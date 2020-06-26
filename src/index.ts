@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
-import { isDevelopment } from './utils/is-development';
+import { isDevelopment } from './utils/isDevelopment';
 
 const proxy = httpProxy.createProxy({
 	target: 'http://client:3000'

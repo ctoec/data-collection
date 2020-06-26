@@ -8,7 +8,7 @@ services:
       - ./client:/home/node/app:cached
     working_dir: /home/node/app
     ports:
-      - 3001:3000
+      - 5000:3000
     entrypoint:
       - yarn
       - start
@@ -22,7 +22,7 @@ services:
       - ./:/home/node/app:cached
     working_dir: /home/node/app
     ports:
-      - 3000:3000
+      - 5001:3000
     entrypoint:
       - yarn
       - run
@@ -30,3 +30,26 @@ services:
     environment:
       HOST: '0.0.0.0'
       NODE_ENV: development
+
+  winged-keys-db:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: TestPassword1
+      ACCEPT_EULA: Y
+  winged-keys:
+    build:
+        context: .
+        dockerfile: ./winged-keys/Dockerfile
+    environment:
+      ConnectionStrings__WINGEDKEYS: Server=winged-keys-db;Database=master;User=sa;Password=TestPassword1
+    volumes:
+      - ./winged-keys/src/WingedKeys:/app/src/WingedKeys:cached
+      - ./winged-keys/entrypoint.sh:/entrypoint.sh
+    working_dir: /app/src/WingedKeys
+    ports:
+      - 5050:5050
+    entrypoint:
+      - sh
+      - /entrypoint.sh
+    depends_on:
+    - winged-keys-db
