@@ -10,6 +10,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -19,6 +20,9 @@
 .env.production.local
 .cache
 .config
+
+# VS Code
+.vscode
 
 # NPM
 .npm

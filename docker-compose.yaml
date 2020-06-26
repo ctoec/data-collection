@@ -1,0 +1,32 @@
+version: '3.2'
+
+services:
+  client:
+    image: node:12
+    stdin_open: true
+    volumes:
+      - ./client:/home/node/app:cached
+    working_dir: /home/node/app
+    ports:
+      - 3001:3000
+    entrypoint:
+      - yarn
+      - start
+    environment:
+      HOST: '0.0.0.0'
+
+  server:
+    image: node:12
+    stdin_open: true
+    volumes:
+      - ./:/home/node/app:cached
+    working_dir: /home/node/app
+    ports:
+      - 3000:3000
+    entrypoint:
+      - yarn
+      - run
+      - watch
+    environment:
+      HOST: '0.0.0.0'
+      NODE_ENV: development
