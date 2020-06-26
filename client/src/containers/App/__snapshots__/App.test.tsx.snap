@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="App"
+  >
+    <header>
+      <h1>
+        OEC Data Collection
+      </h1>
+      <nav>
+        <a
+          href="/login"
+        >
+          Sign in
+        </a>
+      </nav>
+    </header>
+    <div>
+      This is the data collection tool
+    </div>
+  </div>
+</DocumentFragment>
+`;
