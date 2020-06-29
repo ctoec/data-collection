@@ -18,7 +18,7 @@ const handleError = (
 	next: NextFunction
 ) => {
 	if (err.name === 'UnauthorizedError') {
-    res.status(401).json({
+		res.status(401).json({
 			status: 401,
 			message: 'Unauthorized'
 		});
