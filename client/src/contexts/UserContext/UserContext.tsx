@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useFetch } from 'use-http';
 import type { User } from '../../../../src/models/user';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 

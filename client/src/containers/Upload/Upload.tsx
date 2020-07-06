@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 
 const Upload: React.FC = () => {
@@ -22,7 +22,6 @@ const Upload: React.FC = () => {
 			error: true,
 			message: 'There was an error'
 		}));
-		e.persist();
 		
 		return false;
 	}
@@ -41,7 +40,7 @@ const Upload: React.FC = () => {
 			<p>{status && status.message}</p>
 			<form onSubmit={onSubmit}>
 				<label htmlFor="file"></label>
-				<input name="file" type="file" onChange={fileUpload} />
+				<input id="file" type="file" onChange={fileUpload} />
 				<button type="submit">Submit</button>
 			</form>
 		</>

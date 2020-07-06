@@ -11,7 +11,7 @@ const Header: React.FC = () => {
 
 	return (
 		<header>
-			<h1>OEC Data Collection</h1>
+			<p>OEC Data Collection</p>
 			<nav>
 				{user ? <span>Hi, {user.firstName}</span> : <Link to="/login">Sign in</Link>}
 				<p>{user && <Link to="/logout">Logout</Link>}</p>
