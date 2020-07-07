@@ -8,6 +8,7 @@ const validate = jwt({
 		// @TODO Add HTTPS support
 		strictSsl: false,
 	}),
+	algorithms: [ 'RS256' ],
 	requestProperty: 'token'
 });
 

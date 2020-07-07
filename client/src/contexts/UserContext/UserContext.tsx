@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import type { User } from '../../../../src/models/user';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
+
+interface User {
+	id: number;
+	wingedKeysId: string;
+	firstName: string;
+	lastName: string;
+}
 
 export type UserContextType = {
 	user: User | null;
