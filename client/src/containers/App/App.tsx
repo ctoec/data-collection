@@ -6,8 +6,6 @@ import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';
 import UserContext from '../../contexts/UserContext/UserContext';
 
-import './App.css';
-
 const App: React.FC = () => {
 	const { user } = useContext(UserContext);
 	return (

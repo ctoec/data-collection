@@ -8,7 +8,7 @@ import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/hom
 import UserContext from '../../contexts/UserContext/UserContext';
 
 import cx from 'classnames';
-import styles from './Home.module.scss';
+import { MailToLink } from './MailToLink';
 
 const Home: React.FC = () => {
 	const { user, loading } = useContext(UserContext);
@@ -26,12 +26,12 @@ const Home: React.FC = () => {
 	}
 
 	return (
-		<div className={cx(styles.container)}>
-			<div className={cx('usa-hero', styles.hero)}>
+		<div className="Home">
+			<div className="usa-hero">
 				<div>
 					<h1 className="margin-bottom-2">Upload your enrollment data</h1>
 					<Button
-						className={cx(styles['btn--inverse'])}
+						className="btn--inverse"
 						href="/login"
 						text="Sign in"
 						appearance="base"
@@ -42,9 +42,9 @@ const Home: React.FC = () => {
 				<div className="grid-row">
 					<div className="tablet:grid-col-auto margin-right-4 padding-4">
 						<img
-							className={cx(styles['hero-bubble'])}
+							className="hero-bubble"
 							src={HomeCareerBubbleSrc}
-							alt="Children playing on the floor watched by a child care provider"
+							alt=""
 						/>
 					</div>
 					<div className="tablet:grid-col-fill">
@@ -95,24 +95,22 @@ const Home: React.FC = () => {
 					</div>
 				</div>
 			</div>
-			<div className={cx('bg-base-lightest', 'height-15', styles.footer)}>
-				<div className="display-flex flex-justify flex-align-center">
-					<p className="text-primary text-light font-sans-lg">Find out what's new at OEC</p>
-					<Button
-						className={cx(styles['usa-button'], 'bg-accent-cool-darker radius-0')}
-						text={
-							// TODO: use TextWithIcon here
-							<span className="display-flex flex-align-center">
-								<span>Visit the OEC website</span>
-								<ArrowRight aria-hidden width="20" height="20" className="margin-left-3" />
-							</span>
-						}
-						href="https://ctoec.org"
-						external={true}
-						appearance="default"
-					/>
+			<footer className={cx('bg-base-lightest', 'padding-y-6', 'footer')}>
+				<div className="grid-row flex-justify flex-align-center">
+					<div className="grid-col-10">
+						<h2 className="text-primary text-light margin-y-3">
+							Have feedback about OEC's data collection process?
+						</h2>
+						<p>Feedback from providers like you helps make this tool even better.</p>
+						<p>
+							Send us your feedback at <MailToLink />
+						</p>
+					</div>
 				</div>
-			</div>
+				<div className="grid-col-2">
+					{/* TODO: Add icon of message bubbles */}
+				</div>
+			</footer>
 		</div>
 	);
 }
