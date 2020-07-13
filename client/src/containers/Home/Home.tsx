@@ -20,7 +20,7 @@ const Home: React.FC = () => {
 
 	// If the user is logged in, don't show the splash page
 	if (user) {
-		history.push('/upload');
+		history.push('/getting-started');
 		return <></>;
 	}
 
