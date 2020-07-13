@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Button, TextWithIcon } from '@ctoec/component-library'
 import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
-import { ReactComponent as TeacherWithChalkboard } from '@ctoec/component-library/dist/assets/images/teacherWithChalkboard.svg';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
 
 import UserContext from '../../contexts/UserContext/UserContext';
