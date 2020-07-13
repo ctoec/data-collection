@@ -90,6 +90,20 @@ const Home: React.FC = () => {
 									/>
 								}
 							/>
+							<br />
+							<br />
+							<a
+								href="/upload_template/ECE Data Collection Template.xlsx"
+								className="text-bold"
+							>
+								<TextWithIcon
+									text="Download the Excel data collection template"
+									Icon={ArrowRight}
+									direction="right"
+									iconSide="right"
+									className="text-underline"
+								/>
+							</a>
 						</div>
 					</div>
 				</div>
