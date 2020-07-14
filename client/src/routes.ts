@@ -3,6 +3,7 @@ import Home from './containers/Home/Home';
 import Login from './containers/Login/Login';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
+import GettingStarted from './containers/GettingStarted/GettingStarted';
 
 
 export type RouteConfig = {
@@ -30,6 +31,11 @@ export const routes: RouteConfig[] = [
 		path: '/logout',
 		component: Login,
 		unauthorized: true,
+	},
+	{
+		path: '/getting-started',
+		component: GettingStarted,
+		unauthorized: false,
 	},
 	{
 		path: '/upload',
