@@ -1,0 +1,46 @@
+.Home {
+	.usa-hero {
+		background-image: url('~@ctoec/component-library/dist/assets/images/hero.svg');
+		color: white;
+		padding: 3em 0;
+		margin-bottom: 1em;
+
+		div {
+			max-width: 64em;
+			margin: 0 auto;
+			padding-left: 2em;
+			padding-right: 2em;
+		}
+
+		.btn--inverse {
+			color: black;
+			background-color: white;
+			width: 10em;
+			height: 3em;
+			line-height: 150%;
+		}
+	}
+
+	.hero-bubble {
+		width: 13em;
+	}
+
+	.footer {
+		margin-top: -1em;
+		margin-bottom: -10em;
+		fill: white;
+
+		div {
+			height: 100%;
+			width: 100%;
+			max-width: 64em;
+			margin: 0 auto;
+			padding-left: 2em;
+			padding-right: 2em;
+		}
+
+		.usa-button:hover {
+			background-color: #2378c3;
+		}
+	}
+}
