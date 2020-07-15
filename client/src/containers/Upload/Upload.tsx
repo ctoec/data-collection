@@ -17,7 +17,7 @@ const Upload: React.FC = () => {
 			body: formData
 		})
 		.then(value => value.json())
-		.then(value => setStatus(value))
+		.then(value => setStatus({message: value.filename}))
 		.catch(_ => setStatus({
 			error: true,
 			message: 'There was an error'
