@@ -21,7 +21,7 @@ jobs:
 
   steps:
   - script: |
-      yarn install
+      yarn install --frozen-lockfile
     displayName: 'Build backend'
 
 #
@@ -33,7 +33,7 @@ jobs:
   steps:
   - script: |
       cd client
-      yarn install
+      yarn install --frozen-lockfile
       yarn build
 
 #
@@ -43,7 +43,7 @@ jobs:
   displayName: "Backend tests"
 
   steps:
-    - script: cd $(Build.SourcesDirectory) && yarn install &&  yarn test --ci
+    - script: cd $(Build.SourcesDirectory) && yarn install --frozen-lockfile && yarn test --ci
       displayName: "Install node_modules and run tests"
 
 #
@@ -53,5 +53,5 @@ jobs:
   displayName: "Frontend tests"
 
   steps:
-    - script: cd $(Build.SourcesDirectory)/client && yarn install &&  yarn test --ci
+    - script: cd $(Build.SourcesDirectory)/client && yarn install --frozen-lockfile && yarn test --ci
       displayName: "Install node_modules and run tests"
