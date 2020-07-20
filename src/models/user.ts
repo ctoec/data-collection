@@ -9,7 +9,7 @@ export interface User {
 	lastName: string;
 	middleName?: string;
 	suffix?: string;
-  orgPermissions?: Array<OrganizationPermission>;
-  sitePermissions?: Array<SitePermission>;
-  sites?: Array<Site>;
+	orgPermissions?: Array<OrganizationPermission>;
+	sitePermissions?: Array<SitePermission>;
+	sites?: Array<Site>;
 }
