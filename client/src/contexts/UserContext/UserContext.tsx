@@ -1,12 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
-
-interface User {
-	id: number;
-	wingedKeysId: string;
-	firstName: string;
-	lastName: string;
-}
+import { User, Configuration, DefaultApi } from '../../generated';
+import { getCurrentHost } from '../../utils/getCurrentHost';
 
 export type UserContextType = {
 	user: User | null;
@@ -36,12 +31,17 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
 		setUserLoading(false);
 		if (accessToken) {
 			setUserLoading(true);
-			fetch('/api/users/current', {
-				headers: {
-					authorization: `Bearer ${accessToken}`
+			new DefaultApi(
+				new Configuration({
+					basePath: `${getCurrentHost()}/api`,
+					// TODO: Convert this to use apiKey and update the server for direct
+					// TSOA security usage, instead of manually configuring authn/z
+					headers: {
+						authorization: `Bearer ${accessToken}`,
+					}
 				}
-			})
-			.then(data => data.json())
+			))
+			.getCurrentUser()
 			.then(data => setUser(data))
 			.then(_ => setUserLoading(false))
 			.finally(() => setUserLoading(false));

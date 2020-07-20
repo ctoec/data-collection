@@ -21,6 +21,7 @@
 		"node-postgres": "^0.6.2",
 		"nodemon": "^2.0.4",
 		"ts-node": "^8.10.2",
+		"tsoa": "^3.2.1",
 		"typescript": "^3.9.5"
 	},
 	"scripts": {
