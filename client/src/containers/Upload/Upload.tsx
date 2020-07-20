@@ -23,6 +23,13 @@ const Upload: React.FC = () => {
 	const formData = new FormData();
 
 	const onSubmit = () => {
+		if(!formData.has("file")) {
+			setStatus({
+				error: "You must select a file to upload"
+			});
+			return; 
+		}
+
 		setLoading(true);
 		fetch('/api/reports', {
 			method: 'POST',
@@ -62,7 +69,11 @@ const Upload: React.FC = () => {
 
 	return (
 		<div className="grid-container margin-top-4">
-			{status && <Alert text={status.message} type="success" />}
+			{status && (
+				!status.error
+				? <Alert text={status.message} type="success" />
+				: <Alert text={status.error} type="error" />
+			)}
 			<div className="grid-row">
 				<h1>Upload your enrollment data</h1>
 				<p>After you've entered all state funded enrollment data in the spreadsheet template, upload the file here.</p>
@@ -76,8 +87,8 @@ const Upload: React.FC = () => {
 					<FileInput id="report" label="Upload enrollment data" onChange={fileUpload} />
 					<FormSubmitButton className="margin-top-2" text={loading ? "Uploading..." : "Upload"} />
 					{
-						status && !status.error && 
-						<Button href="/check-data" text="Check your data" appearance="outline" />
+						status && !status.error &&
+						<Button href={`/check-data/${status.filename}`} text="Check your data" appearance="outline" />
 					}
 				</Form>
 			</div>
