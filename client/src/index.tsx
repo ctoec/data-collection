@@ -8,7 +8,6 @@ import { UserProvider } from './contexts/UserContext/UserContext';
 import * as serviceWorker from './serviceWorker';
 
 import '@ctoec/component-library/dist/assets/styles/index.scss';
-import './assets/styles/index.scss';
 import './index.scss';
 
 const render = (Component: React.FC) => (
