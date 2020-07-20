@@ -16,6 +16,7 @@ export type RouteConfig = {
 };
 
 export const routes: RouteConfig[] = [
+<<<<<<< HEAD
   {
     path: '/',
     exact: true,
@@ -52,6 +53,44 @@ export const routes: RouteConfig[] = [
     component: PageNotFound,
     unauthorized: true,
   },
+=======
+	{
+		path: '/',
+		exact: true,
+		component: Home,
+		unauthorized: true,
+	},
+	{
+		path: '/login',
+		component: Login,
+		unauthorized: true,
+	},
+	{
+		path: '/logout',
+		component: Login,
+		unauthorized: true,
+	},
+	{
+		path: '/getting-started',
+		component: GettingStarted,
+		unauthorized: false,
+	},
+	{
+		path: '/upload',
+		component: Upload,
+		unauthorized: false,
+	},
+	{
+		path: '/check-data/:fileUploadId',
+		component: CheckData,
+		unauthorized: false,
+	},
+	{
+		path: '/:unknown',
+		component: PageNotFound,
+		unauthorized: true,
+	},
+>>>>>>> 21: Adds data header validation to CheckData
 ];
 
 export default routes;
