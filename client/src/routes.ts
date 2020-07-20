@@ -4,7 +4,7 @@ import Login from './containers/Login/Login';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
-
+import CheckData from './containers/CheckData/CheckData';
 
 export type RouteConfig = {
 	path: string;
@@ -40,6 +40,11 @@ export const routes: RouteConfig[] = [
 	{
 		path: '/upload',
 		component: Upload,
+		unauthorized: false,
+	},
+	{
+		path: '/check-data',
+		component: CheckData,
 		unauthorized: false,
 	},
 	{

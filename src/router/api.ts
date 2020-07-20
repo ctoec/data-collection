@@ -21,7 +21,10 @@ router.get('/users/current', (req, res) => {
 
 // Post file uploads, storing file on disk, and return local file name
 router.post('/reports', upload.single('file'), (req, res) => {
-	res.status(200).send(req.file.filename);
+	res.status(200).send({
+		filename: req.file.filename,
+		message: 'Successfully uploaded file'
+	});
 });
 
 router.use(handleError);
