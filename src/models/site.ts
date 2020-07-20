@@ -1,6 +1,7 @@
 import { Enrollment } from './enrollment';
 import { Organization } from './organization';
 import { Region } from './region';
+import { User } from './user';
 
 export interface Site { 
     id: number;
@@ -14,4 +15,12 @@ export interface Site {
     naeycId?: number;
     registryId?: number;
     enrollments?: Array<Enrollment>;
+}
+
+export interface SitePermission { 
+    siteId: number;
+    site?: Site;
+    id: number;
+    userId: number;
+    user?: User;
 }

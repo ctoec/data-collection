@@ -1,5 +1,4 @@
 import { Child } from './child';
-import { FamilyDetermination } from './familyDetermination';
 import { Organization } from './organization';
 import { User } from './user';
 
@@ -15,6 +14,18 @@ export interface Family {
     determinations?: Array<FamilyDetermination>;
     organizationId: number;
     organization?: Organization;
+    readonly authorId?: number;
+    author?: User;
+    readonly updatedAt?: Date;
+}
+
+export interface FamilyDetermination { 
+    id: number;
+    numberOfPeople?: number;
+    income?: number;
+    determinationDate?: Date;
+    familyId: number;
+    family?: Family;
     readonly authorId?: number;
     author?: User;
     readonly updatedAt?: Date;

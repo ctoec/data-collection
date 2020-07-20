@@ -1,4 +1,4 @@
-import { FundingSource } from './fundingSource';
+import { FundingSource } from './funding';
 
 export interface ReportingPeriod { 
     id: number;

@@ -1,6 +1,6 @@
-import { OrganizationPermission } from './organizationPermission';
+import { OrganizationPermission } from './organization';
 import { Site } from './site';
-import { SitePermission } from './sitePermission';
+import { SitePermission } from './site';
 
 export interface User {
 	id: number;

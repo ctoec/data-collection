@@ -1,6 +1,5 @@
 import { Enrollment } from './enrollment';
-import { FundingSource } from './fundingSource';
-import { FundingTimeSplitUtilization } from './fundingTimeSplitUtilization';
+import { FundingSource, FundingTimeSplitUtilization } from './funding';
 import { Organization } from './organization';
 import { ReportingPeriod } from './reportingPeriod';
 
