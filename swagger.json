@@ -1,14 +1,14 @@
 {
     "openapi": "3.0.1",
     "info": {
-      "title": "Pensieve API",
+      "title": "Fawkes API",
       "version": "v1"
     },
     "paths": {
       "/api/users/current": {
         "get": {
           "tags": [
-            "Pensieve"
+            "Fawkes"
           ],
           "responses": {
             "200": {
@@ -37,7 +37,7 @@
       "/api/reports": {
         "post": {
           "tags": [
-            "Pensieve"
+            "Fawkes"
           ],
           "parameters": [
             {
