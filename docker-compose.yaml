@@ -30,6 +30,14 @@ services:
     environment:
       HOST: '0.0.0.0'
       NODE_ENV: development
+      DB_PASSWORD: TestPassword1
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: TestPassword1
 
   winged-keys-db:
     image: mcr.microsoft.com/mssql/server

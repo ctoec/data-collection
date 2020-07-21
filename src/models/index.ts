@@ -7,7 +7,6 @@ export * from './family';
 export * from './funding';
 export * from './gender';
 export * from './organization';
-export * from './problemDetails';
 export * from './region';
 export * from './reportingPeriod';
 export * from './site';
