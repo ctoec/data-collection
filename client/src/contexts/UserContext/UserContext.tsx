@@ -34,11 +34,7 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
 			new DefaultApi(
 				new Configuration({
 					basePath: `${getCurrentHost()}/api`,
-					// TODO: Convert this to use apiKey and update the server for direct
-					// TSOA security usage, instead of manually configuring authn/z
-					headers: {
-						authorization: `Bearer ${accessToken}`,
-					}
+					apiKey: `Bearer ${accessToken}`,
 				}
 			))
 			.getCurrentUser()

@@ -1,21 +1,21 @@
 import {
   Controller,
   Get,
-	Path,
 	Request,
   Route,
+	Security,
 } from "tsoa";
-import { User } from "../models/User";
-import { UsersService } from "../services/user/UserService";
+import { User } from "../models/user";
+import { UserService } from "../services/user/UserService";
 
 @Route("users")
-export class UsersController extends Controller {
+export class UserController extends Controller {
 
+	@Security("jwt")
 	@Get("current")
 	public async getCurrentUser(
 		@Request() req: Express.Request
 	): Promise<User> {
-		const wingedKeysId = req.sub;
-		return new UsersService().get(wingedKeysId);
+		return new UserService().get(req.user.id);
 	}
 }

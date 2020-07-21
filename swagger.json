@@ -1,1059 +1,892 @@
 {
-    "openapi": "3.0.1",
-    "info": {
-      "title": "Fawkes API",
-      "version": "v1"
-    },
-    "paths": {
-      "/api/users/current": {
-        "get": {
-          "tags": [
-            "Fawkes"
-          ],
-          "responses": {
-            "200": {
-              "description": "Success",
-              "content": {
-                "text/plain": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                },
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                },
-                "text/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/User"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "/api/reports": {
-        "post": {
-          "tags": [
-            "Fawkes"
-          ],
-          "requestBody": {
-            "content": {
-              "text/csv": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              },
-              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {
-                "schema": {
-                  "type": "string",
-                  "format": "binary"
-                }
-              }
-            }
-          },
-          "responses": {
-            "200": {
-              "description": "The name of the file uploaded"
-            },
-            "400": {
-              "description": "Bad Request"
-            }
-          }
-        }
-      }
-    },
-    "components": {
-      "schemas": {
-        "Gender": {
-          "enum": [
-            "Male",
-            "Female",
-            "Nonbinary",
-            "Unknown",
-            "Unspecified"
-          ],
-          "type": "string"
-        },
-        "Region": {
-          "enum": [
-            "East",
-            "NorthCentral",
-            "NorthWest",
-            "SouthCentral",
-            "SouthWest"
-          ],
-          "type": "string"
-        },
-        "Site": {
-          "required": [
-            "id",
-            "name",
-            "organizationId",
-            "region",
-            "titleI"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "name": {
-              "maxLength": 100,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "titleI": {
-              "type": "boolean"
-            },
-            "region": {
-              "$ref": "#/components/schemas/Region"
-            },
-            "organizationId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "organization": {
-              "$ref": "#/components/schemas/Organization"
-            },
-            "facilityCode": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "licenseNumber": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "naeycId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "registryId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "enrollments": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Enrollment"
-              },
-              "nullable": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "FundingSource": {
-          "enum": [
-            "CDC"
-          ],
-          "type": "string"
-        },
-        "Age": {
-          "enum": [
-            "InfantToddler",
-            "Preschool",
-            "SchoolAge"
-          ],
-          "type": "string"
-        },
-        "ReportingPeriod": {
-          "required": [
-            "dueAt",
-            "id",
-            "period",
-            "periodEnd",
-            "periodStart",
-            "type"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "type": {
-              "$ref": "#/components/schemas/FundingSource"
-            },
-            "period": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "periodStart": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "periodEnd": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "dueAt": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          "additionalProperties": false
-        },
-        "Funding": {
-          "required": [
-            "enrollmentId",
-            "fundingSpaceId",
-            "id"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "enrollmentId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "enrollment": {
-              "$ref": "#/components/schemas/Enrollment"
-            },
-            "fundingSpace": {
-              "$ref": "#/components/schemas/FundingSpace"
-            },
-            "fundingSpaceId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "source": {
-              "$ref": "#/components/schemas/FundingSource"
-            },
-            "firstReportingPeriodId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "firstReportingPeriod": {
-              "$ref": "#/components/schemas/ReportingPeriod"
-            },
-            "lastReportingPeriodId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "lastReportingPeriod": {
-              "$ref": "#/components/schemas/ReportingPeriod"
-            },
-            "authorId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true,
-              "readOnly": true
-            },
-            "author": {
-              "$ref": "#/components/schemas/User"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true,
-              "readOnly": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "FundingTime": {
-          "enum": [
-            "Full",
-            "Part",
-            "Split"
-          ],
-          "type": "string"
-        },
-        "FundingTimeSplit": {
-          "required": [
-            "fullTimeWeeks",
-            "fundingSpaceId",
-            "id",
-            "partTimeWeeks"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "fundingSpaceId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "fundingSpace": {
-              "$ref": "#/components/schemas/FundingSpace"
-            },
-            "fullTimeWeeks": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "partTimeWeeks": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "additionalProperties": false
-        },
-        "CdcReport": {
-          "required": [
-            "accredited",
-            "c4KRevenue",
-            "familyFeesRevenue",
-            "id",
-            "organizationId",
-            "reportingPeriod",
-            "reportingPeriodId"
-          ],
-          "type": "object",
-          "properties": {
-            "accredited": {
-              "type": "boolean"
-            },
-            "c4KRevenue": {
-              "type": "number",
-              "format": "double",
-              "nullable": true
-            },
-            "retroactiveC4KRevenue": {
-              "type": "boolean"
-            },
-            "familyFeesRevenue": {
-              "type": "number",
-              "format": "double",
-              "nullable": true
-            },
-            "comment": {
-              "type": "string",
-              "nullable": true
-            },
-            "timeSplitUtilizations": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/FundingTimeSplitUtilization"
-              },
-              "nullable": true
-            },
-            "organizationId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "organization": {
-              "$ref": "#/components/schemas/Organization"
-            },
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "type": {
-              "$ref": "#/components/schemas/FundingSource"
-            },
-            "reportingPeriodId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "reportingPeriod": {
-              "$ref": "#/components/schemas/ReportingPeriod"
-            },
-            "submittedAt": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
-            },
-            "enrollments": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Enrollment"
-              },
-              "nullable": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "FundingTimeSplitUtilization": {
-          "required": [
-            "fullTimeWeeksUsed",
-            "fundingSpaceId",
-            "id",
-            "partTimeWeeksUsed",
-            "reportId",
-            "reportingPeriodId"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "reportingPeriodId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "reportingPeriod": {
-              "$ref": "#/components/schemas/ReportingPeriod"
-            },
-            "reportId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "report": {
-              "$ref": "#/components/schemas/CdcReport"
-            },
-            "fundingSpaceId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "fundingSpace": {
-              "$ref": "#/components/schemas/FundingSpace"
-            },
-            "fullTimeWeeksUsed": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "partTimeWeeksUsed": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          "additionalProperties": false
-        },
-        "FundingSpace": {
-          "required": [
-            "ageGroup",
-            "capacity",
-            "id",
-            "organizationId",
-            "source",
-            "time"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "capacity": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "organizationId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "organization": {
-              "$ref": "#/components/schemas/Organization"
-            },
-            "source": {
-              "$ref": "#/components/schemas/FundingSource"
-            },
-            "ageGroup": {
-              "$ref": "#/components/schemas/Age"
-            },
-            "fundings": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Funding"
-              },
-              "nullable": true
-            },
-            "time": {
-              "$ref": "#/components/schemas/FundingTime"
-            },
-            "timeSplit": {
-              "$ref": "#/components/schemas/FundingTimeSplit"
-            },
-            "timeSplitUtilizations": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/FundingTimeSplitUtilization"
-              },
-              "nullable": true,
-              "readOnly": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "Organization": {
-          "required": [
-            "id",
-            "name"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "name": {
-              "maxLength": 100,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "sites": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Site"
-              },
-              "nullable": true
-            },
-            "fundingSpaces": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/FundingSpace"
-              },
-              "nullable": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "OrganizationPermission": {
-          "required": [
-            "id",
-            "organizationId",
-            "userId"
-          ],
-          "type": "object",
-          "properties": {
-            "organizationId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "organization": {
-              "$ref": "#/components/schemas/Organization"
-            },
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "userId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "user": {
-              "$ref": "#/components/schemas/User"
-            }
-          },
-          "additionalProperties": false
-        },
-        "SitePermission": {
-          "required": [
-            "id",
-            "siteId",
-            "userId"
-          ],
-          "type": "object",
-          "properties": {
-            "siteId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "site": {
-              "$ref": "#/components/schemas/Site"
-            },
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "userId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "user": {
-              "$ref": "#/components/schemas/User"
-            }
-          },
-          "additionalProperties": false
-        },
-        "User": {
-          "required": [
-            "firstName",
-            "id",
-            "lastName",
-            "wingedKeysId"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "wingedKeysId": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "firstName": {
-              "maxLength": 35,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "middleName": {
-              "maxLength": 35,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "lastName": {
-              "maxLength": 35,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "suffix": {
-              "maxLength": 10,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "orgPermissions": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/OrganizationPermission"
-              },
-              "nullable": true
-            },
-            "sitePermissions": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/SitePermission"
-              },
-              "nullable": true
-            },
-            "sites": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Site"
-              },
-              "nullable": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "FamilyDetermination": {
-          "required": [
-            "familyId",
-            "id"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "numberOfPeople": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "income": {
-              "type": "number",
-              "format": "double",
-              "nullable": true
-            },
-            "determinationDate": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
-            },
-            "familyId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "family": {
-              "$ref": "#/components/schemas/Family"
-            },
-            "authorId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true,
-              "readOnly": true
-            },
-            "author": {
-              "$ref": "#/components/schemas/User"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true,
-              "readOnly": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "Family": {
-          "required": [
-            "id",
-            "organizationId"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "children": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Child"
-              },
-              "nullable": true
-            },
-            "addressLine1": {
-              "type": "string",
-              "nullable": true
-            },
-            "addressLine2": {
-              "type": "string",
-              "nullable": true
-            },
-            "town": {
-              "type": "string",
-              "nullable": true
-            },
-            "state": {
-              "type": "string",
-              "nullable": true
-            },
-            "zip": {
-              "type": "string",
-              "nullable": true
-            },
-            "homelessness": {
-              "type": "boolean"
-            },
-            "determinations": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/FamilyDetermination"
-              },
-              "nullable": true
-            },
-            "organizationId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "organization": {
-              "$ref": "#/components/schemas/Organization"
-            },
-            "authorId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true,
-              "readOnly": true
-            },
-            "author": {
-              "$ref": "#/components/schemas/User"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true,
-              "readOnly": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "C4KCertificate": {
-          "required": [
-            "childId",
-            "id"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "childId": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "child": {
-              "$ref": "#/components/schemas/Child"
-            },
-            "startDate": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
-            },
-            "endDate": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "Child": {
-          "required": [
-            "firstName",
-            "id",
-            "lastName",
-            "organizationId"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "sasid": {
-              "type": "string",
-              "nullable": true
-            },
-            "firstName": {
-              "maxLength": 35,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "middleName": {
-              "maxLength": 35,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "lastName": {
-              "maxLength": 35,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "suffix": {
-              "maxLength": 10,
-              "minLength": 0,
-              "type": "string",
-              "nullable": true
-            },
-            "birthdate": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
-            },
-            "birthTown": {
-              "type": "string",
-              "nullable": true
-            },
-            "birthState": {
-              "type": "string",
-              "nullable": true
-            },
-            "birthCertificateId": {
-              "type": "string",
-              "nullable": true
-            },
-            "americanIndianOrAlaskaNative": {
-              "type": "boolean"
-            },
-            "asian": {
-              "type": "boolean"
-            },
-            "blackOrAfricanAmerican": {
-              "type": "boolean"
-            },
-            "nativeHawaiianOrPacificIslander": {
-              "type": "boolean"
-            },
-            "white": {
-              "type": "boolean"
-            },
-            "hispanicOrLatinxEthnicity": {
-              "type": "boolean",
-              "nullable": true
-            },
-            "gender": {
-              "$ref": "#/components/schemas/Gender"
-            },
-            "foster": {
-              "type": "boolean"
-            },
-            "familyId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "family": {
-              "$ref": "#/components/schemas/Family"
-            },
-            "enrollments": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Enrollment"
-              },
-              "nullable": true
-            },
-            "organizationId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "organization": {
-              "$ref": "#/components/schemas/Organization"
-            },
-            "c4KFamilyCaseNumber": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "c4KCertificates": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/C4KCertificate"
-              },
-              "nullable": true
-            },
-            "authorId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true,
-              "readOnly": true
-            },
-            "author": {
-              "$ref": "#/components/schemas/User"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true,
-              "readOnly": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "Enrollment": {
-          "required": [
-            "childId",
-            "id",
-            "siteId"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "childId": {
-              "type": "string",
-              "format": "uuid"
-            },
-            "child": {
-              "$ref": "#/components/schemas/Child"
-            },
-            "siteId": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "site": {
-              "$ref": "#/components/schemas/Site"
-            },
-            "ageGroup": {
-              "$ref": "#/components/schemas/Age"
-            },
-            "entry": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
-            },
-            "exit": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true
-            },
-            "exitReason": {
-              "type": "string",
-              "nullable": true
-            },
-            "fundings": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Funding"
-              },
-              "nullable": true
-            },
-            "pastEnrollments": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Enrollment"
-              },
-              "nullable": true
-            },
-            "authorId": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true,
-              "readOnly": true
-            },
-            "author": {
-              "$ref": "#/components/schemas/User"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "nullable": true,
-              "readOnly": true
-            }
-          },
-          "additionalProperties": false
-        },
-        "ProblemDetails": {
-          "type": "object",
-          "properties": {
-            "type": {
-              "type": "string",
-              "nullable": true
-            },
-            "title": {
-              "type": "string",
-              "nullable": true
-            },
-            "status": {
-              "type": "integer",
-              "format": "int32",
-              "nullable": true
-            },
-            "detail": {
-              "type": "string",
-              "nullable": true
-            },
-            "instance": {
-              "type": "string",
-              "nullable": true
-            },
-            "extensions": {
-              "type": "object",
-              "additionalProperties": {
-                "type": "object",
-                "additionalProperties": false
-              },
-              "nullable": true,
-              "readOnly": true
-            }
-          },
-          "additionalProperties": false
-        }
-      },
-      "securitySchemes": {
-        "Bearer": {
-          "type": "apiKey",
-          "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-          "name": "Authorization",
-          "in": "header"
-        }
-      }
-    },
-    "security": [
-      {
-        "Bearer": [ ]
-      }
-    ]
-  }
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"Region": {
+				"enum": [
+					"East",
+					"NorthCentral",
+					"NorthWest",
+					"SouthCentral",
+					"SouthWest"
+				],
+				"type": "string"
+			},
+			"Organization": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"sites": {
+						"items": {
+							"$ref": "#/components/schemas/Site"
+						},
+						"type": "array"
+					},
+					"fundingSpaces": {
+						"items": {
+							"$ref": "#/components/schemas/FundingSpace"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Gender": {
+				"enum": [
+					"Male",
+					"Female",
+					"Nonbinary",
+					"Unknown",
+					"Unspecified"
+				],
+				"type": "string"
+			},
+			"Child": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"sasid": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"middleName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"suffix": {
+						"type": "string"
+					},
+					"birthdate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"birthTown": {
+						"type": "string"
+					},
+					"birthState": {
+						"type": "string"
+					},
+					"birthCertificateId": {
+						"type": "string"
+					},
+					"americanIndianOrAlaskaNative": {
+						"type": "boolean"
+					},
+					"asian": {
+						"type": "boolean"
+					},
+					"blackOrAfricanAmerican": {
+						"type": "boolean"
+					},
+					"nativeHawaiianOrPacificIslander": {
+						"type": "boolean"
+					},
+					"white": {
+						"type": "boolean"
+					},
+					"hispanicOrLatinxEthnicity": {
+						"type": "boolean"
+					},
+					"gender": {
+						"$ref": "#/components/schemas/Gender"
+					},
+					"foster": {
+						"type": "boolean"
+					},
+					"familyId": {
+						"type": "number",
+						"format": "double"
+					},
+					"family": {
+						"$ref": "#/components/schemas/Family"
+					},
+					"enrollments": {
+						"items": {
+							"$ref": "#/components/schemas/Enrollment"
+						},
+						"type": "array"
+					},
+					"organizationId": {
+						"type": "number",
+						"format": "double"
+					},
+					"organization": {
+						"$ref": "#/components/schemas/Organization"
+					},
+					"c4KFamilyCaseNumber": {
+						"type": "number",
+						"format": "double"
+					},
+					"c4KCertificates": {
+						"items": {
+							"$ref": "#/components/schemas/C4KCertificate"
+						},
+						"type": "array"
+					},
+					"authorId": {
+						"type": "number",
+						"format": "double"
+					},
+					"author": {
+						"$ref": "#/components/schemas/User"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"firstName",
+					"lastName",
+					"organizationId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Family": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"children": {
+						"items": {
+							"$ref": "#/components/schemas/Child"
+						},
+						"type": "array"
+					},
+					"addressLine1": {
+						"type": "string"
+					},
+					"addressLine2": {
+						"type": "string"
+					},
+					"town": {
+						"type": "string"
+					},
+					"state": {
+						"type": "string"
+					},
+					"zip": {
+						"type": "string"
+					},
+					"homelessness": {
+						"type": "boolean"
+					},
+					"determinations": {
+						"items": {
+							"$ref": "#/components/schemas/FamilyDetermination"
+						},
+						"type": "array"
+					},
+					"organizationId": {
+						"type": "number",
+						"format": "double"
+					},
+					"organization": {
+						"$ref": "#/components/schemas/Organization"
+					},
+					"authorId": {
+						"type": "number",
+						"format": "double"
+					},
+					"author": {
+						"$ref": "#/components/schemas/User"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"organizationId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"User": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"wingedKeysId": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"middleName": {
+						"type": "string"
+					},
+					"suffix": {
+						"type": "string"
+					},
+					"orgPermissions": {
+						"items": {
+							"$ref": "#/components/schemas/OrganizationPermission"
+						},
+						"type": "array"
+					},
+					"sitePermissions": {
+						"items": {
+							"$ref": "#/components/schemas/SitePermission"
+						},
+						"type": "array"
+					},
+					"sites": {
+						"items": {
+							"$ref": "#/components/schemas/Site"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"wingedKeysId",
+					"firstName",
+					"lastName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FamilyDetermination": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"numberOfPeople": {
+						"type": "number",
+						"format": "double"
+					},
+					"income": {
+						"type": "number",
+						"format": "double"
+					},
+					"determinationDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"familyId": {
+						"type": "number",
+						"format": "double"
+					},
+					"family": {
+						"$ref": "#/components/schemas/Family"
+					},
+					"authorId": {
+						"type": "number",
+						"format": "double"
+					},
+					"author": {
+						"$ref": "#/components/schemas/User"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"familyId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Enrollment": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"childId": {
+						"type": "string"
+					},
+					"child": {
+						"$ref": "#/components/schemas/Child"
+					},
+					"siteId": {
+						"type": "number",
+						"format": "double"
+					},
+					"site": {
+						"$ref": "#/components/schemas/Site"
+					},
+					"ageGroup": {
+						"$ref": "#/components/schemas/Age"
+					},
+					"entry": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"exit": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"exitReason": {
+						"type": "string"
+					},
+					"fundings": {
+						"items": {
+							"$ref": "#/components/schemas/Funding"
+						},
+						"type": "array"
+					},
+					"pastEnrollments": {
+						"items": {
+							"$ref": "#/components/schemas/Enrollment"
+						},
+						"type": "array"
+					},
+					"authorId": {
+						"type": "number",
+						"format": "double"
+					},
+					"author": {
+						"$ref": "#/components/schemas/User"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"childId",
+					"siteId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"C4KCertificate": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"childId": {
+						"type": "string"
+					},
+					"child": {
+						"$ref": "#/components/schemas/Child"
+					},
+					"startDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"endDate": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"childId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Site": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"titleI": {
+						"type": "boolean"
+					},
+					"region": {
+						"$ref": "#/components/schemas/Region"
+					},
+					"organizationId": {
+						"type": "number",
+						"format": "double"
+					},
+					"organization": {
+						"$ref": "#/components/schemas/Organization"
+					},
+					"facilityCode": {
+						"type": "number",
+						"format": "double"
+					},
+					"licenseNumber": {
+						"type": "number",
+						"format": "double"
+					},
+					"naeycId": {
+						"type": "number",
+						"format": "double"
+					},
+					"registryId": {
+						"type": "number",
+						"format": "double"
+					},
+					"enrollments": {
+						"items": {
+							"$ref": "#/components/schemas/Enrollment"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"titleI",
+					"region",
+					"organizationId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Age": {
+				"enum": [
+					"InfantToddler",
+					"Preschool",
+					"SchoolAge"
+				],
+				"type": "string"
+			},
+			"FundingSource": {
+				"enum": [
+					"CDC"
+				],
+				"type": "string"
+			},
+			"Funding": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"enrollmentId": {
+						"type": "number",
+						"format": "double"
+					},
+					"enrollment": {
+						"$ref": "#/components/schemas/Enrollment"
+					},
+					"fundingSpace": {
+						"$ref": "#/components/schemas/FundingSpace"
+					},
+					"fundingSpaceId": {
+						"type": "number",
+						"format": "double"
+					},
+					"source": {
+						"$ref": "#/components/schemas/FundingSource"
+					},
+					"firstReportingPeriodId": {
+						"type": "number",
+						"format": "double"
+					},
+					"firstReportingPeriod": {
+						"$ref": "#/components/schemas/ReportingPeriod"
+					},
+					"lastReportingPeriodId": {
+						"type": "number",
+						"format": "double"
+					},
+					"lastReportingPeriod": {
+						"$ref": "#/components/schemas/ReportingPeriod"
+					},
+					"authorId": {
+						"type": "number",
+						"format": "double"
+					},
+					"author": {
+						"$ref": "#/components/schemas/User"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"enrollmentId",
+					"fundingSpaceId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FundingTime": {
+				"enum": [
+					"Full",
+					"Part",
+					"Split"
+				],
+				"type": "string"
+			},
+			"FundingSpace": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"capacity": {
+						"type": "number",
+						"format": "double"
+					},
+					"organizationId": {
+						"type": "number",
+						"format": "double"
+					},
+					"organization": {
+						"$ref": "#/components/schemas/Organization"
+					},
+					"source": {
+						"$ref": "#/components/schemas/FundingSource"
+					},
+					"ageGroup": {
+						"$ref": "#/components/schemas/Age"
+					},
+					"fundings": {
+						"items": {
+							"$ref": "#/components/schemas/Funding"
+						},
+						"type": "array"
+					},
+					"time": {
+						"$ref": "#/components/schemas/FundingTime"
+					},
+					"timeSplit": {
+						"$ref": "#/components/schemas/FundingTimeSplit"
+					},
+					"timeSplitUtilizations": {
+						"items": {
+							"$ref": "#/components/schemas/FundingTimeSplitUtilization"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"capacity",
+					"organizationId",
+					"source",
+					"ageGroup",
+					"time"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FundingTimeSplit": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"fundingSpaceId": {
+						"type": "number",
+						"format": "double"
+					},
+					"fundingSpace": {
+						"$ref": "#/components/schemas/FundingSpace"
+					},
+					"fullTimeWeeks": {
+						"type": "number",
+						"format": "double"
+					},
+					"partTimeWeeks": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"fundingSpaceId",
+					"fullTimeWeeks",
+					"partTimeWeeks"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReportingPeriod": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"type": {
+						"$ref": "#/components/schemas/FundingSource"
+					},
+					"period": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"periodStart": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"periodEnd": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"dueAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"type",
+					"period",
+					"periodStart",
+					"periodEnd",
+					"dueAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FundingTimeSplitUtilization": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"reportingPeriodId": {
+						"type": "number",
+						"format": "double"
+					},
+					"reportingPeriod": {
+						"$ref": "#/components/schemas/ReportingPeriod"
+					},
+					"reportId": {
+						"type": "number",
+						"format": "double"
+					},
+					"report": {
+						"$ref": "#/components/schemas/CdcReport"
+					},
+					"fundingSpaceId": {
+						"type": "number",
+						"format": "double"
+					},
+					"fundingSpace": {
+						"$ref": "#/components/schemas/FundingSpace"
+					},
+					"fullTimeWeeksUsed": {
+						"type": "number",
+						"format": "double"
+					},
+					"partTimeWeeksUsed": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"reportingPeriodId",
+					"reportId",
+					"fundingSpaceId",
+					"fullTimeWeeksUsed",
+					"partTimeWeeksUsed"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CdcReport": {
+				"properties": {
+					"accredited": {
+						"type": "boolean"
+					},
+					"c4KRevenue": {
+						"type": "number",
+						"format": "double"
+					},
+					"retroactiveC4KRevenue": {
+						"type": "boolean"
+					},
+					"familyFeesRevenue": {
+						"type": "number",
+						"format": "double"
+					},
+					"comment": {
+						"type": "string"
+					},
+					"timeSplitUtilizations": {
+						"items": {
+							"$ref": "#/components/schemas/FundingTimeSplitUtilization"
+						},
+						"type": "array"
+					},
+					"organizationId": {
+						"type": "number",
+						"format": "double"
+					},
+					"organization": {
+						"$ref": "#/components/schemas/Organization"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"type": {
+						"$ref": "#/components/schemas/FundingSource"
+					},
+					"reportingPeriodId": {
+						"type": "number",
+						"format": "double"
+					},
+					"reportingPeriod": {
+						"$ref": "#/components/schemas/ReportingPeriod"
+					},
+					"submittedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"enrollments": {
+						"items": {
+							"$ref": "#/components/schemas/Enrollment"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"accredited",
+					"c4KRevenue",
+					"familyFeesRevenue",
+					"organizationId",
+					"id",
+					"reportingPeriodId",
+					"reportingPeriod"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"OrganizationPermission": {
+				"properties": {
+					"organizationId": {
+						"type": "number",
+						"format": "double"
+					},
+					"organization": {
+						"$ref": "#/components/schemas/Organization"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"required": [
+					"organizationId",
+					"id",
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"SitePermission": {
+				"properties": {
+					"siteId": {
+						"type": "number",
+						"format": "double"
+					},
+					"site": {
+						"$ref": "#/components/schemas/Site"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/User"
+					}
+				},
+				"required": [
+					"siteId",
+					"id",
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {
+			"jwt": {
+				"type": "apiKey",
+				"description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+				"name": "Authorization",
+				"in": "header"
+			}
+		}
+	},
+	"info": {
+		"title": "data-collection",
+		"version": "0.0.1",
+		"license": {
+			"name": "MIT"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/users/current": {
+			"get": {
+				"operationId": "GetCurrentUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/User"
+								}
+							}
+						}
+					}
+				},
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

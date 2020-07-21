@@ -13,6 +13,21 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import {
+    OrganizationPermission,
+    OrganizationPermissionFromJSON,
+    OrganizationPermissionFromJSONTyped,
+    OrganizationPermissionToJSON,
+    Site,
+    SiteFromJSON,
+    SiteFromJSONTyped,
+    SiteToJSON,
+    SitePermission,
+    SitePermissionFromJSON,
+    SitePermissionFromJSONTyped,
+    SitePermissionToJSON,
+} from './';
+
 /**
  * 
  * @export
@@ -43,6 +58,36 @@ export interface User {
      * @memberof User
      */
     lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    middleName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    suffix?: string;
+    /**
+     * 
+     * @type {Array<OrganizationPermission>}
+     * @memberof User
+     */
+    orgPermissions?: Array<OrganizationPermission>;
+    /**
+     * 
+     * @type {Array<SitePermission>}
+     * @memberof User
+     */
+    sitePermissions?: Array<SitePermission>;
+    /**
+     * 
+     * @type {Array<Site>}
+     * @memberof User
+     */
+    sites?: Array<Site>;
 }
 
 export function UserFromJSON(json: any): User {
@@ -59,6 +104,11 @@ export function UserFromJSONTyped(json: any, ignoreDiscriminator: boolean): User
         'wingedKeysId': json['wingedKeysId'],
         'firstName': json['firstName'],
         'lastName': json['lastName'],
+        'middleName': !exists(json, 'middleName') ? undefined : json['middleName'],
+        'suffix': !exists(json, 'suffix') ? undefined : json['suffix'],
+        'orgPermissions': !exists(json, 'orgPermissions') ? undefined : ((json['orgPermissions'] as Array<any>).map(OrganizationPermissionFromJSON)),
+        'sitePermissions': !exists(json, 'sitePermissions') ? undefined : ((json['sitePermissions'] as Array<any>).map(SitePermissionFromJSON)),
+        'sites': !exists(json, 'sites') ? undefined : ((json['sites'] as Array<any>).map(SiteFromJSON)),
     };
 }
 
@@ -75,6 +125,11 @@ export function UserToJSON(value?: User | null): any {
         'wingedKeysId': value.wingedKeysId,
         'firstName': value.firstName,
         'lastName': value.lastName,
+        'middleName': value.middleName,
+        'suffix': value.suffix,
+        'orgPermissions': value.orgPermissions === undefined ? undefined : ((value.orgPermissions as Array<any>).map(OrganizationPermissionToJSON)),
+        'sitePermissions': value.sitePermissions === undefined ? undefined : ((value.sitePermissions as Array<any>).map(SitePermissionToJSON)),
+        'sites': value.sites === undefined ? undefined : ((value.sites as Array<any>).map(SiteToJSON)),
     };
 }
 
