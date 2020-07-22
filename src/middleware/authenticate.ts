@@ -1,49 +1,63 @@
-import { NextFunction, Request, Response } from "express";
-import jwt from 'express-jwt';
+import { Request } from "express";
+import jwt, { JwtHeader, SigningKeyCallback, VerifyCallback } from 'jsonwebtoken'
 import jwks from 'jwks-rsa';
+import { UserService } from "../services/user/UserService";
 
-const validate = jwt({
-	secret: jwks.expressJwtSecret({
-		jwksUri: 'https://winged-keys:5050/.well-known/openid-configuration/jwks',
-		// @TODO Add HTTPS support
-		strictSsl: false,
-	}),
-	algorithms: [ 'RS256' ],
-	requestProperty: 'token'
+const jwksClient = jwks({
+	// @TODO Use ENV var for URI host
+	jwksUri: 'https://winged-keys:5050/.well-known/openid-configuration/jwks',
+	// @TODO Add HTTPS support
+	strictSsl: false,
 });
 
-const handleError = (
-	err: Error,
-	_: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	if (err.name === 'UnauthorizedError') {
-		res.status(401).json({
-			status: 401,
-			message: 'Unauthorized'
-		});
-  } else {
-		next();
+const getAuthorizationToken = (req: Request) => {
+	const authorizationHeader = req.header("Authorization");
+	if (!authorizationHeader) {
+		throw new Error("No Authorization header");
+	}
+	if (authorizationHeader && authorizationHeader.startsWith("Bearer ")) {
+		const token = authorizationHeader.substr(7);
+		return token;
+	} else {
+		throw new Error("Invalid Authorization header for Bearer Auth");
 	}
 }
 
-const identify = (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
- try {
-	 const token = req.token;
-	 const sub = token.sub;
-	 req.sub = sub;
-	 next();
- } catch (e) {
-	 console.log(e)
-	 res.status(500).send({
-		 error: e.toString()
-	 });
- }
+const getJwtSecret = (header: JwtHeader, cb: SigningKeyCallback) => {
+	jwksClient.getSigningKey(header.kid, function(err, key) {
+		if (err) {
+			cb(err, null);
+			return;
+		}
+		var signingKey = key.getPublicKey();
+		cb(null, signingKey);
+	});
 }
 
-export const authenticate = [validate, handleError, identify];
+const validate = (token: string, cb: VerifyCallback) => {
+	jwt.verify(token, getJwtSecret, {
+		algorithms: [ 'RS256' ],
+	}, cb);
+}
+
+export function expressAuthentication(
+	req: Request,
+	securityName: string,
+	scopes?: string[]
+): Promise<any> {
+	if (securityName !== "jwt") {
+		throw new Error("Invalid security scheme");
+	}
+
+	const token = getAuthorizationToken(req);
+
+	return new Promise((resolve, reject) => {
+		validate(token, (err, decodedToken: any) => {
+			if (err) {
+				reject(err);
+			}
+			const user =  new UserService().getByWingedKeysId(decodedToken.sub);
+			resolve(user);
+		})
+	});
+}

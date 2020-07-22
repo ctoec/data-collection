@@ -8,7 +8,3 @@ export const users: User[] = [
 		lastName: "Mort"
 	}
 ];
-
-export const getUserByWingedKeysId = (wingedKeysId: string) => (
-	users.find(user => user.wingedKeysId === wingedKeysId)
-);
