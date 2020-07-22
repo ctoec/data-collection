@@ -23,6 +23,7 @@ export type UserProviderPropsType = {};
  * @param props Props with user
  */
 const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
+<<<<<<< HEAD
   const { accessToken, loading } = useContext(AuthenticationContext);
   const [user, setUser] = useState<User | null>(null);
   const [userLoading, setUserLoading] = useState(loading);
@@ -45,6 +46,30 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
   }, [accessToken]);
 
   return <Provider value={{ loading: userLoading, user }}>{children}</Provider>;
+=======
+	const { accessToken, loading } = useContext(AuthenticationContext);
+	const [user, setUser] = useState<User | null>(null);
+	const [userLoading, setUserLoading] = useState(loading);
+
+	useEffect(() => {
+		setUserLoading(false);
+		if (accessToken) {
+			setUserLoading(true);
+			new DefaultApi(
+				new Configuration({
+					basePath: `${getCurrentHost()}/api`,
+					apiKey: `Bearer ${accessToken}`,
+				}
+			))
+			.getCurrentUser()
+			.then(data => setUser(data))
+			.then(_ => setUserLoading(false))
+			.finally(() => setUserLoading(false));
+		}
+	}, [accessToken]);
+
+	return <Provider value={{ loading: userLoading, user }}>{children}</Provider>;
+>>>>>>> Add TSOA, generate spec and client code (PR #68) (Issue #57)
 };
 
 export { UserProvider };

@@ -13,6 +13,24 @@ A web application to collect information from child care providers in the State 
 
 ### OpenAPI Spec and Client Code Generation
 This application uses a code-first automated generation strategy for producing the Express API, an OpenAPI Spec, and client-calling code to the API.
+<<<<<<< HEAD
+=======
+
+To generate the generated routes, run:
+```bash
+yarn run tsoa routes
+```
+
+To generate the OpenAPI specification, run:
+```bash
+yarn run tsoa spec
+```
+
+To generate the client code, run the included Bash file: `./generate-client-code.sh`.
+
+#### Local
+1. Install (if you haven't already) Visual Studio, [Node 12](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/lang/en/docs/install/).
+>>>>>>> Add TSOA, generate spec and client code (PR #68) (Issue #57)
 
 To generate the generated routes, run:
 ```bash

@@ -1,1 +1,2 @@
-export class ReportService {}
+export class ReportService {
+}
