@@ -1,31 +1,26 @@
 {
-	"compilerOptions": {
-		"target": "es6",	
-		"module": "commonjs",
-		"outDir": "dist",
-		"isolatedModules": true,
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "dist",
+    "isolatedModules": true,
 
-		"strict": false,
+    "strict": false,
 
-		"sourceMap": true,
+    "sourceMap": true,
 
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
 
-		"experimentalDecorators": true,
-		
-		"baseUrl": ".",
-		"paths": {
-			"*": [
-				"node_modules/*",
-				"src/types/*"
-			]
-		},
-	
-		"forceConsistentCasingInFileNames": true
-	},
-	"include": [
-		"src/**/*"
-	]
+    "experimentalDecorators": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    },
+
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
 }
