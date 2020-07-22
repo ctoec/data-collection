@@ -1,59 +1,63 @@
 {
-   "name": "data-collection",
-   "version": "0.0.1",
-   "main": "dist/index.js",
-   "repository": "https://github.com/ctoec/data-collection.git",
-   "license": "MIT",
-   "dependencies": {
-      "@types/express": "^4.17.6",
-      "@types/express-jwt": "^0.0.42",
-      "@types/http-proxy": "^1.17.4",
-      "@types/multer": "^1.4.3",
-      "@types/node": "^14.0.14",
-      "concurrently": "^5.2.0",
-      "del": "^5.1.0",
-      "express": "^4.17.1",
-      "express-jwt": "^6.0.0",
-      "forever": "^3.0.0",
-      "http-proxy": "^1.18.1",
-      "jwks-rsa": "^1.8.1",
-      "multer": "^1.4.2",
-      "node-postgres": "^0.6.2",
-      "nodemon": "^2.0.4",
-      "pg": "^7.3.0",
-      "reflect-metadata": "^0.1.10",
-      "ts-node": "^8.10.2",
-		"tsoa": "^3.2.1",
-      "typeorm": "0.2.25",
-      "typescript": "^3.9.5"
-   },
-   "scripts": {
-      "build": "npm run build-ts",
-      "build-ts": "tsc",
-      "debug": "npm run build && npm run watch-debug",
-      "serve": "node dist/index.js",
-      "serve-debug": "nodemon --inspect dist/index.js",
-      "start": "ts-node src/index.ts",
-      "test": "exit 0",
-      "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
-      "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
-      "watch-node": "nodemon dist/index.js",
-      "watch-test": "npm run test -- --watchAll",
-      "watch-ts": "tsc -w"
-   },
-   "engines": {
-      "node": "^12"
-   },
-   "devDependencies": {
-      "@types/node": "^8.0.29",
-      "prettier": "^2.0.0",
-      "pretty-quick": "^2.0.1",
-      "ts-node": "3.3.0",
-      "typescript": "3.3.3333"
-   },
-   "husky": {
-      "hooks": {
-         "pre-commit": "pretty-quick --staged"
-      }
-   }
+  "name": "data-collection",
+  "version": "0.0.1",
+  "main": "dist/index.js",
+  "repository": "https://github.com/ctoec/data-collection.git",
+  "license": "MIT",
+  "dependencies": {
+    "@types/express": "^4.17.6",
+    "@types/express-jwt": "^0.0.42",
+    "@types/http-proxy": "^1.17.4",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/multer": "^1.4.3",
+    "@types/node": "^14.0.14",
+    "concurrently": "^5.2.0",
+    "del": "^5.1.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "forever": "^3.0.0",
+    "http-proxy": "^1.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.8.1",
+    "multer": "^1.4.2",
+    "node-postgres": "^0.6.2",
+    "nodemon": "^2.0.4",
+    "pg": "^7.3.0",
+    "reflect-metadata": "^0.1.10",
+    "ts-node": "^8.10.2",
+    "tsoa": "^3.2.1",
+    "typeorm": "0.2.25",
+    "typescript": "^3.9.5"
+  },
+  "scripts": {
+    "build": "npm run build-ts",
+    "build-ts": "tsc",
+    "debug": "npm run build && npm run watch-debug",
+    "serve": "node dist/index.js",
+    "serve-debug": "nodemon --inspect dist/index.js",
+    "start": "ts-node src/index.ts",
+    "test": "exit 0",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run serve-debug\"",
+    "watch-node": "nodemon dist/index.js",
+    "watch-test": "npm run test -- --watchAll",
+    "watch-ts": "tsc -w",
+    "prettier": "prettier --single-quote --write **/*.{js,jsx,ts,tsx,json,css,scss}",
+    "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
+  },
+  "engines": {
+    "node": "^12"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.29",
+    "prettier": "^2.0.0",
+    "pretty-quick": "^2.0.1",
+    "ts-node": "3.3.0",
+    "typescript": "3.3.3333"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
 }

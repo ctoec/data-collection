@@ -1,5 +1,4 @@
 export enum FundingSource {
-		CDC = 'CDC',
-		SchoolReadiness = 'SchoolReadiness'
+  CDC = 'CDC',
+  SchoolReadiness = 'SchoolReadiness',
 }
-

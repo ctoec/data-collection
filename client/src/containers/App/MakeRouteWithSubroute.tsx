@@ -5,16 +5,18 @@ import { RouteConfig } from '../../routes';
 // Derived from: https://www.freecodecamp.org/news/hitchhikers-guide-to-react-router-v4-c98c39892399/
 
 const MakeRouteWithSubRoutes = (route: RouteConfig) => {
-	return (
-		<Route
-			path={route.path}
-			exact={route.exact}
-			render={(props) => {
-				const component = <route.component {...props} {...route.props} routes={route.routes} />;
-				return component;
-			}}
-		/>
-	);
+  return (
+    <Route
+      path={route.path}
+      exact={route.exact}
+      render={(props) => {
+        const component = (
+          <route.component {...props} {...route.props} routes={route.routes} />
+        );
+        return component;
+      }}
+    />
+  );
 };
 
 export default MakeRouteWithSubRoutes;

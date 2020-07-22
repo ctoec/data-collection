@@ -1,33 +1,37 @@
-import { Entity, TableInheritance, PrimaryGeneratedColumn, ManyToOne, ChildEntity } from 'typeorm';
+import {
+  Entity,
+  TableInheritance,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  ChildEntity,
+} from 'typeorm';
 import { User } from './User';
 import { Organization } from './Organization';
 import { Site } from './Site';
 
 enum PermissionType {
-	Organization = 1,
-	Site = 2,
-};
-
+  Organization = 1,
+  Site = 2,
+}
 
 @Entity()
-@TableInheritance({ column: {type: 'enum', enum: PermissionType }})
+@TableInheritance({ column: { type: 'enum', enum: PermissionType } })
 export abstract class Permission {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-	@PrimaryGeneratedColumn()
-	id: number;
-
-	@ManyToOne(type => User)
-	user: User;
+  @ManyToOne((type) => User)
+  user: User;
 }
 
 @ChildEntity(PermissionType.Organization)
 export class OrganizationPermission extends Permission {
-	@ManyToOne(type => Organization)
-	organization: Organization;
+  @ManyToOne((type) => Organization)
+  organization: Organization;
 }
 
 @ChildEntity(PermissionType.Site)
 export class SitePermission extends Permission {
-	@ManyToOne(type => Site)
-	site: Site;
+  @ManyToOne((type) => Site)
+  site: Site;
 }

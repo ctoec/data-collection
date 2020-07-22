@@ -6,6 +6,10 @@ A web application to collect information from child care providers in the State 
 
 ### Requirements
 1. Bind mount or clone [`winged-keys`](https://github.com/ctoec/winged-keys) into the top-level of this directory.
+2. Install git pre-commit hook from `/hooks` dir
+    ```sh
+       ln -s `pwd`/hooks/pre-commit.sh `pwd`/.git/hooks/pre-commit 
+    ```
 
 ### OpenAPI Spec and Client Code Generation
 This application uses a code-first automated generation strategy for producing the Express API, an OpenAPI Spec, and client-calling code to the API.
@@ -22,22 +26,12 @@ yarn run tsoa spec
 
 To generate the client code, run the included Bash file: `./generate-client-code.sh`.
 
-#### Local
-1. Install (if you haven't already) Visual Studio, [Node 12](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/lang/en/docs/install/).
-
-2. Install all corresponding yarn dependencies, based on the static versions specified in `yarn.lock`:
-    ```.sh
-    yarn install --frozen-lockfile
-    ```
-
-3. Follow steps 2 and 3 again from within the `client` directory, located in project root.
-
-#### Docker
+### Running the app
 1. Install (if you haven't already) [Docker](https://hub.docker.com/search?q=&type=edition&offering=community). Make sure you have [Docker Compose](https://docs.docker.com/compose/install/), which is included in some OS distributions but must be installed separately in others.
 2. Install all corresponding yarn dependencies, based on the static versions specified in `yarn.lock`, via the containers:
     ```sh
-    docker-compose --entrypoint "yarn install --frozen-lockfile" client
-    docker-compose --entrypoint "yarn install --frozen-lockfile" server
+    docker-compose exec client yarn install --frozen-lockfile
+    docker-compose exec server yarn install --frozen-lockfile
     ```
 3. Start application:
     ```sh
@@ -49,6 +43,7 @@ To generate the client code, run the included Bash file: `./generate-client-code
         Name                            Command               State           Ports                
     --------------------------------------------------------------------------------------------------       
     data-collection_client_1           yarn start                       Up      0.0.0.0:5000->3000/tcp       
+    data-collection_db_1               docker-entrypoint.sh postgres    Up      5432/tcp   
     data-collection_server_1           yarn run watch                   Up      0.0.0.0:5001->3000/tcp       
     data-collection_winged-keys-db_1   /opt/mssql/bin/permissions ...   Up      1433/tcp                     
     data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp       

@@ -2,17 +2,16 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { FundingSpace } from './FundingSpace';
 
 @Entity()
-export class FundingTimeSplit { 
+export class FundingTimeSplit {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-		@PrimaryGeneratedColumn()
-		id: number;
-		
-		@ManyToOne(type => FundingSpace)
-		fundingSpace: FundingSpace;
-		
-		@Column()
-		fullTimeWeeks: number;
-		
-		@Column()
-    partTimeWeeks: number;
+  @ManyToOne((type) => FundingSpace)
+  fundingSpace: FundingSpace;
+
+  @Column()
+  fullTimeWeeks: number;
+
+  @Column()
+  partTimeWeeks: number;
 }

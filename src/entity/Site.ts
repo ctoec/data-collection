@@ -1,39 +1,44 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 import { Enrollment } from './Enrollment';
 import { Organization } from './Organization';
 import { Region } from './enums';
 
 @Entity()
-export class Site { 
+export class Site {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-		@PrimaryGeneratedColumn()
-		id: number;
-		
-		@Column()
-		name: string;
-		
-		@Column()
-		titleI: boolean;
+  @Column()
+  name: string;
 
-		@Column()
-		region: Region;
+  @Column()
+  titleI: boolean;
 
-		@Column({ nullable: true })
-		facilityCode?: number;
-		
-		@Column({ nullable: true })
-		licenseNumber?: number;
-		
-		@Column({ nullable: true })
-		naeycId?: number;
-		
-		@Column({ nullable: true })
-		registryId?: number;
+  @Column()
+  region: Region;
 
-		@ManyToOne(type => Organization)
-    organization: Organization;
+  @Column({ nullable: true })
+  facilityCode?: number;
 
-		@OneToMany(type => Enrollment, enrollment => enrollment.site)
-    enrollments: Array<Enrollment>;
+  @Column({ nullable: true })
+  licenseNumber?: number;
+
+  @Column({ nullable: true })
+  naeycId?: number;
+
+  @Column({ nullable: true })
+  registryId?: number;
+
+  @ManyToOne((type) => Organization)
+  organization: Organization;
+
+  @OneToMany((type) => Enrollment, (enrollment) => enrollment.site)
+  enrollments: Array<Enrollment>;
 }

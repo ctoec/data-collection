@@ -5,9 +5,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 it('matches snapshot', () => {
   const { asFragment } = render(
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	);
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
   expect(asFragment()).toMatchSnapshot();
 });
