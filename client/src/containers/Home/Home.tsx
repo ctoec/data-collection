@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, TextWithIcon } from '@ctoec/component-library'
+import { Button, TextWithIcon } from '@ctoec/component-library';
 import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
 
@@ -10,122 +10,120 @@ import cx from 'classnames';
 import { MailToLink } from './MailToLink';
 
 const Home: React.FC = () => {
-	const { user, loading } = useContext(UserContext);
-	const history = useHistory();
+  const { user, loading } = useContext(UserContext);
+  const history = useHistory();
 
-	// To prevent flash of splash page if user is logged in
-	if (loading) {
-		return <></>;
-	}
+  // To prevent flash of splash page if user is logged in
+  if (loading) {
+    return <></>;
+  }
 
-	// If the user is logged in, don't show the splash page
-	if (user) {
-		history.push('/getting-started');
-		return <></>;
-	}
+  // If the user is logged in, don't show the splash page
+  if (user) {
+    history.push('/getting-started');
+    return <></>;
+  }
 
-	return (
-		<div className="Home">
-			<div className="usa-hero">
-				<div>
-					<h1 className="margin-bottom-2">Upload your enrollment data</h1>
-					<Button
-						className="btn--inverse"
-						href="/login"
-						text="Sign in"
-						appearance="base"
-					/>
-				</div>
-			</div>
-			<div className="grid-container margin-top-4">
-				<div className="grid-row">
-					<div className="tablet:grid-col-auto margin-right-4 padding-4">
-						<img
-							className="hero-bubble"
-							src={HomeCareerBubbleSrc}
-							alt=""
-						/>
-					</div>
-					<div className="tablet:grid-col-fill">
-						<h2 className="text-primary text-light margin-y-3">
-							We support affordable child care in Connecticut
-						</h2>
-						<p className="line-height-sans-5">
-							Publicly-funded early care and education programs use ECE Reporter to share data with
-							the Connecticut Office of Early Childhood.
-						</p>
-						<p>
-							The Office of Early Childhood uses this data to pay programs and help
-							families access quality care.
-						</p>
-						<div className="margin-bottom-6">
-							<p className="text-bold">Learn more</p>
-							<Button
-								appearance="unstyled"
-								href="https://ctoec.org"
-								className="text-bold"
-								text={
-									<TextWithIcon
-										text="Visit OEC's website"
-										Icon={ArrowRight}
-										direction="right"
-										iconSide="right"
-										className="text-underline"
-									/>
-								}
-							/>
-							<br />
-							<br />
-							<Button
-								appearance="unstyled"
-								href="/privacy-policy"
-								className="text-bold"
-								text={
-									<TextWithIcon
-										text="See the privacy policy"
-										Icon={ArrowRight}
-										direction="right"
-										iconSide="right"
-										className="text-underline"
-									/>
-								}
-							/>
-							<br />
-							<br />
-							<a
-								href="/upload_template/ECE Data Collection Template.xlsx"
-								className="text-bold"
-							>
-								<TextWithIcon
-									text="Download the Excel data collection template"
-									Icon={ArrowRight}
-									direction="right"
-									iconSide="right"
-									className="text-underline"
-								/>
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<footer className={cx('bg-base-lightest', 'padding-y-6', 'footer')}>
-				<div className="grid-row flex-justify flex-align-center">
-					<div className="grid-col-10">
-						<h2 className="text-primary text-light margin-y-3">
-							Have feedback about OEC's data collection process?
-						</h2>
-						<p>Feedback from providers like you helps make this tool even better.</p>
-						<p>
-							Send us your feedback at <MailToLink />
-						</p>
-					</div>
-				</div>
-				<div className="grid-col-2">
-					{/* TODO: Add icon of message bubbles */}
-				</div>
-			</footer>
-		</div>
-	);
-}
+  return (
+    <div className="Home">
+      <div className="usa-hero">
+        <div>
+          <h1 className="margin-bottom-2">Upload your enrollment data</h1>
+          <Button
+            className="btn--inverse"
+            href="/login"
+            text="Sign in"
+            appearance="base"
+          />
+        </div>
+      </div>
+      <div className="grid-container margin-top-4">
+        <div className="grid-row">
+          <div className="tablet:grid-col-auto margin-right-4 padding-4">
+            <img className="hero-bubble" src={HomeCareerBubbleSrc} alt="" />
+          </div>
+          <div className="tablet:grid-col-fill">
+            <h2 className="text-primary text-light margin-y-3">
+              We support affordable child care in Connecticut
+            </h2>
+            <p className="line-height-sans-5">
+              Publicly-funded early care and education programs use ECE Reporter
+              to share data with the Connecticut Office of Early Childhood.
+            </p>
+            <p>
+              The Office of Early Childhood uses this data to pay programs and
+              help families access quality care.
+            </p>
+            <div className="margin-bottom-6">
+              <p className="text-bold">Learn more</p>
+              <Button
+                appearance="unstyled"
+                href="https://ctoec.org"
+                className="text-bold"
+                text={
+                  <TextWithIcon
+                    text="Visit OEC's website"
+                    Icon={ArrowRight}
+                    direction="right"
+                    iconSide="right"
+                    className="text-underline"
+                  />
+                }
+              />
+              <br />
+              <br />
+              <Button
+                appearance="unstyled"
+                href="/privacy-policy"
+                className="text-bold"
+                text={
+                  <TextWithIcon
+                    text="See the privacy policy"
+                    Icon={ArrowRight}
+                    direction="right"
+                    iconSide="right"
+                    className="text-underline"
+                  />
+                }
+              />
+              <br />
+              <br />
+              <a
+                href="/upload_template/ECE Data Collection Template.xlsx"
+                className="text-bold"
+              >
+                <TextWithIcon
+                  text="Download the Excel data collection template"
+                  Icon={ArrowRight}
+                  direction="right"
+                  iconSide="right"
+                  className="text-underline"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer className={cx('bg-base-lightest', 'padding-y-6', 'footer')}>
+        <div className="grid-row flex-justify flex-align-center">
+          <div className="grid-col-10">
+            <h2 className="text-primary text-light margin-y-3">
+              Have feedback about OEC's data collection process?
+            </h2>
+            <p>
+              Feedback from providers like you helps make this tool even better.
+            </p>
+            <p>
+              Send us your feedback at <MailToLink />
+            </p>
+          </div>
+        </div>
+        <div className="grid-col-2">
+          {/* TODO: Add icon of message bubbles */}
+        </div>
+      </footer>
+    </div>
+  );
+};
 
 export default Home;

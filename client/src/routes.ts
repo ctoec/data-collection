@@ -7,51 +7,51 @@ import GettingStarted from './containers/GettingStarted/GettingStarted';
 import CheckData from './containers/CheckData/CheckData';
 
 export type RouteConfig = {
-	path: string;
-	component: React.FC<any>;
-	exact?: boolean;
-	routes?: RouteConfig[];
-	unauthorized?: boolean;
-	props?: any;
+  path: string;
+  component: React.FC<any>;
+  exact?: boolean;
+  routes?: RouteConfig[];
+  unauthorized?: boolean;
+  props?: any;
 };
 
 export const routes: RouteConfig[] = [
-	{
-		path: '/',
-		exact: true,
-		component: Home,
-		unauthorized: true,
-	},
-	{
-		path: '/login',
-		component: Login,
-		unauthorized: true,
-	},
-	{
-		path: '/logout',
-		component: Login,
-		unauthorized: true,
-	},
-	{
-		path: '/getting-started',
-		component: GettingStarted,
-		unauthorized: false,
-	},
-	{
-		path: '/upload',
-		component: Upload,
-		unauthorized: false,
-	},
-	{
-		path: '/check-data',
-		component: CheckData,
-		unauthorized: false,
-	},
-	{
-		path: '/:unknown',
-		component: PageNotFound,
-		unauthorized: true,
-	},
+  {
+    path: '/',
+    exact: true,
+    component: Home,
+    unauthorized: true,
+  },
+  {
+    path: '/login',
+    component: Login,
+    unauthorized: true,
+  },
+  {
+    path: '/logout',
+    component: Login,
+    unauthorized: true,
+  },
+  {
+    path: '/getting-started',
+    component: GettingStarted,
+    unauthorized: false,
+  },
+  {
+    path: '/upload',
+    component: Upload,
+    unauthorized: false,
+  },
+  {
+    path: '/check-data',
+    component: CheckData,
+    unauthorized: false,
+  },
+  {
+    path: '/:unknown',
+    component: PageNotFound,
+    unauthorized: true,
+  },
 ];
 
 export default routes;
