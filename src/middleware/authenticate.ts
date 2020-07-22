@@ -12,7 +12,10 @@ const jwksClient = jwks({
 
 const getAuthorizationToken = (req: Request) => {
 	const authorizationHeader = req.header("Authorization");
-	if (authorizationHeader.startsWith("Bearer ")) {
+	if (!authorizationHeader) {
+		throw new Error("No Authorization header");
+	}
+	if (authorizationHeader && authorizationHeader.startsWith("Bearer ")) {
 		const token = authorizationHeader.substr(7);
 		return token;
 	} else {
