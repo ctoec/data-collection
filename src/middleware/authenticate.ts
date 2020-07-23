@@ -64,6 +64,7 @@ export function expressAuthentication(
     validate(token, (err, decodedToken: any) => {
       if (err) {
         reject(err);
+        return;
       }
       const user = new UserService().getByWingedKeysId(decodedToken.sub);
       resolve(user);
