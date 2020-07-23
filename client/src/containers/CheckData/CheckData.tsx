@@ -40,6 +40,14 @@ const tableIcons = {
 
 const oecFontFamily = 'Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol';
 
+//  TODO: Pull from somewhere instead of this static set of CLEARLY POPULAR basketball players
+const tableRows = [
+  { name: 'Michael', surname: 'Johnson', birthYear: 1987, birthCity: 63 },
+  { name: 'LeBron', surname: 'James', birthYear: 2017, birthCity: 34 },
+  { name: 'Giannis', surname: 'Antetokounmpo', birthYear: 1987, birthCity: 63 },
+  { name: 'James', surname: 'Harden', birthYear: 2017, birthCity: 34 },
+  { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 }
+];
 
 const CheckData: React.FC = () => {
   return <MaterialTable
@@ -57,32 +65,11 @@ const CheckData: React.FC = () => {
           lookup: { 34: 'Somewhere', 63: 'Somewhere Else' },
         },
       ]}
-      data={[
-        { name: 'Michael', surname: 'Johnson', birthYear: 1987, birthCity: 63 },
-        { name: 'LeBron', surname: 'James', birthYear: 2017, birthCity: 34 },
-        { name: 'Giannis', surname: 'Antetokounmpo', birthYear: 1987, birthCity: 63 },
-        { name: 'James', surname: 'Harden', birthYear: 2017, birthCity: 34 },
-        { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 }
-      ]}
+      data={tableRows}
       editable={{
-        onRowAdd: newData =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve()
-            }, 1000)
-          }),
-        onRowUpdate: (newData, oldData) =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve()
-            }, 1000)
-          }),
-        onRowDelete: oldData =>
-          new Promise((resolve, reject) => {
-            setTimeout(() => {
-              resolve()
-            }, 1000)
-          }),
+        onRowAdd,
+        onRowUpdate,
+        onRowDelete,
       }}
       actions={[
         {
@@ -105,3 +92,34 @@ const CheckData: React.FC = () => {
 };
 
 export default CheckData;
+
+///////////////////////////////////////////////////
+
+//  TODO: Capture and store new data entered to data table
+function onRowAdd(newData: any) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, 1000)
+  })
+}
+
+//  TODO: Capture and store data table updates
+function onRowUpdate(newData: any, oldData: any) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, 1000)
+  });
+}
+
+//  TODO: Capture and apply deletions made to data table
+function onRowDelete(oldData: any) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve()
+    }, 1000)
+  });
+}
+
+
