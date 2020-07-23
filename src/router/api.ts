@@ -21,21 +21,19 @@ router.post('/reports', upload.single('file'), (req, res) => {
 });
 
 router.get('/reports/:id', (req, res) => {
-	const id = req.params.id || '';
-	if(!id) {
-		res.sendStatus(404);
-	}
+  const id = req.params.id || '';
+  if (!id) {
+    res.sendStatus(404);
+  }
 
-	fs.readFile(path.join('/tmp/uploads', id), 'utf-8', (err, data) => {
-		if(err) {
-			res.sendStatus(500);
-		}
+  fs.readFile(path.join('/tmp/uploads', id), 'utf-8', (err, data) => {
+    if (err) {
+      res.sendStatus(500);
+    }
 
-		res.status(200).send(
-			data
-		);
-	})
-})
+    res.status(200).send(data);
+  });
+});
 
 router.use(handleError);
 

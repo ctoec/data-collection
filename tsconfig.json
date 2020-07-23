@@ -9,23 +9,18 @@
 
     "sourceMap": true,
 
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
 
-		"experimentalDecorators": true,
-		
-		"baseUrl": ".",
-		"paths": {
-			"*": [
-				"node_modules/*",
-				"src/types/*"
-			]
-		},
-	
-		"forceConsistentCasingInFileNames": true
-	},
-	"include": [
-		"src/**/*"
-	]
+    "experimentalDecorators": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    },
+
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
 }

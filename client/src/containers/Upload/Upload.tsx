@@ -31,50 +31,55 @@ const Upload: React.FC = () => {
   const formData = new FormData();
 
   const onSubmit = () => {
-		setLoading(true);
-		new DefaultApi(
-			new Configuration({
-				basePath: `${getCurrentHost()}/api`,
-				apiKey: `Bearer ${accessToken}`
-			})
-		)
-		.post({
-			file: formData.get("file") as any
-		})
-		.then(value => {
-			setStatus({
-				filename: (value as any).filename,
-				message: "Successfully uploaded file"
-			})
-		})
-		.catch(_ => {
-			setStatus({
-				error: 'There was an error'
-			})
-		})
-		.finally(() => {
-			setLoading(false)
-		});
-		
-		return false;
-	}
-	const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-		e.preventDefault();
-		if (!e.target.files) {
-			return false;
-		}
-		const file = e.target.files[0];
-		if (!file) {
-			return false;
-		}
-		formData.delete("file");
-		formData.set("file", file);
-		return false;
-	}
+    setLoading(true);
+    new DefaultApi(
+      new Configuration({
+        basePath: `${getCurrentHost()}/api`,
+        apiKey: `Bearer ${accessToken}`,
+      })
+    )
+      .post({
+        file: formData.get('file') as any,
+      })
+      .then((value) => {
+        setStatus({
+          filename: (value as any).filename,
+          message: 'Successfully uploaded file',
+        });
+      })
+      .catch((_) => {
+        setStatus({
+          error: 'There was an error',
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+
+    return false;
+  };
+  const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (!e.target.files) {
+      return false;
+    }
+    const file = e.target.files[0];
+    if (!file) {
+      return false;
+    }
+    formData.delete('file');
+    formData.set('file', file);
+    return false;
+  };
 
   return (
     <div className="grid-container margin-top-4">
-      {status && <Alert text={status.message} type="success" />}
+      {status &&
+        (!status.error ? (
+          <Alert text={status.message} type="success" />
+        ) : (
+          <Alert text={status.error} type="error" />
+        ))}
       <div className="grid-row">
         <h1>Upload your enrollment data</h1>
         <p>
@@ -95,7 +100,7 @@ const Upload: React.FC = () => {
           />
           {status && !status.error && (
             <Button
-              href="/check-data"
+              href={`/check-data/${status.filename}`}
               text="Check your data"
               appearance="outline"
             />
