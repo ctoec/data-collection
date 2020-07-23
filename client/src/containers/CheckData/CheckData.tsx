@@ -18,8 +18,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-
 const tableIcons = {
     Add: forwardRef<any, any>((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef<any, any>((props, ref) => <Check {...props} ref={ref} />),
@@ -40,45 +38,70 @@ const tableIcons = {
     ViewColumn: forwardRef<any, any>((props, ref) => <ViewColumn {...props} ref={ref} />)
   };
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#4caf50',
-    },
-    secondary: {
-      main: '#ff9100',
-    },
-  },
+const oecFontFamily = 'Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol';
 
-});
 
 const CheckData: React.FC = () => {
   return <MaterialTable
-    icons={tableIcons}
-    title="Example Data Table"
-    columns={[
-      {
-        title: 'Name', field: 'name',
-      },
-      { title: 'Surname', field: 'surname' },
-      { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-      {
-        title: 'Birth Place',
-        field: 'birthCity',
-        lookup: { 34: 'Somewhere', 63: 'Somewhere Else' },
-      },
-    ]}
-    data={[
-      { name: 'Michael', surname: 'Jordan', birthYear: 1987, birthCity: 63 },
-      { name: 'LeBron', surname: 'James', birthYear: 2017, birthCity: 34 },
-      { name: 'Giannis', surname: 'Antetokounmpo', birthYear: 1987, birthCity: 63 },
-      { name: 'James', surname: 'Harden', birthYear: 2017, birthCity: 34 },
-      { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 }
-    ]}
-    options={{
-      selection: true
-    }}
-  />;
+      icons={tableIcons}
+      title="Example Data Table"
+      columns={[
+        {
+          title: 'Name', field: 'name', validate: rowData => rowData.name !== ''
+        },
+        { title: 'Surname', field: 'surname', validate: rowData => rowData.surname !== '' },
+        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+        {
+          title: 'Birth Place',
+          field: 'birthCity',
+          lookup: { 34: 'Somewhere', 63: 'Somewhere Else' },
+        },
+      ]}
+      data={[
+        { name: 'Michael', surname: 'Johnson', birthYear: 1987, birthCity: 63 },
+        { name: 'LeBron', surname: 'James', birthYear: 2017, birthCity: 34 },
+        { name: 'Giannis', surname: 'Antetokounmpo', birthYear: 1987, birthCity: 63 },
+        { name: 'James', surname: 'Harden', birthYear: 2017, birthCity: 34 },
+        { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 }
+      ]}
+      editable={{
+        onRowAdd: newData =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve()
+            }, 1000)
+          }),
+        onRowUpdate: (newData, oldData) =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve()
+            }, 1000)
+          }),
+        onRowDelete: oldData =>
+          new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve()
+            }, 1000)
+          }),
+      }}
+      actions={[
+        {
+          tooltip: 'Remove All Selected Users',
+          icon: () => <DeleteOutline />,
+          onClick: (evt, data) => alert('You want to delete rows?')
+        }
+      ]}
+      options={{
+        rowStyle: { 
+          fontFamily: oecFontFamily
+         },
+        headerStyle: {
+          fontFamily: oecFontFamily
+        },
+        selection: true,
+        showTitle: false
+      }}
+    />;
 };
 
 export default CheckData;
