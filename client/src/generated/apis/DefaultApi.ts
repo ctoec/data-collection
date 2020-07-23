@@ -15,12 +15,12 @@
 import * as runtime from '../runtime';
 import { User, UserFromJSON, UserToJSON } from '../models';
 
-export interface GetRequest {
-  reportId: string;
+export interface CreateReportRequest {
+  file?: Blob;
 }
 
-export interface PostRequest {
-  file?: Blob;
+export interface GetReportByIdRequest {
+  reportId: string;
 }
 
 /**
@@ -29,85 +29,8 @@ export interface PostRequest {
 export class DefaultApi extends runtime.BaseAPI {
   /**
    */
-  async getRaw(
-    requestParameters: GetRequest
-  ): Promise<runtime.ApiResponse<object>> {
-    if (
-      requestParameters.reportId === null ||
-      requestParameters.reportId === undefined
-    ) {
-      throw new runtime.RequiredError(
-        'reportId',
-        'Required parameter requestParameters.reportId was null or undefined when calling get.'
-      );
-    }
-
-    const queryParameters: runtime.HTTPQuery = {};
-
-    const headerParameters: runtime.HTTPHeaders = {};
-
-    if (this.configuration && this.configuration.apiKey) {
-      headerParameters['Authorization'] = this.configuration.apiKey(
-        'Authorization'
-      ); // jwt authentication
-    }
-
-    const response = await this.request({
-      path: `/reports/{reportId}`.replace(
-        `{${'reportId'}}`,
-        encodeURIComponent(String(requestParameters.reportId))
-      ),
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    });
-
-    return new runtime.JSONApiResponse<any>(response);
-  }
-
-  /**
-   */
-  async get(requestParameters: GetRequest): Promise<object> {
-    const response = await this.getRaw(requestParameters);
-    return await response.value();
-  }
-
-  /**
-   */
-  async getCurrentUserRaw(): Promise<runtime.ApiResponse<User>> {
-    const queryParameters: runtime.HTTPQuery = {};
-
-    const headerParameters: runtime.HTTPHeaders = {};
-
-    if (this.configuration && this.configuration.apiKey) {
-      headerParameters['Authorization'] = this.configuration.apiKey(
-        'Authorization'
-      ); // jwt authentication
-    }
-
-    const response = await this.request({
-      path: `/users/current`,
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    });
-
-    return new runtime.JSONApiResponse(response, (jsonValue) =>
-      UserFromJSON(jsonValue)
-    );
-  }
-
-  /**
-   */
-  async getCurrentUser(): Promise<User> {
-    const response = await this.getCurrentUserRaw();
-    return await response.value();
-  }
-
-  /**
-   */
-  async postRaw(
-    requestParameters: PostRequest
+  async createReportRaw(
+    requestParameters: CreateReportRequest
   ): Promise<runtime.ApiResponse<object>> {
     const queryParameters: runtime.HTTPQuery = {};
 
@@ -152,8 +75,87 @@ export class DefaultApi extends runtime.BaseAPI {
 
   /**
    */
-  async post(requestParameters: PostRequest): Promise<object> {
-    const response = await this.postRaw(requestParameters);
+  async createReport(requestParameters: CreateReportRequest): Promise<object> {
+    const response = await this.createReportRaw(requestParameters);
+    return await response.value();
+  }
+
+  /**
+   */
+  async getCurrentUserRaw(): Promise<runtime.ApiResponse<User>> {
+    const queryParameters: runtime.HTTPQuery = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.apiKey) {
+      headerParameters['Authorization'] = this.configuration.apiKey(
+        'Authorization'
+      ); // jwt authentication
+    }
+
+    const response = await this.request({
+      path: `/users/current`,
+      method: 'GET',
+      headers: headerParameters,
+      query: queryParameters,
+    });
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      UserFromJSON(jsonValue)
+    );
+  }
+
+  /**
+   */
+  async getCurrentUser(): Promise<User> {
+    const response = await this.getCurrentUserRaw();
+    return await response.value();
+  }
+
+  /**
+   */
+  async getReportByIdRaw(
+    requestParameters: GetReportByIdRequest
+  ): Promise<runtime.ApiResponse<object>> {
+    if (
+      requestParameters.reportId === null ||
+      requestParameters.reportId === undefined
+    ) {
+      throw new runtime.RequiredError(
+        'reportId',
+        'Required parameter requestParameters.reportId was null or undefined when calling getReportById.'
+      );
+    }
+
+    const queryParameters: runtime.HTTPQuery = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    if (this.configuration && this.configuration.apiKey) {
+      headerParameters['Authorization'] = this.configuration.apiKey(
+        'Authorization'
+      ); // jwt authentication
+    }
+
+    const response = await this.request({
+      path: `/reports/{reportId}`.replace(
+        `{${'reportId'}}`,
+        encodeURIComponent(String(requestParameters.reportId))
+      ),
+      method: 'GET',
+      headers: headerParameters,
+      query: queryParameters,
+    });
+
+    return new runtime.JSONApiResponse<any>(response);
+  }
+
+  /**
+   */
+  async getReportById(
+    requestParameters: GetReportByIdRequest
+  ): Promise<object> {
+    const response = await this.getReportByIdRaw(requestParameters);
     return await response.value();
   }
 }

@@ -364,7 +364,10 @@ export function RegisterRoutes(app: express.Express) {
 
       const controller = new ReportController();
 
-      const promise = controller.get.apply(controller, validatedArgs as any);
+      const promise = controller.getReportById.apply(
+        controller,
+        validatedArgs as any
+      );
       promiseHandler(controller, promise, response, next);
     }
   );
@@ -389,7 +392,10 @@ export function RegisterRoutes(app: express.Express) {
 
     const controller = new ReportController();
 
-    const promise = controller.post.apply(controller, validatedArgs as any);
+    const promise = controller.createReport.apply(
+      controller,
+      validatedArgs as any
+    );
     promiseHandler(controller, promise, response, next);
   });
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

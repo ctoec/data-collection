@@ -38,7 +38,7 @@ const Upload: React.FC = () => {
         apiKey: `Bearer ${accessToken}`,
       })
     )
-      .post({
+      .createReport({
         file: formData.get('file') as any,
       })
       .then((value) => {

@@ -8,17 +8,14 @@ import { readFileSync } from 'fs';
 export class ReportController extends Controller {
   @Security('jwt')
   @Get('{reportId}')
-  public async get(reportId: string): Promise<any> {
+  public async getReportById(reportId: string): Promise<any> {
     // TODO Connect to ReportService
-    return readFileSync(path.join('/tmp/uploads', reportId), 'utf-8').replace(
-      '"',
-      ''
-    );
+    return readFileSync(path.join('/tmp/uploads', reportId), 'utf-8');
   }
 
   @Security('jwt')
   @Post('')
-  public async post(@Request() req: Express.Request): Promise<any> {
+  public async createReport(@Request() req: Express.Request): Promise<any> {
     await this.handleFile(req);
     const reportService = new ReportService();
     const enrollmentReport = reportService.parse(req.file);

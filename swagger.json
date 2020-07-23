@@ -797,7 +797,7 @@
   "paths": {
     "/reports/{reportId}": {
       "get": {
-        "operationId": "Get",
+        "operationId": "GetReportById",
         "responses": {
           "200": {
             "description": "Ok",
@@ -827,7 +827,7 @@
     },
     "/reports": {
       "post": {
-        "operationId": "Post",
+        "operationId": "CreateReport",
         "responses": {
           "200": {
             "description": "Ok",
