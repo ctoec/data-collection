@@ -7,6 +7,8 @@ import {
   Button,
   Alert,
 } from '@ctoec/component-library';
+import { DefaultApi, Configuration } from '../../generated';
+import { getCurrentHost } from '../../utils/getCurrentHost';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -29,42 +31,46 @@ const Upload: React.FC = () => {
   const formData = new FormData();
 
   const onSubmit = () => {
-    setLoading(true);
-    fetch('/api/reports', {
-      method: 'POST',
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
-      body: formData,
-    })
-      .then((value) => value.json())
-      .then((value) => {
-        setStatus(value);
-      })
-      .catch((_) => {
-        setStatus({
-          error: 'There was an error',
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    return false;
-  };
-  const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    if (!e.target.files) {
-      return false;
-    }
-    const file = e.target.files[0];
-    if (!file) {
-      return false;
-    }
-    formData.delete('file');
-    formData.set('file', file);
-    return false;
-  };
+		setLoading(true);
+		new DefaultApi(
+			new Configuration({
+				basePath: `${getCurrentHost()}/api`,
+				apiKey: `Bearer ${accessToken}`
+			})
+		)
+		.post({
+			file: formData.get("file") as any
+		})
+		.then(value => {
+			setStatus({
+				filename: (value as any).filename,
+				message: "Successfully uploaded file"
+			})
+		})
+		.catch(_ => {
+			setStatus({
+				error: 'There was an error'
+			})
+		})
+		.finally(() => {
+			setLoading(false)
+		});
+		
+		return false;
+	}
+	const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault();
+		if (!e.target.files) {
+			return false;
+		}
+		const file = e.target.files[0];
+		if (!file) {
+			return false;
+		}
+		formData.delete("file");
+		formData.set("file", file);
+		return false;
+	}
 
   return (
     <div className="grid-container margin-top-4">

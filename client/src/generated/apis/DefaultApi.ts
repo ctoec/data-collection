@@ -20,10 +20,50 @@ import {
     UserToJSON,
 } from '../models';
 
+export interface GetRequest {
+    reportId: string;
+}
+
+export interface PostRequest {
+    file?: Blob;
+}
+
 /**
  * no description
  */
 export class DefaultApi extends runtime.BaseAPI {
+
+    /**
+     */
+    async getRaw(requestParameters: GetRequest): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters.reportId === null || requestParameters.reportId === undefined) {
+            throw new runtime.RequiredError('reportId','Required parameter requestParameters.reportId was null or undefined when calling get.');
+        }
+
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // jwt authentication
+        }
+
+        const response = await this.request({
+            path: `/reports/{reportId}`.replace(`{${"reportId"}}`, encodeURIComponent(String(requestParameters.reportId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async get(requestParameters: GetRequest): Promise<object> {
+        const response = await this.getRaw(requestParameters);
+        return await response.value();
+    }
 
     /**
      */
@@ -50,6 +90,55 @@ export class DefaultApi extends runtime.BaseAPI {
      */
     async getCurrentUser(): Promise<User> {
         const response = await this.getCurrentUserRaw();
+        return await response.value();
+    }
+
+    /**
+     */
+    async postRaw(requestParameters: PostRequest): Promise<runtime.ApiResponse<object>> {
+        const queryParameters: runtime.HTTPQuery = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.apiKey) {
+            headerParameters["Authorization"] = this.configuration.apiKey("Authorization"); // jwt authentication
+        }
+
+        const consumes: runtime.Consume[] = [
+            { contentType: 'multipart/form-data' },
+        ];
+        // @ts-ignore: canConsumeForm may be unused
+        const canConsumeForm = runtime.canConsumeForm(consumes);
+
+        let formParams: { append(param: string, value: any): any };
+        let useForm = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        useForm = canConsumeForm;
+        if (useForm) {
+            formParams = new FormData();
+        } else {
+            formParams = new URLSearchParams();
+        }
+
+        if (requestParameters.file !== undefined) {
+            formParams.append('file', requestParameters.file as any);
+        }
+
+        const response = await this.request({
+            path: `/reports`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: formParams,
+        });
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async post(requestParameters: PostRequest): Promise<object> {
+        const response = await this.postRaw(requestParameters);
         return await response.value();
     }
 
