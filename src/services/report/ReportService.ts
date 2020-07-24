@@ -6,6 +6,38 @@ import { readFile, utils, WorkSheet } from 'xlsx';
  * @TODO Connect to DB
  */
 export class ReportService {
+  private EXPECTED_HEADERS = [
+    'sasid',
+    'name',
+    'dateOfBirth',
+    'birthCertificateId',
+    'townOfBirth',
+    'stateOfBirth',
+    'race',
+    'ethnicity',
+    'gender',
+    'receivingSpecialEducationServices',
+    'specialEducationServicesType',
+    'address',
+    'livesWithFosterFamily',
+    'experiencedHomelessnessOrHousingInsecurity',
+    'householdSize',
+    'annualHouseholdIncome',
+    'incomeDeterminationDate',
+    'enrollmentStartDate',
+    'enrollmentEndDate',
+    'enrollmentExitReason',
+    'firstFundingPeriod',
+    'lastFundingPeriod',
+    'site',
+    'ageGroup',
+    'fundingType',
+    'spaceType',
+    'model',
+    'receivingCareForKids',
+    'tableData',
+  ];
+
   public get(id: number): EnrollmentReport {
     return enrollmentReports.find((r) => r.id === id);
   }
@@ -26,6 +58,7 @@ export class ReportService {
 
     const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
       range: startingRow,
+      header: this.EXPECTED_HEADERS,
     });
 
     return parsedSheet;
@@ -37,6 +70,6 @@ export class ReportService {
     // We want to skip the first row if this is the
     // Excel template. Otherwise, start at the first
     // row.
-    return sheet['A1'].v === 'Child Info' ? 1 : 0;
+    return sheet['A1'].v === 'Child Info' ? 2 : 1;
   }
 }

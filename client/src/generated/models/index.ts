@@ -6,6 +6,7 @@ export * from './Enrollment';
 export * from './EnrollmentReport';
 export * from './Family';
 export * from './FamilyDetermination';
+export * from './FlattenedEnrollment';
 export * from './Funding';
 export * from './FundingSource';
 export * from './FundingSpace';

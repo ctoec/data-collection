@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { forwardRef } from 'react';
 
 import MaterialTable from 'material-table';
@@ -17,6 +17,10 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import { DefaultApi, Configuration } from '../../generated';
+import { getCurrentHost } from '../../utils/getCurrentHost';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
+import { FlattenedEnrollment } from '../../generated/models/FlattenedEnrollment';
 
 const tableIcons = {
   Add: forwardRef<any, any>((props, ref) => <AddBox {...props} ref={ref} />),
@@ -66,15 +70,48 @@ const oecFontFamily =
   'Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol';
 
 //  TODO: Pull from somewhere instead of this static set of CLEARLY POPULAR basketball players
-const tableRows = [
-  { name: 'Michael', surname: 'Johnson', birthYear: 1987, birthCity: 63 },
-  { name: 'LeBron', surname: 'James', birthYear: 2017, birthCity: 34 },
-  { name: 'Giannis', surname: 'Antetokounmpo', birthYear: 1987, birthCity: 63 },
-  { name: 'James', surname: 'Harden', birthYear: 2017, birthCity: 34 },
-  { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 },
-];
+// const tableRows = [
+//   { name: 'Michael', surname: 'Johnson', birthYear: 1987, birthCity: 63 },
+//   { name: 'LeBron', surname: 'James', birthYear: 2017, birthCity: 34 },
+//   { name: 'Giannis', surname: 'Antetokounmpo', birthYear: 1987, birthCity: 63 },
+//   { name: 'James', surname: 'Harden', birthYear: 2017, birthCity: 34 },
+//   { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 }
+// ];
 
-const CheckData: React.FC = () => {
+type CheckDataProps = {
+  match: {
+    params: {
+      reportId: number;
+    };
+  };
+};
+
+const CheckData: React.FC<CheckDataProps> = ({
+  match: {
+    params: { reportId },
+  },
+}) => {
+  const { accessToken } = useContext(AuthenticationContext);
+
+  const [tableRows, setTableRows] = useState<FlattenedEnrollment[]>([]);
+
+  useEffect(() => {
+    new DefaultApi(
+      new Configuration({
+        basePath: `${getCurrentHost()}/api`,
+        apiKey: `Bearer ${accessToken}`,
+      })
+    )
+      .getReportById({
+        reportId,
+      })
+      .then((report) => {
+        setTableRows(report.enrollments);
+      });
+  }, []);
+
+  console.log(tableRows);
+
   return (
     <MaterialTable
       icons={tableIcons}
@@ -85,17 +122,13 @@ const CheckData: React.FC = () => {
           field: 'name',
           validate: (rowData) => rowData.name !== '',
         },
-        {
-          title: 'Surname',
-          field: 'surname',
-          validate: (rowData) => rowData.surname !== '',
-        },
-        { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-        {
-          title: 'Birth Place',
-          field: 'birthCity',
-          lookup: { 34: 'Somewhere', 63: 'Somewhere Else' },
-        },
+        // { title: 'Surname', field: 'surname', validate: rowData => rowData.surname !== '' },
+        // { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+        // {
+        //   title: 'Birth Place',
+        //   field: 'birthCity',
+        //   lookup: { 34: 'Somewhere', 63: 'Somewhere Else' },
+        // },
       ]}
       data={tableRows}
       editable={{
