@@ -2,27 +2,31 @@ import { Controller, Get, Post, Request, Route, Security } from 'tsoa';
 import { ReportService } from '../../services/report/ReportService';
 import multer from 'multer';
 import path from 'path';
-import { readFileSync } from 'fs';
+import { EnrollmentReport } from '../../models';
 
 @Route('reports')
 export class ReportController extends Controller {
   @Security('jwt')
   @Get('{reportId}')
-  public async getReportById(reportId: string): Promise<any> {
-    // TODO Connect to ReportService
-    return readFileSync(path.join('/tmp/uploads', reportId), 'utf-8');
+  public async getReportById(reportId: number): Promise<EnrollmentReport> {
+    return new ReportService().get(reportId);
   }
 
+  // TODO Consider returning structured enrollments in the report
   @Security('jwt')
   @Post('')
-  public async createReport(@Request() req: Express.Request): Promise<any> {
+  public async createReport(
+    @Request() req: Express.Request
+  ): Promise<EnrollmentReport> {
     await this.handleFile(req);
     const reportService = new ReportService();
-    const enrollmentReport = reportService.parse(req.file);
-    reportService.save(enrollmentReport);
-    return {
-      filename: req.file.filename,
+    const flattenedEnrollments = reportService.parse(req.file);
+    const report = {
+      id: 1,
+      enrollments: flattenedEnrollments,
     };
+    reportService.save(report);
+    return report;
   }
 
   private async handleFile(req: Express.Request): Promise<any> {

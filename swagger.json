@@ -6,6 +6,120 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "FlattenedEnrollment": {
+        "properties": {
+          "sasid": {
+            "type": "number",
+            "format": "double"
+          },
+          "name": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "birthCertificateId": {
+            "type": "string"
+          },
+          "townOfBirth": {
+            "type": "string"
+          },
+          "stateOfBirth": {
+            "type": "string"
+          },
+          "race": {
+            "type": "string"
+          },
+          "ethnicity": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "receivingSpecialEducationServices": {
+            "type": "boolean"
+          },
+          "specialEducationServicesType": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "livesWithFosterFamily": {
+            "type": "boolean"
+          },
+          "experiencedHomelessnessOrHousingInsecurity": {
+            "type": "boolean"
+          },
+          "householdSize": {
+            "type": "number",
+            "format": "double"
+          },
+          "annualHouseholdIncome": {
+            "type": "number",
+            "format": "double"
+          },
+          "incomeDeterminationDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "enrollmentStartDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "enrollmentEndDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "enrollmentExitReason": {
+            "type": "string"
+          },
+          "firstFundingPeriod": {
+            "type": "string"
+          },
+          "lastFundingPeriod": {
+            "type": "string"
+          },
+          "site": {
+            "type": "string"
+          },
+          "ageGroup": {
+            "type": "string"
+          },
+          "fundingType": {
+            "type": "string"
+          },
+          "spaceType": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "receivingCareForKids": {
+            "type": "boolean"
+          }
+        },
+        "type": "object",
+        "additionalProperties": false
+      },
+      "EnrollmentReport": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "enrollments": {
+            "items": {
+              "$ref": "#/components/schemas/FlattenedEnrollment"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["id", "enrollments"],
+        "type": "object",
+        "additionalProperties": false
+      },
       "Region": {
         "enum": [
           "East",
@@ -803,7 +917,9 @@
             "description": "Ok",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollmentReport"
+                }
               }
             }
           }
@@ -819,7 +935,8 @@
             "name": "reportId",
             "required": true,
             "schema": {
-              "type": "string"
+              "format": "double",
+              "type": "number"
             }
           }
         ]
@@ -833,7 +950,9 @@
             "description": "Ok",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/EnrollmentReport"
+                }
               }
             }
           }

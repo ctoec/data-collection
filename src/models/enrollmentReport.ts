@@ -1,6 +1,6 @@
-import { Enrollment } from './enrollment';
+import { FlattenedEnrollment } from './flattenedEnrollment';
 
 export interface EnrollmentReport {
   id: number;
-  enrollments: Enrollment[];
+  enrollments: FlattenedEnrollment[];
 }

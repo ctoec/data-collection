@@ -5,6 +5,7 @@ export * from './child';
 export * from './enrollment';
 export * from './enrollmentReport';
 export * from './family';
+export * from './flattenedEnrollment';
 export * from './funding';
 export * from './gender';
 export * from './organization';

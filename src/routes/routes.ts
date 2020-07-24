@@ -20,6 +20,54 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+  FlattenedEnrollment: {
+    dataType: 'refObject',
+    properties: {
+      sasid: { dataType: 'double' },
+      name: { dataType: 'string' },
+      dateOfBirth: { dataType: 'datetime' },
+      birthCertificateId: { dataType: 'string' },
+      townOfBirth: { dataType: 'string' },
+      stateOfBirth: { dataType: 'string' },
+      race: { dataType: 'string' },
+      ethnicity: { dataType: 'string' },
+      gender: { dataType: 'string' },
+      receivingSpecialEducationServices: { dataType: 'boolean' },
+      specialEducationServicesType: { dataType: 'string' },
+      address: { dataType: 'string' },
+      livesWithFosterFamily: { dataType: 'boolean' },
+      experiencedHomelessnessOrHousingInsecurity: { dataType: 'boolean' },
+      householdSize: { dataType: 'double' },
+      annualHouseholdIncome: { dataType: 'double' },
+      incomeDeterminationDate: { dataType: 'datetime' },
+      enrollmentStartDate: { dataType: 'datetime' },
+      enrollmentEndDate: { dataType: 'datetime' },
+      enrollmentExitReason: { dataType: 'string' },
+      firstFundingPeriod: { dataType: 'string' },
+      lastFundingPeriod: { dataType: 'string' },
+      site: { dataType: 'string' },
+      ageGroup: { dataType: 'string' },
+      fundingType: { dataType: 'string' },
+      spaceType: { dataType: 'string' },
+      model: { dataType: 'string' },
+      receivingCareForKids: { dataType: 'boolean' },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  EnrollmentReport: {
+    dataType: 'refObject',
+    properties: {
+      id: { dataType: 'double', required: true },
+      enrollments: {
+        dataType: 'array',
+        array: { ref: 'FlattenedEnrollment' },
+        required: true,
+      },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   Region: {
     dataType: 'refEnum',
     enums: ['East', 'NorthCentral', 'NorthWest', 'SouthCentral', 'SouthWest'],
@@ -349,7 +397,7 @@ export function RegisterRoutes(app: express.Express) {
           in: 'path',
           name: 'reportId',
           required: true,
-          dataType: 'string',
+          dataType: 'double',
         },
       };
 
