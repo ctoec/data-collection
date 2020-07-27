@@ -1,6 +1,6 @@
 import { Controller, Get, Request, Route, Security } from 'tsoa';
-import { User } from '../models/user';
-import { UserService } from '../services/user/UserService';
+import { User } from '../../models/user';
+import { UserService } from '../../services/user/UserService';
 
 @Route('users')
 export class UserController extends Controller {

@@ -11,7 +11,9 @@ import {
   TsoaResponse,
 } from 'tsoa';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { UserController } from './../controllers/UserController';
+import { ReportController } from './../controllers/report/ReportController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { UserController } from './../controllers/user/UserController';
 import { expressAuthentication } from './../middleware/authenticate';
 import * as express from 'express';
 
@@ -338,6 +340,65 @@ export function RegisterRoutes(app: express.Express) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
+  app.get(
+    '/api/reports/:reportId',
+    authenticateMiddleware([{ jwt: [] }]),
+    function (request: any, response: any, next: any) {
+      const args = {
+        reportId: {
+          in: 'path',
+          name: 'reportId',
+          required: true,
+          dataType: 'string',
+        },
+      };
+
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new ReportController();
+
+      const promise = controller.getReportById.apply(
+        controller,
+        validatedArgs as any
+      );
+      promiseHandler(controller, promise, response, next);
+    }
+  );
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  app.post('/api/reports', authenticateMiddleware([{ jwt: [] }]), function (
+    request: any,
+    response: any,
+    next: any
+  ) {
+    const args = {
+      req: { in: 'request', name: 'req', required: true, dataType: 'object' },
+    };
+
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+    let validatedArgs: any[] = [];
+    try {
+      validatedArgs = getValidatedArgs(args, request, response);
+    } catch (err) {
+      return next(err);
+    }
+
+    const controller = new ReportController();
+
+    const promise = controller.createReport.apply(
+      controller,
+      validatedArgs as any
+    );
+    promiseHandler(controller, promise, response, next);
+  });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.get(
     '/api/users/current',
     authenticateMiddleware([{ jwt: [] }]),

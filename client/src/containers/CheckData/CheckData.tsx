@@ -1,7 +1,7 @@
 import React from 'react';
 import { forwardRef } from 'react';
 
-import MaterialTable from 'material-table'
+import MaterialTable from 'material-table';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -19,26 +19,51 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
 const tableIcons = {
-    Add: forwardRef<any, any>((props, ref) => <AddBox {...props} ref={ref} />),
-    Check: forwardRef<any, any>((props, ref) => <Check {...props} ref={ref} />),
-    Clear: forwardRef<any, any>((props, ref) => <Clear {...props} ref={ref} />),
-    Delete: forwardRef<any, any>((props, ref) => <DeleteOutline {...props} ref={ref} />),
-    DetailPanel: forwardRef<any, any>((props, ref) => <ChevronRight {...props} ref={ref} />),
-    Edit: forwardRef<any, any>((props, ref) => <Edit {...props} ref={ref} />),
-    Export: forwardRef<any, any>((props, ref) => <SaveAlt {...props} ref={ref} />),
-    Filter: forwardRef<any, any>((props, ref) => <FilterList {...props} ref={ref} />),
-    FirstPage: forwardRef<any, any>((props, ref) => <FirstPage {...props} ref={ref} />),
-    LastPage: forwardRef<any, any>((props, ref) => <LastPage {...props} ref={ref} />),
-    NextPage: forwardRef<any, any>((props, ref) => <ChevronRight {...props} ref={ref} />),
-    PreviousPage: forwardRef<any, any>((props, ref) => <ChevronLeft {...props} ref={ref} />),
-    ResetSearch: forwardRef<any, any>((props, ref) => <Clear {...props} ref={ref} />),
-    Search: forwardRef<any, any>((props, ref) => <Search {...props} ref={ref} />),
-    SortArrow: forwardRef<any, any>((props, ref) => <ArrowDownward {...props} ref={ref} />),
-    ThirdStateCheck: forwardRef<any, any>((props, ref) => <Remove {...props} ref={ref} />),
-    ViewColumn: forwardRef<any, any>((props, ref) => <ViewColumn {...props} ref={ref} />)
-  };
+  Add: forwardRef<any, any>((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef<any, any>((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef<any, any>((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef<any, any>((props, ref) => (
+    <DeleteOutline {...props} ref={ref} />
+  )),
+  DetailPanel: forwardRef<any, any>((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  Edit: forwardRef<any, any>((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef<any, any>((props, ref) => (
+    <SaveAlt {...props} ref={ref} />
+  )),
+  Filter: forwardRef<any, any>((props, ref) => (
+    <FilterList {...props} ref={ref} />
+  )),
+  FirstPage: forwardRef<any, any>((props, ref) => (
+    <FirstPage {...props} ref={ref} />
+  )),
+  LastPage: forwardRef<any, any>((props, ref) => (
+    <LastPage {...props} ref={ref} />
+  )),
+  NextPage: forwardRef<any, any>((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  PreviousPage: forwardRef<any, any>((props, ref) => (
+    <ChevronLeft {...props} ref={ref} />
+  )),
+  ResetSearch: forwardRef<any, any>((props, ref) => (
+    <Clear {...props} ref={ref} />
+  )),
+  Search: forwardRef<any, any>((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef<any, any>((props, ref) => (
+    <ArrowDownward {...props} ref={ref} />
+  )),
+  ThirdStateCheck: forwardRef<any, any>((props, ref) => (
+    <Remove {...props} ref={ref} />
+  )),
+  ViewColumn: forwardRef<any, any>((props, ref) => (
+    <ViewColumn {...props} ref={ref} />
+  )),
+};
 
-const oecFontFamily = 'Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol';
+const oecFontFamily =
+  'Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol';
 
 //  TODO: Pull from somewhere instead of this static set of CLEARLY POPULAR basketball players
 const tableRows = [
@@ -46,18 +71,25 @@ const tableRows = [
   { name: 'LeBron', surname: 'James', birthYear: 2017, birthCity: 34 },
   { name: 'Giannis', surname: 'Antetokounmpo', birthYear: 1987, birthCity: 63 },
   { name: 'James', surname: 'Harden', birthYear: 2017, birthCity: 34 },
-  { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 }
+  { name: 'Steph', surname: 'Curry', birthYear: 2017, birthCity: 34 },
 ];
 
 const CheckData: React.FC = () => {
-  return <MaterialTable
+  return (
+    <MaterialTable
       icons={tableIcons}
       title="Example Data Table"
       columns={[
         {
-          title: 'Name', field: 'name', validate: rowData => rowData.name !== ''
+          title: 'Name',
+          field: 'name',
+          validate: (rowData) => rowData.name !== '',
         },
-        { title: 'Surname', field: 'surname', validate: rowData => rowData.surname !== '' },
+        {
+          title: 'Surname',
+          field: 'surname',
+          validate: (rowData) => rowData.surname !== '',
+        },
         { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
         {
           title: 'Birth Place',
@@ -75,20 +107,21 @@ const CheckData: React.FC = () => {
         {
           tooltip: 'Remove All Selected Users',
           icon: () => <DeleteOutline />,
-          onClick: (evt, data) => alert('You want to delete rows?')
-        }
+          onClick: (evt, data) => alert('You want to delete rows?'),
+        },
       ]}
       options={{
-        rowStyle: { 
-          fontFamily: oecFontFamily
-         },
+        rowStyle: {
+          fontFamily: oecFontFamily,
+        },
         headerStyle: {
-          fontFamily: oecFontFamily
+          fontFamily: oecFontFamily,
         },
         selection: true,
-        showTitle: false
+        showTitle: false,
       }}
-    />;
+    />
+  );
 };
 
 export default CheckData;
@@ -99,17 +132,17 @@ export default CheckData;
 function onRowAdd(newData: any) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve()
-    }, 1000)
-  })
+      resolve();
+    }, 1000);
+  });
 }
 
 //  TODO: Capture and store data table updates
 function onRowUpdate(newData: any, oldData: any) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve()
-    }, 1000)
+      resolve();
+    }, 1000);
   });
 }
 
@@ -117,9 +150,7 @@ function onRowUpdate(newData: any, oldData: any) {
 function onRowDelete(oldData: any) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve()
-    }, 1000)
+      resolve();
+    }, 1000);
   });
 }
-
-

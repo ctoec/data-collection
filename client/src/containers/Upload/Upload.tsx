@@ -7,6 +7,8 @@ import {
   Button,
   Alert,
 } from '@ctoec/component-library';
+import { DefaultApi, Configuration } from '../../generated';
+import { getCurrentHost } from '../../utils/getCurrentHost';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -30,16 +32,20 @@ const Upload: React.FC = () => {
 
   const onSubmit = () => {
     setLoading(true);
-    fetch('/api/reports', {
-      method: 'POST',
-      headers: {
-        authorization: `Bearer ${accessToken}`,
-      },
-      body: formData,
-    })
-      .then((value) => value.json())
+    new DefaultApi(
+      new Configuration({
+        basePath: `${getCurrentHost()}/api`,
+        apiKey: `Bearer ${accessToken}`,
+      })
+    )
+      .createReport({
+        file: formData.get('file') as any,
+      })
       .then((value) => {
-        setStatus(value);
+        setStatus({
+          filename: (value as any).filename,
+          message: 'Successfully uploaded file',
+        });
       })
       .catch((_) => {
         setStatus({
@@ -68,7 +74,12 @@ const Upload: React.FC = () => {
 
   return (
     <div className="grid-container margin-top-4">
-      {status && <Alert text={status.message} type="success" />}
+      {status &&
+        (!status.error ? (
+          <Alert text={status.message} type="success" />
+        ) : (
+          <Alert text={status.error} type="error" />
+        ))}
       <div className="grid-row">
         <h1>Upload your enrollment data</h1>
         <p>
@@ -89,7 +100,7 @@ const Upload: React.FC = () => {
           />
           {status && !status.error && (
             <Button
-              href="/check-data"
+              href={`/check-data/${status.filename}`}
               text="Check your data"
               appearance="outline"
             />
