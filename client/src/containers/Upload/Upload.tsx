@@ -43,7 +43,7 @@ const Upload: React.FC = () => {
       })
       .then((value) => {
         setStatus({
-          filename: (value as any).filename,
+          reportId: value.id,
           message: 'Successfully uploaded file',
         });
       })
@@ -100,7 +100,7 @@ const Upload: React.FC = () => {
           />
           {status && !status.error && (
             <Button
-              href={`/check-data/${status.filename}`}
+              href={`/check-data/${status.reportId}`}
               text="Check your data"
               appearance="outline"
             />

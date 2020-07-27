@@ -24,7 +24,8 @@
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
     "tsoa": "^3.2.1",
-    "typescript": "^3.9.5"
+    "typescript": "^3.9.5",
+    "xlsx": "^0.16.4"
   },
   "scripts": {
     "build": "npm run build-ts",

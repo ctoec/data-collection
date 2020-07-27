@@ -13,14 +13,21 @@
  */
 
 import * as runtime from '../runtime';
-import { User, UserFromJSON, UserToJSON } from '../models';
+import {
+  EnrollmentReport,
+  EnrollmentReportFromJSON,
+  EnrollmentReportToJSON,
+  User,
+  UserFromJSON,
+  UserToJSON,
+} from '../models';
 
 export interface CreateReportRequest {
   file?: Blob;
 }
 
 export interface GetReportByIdRequest {
-  reportId: string;
+  reportId: number;
 }
 
 /**
@@ -31,7 +38,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async createReportRaw(
     requestParameters: CreateReportRequest
-  ): Promise<runtime.ApiResponse<object>> {
+  ): Promise<runtime.ApiResponse<EnrollmentReport>> {
     const queryParameters: runtime.HTTPQuery = {};
 
     const headerParameters: runtime.HTTPHeaders = {};
@@ -70,12 +77,16 @@ export class DefaultApi extends runtime.BaseAPI {
       body: formParams,
     });
 
-    return new runtime.JSONApiResponse<any>(response);
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      EnrollmentReportFromJSON(jsonValue)
+    );
   }
 
   /**
    */
-  async createReport(requestParameters: CreateReportRequest): Promise<object> {
+  async createReport(
+    requestParameters: CreateReportRequest
+  ): Promise<EnrollmentReport> {
     const response = await this.createReportRaw(requestParameters);
     return await response.value();
   }
@@ -116,7 +127,7 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async getReportByIdRaw(
     requestParameters: GetReportByIdRequest
-  ): Promise<runtime.ApiResponse<object>> {
+  ): Promise<runtime.ApiResponse<EnrollmentReport>> {
     if (
       requestParameters.reportId === null ||
       requestParameters.reportId === undefined
@@ -147,14 +158,16 @@ export class DefaultApi extends runtime.BaseAPI {
       query: queryParameters,
     });
 
-    return new runtime.JSONApiResponse<any>(response);
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      EnrollmentReportFromJSON(jsonValue)
+    );
   }
 
   /**
    */
   async getReportById(
     requestParameters: GetReportByIdRequest
-  ): Promise<object> {
+  ): Promise<EnrollmentReport> {
     const response = await this.getReportByIdRaw(requestParameters);
     return await response.value();
   }
