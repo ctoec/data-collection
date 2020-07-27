@@ -3,6 +3,7 @@ export * from './c4KCertificate';
 export * from './cdcReport';
 export * from './child';
 export * from './enrollment';
+export * from './enrollmentReport';
 export * from './family';
 export * from './funding';
 export * from './gender';
