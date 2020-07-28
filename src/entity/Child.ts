@@ -10,10 +10,11 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Gender } from './enums/Gender';
 import { Organization } from './Organization';
+import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
 export class Child {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ nullable: true })
@@ -78,4 +79,7 @@ export class Child {
 
   @OneToMany((type) => Enrollment, (enrollment) => enrollment.child)
   enrollments?: Array<Enrollment>;
+
+  @Column((type) => UpdateMetaData)
+  updateMetaData: UpdateMetaData;
 }

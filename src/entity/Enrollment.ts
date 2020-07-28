@@ -10,6 +10,7 @@ import { AgeGroup } from './enums/AgeGroup';
 import { Child } from './Child';
 import { Funding } from './Funding';
 import { Site } from './Site';
+import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
 export class Enrollment {
@@ -36,4 +37,7 @@ export class Enrollment {
 
   @OneToMany((type) => Funding, (funding) => funding.enrollment)
   fundings: Array<Funding>;
+
+  @Column((type) => UpdateMetaData)
+  updateMetaData: UpdateMetaData;
 }

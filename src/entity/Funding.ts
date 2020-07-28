@@ -1,10 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 
 import { Enrollment } from './Enrollment';
 import { ReportingPeriod } from './ReportingPeriod';
 import { User } from './User';
 import { CdcReport } from './Report';
 import { FundingSpace } from './FundingSpace';
+import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
 export class Funding {
@@ -22,4 +23,7 @@ export class Funding {
 
   @ManyToOne((type) => ReportingPeriod, { nullable: true })
   lastReportingPeriod?: ReportingPeriod;
+
+  @Column((type) => UpdateMetaData)
+  updateMetaData: UpdateMetaData;
 }

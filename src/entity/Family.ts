@@ -10,6 +10,7 @@ import {
 import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
 import { Child } from './Child';
+import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
 export class Family {
@@ -42,4 +43,7 @@ export class Family {
 
   @ManyToOne((type) => Organization)
   organization: Organization;
+
+  @Column((type) => UpdateMetaData)
+  updateMetaData: UpdateMetaData;
 }

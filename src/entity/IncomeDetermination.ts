@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
 import { Family } from './Family';
+import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
 export class IncomeDetermination {
@@ -18,4 +19,7 @@ export class IncomeDetermination {
 
   @ManyToOne((type) => Family)
   family: Family;
+
+  @Column((type) => UpdateMetaData)
+  updateMetaData: UpdateMetaData;
 }

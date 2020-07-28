@@ -11,6 +11,7 @@ import { Enrollment } from './Enrollment';
 import { Organization } from './Organization';
 import { ReportingPeriod } from './ReportingPeriod';
 import { FundingSource } from './enums';
+import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
 @TableInheritance({
@@ -28,6 +29,9 @@ export abstract class Report {
 
   @Column({ type: 'enum', enum: FundingSource })
   type: FundingSource;
+
+  @Column((type) => UpdateMetaData)
+  updateMetaData: UpdateMetaData;
 
   // not mapped
   // convenience var: all enrollments with funding of type `type`
