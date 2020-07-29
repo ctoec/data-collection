@@ -1,4 +1,4 @@
-import { EnrollmentReport, FlattenedEnrollment } from '../../models';
+import { EnrollmentReport, FlattenedEnrollment } from '../../entity';
 import { enrollmentReports } from '../../data/enrollmentReports';
 import { readFile, utils, WorkSheet } from 'xlsx';
 

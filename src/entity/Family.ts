@@ -36,14 +36,14 @@ export class Family {
   homelessness?: boolean;
 
   @OneToMany((type) => IncomeDetermination, (det) => det.family)
-  incomeDeterminations: Array<IncomeDetermination>;
+  incomeDeterminations?: Array<IncomeDetermination>;
 
   @OneToMany((type) => Child, (child) => child.family)
-  children: Array<Child>;
+  children?: Array<Child>;
 
-  @ManyToOne((type) => Organization)
-  organization: Organization;
+  @ManyToOne((type) => Organization, { nullable: false })
+  organization?: Organization;
 
-  @Column((type) => UpdateMetaData)
-  updateMetaData: UpdateMetaData;
+  @Column((type) => UpdateMetaData, { prefix: false })
+  updateMetaData?: UpdateMetaData;
 }

@@ -20,7 +20,7 @@ export abstract class Permission {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => User)
+  @ManyToOne((type) => User, { nullable: false })
   user: User;
 }
 

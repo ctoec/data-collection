@@ -2,8 +2,6 @@ import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 
 import { Enrollment } from './Enrollment';
 import { ReportingPeriod } from './ReportingPeriod';
-import { User } from './User';
-import { CdcReport } from './Report';
 import { FundingSpace } from './FundingSpace';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
@@ -12,18 +10,18 @@ export class Funding {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Enrollment)
+  @ManyToOne((type) => Enrollment, { nullable: false })
   enrollment: Enrollment;
 
-  @ManyToOne((type) => FundingSpace)
+  @ManyToOne((type) => FundingSpace, { nullable: false, eager: true })
   fundingSpace: FundingSpace;
 
-  @ManyToOne((type) => ReportingPeriod, { nullable: true })
+  @ManyToOne((type) => ReportingPeriod, { eager: true })
   firstReportingPeriod?: ReportingPeriod;
 
-  @ManyToOne((type) => ReportingPeriod, { nullable: true })
+  @ManyToOne((type) => ReportingPeriod, { eager: true })
   lastReportingPeriod?: ReportingPeriod;
 
-  @Column((type) => UpdateMetaData)
-  updateMetaData: UpdateMetaData;
+  @Column((type) => UpdateMetaData, { prefix: false })
+  updateMetaData?: UpdateMetaData;
 }

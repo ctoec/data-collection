@@ -1,4 +1,4 @@
-import { User } from '../models/user';
+import { User } from '../entity';
 
 export const users: User[] = [
   {

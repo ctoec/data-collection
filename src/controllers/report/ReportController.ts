@@ -2,7 +2,7 @@ import { Controller, Get, Post, Request, Route, Security } from 'tsoa';
 import { ReportService } from '../../services/report/ReportService';
 import multer from 'multer';
 import path from 'path';
-import { EnrollmentReport } from '../../models';
+import { EnrollmentReport } from '../../entity';
 
 @Route('reports')
 export class ReportController extends Controller {

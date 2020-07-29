@@ -6,7 +6,7 @@ export class FundingTimeSplit {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => FundingSpace)
+  @ManyToOne((type) => FundingSpace, { nullable: false })
   fundingSpace: FundingSpace;
 
   @Column()

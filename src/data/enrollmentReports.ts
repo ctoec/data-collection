@@ -1,3 +1,3 @@
-import { EnrollmentReport } from '../models/enrollmentReport';
+import { EnrollmentReport } from '../entity';
 
 export const enrollmentReports: EnrollmentReport[] = [];

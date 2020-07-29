@@ -17,10 +17,10 @@ export class Enrollment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Child)
+  @ManyToOne((type) => Child, { nullable: false })
   child: Child;
 
-  @ManyToOne((type) => Site)
+  @ManyToOne((type) => Site, { nullable: false })
   site: Site;
 
   @Column({ type: 'enum', enum: AgeGroup, nullable: true })
@@ -36,8 +36,8 @@ export class Enrollment {
   exitReason?: string;
 
   @OneToMany((type) => Funding, (funding) => funding.enrollment)
-  fundings: Array<Funding>;
+  fundings?: Array<Funding>;
 
-  @Column((type) => UpdateMetaData)
-  updateMetaData: UpdateMetaData;
+  @Column((type) => UpdateMetaData, { prefix: false })
+  updateMetaData?: UpdateMetaData;
 }

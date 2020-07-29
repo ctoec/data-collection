@@ -1,4 +1,4 @@
-import { User } from '../../models/user';
+import { User } from '../../entity';
 import { users } from '../../data/users';
 
 export class UserService {
