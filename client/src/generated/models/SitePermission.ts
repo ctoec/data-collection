@@ -35,31 +35,19 @@ export interface SitePermission {
    * @type {number}
    * @memberof SitePermission
    */
-  siteId: number;
-  /**
-   *
-   * @type {Site}
-   * @memberof SitePermission
-   */
-  site?: Site;
-  /**
-   *
-   * @type {number}
-   * @memberof SitePermission
-   */
   id: number;
-  /**
-   *
-   * @type {number}
-   * @memberof SitePermission
-   */
-  userId: number;
   /**
    *
    * @type {User}
    * @memberof SitePermission
    */
-  user?: User;
+  user: User;
+  /**
+   *
+   * @type {Site}
+   * @memberof SitePermission
+   */
+  site: Site;
 }
 
 export function SitePermissionFromJSON(json: any): SitePermission {
@@ -74,11 +62,9 @@ export function SitePermissionFromJSONTyped(
     return json;
   }
   return {
-    siteId: json['siteId'],
-    site: !exists(json, 'site') ? undefined : SiteFromJSON(json['site']),
     id: json['id'],
-    userId: json['userId'],
-    user: !exists(json, 'user') ? undefined : UserFromJSON(json['user']),
+    user: UserFromJSON(json['user']),
+    site: SiteFromJSON(json['site']),
   };
 }
 
@@ -90,10 +76,8 @@ export function SitePermissionToJSON(value?: SitePermission | null): any {
     return null;
   }
   return {
-    siteId: value.siteId,
-    site: SiteToJSON(value.site),
     id: value.id,
-    userId: value.userId,
     user: UserToJSON(value.user),
+    site: SiteToJSON(value.site),
   };
 }

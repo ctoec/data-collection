@@ -22,11 +22,11 @@ import {
   UserToJSON,
 } from '../models';
 
-export interface CreateReportRequest {
+export interface CreateEnrollmentReportRequest {
   file?: Blob;
 }
 
-export interface GetReportByIdRequest {
+export interface GetEnrollmentReportByIdRequest {
   reportId: number;
 }
 
@@ -36,8 +36,8 @@ export interface GetReportByIdRequest {
 export class DefaultApi extends runtime.BaseAPI {
   /**
    */
-  async createReportRaw(
-    requestParameters: CreateReportRequest
+  async createEnrollmentReportRaw(
+    requestParameters: CreateEnrollmentReportRequest
   ): Promise<runtime.ApiResponse<EnrollmentReport>> {
     const queryParameters: runtime.HTTPQuery = {};
 
@@ -70,7 +70,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     const response = await this.request({
-      path: `/reports`,
+      path: `/enrollment-reports`,
       method: 'POST',
       headers: headerParameters,
       query: queryParameters,
@@ -84,10 +84,10 @@ export class DefaultApi extends runtime.BaseAPI {
 
   /**
    */
-  async createReport(
-    requestParameters: CreateReportRequest
+  async createEnrollmentReport(
+    requestParameters: CreateEnrollmentReportRequest
   ): Promise<EnrollmentReport> {
-    const response = await this.createReportRaw(requestParameters);
+    const response = await this.createEnrollmentReportRaw(requestParameters);
     return await response.value();
   }
 
@@ -125,8 +125,8 @@ export class DefaultApi extends runtime.BaseAPI {
 
   /**
    */
-  async getReportByIdRaw(
-    requestParameters: GetReportByIdRequest
+  async getEnrollmentReportByIdRaw(
+    requestParameters: GetEnrollmentReportByIdRequest
   ): Promise<runtime.ApiResponse<EnrollmentReport>> {
     if (
       requestParameters.reportId === null ||
@@ -134,7 +134,7 @@ export class DefaultApi extends runtime.BaseAPI {
     ) {
       throw new runtime.RequiredError(
         'reportId',
-        'Required parameter requestParameters.reportId was null or undefined when calling getReportById.'
+        'Required parameter requestParameters.reportId was null or undefined when calling getEnrollmentReportById.'
       );
     }
 
@@ -149,7 +149,7 @@ export class DefaultApi extends runtime.BaseAPI {
     }
 
     const response = await this.request({
-      path: `/reports/{reportId}`.replace(
+      path: `/enrollment-reports/{reportId}`.replace(
         `{${'reportId'}}`,
         encodeURIComponent(String(requestParameters.reportId))
       ),
@@ -165,10 +165,10 @@ export class DefaultApi extends runtime.BaseAPI {
 
   /**
    */
-  async getReportById(
-    requestParameters: GetReportByIdRequest
+  async getEnrollmentReportById(
+    requestParameters: GetEnrollmentReportByIdRequest
   ): Promise<EnrollmentReport> {
-    const response = await this.getReportByIdRaw(requestParameters);
+    const response = await this.getEnrollmentReportByIdRaw(requestParameters);
     return await response.value();
   }
 }

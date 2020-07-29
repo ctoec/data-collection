@@ -6,15 +6,31 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "EnrollmentReport": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "enrollments": {
+            "items": {
+              "$ref": "#/components/schemas/FlattenedEnrollment"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["id", "enrollments"],
+        "type": "object",
+        "additionalProperties": false
+      },
       "FlattenedEnrollment": {
         "properties": {
           "id": {
             "type": "number",
             "format": "double"
           },
-          "reportId": {
-            "type": "number",
-            "format": "double"
+          "report": {
+            "$ref": "#/components/schemas/EnrollmentReport"
           },
           "sasid": {
             "type": "number",
@@ -108,24 +124,7 @@
             "type": "boolean"
           }
         },
-        "required": ["id", "reportId"],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "EnrollmentReport": {
-        "properties": {
-          "id": {
-            "type": "number",
-            "format": "double"
-          },
-          "enrollments": {
-            "items": {
-              "$ref": "#/components/schemas/FlattenedEnrollment"
-            },
-            "type": "array"
-          }
-        },
-        "required": ["id", "enrollments"],
+        "required": ["id", "report"],
         "type": "object",
         "additionalProperties": false
       },
@@ -212,13 +211,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": [
-          "id",
-          "incomeDeterminations",
-          "children",
-          "organization",
-          "updateMetaData"
-        ],
+        "required": ["id", "organization"],
         "type": "object",
         "additionalProperties": false
       },
@@ -276,7 +269,7 @@
             "$ref": "#/components/schemas/User"
           }
         },
-        "required": ["updatedAt", "author"],
+        "required": ["updatedAt"],
         "type": "object",
         "additionalProperties": false
       },
@@ -305,7 +298,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "family", "updateMetaData"],
+        "required": ["id", "family"],
         "type": "object",
         "additionalProperties": false
       },
@@ -386,7 +379,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "firstName", "lastName", "family", "updateMetaData"],
+        "required": ["id", "firstName", "lastName", "family"],
         "type": "object",
         "additionalProperties": false
       },
@@ -426,7 +419,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "child", "site", "fundings", "updateMetaData"],
+        "required": ["id", "child", "site"],
         "type": "object",
         "additionalProperties": false
       },
@@ -471,14 +464,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "titleI",
-          "region",
-          "organization",
-          "enrollments"
-        ],
+        "required": ["id", "name", "titleI", "region", "organization"],
         "type": "object",
         "additionalProperties": false
       },
@@ -612,7 +598,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "enrollment", "fundingSpace", "updateMetaData"],
+        "required": ["id", "enrollment", "fundingSpace"],
         "type": "object",
         "additionalProperties": false
       },
@@ -670,9 +656,9 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/reports/{reportId}": {
+    "/enrollment-reports/{reportId}": {
       "get": {
-        "operationId": "GetReportById",
+        "operationId": "GetEnrollmentReportById",
         "responses": {
           "200": {
             "description": "Ok",
@@ -703,9 +689,9 @@
         ]
       }
     },
-    "/reports": {
+    "/enrollment-reports": {
       "post": {
-        "operationId": "CreateReport",
+        "operationId": "CreateEnrollmentReport",
         "responses": {
           "200": {
             "description": "Ok",

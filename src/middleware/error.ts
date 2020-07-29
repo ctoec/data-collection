@@ -7,6 +7,7 @@ export const handleError = (
   next: NextFunction
 ) => {
   if (err) {
+    console.error(err);
     res.status(500).json({
       status: 500,
       error: err.toString(),

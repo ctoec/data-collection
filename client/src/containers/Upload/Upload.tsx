@@ -9,6 +9,7 @@ import {
 } from '@ctoec/component-library';
 import { DefaultApi, Configuration } from '../../generated';
 import { getCurrentHost } from '../../utils/getCurrentHost';
+import { getApi } from '../../utils/getApi';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -31,14 +32,16 @@ const Upload: React.FC = () => {
   const formData = new FormData();
 
   const onSubmit = () => {
+    if (!formData.has('file')) {
+      setStatus({
+        error: 'You must select a file to upload',
+      });
+      return;
+    }
     setLoading(true);
-    new DefaultApi(
-      new Configuration({
-        basePath: `${getCurrentHost()}/api`,
-        apiKey: `Bearer ${accessToken}`,
-      })
-    )
-      .createReport({
+
+    getApi(accessToken)
+      .createEnrollmentReport({
         file: formData.get('file') as any,
       })
       .then((value) => {
@@ -58,6 +61,7 @@ const Upload: React.FC = () => {
 
     return false;
   };
+
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (!e.target.files) {

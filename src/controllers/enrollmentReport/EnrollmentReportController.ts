@@ -1,31 +1,35 @@
 import { Controller, Get, Post, Request, Route, Security } from 'tsoa';
-import { ReportService } from '../../services/report/ReportService';
+import { EnrollmentReportService } from '../../services/enrollmentReport/EnrollmentReportService';
 import multer from 'multer';
 import path from 'path';
 import { EnrollmentReport } from '../../entity';
 
-@Route('reports')
+@Route('enrollment-reports')
 export class ReportController extends Controller {
+  _service = new EnrollmentReportService();
+
   @Security('jwt')
   @Get('{reportId}')
-  public async getReportById(reportId: number): Promise<EnrollmentReport> {
-    return new ReportService().get(reportId);
+  public async getEnrollmentReportById(
+    reportId: number
+  ): Promise<EnrollmentReport> {
+    return this._service.get(reportId);
   }
 
   // TODO Consider returning structured enrollments in the report
   @Security('jwt')
   @Post('')
-  public async createReport(
+  public async createEnrollmentReport(
     @Request() req: Express.Request
   ): Promise<EnrollmentReport> {
     await this.handleFile(req);
-    const reportService = new ReportService();
-    const flattenedEnrollments = reportService.parse(req.file);
-    const report = {
-      id: 1,
-      enrollments: flattenedEnrollments,
-    };
-    reportService.save(report);
+    const flattenedEnrollments = this._service.parse(req.file);
+    console.log('Flattened enrollments', flattenedEnrollments);
+
+    const report = new EnrollmentReport();
+    report.enrollments = flattenedEnrollments;
+
+    await this._service.save(report);
     return report;
   }
 

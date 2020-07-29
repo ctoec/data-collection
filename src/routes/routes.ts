@@ -11,7 +11,7 @@ import {
   TsoaResponse,
 } from 'tsoa';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { ReportController } from './../controllers/report/ReportController';
+import { ReportController } from './../controllers/enrollmentReport/EnrollmentReportController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './../controllers/user/UserController';
 import { expressAuthentication } from './../middleware/authenticate';
@@ -20,9 +20,24 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+  EnrollmentReport: {
+    dataType: 'refObject',
+    properties: {
+      id: { dataType: 'double', required: true },
+      enrollments: {
+        dataType: 'array',
+        array: { ref: 'FlattenedEnrollment' },
+        required: true,
+      },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   FlattenedEnrollment: {
     dataType: 'refObject',
     properties: {
+      id: { dataType: 'double', required: true },
+      report: { ref: 'EnrollmentReport', required: true },
       sasid: { dataType: 'double' },
       name: { dataType: 'string' },
       dateOfBirth: { dataType: 'datetime' },
@@ -55,19 +70,6 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  EnrollmentReport: {
-    dataType: 'refObject',
-    properties: {
-      id: { dataType: 'double', required: true },
-      enrollments: {
-        dataType: 'array',
-        array: { ref: 'FlattenedEnrollment' },
-        required: true,
-      },
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   Region: {
     dataType: 'refEnum',
     enums: ['East', 'NorthCentral', 'NorthWest', 'SouthCentral', 'SouthWest'],
@@ -89,61 +91,23 @@ const models: TsoaRoute.Models = {
     enums: ['Male', 'Female', 'Nonbinary', 'Unknown', 'Unspecified'],
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  Child: {
-    dataType: 'refObject',
-    properties: {
-      id: { dataType: 'string', required: true },
-      sasid: { dataType: 'string' },
-      firstName: { dataType: 'string', required: true },
-      middleName: { dataType: 'string' },
-      lastName: { dataType: 'string', required: true },
-      suffix: { dataType: 'string' },
-      birthdate: { dataType: 'datetime' },
-      birthTown: { dataType: 'string' },
-      birthState: { dataType: 'string' },
-      birthCertificateId: { dataType: 'string' },
-      americanIndianOrAlaskaNative: { dataType: 'boolean' },
-      asian: { dataType: 'boolean' },
-      blackOrAfricanAmerican: { dataType: 'boolean' },
-      nativeHawaiianOrPacificIslander: { dataType: 'boolean' },
-      white: { dataType: 'boolean' },
-      hispanicOrLatinxEthnicity: { dataType: 'boolean' },
-      gender: { ref: 'Gender' },
-      foster: { dataType: 'boolean' },
-      familyId: { dataType: 'double' },
-      family: { ref: 'Family' },
-      enrollments: { dataType: 'array', array: { ref: 'Enrollment' } },
-      organizationId: { dataType: 'double', required: true },
-      organization: { ref: 'Organization' },
-      c4KFamilyCaseNumber: { dataType: 'double' },
-      c4KCertificates: { dataType: 'array', array: { ref: 'C4KCertificate' } },
-      authorId: { dataType: 'double' },
-      author: { ref: 'User' },
-      updatedAt: { dataType: 'datetime' },
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   Family: {
     dataType: 'refObject',
     properties: {
       id: { dataType: 'double', required: true },
-      children: { dataType: 'array', array: { ref: 'Child' } },
       addressLine1: { dataType: 'string' },
       addressLine2: { dataType: 'string' },
       town: { dataType: 'string' },
       state: { dataType: 'string' },
       zip: { dataType: 'string' },
       homelessness: { dataType: 'boolean' },
-      determinations: {
+      incomeDeterminations: {
         dataType: 'array',
-        array: { ref: 'FamilyDetermination' },
+        array: { ref: 'IncomeDetermination' },
       },
-      organizationId: { dataType: 'double', required: true },
-      organization: { ref: 'Organization' },
-      authorId: { dataType: 'double' },
-      author: { ref: 'User' },
-      updatedAt: { dataType: 'datetime' },
+      children: { dataType: 'array', array: { ref: 'Child' } },
+      organization: { ref: 'Organization', required: true },
+      updateMetaData: { ref: 'UpdateMetaData' },
     },
     additionalProperties: false,
   },
@@ -167,18 +131,54 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  FamilyDetermination: {
+  UpdateMetaData: {
+    dataType: 'refObject',
+    properties: {
+      updatedAt: { dataType: 'datetime', required: true },
+      author: { ref: 'User' },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  IncomeDetermination: {
     dataType: 'refObject',
     properties: {
       id: { dataType: 'double', required: true },
       numberOfPeople: { dataType: 'double' },
       income: { dataType: 'double' },
       determinationDate: { dataType: 'datetime' },
-      familyId: { dataType: 'double', required: true },
-      family: { ref: 'Family' },
-      authorId: { dataType: 'double' },
-      author: { ref: 'User' },
-      updatedAt: { dataType: 'datetime' },
+      family: { ref: 'Family', required: true },
+      updateMetaData: { ref: 'UpdateMetaData' },
+    },
+    additionalProperties: false,
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+  Child: {
+    dataType: 'refObject',
+    properties: {
+      id: { dataType: 'string', required: true },
+      sasid: { dataType: 'string' },
+      firstName: { dataType: 'string', required: true },
+      middleName: { dataType: 'string' },
+      lastName: { dataType: 'string', required: true },
+      suffix: { dataType: 'string' },
+      birthdate: { dataType: 'datetime' },
+      birthTown: { dataType: 'string' },
+      birthState: { dataType: 'string' },
+      birthCertificateId: { dataType: 'string' },
+      americanIndianOrAlaskaNative: { dataType: 'boolean' },
+      asian: { dataType: 'boolean' },
+      blackOrAfricanAmerican: { dataType: 'boolean' },
+      nativeHawaiianOrPacificIslander: { dataType: 'boolean' },
+      white: { dataType: 'boolean' },
+      hispanicOrLatinxEthnicity: { dataType: 'boolean' },
+      gender: { ref: 'Gender' },
+      foster: { dataType: 'boolean' },
+      recievesC4K: { dataType: 'boolean', default: false },
+      family: { ref: 'Family', required: true },
+      organization: { ref: 'Organization' },
+      enrollments: { dataType: 'array', array: { ref: 'Enrollment' } },
+      updateMetaData: { ref: 'UpdateMetaData' },
     },
     additionalProperties: false,
   },
@@ -187,31 +187,14 @@ const models: TsoaRoute.Models = {
     dataType: 'refObject',
     properties: {
       id: { dataType: 'double', required: true },
-      childId: { dataType: 'string', required: true },
-      child: { ref: 'Child' },
-      siteId: { dataType: 'double', required: true },
-      site: { ref: 'Site' },
-      ageGroup: { ref: 'Age' },
+      child: { ref: 'Child', required: true },
+      site: { ref: 'Site', required: true },
+      ageGroup: { ref: 'AgeGroup' },
       entry: { dataType: 'datetime' },
       exit: { dataType: 'datetime' },
       exitReason: { dataType: 'string' },
       fundings: { dataType: 'array', array: { ref: 'Funding' } },
-      pastEnrollments: { dataType: 'array', array: { ref: 'Enrollment' } },
-      authorId: { dataType: 'double' },
-      author: { ref: 'User' },
-      updatedAt: { dataType: 'datetime' },
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  C4KCertificate: {
-    dataType: 'refObject',
-    properties: {
-      id: { dataType: 'double', required: true },
-      childId: { dataType: 'string', required: true },
-      child: { ref: 'Child' },
-      startDate: { dataType: 'datetime' },
-      endDate: { dataType: 'datetime' },
+      updateMetaData: { ref: 'UpdateMetaData' },
     },
     additionalProperties: false,
   },
@@ -223,45 +206,24 @@ const models: TsoaRoute.Models = {
       name: { dataType: 'string', required: true },
       titleI: { dataType: 'boolean', required: true },
       region: { ref: 'Region', required: true },
-      organizationId: { dataType: 'double', required: true },
-      organization: { ref: 'Organization' },
       facilityCode: { dataType: 'double' },
       licenseNumber: { dataType: 'double' },
       naeycId: { dataType: 'double' },
       registryId: { dataType: 'double' },
+      organization: { ref: 'Organization', required: true },
       enrollments: { dataType: 'array', array: { ref: 'Enrollment' } },
     },
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  Age: {
+  AgeGroup: {
     dataType: 'refEnum',
     enums: ['InfantToddler', 'Preschool', 'SchoolAge'],
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   FundingSource: {
     dataType: 'refEnum',
-    enums: ['CDC'],
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  Funding: {
-    dataType: 'refObject',
-    properties: {
-      id: { dataType: 'double', required: true },
-      enrollmentId: { dataType: 'double', required: true },
-      enrollment: { ref: 'Enrollment' },
-      fundingSpace: { ref: 'FundingSpace' },
-      fundingSpaceId: { dataType: 'double', required: true },
-      source: { ref: 'FundingSource' },
-      firstReportingPeriodId: { dataType: 'double' },
-      firstReportingPeriod: { ref: 'ReportingPeriod' },
-      lastReportingPeriodId: { dataType: 'double' },
-      lastReportingPeriod: { ref: 'ReportingPeriod' },
-      authorId: { dataType: 'double' },
-      author: { ref: 'User' },
-      updatedAt: { dataType: 'datetime' },
-    },
-    additionalProperties: false,
+    enums: ['CDC', 'SchoolReadiness'],
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   FundingTime: {
@@ -274,17 +236,11 @@ const models: TsoaRoute.Models = {
     properties: {
       id: { dataType: 'double', required: true },
       capacity: { dataType: 'double', required: true },
-      organizationId: { dataType: 'double', required: true },
-      organization: { ref: 'Organization' },
+      organization: { ref: 'Organization', required: true },
       source: { ref: 'FundingSource', required: true },
-      ageGroup: { ref: 'Age', required: true },
-      fundings: { dataType: 'array', array: { ref: 'Funding' } },
+      ageGroup: { ref: 'AgeGroup', required: true },
       time: { ref: 'FundingTime', required: true },
       timeSplit: { ref: 'FundingTimeSplit' },
-      timeSplitUtilizations: {
-        dataType: 'array',
-        array: { ref: 'FundingTimeSplitUtilization' },
-      },
     },
     additionalProperties: false,
   },
@@ -293,8 +249,7 @@ const models: TsoaRoute.Models = {
     dataType: 'refObject',
     properties: {
       id: { dataType: 'double', required: true },
-      fundingSpaceId: { dataType: 'double', required: true },
-      fundingSpace: { ref: 'FundingSpace' },
+      fundingSpace: { ref: 'FundingSpace', required: true },
       fullTimeWeeks: { dataType: 'double', required: true },
       partTimeWeeks: { dataType: 'double', required: true },
     },
@@ -314,42 +269,15 @@ const models: TsoaRoute.Models = {
     additionalProperties: false,
   },
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  FundingTimeSplitUtilization: {
+  Funding: {
     dataType: 'refObject',
     properties: {
       id: { dataType: 'double', required: true },
-      reportingPeriodId: { dataType: 'double', required: true },
-      reportingPeriod: { ref: 'ReportingPeriod' },
-      reportId: { dataType: 'double', required: true },
-      report: { ref: 'CdcReport' },
-      fundingSpaceId: { dataType: 'double', required: true },
-      fundingSpace: { ref: 'FundingSpace' },
-      fullTimeWeeksUsed: { dataType: 'double', required: true },
-      partTimeWeeksUsed: { dataType: 'double', required: true },
-    },
-    additionalProperties: false,
-  },
-  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  CdcReport: {
-    dataType: 'refObject',
-    properties: {
-      accredited: { dataType: 'boolean', required: true },
-      c4KRevenue: { dataType: 'double', required: true },
-      retroactiveC4KRevenue: { dataType: 'boolean' },
-      familyFeesRevenue: { dataType: 'double', required: true },
-      comment: { dataType: 'string' },
-      timeSplitUtilizations: {
-        dataType: 'array',
-        array: { ref: 'FundingTimeSplitUtilization' },
-      },
-      organizationId: { dataType: 'double', required: true },
-      organization: { ref: 'Organization' },
-      id: { dataType: 'double', required: true },
-      type: { ref: 'FundingSource' },
-      reportingPeriodId: { dataType: 'double', required: true },
-      reportingPeriod: { ref: 'ReportingPeriod', required: true },
-      submittedAt: { dataType: 'datetime' },
-      enrollments: { dataType: 'array', array: { ref: 'Enrollment' } },
+      enrollment: { ref: 'Enrollment', required: true },
+      fundingSpace: { ref: 'FundingSpace', required: true },
+      firstReportingPeriod: { ref: 'ReportingPeriod' },
+      lastReportingPeriod: { ref: 'ReportingPeriod' },
+      updateMetaData: { ref: 'UpdateMetaData' },
     },
     additionalProperties: false,
   },
@@ -357,11 +285,9 @@ const models: TsoaRoute.Models = {
   OrganizationPermission: {
     dataType: 'refObject',
     properties: {
-      organizationId: { dataType: 'double', required: true },
-      organization: { ref: 'Organization' },
       id: { dataType: 'double', required: true },
-      userId: { dataType: 'double', required: true },
-      user: { ref: 'User' },
+      user: { ref: 'User', required: true },
+      organization: { ref: 'Organization', required: true },
     },
     additionalProperties: false,
   },
@@ -369,11 +295,9 @@ const models: TsoaRoute.Models = {
   SitePermission: {
     dataType: 'refObject',
     properties: {
-      siteId: { dataType: 'double', required: true },
-      site: { ref: 'Site' },
       id: { dataType: 'double', required: true },
-      userId: { dataType: 'double', required: true },
-      user: { ref: 'User' },
+      user: { ref: 'User', required: true },
+      site: { ref: 'Site', required: true },
     },
     additionalProperties: false,
   },
@@ -389,7 +313,7 @@ export function RegisterRoutes(app: express.Express) {
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
   app.get(
-    '/api/reports/:reportId',
+    '/api/enrollment-reports/:reportId',
     authenticateMiddleware([{ jwt: [] }]),
     function (request: any, response: any, next: any) {
       const args = {
@@ -412,7 +336,7 @@ export function RegisterRoutes(app: express.Express) {
 
       const controller = new ReportController();
 
-      const promise = controller.getReportById.apply(
+      const promise = controller.getEnrollmentReportById.apply(
         controller,
         validatedArgs as any
       );
@@ -420,32 +344,32 @@ export function RegisterRoutes(app: express.Express) {
     }
   );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-  app.post('/api/reports', authenticateMiddleware([{ jwt: [] }]), function (
-    request: any,
-    response: any,
-    next: any
-  ) {
-    const args = {
-      req: { in: 'request', name: 'req', required: true, dataType: 'object' },
-    };
+  app.post(
+    '/api/enrollment-reports',
+    authenticateMiddleware([{ jwt: [] }]),
+    function (request: any, response: any, next: any) {
+      const args = {
+        req: { in: 'request', name: 'req', required: true, dataType: 'object' },
+      };
 
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+      // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
-    let validatedArgs: any[] = [];
-    try {
-      validatedArgs = getValidatedArgs(args, request, response);
-    } catch (err) {
-      return next(err);
+      let validatedArgs: any[] = [];
+      try {
+        validatedArgs = getValidatedArgs(args, request, response);
+      } catch (err) {
+        return next(err);
+      }
+
+      const controller = new ReportController();
+
+      const promise = controller.createEnrollmentReport.apply(
+        controller,
+        validatedArgs as any
+      );
+      promiseHandler(controller, promise, response, next);
     }
-
-    const controller = new ReportController();
-
-    const promise = controller.createReport.apply(
-      controller,
-      validatedArgs as any
-    );
-    promiseHandler(controller, promise, response, next);
-  });
+  );
   // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.get(
     '/api/users/current',

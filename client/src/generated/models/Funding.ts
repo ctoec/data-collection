@@ -18,10 +18,6 @@ import {
   EnrollmentFromJSON,
   EnrollmentFromJSONTyped,
   EnrollmentToJSON,
-  FundingSource,
-  FundingSourceFromJSON,
-  FundingSourceFromJSONTyped,
-  FundingSourceToJSON,
   FundingSpace,
   FundingSpaceFromJSON,
   FundingSpaceFromJSONTyped,
@@ -30,10 +26,10 @@ import {
   ReportingPeriodFromJSON,
   ReportingPeriodFromJSONTyped,
   ReportingPeriodToJSON,
-  User,
-  UserFromJSON,
-  UserFromJSONTyped,
-  UserToJSON,
+  UpdateMetaData,
+  UpdateMetaDataFromJSON,
+  UpdateMetaDataFromJSONTyped,
+  UpdateMetaDataToJSON,
 } from './';
 
 /**
@@ -50,40 +46,16 @@ export interface Funding {
   id: number;
   /**
    *
-   * @type {number}
-   * @memberof Funding
-   */
-  enrollmentId: number;
-  /**
-   *
    * @type {Enrollment}
    * @memberof Funding
    */
-  enrollment?: Enrollment;
+  enrollment: Enrollment;
   /**
    *
    * @type {FundingSpace}
    * @memberof Funding
    */
-  fundingSpace?: FundingSpace;
-  /**
-   *
-   * @type {number}
-   * @memberof Funding
-   */
-  fundingSpaceId: number;
-  /**
-   *
-   * @type {FundingSource}
-   * @memberof Funding
-   */
-  source?: FundingSource;
-  /**
-   *
-   * @type {number}
-   * @memberof Funding
-   */
-  firstReportingPeriodId?: number;
+  fundingSpace: FundingSpace;
   /**
    *
    * @type {ReportingPeriod}
@@ -92,34 +64,16 @@ export interface Funding {
   firstReportingPeriod?: ReportingPeriod;
   /**
    *
-   * @type {number}
-   * @memberof Funding
-   */
-  lastReportingPeriodId?: number;
-  /**
-   *
    * @type {ReportingPeriod}
    * @memberof Funding
    */
   lastReportingPeriod?: ReportingPeriod;
   /**
    *
-   * @type {number}
+   * @type {UpdateMetaData}
    * @memberof Funding
    */
-  authorId?: number;
-  /**
-   *
-   * @type {User}
-   * @memberof Funding
-   */
-  author?: User;
-  /**
-   *
-   * @type {Date}
-   * @memberof Funding
-   */
-  updatedAt?: Date;
+  updateMetaData?: UpdateMetaData;
 }
 
 export function FundingFromJSON(json: any): Funding {
@@ -135,34 +89,17 @@ export function FundingFromJSONTyped(
   }
   return {
     id: json['id'],
-    enrollmentId: json['enrollmentId'],
-    enrollment: !exists(json, 'enrollment')
-      ? undefined
-      : EnrollmentFromJSON(json['enrollment']),
-    fundingSpace: !exists(json, 'fundingSpace')
-      ? undefined
-      : FundingSpaceFromJSON(json['fundingSpace']),
-    fundingSpaceId: json['fundingSpaceId'],
-    source: !exists(json, 'source')
-      ? undefined
-      : FundingSourceFromJSON(json['source']),
-    firstReportingPeriodId: !exists(json, 'firstReportingPeriodId')
-      ? undefined
-      : json['firstReportingPeriodId'],
+    enrollment: EnrollmentFromJSON(json['enrollment']),
+    fundingSpace: FundingSpaceFromJSON(json['fundingSpace']),
     firstReportingPeriod: !exists(json, 'firstReportingPeriod')
       ? undefined
       : ReportingPeriodFromJSON(json['firstReportingPeriod']),
-    lastReportingPeriodId: !exists(json, 'lastReportingPeriodId')
-      ? undefined
-      : json['lastReportingPeriodId'],
     lastReportingPeriod: !exists(json, 'lastReportingPeriod')
       ? undefined
       : ReportingPeriodFromJSON(json['lastReportingPeriod']),
-    authorId: !exists(json, 'authorId') ? undefined : json['authorId'],
-    author: !exists(json, 'author') ? undefined : UserFromJSON(json['author']),
-    updatedAt: !exists(json, 'updatedAt')
+    updateMetaData: !exists(json, 'updateMetaData')
       ? undefined
-      : new Date(json['updatedAt']),
+      : UpdateMetaDataFromJSON(json['updateMetaData']),
   };
 }
 
@@ -175,18 +112,10 @@ export function FundingToJSON(value?: Funding | null): any {
   }
   return {
     id: value.id,
-    enrollmentId: value.enrollmentId,
     enrollment: EnrollmentToJSON(value.enrollment),
     fundingSpace: FundingSpaceToJSON(value.fundingSpace),
-    fundingSpaceId: value.fundingSpaceId,
-    source: FundingSourceToJSON(value.source),
-    firstReportingPeriodId: value.firstReportingPeriodId,
     firstReportingPeriod: ReportingPeriodToJSON(value.firstReportingPeriod),
-    lastReportingPeriodId: value.lastReportingPeriodId,
     lastReportingPeriod: ReportingPeriodToJSON(value.lastReportingPeriod),
-    authorId: value.authorId,
-    author: UserToJSON(value.author),
-    updatedAt:
-      value.updatedAt === undefined ? undefined : value.updatedAt.toISOString(),
+    updateMetaData: UpdateMetaDataToJSON(value.updateMetaData),
   };
 }

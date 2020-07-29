@@ -17,22 +17,23 @@
  * @export
  * @enum {string}
  */
-export enum FundingSource {
-  CDC = 'CDC',
-  SchoolReadiness = 'SchoolReadiness',
+export enum AgeGroup {
+  InfantToddler = 'InfantToddler',
+  Preschool = 'Preschool',
+  SchoolAge = 'SchoolAge',
 }
 
-export function FundingSourceFromJSON(json: any): FundingSource {
-  return FundingSourceFromJSONTyped(json, false);
+export function AgeGroupFromJSON(json: any): AgeGroup {
+  return AgeGroupFromJSONTyped(json, false);
 }
 
-export function FundingSourceFromJSONTyped(
+export function AgeGroupFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean
-): FundingSource {
-  return json as FundingSource;
+): AgeGroup {
+  return json as AgeGroup;
 }
 
-export function FundingSourceToJSON(value?: FundingSource | null): any {
+export function AgeGroupToJSON(value?: AgeGroup | null): any {
   return value as any;
 }

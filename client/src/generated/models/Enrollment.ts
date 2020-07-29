@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-  Age,
-  AgeFromJSON,
-  AgeFromJSONTyped,
-  AgeToJSON,
+  AgeGroup,
+  AgeGroupFromJSON,
+  AgeGroupFromJSONTyped,
+  AgeGroupToJSON,
   Child,
   ChildFromJSON,
   ChildFromJSONTyped,
@@ -30,10 +30,10 @@ import {
   SiteFromJSON,
   SiteFromJSONTyped,
   SiteToJSON,
-  User,
-  UserFromJSON,
-  UserFromJSONTyped,
-  UserToJSON,
+  UpdateMetaData,
+  UpdateMetaDataFromJSON,
+  UpdateMetaDataFromJSONTyped,
+  UpdateMetaDataToJSON,
 } from './';
 
 /**
@@ -50,34 +50,22 @@ export interface Enrollment {
   id: number;
   /**
    *
-   * @type {string}
-   * @memberof Enrollment
-   */
-  childId: string;
-  /**
-   *
    * @type {Child}
    * @memberof Enrollment
    */
-  child?: Child;
-  /**
-   *
-   * @type {number}
-   * @memberof Enrollment
-   */
-  siteId: number;
+  child: Child;
   /**
    *
    * @type {Site}
    * @memberof Enrollment
    */
-  site?: Site;
+  site: Site;
   /**
    *
-   * @type {Age}
+   * @type {AgeGroup}
    * @memberof Enrollment
    */
-  ageGroup?: Age;
+  ageGroup?: AgeGroup;
   /**
    *
    * @type {Date}
@@ -104,28 +92,10 @@ export interface Enrollment {
   fundings?: Array<Funding>;
   /**
    *
-   * @type {Array<Enrollment>}
+   * @type {UpdateMetaData}
    * @memberof Enrollment
    */
-  pastEnrollments?: Array<Enrollment>;
-  /**
-   *
-   * @type {number}
-   * @memberof Enrollment
-   */
-  authorId?: number;
-  /**
-   *
-   * @type {User}
-   * @memberof Enrollment
-   */
-  author?: User;
-  /**
-   *
-   * @type {Date}
-   * @memberof Enrollment
-   */
-  updatedAt?: Date;
+  updateMetaData?: UpdateMetaData;
 }
 
 export function EnrollmentFromJSON(json: any): Enrollment {
@@ -141,27 +111,20 @@ export function EnrollmentFromJSONTyped(
   }
   return {
     id: json['id'],
-    childId: json['childId'],
-    child: !exists(json, 'child') ? undefined : ChildFromJSON(json['child']),
-    siteId: json['siteId'],
-    site: !exists(json, 'site') ? undefined : SiteFromJSON(json['site']),
+    child: ChildFromJSON(json['child']),
+    site: SiteFromJSON(json['site']),
     ageGroup: !exists(json, 'ageGroup')
       ? undefined
-      : AgeFromJSON(json['ageGroup']),
+      : AgeGroupFromJSON(json['ageGroup']),
     entry: !exists(json, 'entry') ? undefined : new Date(json['entry']),
     exit: !exists(json, 'exit') ? undefined : new Date(json['exit']),
     exitReason: !exists(json, 'exitReason') ? undefined : json['exitReason'],
     fundings: !exists(json, 'fundings')
       ? undefined
       : (json['fundings'] as Array<any>).map(FundingFromJSON),
-    pastEnrollments: !exists(json, 'pastEnrollments')
+    updateMetaData: !exists(json, 'updateMetaData')
       ? undefined
-      : (json['pastEnrollments'] as Array<any>).map(EnrollmentFromJSON),
-    authorId: !exists(json, 'authorId') ? undefined : json['authorId'],
-    author: !exists(json, 'author') ? undefined : UserFromJSON(json['author']),
-    updatedAt: !exists(json, 'updatedAt')
-      ? undefined
-      : new Date(json['updatedAt']),
+      : UpdateMetaDataFromJSON(json['updateMetaData']),
   };
 }
 
@@ -174,11 +137,9 @@ export function EnrollmentToJSON(value?: Enrollment | null): any {
   }
   return {
     id: value.id,
-    childId: value.childId,
     child: ChildToJSON(value.child),
-    siteId: value.siteId,
     site: SiteToJSON(value.site),
-    ageGroup: AgeToJSON(value.ageGroup),
+    ageGroup: AgeGroupToJSON(value.ageGroup),
     entry: value.entry === undefined ? undefined : value.entry.toISOString(),
     exit: value.exit === undefined ? undefined : value.exit.toISOString(),
     exitReason: value.exitReason,
@@ -186,13 +147,6 @@ export function EnrollmentToJSON(value?: Enrollment | null): any {
       value.fundings === undefined
         ? undefined
         : (value.fundings as Array<any>).map(FundingToJSON),
-    pastEnrollments:
-      value.pastEnrollments === undefined
-        ? undefined
-        : (value.pastEnrollments as Array<any>).map(EnrollmentToJSON),
-    authorId: value.authorId,
-    author: UserToJSON(value.author),
-    updatedAt:
-      value.updatedAt === undefined ? undefined : value.updatedAt.toISOString(),
+    updateMetaData: UpdateMetaDataToJSON(value.updateMetaData),
   };
 }

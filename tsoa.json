@@ -16,7 +16,7 @@
     },
     "spec": {
       "paths": {
-        "/reports": {
+        "/enrollment-reports": {
           "post": {
             "requestBody": {
               "content": {
