@@ -1,11 +1,7 @@
 import { EnrollmentReport, FlattenedEnrollment } from '../../entity';
-import { enrollmentReports } from '../../data/enrollmentReports';
-import { readFile, utils, WorkSheet } from 'xlsx';
+import { readFile, utils } from 'xlsx';
 import { getManager, getConnection } from 'typeorm';
 
-/**
- * @TODO Connect to DB
- */
 export class EnrollmentReportService {
   public async get(id: number): Promise<EnrollmentReport> {
     return getManager().findOne(EnrollmentReport, id);
@@ -19,7 +15,9 @@ export class EnrollmentReportService {
   public parse(
     enrollmentReportBodyParams: Express.Multer.File
   ): FlattenedEnrollment[] {
-    const fileData = readFile(enrollmentReportBodyParams.path);
+    const fileData = readFile(enrollmentReportBodyParams.path, {
+      cellDates: true,
+    });
 
     const sheet = Object.values(fileData.Sheets)[0];
 
@@ -27,7 +25,9 @@ export class EnrollmentReportService {
       .getMetadata(FlattenedEnrollment)
       .columns.filter(
         (column) =>
-          column.propertyName !== 'id' && column.propertyName !== 'report'
+          column.propertyName !== 'id' &&
+          column.propertyName !== 'report' &&
+          column.propertyName !== 'externalId'
       )
       .map((column) => column.propertyName);
 
@@ -36,6 +36,7 @@ export class EnrollmentReportService {
       header: expectedHeaders,
     });
 
+    console.log('parsed sheet', parsedSheet);
     return parsedSheet.map((enrollment) =>
       getManager().create(FlattenedEnrollment, enrollment)
     );
