@@ -70,24 +70,20 @@ const getTemplateWorkbook = (type: 'csv' | 'xlsx') => {
 
   const workbook = new Excel.Workbook();
   const sheet = workbook.addWorksheet('Data collection');
+
+  // If getting excel format, add section titles and merge cells
   if (type === 'xlsx') {
     sheet.addRow(getWideSectionTitles(sectionCounts, titles.length));
-    mergeCells(sheet, sectionCounts);
+    mergeAndFormatSectionTitleCells(sheet, sectionCounts);
   }
+
+  // Add column titles
   sheet.addRow(titles);
+
+  // If getting excel format, add column descriptions
   if (type === 'xlsx') {
     sheet.addRow(descriptions);
   }
-
-  // const aoa = type === 'xlsx' ? [getWideSectionTitles(sectionCounts, titles.length), titles, descriptions] : [titles];
-  // const sheet = utils.aoa_to_sheet(aoa);
-
-  // if(type === 'xlsx') {
-  // 	sheet["!merges"] = getMergesForSections(sectionCounts);
-  // }
-
-  // const workbook = utils.book_new();
-  // utils.book_append_sheet(workbook, sheet);
 
   return workbook;
 };
@@ -133,24 +129,28 @@ const getTemplateData = () =>
       { titles: [], descriptions: [], sectionCounts: {} }
     );
 
-const mergeCells = (worksheet: Worksheet, sectionCounts: object) => {
+/**
+ * Merge section title cells (top row) based on number of columns in each section
+ * @param worksheet
+ * @param sectionCounts
+ */
+const mergeAndFormatSectionTitleCells = (
+  worksheet: Worksheet,
+  sectionCounts: object
+) => {
   let left = 0;
   Object.entries(sectionCounts).forEach(([section, count]) => {
     worksheet.mergeCells(0, left, 0, left + count);
+    if (left === 0) {
+      const thisCell = worksheet.getCell('A1');
+      thisCell.alignment = { horizontal: 'center' };
+      thisCell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        bgColor: { argb: 'FFFAEBD7' },
+        fgColor: { argb: 'FFFAEBD7' },
+      };
+    }
     left += count + 1;
   });
-};
-const getMergesForSections = (sectionCounts: object) => {
-  const sectionNames = Object.keys(sectionCounts);
-  const merges = [];
-  let lastEnd = 0;
-  sectionNames.forEach((sectionName) => {
-    const start = lastEnd > 0 ? lastEnd + 1 : lastEnd;
-    const end = lastEnd + sectionCounts[sectionName];
-    merges.push({ s: { c: start, r: 0 }, e: { c: end, r: 0 } });
-
-    lastEnd = end;
-  });
-
-  return merges;
 };
