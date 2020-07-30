@@ -7,16 +7,8 @@ import { handleError } from './middleware/error';
 import { createConnection } from 'typeorm';
 
 createConnection()
-  .then(async (connection) => {
-    console.log('Successfully connected to DB with typeORM');
-    connection
-      .query('SELECT 1 as ok')
-      .then((res) =>
-        console.log(
-          "succesfully queried 'SELECT 1 as ok' from DB with typeORM",
-          res
-        )
-      );
+  .then(async () => {
+    console.log('Successfully established TypeORM DB connection');
 
     // Instantiate the application server
     const app = express();

@@ -36,9 +36,9 @@ export class Site {
   @Column({ nullable: true })
   registryId?: number;
 
-  @ManyToOne((type) => Organization)
+  @ManyToOne((type) => Organization, { nullable: false })
   organization: Organization;
 
   @OneToMany((type) => Enrollment, (enrollment) => enrollment.site)
-  enrollments: Array<Enrollment>;
+  enrollments?: Array<Enrollment>;
 }

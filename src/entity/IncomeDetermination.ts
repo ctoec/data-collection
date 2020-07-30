@@ -17,9 +17,9 @@ export class IncomeDetermination {
   @Column({ nullable: true })
   determinationDate?: Date;
 
-  @ManyToOne((type) => Family)
+  @ManyToOne((type) => Family, { nullable: false })
   family: Family;
 
-  @Column((type) => UpdateMetaData)
-  updateMetaData: UpdateMetaData;
+  @Column((type) => UpdateMetaData, { prefix: false })
+  updateMetaData?: UpdateMetaData;
 }

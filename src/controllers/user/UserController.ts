@@ -1,5 +1,5 @@
 import { Controller, Get, Request, Route, Security } from 'tsoa';
-import { User } from '../../models/user';
+import { User } from '../../entity';
 import { UserService } from '../../services/user/UserService';
 
 @Route('users')

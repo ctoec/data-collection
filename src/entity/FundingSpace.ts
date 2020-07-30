@@ -30,6 +30,6 @@ export class FundingSpace {
   @Column({ type: 'enum', enum: FundingTime })
   time: FundingTime;
 
-  @OneToOne((type) => FundingTimeSplit, { nullable: true })
+  @OneToOne((type) => FundingTimeSplit, { eager: true })
   timeSplit?: FundingTimeSplit;
 }

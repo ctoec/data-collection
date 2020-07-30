@@ -69,17 +69,17 @@ export class Child {
   foster?: boolean;
 
   @Column({ default: false })
-  recievesC4K: boolean = false;
+  recievesC4K?: boolean = false;
 
-  @ManyToOne((type) => Family)
+  @ManyToOne((type) => Family, { nullable: false })
   family: Family;
 
-  @ManyToOne((type) => Organization)
+  @ManyToOne((type) => Organization, { nullable: false })
   organization?: Organization;
 
   @OneToMany((type) => Enrollment, (enrollment) => enrollment.child)
   enrollments?: Array<Enrollment>;
 
-  @Column((type) => UpdateMetaData)
-  updateMetaData: UpdateMetaData;
+  @Column((type) => UpdateMetaData, { prefix: false })
+  updateMetaData?: UpdateMetaData;
 }

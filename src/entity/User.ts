@@ -13,9 +13,9 @@ export class User {
   firstName: string;
   @Column()
   lastName: string;
-  @Column()
+  @Column({ nullable: true })
   middleName?: string;
-  @Column()
+  @Column({ nullable: true })
   suffix?: string;
 
   @OneToMany((type) => OrganizationPermission, (perm) => perm.user)
