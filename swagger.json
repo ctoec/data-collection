@@ -6,15 +6,34 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "EnrollmentReport": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "enrollments": {
+            "items": {
+              "$ref": "#/components/schemas/FlattenedEnrollment"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["id", "enrollments"],
+        "type": "object",
+        "additionalProperties": false
+      },
       "FlattenedEnrollment": {
         "properties": {
           "id": {
             "type": "number",
             "format": "double"
           },
-          "reportId": {
-            "type": "number",
-            "format": "double"
+          "report": {
+            "$ref": "#/components/schemas/EnrollmentReport"
+          },
+          "externalId": {
+            "type": "string"
           },
           "sasid": {
             "type": "number",
@@ -36,7 +55,19 @@
           "stateOfBirth": {
             "type": "string"
           },
-          "race": {
+          "americanIndianOrAlaskaNative": {
+            "type": "string"
+          },
+          "asian": {
+            "type": "string"
+          },
+          "blackOrAfricanAmerican": {
+            "type": "string"
+          },
+          "nativeHawaiianOrPacificIslander": {
+            "type": "string"
+          },
+          "white": {
             "type": "string"
           },
           "ethnicity": {
@@ -45,13 +76,28 @@
           "gender": {
             "type": "string"
           },
+          "dualLanguageLearner": {
+            "type": "boolean"
+          },
           "receivingSpecialEducationServices": {
             "type": "boolean"
           },
           "specialEducationServicesType": {
             "type": "string"
           },
-          "address": {
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "town": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zipcode": {
             "type": "string"
           },
           "livesWithFosterFamily": {
@@ -108,24 +154,7 @@
             "type": "boolean"
           }
         },
-        "required": ["id", "reportId"],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "EnrollmentReport": {
-        "properties": {
-          "id": {
-            "type": "number",
-            "format": "double"
-          },
-          "enrollments": {
-            "items": {
-              "$ref": "#/components/schemas/FlattenedEnrollment"
-            },
-            "type": "array"
-          }
-        },
-        "required": ["id", "enrollments"],
+        "required": ["id", "report"],
         "type": "object",
         "additionalProperties": false
       },
@@ -212,13 +241,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": [
-          "id",
-          "incomeDeterminations",
-          "children",
-          "organization",
-          "updateMetaData"
-        ],
+        "required": ["id"],
         "type": "object",
         "additionalProperties": false
       },
@@ -276,7 +299,7 @@
             "$ref": "#/components/schemas/User"
           }
         },
-        "required": ["updatedAt", "author"],
+        "required": ["updatedAt"],
         "type": "object",
         "additionalProperties": false
       },
@@ -305,7 +328,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "family", "updateMetaData"],
+        "required": ["id", "family"],
         "type": "object",
         "additionalProperties": false
       },
@@ -386,7 +409,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "firstName", "lastName", "family", "updateMetaData"],
+        "required": ["id", "firstName", "lastName", "family"],
         "type": "object",
         "additionalProperties": false
       },
@@ -426,7 +449,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "child", "site", "fundings", "updateMetaData"],
+        "required": ["id", "child", "site"],
         "type": "object",
         "additionalProperties": false
       },
@@ -471,14 +494,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "titleI",
-          "region",
-          "organization",
-          "enrollments"
-        ],
+        "required": ["id", "name", "titleI", "region", "organization"],
         "type": "object",
         "additionalProperties": false
       },
@@ -612,7 +628,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "enrollment", "fundingSpace", "updateMetaData"],
+        "required": ["id", "enrollment", "fundingSpace"],
         "type": "object",
         "additionalProperties": false
       },
@@ -738,6 +754,28 @@
             }
           }
         }
+      }
+    },
+    "/templates/csv": {
+      "get": {
+        "operationId": "GetCsvTemplate",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
       }
     },
     "/users/current": {

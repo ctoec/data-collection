@@ -33,6 +33,20 @@
               }
             }
           }
+        },
+        "/templates/csv": {
+          "get": {
+            "responses": {
+              "200": {
+                "description": "Ok",
+                "content": {
+                  "text/csv": {
+                    "schema": { "type": "binary" }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

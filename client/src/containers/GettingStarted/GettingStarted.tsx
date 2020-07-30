@@ -1,6 +1,7 @@
 import React from 'react';
 import { MailToLink } from '../Home/MailToLink';
 import { Button } from '@ctoec/component-library';
+import { getCurrentHost } from '../../utils/getCurrentHost';
 
 const GettingStarted: React.FC = () => {
   return (
@@ -19,14 +20,14 @@ const GettingStarted: React.FC = () => {
         <p>
           <span className="text-bold">Excel template</span>
           <br />
-          <a href="/upload_template/ECE Data Collection Template.xlsx">
+          <a href={`${getCurrentHost()}/template/xlsx`}>
             ECE Data Collection Excel Template
           </a>
           <br />
           <br />
           <span className="text-bold">CSV template</span>
           <br />
-          <a href="/upload_template/ECE Data Collection Template.csv">
+          <a href={`${getCurrentHost()}/template/csv`} target="#">
             ECE Data Collection CSV Template
           </a>
         </p>
