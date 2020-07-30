@@ -1,8 +1,10 @@
 import { utils, writeFile } from 'xlsx';
+import Excel, { Worksheet } from 'exceljs';
 import path from 'path';
 import { Response, Request } from 'express';
 import { getConnection } from 'typeorm';
 import { FlattenedEnrollment } from '../entity';
+import { getTemplateMeta } from '../decorators/templateMetadata';
 
 const CSV_MIME_TYPE = 'text/csv';
 const XLSX_MIME_TYPE =
@@ -33,15 +35,20 @@ export const xlsxGet = (request: Request, response: Response) =>
  * @param response
  * @param type
  */
-const templateGet = (
+const templateGet = async (
   request: Request,
   response: Response,
   type: 'csv' | 'xlsx'
 ) => {
-  const template = getTemplateWorkbook();
+  const template = getTemplateWorkbook(type);
   const filePath = path.join('/tmp', `template.${type}`);
 
-  writeFile(template, filePath, { bookType: type });
+  // writeFile(template, filePath, { bookType: type });
+  if (type === 'xlsx') {
+    await template.xlsx.writeFile(filePath);
+  } else {
+    await template.csv.writeFile(filePath);
+  }
 
   response.setHeader(
     'Content-type',
@@ -58,13 +65,43 @@ const templateGet = (
  * Creates Workbook object containing a single worksheet,
  * which contains the data collection template data.
  */
-const getTemplateWorkbook = () => {
-  const templateData = getTemplateData();
-  const sheet = utils.aoa_to_sheet(templateData);
-  const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, sheet);
+const getTemplateWorkbook = (type: 'csv' | 'xlsx') => {
+  const { titles, descriptions, sectionCounts } = getTemplateData();
+
+  const workbook = new Excel.Workbook();
+  const sheet = workbook.addWorksheet('Data collection');
+  if (type === 'xlsx') {
+    sheet.addRow(getWideSectionTitles(sectionCounts, titles.length));
+    mergeCells(sheet, sectionCounts);
+  }
+  sheet.addRow(titles);
+  if (type === 'xlsx') {
+    sheet.addRow(descriptions);
+  }
+
+  // const aoa = type === 'xlsx' ? [getWideSectionTitles(sectionCounts, titles.length), titles, descriptions] : [titles];
+  // const sheet = utils.aoa_to_sheet(aoa);
+
+  // if(type === 'xlsx') {
+  // 	sheet["!merges"] = getMergesForSections(sectionCounts);
+  // }
+
+  // const workbook = utils.book_new();
+  // utils.book_append_sheet(workbook, sheet);
 
   return workbook;
+};
+
+const getWideSectionTitles = (sectionCounts: object, width: number) => {
+  const sectionTitles = Array.from({ length: width });
+
+  let fillStart = 0;
+  Object.entries(sectionCounts).forEach(([key, value]) => {
+    sectionTitles.fill(key, fillStart, fillStart + value);
+    fillStart += value;
+  });
+
+  return sectionTitles;
 };
 
 /**
@@ -77,28 +114,43 @@ const getTemplateWorkbook = () => {
 const getTemplateData = () =>
   getConnection()
     .getMetadata(FlattenedEnrollment)
-    .columns.filter((column) => column.comment.length > 0)
-    .map((column) => parseColumnComment(column.comment))
+    .columns.map((column) =>
+      getTemplateMeta(new FlattenedEnrollment(), column.propertyName)
+    )
+    .filter((templateMeta) => !!templateMeta)
     .reduce(
-      (acc, currentValue) => [
-        [...acc[0], currentValue.title],
-        [...acc[1], currentValue.description],
-      ],
-      [[], []]
+      (acc, currentValue) => {
+        acc.titles = [...acc.titles, currentValue.title];
+        acc.descriptions = [...acc.descriptions, currentValue.description];
+        if (acc.sectionCounts[currentValue.section]) {
+          acc.sectionCounts[currentValue.section] += 1;
+        } else {
+          acc.sectionCounts[currentValue.section] = 1;
+        }
+
+        return acc;
+      },
+      { titles: [], descriptions: [], sectionCounts: {} }
     );
 
-/**
- * Parses column title and description from column comment string.
- * Assumes title is separated from description by first instance of `\n`.
- * If no new lines exist, then there is no description.
- * @param columnComment
- */
-const parseColumnComment = (columnComment: string) => {
-  const newLineIdx = columnComment.indexOf('\n');
-  return newLineIdx > 0
-    ? {
-        title: columnComment.slice(0, newLineIdx),
-        description: columnComment.slice(newLineIdx + 1),
-      }
-    : { title: columnComment, description: '' };
+const mergeCells = (worksheet: Worksheet, sectionCounts: object) => {
+  let left = 0;
+  Object.entries(sectionCounts).forEach(([section, count]) => {
+    worksheet.mergeCells(0, left, 0, left + count);
+    left += count + 1;
+  });
+};
+const getMergesForSections = (sectionCounts: object) => {
+  const sectionNames = Object.keys(sectionCounts);
+  const merges = [];
+  let lastEnd = 0;
+  sectionNames.forEach((sectionName) => {
+    const start = lastEnd > 0 ? lastEnd + 1 : lastEnd;
+    const end = lastEnd + sectionCounts[sectionName];
+    merges.push({ s: { c: start, r: 0 }, e: { c: end, r: 0 } });
+
+    lastEnd = end;
+  });
+
+  return merges;
 };
