@@ -1,10 +1,12 @@
 import { utils, writeFile } from 'xlsx';
-import Excel, { Worksheet } from 'exceljs';
 import path from 'path';
 import { Response, Request } from 'express';
 import { getConnection } from 'typeorm';
-import { FlattenedEnrollment } from '../entity';
-import { getTemplateMeta } from '../decorators/templateMetadata';
+import { FlattenedEnrollment, TEMPLATE_SECTIONS } from '../entity';
+import {
+  getTemplateMeta,
+  TemplateMetadata,
+} from '../decorators/templateMetadata';
 
 const CSV_MIME_TYPE = 'text/csv';
 const XLSX_MIME_TYPE =
@@ -35,7 +37,7 @@ export const xlsxGet = (request: Request, response: Response) =>
  * @param response
  * @param type
  */
-const templateGet = async (
+const templateGet = (
   request: Request,
   response: Response,
   type: 'csv' | 'xlsx'
@@ -43,12 +45,7 @@ const templateGet = async (
   const template = getTemplateWorkbook(type);
   const filePath = path.join('/tmp', `template.${type}`);
 
-  // writeFile(template, filePath, { bookType: type });
-  if (type === 'xlsx') {
-    await template.xlsx.writeFile(filePath);
-  } else {
-    await template.csv.writeFile(filePath);
-  }
+  writeFile(template, filePath, { bookType: type });
 
   response.setHeader(
     'Content-type',
@@ -68,22 +65,23 @@ const templateGet = async (
 const getTemplateWorkbook = (type: 'csv' | 'xlsx') => {
   const { titles, descriptions, sectionCounts } = getTemplateData();
 
-  const workbook = new Excel.Workbook();
-  const sheet = workbook.addWorksheet('Data collection');
+  const aoa =
+    type === 'xlsx'
+      ? [
+          getWideSectionTitles(sectionCounts, titles.length),
+          titles,
+          descriptions,
+        ]
+      : [titles];
+  const sheet = utils.aoa_to_sheet(aoa);
 
-  // If getting excel format, add section titles and merge cells
+  console.log('section counts', sectionCounts);
   if (type === 'xlsx') {
-    sheet.addRow(getWideSectionTitles(sectionCounts, titles.length));
-    mergeAndFormatSectionTitleCells(sheet, sectionCounts);
+    sheet['!merges'] = getMergesForSections(sectionCounts);
   }
 
-  // Add column titles
-  sheet.addRow(titles);
-
-  // If getting excel format, add column descriptions
-  if (type === 'xlsx') {
-    sheet.addRow(descriptions);
-  }
+  const workbook = utils.book_new();
+  utils.book_append_sheet(workbook, sheet);
 
   return workbook;
 };
@@ -92,9 +90,9 @@ const getWideSectionTitles = (sectionCounts: object, width: number) => {
   const sectionTitles = Array.from({ length: width });
 
   let fillStart = 0;
-  Object.entries(sectionCounts).forEach(([key, value]) => {
-    sectionTitles.fill(key, fillStart, fillStart + value);
-    fillStart += value;
+  Object.entries(sectionCounts).forEach(([section, count]) => {
+    sectionTitles.fill(section, fillStart, fillStart + count);
+    fillStart += count;
   });
 
   return sectionTitles;
@@ -129,28 +127,17 @@ const getTemplateData = () =>
       { titles: [], descriptions: [], sectionCounts: {} }
     );
 
-/**
- * Merge section title cells (top row) based on number of columns in each section
- * @param worksheet
- * @param sectionCounts
- */
-const mergeAndFormatSectionTitleCells = (
-  worksheet: Worksheet,
-  sectionCounts: object
-) => {
-  let left = 0;
-  Object.entries(sectionCounts).forEach(([section, count]) => {
-    worksheet.mergeCells(0, left, 0, left + count);
-    if (left === 0) {
-      const thisCell = worksheet.getCell('A1');
-      thisCell.alignment = { horizontal: 'center' };
-      thisCell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        bgColor: { argb: 'FFFAEBD7' },
-        fgColor: { argb: 'FFFAEBD7' },
-      };
-    }
-    left += count + 1;
+const getMergesForSections = (sectionCounts: object) => {
+  const sectionNames = Object.keys(sectionCounts);
+  const merges = [];
+  let lastEnd = 0;
+  sectionNames.forEach((sectionName) => {
+    const start = lastEnd > 0 ? lastEnd + 1 : lastEnd;
+    const end = lastEnd + sectionCounts[sectionName];
+    merges.push({ s: { c: start, r: 0 }, e: { c: end, r: 0 } });
+
+    lastEnd = end;
   });
+
+  return merges;
 };
