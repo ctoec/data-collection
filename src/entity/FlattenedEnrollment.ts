@@ -34,22 +34,22 @@ export class FlattenedEnrollment {
   stateOfBirth?: string;
 
   @Column({ nullable: true })
-  americanIndianOrAlaskaNative?: string;
+  americanIndianOrAlaskaNative?: boolean;
 
   @Column({ nullable: true })
-  asian?: string;
+  asian?: boolean;
 
   @Column({ nullable: true })
-  blackOrAfricanAmerican?: string;
+  blackOrAfricanAmerican?: boolean;
 
   @Column({ nullable: true })
-  nativeHawaiianOrPacificIslander?: string;
+  nativeHawaiianOrPacificIslander?: boolean;
 
   @Column({ nullable: true })
-  white?: string;
+  white?: boolean;
 
   @Column({ nullable: true })
-  ethnicity?: string;
+  hispanicOrLatinxEthnicity?: boolean;
 
   @Column({ nullable: true })
   gender?: string;
