@@ -16,13 +16,10 @@ export class FlattenedEnrollment {
   report: EnrollmentReport;
 
   @Column({ nullable: true })
-  externalId?: string;
+  name?: string;
 
   @Column({ nullable: true })
   sasid?: number;
-
-  @Column({ nullable: true })
-  name?: string;
 
   @Column({ nullable: true })
   dateOfBirth?: Date;
@@ -97,6 +94,18 @@ export class FlattenedEnrollment {
   incomeDeterminationDate?: Date;
 
   @Column({ nullable: true })
+  provider?: string;
+
+  @Column({ nullable: true })
+  site?: string;
+
+  @Column({ nullable: true })
+  model?: string;
+
+  @Column({ nullable: true })
+  ageGroup?: string;
+
+  @Column({ nullable: true })
   enrollmentStartDate?: Date;
 
   @Column({ nullable: true })
@@ -106,25 +115,16 @@ export class FlattenedEnrollment {
   enrollmentExitReason?: string;
 
   @Column({ nullable: true })
-  firstFundingPeriod?: string;
-
-  @Column({ nullable: true })
-  lastFundingPeriod?: string;
-
-  @Column({ nullable: true })
-  site?: string;
-
-  @Column({ nullable: true })
-  ageGroup?: string;
-
-  @Column({ nullable: true })
   fundingType?: string;
 
   @Column({ nullable: true })
   spaceType?: string;
 
   @Column({ nullable: true })
-  model?: string;
+  firstFundingPeriod?: string;
+
+  @Column({ nullable: true })
+  lastFundingPeriod?: string;
 
   @Column({ nullable: true })
   receivingCareForKids?: boolean;
