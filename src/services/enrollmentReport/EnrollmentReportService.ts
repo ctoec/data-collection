@@ -1,5 +1,5 @@
 import { EnrollmentReport, FlattenedEnrollment } from '../../entity';
-import { readFile, utils } from 'xlsx';
+import { readFile, utils, WorkSheet } from 'xlsx';
 import { getManager, getConnection } from 'typeorm';
 
 export class EnrollmentReportService {
@@ -32,13 +32,21 @@ export class EnrollmentReportService {
       .map((column) => column.propertyName);
 
     const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
-      range: 1,
+      range: this.getStartingRow(sheet),
       header: expectedHeaders,
     });
 
-    console.log('parsed sheet', parsedSheet);
     return parsedSheet.map((enrollment) =>
       getManager().create(FlattenedEnrollment, enrollment)
     );
+  }
+
+  private getStartingRow(sheet: WorkSheet): number {
+    // If the second cell in the first row has value 'Child Info'
+    // then the sheet has section headers, meaning it is the
+    // excel format and data starts on row 3
+    // (after section headers, column headers, and column descriptions).
+    // Otherwise, it is the csv format and data starts on row 1
+    return sheet['B1'].v === 'Child Info' ? 3 : 1;
   }
 }
