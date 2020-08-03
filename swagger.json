@@ -32,12 +32,12 @@
           "report": {
             "$ref": "#/components/schemas/EnrollmentReport"
           },
+          "name": {
+            "type": "string"
+          },
           "sasid": {
             "type": "number",
             "format": "double"
-          },
-          "name": {
-            "type": "string"
           },
           "dateOfBirth": {
             "type": "string",
@@ -52,14 +52,29 @@
           "stateOfBirth": {
             "type": "string"
           },
-          "race": {
-            "type": "string"
+          "americanIndianOrAlaskaNative": {
+            "type": "boolean"
           },
-          "ethnicity": {
-            "type": "string"
+          "asian": {
+            "type": "boolean"
+          },
+          "blackOrAfricanAmerican": {
+            "type": "boolean"
+          },
+          "nativeHawaiianOrPacificIslander": {
+            "type": "boolean"
+          },
+          "white": {
+            "type": "boolean"
+          },
+          "hispanicOrLatinxEthnicity": {
+            "type": "boolean"
           },
           "gender": {
             "type": "string"
+          },
+          "dualLanguageLearner": {
+            "type": "boolean"
           },
           "receivingSpecialEducationServices": {
             "type": "boolean"
@@ -67,7 +82,19 @@
           "specialEducationServicesType": {
             "type": "string"
           },
-          "address": {
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "town": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zipcode": {
             "type": "string"
           },
           "livesWithFosterFamily": {
@@ -88,6 +115,18 @@
             "type": "string",
             "format": "date-time"
           },
+          "provider": {
+            "type": "string"
+          },
+          "site": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "ageGroup": {
+            "type": "string"
+          },
           "enrollmentStartDate": {
             "type": "string",
             "format": "date-time"
@@ -99,25 +138,16 @@
           "enrollmentExitReason": {
             "type": "string"
           },
-          "firstFundingPeriod": {
-            "type": "string"
-          },
-          "lastFundingPeriod": {
-            "type": "string"
-          },
-          "site": {
-            "type": "string"
-          },
-          "ageGroup": {
-            "type": "string"
-          },
           "fundingType": {
             "type": "string"
           },
           "spaceType": {
             "type": "string"
           },
-          "model": {
+          "firstFundingPeriod": {
+            "type": "string"
+          },
+          "lastFundingPeriod": {
             "type": "string"
           },
           "receivingCareForKids": {
@@ -211,7 +241,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "organization"],
+        "required": ["id"],
         "type": "object",
         "additionalProperties": false
       },

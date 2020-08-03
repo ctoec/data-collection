@@ -40,16 +40,16 @@ export interface FlattenedEnrollment {
   report: EnrollmentReport;
   /**
    *
-   * @type {number}
-   * @memberof FlattenedEnrollment
-   */
-  sasid?: number;
-  /**
-   *
    * @type {string}
    * @memberof FlattenedEnrollment
    */
   name?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof FlattenedEnrollment
+   */
+  sasid?: number;
   /**
    *
    * @type {Date}
@@ -76,22 +76,52 @@ export interface FlattenedEnrollment {
   stateOfBirth?: string;
   /**
    *
-   * @type {string}
+   * @type {boolean}
    * @memberof FlattenedEnrollment
    */
-  race?: string;
+  americanIndianOrAlaskaNative?: boolean;
   /**
    *
-   * @type {string}
+   * @type {boolean}
    * @memberof FlattenedEnrollment
    */
-  ethnicity?: string;
+  asian?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof FlattenedEnrollment
+   */
+  blackOrAfricanAmerican?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof FlattenedEnrollment
+   */
+  nativeHawaiianOrPacificIslander?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof FlattenedEnrollment
+   */
+  white?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof FlattenedEnrollment
+   */
+  hispanicOrLatinxEthnicity?: boolean;
   /**
    *
    * @type {string}
    * @memberof FlattenedEnrollment
    */
   gender?: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof FlattenedEnrollment
+   */
+  dualLanguageLearner?: boolean;
   /**
    *
    * @type {boolean}
@@ -109,7 +139,31 @@ export interface FlattenedEnrollment {
    * @type {string}
    * @memberof FlattenedEnrollment
    */
-  address?: string;
+  addressLine1?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  addressLine2?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  town?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  state?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  zipcode?: string;
   /**
    *
    * @type {boolean}
@@ -142,6 +196,30 @@ export interface FlattenedEnrollment {
   incomeDeterminationDate?: Date;
   /**
    *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  provider?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  site?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  model?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  ageGroup?: string;
+  /**
+   *
    * @type {Date}
    * @memberof FlattenedEnrollment
    */
@@ -163,30 +241,6 @@ export interface FlattenedEnrollment {
    * @type {string}
    * @memberof FlattenedEnrollment
    */
-  firstFundingPeriod?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FlattenedEnrollment
-   */
-  lastFundingPeriod?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FlattenedEnrollment
-   */
-  site?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FlattenedEnrollment
-   */
-  ageGroup?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FlattenedEnrollment
-   */
   fundingType?: string;
   /**
    *
@@ -199,7 +253,13 @@ export interface FlattenedEnrollment {
    * @type {string}
    * @memberof FlattenedEnrollment
    */
-  model?: string;
+  firstFundingPeriod?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FlattenedEnrollment
+   */
+  lastFundingPeriod?: string;
   /**
    *
    * @type {boolean}
@@ -222,8 +282,8 @@ export function FlattenedEnrollmentFromJSONTyped(
   return {
     id: json['id'],
     report: EnrollmentReportFromJSON(json['report']),
-    sasid: !exists(json, 'sasid') ? undefined : json['sasid'],
     name: !exists(json, 'name') ? undefined : json['name'],
+    sasid: !exists(json, 'sasid') ? undefined : json['sasid'],
     dateOfBirth: !exists(json, 'dateOfBirth')
       ? undefined
       : new Date(json['dateOfBirth']),
@@ -234,9 +294,27 @@ export function FlattenedEnrollmentFromJSONTyped(
     stateOfBirth: !exists(json, 'stateOfBirth')
       ? undefined
       : json['stateOfBirth'],
-    race: !exists(json, 'race') ? undefined : json['race'],
-    ethnicity: !exists(json, 'ethnicity') ? undefined : json['ethnicity'],
+    americanIndianOrAlaskaNative: !exists(json, 'americanIndianOrAlaskaNative')
+      ? undefined
+      : json['americanIndianOrAlaskaNative'],
+    asian: !exists(json, 'asian') ? undefined : json['asian'],
+    blackOrAfricanAmerican: !exists(json, 'blackOrAfricanAmerican')
+      ? undefined
+      : json['blackOrAfricanAmerican'],
+    nativeHawaiianOrPacificIslander: !exists(
+      json,
+      'nativeHawaiianOrPacificIslander'
+    )
+      ? undefined
+      : json['nativeHawaiianOrPacificIslander'],
+    white: !exists(json, 'white') ? undefined : json['white'],
+    hispanicOrLatinxEthnicity: !exists(json, 'hispanicOrLatinxEthnicity')
+      ? undefined
+      : json['hispanicOrLatinxEthnicity'],
     gender: !exists(json, 'gender') ? undefined : json['gender'],
+    dualLanguageLearner: !exists(json, 'dualLanguageLearner')
+      ? undefined
+      : json['dualLanguageLearner'],
     receivingSpecialEducationServices: !exists(
       json,
       'receivingSpecialEducationServices'
@@ -246,7 +324,15 @@ export function FlattenedEnrollmentFromJSONTyped(
     specialEducationServicesType: !exists(json, 'specialEducationServicesType')
       ? undefined
       : json['specialEducationServicesType'],
-    address: !exists(json, 'address') ? undefined : json['address'],
+    addressLine1: !exists(json, 'addressLine1')
+      ? undefined
+      : json['addressLine1'],
+    addressLine2: !exists(json, 'addressLine2')
+      ? undefined
+      : json['addressLine2'],
+    town: !exists(json, 'town') ? undefined : json['town'],
+    state: !exists(json, 'state') ? undefined : json['state'],
+    zipcode: !exists(json, 'zipcode') ? undefined : json['zipcode'],
     livesWithFosterFamily: !exists(json, 'livesWithFosterFamily')
       ? undefined
       : json['livesWithFosterFamily'],
@@ -265,6 +351,10 @@ export function FlattenedEnrollmentFromJSONTyped(
     incomeDeterminationDate: !exists(json, 'incomeDeterminationDate')
       ? undefined
       : new Date(json['incomeDeterminationDate']),
+    provider: !exists(json, 'provider') ? undefined : json['provider'],
+    site: !exists(json, 'site') ? undefined : json['site'],
+    model: !exists(json, 'model') ? undefined : json['model'],
+    ageGroup: !exists(json, 'ageGroup') ? undefined : json['ageGroup'],
     enrollmentStartDate: !exists(json, 'enrollmentStartDate')
       ? undefined
       : new Date(json['enrollmentStartDate']),
@@ -274,17 +364,14 @@ export function FlattenedEnrollmentFromJSONTyped(
     enrollmentExitReason: !exists(json, 'enrollmentExitReason')
       ? undefined
       : json['enrollmentExitReason'],
+    fundingType: !exists(json, 'fundingType') ? undefined : json['fundingType'],
+    spaceType: !exists(json, 'spaceType') ? undefined : json['spaceType'],
     firstFundingPeriod: !exists(json, 'firstFundingPeriod')
       ? undefined
       : json['firstFundingPeriod'],
     lastFundingPeriod: !exists(json, 'lastFundingPeriod')
       ? undefined
       : json['lastFundingPeriod'],
-    site: !exists(json, 'site') ? undefined : json['site'],
-    ageGroup: !exists(json, 'ageGroup') ? undefined : json['ageGroup'],
-    fundingType: !exists(json, 'fundingType') ? undefined : json['fundingType'],
-    spaceType: !exists(json, 'spaceType') ? undefined : json['spaceType'],
-    model: !exists(json, 'model') ? undefined : json['model'],
     receivingCareForKids: !exists(json, 'receivingCareForKids')
       ? undefined
       : json['receivingCareForKids'],
@@ -303,8 +390,8 @@ export function FlattenedEnrollmentToJSON(
   return {
     id: value.id,
     report: EnrollmentReportToJSON(value.report),
-    sasid: value.sasid,
     name: value.name,
+    sasid: value.sasid,
     dateOfBirth:
       value.dateOfBirth === undefined
         ? undefined
@@ -312,12 +399,21 @@ export function FlattenedEnrollmentToJSON(
     birthCertificateId: value.birthCertificateId,
     townOfBirth: value.townOfBirth,
     stateOfBirth: value.stateOfBirth,
-    race: value.race,
-    ethnicity: value.ethnicity,
+    americanIndianOrAlaskaNative: value.americanIndianOrAlaskaNative,
+    asian: value.asian,
+    blackOrAfricanAmerican: value.blackOrAfricanAmerican,
+    nativeHawaiianOrPacificIslander: value.nativeHawaiianOrPacificIslander,
+    white: value.white,
+    hispanicOrLatinxEthnicity: value.hispanicOrLatinxEthnicity,
     gender: value.gender,
+    dualLanguageLearner: value.dualLanguageLearner,
     receivingSpecialEducationServices: value.receivingSpecialEducationServices,
     specialEducationServicesType: value.specialEducationServicesType,
-    address: value.address,
+    addressLine1: value.addressLine1,
+    addressLine2: value.addressLine2,
+    town: value.town,
+    state: value.state,
+    zipcode: value.zipcode,
     livesWithFosterFamily: value.livesWithFosterFamily,
     experiencedHomelessnessOrHousingInsecurity:
       value.experiencedHomelessnessOrHousingInsecurity,
@@ -327,6 +423,10 @@ export function FlattenedEnrollmentToJSON(
       value.incomeDeterminationDate === undefined
         ? undefined
         : value.incomeDeterminationDate.toISOString(),
+    provider: value.provider,
+    site: value.site,
+    model: value.model,
+    ageGroup: value.ageGroup,
     enrollmentStartDate:
       value.enrollmentStartDate === undefined
         ? undefined
@@ -336,13 +436,10 @@ export function FlattenedEnrollmentToJSON(
         ? undefined
         : value.enrollmentEndDate.toISOString(),
     enrollmentExitReason: value.enrollmentExitReason,
-    firstFundingPeriod: value.firstFundingPeriod,
-    lastFundingPeriod: value.lastFundingPeriod,
-    site: value.site,
-    ageGroup: value.ageGroup,
     fundingType: value.fundingType,
     spaceType: value.spaceType,
-    model: value.model,
+    firstFundingPeriod: value.firstFundingPeriod,
+    lastFundingPeriod: value.lastFundingPeriod,
     receivingCareForKids: value.receivingCareForKids,
   };
 }

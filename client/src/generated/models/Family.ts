@@ -97,7 +97,7 @@ export interface Family {
    * @type {Organization}
    * @memberof Family
    */
-  organization: Organization;
+  organization?: Organization;
   /**
    *
    * @type {UpdateMetaData}
@@ -139,7 +139,9 @@ export function FamilyFromJSONTyped(
     children: !exists(json, 'children')
       ? undefined
       : (json['children'] as Array<any>).map(ChildFromJSON),
-    organization: OrganizationFromJSON(json['organization']),
+    organization: !exists(json, 'organization')
+      ? undefined
+      : OrganizationFromJSON(json['organization']),
     updateMetaData: !exists(json, 'updateMetaData')
       ? undefined
       : UpdateMetaDataFromJSON(json['updateMetaData']),
