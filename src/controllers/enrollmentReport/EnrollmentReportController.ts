@@ -28,7 +28,6 @@ export class ReportController extends Controller {
     const report = new EnrollmentReport();
     report.enrollments = flattenedEnrollments;
 
-    console.log(flattenedEnrollments);
     return this._service.save(report);
   }
 
