@@ -1,7 +1,6 @@
 import { EnrollmentReport, FlattenedEnrollment } from '../../entity';
 import { readFile, utils, WorkSheet } from 'xlsx';
-import { getManager, getConnection, Column } from 'typeorm';
-import { report } from 'process';
+import { getManager, getConnection } from 'typeorm';
 
 export class EnrollmentReportService {
   public async get(id: number): Promise<EnrollmentReport> {
