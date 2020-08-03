@@ -1,15 +1,17 @@
 import { EnrollmentReport, FlattenedEnrollment } from '../../entity';
 import { readFile, utils, WorkSheet } from 'xlsx';
-import { getManager, getConnection } from 'typeorm';
+import { getManager, getConnection, Column } from 'typeorm';
+import { report } from 'process';
 
 export class EnrollmentReportService {
   public async get(id: number): Promise<EnrollmentReport> {
     return getManager().findOne(EnrollmentReport, id);
   }
 
-  public async save(enrollmentReport: EnrollmentReport): Promise<void> {
-    getManager().save(enrollmentReport);
-    getManager().save(enrollmentReport.enrollments);
+  public async save(
+    enrollmentReport: EnrollmentReport
+  ): Promise<EnrollmentReport> {
+    return getManager().save(enrollmentReport);
   }
 
   public parse(
@@ -27,7 +29,7 @@ export class EnrollmentReportService {
         (column) =>
           column.propertyName !== 'id' &&
           column.propertyName !== 'report' &&
-          column.propertyName !== 'externalId'
+          column.propertyName !== 'reportId'
       )
       .map((column) => column.propertyName);
 

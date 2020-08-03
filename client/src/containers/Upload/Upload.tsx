@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import queryString from 'query-string';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   FileInput,
@@ -7,8 +8,6 @@ import {
   Button,
   Alert,
 } from '@ctoec/component-library';
-import { DefaultApi, Configuration } from '../../generated';
-import { getCurrentHost } from '../../utils/getCurrentHost';
 import { getApi } from '../../utils/getApi';
 
 const Upload: React.FC = () => {
@@ -102,9 +101,11 @@ const Upload: React.FC = () => {
             className="margin-top-2"
             text={loading ? 'Uploading...' : 'Upload'}
           />
-          {status && !status.error && (
+          {status && !status.error && status.reportId && (
             <Button
-              href={`/check-data/${status.reportId}`}
+              href={`/check-data?${queryString.stringify({
+                reportId: status.reportId,
+              })}`}
               text="Check your data"
               appearance="outline"
             />

@@ -43,7 +43,7 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/check-data/:fileUploadId',
+    path: '/check-data',
     component: CheckData,
     unauthorized: false,
   },

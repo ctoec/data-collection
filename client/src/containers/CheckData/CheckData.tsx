@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-
+import { useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import MaterialTable from 'material-table';
-
 import {
   tableIcons,
   DeleteOutline,
@@ -11,21 +11,12 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { FlattenedEnrollment } from '../../generated';
 import { getApi } from '../../utils/getApi';
 
-type CheckDataProps = {
-  match: {
-    params: {
-      reportId: number;
-    };
-  };
-};
-
-const CheckData: React.FC<CheckDataProps> = ({
-  match: {
-    params: { reportId },
-  },
-}) => {
+const CheckData: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<FlattenedEnrollment[]>([]);
+  const reportId = parseInt(
+    (queryString.parse(useLocation().search).reportId as string) || ''
+  );
 
   useEffect(() => {
     getApi(accessToken)

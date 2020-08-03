@@ -29,8 +29,7 @@ export class ReportController extends Controller {
     report.enrollments = flattenedEnrollments;
 
     console.log(flattenedEnrollments);
-    await this._service.save(report);
-    return report;
+    return this._service.save(report);
   }
 
   private async handleFile(req: Express.Request): Promise<any> {
