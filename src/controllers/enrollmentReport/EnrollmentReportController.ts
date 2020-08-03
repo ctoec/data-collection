@@ -24,11 +24,11 @@ export class ReportController extends Controller {
   ): Promise<EnrollmentReport> {
     await this.handleFile(req);
     const flattenedEnrollments = this._service.parse(req.file);
-    console.log('Flattened enrollments', flattenedEnrollments);
 
     const report = new EnrollmentReport();
     report.enrollments = flattenedEnrollments;
 
+    console.log(flattenedEnrollments);
     await this._service.save(report);
     return report;
   }

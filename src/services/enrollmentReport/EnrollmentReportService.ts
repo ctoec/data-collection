@@ -31,13 +31,14 @@ export class EnrollmentReportService {
       )
       .map((column) => column.propertyName);
 
-    const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
+    const parsedSheet = utils.sheet_to_json(sheet, {
       range: this.getStartingRow(sheet),
       header: expectedHeaders,
     });
 
+    console.log('parsed sheet', parsedSheet);
     return parsedSheet.map((enrollment) =>
-      getManager().create(FlattenedEnrollment, enrollment)
+      this.parseFlattenedEnrollment(enrollment as object)
     );
   }
 
@@ -48,5 +49,34 @@ export class EnrollmentReportService {
     // (after section headers, column headers, and column descriptions).
     // Otherwise, it is the csv format and data starts on row 1
     return sheet['B1'].v === 'Child Info' ? 3 : 1;
+  }
+
+  private parseFlattenedEnrollment(rawEnrollment: object) {
+    Object.entries(rawEnrollment).forEach(([property, value]) => {
+      if (
+        [
+          'americanIndianOrAlaskaNative',
+          'asian',
+          'blackOrAfricanAmerican',
+          'nativeHawaiianOrPacificIslander',
+          'white',
+          'hispanicOrLatinxEthnicity',
+          'dualLanguageLearner',
+          'receivingSpecialEducationServices',
+          'livesWithFosterFamily',
+          'experiencedHomelessnessOrHousingInsecurity',
+          'receivingCareForKids',
+        ].includes(property)
+      ) {
+        rawEnrollment[property] = this.getBoolean(value);
+      }
+    });
+
+    return getConnection().manager.create(FlattenedEnrollment, rawEnrollment);
+  }
+
+  private getBoolean(value: string): boolean {
+    if (['', 'N', 'NO', undefined].includes(value)) return false;
+    return true;
   }
 }
