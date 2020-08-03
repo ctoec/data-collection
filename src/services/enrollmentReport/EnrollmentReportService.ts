@@ -37,7 +37,6 @@ export class EnrollmentReportService {
       header: expectedHeaders,
     });
 
-    console.log('parsed sheet', parsedSheet);
     return parsedSheet.map((enrollment) =>
       this.parseFlattenedEnrollment(enrollment as object)
     );
