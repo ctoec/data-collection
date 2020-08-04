@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, TextWithIcon } from '@ctoec/component-library';
 import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
+import { ReactComponent as ArrowDown } from 'uswds/dist/img/arrow-down.svg';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
 
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -52,14 +53,14 @@ const Home: React.FC = () => {
             </p>
             <p>
               The Office of Early Childhood uses this data to pay programs and
-              help families access quality care.
+              help families access quality care. vic{' '}
             </p>
-            <div className="margin-bottom-6">
+            <div className="margin-bottom-4">
               <p className="text-bold">Learn more</p>
               <Button
                 appearance="unstyled"
                 href="https://ctoec.org"
-                className="text-bold"
+                className="text-bold margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
                     text="Visit OEC's website"
@@ -70,12 +71,10 @@ const Home: React.FC = () => {
                   />
                 }
               />
-              <br />
-              <br />
               <Button
                 appearance="unstyled"
                 href="/privacy-policy"
-                className="text-bold"
+                className="text-bold margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
                     text="See the privacy policy"
@@ -86,20 +85,51 @@ const Home: React.FC = () => {
                   />
                 }
               />
-              <br />
-              <br />
-              <a
+              <Button
+                appearance="unstyled"
+                href="/data-definitions"
+                className="text-bold margin-bottom-3 display-block"
+                text={
+                  <TextWithIcon
+                    text="See the data requirements"
+                    Icon={ArrowRight}
+                    direction="right"
+                    iconSide="right"
+                    className="text-underline"
+                  />
+                }
+              />
+            </div>
+            <div>
+              <p className="text-bold">Download the data collection template</p>
+              <Button
+                appearance="unstyled"
                 href="/upload_template/ECE Data Collection Template.xlsx"
-                className="text-bold"
-              >
-                <TextWithIcon
-                  text="Download the Excel data collection template"
-                  Icon={ArrowRight}
-                  direction="right"
-                  iconSide="right"
-                  className="text-underline"
-                />
-              </a>
+                className="text-bold margin-bottom-3 display-block"
+                external
+                text={
+                  <TextWithIcon
+                    text="Download Excel template"
+                    Icon={ArrowDown}
+                    iconSide="left"
+                    className="text-underline"
+                  />
+                }
+              />
+              <Button
+                appearance="unstyled"
+                href="/upload_template/ECE Data Collection Template.csv"
+                className="text-bold margin-bottom-3 display-block"
+                external
+                text={
+                  <TextWithIcon
+                    text="Download .csv template"
+                    Icon={ArrowDown}
+                    iconSide="left"
+                    className="text-underline"
+                  />
+                }
+              />
             </div>
           </div>
         </div>
