@@ -64,6 +64,12 @@ jobs:
   displayName: "Build and Package Release"
 
   steps:
+    - script: cd $(Build.SourcesDirectory) && yarn run build
+      displayName: "Build Fawkes back-end"
+
+    - script: cd $(Build.SourcesDirectory)/client && yarn run build
+      displayName: "Build Fawkes front-end"
+
     - task: ArchiveFiles@2
       displayName: "Archive Fawkes front-end"
       inputs:
