@@ -5,6 +5,7 @@ import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
 import CheckData from './containers/CheckData/CheckData';
+import DataDefinitions from './containers/DataDefinitions/DataDefinitions';
 
 export type RouteConfig = {
   path: string;
@@ -36,6 +37,11 @@ export const routes: RouteConfig[] = [
     path: '/getting-started',
     component: GettingStarted,
     unauthorized: false,
+  },
+  {
+    path: '/data-definitions',
+    component: DataDefinitions,
+    unauthorized: true,
   },
   {
     path: '/upload',

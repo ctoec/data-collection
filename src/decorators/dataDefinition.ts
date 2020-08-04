@@ -18,7 +18,7 @@ export const REPORTING_REASON = 'Used for reporting.';
 export const DEMOGRAPHIC_REPORTING_REASON = 'Used for demographic reporting.';
 export const GEOGRAPHIC_REPORTING_REASON = 'Used for geographic reporting.';
 export const UTILIZATION_REPORTING_REASON =
-  'Usedd for reporting on the utilization of state funded spaced';
+  'Used for reporting on the utilization of state funded spaced';
 
 const DATA_DEFINITION_KEY = Symbol('definitionMetadata');
 
@@ -35,4 +35,8 @@ export const DataDefinition = (definition: DataDefinitionInfo) =>
   Reflect.metadata(DATA_DEFINITION_KEY, definition);
 
 export const getDataDefinition = (target: any, propertyKey: string) =>
-  Reflect.getMetadata(DATA_DEFINITION_KEY, target, propertyKey);
+  Reflect.getMetadata(
+    DATA_DEFINITION_KEY,
+    target,
+    propertyKey
+  ) as DataDefinitionInfo;
