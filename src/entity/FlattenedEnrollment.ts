@@ -218,25 +218,14 @@ export class FlattenedEnrollment {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Address (line 1)',
+    formattedName: 'Street address',
     required: REQUIRED,
     definition: 'The primary residence of the family.',
     reason: GEOGRAPHIC_REPORTING_REASON,
     format: 'Text',
     example: '123 Green Street',
   })
-  addressLine1?: string;
-
-  @Column({ nullable: true })
-  @DataDefinition({
-    formattedName: 'Address (line 2)',
-    required: OPTIONAL,
-    definition: 'The primary residence of the family.',
-    reason: GEOGRAPHIC_REPORTING_REASON,
-    format: 'Text',
-    example: 'Apartment 2R',
-  })
-  addressLine2?: string;
+  streetAddress?: string;
 
   @Column({ nullable: true })
   @DataDefinition({
