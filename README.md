@@ -49,3 +49,25 @@ To generate the client code, run the included Bash file: `./generate-client-code
     data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp       
 
     ```
+
+## Deploy
+
+Deployments can either be triggered directly through the corresponding Azure pipeline for the applicable stage, or directly from the CLI.
+
+### Command Line
+This option will require you to have the Elastic Beanstalk CLI installed on your machine.
+
+1. 
+```bash
+cd <path-to-project-root>/client && yarn install --frozen-lockfile && yarn build
+```
+
+1. 
+```bash
+cd <path-to-project-root> && yarn install --frozen-lockfile && yarn build
+```
+
+1. 
+```bash
+eb deploy <elastic-beanstalk-environment>
+```
