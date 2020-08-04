@@ -14,47 +14,27 @@ variables:
 
 jobs:
 #
-# Backend Build
-#
-- job: backend_build
-  displayName: "Backend build"
-
-  steps:
-  - script: |
-      yarn install --frozen-lockfile
-      yarn build
-    displayName: 'Build backend'
-
-#
-# Frontend Build
-#
-- job: frontend_build
-  displayName: "Frontend build"
-
-  steps:
-  - script: |
-      cd client
-      yarn install --frozen-lockfile
-      yarn build
-
-#
 # Backend Tests
 #
 - job: test_backend
-  displayName: "Backend tests"
-
+  displayName: "Fawkes Back-end Tests"
   steps:
-    - script: cd $(Build.SourcesDirectory) && yarn install --frozen-lockfile && yarn test --ci
+    - script: |
+        cd $(Build.SourcesDirectory)
+        yarn install --frozen-lockfile
+        yarn test --ci
       displayName: "Install node_modules and run tests"
 
 #
 # Frontend Tests
 #
 - job: test_frontend
-  displayName: "Frontend tests"
-
+  displayName: "Fawkes Front-end Tests"
   steps:
-    - script: cd $(Build.SourcesDirectory)/client && yarn install --frozen-lockfile && yarn test --ci
+    - script: |
+        cd $(Build.SourcesDirectory)/client
+        yarn install --frozen-lockfile
+        yarn test --ci
       displayName: "Install node_modules and run tests"
 
 #
@@ -62,12 +42,22 @@ jobs:
 #
 - job: package_release
   displayName: "Build and Package Release"
+  dependsOn:
+  - test_frontend
+  - test_backend
+  condition: succeeded()
 
   steps:
-    - script: cd $(Build.SourcesDirectory) && yarn run build
+    - script: |
+        cd $(Build.SourcesDirectory)
+        yarn install --frozen-lockfile
+        yarn build
       displayName: "Build Fawkes back-end"
 
-    - script: cd $(Build.SourcesDirectory)/client && yarn run build
+    - script: |
+        cd $(Build.SourcesDirectory)/client
+        yarn install --frozen-lockfile
+        yarn build
       displayName: "Build Fawkes front-end"
 
     - task: ArchiveFiles@2
