@@ -55,3 +55,28 @@ jobs:
   steps:
     - script: cd $(Build.SourcesDirectory)/client && yarn install --frozen-lockfile && yarn test --ci
       displayName: "Install node_modules and run tests"
+
+#
+# Build and Package Release
+#
+- job: package_release
+  displayName: "Build and Package Release"
+
+  steps:
+    # First, just upload single page application to Azure Devops
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifacts: fawkes-uncompiled-spa"
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      inputs:
+        pathToPublish: "$(Build.SourcesDirectory)/src/Hedwig/ClientApp"
+        artifactName: fawkes-uncompiled-spa
+
+    # Then zip up back-end files for later deployment
+    - task: ArchiveFiles@2
+      displayName: "Archive Fawkes back-end"
+      inputs:
+        rootFolderOrFile: "$(Build.SourcesDirectory)/dist"
+        includeRootFolder: false
+        archiveType: "zip"
+        archiveFile: "$(Build.ArtifactStagingDirectory)/fawkes-spa.zip"
+        replaceExistingArchive: true
