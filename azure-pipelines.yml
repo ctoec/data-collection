@@ -80,14 +80,14 @@ jobs:
 
     - task: PublishBuildArtifacts@1
       displayName: "Publish Artifacts: fawkes-spa"
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/create-fawkes-infra'))
+      # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
       inputs:
         pathToPublish: "$(Build.ArtifactStagingDirectory)/fawkes-spa.zip"
         artifactName: fawkes-spa
 
     - task: PublishBuildArtifacts@1
       displayName: "Publish Artifacts: fawkes-api"
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/create-fawkes-infra'))
+      # condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
       inputs:
         pathToPublish: "$(Build.ArtifactStagingDirectory)/fawkes-api.zip"
         artifactName: fawkes-api
