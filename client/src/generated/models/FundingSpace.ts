@@ -14,14 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-  Age,
-  AgeFromJSON,
-  AgeFromJSONTyped,
-  AgeToJSON,
-  Funding,
-  FundingFromJSON,
-  FundingFromJSONTyped,
-  FundingToJSON,
+  AgeGroup,
+  AgeGroupFromJSON,
+  AgeGroupFromJSONTyped,
+  AgeGroupToJSON,
   FundingSource,
   FundingSourceFromJSON,
   FundingSourceFromJSONTyped,
@@ -34,10 +30,6 @@ import {
   FundingTimeSplitFromJSON,
   FundingTimeSplitFromJSONTyped,
   FundingTimeSplitToJSON,
-  FundingTimeSplitUtilization,
-  FundingTimeSplitUtilizationFromJSON,
-  FundingTimeSplitUtilizationFromJSONTyped,
-  FundingTimeSplitUtilizationToJSON,
   Organization,
   OrganizationFromJSON,
   OrganizationFromJSONTyped,
@@ -64,16 +56,10 @@ export interface FundingSpace {
   capacity: number;
   /**
    *
-   * @type {number}
-   * @memberof FundingSpace
-   */
-  organizationId: number;
-  /**
-   *
    * @type {Organization}
    * @memberof FundingSpace
    */
-  organization?: Organization;
+  organization: Organization;
   /**
    *
    * @type {FundingSource}
@@ -82,16 +68,10 @@ export interface FundingSpace {
   source: FundingSource;
   /**
    *
-   * @type {Age}
+   * @type {AgeGroup}
    * @memberof FundingSpace
    */
-  ageGroup: Age;
-  /**
-   *
-   * @type {Array<Funding>}
-   * @memberof FundingSpace
-   */
-  fundings?: Array<Funding>;
+  ageGroup: AgeGroup;
   /**
    *
    * @type {FundingTime}
@@ -104,12 +84,6 @@ export interface FundingSpace {
    * @memberof FundingSpace
    */
   timeSplit?: FundingTimeSplit;
-  /**
-   *
-   * @type {Array<FundingTimeSplitUtilization>}
-   * @memberof FundingSpace
-   */
-  timeSplitUtilizations?: Array<FundingTimeSplitUtilization>;
 }
 
 export function FundingSpaceFromJSON(json: any): FundingSpace {
@@ -126,24 +100,13 @@ export function FundingSpaceFromJSONTyped(
   return {
     id: json['id'],
     capacity: json['capacity'],
-    organizationId: json['organizationId'],
-    organization: !exists(json, 'organization')
-      ? undefined
-      : OrganizationFromJSON(json['organization']),
+    organization: OrganizationFromJSON(json['organization']),
     source: FundingSourceFromJSON(json['source']),
-    ageGroup: AgeFromJSON(json['ageGroup']),
-    fundings: !exists(json, 'fundings')
-      ? undefined
-      : (json['fundings'] as Array<any>).map(FundingFromJSON),
+    ageGroup: AgeGroupFromJSON(json['ageGroup']),
     time: FundingTimeFromJSON(json['time']),
     timeSplit: !exists(json, 'timeSplit')
       ? undefined
       : FundingTimeSplitFromJSON(json['timeSplit']),
-    timeSplitUtilizations: !exists(json, 'timeSplitUtilizations')
-      ? undefined
-      : (json['timeSplitUtilizations'] as Array<any>).map(
-          FundingTimeSplitUtilizationFromJSON
-        ),
   };
 }
 
@@ -157,21 +120,10 @@ export function FundingSpaceToJSON(value?: FundingSpace | null): any {
   return {
     id: value.id,
     capacity: value.capacity,
-    organizationId: value.organizationId,
     organization: OrganizationToJSON(value.organization),
     source: FundingSourceToJSON(value.source),
-    ageGroup: AgeToJSON(value.ageGroup),
-    fundings:
-      value.fundings === undefined
-        ? undefined
-        : (value.fundings as Array<any>).map(FundingToJSON),
+    ageGroup: AgeGroupToJSON(value.ageGroup),
     time: FundingTimeToJSON(value.time),
     timeSplit: FundingTimeSplitToJSON(value.timeSplit),
-    timeSplitUtilizations:
-      value.timeSplitUtilizations === undefined
-        ? undefined
-        : (value.timeSplitUtilizations as Array<any>).map(
-            FundingTimeSplitUtilizationToJSON
-          ),
   };
 }

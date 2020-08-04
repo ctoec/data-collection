@@ -17,20 +17,23 @@
  * @export
  * @enum {string}
  */
-export enum Age {
+export enum AgeGroup {
   InfantToddler = 'InfantToddler',
   Preschool = 'Preschool',
   SchoolAge = 'SchoolAge',
 }
 
-export function AgeFromJSON(json: any): Age {
-  return AgeFromJSONTyped(json, false);
+export function AgeGroupFromJSON(json: any): AgeGroup {
+  return AgeGroupFromJSONTyped(json, false);
 }
 
-export function AgeFromJSONTyped(json: any, ignoreDiscriminator: boolean): Age {
-  return json as Age;
+export function AgeGroupFromJSONTyped(
+  json: any,
+  ignoreDiscriminator: boolean
+): AgeGroup {
+  return json as AgeGroup;
 }
 
-export function AgeToJSON(value?: Age | null): any {
+export function AgeGroupToJSON(value?: AgeGroup | null): any {
   return value as any;
 }

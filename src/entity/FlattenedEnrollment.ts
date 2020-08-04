@@ -12,7 +12,7 @@ export class FlattenedEnrollment {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => EnrollmentReport)
+  @ManyToOne((type) => EnrollmentReport, { nullable: false })
   report: EnrollmentReport;
 
   @Column({ nullable: true })

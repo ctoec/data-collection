@@ -35,31 +35,19 @@ export interface OrganizationPermission {
    * @type {number}
    * @memberof OrganizationPermission
    */
-  organizationId: number;
-  /**
-   *
-   * @type {Organization}
-   * @memberof OrganizationPermission
-   */
-  organization?: Organization;
-  /**
-   *
-   * @type {number}
-   * @memberof OrganizationPermission
-   */
   id: number;
-  /**
-   *
-   * @type {number}
-   * @memberof OrganizationPermission
-   */
-  userId: number;
   /**
    *
    * @type {User}
    * @memberof OrganizationPermission
    */
-  user?: User;
+  user: User;
+  /**
+   *
+   * @type {Organization}
+   * @memberof OrganizationPermission
+   */
+  organization: Organization;
 }
 
 export function OrganizationPermissionFromJSON(
@@ -76,13 +64,9 @@ export function OrganizationPermissionFromJSONTyped(
     return json;
   }
   return {
-    organizationId: json['organizationId'],
-    organization: !exists(json, 'organization')
-      ? undefined
-      : OrganizationFromJSON(json['organization']),
     id: json['id'],
-    userId: json['userId'],
-    user: !exists(json, 'user') ? undefined : UserFromJSON(json['user']),
+    user: UserFromJSON(json['user']),
+    organization: OrganizationFromJSON(json['organization']),
   };
 }
 
@@ -96,10 +80,8 @@ export function OrganizationPermissionToJSON(
     return null;
   }
   return {
-    organizationId: value.organizationId,
-    organization: OrganizationToJSON(value.organization),
     id: value.id,
-    userId: value.userId,
     user: UserToJSON(value.user),
+    organization: OrganizationToJSON(value.organization),
   };
 }

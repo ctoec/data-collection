@@ -34,16 +34,10 @@ export interface FundingTimeSplit {
   id: number;
   /**
    *
-   * @type {number}
-   * @memberof FundingTimeSplit
-   */
-  fundingSpaceId: number;
-  /**
-   *
    * @type {FundingSpace}
    * @memberof FundingTimeSplit
    */
-  fundingSpace?: FundingSpace;
+  fundingSpace: FundingSpace;
   /**
    *
    * @type {number}
@@ -71,10 +65,7 @@ export function FundingTimeSplitFromJSONTyped(
   }
   return {
     id: json['id'],
-    fundingSpaceId: json['fundingSpaceId'],
-    fundingSpace: !exists(json, 'fundingSpace')
-      ? undefined
-      : FundingSpaceFromJSON(json['fundingSpace']),
+    fundingSpace: FundingSpaceFromJSON(json['fundingSpace']),
     fullTimeWeeks: json['fullTimeWeeks'],
     partTimeWeeks: json['partTimeWeeks'],
   };
@@ -89,7 +80,6 @@ export function FundingTimeSplitToJSON(value?: FundingTimeSplit | null): any {
   }
   return {
     id: value.id,
-    fundingSpaceId: value.fundingSpaceId,
     fundingSpace: FundingSpaceToJSON(value.fundingSpace),
     fullTimeWeeks: value.fullTimeWeeks,
     partTimeWeeks: value.partTimeWeeks,

@@ -14,10 +14,6 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-  C4KCertificate,
-  C4KCertificateFromJSON,
-  C4KCertificateFromJSONTyped,
-  C4KCertificateToJSON,
   Enrollment,
   EnrollmentFromJSON,
   EnrollmentFromJSONTyped,
@@ -34,10 +30,10 @@ import {
   OrganizationFromJSON,
   OrganizationFromJSONTyped,
   OrganizationToJSON,
-  User,
-  UserFromJSON,
-  UserFromJSONTyped,
-  UserToJSON,
+  UpdateMetaData,
+  UpdateMetaDataFromJSON,
+  UpdateMetaDataFromJSONTyped,
+  UpdateMetaDataToJSON,
 } from './';
 
 /**
@@ -156,28 +152,16 @@ export interface Child {
   foster?: boolean;
   /**
    *
-   * @type {number}
+   * @type {boolean}
    * @memberof Child
    */
-  familyId?: number;
+  recievesC4K?: boolean;
   /**
    *
    * @type {Family}
    * @memberof Child
    */
-  family?: Family;
-  /**
-   *
-   * @type {Array<Enrollment>}
-   * @memberof Child
-   */
-  enrollments?: Array<Enrollment>;
-  /**
-   *
-   * @type {number}
-   * @memberof Child
-   */
-  organizationId: number;
+  family: Family;
   /**
    *
    * @type {Organization}
@@ -186,34 +170,16 @@ export interface Child {
   organization?: Organization;
   /**
    *
-   * @type {number}
+   * @type {Array<Enrollment>}
    * @memberof Child
    */
-  c4KFamilyCaseNumber?: number;
+  enrollments?: Array<Enrollment>;
   /**
    *
-   * @type {Array<C4KCertificate>}
+   * @type {UpdateMetaData}
    * @memberof Child
    */
-  c4KCertificates?: Array<C4KCertificate>;
-  /**
-   *
-   * @type {number}
-   * @memberof Child
-   */
-  authorId?: number;
-  /**
-   *
-   * @type {User}
-   * @memberof Child
-   */
-  author?: User;
-  /**
-   *
-   * @type {Date}
-   * @memberof Child
-   */
-  updatedAt?: Date;
+  updateMetaData?: UpdateMetaData;
 }
 
 export function ChildFromJSON(json: any): Child {
@@ -263,28 +229,17 @@ export function ChildFromJSONTyped(
       ? undefined
       : GenderFromJSON(json['gender']),
     foster: !exists(json, 'foster') ? undefined : json['foster'],
-    familyId: !exists(json, 'familyId') ? undefined : json['familyId'],
-    family: !exists(json, 'family')
-      ? undefined
-      : FamilyFromJSON(json['family']),
-    enrollments: !exists(json, 'enrollments')
-      ? undefined
-      : (json['enrollments'] as Array<any>).map(EnrollmentFromJSON),
-    organizationId: json['organizationId'],
+    recievesC4K: !exists(json, 'recievesC4K') ? undefined : json['recievesC4K'],
+    family: FamilyFromJSON(json['family']),
     organization: !exists(json, 'organization')
       ? undefined
       : OrganizationFromJSON(json['organization']),
-    c4KFamilyCaseNumber: !exists(json, 'c4KFamilyCaseNumber')
+    enrollments: !exists(json, 'enrollments')
       ? undefined
-      : json['c4KFamilyCaseNumber'],
-    c4KCertificates: !exists(json, 'c4KCertificates')
+      : (json['enrollments'] as Array<any>).map(EnrollmentFromJSON),
+    updateMetaData: !exists(json, 'updateMetaData')
       ? undefined
-      : (json['c4KCertificates'] as Array<any>).map(C4KCertificateFromJSON),
-    authorId: !exists(json, 'authorId') ? undefined : json['authorId'],
-    author: !exists(json, 'author') ? undefined : UserFromJSON(json['author']),
-    updatedAt: !exists(json, 'updatedAt')
-      ? undefined
-      : new Date(json['updatedAt']),
+      : UpdateMetaDataFromJSON(json['updateMetaData']),
   };
 }
 
@@ -315,22 +270,13 @@ export function ChildToJSON(value?: Child | null): any {
     hispanicOrLatinxEthnicity: value.hispanicOrLatinxEthnicity,
     gender: GenderToJSON(value.gender),
     foster: value.foster,
-    familyId: value.familyId,
+    recievesC4K: value.recievesC4K,
     family: FamilyToJSON(value.family),
+    organization: OrganizationToJSON(value.organization),
     enrollments:
       value.enrollments === undefined
         ? undefined
         : (value.enrollments as Array<any>).map(EnrollmentToJSON),
-    organizationId: value.organizationId,
-    organization: OrganizationToJSON(value.organization),
-    c4KFamilyCaseNumber: value.c4KFamilyCaseNumber,
-    c4KCertificates:
-      value.c4KCertificates === undefined
-        ? undefined
-        : (value.c4KCertificates as Array<any>).map(C4KCertificateToJSON),
-    authorId: value.authorId,
-    author: UserToJSON(value.author),
-    updatedAt:
-      value.updatedAt === undefined ? undefined : value.updatedAt.toISOString(),
+    updateMetaData: UpdateMetaDataToJSON(value.updateMetaData),
   };
 }

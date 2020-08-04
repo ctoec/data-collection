@@ -18,82 +18,64 @@ import {
   FamilyFromJSON,
   FamilyFromJSONTyped,
   FamilyToJSON,
-  User,
-  UserFromJSON,
-  UserFromJSONTyped,
-  UserToJSON,
+  UpdateMetaData,
+  UpdateMetaDataFromJSON,
+  UpdateMetaDataFromJSONTyped,
+  UpdateMetaDataToJSON,
 } from './';
 
 /**
  *
  * @export
- * @interface FamilyDetermination
+ * @interface IncomeDetermination
  */
-export interface FamilyDetermination {
+export interface IncomeDetermination {
   /**
    *
    * @type {number}
-   * @memberof FamilyDetermination
+   * @memberof IncomeDetermination
    */
   id: number;
   /**
    *
    * @type {number}
-   * @memberof FamilyDetermination
+   * @memberof IncomeDetermination
    */
   numberOfPeople?: number;
   /**
    *
    * @type {number}
-   * @memberof FamilyDetermination
+   * @memberof IncomeDetermination
    */
   income?: number;
   /**
    *
    * @type {Date}
-   * @memberof FamilyDetermination
+   * @memberof IncomeDetermination
    */
   determinationDate?: Date;
   /**
    *
-   * @type {number}
-   * @memberof FamilyDetermination
-   */
-  familyId: number;
-  /**
-   *
    * @type {Family}
-   * @memberof FamilyDetermination
+   * @memberof IncomeDetermination
    */
-  family?: Family;
+  family: Family;
   /**
    *
-   * @type {number}
-   * @memberof FamilyDetermination
+   * @type {UpdateMetaData}
+   * @memberof IncomeDetermination
    */
-  authorId?: number;
-  /**
-   *
-   * @type {User}
-   * @memberof FamilyDetermination
-   */
-  author?: User;
-  /**
-   *
-   * @type {Date}
-   * @memberof FamilyDetermination
-   */
-  updatedAt?: Date;
+  updateMetaData?: UpdateMetaData;
 }
 
-export function FamilyDeterminationFromJSON(json: any): FamilyDetermination {
-  return FamilyDeterminationFromJSONTyped(json, false);
+export function IncomeDeterminationFromJSON(json: any): IncomeDetermination {
+  return IncomeDeterminationFromJSONTyped(json, false);
 }
 
-export function FamilyDeterminationFromJSONTyped(
+export function IncomeDeterminationFromJSONTyped(
   json: any,
   ignoreDiscriminator: boolean
-): FamilyDetermination {
+): IncomeDetermination {
   if (json === undefined || json === null) {
     return json;
   }
@@ -106,20 +88,15 @@ export function FamilyDeterminationFromJSONTyped(
     determinationDate: !exists(json, 'determinationDate')
       ? undefined
       : new Date(json['determinationDate']),
-    familyId: json['familyId'],
-    family: !exists(json, 'family')
+    family: FamilyFromJSON(json['family']),
+    updateMetaData: !exists(json, 'updateMetaData')
       ? undefined
-      : FamilyFromJSON(json['family']),
-    authorId: !exists(json, 'authorId') ? undefined : json['authorId'],
-    author: !exists(json, 'author') ? undefined : UserFromJSON(json['author']),
-    updatedAt: !exists(json, 'updatedAt')
-      ? undefined
-      : new Date(json['updatedAt']),
+      : UpdateMetaDataFromJSON(json['updateMetaData']),
   };
 }
 
-export function FamilyDeterminationToJSON(
-  value?: FamilyDetermination | null
+export function IncomeDeterminationToJSON(
+  value?: IncomeDetermination | null
 ): any {
   if (value === undefined) {
     return undefined;
@@ -135,11 +112,7 @@ export function FamilyDeterminationToJSON(
       value.determinationDate === undefined
         ? undefined
         : value.determinationDate.toISOString(),
-    familyId: value.familyId,
     family: FamilyToJSON(value.family),
-    authorId: value.authorId,
-    author: UserToJSON(value.author),
-    updatedAt:
-      value.updatedAt === undefined ? undefined : value.updatedAt.toISOString(),
+    updateMetaData: UpdateMetaDataToJSON(value.updateMetaData),
   };
 }

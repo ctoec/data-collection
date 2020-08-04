@@ -19,6 +19,7 @@
  */
 export enum FundingSource {
   CDC = 'CDC',
+  SchoolReadiness = 'SchoolReadiness',
 }
 
 export function FundingSourceFromJSON(json: any): FundingSource {

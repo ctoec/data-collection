@@ -6,22 +6,38 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "EnrollmentReport": {
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "double"
+          },
+          "enrollments": {
+            "items": {
+              "$ref": "#/components/schemas/FlattenedEnrollment"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["id", "enrollments"],
+        "type": "object",
+        "additionalProperties": false
+      },
       "FlattenedEnrollment": {
         "properties": {
           "id": {
             "type": "number",
             "format": "double"
           },
-          "reportId": {
-            "type": "number",
-            "format": "double"
+          "report": {
+            "$ref": "#/components/schemas/EnrollmentReport"
+          },
+          "name": {
+            "type": "string"
           },
           "sasid": {
             "type": "number",
             "format": "double"
-          },
-          "name": {
-            "type": "string"
           },
           "dateOfBirth": {
             "type": "string",
@@ -36,14 +52,29 @@
           "stateOfBirth": {
             "type": "string"
           },
-          "race": {
-            "type": "string"
+          "americanIndianOrAlaskaNative": {
+            "type": "boolean"
           },
-          "ethnicity": {
-            "type": "string"
+          "asian": {
+            "type": "boolean"
+          },
+          "blackOrAfricanAmerican": {
+            "type": "boolean"
+          },
+          "nativeHawaiianOrPacificIslander": {
+            "type": "boolean"
+          },
+          "white": {
+            "type": "boolean"
+          },
+          "hispanicOrLatinxEthnicity": {
+            "type": "boolean"
           },
           "gender": {
             "type": "string"
+          },
+          "dualLanguageLearner": {
+            "type": "boolean"
           },
           "receivingSpecialEducationServices": {
             "type": "boolean"
@@ -51,7 +82,19 @@
           "specialEducationServicesType": {
             "type": "string"
           },
-          "address": {
+          "addressLine1": {
+            "type": "string"
+          },
+          "addressLine2": {
+            "type": "string"
+          },
+          "town": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          },
+          "zipcode": {
             "type": "string"
           },
           "livesWithFosterFamily": {
@@ -72,6 +115,18 @@
             "type": "string",
             "format": "date-time"
           },
+          "provider": {
+            "type": "string"
+          },
+          "site": {
+            "type": "string"
+          },
+          "model": {
+            "type": "string"
+          },
+          "ageGroup": {
+            "type": "string"
+          },
           "enrollmentStartDate": {
             "type": "string",
             "format": "date-time"
@@ -83,49 +138,23 @@
           "enrollmentExitReason": {
             "type": "string"
           },
-          "firstFundingPeriod": {
-            "type": "string"
-          },
-          "lastFundingPeriod": {
-            "type": "string"
-          },
-          "site": {
-            "type": "string"
-          },
-          "ageGroup": {
-            "type": "string"
-          },
           "fundingType": {
             "type": "string"
           },
           "spaceType": {
             "type": "string"
           },
-          "model": {
+          "firstFundingPeriod": {
+            "type": "string"
+          },
+          "lastFundingPeriod": {
             "type": "string"
           },
           "receivingCareForKids": {
             "type": "boolean"
           }
         },
-        "required": ["id", "reportId"],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "EnrollmentReport": {
-        "properties": {
-          "id": {
-            "type": "number",
-            "format": "double"
-          },
-          "enrollments": {
-            "items": {
-              "$ref": "#/components/schemas/FlattenedEnrollment"
-            },
-            "type": "array"
-          }
-        },
-        "required": ["id", "enrollments"],
+        "required": ["id", "report"],
         "type": "object",
         "additionalProperties": false
       },
@@ -212,13 +241,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": [
-          "id",
-          "incomeDeterminations",
-          "children",
-          "organization",
-          "updateMetaData"
-        ],
+        "required": ["id"],
         "type": "object",
         "additionalProperties": false
       },
@@ -276,7 +299,7 @@
             "$ref": "#/components/schemas/User"
           }
         },
-        "required": ["updatedAt", "author"],
+        "required": ["updatedAt"],
         "type": "object",
         "additionalProperties": false
       },
@@ -305,7 +328,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "family", "updateMetaData"],
+        "required": ["id", "family"],
         "type": "object",
         "additionalProperties": false
       },
@@ -386,7 +409,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "firstName", "lastName", "family", "updateMetaData"],
+        "required": ["id", "firstName", "lastName", "family"],
         "type": "object",
         "additionalProperties": false
       },
@@ -426,7 +449,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "child", "site", "fundings", "updateMetaData"],
+        "required": ["id", "child", "site"],
         "type": "object",
         "additionalProperties": false
       },
@@ -471,14 +494,7 @@
             "type": "array"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "titleI",
-          "region",
-          "organization",
-          "enrollments"
-        ],
+        "required": ["id", "name", "titleI", "region", "organization"],
         "type": "object",
         "additionalProperties": false
       },
@@ -612,7 +628,7 @@
             "$ref": "#/components/schemas/UpdateMetaData"
           }
         },
-        "required": ["id", "enrollment", "fundingSpace", "updateMetaData"],
+        "required": ["id", "enrollment", "fundingSpace"],
         "type": "object",
         "additionalProperties": false
       },
@@ -670,9 +686,9 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/reports/{reportId}": {
+    "/enrollment-reports/{reportId}": {
       "get": {
-        "operationId": "GetReportById",
+        "operationId": "GetEnrollmentReportById",
         "responses": {
           "200": {
             "description": "Ok",
@@ -703,9 +719,9 @@
         ]
       }
     },
-    "/reports": {
+    "/enrollment-reports": {
       "post": {
-        "operationId": "CreateReport",
+        "operationId": "CreateEnrollmentReport",
         "responses": {
           "200": {
             "description": "Ok",
