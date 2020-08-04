@@ -47,7 +47,7 @@
     "watch-ts": "tsc -w"
   },
   "engines": {
-    "node": "^12"
+    "node": "v12.18.1"
   },
   "devDependencies": {
     "prettier": "^2.0.5"
