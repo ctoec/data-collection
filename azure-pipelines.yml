@@ -56,3 +56,42 @@ jobs:
   steps:
     - script: cd $(Build.SourcesDirectory)/client && yarn install --frozen-lockfile && yarn test --ci
       displayName: "Install node_modules and run tests"
+
+#
+# Build and Package Release
+#
+- job: package_release
+  displayName: "Build and Package Release"
+
+  steps:
+    - task: ArchiveFiles@2
+      displayName: "Archive Fawkes front-end"
+      inputs:
+        rootFolderOrFile: "$(Build.SourcesDirectory)/client/build"
+        includeRootFolder: false
+        archiveType: "zip"
+        archiveFile: "$(Build.ArtifactStagingDirectory)/fawkes-spa.zip"
+        replaceExistingArchive: true
+
+    - task: ArchiveFiles@2
+      displayName: "Archive Fawkes back-end"
+      inputs:
+        rootFolderOrFile: "$(Build.SourcesDirectory)/dist"
+        includeRootFolder: false
+        archiveType: "zip"
+        archiveFile: "$(Build.ArtifactStagingDirectory)/fawkes-api.zip"
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifacts: fawkes-spa"
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      inputs:
+        pathToPublish: "$(Build.ArtifactStagingDirectory)/fawkes-spa.zip"
+        artifactName: fawkes-spa
+
+    - task: PublishBuildArtifacts@1
+      displayName: "Publish Artifacts: fawkes-api"
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      inputs:
+        pathToPublish: "$(Build.ArtifactStagingDirectory)/fawkes-api.zip"
+        artifactName: fawkes-api
