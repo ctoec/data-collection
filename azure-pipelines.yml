@@ -64,7 +64,6 @@ jobs:
   displayName: "Build and Package Release"
 
   steps:
-    # First, just upload single page application to Azure Devops
     - task: ArchiveFiles@2
         displayName: "Archive Fawkes front-end"
         inputs:
@@ -74,7 +73,6 @@ jobs:
           archiveFile: "$(Build.ArtifactStagingDirectory)/fawkes-spa.zip"
           replaceExistingArchive: true
 
-    # Then zip up back-end files for later deployment
     - task: ArchiveFiles@2
       displayName: "Archive Fawkes back-end"
       inputs:
