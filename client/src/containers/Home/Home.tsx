@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, TextWithIcon } from '@ctoec/component-library';
 import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
-import { ReactComponent as ArrowDown } from 'uswds/dist/img/arrow-down.svg';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
 
 import UserContext from '../../contexts/UserContext/UserContext';

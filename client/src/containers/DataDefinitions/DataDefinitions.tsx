@@ -5,7 +5,6 @@ import { DataDefinitionInfo } from '../../generated/models/DataDefinitionInfo';
 import { getApi } from '../../utils/getApi';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
-import { Link } from 'react-router-dom';
 
 const DataDefinitions: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
