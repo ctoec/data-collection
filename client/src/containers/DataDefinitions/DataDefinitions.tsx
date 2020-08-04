@@ -1,9 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { ReactComponent as ArrowLeft } from 'uswds/dist/img/arrow-left.svg';
 import { DataDefinitionInfo } from '../../generated/models/DataDefinitionInfo';
 import { getApi } from '../../utils/getApi';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { Table, Column } from '@ctoec/component-library';
+import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
+import { Link } from 'react-router-dom';
 
 const DataDefinitions: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -55,7 +57,7 @@ const DataDefinitions: React.FC = () => {
         row ? (
           <td>
             <div>{row.format}</div>
-            <div>Ex: {row.example}</div>
+            <div className="margin-top-1">Ex: {row.example}</div>
           </td>
         ) : (
           <></>
@@ -65,6 +67,13 @@ const DataDefinitions: React.FC = () => {
 
   return (
     <div className="grid-container margin-top-4">
+      <Button
+        className="text-bold margin-bottom-4"
+        appearance="unstyled"
+        href="/"
+        text={<TextWithIcon text="Back" Icon={ArrowLeft} iconSide="left" />}
+      />
+      <h1 className="margin-bottom-2">OEC's enrollment data requirements</h1>
       <Table
         id="data-definitions-table"
         data={dataDefinitions}
