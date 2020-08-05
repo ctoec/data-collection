@@ -11,6 +11,8 @@ import {
   TsoaResponse,
 } from 'tsoa';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+import { DataDefinitionsController } from './../controllers/dataDefinitions/DataDefinitionsController';
+// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ReportController } from './../controllers/enrollmentReport/EnrollmentReportController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { UserController } from './../controllers/user/UserController';
@@ -20,6 +22,22 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+  DataDefinitionInfo: {
+    dataType: 'refAlias',
+    type: {
+      dataType: 'nestedObjectLiteral',
+      nestedProperties: {
+        example: { dataType: 'string', required: true },
+        format: { dataType: 'string', required: true },
+        reason: { dataType: 'string', required: true },
+        definition: { dataType: 'string', required: true },
+        required: { dataType: 'string', required: true },
+        formattedName: { dataType: 'string', required: true },
+      },
+      validators: {},
+    },
+  },
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   EnrollmentReport: {
     dataType: 'refObject',
     properties: {
@@ -322,6 +340,31 @@ export function RegisterRoutes(app: express.Express) {
   //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
   //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
   // ###########################################################################################################
+  app.get('/api/data-definitions', function (
+    request: any,
+    response: any,
+    next: any
+  ) {
+    const args = {};
+
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+    let validatedArgs: any[] = [];
+    try {
+      validatedArgs = getValidatedArgs(args, request, response);
+    } catch (err) {
+      return next(err);
+    }
+
+    const controller = new DataDefinitionsController();
+
+    const promise = controller.getDataDefinitions.apply(
+      controller,
+      validatedArgs as any
+    );
+    promiseHandler(controller, promise, response, next);
+  });
+  // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
   app.get(
     '/api/enrollment-reports/:reportId',
     authenticateMiddleware([{ jwt: [] }]),

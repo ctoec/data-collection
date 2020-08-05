@@ -6,6 +6,41 @@
     "requestBodies": {},
     "responses": {},
     "schemas": {
+      "DataDefinitionInfo": {
+        "properties": {
+          "section": {
+            "type": "string"
+          },
+          "example": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "definition": {
+            "type": "string"
+          },
+          "required": {
+            "type": "string"
+          },
+          "formattedName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "section",
+          "example",
+          "format",
+          "reason",
+          "definition",
+          "required",
+          "formattedName"
+        ],
+        "type": "object"
+      },
       "EnrollmentReport": {
         "properties": {
           "id": {
@@ -82,10 +117,7 @@
           "specialEducationServicesType": {
             "type": "string"
           },
-          "addressLine1": {
-            "type": "string"
-          },
-          "addressLine2": {
+          "streetAddress": {
             "type": "string"
           },
           "town": {
@@ -686,6 +718,28 @@
   },
   "openapi": "3.0.0",
   "paths": {
+    "/data-definitions": {
+      "get": {
+        "operationId": "GetDataDefinitions",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DataDefinitionInfo"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "security": [],
+        "parameters": []
+      }
+    },
     "/enrollment-reports/{reportId}": {
       "get": {
         "operationId": "GetEnrollmentReportById",

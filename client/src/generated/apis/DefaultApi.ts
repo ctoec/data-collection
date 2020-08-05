@@ -14,6 +14,9 @@
 
 import * as runtime from '../runtime';
 import {
+  DataDefinitionInfo,
+  DataDefinitionInfoFromJSON,
+  DataDefinitionInfoToJSON,
   EnrollmentReport,
   EnrollmentReportFromJSON,
   EnrollmentReportToJSON,
@@ -120,6 +123,34 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async getCurrentUser(): Promise<User> {
     const response = await this.getCurrentUserRaw();
+    return await response.value();
+  }
+
+  /**
+   */
+  async getDataDefinitionsRaw(): Promise<
+    runtime.ApiResponse<Array<DataDefinitionInfo>>
+  > {
+    const queryParameters: runtime.HTTPQuery = {};
+
+    const headerParameters: runtime.HTTPHeaders = {};
+
+    const response = await this.request({
+      path: `/data-definitions`,
+      method: 'GET',
+      headers: headerParameters,
+      query: queryParameters,
+    });
+
+    return new runtime.JSONApiResponse(response, (jsonValue) =>
+      jsonValue.map(DataDefinitionInfoFromJSON)
+    );
+  }
+
+  /**
+   */
+  async getDataDefinitions(): Promise<Array<DataDefinitionInfo>> {
+    const response = await this.getDataDefinitionsRaw();
     return await response.value();
   }
 

@@ -139,13 +139,7 @@ export interface FlattenedEnrollment {
    * @type {string}
    * @memberof FlattenedEnrollment
    */
-  addressLine1?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FlattenedEnrollment
-   */
-  addressLine2?: string;
+  streetAddress?: string;
   /**
    *
    * @type {string}
@@ -324,12 +318,9 @@ export function FlattenedEnrollmentFromJSONTyped(
     specialEducationServicesType: !exists(json, 'specialEducationServicesType')
       ? undefined
       : json['specialEducationServicesType'],
-    addressLine1: !exists(json, 'addressLine1')
+    streetAddress: !exists(json, 'streetAddress')
       ? undefined
-      : json['addressLine1'],
-    addressLine2: !exists(json, 'addressLine2')
-      ? undefined
-      : json['addressLine2'],
+      : json['streetAddress'],
     town: !exists(json, 'town') ? undefined : json['town'],
     state: !exists(json, 'state') ? undefined : json['state'],
     zipcode: !exists(json, 'zipcode') ? undefined : json['zipcode'],
@@ -409,8 +400,7 @@ export function FlattenedEnrollmentToJSON(
     dualLanguageLearner: value.dualLanguageLearner,
     receivingSpecialEducationServices: value.receivingSpecialEducationServices,
     specialEducationServicesType: value.specialEducationServicesType,
-    addressLine1: value.addressLine1,
-    addressLine2: value.addressLine2,
+    streetAddress: value.streetAddress,
     town: value.town,
     state: value.state,
     zipcode: value.zipcode,
