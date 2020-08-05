@@ -32,10 +32,11 @@
   "scripts": {
     "build": "npm run build-ts",
     "build-ts": "tsc",
+    "bundle": "yarn run build && zip fawkes-bundle.zip -r dist client/build .ebextensions .elasticbeanstalk",
     "debug": "npm run build && npm run watch-debug",
     "prettier-all": "prettier --single-quote --write **/*.{js,jsx,ts,tsx,json,css,scss}",
     "prettier": "prettier --single-quote --write",
-    "serve": "npm ci && npm build && cd client && npm ci && npm build && cd ../ && node dist/index.js",
+    "serve": "node dist/index.js",
     "serve-debug": "nodemon --inspect dist/index.js",
     "start": "npm run serve",
     "test": "exit 0",
