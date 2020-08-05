@@ -32,7 +32,7 @@
   "scripts": {
     "build": "npm run build-ts",
     "build-ts": "tsc",
-    "bundle": "rm -rf fawkes-bundle.zip && zip fawkes-bundle.zip -r dist client/build .ebextensions .elasticbeanstalk package.json",
+    "bundle": "rm -rf fawkes-bundle.zip && zip fawkes-bundle.zip -r dist client/build .ebextensions .elasticbeanstalk package.json ormconfig.json",
     "debug": "npm run build && npm run watch-debug",
     "prettier-all": "prettier --single-quote --write **/*.{js,jsx,ts,tsx,json,css,scss}",
     "prettier": "prettier --single-quote --write",
