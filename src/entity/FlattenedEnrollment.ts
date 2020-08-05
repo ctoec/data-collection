@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToMany,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { EnrollmentReport } from './EnrollmentReport';
 import {
   DataDefinition,
@@ -21,7 +15,13 @@ import {
   REPORTING_REASON,
   REPORTING_PERIOD_FORMAT,
 } from '../decorators/dataDefinition';
-import { utils } from 'xlsx/types';
+
+const SECTIONS = {
+  CHILD_INFO: 'child-info',
+  FAMILY_INFO: 'family-info',
+  FAMILY_INCOME: 'family-income',
+  ENROLLMENT_FUNDING: 'enrollment-funding',
+};
 
 @Entity()
 export class FlattenedEnrollment {
@@ -40,6 +40,7 @@ export class FlattenedEnrollment {
       'Used for linking to a variety of datasets, including SASID-backed data.',
     format: 'Text; names separated by spaces',
     example: 'Firstname Lastname',
+    section: SECTIONS.CHILD_INFO,
   })
   name?: string;
 
@@ -51,6 +52,7 @@ export class FlattenedEnrollment {
     reason: 'Used for linking to SASID-backed data.',
     format: 'Valid SASID (10-digit number)',
     example: '0123456789',
+    section: SECTIONS.CHILD_INFO,
   })
   sasid?: number;
 
@@ -63,6 +65,7 @@ export class FlattenedEnrollment {
       'Used for a variety of reporting; allows linking to a variety of data sets, including SASID-backed data.',
     format: DATE_FORMAT,
     example: '10/01/2016',
+    section: SECTIONS.CHILD_INFO,
   })
   dateOfBirth?: Date;
 
@@ -75,6 +78,7 @@ export class FlattenedEnrollment {
     format:
       'Text; comprised of numbers, letters, and dashes (-); exact format varies by state/country',
     example: '2015-00-1234567',
+    section: SECTIONS.CHILD_INFO,
   })
   birthCertificateId?: string;
 
@@ -87,6 +91,7 @@ export class FlattenedEnrollment {
     reason: 'Tiebreaker for linking to SASID-backed data.',
     format: 'Text',
     example: 'Hartford',
+    section: SECTIONS.CHILD_INFO,
   })
   townOfBirth?: string;
 
@@ -99,6 +104,7 @@ export class FlattenedEnrollment {
     reason: 'Tiebreaker for linking to SASID-backed data.',
     format: 'Text; two-letter state abbreviation',
     example: 'CT',
+    section: SECTIONS.CHILD_INFO,
   })
   stateOfBirth?: string;
 
@@ -110,6 +116,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   americanIndianOrAlaskaNative?: boolean;
 
@@ -121,6 +128,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   asian?: boolean;
 
@@ -132,6 +140,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   blackOrAfricanAmerican?: boolean;
 
@@ -143,6 +152,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   nativeHawaiianOrPacificIslander?: boolean;
 
@@ -154,6 +164,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   white?: boolean;
 
@@ -165,6 +176,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   hispanicOrLatinxEthnicity?: boolean;
 
@@ -177,6 +189,7 @@ export class FlattenedEnrollment {
     reason: 'Allows linking to SASID-backed data',
     format: 'Male, Female, Nonbinary, Unspecified',
     example: 'Nonbinary',
+    section: SECTIONS.CHILD_INFO,
   })
   gender?: string;
 
@@ -189,6 +202,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   dualLanguageLearner?: boolean;
 
@@ -201,6 +215,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
   })
   receivingSpecialEducationServices?: boolean;
 
@@ -213,6 +228,7 @@ export class FlattenedEnrollment {
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: 'LEA, Non-LEA',
     example: 'Non-LEA',
+    section: SECTIONS.CHILD_INFO,
   })
   specialEducationServicesType?: string;
 
@@ -224,6 +240,7 @@ export class FlattenedEnrollment {
     reason: GEOGRAPHIC_REPORTING_REASON,
     format: 'Text',
     example: '123 Green Street',
+    section: SECTIONS.FAMILY_INFO,
   })
   streetAddress?: string;
 
@@ -235,6 +252,7 @@ export class FlattenedEnrollment {
     reason: GEOGRAPHIC_REPORTING_REASON,
     format: 'Text',
     example: 'Hartford',
+    section: SECTIONS.FAMILY_INFO,
   })
   town?: string;
 
@@ -246,6 +264,7 @@ export class FlattenedEnrollment {
     reason: GEOGRAPHIC_REPORTING_REASON,
     format: 'Text; two-letter state abbreviation',
     example: 'CT',
+    section: SECTIONS.FAMILY_INFO,
   })
   state?: string;
 
@@ -257,6 +276,7 @@ export class FlattenedEnrollment {
     reason: GEOGRAPHIC_REPORTING_REASON,
     format: 'Valid zipcode (5-digit number)',
     example: '01234',
+    section: SECTIONS.FAMILY_INFO,
   })
   zipcode?: string;
 
@@ -269,6 +289,7 @@ export class FlattenedEnrollment {
       'Affects eligibility for state funding, and used for demographic reporting.',
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.FAMILY_INFO,
   })
   livesWithFosterFamily?: boolean;
 
@@ -282,6 +303,7 @@ export class FlattenedEnrollment {
       'Used for reporting and identification of programs that serve families at risk of homelessness.',
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.FAMILY_INFO,
   })
   experiencedHomelessnessOrHousingInsecurity?: boolean;
 
@@ -295,6 +317,7 @@ export class FlattenedEnrollment {
       'Allows for income group reporting and automated calculation of funding eligibility.',
     format: 'Number',
     example: '4',
+    section: SECTIONS.FAMILY_INCOME,
   })
   householdSize?: number;
 
@@ -307,6 +330,7 @@ export class FlattenedEnrollment {
       'Allows for demographic reporting an automated calculation of funding eligibility.',
     format: 'Number',
     example: '20000',
+    section: SECTIONS.FAMILY_INCOME,
   })
   annualHouseholdIncome?: number;
 
@@ -320,6 +344,7 @@ export class FlattenedEnrollment {
       'Used to ensure the family income has been determined within the last year.',
     format: DATE_FORMAT,
     example: `10/01/${new Date().getFullYear()}`,
+    section: SECTIONS.FAMILY_INCOME,
   })
   incomeDeterminationDate?: Date;
 
@@ -331,6 +356,7 @@ export class FlattenedEnrollment {
     reason: 'Used to link child information to provider data.',
     format: 'Text',
     example: "Children's Center of Connecticut",
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   provider?: string;
 
@@ -342,6 +368,7 @@ export class FlattenedEnrollment {
     reason: 'Used to link with other data like ECIS and PSIS.',
     format: 'Text',
     example: "Children's Center of Connecticut at Hartford",
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   site?: string;
 
@@ -353,6 +380,7 @@ export class FlattenedEnrollment {
     reason: 'Used to identify children receiving in-person or virtual services',
     format: 'In-person, Virtual, Hybrid',
     example: 'Hybrid',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   model?: string;
 
@@ -365,6 +393,7 @@ export class FlattenedEnrollment {
     reason: UTILIZATION_REPORTING_REASON,
     format: 'Infant/toddler, Preschool, School age',
     example: 'School age',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   ageGroup?: string;
 
@@ -376,6 +405,7 @@ export class FlattenedEnrollment {
     reason: REPORTING_REASON,
     format: DATE_FORMAT,
     example: '10/01/2016',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   enrollmentStartDate?: Date;
 
@@ -387,6 +417,7 @@ export class FlattenedEnrollment {
     reason: REPORTING_REASON,
     format: DATE_FORMAT,
     example: '08/30/2017',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   enrollmentEndDate?: Date;
 
@@ -398,6 +429,7 @@ export class FlattenedEnrollment {
     reason: REPORTING_REASON,
     format: 'Text',
     example: 'Aged out',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   enrollmentExitReason?: string;
 
@@ -410,6 +442,7 @@ export class FlattenedEnrollment {
     reason: UTILIZATION_REPORTING_REASON,
     format: 'CDC, SR',
     example: 'SR',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   fundingType?: string;
 
@@ -422,6 +455,7 @@ export class FlattenedEnrollment {
     format:
       'Part-time, Full-time, Part-time / full-time, School day, Wraparound',
     example: 'Wraparound',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   spaceType?: string;
 
@@ -434,6 +468,7 @@ export class FlattenedEnrollment {
     reason: UTILIZATION_REPORTING_REASON,
     format: REPORTING_PERIOD_FORMAT,
     example: '10/2016',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   firstFundingPeriod?: string;
 
@@ -446,6 +481,7 @@ export class FlattenedEnrollment {
     reason: 'Used to track children moving between funding groups',
     format: REPORTING_PERIOD_FORMAT,
     example: '08/2017',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   lastFundingPeriod?: string;
 
@@ -458,6 +494,7 @@ export class FlattenedEnrollment {
       'Used to identify overlaps between state funded spaces and Care 4 Kids subsidies',
     format: BOOLEAN_FORMAT,
     example: 'Yes',
+    section: SECTIONS.ENROLLMENT_FUNDING,
   })
   receivingCareForKids?: boolean;
 }

@@ -18,7 +18,7 @@ export const REPORTING_REASON = 'Used for reporting.';
 export const DEMOGRAPHIC_REPORTING_REASON = 'Used for demographic reporting.';
 export const GEOGRAPHIC_REPORTING_REASON = 'Used for geographic reporting.';
 export const UTILIZATION_REPORTING_REASON =
-  'Used for reporting on the utilization of state funded spaced';
+  'Used for reporting on the utilization of state funded spaces.';
 
 const DATA_DEFINITION_KEY = Symbol('definitionMetadata');
 
@@ -29,6 +29,7 @@ export type DataDefinitionInfo = {
   reason: string;
   format: string;
   example: string;
+  section: string;
 };
 
 export const DataDefinition = (definition: DataDefinitionInfo) =>

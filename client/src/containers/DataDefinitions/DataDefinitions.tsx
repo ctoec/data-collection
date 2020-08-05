@@ -5,6 +5,7 @@ import { DataDefinitionInfo } from '../../generated/models/DataDefinitionInfo';
 import { getApi } from '../../utils/getApi';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
+import { SECTION_COPY } from './Sections';
 
 const DataDefinitions: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -16,7 +17,7 @@ const DataDefinitions: React.FC = () => {
     getApi(accessToken)
       .getDataDefinitions()
       .then((definitions) => setDataDefinitions(definitions));
-  });
+  }, [accessToken]);
 
   const columns: Column<DataDefinitionInfo>[] = [
     {
@@ -64,6 +65,18 @@ const DataDefinitions: React.FC = () => {
     },
   ];
 
+  const dataDefinitionsBySection: { [key: string]: DataDefinitionInfo[] } = {};
+  console.log(dataDefinitions);
+  dataDefinitions.reduce((acc, cur) => {
+    if (acc[cur.section]) {
+      acc[cur.section].push(cur);
+    } else {
+      acc[cur.section] = [cur];
+    }
+
+    return acc;
+  }, dataDefinitionsBySection);
+
   return (
     <div className="grid-container margin-top-4">
       <Button
@@ -72,14 +85,24 @@ const DataDefinitions: React.FC = () => {
         href="/"
         text={<TextWithIcon text="Back" Icon={ArrowLeft} iconSide="left" />}
       />
-      <h1 className="margin-bottom-2">OEC's enrollment data requirements</h1>
-      <Table
-        id="data-definitions-table"
-        data={dataDefinitions}
-        rowKey={(row) => (row ? row.formattedName : '')}
-        columns={columns}
-        defaultSortColumn={0}
-      />
+      <h1>OEC's enrollment data requirements</h1>
+      {Object.entries(dataDefinitionsBySection).map(
+        ([sectionKey, sectionData]) => (
+          <div className="margin-top-4">
+            <h2>{SECTION_COPY[sectionKey].formattedName}</h2>
+            <p className="text-pre-line">
+              {SECTION_COPY[sectionKey].description}
+            </p>
+            <Table
+              id="data-definitions-table"
+              data={sectionData}
+              rowKey={(row) => (row ? row.formattedName : '')}
+              columns={columns}
+              defaultSortColumn={0}
+            />
+          </div>
+        )
+      )}
     </div>
   );
 };

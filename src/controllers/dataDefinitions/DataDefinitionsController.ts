@@ -14,6 +14,7 @@ export class DataDefinitionsController extends Controller {
       .getMetadata(FlattenedEnrollment)
       .columns.map((column) =>
         getDataDefinition(new FlattenedEnrollment(), column.propertyName)
-      );
+      )
+      .filter((dataDefinition) => !!dataDefinition);
   }
 }

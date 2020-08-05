@@ -24,6 +24,12 @@ export interface DataDefinitionInfo {
    * @type {string}
    * @memberof DataDefinitionInfo
    */
+  section: string;
+  /**
+   *
+   * @type {string}
+   * @memberof DataDefinitionInfo
+   */
   example: string;
   /**
    *
@@ -69,6 +75,7 @@ export function DataDefinitionInfoFromJSONTyped(
     return json;
   }
   return {
+    section: json['section'],
     example: json['example'],
     format: json['format'],
     reason: json['reason'],
@@ -88,6 +95,7 @@ export function DataDefinitionInfoToJSON(
     return null;
   }
   return {
+    section: value.section,
     example: value.example,
     format: value.format,
     reason: value.reason,
