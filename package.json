@@ -35,7 +35,7 @@
     "debug": "npm run build && npm run watch-debug",
     "prettier-all": "prettier --single-quote --write **/*.{js,jsx,ts,tsx,json,css,scss}",
     "prettier": "prettier --single-quote --write",
-    "serve": "npm install --ci && npm build && cd client && npm install --ci && npm build && cd ../ && node dist/index.js",
+    "serve": "npm ci && npm build && cd client && npm ci && npm build && cd ../ && node dist/index.js",
     "serve-debug": "nodemon --inspect dist/index.js",
     "start": "npm run serve",
     "test": "exit 0",
