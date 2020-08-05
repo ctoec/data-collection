@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, TextWithIcon } from '@ctoec/component-library';
-import { ReactComponent as ArrowDown } from 'uswds/dist/img/arrow-down.svg';
+import { ReactComponent as DownloadArrow } from '@ctoec/component-library/dist/assets/images/download.svg';
 
 export const ExcelTemplateDownloadLink = () => (
   <Button
@@ -11,7 +11,7 @@ export const ExcelTemplateDownloadLink = () => (
     text={
       <TextWithIcon
         text="Download Excel template"
-        Icon={ArrowDown}
+        Icon={DownloadArrow}
         iconSide="left"
         className="text-underline"
       />

@@ -1183,10 +1183,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@^0.0.21":
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-0.0.21.tgz#1fd3c6fca281720f6d69552f91f139bdfdbb3ab0"
-  integrity sha512-VI3loE4w6v4zno5Svggo6HDaZgb3VytFiqGhHKG9gONis9htk6zYtpEtDOnOR5AOTgixJ4t/p63ApLfl3uLvFQ==
+"@ctoec/component-library@^0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-0.0.22.tgz#79298ac6cc91751d4c2305b4af120b09a4e2b4c0"
+  integrity sha512-oxnmrUJQGA9eA222PpD1pV7747W/p1iknp19PJRlphMrpqBnErFf9Xf42rl8hgEocR5dTW9M6ZMoy/wGGGXgVw==
   dependencies:
     dompurify "^2.0.12"
     html-react-parser "^0.13.0"

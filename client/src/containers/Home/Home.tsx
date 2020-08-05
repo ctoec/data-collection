@@ -54,7 +54,7 @@ const Home: React.FC = () => {
             </p>
             <p>
               The Office of Early Childhood uses this data to pay programs and
-              help families access quality care. vic{' '}
+              help families access quality care.
             </p>
             <div className="margin-bottom-4">
               <p className="text-bold">Learn more</p>
