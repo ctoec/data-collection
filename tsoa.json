@@ -1,0 +1,45 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*Controller.ts"],
+  "spec": {
+    "outputDirectory": ".",
+    "specVersion": 3,
+    "specMerging": "recursive",
+    "securityDefinitions": {
+      "jwt": {
+        "type": "apiKey",
+        "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "spec": {
+      "paths": {
+        "/enrollment-reports": {
+          "post": {
+            "requestBody": {
+              "content": {
+                "multipart/form-data": {
+                  "schema": {
+                    "properties": {
+                      "file": {
+                        "type": "string",
+                        "format": "binary"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "routes": {
+    "authenticationModule": "./src/middleware/authenticate.ts",
+    "basePath": "/api",
+    "routesDir": "src/routes"
+  }
+}
