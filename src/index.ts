@@ -26,13 +26,13 @@ createConnection()
 
     /* Register SPA-serving middlewares */
     // Serve the static files from the React app
-    app.use(express.static(path.join(__dirname, 'client/build')));
+    app.use(express.static(path.join(__dirname, '../client/build')));
 
     // Handles any requests that don't match the ones above
     if (!isDevelopment()) {
       // Register the fallback route to index.html
       app.get('*', (_, res) =>
-        res.sendFile(path.join(__dirname, 'client/build/index.html'))
+        res.sendFile(path.join(__dirname, '../client/build/index.html'))
       );
     } else {
       // When in development, proxy requests to the docker container for the client
