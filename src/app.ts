@@ -2,7 +2,7 @@ import express, { json, Express } from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
 
-import { User } from './entity';
+import { User } from '../entity';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error';
 import { getManager } from 'typeorm';

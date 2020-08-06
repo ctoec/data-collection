@@ -14,7 +14,7 @@ import {
   UTILIZATION_REPORTING_REASON,
   REPORTING_REASON,
   REPORTING_PERIOD_FORMAT,
-} from '../decorators/dataDefinition';
+} from '../src/decorators/dataDefinition';
 
 const SECTIONS = {
   CHILD_INFO: 'child-info',

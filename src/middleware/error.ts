@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { UnauthorizedError } from 'express-jwt'
 
 export const handleError = (
   err: Error,
@@ -7,11 +8,11 @@ export const handleError = (
   next: NextFunction
 ) => {
   if (err) {
-    console.error(err);
-    res.status(500).json({
-      status: 500,
-      error: err.toString(),
-    });
+		console.error(err);
+		if(err.name === UnauthorizedError.name) {
+			return res.status(401).json({ error: err.message })
+		}
+		res.status(500).json({ error: err.toString() });
   } else {
     next();
   }

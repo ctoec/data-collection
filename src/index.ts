@@ -4,7 +4,7 @@ import httpProxy from 'http-proxy';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error';
 import { createConnection, getManager } from 'typeorm';
-import { User } from './entity';
+import { User } from '../entity';
 import { router as apiRouter } from './routes';
 
 createConnection()
@@ -27,13 +27,6 @@ createConnection()
 
     // Register pre-processing middlewares
     app.use(json());
-
-    // Register routes
-    app.use('/user/current', async (req, res) => {
-      console.log('endpoints');
-      const user = await getManager().findOne(User, 1);
-      res.send(user);
-    });
 
     app.use('/api', apiRouter);
 
