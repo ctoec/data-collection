@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 12
+      nodejs: 12.18.1
       # maybe install yarn here
   pre_build:
     commands:
