@@ -19,7 +19,7 @@ services:
     image: node:12
     stdin_open: true
     volumes:
-      - ./server:/home/node/app:cached
+      - ./:/home/node/app:cached
     working_dir: /home/node/app
     ports:
       - 5001:3000
