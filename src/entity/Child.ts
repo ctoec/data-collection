@@ -62,7 +62,7 @@ export class Child {
   @Column({ nullable: true })
   hispanicOrLatinxEthnicity?: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'enum', enum: Gender })
   gender?: Gender;
 
   @Column({ nullable: true })

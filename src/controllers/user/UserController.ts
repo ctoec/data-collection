@@ -1,12 +1,8 @@
-import { Controller, Get, Request, Route, Security } from 'tsoa';
 import { User } from '../../entity';
-import { UserService } from '../../services/user/UserService';
+import { getManager } from 'typeorm';
 
-@Route('users')
-export class UserController extends Controller {
-  @Security('jwt')
-  @Get('current')
-  public async getCurrentUser(@Request() req: Express.Request): Promise<User> {
-    return new UserService().get(req.user.id);
+export class UserController {
+  public async getCurrentUser(req: Express.Request): Promise<User> {
+    return getManager().findOne(User, req.user.id);
   }
 }
