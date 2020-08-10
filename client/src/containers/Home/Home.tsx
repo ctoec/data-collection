@@ -7,7 +7,9 @@ import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/hom
 import UserContext from '../../contexts/UserContext/UserContext';
 
 import cx from 'classnames';
-import { MailToLink } from './MailToLink';
+import { MailToLink } from '../../components/MailToLink';
+import { ExcelTemplateDownloadLink } from '../../components/ExcelTemplateDownloadLink';
+import { CSVTemplateDownloadLink } from '../../components/CSVTemplateDownloadLink';
 
 const Home: React.FC = () => {
   const { user, loading } = useContext(UserContext);
@@ -54,12 +56,12 @@ const Home: React.FC = () => {
               The Office of Early Childhood uses this data to pay programs and
               help families access quality care.
             </p>
-            <div className="margin-bottom-6">
+            <div className="margin-bottom-4">
               <p className="text-bold">Learn more</p>
               <Button
                 appearance="unstyled"
                 href="https://ctoec.org"
-                className="text-bold"
+                className="text-bold margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
                     text="Visit OEC's website"
@@ -70,12 +72,10 @@ const Home: React.FC = () => {
                   />
                 }
               />
-              <br />
-              <br />
               <Button
                 appearance="unstyled"
                 href="/privacy-policy"
-                className="text-bold"
+                className="text-bold margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
                     text="See the privacy policy"
@@ -86,20 +86,25 @@ const Home: React.FC = () => {
                   />
                 }
               />
-              <br />
-              <br />
-              <a
-                href="/upload_template/ECE Data Collection Template.xlsx"
-                className="text-bold"
-              >
-                <TextWithIcon
-                  text="Download the Excel data collection template"
-                  Icon={ArrowRight}
-                  direction="right"
-                  iconSide="right"
-                  className="text-underline"
-                />
-              </a>
+              <Button
+                appearance="unstyled"
+                href="/data-definitions"
+                className="text-bold margin-bottom-3 display-block"
+                text={
+                  <TextWithIcon
+                    text="See the data requirements"
+                    Icon={ArrowRight}
+                    direction="right"
+                    iconSide="right"
+                    className="text-underline"
+                  />
+                }
+              />
+            </div>
+            <div>
+              <p className="text-bold">Download the data collection template</p>
+              <ExcelTemplateDownloadLink />
+              <CSVTemplateDownloadLink />
             </div>
           </div>
         </div>

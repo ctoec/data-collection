@@ -63,18 +63,6 @@ export interface Site {
    * @type {number}
    * @memberof Site
    */
-  organizationId: number;
-  /**
-   *
-   * @type {Organization}
-   * @memberof Site
-   */
-  organization?: Organization;
-  /**
-   *
-   * @type {number}
-   * @memberof Site
-   */
   facilityCode?: number;
   /**
    *
@@ -94,6 +82,12 @@ export interface Site {
    * @memberof Site
    */
   registryId?: number;
+  /**
+   *
+   * @type {Organization}
+   * @memberof Site
+   */
+  organization: Organization;
   /**
    *
    * @type {Array<Enrollment>}
@@ -118,10 +112,6 @@ export function SiteFromJSONTyped(
     name: json['name'],
     titleI: json['titleI'],
     region: RegionFromJSON(json['region']),
-    organizationId: json['organizationId'],
-    organization: !exists(json, 'organization')
-      ? undefined
-      : OrganizationFromJSON(json['organization']),
     facilityCode: !exists(json, 'facilityCode')
       ? undefined
       : json['facilityCode'],
@@ -130,6 +120,7 @@ export function SiteFromJSONTyped(
       : json['licenseNumber'],
     naeycId: !exists(json, 'naeycId') ? undefined : json['naeycId'],
     registryId: !exists(json, 'registryId') ? undefined : json['registryId'],
+    organization: OrganizationFromJSON(json['organization']),
     enrollments: !exists(json, 'enrollments')
       ? undefined
       : (json['enrollments'] as Array<any>).map(EnrollmentFromJSON),
@@ -148,12 +139,11 @@ export function SiteToJSON(value?: Site | null): any {
     name: value.name,
     titleI: value.titleI,
     region: RegionToJSON(value.region),
-    organizationId: value.organizationId,
-    organization: OrganizationToJSON(value.organization),
     facilityCode: value.facilityCode,
     licenseNumber: value.licenseNumber,
     naeycId: value.naeycId,
     registryId: value.registryId,
+    organization: OrganizationToJSON(value.organization),
     enrollments:
       value.enrollments === undefined
         ? undefined

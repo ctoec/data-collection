@@ -14,10 +14,10 @@
 
 import { exists, mapValues } from '../runtime';
 import {
-  Enrollment,
-  EnrollmentFromJSON,
-  EnrollmentFromJSONTyped,
-  EnrollmentToJSON,
+  FlattenedEnrollment,
+  FlattenedEnrollmentFromJSON,
+  FlattenedEnrollmentFromJSONTyped,
+  FlattenedEnrollmentToJSON,
 } from './';
 
 /**
@@ -34,10 +34,10 @@ export interface EnrollmentReport {
   id: number;
   /**
    *
-   * @type {Array<Enrollment>}
+   * @type {Array<FlattenedEnrollment>}
    * @memberof EnrollmentReport
    */
-  enrollments: Array<Enrollment>;
+  enrollments: Array<FlattenedEnrollment>;
 }
 
 export function EnrollmentReportFromJSON(json: any): EnrollmentReport {
@@ -53,7 +53,9 @@ export function EnrollmentReportFromJSONTyped(
   }
   return {
     id: json['id'],
-    enrollments: (json['enrollments'] as Array<any>).map(EnrollmentFromJSON),
+    enrollments: (json['enrollments'] as Array<any>).map(
+      FlattenedEnrollmentFromJSON
+    ),
   };
 }
 
@@ -66,6 +68,8 @@ export function EnrollmentReportToJSON(value?: EnrollmentReport | null): any {
   }
   return {
     id: value.id,
-    enrollments: (value.enrollments as Array<any>).map(EnrollmentToJSON),
+    enrollments: (value.enrollments as Array<any>).map(
+      FlattenedEnrollmentToJSON
+    ),
   };
 }

@@ -1,6 +1,9 @@
 import React from 'react';
-import { MailToLink } from '../Home/MailToLink';
-import { Button } from '@ctoec/component-library';
+import { MailToLink } from '../../components/MailToLink';
+import { Button, Alert } from '@ctoec/component-library';
+import { Link } from 'react-router-dom';
+import { ExcelTemplateDownloadLink } from '../../components/ExcelTemplateDownloadLink';
+import { CSVTemplateDownloadLink } from '../../components/CSVTemplateDownloadLink';
 
 const GettingStarted: React.FC = () => {
   return (
@@ -16,22 +19,28 @@ const GettingStarted: React.FC = () => {
           required data for each field. If you have any questions, reach out to{' '}
           <MailToLink />
         </p>
-        <p>
-          <span className="text-bold">Excel template</span>
-          <br />
-          <a href="/upload_template/ECE Data Collection Template.xlsx">
-            ECE Data Collection Excel Template
-          </a>
-          <br />
-          <br />
-          <span className="text-bold">CSV template</span>
-          <br />
-          <a href="/upload_template/ECE Data Collection Template.csv">
-            ECE Data Collection CSV Template
-          </a>
-        </p>
+        <Alert
+          heading="OEC's enrollment data requirements"
+          type="info"
+          text={
+            <span>
+              To see all required data fields, definitions, and rationale, see{' '}
+              <Link to="/data-definitions">enrollment data requirements.</Link>
+            </span>
+          }
+        />
+
+        <div>
+          <h2>Download the data entry template</h2>
+          <p>
+            Use one of these templates to enter your enrollment data for all
+            state-funded children.
+          </p>
+          <ExcelTemplateDownloadLink />
+          <CSVTemplateDownloadLink />
+        </div>
       </div>
-      <div className="grid-row margin-top-4">
+      <div className="grid-row margin-top-2">
         <Button text="Go to file upload" href="/upload" />
       </div>
     </div>

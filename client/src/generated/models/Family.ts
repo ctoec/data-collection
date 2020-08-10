@@ -18,18 +18,18 @@ import {
   ChildFromJSON,
   ChildFromJSONTyped,
   ChildToJSON,
-  FamilyDetermination,
-  FamilyDeterminationFromJSON,
-  FamilyDeterminationFromJSONTyped,
-  FamilyDeterminationToJSON,
+  IncomeDetermination,
+  IncomeDeterminationFromJSON,
+  IncomeDeterminationFromJSONTyped,
+  IncomeDeterminationToJSON,
   Organization,
   OrganizationFromJSON,
   OrganizationFromJSONTyped,
   OrganizationToJSON,
-  User,
-  UserFromJSON,
-  UserFromJSONTyped,
-  UserToJSON,
+  UpdateMetaData,
+  UpdateMetaDataFromJSON,
+  UpdateMetaDataFromJSONTyped,
+  UpdateMetaDataToJSON,
 } from './';
 
 /**
@@ -44,12 +44,6 @@ export interface Family {
    * @memberof Family
    */
   id: number;
-  /**
-   *
-   * @type {Array<Child>}
-   * @memberof Family
-   */
-  children?: Array<Child>;
   /**
    *
    * @type {string}
@@ -88,16 +82,16 @@ export interface Family {
   homelessness?: boolean;
   /**
    *
-   * @type {Array<FamilyDetermination>}
+   * @type {Array<IncomeDetermination>}
    * @memberof Family
    */
-  determinations?: Array<FamilyDetermination>;
+  incomeDeterminations?: Array<IncomeDetermination>;
   /**
    *
-   * @type {number}
+   * @type {Array<Child>}
    * @memberof Family
    */
-  organizationId: number;
+  children?: Array<Child>;
   /**
    *
    * @type {Organization}
@@ -106,22 +100,10 @@ export interface Family {
   organization?: Organization;
   /**
    *
-   * @type {number}
+   * @type {UpdateMetaData}
    * @memberof Family
    */
-  authorId?: number;
-  /**
-   *
-   * @type {User}
-   * @memberof Family
-   */
-  author?: User;
-  /**
-   *
-   * @type {Date}
-   * @memberof Family
-   */
-  updatedAt?: Date;
+  updateMetaData?: UpdateMetaData;
 }
 
 export function FamilyFromJSON(json: any): Family {
@@ -137,9 +119,6 @@ export function FamilyFromJSONTyped(
   }
   return {
     id: json['id'],
-    children: !exists(json, 'children')
-      ? undefined
-      : (json['children'] as Array<any>).map(ChildFromJSON),
     addressLine1: !exists(json, 'addressLine1')
       ? undefined
       : json['addressLine1'],
@@ -152,18 +131,20 @@ export function FamilyFromJSONTyped(
     homelessness: !exists(json, 'homelessness')
       ? undefined
       : json['homelessness'],
-    determinations: !exists(json, 'determinations')
+    incomeDeterminations: !exists(json, 'incomeDeterminations')
       ? undefined
-      : (json['determinations'] as Array<any>).map(FamilyDeterminationFromJSON),
-    organizationId: json['organizationId'],
+      : (json['incomeDeterminations'] as Array<any>).map(
+          IncomeDeterminationFromJSON
+        ),
+    children: !exists(json, 'children')
+      ? undefined
+      : (json['children'] as Array<any>).map(ChildFromJSON),
     organization: !exists(json, 'organization')
       ? undefined
       : OrganizationFromJSON(json['organization']),
-    authorId: !exists(json, 'authorId') ? undefined : json['authorId'],
-    author: !exists(json, 'author') ? undefined : UserFromJSON(json['author']),
-    updatedAt: !exists(json, 'updatedAt')
+    updateMetaData: !exists(json, 'updateMetaData')
       ? undefined
-      : new Date(json['updatedAt']),
+      : UpdateMetaDataFromJSON(json['updateMetaData']),
   };
 }
 
@@ -176,25 +157,23 @@ export function FamilyToJSON(value?: Family | null): any {
   }
   return {
     id: value.id,
-    children:
-      value.children === undefined
-        ? undefined
-        : (value.children as Array<any>).map(ChildToJSON),
     addressLine1: value.addressLine1,
     addressLine2: value.addressLine2,
     town: value.town,
     state: value.state,
     zip: value.zip,
     homelessness: value.homelessness,
-    determinations:
-      value.determinations === undefined
+    incomeDeterminations:
+      value.incomeDeterminations === undefined
         ? undefined
-        : (value.determinations as Array<any>).map(FamilyDeterminationToJSON),
-    organizationId: value.organizationId,
+        : (value.incomeDeterminations as Array<any>).map(
+            IncomeDeterminationToJSON
+          ),
+    children:
+      value.children === undefined
+        ? undefined
+        : (value.children as Array<any>).map(ChildToJSON),
     organization: OrganizationToJSON(value.organization),
-    authorId: value.authorId,
-    author: UserToJSON(value.author),
-    updatedAt:
-      value.updatedAt === undefined ? undefined : value.updatedAt.toISOString(),
+    updateMetaData: UpdateMetaDataToJSON(value.updateMetaData),
   };
 }

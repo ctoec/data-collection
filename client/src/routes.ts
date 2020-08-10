@@ -5,6 +5,7 @@ import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
 import CheckData from './containers/CheckData/CheckData';
+import DataDefinitions from './containers/DataDefinitions/DataDefinitions';
 
 export type RouteConfig = {
   path: string;
@@ -38,12 +39,17 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
+    path: '/data-definitions',
+    component: DataDefinitions,
+    unauthorized: true,
+  },
+  {
     path: '/upload',
     component: Upload,
     unauthorized: false,
   },
   {
-    path: '/check-data/:fileUploadId',
+    path: '/check-data',
     component: CheckData,
     unauthorized: false,
   },
