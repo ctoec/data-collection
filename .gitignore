@@ -11,8 +11,6 @@
 # production
 /build
 /dist
-fawkes-bundle
-fawkes-bundle.zip
 
 # misc
 .DS_Store
