@@ -8,7 +8,7 @@ module.exports = {
   database: "postgres",
   synchronize: false,
   migrationsRun: true,
-  logging: false,
+  logging: true,
   entities: ["dist/entity/**/*.js"],
   migrations: ["dist/migration/**/*.js"],
   subscribers: ["dist/subscriber/**/*.js"],
