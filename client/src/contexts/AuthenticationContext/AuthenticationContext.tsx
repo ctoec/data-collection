@@ -126,7 +126,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = ({
       if (!!defaultOpenIdConnectUrl) {
         setOpenIdConnectUrl(defaultOpenIdConnectUrl);
       } else if (!openIdConnectUrl) {
-        const wingedKeysUri = process.env.WINGED_KEYS_HOST;
+        const wingedKeysUri = `${process.env.REACT_APP_WINGED_KEYS_HOST || 'https://winged-keys:5050/'}`;
         if (!wingedKeysUri) {
           throw new Error('No winged keys uri found');
         }
