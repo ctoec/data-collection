@@ -1,13 +1,10 @@
-branch-defaults:
-  create-fawkes-infra:
-    environment: ece-fawkes-staging-staging
 environment-defaults:
   ece-fawkes-staging-staging:
-    branch: null
+    application_name: ece-fawkes-staging
+    default_ec2_keyname: keypair-devops-staging
+    branch: master
     repository: null
 global:
-  application_name: ece-fawkes-staging
-  default_ec2_keyname: keypair-devops-staging
   default_platform: Node.js 12 running on 64bit Amazon Linux 2
   default_region: us-east-2
   include_git_submodules: true
