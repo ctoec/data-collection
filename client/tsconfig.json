@@ -13,8 +13,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react",
-    "paths": ["../node_modules/typeorm/typeorm-model-shim.js"]
+    "jsx": "react"
   },
   "include": ["src"]
 }
