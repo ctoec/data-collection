@@ -52,16 +52,17 @@ To generate the client code, run the included Bash file: `./generate-client-code
 
 ## Deploy
 
-Deployments can either be triggered directly through the corresponding Azure pipeline for the applicable stage, or directly from the CLI.  Additionally, we also don't utilize Docker in any of our deployment environments, but rather Linux/Node for the sake of simplicity.
+Deployments can either be triggered directly through the corresponding AWS CodePipeline for the applicable stage, or directly from the CLI.  Additionally, we also don't utilize Docker in any of our deployment environments, but rather Linux/Node for the sake of simplicity.
 
 ### Pipeline
+The preferred way of Fawkes deployment would be through AWS CodePipeline, which should automatically be set up for whatever stage you're looking to deploy.  Triggering a new deploy is a simple button click after navigating to the corresponding CodePipeline in the AWS console.
 
 ### Command Line
 NOTE: This option will require you to have the Elastic Beanstalk CLI installed on your machine.  If you're on OSX, [Homebrew](https://formulae.brew.sh/formula/aws-elasticbeanstalk) is your best bet - otherwise, following the setup scripts outlined in the [AWS docs](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html) works just fine.
 
 1. Install the dependencies for the React application.
 ```bash
-cd <path-to-project-root>/client && yarn install
+cd <path-to-project-root>/client && yarn install --frozen-lockfile
 ```
 
 1. Once the dependencies are installed, create a prod-ready build of the React app.
