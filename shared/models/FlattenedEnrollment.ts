@@ -1,0 +1,43 @@
+import { EnrollmentReport } from '.';
+
+export interface FlattenedEnrollment {
+  id: number;
+  report: EnrollmentReport;
+  name?: string;
+  sasid?: number;
+  dateOfBirth?: Date;
+  birthCertificateId?: string;
+  townOfBirth?: string;
+  stateOfBirth?: string;
+  americanIndianOrAlaskaNative?: boolean;
+  asian?: boolean;
+  blackOrAfricanAmerican?: boolean;
+  nativeHawaiianOrPacificIslander?: boolean;
+  white?: boolean;
+  hispanicOrLatinxEthnicity?: boolean;
+  gender?: string;
+  dualLanguageLearner?: boolean;
+  receivingSpecialEducationServices?: boolean;
+  specialEducationServicesType?: string;
+  streetAddress?: string;
+  town?: string;
+  state?: string;
+  zipcode?: string;
+  livesWithFosterFamily?: boolean;
+  experiencedHomelessnessOrHousingInsecurity?: boolean;
+  householdSize?: number;
+  annualHouseholdIncome?: number;
+  incomeDeterminationDate?: Date;
+  provider?: string;
+  site?: string;
+  model?: string;
+  ageGroup?: string;
+  enrollmentStartDate?: Date;
+  enrollmentEndDate?: Date;
+  enrollmentExitReason?: string;
+  fundingType?: string;
+  spaceType?: string;
+  firstFundingPeriod?: string;
+  lastFundingPeriod?: string;
+  receivingCareForKids?: boolean;
+}

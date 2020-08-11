@@ -21,7 +21,7 @@ export class Site {
   @Column()
   titleI: boolean;
 
-  @Column()
+  @Column({ type: 'enum', enum: Region })
   region: Region;
 
   @Column({ nullable: true })

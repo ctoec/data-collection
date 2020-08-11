@@ -19,7 +19,6 @@ import {
   QueryStringUtils,
 } from '@openid/appauth';
 import { getCurrentHost } from '../../utils/getCurrentHost';
-import { getConfig } from '../../config/getConfig';
 
 export type AuthenticationContextType = {
   accessToken: string | null;

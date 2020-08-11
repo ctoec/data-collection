@@ -6,38 +6,23 @@ A web application to collect information from child care providers in the State 
 
 ### Requirements
 1. Bind mount or clone [`winged-keys`](https://github.com/ctoec/winged-keys) into the top-level of this directory.
-2. Install git pre-commit hook from `/hooks` dir
+1. Install git pre-commit hook from `/hooks` dir
     ```sh
        ln -s `pwd`/hooks/pre-commit.sh `pwd`/.git/hooks/pre-commit
     ```
-
-### OpenAPI Spec and Client Code Generation
-This application uses a code-first automated generation strategy for producing the Express API, an OpenAPI Spec, and client-calling code to the API.
-
-To generate the generated routes, run:
-```bash
-yarn run tsoa routes
-```
-
-To generate the OpenAPI specification, run:
-```bash
-yarn run tsoa spec
-```
-
-To generate the client code, run the included Bash file: `./generate-client-code.sh`.
+1. Install (if you haven't already) [Docker](https://hub.docker.com/search?q=&type=edition&offering=community). Make sure you have [Docker Compose](https://docs.docker.com/compose/install/), which is included in some OS distributions but must be installed separately in others.
 
 ### Running the app
-1. Install (if you haven't already) [Docker](https://hub.docker.com/search?q=&type=edition&offering=community). Make sure you have [Docker Compose](https://docs.docker.com/compose/install/), which is included in some OS distributions but must be installed separately in others.
-2. Install all corresponding yarn dependencies, based on the static versions specified in `yarn.lock`, via the containers:
+1. Install all corresponding yarn dependencies, based on the static versions specified in `yarn.lock`, via the containers:
     ```sh
     docker-compose exec client yarn install --frozen-lockfile
     docker-compose exec server yarn install --frozen-lockfile
     ```
-3. Start application:
+1. Start application:
     ```sh
     docker-compose up -d
     ```
-4. Ensure application is running and confirm port mappings:
+1. Ensure application is running and confirm port mappings:
     ```sh
     docker-compose ps
         Name                            Command               State           Ports                
@@ -49,6 +34,11 @@ To generate the client code, run the included Bash file: `./generate-client-code
     data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp       
 
     ```
+### Architecture
+This mono-repo consists of three main parts:
+1. Server, located in the root dir. The backend is an express server, with routes defined in `src/routes`
+1. Client, located in `client` dir. The frontend is a React SPA, created with create-react-app.
+1. Shared resources, located in `/shared` dir. The shared resources are installed in both the backend and frontend via [local path package.json dependencies](https://docs.npmjs.com/files/package.json#local-paths)
 
 ## Deploy
 

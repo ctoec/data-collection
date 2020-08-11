@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
-import { User, Configuration, DefaultApi } from '../../generated';
-import { getCurrentHost } from '../../utils/getCurrentHost';
+import { User } from 'shared/models';
+import { apiGet } from '../../utils/api';
 
 export type UserContextType = {
   user: User | null;
@@ -31,15 +31,8 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
     setUserLoading(false);
     if (accessToken) {
       setUserLoading(true);
-      new DefaultApi(
-        new Configuration({
-          basePath: `${getCurrentHost()}/api`,
-          apiKey: `Bearer ${accessToken}`,
-        })
-      )
-        .getCurrentUser()
+      apiGet('users/current', { accessToken })
         .then((data) => setUser(data))
-        .then((_) => setUserLoading(false))
         .finally(() => setUserLoading(false));
     }
   }, [accessToken]);

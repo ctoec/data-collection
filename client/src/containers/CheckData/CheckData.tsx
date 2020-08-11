@@ -8,8 +8,8 @@ import {
   oecFontFamily,
 } from '../../utils/materialTable';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { FlattenedEnrollment } from '../../generated';
-import { getApi } from '../../utils/getApi';
+import { FlattenedEnrollment } from 'shared/models';
+import { apiGet } from '../../utils/api';
 
 const CheckData: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -19,11 +19,11 @@ const CheckData: React.FC = () => {
   );
 
   useEffect(() => {
-    getApi(accessToken)
-      .getEnrollmentReportById({ reportId })
-      .then((report) => {
+    apiGet(`enrollment-reports/${reportId}`, { accessToken }).then((report) => {
+      if (report && report.enrollments) {
         setReportData(report.enrollments);
-      });
+      }
+    });
   }, [reportId, accessToken]);
 
   return (

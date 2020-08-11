@@ -1,4 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+
+import { FlattenedEnrollment as FlattenedEnrollmentInterface } from 'shared/models';
+
 import { EnrollmentReport } from './EnrollmentReport';
 import {
   DataDefinition,
@@ -14,7 +17,7 @@ import {
   UTILIZATION_REPORTING_REASON,
   REPORTING_REASON,
   REPORTING_PERIOD_FORMAT,
-} from '../decorators/dataDefinition';
+} from './decorators/dataDefinition';
 
 const SECTIONS = {
   CHILD_INFO: 'child-info',
@@ -24,7 +27,7 @@ const SECTIONS = {
 };
 
 @Entity()
-export class FlattenedEnrollment {
+export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

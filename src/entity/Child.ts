@@ -6,6 +6,8 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { Child as ChildInterface } from 'shared/models';
+
 import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Gender } from './enums/Gender';
@@ -13,7 +15,7 @@ import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
-export class Child {
+export class Child implements ChildInterface {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -62,7 +64,7 @@ export class Child {
   @Column({ nullable: true })
   hispanicOrLatinxEthnicity?: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'enum', enum: Gender })
   gender?: Gender;
 
   @Column({ nullable: true })

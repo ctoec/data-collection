@@ -6,14 +6,15 @@ import {
   OneToMany,
 } from 'typeorm';
 
-// import { Child } from '../models/child';
+import { Family as FamilyInterface } from 'shared/models';
+
 import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
 import { Child } from './Child';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
-export class Family {
+export class Family implements FamilyInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

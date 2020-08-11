@@ -10695,6 +10695,9 @@ shallow-clone@^3.0.0:
   dependencies:
     kind-of "^6.0.2"
 
+"shared@file:../shared":
+  version "0.0.0"
+
 shebang-command@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shebang-command/-/shebang-command-1.2.0.tgz#44aac65b695b03398968c39f363fee5deafdf1ea"

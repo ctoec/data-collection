@@ -6,6 +6,8 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { Enrollment as EnrollmentInterface } from 'shared/models';
+
 import { AgeGroup } from './enums/AgeGroup';
 import { Child } from './Child';
 import { Funding } from './Funding';
@@ -13,7 +15,7 @@ import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
-export class Enrollment {
+export class Enrollment implements EnrollmentInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

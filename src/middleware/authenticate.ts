@@ -1,72 +1,52 @@
-import { Request } from 'express';
-import jwt, {
-  JwtHeader,
-  SigningKeyCallback,
-  VerifyCallback,
-} from 'jsonwebtoken';
+import jwt, { UnauthorizedError } from 'express-jwt';
 import jwks from 'jwks-rsa';
-import { UserService } from '../services/user/UserService';
+import { Request, Response, NextFunction } from 'express';
+import { getManager } from 'typeorm';
+import { User } from '../entity';
+import { InvalidSubClaimError } from './error/errors';
+import { passAsyncError } from './error/passAsyncError';
 
-const jwksClient = jwks({
-  jwksUri: `${(process.env.WINGED_KEYS_HOST || 'https://localhost:5050/')}.well-known/openid-configuration/jwks`,
-  // @TODO Add HTTPS support
-  strictSsl: false,
+/**
+ * Authentication middleware to decode auth JWT (JSON web token)
+ * with appropriate key from JWKS (JSON web key set).
+ * Leverages express-jwt, a middleware for validating JWT (https://github.com/auth0/express-jwt#readme)
+ *
+ * Adds the resulting claims to the "claims" property on the request.
+ */
+const decodeClaim = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    jwksUri: `${
+      process.env.WINGED_KEYS_HOST || 'https://localhost:5050'
+    }/.well-known/openid-configuration/jwks`,
+    strictSsl: false,
+  }),
+  algorithms: ['RS256'],
+  requestProperty: 'claims',
 });
 
-const getAuthorizationToken = (req: Request) => {
-  const authorizationHeader = req.header('Authorization');
-  if (!authorizationHeader) {
-    throw new Error('No Authorization header');
-  }
-  if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
-    const token = authorizationHeader.substr(7);
-    return token;
-  } else {
-    throw new Error('Invalid Authorization header for Bearer Auth');
-  }
-};
-
-const getJwtSecret = (header: JwtHeader, cb: SigningKeyCallback) => {
-  jwksClient.getSigningKey(header.kid, function (err, key) {
-    if (err) {
-      cb(err, null);
-      return;
+/**
+ * Authentication middleware to use the "sub" claim from the decoded token,
+ * which represents the WingedKeysId for a user, to lookup the authed user.
+ *
+ * Adds the resulting User object to the "user" property on the request.
+ */
+const addUser = passAsyncError(
+  async (req: Request, _: Response, next: NextFunction) => {
+    if (req.claims.sub) {
+      const user = await getManager().findOne(User, {
+        where: { wingedKeysId: req.claims.sub },
+      });
+      if (!user) throw new InvalidSubClaimError();
+      req.user = user;
+      next();
     }
-    var signingKey = key.getPublicKey();
-    cb(null, signingKey);
-  });
-};
-
-const validate = (token: string, cb: VerifyCallback) => {
-  jwt.verify(
-    token,
-    getJwtSecret,
-    {
-      algorithms: ['RS256'],
-    },
-    cb
-  );
-};
-
-export function expressAuthentication(
-  req: Request,
-  securityName: string,
-  scopes?: string[]
-): Promise<any> {
-  if (securityName !== 'jwt') {
-    throw new Error('Invalid security scheme');
   }
+);
 
-  const token = getAuthorizationToken(req);
-
-  return new Promise((resolve, reject) => {
-    validate(token, (err, decodedToken: any) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      const user = new UserService().getByWingedKeysId(decodedToken.sub);
-      resolve(user);
-    });
-  });
-}
+/**
+ * Full authnetication middleware chains together decodeClaim and addUser,
+ * so that any authenticated route gets the user, looked up via decoded JWT
+ * "sub" claim, added to the request
+ */
+export const authenticate = [decodeClaim, addUser];

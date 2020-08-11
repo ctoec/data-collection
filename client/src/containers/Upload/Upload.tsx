@@ -8,7 +8,7 @@ import {
   Button,
   Alert,
 } from '@ctoec/component-library';
-import { getApi } from '../../utils/getApi';
+import { apiPost } from '../../utils/api';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -39,10 +39,7 @@ const Upload: React.FC = () => {
     }
     setLoading(true);
 
-    getApi(accessToken)
-      .createEnrollmentReport({
-        file: formData.get('file') as any,
-      })
+    apiPost('enrollment-reports', formData, { accessToken })
       .then((value) => {
         setStatus({
           reportId: value.id,
