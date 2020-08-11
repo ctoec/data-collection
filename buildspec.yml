@@ -19,6 +19,7 @@ artifacts:
   files:
     - dist/**/*
     - client/build/**/*
+    - shared
     - .ebextensions/**/*
     - .elasticbeanstalk/**/*
     - ormconfig.js
