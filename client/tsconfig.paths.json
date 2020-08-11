@@ -1,0 +1,5 @@
+{
+  "compilerOptions": {
+    "paths": ["../node_modules/typeorm/typeorm-model-shim.js"]
+  }
+}
