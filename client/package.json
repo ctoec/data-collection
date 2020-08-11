@@ -18,7 +18,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "material-table": "^1.66.0",
-    "models": "../models",
+    "models": "file:../models",
     "node-sass": "yarn:sass",
     "query-string": "^6.13.1",
     "react": "^16.13.1",

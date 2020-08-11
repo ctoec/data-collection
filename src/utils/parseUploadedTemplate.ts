@@ -28,7 +28,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
    * @param sheet
    */
   function getStartingRow(sheet: WorkSheet): number {
-    return sheet['B1'] === 'Child Info' ? 3 : 1;
+    return sheet['B1'].v === 'Child Info' ? 3 : 1;
   }
 
   /**
@@ -58,6 +58,22 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     return true;
   }
 
+  function update_sheet_range(ws) {
+    var range = { s: { r: Infinity, c: Infinity }, e: { r: 0, c: 0 } };
+    Object.keys(ws)
+      .filter(function (x) {
+        return x.charAt(0) != '!';
+      })
+      .map(utils.decode_cell)
+      .forEach(function (x) {
+        range.s.c = Math.min(range.s.c, x.c);
+        range.s.r = Math.min(range.s.r, x.r);
+        range.e.c = Math.max(range.e.c, x.c);
+        range.e.r = Math.max(range.e.r, x.r);
+      });
+    ws['!ref'] = utils.encode_range(range);
+  }
+
   // Main
   const fileData = readFile(file.path, {
     cellDates: true,
@@ -65,10 +81,16 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   const sheet = Object.values(fileData.Sheets)[0];
 
   if (sheet) {
-    const parsedSheet = utils.sheet_to_json(sheet, {
+    console.log('before parse sheet');
+    console.log('sheet rows', sheet['!rows']);
+
+    update_sheet_range(sheet);
+    const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
       range: getStartingRow(sheet),
       header: SHEET_HEADERS,
     });
+
+    console.log('parsedSheet');
 
     return parsedSheet.map(parseFlattenedEnrollment);
   }

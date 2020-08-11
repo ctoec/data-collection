@@ -2,10 +2,10 @@ import React, { useState, useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ReactComponent as ArrowLeft } from 'uswds/dist/img/arrow-left.svg';
 import { DataDefinitionInfo } from '../../generated/models/DataDefinitionInfo';
-import { getApi } from '../../utils/getApi';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
 import { SECTION_COPY } from './Sections';
+import { apiGet } from '../../utils/api';
 
 const DataDefinitions: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -14,9 +14,9 @@ const DataDefinitions: React.FC = () => {
   );
 
   useEffect(() => {
-    getApi(accessToken)
-      .getDataDefinitions()
-      .then((definitions) => setDataDefinitions(definitions));
+    apiGet('data-definitions').then((definitions) =>
+      setDataDefinitions(definitions)
+    );
   }, [accessToken]);
 
   const columns: Column<DataDefinitionInfo>[] = [

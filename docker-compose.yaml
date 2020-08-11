@@ -6,7 +6,7 @@ services:
     stdin_open: true
     volumes:
       - ./client:/home/node/app:cached
-      - ./models:/home/node/app/models:cached
+      - ./models:/home/node/models:cached
     working_dir: /home/node/app
     ports:
       - 5000:3000
