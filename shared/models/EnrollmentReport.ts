@@ -1,4 +1,4 @@
-import { FlattenedEnrollment } from './';
+import { FlattenedEnrollment } from '.';
 
 export interface EnrollmentReport {
   id: number;

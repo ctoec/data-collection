@@ -4,7 +4,7 @@ import {
   FundingTime,
   FundingTimeSplit,
   Organization,
-} from './';
+} from '.';
 
 export interface FundingSpace {
   id: number;

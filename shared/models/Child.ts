@@ -1,4 +1,4 @@
-import { Enrollment, Family, Gender, Organization } from './';
+import { Enrollment, Family, Gender, Organization } from '.';
 
 export interface Child {
   id: string;

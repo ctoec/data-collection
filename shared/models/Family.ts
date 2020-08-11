@@ -1,4 +1,4 @@
-import { Child, IncomeDetermination, Organization } from './';
+import { Child, IncomeDetermination, Organization } from '.';
 
 export interface Family {
   id: number;

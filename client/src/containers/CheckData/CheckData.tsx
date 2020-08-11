@@ -8,7 +8,7 @@ import {
   oecFontFamily,
 } from '../../utils/materialTable';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { FlattenedEnrollment } from 'models';
+import { FlattenedEnrollment } from 'shared/models';
 import { apiGet } from '../../utils/api';
 
 const CheckData: React.FC = () => {

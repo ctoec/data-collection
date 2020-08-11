@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Child as ChildInterface } from 'models';
+import { Child as ChildInterface } from 'shared/models';
 
 import { Enrollment } from './Enrollment';
 import { Family } from './Family';

@@ -1,4 +1,4 @@
-import { Enrollment, Organization, Region } from './';
+import { Enrollment, Organization, Region } from '.';
 
 export interface Site {
   id: number;

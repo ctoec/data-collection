@@ -1,4 +1,4 @@
-import { Family } from './';
+import { Family } from '.';
 
 export interface IncomeDetermination {
   id: number;

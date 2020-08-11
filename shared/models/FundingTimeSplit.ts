@@ -1,4 +1,4 @@
-import { FundingSpace } from './';
+import { FundingSpace } from '.';
 
 export interface FundingTimeSplit {
   id: number;

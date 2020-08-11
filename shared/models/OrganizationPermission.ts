@@ -1,4 +1,4 @@
-import { Organization, User } from './';
+import { Organization, User } from '.';
 
 export interface OrganizationPermission {
   id: number;

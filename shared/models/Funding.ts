@@ -1,4 +1,4 @@
-import { Enrollment, FundingSpace, ReportingPeriod } from './';
+import { Enrollment, FundingSpace, ReportingPeriod } from '.';
 
 export interface Funding {
   id: number;

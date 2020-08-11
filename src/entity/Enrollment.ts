@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Enrollment as EnrollmentInterface } from 'models';
+import { Enrollment as EnrollmentInterface } from 'shared/models';
 
 import { AgeGroup } from './enums/AgeGroup';
 import { Child } from './Child';

@@ -1,4 +1,4 @@
-import { Site, User } from './';
+import { Site, User } from '.';
 
 export interface SitePermission {
   id: number;

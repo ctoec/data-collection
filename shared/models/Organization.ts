@@ -1,4 +1,4 @@
-import { FundingSpace, Site } from './';
+import { FundingSpace, Site } from '.';
 
 export interface Organization {
   id: number;

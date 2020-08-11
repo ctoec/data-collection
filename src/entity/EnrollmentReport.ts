@@ -1,9 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { EnrollmentReport as EnrollmentReportInterface } from 'models';
+import { EnrollmentReport as EnrollmentReportInterface } from 'shared/models';
 
 import { FlattenedEnrollment } from './FlattenedEnrollment';
-import { Enrollment } from './Enrollment';
 
 @Entity()
 export class EnrollmentReport implements EnrollmentReportInterface {

@@ -1,4 +1,4 @@
-import { AgeGroup, Child, Funding, Site } from './';
+import { AgeGroup, Child, Funding, Site } from '.';
 
 export interface Enrollment {
   id: number;
