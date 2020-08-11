@@ -1,0 +1,16 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+  pre_build:
+    commands:
+      - yarn install --frozen-lockfile
+      - cd client
+      - yarn install --frozen-lockfile
+  build:
+    commands:
+      - yarn run test
+      - cd ../
+      - yarn run test
