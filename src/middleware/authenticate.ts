@@ -8,8 +8,7 @@ import jwks from 'jwks-rsa';
 import { UserService } from '../services/user/UserService';
 
 const jwksClient = jwks({
-  // @TODO Use ENV var for URI host
-  jwksUri: 'https://winged-keys:5050/.well-known/openid-configuration/jwks',
+  jwksUri: `${(process.env.WINGED_KEYS_HOST || 'https://localhost:5050/')}.well-known/openid-configuration/jwks`,
   // @TODO Add HTTPS support
   strictSsl: false,
 });

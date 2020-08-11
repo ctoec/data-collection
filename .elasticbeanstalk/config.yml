@@ -1,0 +1,18 @@
+environment-defaults:
+  ece-fawkes-staging-staging:
+    application_name: ece-fawkes-staging
+    default_ec2_keyname: keypair-devops-staging
+    branch: master
+    repository: null
+global:
+  default_platform: Node.js 12 running on 64bit Amazon Linux 2
+  default_region: us-east-2
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: null
+  sc: git
+  workspace_type: Application
+deploy:
+  artifact: fawkes-bundle.zip
