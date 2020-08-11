@@ -11,6 +11,6 @@ phases:
       - yarn install --frozen-lockfile
   build:
     commands:
-      - yarn run test
+      - CI=true yarn test --coverage
       - cd ../
       - yarn run test
