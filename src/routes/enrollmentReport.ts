@@ -42,10 +42,6 @@ router.post(
         req.file
       );
 
-      EXPECTED_HEADERS.forEach((header, idx) => {
-        if (header !== headers[idx]) console.log(header, headers[idx]);
-      });
-
       // Array comparison was returning false even when the strings matched
       if (!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
         throw new BadRequestError(
