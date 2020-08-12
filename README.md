@@ -34,6 +34,11 @@ A web application to collect information from child care providers in the State 
     data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp       
 
     ```
+### Architecture
+This mono-repo consists of three main parts:
+1. Server, located in the root dir. The backend is an express server, with routes defined in `src/routes`
+1. Client, located in `client` dir. The frontend is a React SPA, created with create-react-app.
+1. Shared resources, located in `/shared` dir. The shared resources are installed in both the backend and frontend via [local path package.json dependencies](https://docs.npmjs.com/files/package.json#local-paths)
 
 ## Deploy
 
