@@ -1,13 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { UnauthorizedError } from 'express-jwt';
-import { NotFoundError } from './errors';
+import { ApiError } from './errors';
 
 /**
  * Error handling middleware to log errors, and send the appropriate
- * error response. Currently implements:
- * - 401: Unauthorized errors
- * - 404: Not found errors
- * - 500: Internal server errors (default catchall error)
+ * error response.
  */
 export const handleError = (
   err: Error,
@@ -16,21 +13,16 @@ export const handleError = (
   next: NextFunction
 ) => {
   if (err) {
-    switch (err.name) {
-      case UnauthorizedError.name:
-        res
-          .status((err as UnauthorizedError).status)
-          .json({ error: err.message });
-        break;
-
-      case NotFoundError.name:
-        res.status((err as NotFoundError).status).json({ error: err.message });
-        break;
-
-      default:
-        res.status(500).json({ error: err.toString() });
-    }
     console.error(err);
+
+    // UnauthorizedError comes from jwt-express middleware, and so
+    // does not subclass our custom ApiError
+    if (err instanceof ApiError || err instanceof UnauthorizedError) {
+      res.status(err.status).json({ error: err.message });
+      return;
+    }
+
+    res.status(500).json({ error: err.toString() });
   } else {
     next();
   }

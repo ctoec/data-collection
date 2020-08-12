@@ -1,7 +1,7 @@
 import express from 'express';
 import { getConnection } from 'typeorm';
 import { FlattenedEnrollment } from '../entity';
-import { getDataDefinition } from '../decorators/dataDefinition';
+import { getDataDefinition } from '../entity/decorators/dataDefinition';
 
 export const router = express.Router();
 
