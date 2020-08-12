@@ -30,11 +30,11 @@ const decodeClaim = jwt({
  * Adds the resulting User object to the "user" property on the request.
  */
 const addUser = passAsyncError(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: Request, _: Response, next: NextFunction) => {
     if (req.claims.sub) {
       const user = await getManager().findOne(User, {
         where: { wingedKeysId: req.claims.sub },
-      }); // const user = await getManager().findOne(User, { where: { wingedKeysId: req.claims.sub } })
+      });
       if (!user) throw new InvalidSubClaimError();
       req.user = user;
       next();
