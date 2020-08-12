@@ -66,7 +66,6 @@ const DataDefinitions: React.FC = () => {
   ];
 
   const dataDefinitionsBySection: { [key: string]: DataDefinitionInfo[] } = {};
-  console.log(dataDefinitions);
   dataDefinitions.reduce((acc, cur) => {
     if (acc[cur.section]) {
       acc[cur.section].push(cur);

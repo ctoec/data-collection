@@ -58,6 +58,14 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     return true;
   }
 
+  /**
+   * Copied from https://github.com/SheetJS/sheetjs/issues/764#issuecomment-320517667
+   *
+   * Forces sheet range resize to avoid excessive resource utilization when parsing sheet.
+   * This can occur if excel metadata gets corrupted when the worksheet is edited and
+   * it incorrectly reports a much larger size than it actually is.
+   * @param ws
+   */
   function update_sheet_range(ws) {
     var range = { s: { r: Infinity, c: Infinity }, e: { r: 0, c: 0 } };
     Object.keys(ws)
@@ -74,24 +82,21 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     ws['!ref'] = utils.encode_range(range);
   }
 
-  // Main
+  /**
+   * Main
+   */
   const fileData = readFile(file.path, {
     cellDates: true,
   });
   const sheet = Object.values(fileData.Sheets)[0];
 
-  if (sheet) {
-    console.log('before parse sheet');
-    console.log('sheet rows', sheet['!rows']);
+  if (!sheet) throw new Error('Invalid data uploaded');
 
-    update_sheet_range(sheet);
-    const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
-      range: getStartingRow(sheet),
-      header: SHEET_HEADERS,
-    });
+  update_sheet_range(sheet);
+  const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
+    range: getStartingRow(sheet),
+    header: SHEET_HEADERS,
+  });
 
-    console.log('parsedSheet');
-
-    return parsedSheet.map(parseFlattenedEnrollment);
-  }
+  return parsedSheet.map(parseFlattenedEnrollment);
 }
