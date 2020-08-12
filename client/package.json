@@ -18,7 +18,6 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "material-table": "^1.66.0",
-    "shared": "file:../shared",
     "node-sass": "yarn:sass",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
@@ -26,8 +25,8 @@
     "react-markdown": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "reflect-metadata": "^0.1.13",
     "sass": "^1.26.10",
+    "shared": "file:../shared",
     "typescript": "^3.9.5",
     "uswds": "^2.8.0"
   },

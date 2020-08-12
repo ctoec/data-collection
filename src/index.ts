@@ -2,7 +2,7 @@ import express, { json } from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
 import { isDevelopment } from './utils/isDevelopment';
-import { handleError } from './middleware/error';
+import { handleError } from './middleware/error/handleError';
 import { createConnection, getManager } from 'typeorm';
 import { User } from './entity';
 import { router as apiRouter } from './routes';
@@ -28,12 +28,14 @@ createConnection()
     // Register pre-processing middlewares
     app.use(json());
 
+    // Register business logic routes
     app.use('/api', apiRouter);
 
-    // Catch exceptions throw in business logic
+    // Handle errors
     app.use('/api', handleError);
-    // Catch API requests that don't match any route
-    app.use('/api', (_, res) => res.status(400));
+
+    // Handle non-existant API routes
+    app.use('/api', (_, res) => res.sendStatus(400));
 
     /* Register SPA-serving middlewares */
     // Serve the static files from the React app

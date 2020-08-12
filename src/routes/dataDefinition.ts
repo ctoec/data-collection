@@ -5,7 +5,13 @@ import { getDataDefinition } from '../decorators/dataDefinition';
 
 export const router = express.Router();
 
-router.get('/', (req, res) => {
+/**
+ * /data-definitions GET
+ *
+ * Returns all data-definition metadata from the FlattenedEnrollment model,
+ * as an array of DataDefinitionInfo objects
+ */
+router.get('/', (_, res) => {
   const dataDefinitions = getConnection()
     .getMetadata(FlattenedEnrollment)
     .columns.map((column) =>

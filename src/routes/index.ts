@@ -7,7 +7,9 @@ import { router as dataDefinitionRouter } from './dataDefinition';
 
 export const router = express.Router();
 
+/* PUBLIC ROUTES */
 router.use('/data-definitions', dataDefinitionRouter);
 
+/* AUTHENTICATED ROUTES */
 router.use('/users', authenticate, userRouter);
 router.use('/enrollment-reports', authenticate, enrollmentReportRouter);
