@@ -6,4 +6,5 @@ export interface DataDefinitionInfo {
   definition: string;
   required: string;
   formattedName: string;
+  propertyName: string;
 }

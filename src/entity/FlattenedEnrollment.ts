@@ -173,7 +173,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Hispanic or Latinx ethnicity',
+    formattedName: 'Hispanic or Latinx Ethnicity',
     required: REQUIRED,
     definition: "The child's ethnicity, has identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
@@ -198,7 +198,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Dual language learner?',
+    formattedName: 'Dual language learner',
     required: REQUIRED,
     definition:
       'Children who have a home language other than English and are learning to or more launguages at the same time, or learning a second language while continuing to develop their first language are dual language learners.',
@@ -211,7 +211,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Receiving special education services?',
+    formattedName: 'Receiving Special Education Services',
     required: REQUIRED,
     definition:
       'Children receiving services with an IEP or an IFSP are receiving special education services.',
@@ -224,7 +224,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Special education services type',
+    formattedName: 'Special Education Services Type',
     required: 'Required if child is receiving special education services.',
     definition:
       'Whether a child receives special education services from a Local Education Agency (LEA) or another provider.',
@@ -249,7 +249,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'City / town',
+    formattedName: 'Town',
     required: REQUIRED,
     definition: 'The primary residence of the family.',
     reason: GEOGRAPHIC_REPORTING_REASON,
@@ -298,7 +298,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Experienced homelessness or houseing insecurity',
+    formattedName: 'Experienced homelessness or housing insecurity',
     required: OPTIONAL,
     definition:
       "Children and youth who lack a fixed, regular, and adequate nighttime residence. See [Decision-making Tool to Determine a Family's Homeless Situation](https://eclkc.ohs.acf.hhs.gov/sites/default/files/learning-modules/homelessness-v2/module-4/story_content/external_files/HL%20Module%204%20Decision-Tool_Final%204_20_18.pdf) for definitions and guidance.",
@@ -356,7 +356,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     formattedName: 'Provider',
     required: REQUIRED,
     definition: 'The provider from which the child is receiving services.',
-    reason: 'Used to link child information to provider data.',
+    reason: 'Used to link child information to provi data.',
     format: 'Text',
     example: "Children's Center of Connecticut",
     section: SECTIONS.ENROLLMENT_FUNDING,
@@ -377,7 +377,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Services model',
+    formattedName: 'Model',
     required: REQUIRED,
     definition: 'The type of services received by the child.',
     reason: 'Used to identify children receiving in-person or virtual services',
@@ -389,7 +389,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Age group',
+    formattedName: 'Age Group',
     required: REQUIRED,
     definition:
       'The type of service being provided, as described by the age of the participating children.',
@@ -402,7 +402,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Enrollment start date',
+    formattedName: 'Enrollment Start Date',
     required: REQUIRED,
     definition: 'The first date the child attended the program.',
     reason: REPORTING_REASON,
@@ -414,7 +414,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Enrollment end date',
+    formattedName: 'Enrollment End Date',
     required: 'Required if exited',
     definition: 'The last date the child attended the program.',
     reason: REPORTING_REASON,
@@ -426,7 +426,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Enrollment exit reason',
+    formattedName: 'Enrollment Exit Reason',
     required: 'Required if exited',
     definition: 'The reason for ending an enrollment',
     reason: REPORTING_REASON,
@@ -438,7 +438,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Funding type',
+    formattedName: 'Funding Type',
     required: REQUIRED,
     definition:
       'The type of service being provided, as described by the funding source',
@@ -464,7 +464,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'First funding reporting period',
+    formattedName: 'First funding period',
     required: REQUIRED,
     definition:
       "The first reporting period (roughly equal to a month) during which the child occupied the funded space. The first funding period is often the same as the child's enrollment start month.",
@@ -477,7 +477,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Last funding reporting period',
+    formattedName: 'Last funding period',
     required: REQUIRED,
     definition:
       'The last reporting period (roughly equal to a month) during which the child occupied the funded space.',
@@ -490,7 +490,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @DataDefinition({
-    formattedName: 'Receiving Care 4 Kids',
+    formattedName: 'Receiving Care 4 Kids?',
     required: REQUIRED,
     definition: "Whether the child's family is receiving a Care 4 Kids subsidy",
     reason:

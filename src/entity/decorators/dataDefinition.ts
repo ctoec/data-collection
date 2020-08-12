@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import { DataDefinitionInfo as DataDefinitionInfoInterface } from 'shared/models';
 
 // Formats
 export const BOOLEAN_FORMAT = 'Yes, Y, No, N';
@@ -22,7 +23,18 @@ export const UTILIZATION_REPORTING_REASON =
 
 const DATA_DEFINITION_KEY = Symbol('definitionMetadata');
 
-export type DataDefinitionInfo = {
+export class DataDefinitionInfo implements DataDefinitionInfoInterface {
+  formattedName: string;
+  required: string;
+  definition: string;
+  reason: string;
+  format: string;
+  example: string;
+  section: string;
+  propertyName: string;
+}
+
+type DataDefinitionInfoInput = {
   formattedName: string;
   required: string;
   definition: string;
@@ -32,12 +44,24 @@ export type DataDefinitionInfo = {
   section: string;
 };
 
-export const DataDefinition = (definition: DataDefinitionInfo) =>
+/**
+ * Set the provided data definition object as metadata for the given property
+ * @param definition 
+ */
+export const DataDefinition = (definition: DataDefinitionInfoInput) =>
   Reflect.metadata(DATA_DEFINITION_KEY, definition);
 
-export const getDataDefinition = (target: any, propertyKey: string) =>
-  Reflect.getMetadata(
-    DATA_DEFINITION_KEY,
-    target,
-    propertyKey
-  ) as DataDefinitionInfo;
+/**
+ * Fetch the data definition metadata for the given property. If it exists,
+ * return it augmented with propertyName property. Otherwise, return undefined.
+ * @param target 
+ * @param propertyKey 
+ */
+export const getDataDefinition = (target: any, propertyKey: string) => {
+	const dataDef = Reflect.getMetadata(DATA_DEFINITION_KEY, target, propertyKey);
+	
+	return !dataDef ? dataDef : {
+		...dataDef,
+		propertyName: propertyKey
+	} as DataDefinitionInfo;
+}

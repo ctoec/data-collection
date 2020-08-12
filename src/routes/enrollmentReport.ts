@@ -3,7 +3,7 @@ import { getManager } from 'typeorm';
 import { EnrollmentReport } from '../entity';
 import multer from 'multer';
 import { parseUploadedTemplate } from '../utils/parseUploadedTemplate';
-import { NotFoundError } from '../middleware/error/errors';
+import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 
 export const router = express.Router();
@@ -37,11 +37,23 @@ router.post(
   '/',
   upload,
   passAsyncError(async (req, res, next) => {
-    const flattenedEnrollments = parseUploadedTemplate(req.file);
-    const report = getManager().save(
-      getManager().create(EnrollmentReport, {
-        enrollments: flattenedEnrollments,
-      })
+		const {
+			EXPECTED_HEADERS, 
+			headers,
+			enrollments 
+		} = parseUploadedTemplate(req.file);
+
+		EXPECTED_HEADERS.forEach((header, idx) => {
+			if(header !== headers[idx]) console.log(header, headers[idx])
+		})
+			
+		// Array comparison was returning false even when the strings matched
+		if(!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
+			throw new BadRequestError("Columns from uploaded template do not match expected values");
+		}
+
+    const report = await getManager().save(
+      getManager().create(EnrollmentReport, { enrollments })
     );
     res.send(report);
   })

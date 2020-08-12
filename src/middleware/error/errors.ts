@@ -1,35 +1,39 @@
 import { UnauthorizedError } from 'express-jwt';
 
+export class ApiError extends Error {
+	status: number;
+}
 /**
  * Custom error class to extend jwt-express UnauthorizedError, which reuses
  * UnauthorizedError.name so that it is handled along with errors from
  * jwt-express (see middleware/error.ts) for 401 Unauthorized
  */
-export class InvalidSubClaimError {
+export class InvalidSubClaimError extends ApiError {
   constructor() {
+		super("No valid user found for decided sub claim");
     this.name = UnauthorizedError.name;
-    this.code = 'invalid_sub_claim';
     this.status = 401;
-    this.message = 'No valid user found for decoded sub claim';
   }
-
-  name: typeof UnauthorizedError.name;
-  code: 'invalid_sub_claim';
-  status: 401;
-  message: 'No valid user found for decoded sub claim';
 }
 
 /**
  * Custom error class for 404 Not Found
  */
-export class NotFoundError {
+export class NotFoundError extends ApiError {
   constructor() {
+		super("Resource not found");
     this.name = 'NotFoundError';
     this.status = 404;
-    this.message = 'Resource not found';
   }
+}
 
-  name: 'NotFoundError';
-  status: 404;
-  message: 'Resource not found';
+/**
+ * Custom error class for 400 Bad Request
+ */
+export class BadRequestError extends ApiError {
+	constructor(message: string) {
+		super(message);
+		this.name = 'BadRequestError';
+		this.status = 400;
+	}
 }
