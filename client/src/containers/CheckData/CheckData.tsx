@@ -49,9 +49,9 @@ const CheckData: React.FC = () => {
     validate: (rowData: any) => rowData[columnMeta.propertyName] !== '',
     render: (rowData: any) => {
       const cellData = rowData[columnMeta.propertyName];
-      return cellData instanceof Date
-        ? cellData.toLocaleDateString()
-        : cellData;
+      if (cellData instanceof Date) return cellData.toLocaleDateString();
+      if (typeof cellData === 'boolean') return cellData ? 'yes' : 'no';
+      return cellData;
     },
   }));
 
