@@ -356,7 +356,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     formattedName: 'Provider',
     required: REQUIRED,
     definition: 'The provider from which the child is receiving services.',
-    reason: 'Used to link child information to provi data.',
+    reason: 'Used to link child information to provider data.',
     format: 'Text',
     example: "Children's Center of Connecticut",
     section: SECTIONS.ENROLLMENT_FUNDING,
