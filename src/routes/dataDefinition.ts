@@ -19,5 +19,7 @@ router.get('/', (_, res) => {
     )
     .filter((dataDefinition) => !!dataDefinition);
 
+  console.log('data definitions', dataDefinitions);
+
   res.send(dataDefinitions);
 });
