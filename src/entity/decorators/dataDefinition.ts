@@ -34,6 +34,12 @@ export class DataDefinitionInfo implements DataDefinitionInfoInterface {
   propertyName: string;
 }
 
+/**
+ * This type exists to allow the user to set the DataDefinition metadata
+ * without providing the `propertyName` value, as this should come from the
+ * property itself. It is added to the metadata object returned by
+ * `getDataDefinition` (see below)
+ */
 type DataDefinitionInfoInput = {
   formattedName: string;
   required: string;
@@ -46,7 +52,7 @@ type DataDefinitionInfoInput = {
 
 /**
  * Set the provided data definition object as metadata for the given property
- * @param definition 
+ * @param definition
  */
 export const DataDefinition = (definition: DataDefinitionInfoInput) =>
   Reflect.metadata(DATA_DEFINITION_KEY, definition);
@@ -54,14 +60,16 @@ export const DataDefinition = (definition: DataDefinitionInfoInput) =>
 /**
  * Fetch the data definition metadata for the given property. If it exists,
  * return it augmented with propertyName property. Otherwise, return undefined.
- * @param target 
- * @param propertyKey 
+ * @param target
+ * @param propertyKey
  */
 export const getDataDefinition = (target: any, propertyKey: string) => {
-	const dataDef = Reflect.getMetadata(DATA_DEFINITION_KEY, target, propertyKey);
-	
-	return !dataDef ? dataDef : {
-		...dataDef,
-		propertyName: propertyKey
-	} as DataDefinitionInfo;
-}
+  const dataDef = Reflect.getMetadata(DATA_DEFINITION_KEY, target, propertyKey);
+
+  return !dataDef
+    ? dataDef
+    : ({
+        ...dataDef,
+        propertyName: propertyKey,
+      } as DataDefinitionInfo);
+};

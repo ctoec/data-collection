@@ -46,9 +46,9 @@ const Upload: React.FC = () => {
           message: 'Successfully uploaded file',
         });
       })
-      .catch((_) => {
+      .catch((err) => {
         setStatus({
-          error: 'There was an error',
+          error: err,
         });
       })
       .finally(() => {

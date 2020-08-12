@@ -33,30 +33,39 @@ export function apiPost(path: string, body: any, opts?: ApiOpts) {
  * @param method
  * @param opts
  */
-function api(path: string, body: any, method: 'GET' | 'POST', opts: ApiOpts) {
+async function api(
+  path: string,
+  body: any,
+  method: 'GET' | 'POST',
+  opts: ApiOpts
+) {
   const headers = opts.headers || {};
   if (opts.accessToken) {
     headers['Authorization'] = `Bearer ${opts.accessToken}`;
   }
 
-  return fetch(`${getCurrentHost()}/api/${path}`, {
+  const res = await fetch(`${getCurrentHost()}/api/${path}`, {
     method,
     headers,
     body,
-  }).then((res) => {
-    if (res.status >= 400) {
-      res
-        .json()
-        .catch((err) => {
-          console.log(err);
-          throw new Error('Unknown API error occurred');
-        })
-        .then((errorResponse) => {
-          throw new Error(errorResponse.error);
-        });
+  });
+  // Handle API error response
+  if (res.status >= 400) {
+    try {
+      const errorResponse = await res.json();
+      // return rejected promise instead of throwing error to avoid catch
+      return Promise.reject(errorResponse.error);
+    } catch (err) {
+      console.error('error parsing API error response', err);
+      throw new Error('There was an error');
+    }
+  }
+  // Handle API success response
+  else {
+    if (opts.jsonParse === false) {
+      return res;
     }
 
-    if (opts.jsonParse === false) return res;
-    return res.json();
-  });
+    return await res.json();
+  }
 }

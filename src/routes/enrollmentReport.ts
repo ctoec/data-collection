@@ -37,24 +37,29 @@ router.post(
   '/',
   upload,
   passAsyncError(async (req, res, next) => {
-		const {
-			EXPECTED_HEADERS, 
-			headers,
-			enrollments 
-		} = parseUploadedTemplate(req.file);
+    try {
+      const { EXPECTED_HEADERS, headers, enrollments } = parseUploadedTemplate(
+        req.file
+      );
 
-		EXPECTED_HEADERS.forEach((header, idx) => {
-			if(header !== headers[idx]) console.log(header, headers[idx])
-		})
-			
-		// Array comparison was returning false even when the strings matched
-		if(!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
-			throw new BadRequestError("Columns from uploaded template do not match expected values");
-		}
+      EXPECTED_HEADERS.forEach((header, idx) => {
+        if (header !== headers[idx]) console.log(header, headers[idx]);
+      });
 
-    const report = await getManager().save(
-      getManager().create(EnrollmentReport, { enrollments })
-    );
-    res.send(report);
+      // Array comparison was returning false even when the strings matched
+      if (!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
+        throw new BadRequestError(
+          'Columns from uploaded template do not match expected values'
+        );
+      }
+
+      const report = await getManager().save(
+        getManager().create(EnrollmentReport, { enrollments })
+      );
+      res.send(report);
+    } catch (err) {
+      console.error('Error parsing uploaded enrollment report: ', err);
+      throw new BadRequestError('Unable to parse uploaded report');
+    }
   })
 );
