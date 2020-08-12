@@ -69,8 +69,8 @@ const CheckData: React.FC = () => {
           </Link>
         </div>
         <h1>Check data for {pluralize('child', reportData.length, true)}</h1>
-        <span>Make sure all of your data was uploaded correctly. </span>
-        <span>If everything looks good, submit to OEC.</span>
+        <p>Make sure all of your data was uploaded correctly. </p>
+        <p>If everything looks good, submit to OEC.</p>
         {reportData.length && (
           <EditableTable<FlattenedEnrollment>
             title="Enrollment report table"
@@ -82,7 +82,7 @@ const CheckData: React.FC = () => {
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
         <div className="grid-container margin-bottom-0">
           <div className="fixed-buttons">
-            <Button text="Back to upload" href="/upload" />
+            <Button text="Back to upload" href="/upload" appearance="outline" />
             <Button text="Send to OEC" />
           </div>
         </div>
