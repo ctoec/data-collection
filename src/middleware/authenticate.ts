@@ -13,14 +13,16 @@ import { passAsyncError } from './error/passAsyncError';
  *
  * Adds the resulting claims to the "claims" property on the request.
  */
-const decodeClaim = jwt({ 
-	secret: jwks.expressJwtSecret({
-		cache: true,
-		jwksUri: `${(process.env.WINGED_KEYS_HOST || 'https://localhost:5050/')}.well-known/openid-configuration/jwks`,
-		strictSsl: false,
-	}),
-	algorithms: ['RS256'],
-	requestProperty: 'claims',
+const decodeClaim = jwt({
+  secret: jwks.expressJwtSecret({
+    cache: true,
+    jwksUri: `${
+      process.env.WINGED_KEYS_HOST || 'https://localhost:5050'
+    }/.well-known/openid-configuration/jwks`,
+    strictSsl: false,
+  }),
+  algorithms: ['RS256'],
+  requestProperty: 'claims',
 });
 
 /**

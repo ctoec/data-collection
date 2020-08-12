@@ -32,6 +32,7 @@ services:
       HOST: '0.0.0.0'
       NODE_ENV: development
       DB_PASSWORD: TestPassword1
+      WINGED_KEYS_HOST: "https://winged-keys:5050"
     depends_on:
       - db
 
