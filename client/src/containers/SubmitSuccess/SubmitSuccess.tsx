@@ -1,7 +1,8 @@
 import React from 'react';
 import { MailToLink } from '../../components/MailToLink';
-import { Button, TextWithIcon, ArrowRight as Arrow, LogoWithCheck } from '@ctoec/component-library';
+import { Button, TextWithIcon, ArrowRight as Arrow } from '@ctoec/component-library';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
+import LogoWithCheckSrc from '@ctoec/component-library/dist/assets/images/logoWithCheck.svg';
 
 import { Link } from 'react-router-dom';
 
@@ -19,8 +20,8 @@ const SubmitSuccess: React.FC = () => {
             />
           </Link>
         </div>
-        <div className="tablet:grid-col-auto padding-2">
-          <LogoWithCheck/>
+        <div className="tablet:grid-col-auto margin-top-2 margin-bottom-2">
+          <img src={LogoWithCheckSrc} alt="" />
         </div>
       <div>
         <h1>You've submitted your data to OEC!</h1>
@@ -32,15 +33,15 @@ const SubmitSuccess: React.FC = () => {
           <MailToLink />
         </p>
       </div>
-      <div>
+      <div className="grid-row margin-top-2">
         <strong>
           Want a copy of your enrollment data?
         </strong>
       </div>
-      <div className="grid-row margin-top-1">
+      <div className="grid-row margin-top-1 margin-bottom-2">
         <CSVDownloadLink />
       </div>
-      <div className="grid-row marging-top-4">
+      <div className="grid-row marging-top-6">
         <strong>
           Need to make changes?
         </strong>
