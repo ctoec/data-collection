@@ -90,11 +90,7 @@ const Upload: React.FC = () => {
       </div>
       <div className="grid-row">
         <Form<null> className="UploadForm" onSubmit={onSubmit} data={null}>
-          <FileInput
-            id="report"
-            label="Upload enrollment data"
-            onChange={fileUpload}
-          />
+          <FileInput id="report" label="" onChange={fileUpload} />
           <FormSubmitButton
             className="margin-top-2"
             text={loading ? 'Uploading...' : 'Upload'}
@@ -108,6 +104,14 @@ const Upload: React.FC = () => {
               appearance="outline"
             />
           )}
+
+          <div className="margin-top-8">
+            <Button
+              appearance="unstyled"
+              href="/getting-started"
+              text="Back"
+            />
+          </div>
         </Form>
       </div>
     </div>
