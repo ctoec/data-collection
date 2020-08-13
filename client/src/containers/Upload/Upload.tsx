@@ -58,6 +58,7 @@ const Upload: React.FC = () => {
     return false;
   };
 
+  console.log('status', status);
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (!e.target.files) {

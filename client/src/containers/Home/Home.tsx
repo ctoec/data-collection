@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, TextWithIcon } from '@ctoec/component-library';
+import cx from 'classnames';
 import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
+import { Button, TextWithIcon } from '@ctoec/component-library';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
 
 import UserContext from '../../contexts/UserContext/UserContext';
 
-import cx from 'classnames';
 import { MailToLink } from '../../components/MailToLink';
 import { ExcelTemplateDownloadLink } from '../../components/ExcelTemplateDownloadLink';
 import { CSVTemplateDownloadLink } from '../../components/CSVTemplateDownloadLink';
