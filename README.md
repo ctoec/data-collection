@@ -13,10 +13,21 @@ A web application to collect information from child care providers in the State 
 1. Install (if you haven't already) [Docker](https://hub.docker.com/search?q=&type=edition&offering=community). Make sure you have [Docker Compose](https://docs.docker.com/compose/install/), which is included in some OS distributions but must be installed separately in others.
 
 ### Running the app
-1. Install all corresponding yarn dependencies, based on the static versions specified in `yarn.lock`, via the containers:
+1. Install all corresponding yarn dependencies, based on the static versions specified in `yarn.lock`
+
+
+    - Via the containers:
     ```sh
-    docker-compose exec client yarn install --frozen-lockfile
-    docker-compose exec server yarn install --frozen-lockfile
+    docker-compose run --rm --entry-point "yarn install --frozen-lockfile" client
+    docker-compose run --rm --entry-point "yarn install --frozen-lockfile" server
+    ```
+    **NOTE**: This `docker-compose run` command is only necessary on initial set up, since the containers cannot start without installed dependencies. To execute yarn commands once the containers have started, you can use `docker-compose exec`.
+
+
+    - Via a local yarn installation
+    ```sh
+    yarn install --frozen-lockfile
+    cd client && yarn install --frozen-lockfile
     ```
 1. Start application:
     ```sh
@@ -34,6 +45,7 @@ A web application to collect information from child care providers in the State 
     data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp       
 
     ```
+
 ### Architecture
 This mono-repo consists of three main parts:
 1. Server, located in the root dir. The backend is an express server, with routes defined in `src/routes`
