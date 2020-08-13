@@ -1,9 +1,7 @@
 import React from 'react';
 import { MailToLink } from '../../components/MailToLink';
-import { Button, TextWithIcon } from '@ctoec/component-library';
+import { Button, TextWithIcon, ArrowRight as Arrow, LogoWithCheck } from '@ctoec/component-library';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
-import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
-import { Logo } from '@ctoec/component-library/dist/assets/images/index';
 
 import { Link } from 'react-router-dom';
 
@@ -22,7 +20,7 @@ const SubmitSuccess: React.FC = () => {
           </Link>
         </div>
         <div className="tablet:grid-col-auto padding-2">
-          <Logo/>
+          <LogoWithCheck/>
         </div>
       <div>
         <h1>You've submitted your data to OEC!</h1>

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Button, TextWithIcon } from '@ctoec/component-library';
-import { ReactComponent as DownloadArrow } from '@ctoec/component-library/dist/assets/images/download.svg';
+import { Button, TextWithIcon, ArrowDown as DownloadArrow } from '@ctoec/component-library';
 
 export const CSVDownloadLink = () => (
   <Button
