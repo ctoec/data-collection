@@ -108,7 +108,7 @@ const Upload: React.FC = () => {
             <Button
               appearance="unstyled"
               href="/getting-started"
-              text="Back to Home"
+              text="Back"
             />
           </div>
         </Form>
