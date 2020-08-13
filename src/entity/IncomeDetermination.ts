@@ -11,7 +11,7 @@ export class IncomeDetermination {
   @Column({ nullable: true })
   numberOfPeople?: number;
 
-  @Column({ nullable: true, type: 'decimal', precision: 2, scale: 14 })
+  @Column({ nullable: true, type: 'decimal', precision: 14, scale: 2 })
   income?: number;
 
   @Column({ nullable: true })

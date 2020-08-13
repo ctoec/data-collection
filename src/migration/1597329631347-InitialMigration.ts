@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitialMigration1596046358001 implements MigrationInterface {
-  name = 'InitialMigration1596046358001';
+export class InitialMigration1597329631347 implements MigrationInterface {
+  name = 'InitialMigration1597329631347';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,7 +11,10 @@ export class InitialMigration1596046358001 implements MigrationInterface {
       `CREATE TABLE "reporting_period" ("id" SERIAL NOT NULL, "type" "reporting_period_type_enum" NOT NULL, "period" date NOT NULL, "periodStart" date NOT NULL, "periodEnd" date NOT NULL, "dueAt" date NOT NULL, CONSTRAINT "PK_273d2b68dc1854618ec53e144d0" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "site" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "titleI" boolean NOT NULL, "region" character varying NOT NULL, "facilityCode" integer, "licenseNumber" integer, "naeycId" integer, "registryId" integer, "organizationId" integer NOT NULL, CONSTRAINT "PK_635c0eeabda8862d5b0237b42b4" PRIMARY KEY ("id"))`
+      `CREATE TYPE "site_region_enum" AS ENUM('East', 'NorthCentral', 'NorthWest', 'SouthCentral', 'SouthWest')`
+    );
+    await queryRunner.query(
+      `CREATE TABLE "site" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "titleI" boolean NOT NULL, "region" "site_region_enum" NOT NULL, "facilityCode" integer, "licenseNumber" integer, "naeycId" integer, "registryId" integer, "organizationId" integer NOT NULL, CONSTRAINT "PK_635c0eeabda8862d5b0237b42b4" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "organization" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_472c1f99a32def1b0abb219cd67" PRIMARY KEY ("id"))`
@@ -53,16 +56,19 @@ export class InitialMigration1596046358001 implements MigrationInterface {
       `CREATE TABLE "enrollment" ("id" SERIAL NOT NULL, "ageGroup" "enrollment_agegroup_enum", "entry" date, "exit" date, "exitReason" character varying, "childId" uuid NOT NULL, "siteId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_7e200c699fa93865cdcdd025885" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "income_determination" ("id" SERIAL NOT NULL, "numberOfPeople" integer, "income" integer, "determinationDate" TIMESTAMP, "familyId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_bab8509559a5caf486bf1bdd99b" PRIMARY KEY ("id"))`
+      `CREATE TABLE "income_determination" ("id" SERIAL NOT NULL, "numberOfPeople" integer, "income" numeric(14,2), "determinationDate" TIMESTAMP, "familyId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_bab8509559a5caf486bf1bdd99b" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "family" ("id" SERIAL NOT NULL, "addressLine1" character varying, "addressLine2" character varying, "town" character varying, "state" character varying, "zip" character varying, "homelessness" boolean, "organizationId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_ba386a5a59c3de8593cda4e5626" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "child" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "sasid" character varying, "firstName" character varying NOT NULL, "middleName" character varying, "lastName" character varying NOT NULL, "suffix" character varying, "birthdate" TIMESTAMP, "birthTown" character varying, "birthState" character varying, "birthCertificateId" character varying, "americanIndianOrAlaskaNative" boolean, "asian" boolean, "blackOrAfricanAmerican" boolean, "nativeHawaiianOrPacificIslander" boolean, "white" boolean, "hispanicOrLatinxEthnicity" boolean, "gender" character varying, "foster" boolean, "recievesC4K" boolean NOT NULL DEFAULT false, "familyId" integer NOT NULL, "organizationId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_4609b9b323ca37c6bc435ec4b6b" PRIMARY KEY ("id"))`
+      `CREATE TYPE "child_gender_enum" AS ENUM('Male', 'Female', 'Nonbinary', 'Unknown', 'Unspecified')`
     );
     await queryRunner.query(
-      `CREATE TABLE "flattened_enrollment" ("id" SERIAL NOT NULL, "externalId" character varying, "sasid" integer, "name" character varying, "dateOfBirth" TIMESTAMP, "birthCertificateId" character varying, "townOfBirth" character varying, "stateOfBirth" character varying, "americanIndianOrAlaskaNative" character varying, "asian" character varying, "blackOrAfricanAmerican" character varying, "nativeHawaiianOrPacificIslander" character varying, "white" character varying, "ethnicity" character varying, "gender" character varying, "dualLanguageLearner" boolean, "receivingSpecialEducationServices" boolean, "specialEducationServicesType" character varying, "addressLine1" character varying, "addressLine2" character varying, "town" character varying, "state" character varying, "zipcode" character varying, "livesWithFosterFamily" boolean, "experiencedHomelessnessOrHousingInsecurity" boolean, "householdSize" integer, "annualHouseholdIncome" integer, "incomeDeterminationDate" TIMESTAMP, "enrollmentStartDate" TIMESTAMP, "enrollmentEndDate" TIMESTAMP, "enrollmentExitReason" character varying, "firstFundingPeriod" character varying, "lastFundingPeriod" character varying, "site" character varying, "ageGroup" character varying, "fundingType" character varying, "spaceType" character varying, "model" character varying, "receivingCareForKids" boolean, "reportId" integer, CONSTRAINT "PK_ec816f97751eaf598f110e72340" PRIMARY KEY ("id"))`
+      `CREATE TABLE "child" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "sasid" character varying, "firstName" character varying NOT NULL, "middleName" character varying, "lastName" character varying NOT NULL, "suffix" character varying, "birthdate" TIMESTAMP, "birthTown" character varying, "birthState" character varying, "birthCertificateId" character varying, "americanIndianOrAlaskaNative" boolean, "asian" boolean, "blackOrAfricanAmerican" boolean, "nativeHawaiianOrPacificIslander" boolean, "white" boolean, "hispanicOrLatinxEthnicity" boolean, "gender" "child_gender_enum", "foster" boolean, "recievesC4K" boolean NOT NULL DEFAULT false, "familyId" integer NOT NULL, "organizationId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_4609b9b323ca37c6bc435ec4b6b" PRIMARY KEY ("id"))`
+    );
+    await queryRunner.query(
+      `CREATE TABLE "flattened_enrollment" ("id" SERIAL NOT NULL, "name" character varying, "sasid" integer, "dateOfBirth" TIMESTAMP, "birthCertificateId" character varying, "townOfBirth" character varying, "stateOfBirth" character varying, "americanIndianOrAlaskaNative" boolean, "asian" boolean, "blackOrAfricanAmerican" boolean, "nativeHawaiianOrPacificIslander" boolean, "white" boolean, "hispanicOrLatinxEthnicity" boolean, "gender" character varying, "dualLanguageLearner" boolean, "receivingSpecialEducationServices" boolean, "specialEducationServicesType" character varying, "streetAddress" character varying, "town" character varying, "state" character varying, "zipcode" character varying, "livesWithFosterFamily" boolean, "experiencedHomelessnessOrHousingInsecurity" boolean, "householdSize" integer, "annualHouseholdIncome" numeric(14,2), "incomeDeterminationDate" TIMESTAMP, "provider" character varying, "site" character varying, "model" character varying, "ageGroup" character varying, "enrollmentStartDate" TIMESTAMP, "enrollmentEndDate" TIMESTAMP, "enrollmentExitReason" character varying, "fundingType" character varying, "spaceType" character varying, "firstFundingPeriod" character varying, "lastFundingPeriod" character varying, "receivingCareForKids" boolean, "reportId" integer NOT NULL, CONSTRAINT "PK_ec816f97751eaf598f110e72340" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "enrollment_report" ("id" SERIAL NOT NULL, CONSTRAINT "PK_2e40a5e41f8b10526d0d9bfff6d" PRIMARY KEY ("id"))`
@@ -205,6 +211,7 @@ export class InitialMigration1596046358001 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "enrollment_report"`);
     await queryRunner.query(`DROP TABLE "flattened_enrollment"`);
     await queryRunner.query(`DROP TABLE "child"`);
+    await queryRunner.query(`DROP TYPE "child_gender_enum"`);
     await queryRunner.query(`DROP TABLE "family"`);
     await queryRunner.query(`DROP TABLE "income_determination"`);
     await queryRunner.query(`DROP TABLE "enrollment"`);
@@ -221,6 +228,7 @@ export class InitialMigration1596046358001 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "funding_time_split"`);
     await queryRunner.query(`DROP TABLE "organization"`);
     await queryRunner.query(`DROP TABLE "site"`);
+    await queryRunner.query(`DROP TYPE "site_region_enum"`);
     await queryRunner.query(`DROP TABLE "reporting_period"`);
     await queryRunner.query(`DROP TYPE "reporting_period_type_enum"`);
   }
