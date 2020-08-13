@@ -4,14 +4,12 @@ import queryString from 'query-string';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   FileInput,
-  Form,
-  FormSubmitButton,
-  Button,
   TextWithIcon,
   Alert,
 } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost } from '../../utils/api';
+import { useHistory } from 'react-router-dom';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -29,61 +27,41 @@ const Upload: React.FC = () => {
   }, []);
 
   const { accessToken } = useContext(AuthenticationContext);
-  const [status, setStatus] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(false);
-  const formData = new FormData();
+  const [error, setError] = useState<string>();
+  const [file, setFile] = useState<File>();
+  const history = useHistory();
 
-  const onSubmit = () => {
-    if (!formData.has('file')) {
-      setStatus({
-        error: 'You must select a file to upload',
-      });
-      return;
+  useEffect(() => {
+    if (file) {
+      const formData = new FormData();
+      formData.set('file', file);
+      apiPost('enrollment-reports', formData, { accessToken })
+        .then((value) => {
+          history.push(
+            `check-data?${queryString.stringify({ reportId: value.id })}`
+          );
+        })
+        .catch((err) => {
+          setError(err);
+          setFile(undefined);
+        });
     }
-    setLoading(true);
+  }, [file]);
 
-    apiPost('enrollment-reports', formData, { accessToken })
-      .then((value) => {
-        setStatus({
-          reportId: value.id,
-          message: 'Successfully uploaded file',
-        });
-      })
-      .catch((err) => {
-        setStatus({
-          error: err,
-        });
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-
-    return false;
-  };
-
-  console.log('status', status);
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (!e.target.files) {
-      return false;
+      return setError('No file selected for upload');
     }
     const file = e.target.files[0];
     if (!file) {
-      return false;
+      return setError('No file selected for upload');
     }
-    formData.delete('file');
-    formData.set('file', file);
-    return false;
+    setFile(file);
   };
 
   return (
     <div className="grid-container margin-top-4">
-      {status &&
-        (!status.error ? (
-          <Alert text={status.message} type="success" />
-        ) : (
-          <Alert text={status.error} type="error" />
-        ))}
       <div className="margin-bottom-2 text-bold">
         <Link to="/">
           <TextWithIcon
@@ -94,6 +72,7 @@ const Upload: React.FC = () => {
           />
         </Link>
       </div>
+      {error && <Alert text={error} type="error" />}
       <div className="grid-row">
         <h1>Upload your enrollment data</h1>
         <p>
@@ -102,22 +81,13 @@ const Upload: React.FC = () => {
         </p>
       </div>
       <div className="grid-row">
-        <Form<null> className="UploadForm" onSubmit={onSubmit} data={null}>
-          <FileInput id="report" label="" onChange={fileUpload} />
-          <FormSubmitButton
-            className="margin-top-2"
-            text={loading ? 'Uploading...' : 'Upload'}
+        <form className="usa-form">
+          <FileInput
+            id="report"
+            label="Upload enrollment data"
+            onChange={fileUpload}
           />
-          {status && !status.error && status.reportId && (
-            <Button
-              href={`/check-data?${queryString.stringify({
-                reportId: status.reportId,
-              })}`}
-              text="Check your data"
-              appearance="outline"
-            />
-          )}
-        </Form>
+        </form>
       </div>
     </div>
   );
