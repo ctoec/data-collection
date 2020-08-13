@@ -39,6 +39,11 @@ This mono-repo consists of three main parts:
 1. Server, located in the root dir. The backend is an express server, with routes defined in `src/routes`
 1. Client, located in `client` dir. The frontend is a React SPA, created with create-react-app.
 1. Shared resources, located in `/shared` dir. The shared resources are installed in both the backend and frontend via [local path package.json dependencies](https://docs.npmjs.com/files/package.json#local-paths)
+To update the installed shared resources in server and client `node_modules`, do:
+```
+docker-compose exec server yarn upgrade file:./shared
+docker-compose exec client yarn upgrade file:../shared
+```
 
 ## Deploy
 
