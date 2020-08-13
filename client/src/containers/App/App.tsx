@@ -11,42 +11,46 @@ const App: React.FC = () => {
   const { user } = useContext(UserContext);
   return (
     <div className="App">
-			<SimpleHeader
-				secondaryTitle="Early childhood enrollment data"
+      <SimpleHeader
+        secondaryTitle="Early childhood enrollment data"
         primaryTitle="Office of Early Childhood"
         loginPath="/login"
         logoutPath="/logout"
         navItems={[
-					{
-						id: 'templates-nav',
+          {
+            id: 'templates-nav',
             title: 'Data template',
             children: [
-							{
-								id: 'excel-template-nav',
-								title: 'Excel',
-								path: "/upload_template/ECE Data Collection Template.xlsx"
-							},
-							{
-								id: 'csv-template-nav',
-								title: '.csv',
-								path: "/upload_template/ECE Data Collection Template.csv",
-							},
-						],
-						renderer: (props) => <a {...props} onClick={undefined} href={props.value}>{props.text}</a>
-					},
-					{
-						id: 'data-definitions-nav',
-            title: 'Data definitions',
-						path: '/data-definitions',
-					},
+              {
+                id: 'excel-template-nav',
+                title: 'Excel',
+                path: '/upload_template/ECE Data Collection Template.xlsx',
+              },
+              {
+                id: 'csv-template-nav',
+                title: '.csv',
+                path: '/upload_template/ECE Data Collection Template.csv',
+              },
+            ],
+            renderer: (props) => (
+              <a {...props} onClick={undefined} href={props.value}>
+                {props.text}
+              </a>
+            ),
+          },
           {
-						id: 'feedback-nav',
+            id: 'data-definitions-nav',
+            title: 'Data definitions',
+            path: '/data-definitions',
+          },
+          {
+            id: 'feedback-nav',
             title: 'Feedback',
-						renderer: () => <MailToLink text='Feedback' />
+            renderer: () => <MailToLink text="Feedback" />,
           },
         ]}
         userFirstName={user?.firstName}
-			/>
+      />
       <Switch>
         {routes.map((route, index) => (
           <MakeRouteWithSubRoutes key={index} {...route} />
