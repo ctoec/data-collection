@@ -5,6 +5,7 @@ import { ReactComponent as DownloadArrow } from '@ctoec/component-library/dist/a
 export const CSVDownloadLink = () => (
   <Button
     appearance="unstyled"
+    //  TODO: Have this actual download uploaded data, not the upload template
     href="/upload_template/ECE Data Collection Template.csv"
     className="text-bold margin-bottom-3 display-block"
     external
