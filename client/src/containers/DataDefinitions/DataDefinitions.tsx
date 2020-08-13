@@ -30,7 +30,6 @@ const DataDefinitions: React.FC = () => {
         ) : (
           <></>
         ),
-      sort: (row) => (row ? row.formattedName.toLowerCase() : ''),
     },
     {
       name: 'Required/ Optional',
