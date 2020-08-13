@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const SubmitSuccess: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
-      <div className="grid-row margin-bottom-2 text-bold">
+      <div className="grid-row text-bold">
           <Link to="/check-data">
             <TextWithIcon
               text="Back"
