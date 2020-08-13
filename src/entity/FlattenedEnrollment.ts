@@ -324,7 +324,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   })
   householdSize?: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'decimal', precision: 2, scale: 14 })
   @DataDefinition({
     formattedName: 'Annual household income',
     required: REQUIRED_NOT_FOSTER,
