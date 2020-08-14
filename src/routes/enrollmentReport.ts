@@ -3,11 +3,13 @@ import { getManager } from 'typeorm';
 import { format } from '@fast-csv/format';
 import fs from 'fs';
 import { v4 as uuid } from 'uuid';
-import { EnrollmentReport } from '../entity';
 import multer from 'multer';
+
+import { EnrollmentReport } from '../entity';
 import { parseUploadedTemplate } from '../utils/parseUploadedTemplate';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
+import { mapFlattenedEnrollment } from '../utils/mapFlattenedEnrollment';
 
 export const router = express.Router();
 
@@ -23,7 +25,11 @@ router.get(
     const report = await getManager().findOne(EnrollmentReport, id);
 
     if (!report) throw new NotFoundError();
-    res.send(report);
+
+    const enrollments = await Promise.all(
+      report.enrollments.map(mapFlattenedEnrollment)
+    );
+    res.send(enrollments);
   })
 );
 
@@ -55,8 +61,11 @@ router.post(
       const report = await getManager().save(
         getManager().create(EnrollmentReport, { enrollments })
       );
-      res.send(report);
+
+      res.status(201).json({ id: report.id });
     } catch (err) {
+      if (err instanceof BadRequestError) throw err;
+
       console.error('Error parsing uploaded enrollment report: ', err);
       throw new BadRequestError('Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.');
     }

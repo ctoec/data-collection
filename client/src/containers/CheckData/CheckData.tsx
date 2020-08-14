@@ -34,9 +34,9 @@ const CheckData: React.FC = () => {
   useEffect(() => {
     if (reportId && accessToken) {
       apiGet(`enrollment-reports/${reportId}`, { accessToken }).then(
-        (report) => {
-          if (report && report.enrollments) {
-            setReportData(report.enrollments);
+        (enrollments) => {
+          if (enrollments) {
+            setReportData(enrollments);
           }
         }
       );

@@ -24,7 +24,7 @@ export class FundingSpace implements FundingSpaceInterface {
   @Column()
   capacity: number;
 
-  @ManyToOne((type) => Organization)
+  @ManyToOne(() => Organization)
   organization: Organization;
 
   @Column({ type: 'enum', enum: FundingSource })
@@ -36,6 +36,8 @@ export class FundingSpace implements FundingSpaceInterface {
   @Column({ type: 'enum', enum: FundingTime })
   time: FundingTime;
 
-  @OneToOne((type) => FundingTimeSplit, { eager: true })
+  @OneToOne(() => FundingTimeSplit, (split) => split.fundingSpace, {
+    eager: true,
+  })
   timeSplit?: FundingTimeSplit;
 }
