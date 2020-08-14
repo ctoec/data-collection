@@ -6,6 +6,7 @@ import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
 import CheckData from './containers/CheckData/CheckData';
 import DataDefinitions from './containers/DataDefinitions/DataDefinitions';
+import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 
 export type RouteConfig = {
   path: string;
@@ -51,6 +52,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/check-data',
     component: CheckData,
+    unauthorized: false,
+  },
+  {
+    path: '/success',
+    component: SubmitSuccess,
     unauthorized: false,
   },
   {
