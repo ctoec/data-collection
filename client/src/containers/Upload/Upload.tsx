@@ -106,11 +106,7 @@ const Upload: React.FC = () => {
           )}
 
           <div className="margin-top-8">
-            <Button
-              appearance="unstyled"
-              href="/getting-started"
-              text="Back"
-            />
+            <Button appearance="unstyled" href="/getting-started" text="Back" />
           </div>
         </Form>
       </div>
