@@ -6,9 +6,9 @@ phases:
       nodejs: 12
   pre_build:
     commands:
-      - yarn install --frozen-lockfile --network-concurrency 1
+      - yarn install --frozen-lockfile
       - cd client
-      - yarn install --frozen-lockfile --network-concurrency 1
+      - yarn install --frozen-lockfile
   build:
     commands:
       - yarn build
