@@ -19,4 +19,7 @@ export class Organization {
     (fundingSpace) => fundingSpace.organization
   )
   fundingSpaces?: Array<FundingSpace>;
+
+  @Column()
+  communityId?: number;
 }
