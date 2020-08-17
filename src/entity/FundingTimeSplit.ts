@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-import { FundingTimeSplit as FundingTimeSplitInterface } from 'shared/models';
+import { FundingTimeSplit as FundingTimeSplitInterface } from '../../shared/models';
 
 import { FundingSpace } from './FundingSpace';
 

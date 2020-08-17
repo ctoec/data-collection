@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import {
   ReportingPeriod as ReportingPeriodInterface,
   FundingSource,
-} from 'shared/models';
+} from '../../shared/models';
 
 @Entity()
 export class ReportingPeriod implements ReportingPeriodInterface {

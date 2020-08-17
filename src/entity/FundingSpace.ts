@@ -11,7 +11,7 @@ import {
   FundingSource,
   FundingTime,
   AgeGroup,
-} from 'shared/models';
+} from '../../shared/models';
 
 import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';
