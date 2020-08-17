@@ -6,12 +6,13 @@ import {
   OneToMany,
 } from 'typeorm';
 
+import { Site as SiteInterface, Region } from 'shared/models';
+
 import { Enrollment } from './Enrollment';
 import { Organization } from './Organization';
-import { Region } from './enums';
 
 @Entity()
-export class Site {
+export class Site implements SiteInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

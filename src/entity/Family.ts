@@ -19,10 +19,7 @@ export class Family implements FamilyInterface {
   id: number;
 
   @Column({ nullable: true })
-  addressLine1?: string;
-
-  @Column({ nullable: true })
-  addressLine2?: string;
+  streetAddress?: string;
 
   @Column({ nullable: true })
   town?: string;

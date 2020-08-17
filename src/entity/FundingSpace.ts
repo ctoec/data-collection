@@ -6,12 +6,18 @@ import {
   OneToOne,
 } from 'typeorm';
 
+import {
+  FundingSpace as FundingSpaceInterface,
+  FundingSource,
+  FundingTime,
+  AgeGroup,
+} from 'shared/models';
+
 import { Organization } from './Organization';
-import { FundingSource, FundingTime, AgeGroup } from './enums';
 import { FundingTimeSplit } from './FundingTimeSplit';
 
 @Entity()
-export class FundingSpace {
+export class FundingSpace implements FundingSpaceInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

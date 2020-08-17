@@ -5,6 +5,12 @@ import {
   ManyToOne,
   ChildEntity,
 } from 'typeorm';
+
+import {
+  SitePermission as SitePermissionInterface,
+  OrganizationPermission as OrganizationPermissionInterface,
+} from 'shared/models';
+
 import { User } from './User';
 import { Organization } from './Organization';
 import { Site } from './Site';
@@ -25,13 +31,15 @@ export abstract class Permission {
 }
 
 @ChildEntity(PermissionType.Organization)
-export class OrganizationPermission extends Permission {
+export class OrganizationPermission extends Permission
+  implements OrganizationPermissionInterface {
   @ManyToOne((type) => Organization)
   organization: Organization;
 }
 
 @ChildEntity(PermissionType.Site)
-export class SitePermission extends Permission {
+export class SitePermission extends Permission
+  implements SitePermissionInterface {
   @ManyToOne((type) => Site)
   site: Site;
 }

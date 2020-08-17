@@ -1,4 +1,10 @@
-import { Enrollment, Family, Gender, Organization } from '.';
+import {
+  Enrollment,
+  Family,
+  Gender,
+  Organization,
+  SpecialEducationServicesType,
+} from '.';
 
 export interface Child {
   id: string;
@@ -20,6 +26,8 @@ export interface Child {
   gender?: Gender;
   foster?: boolean;
   recievesC4K?: boolean;
+  recievesSpecialEducationServices?: boolean;
+  specialEducationServicesType?: SpecialEducationServicesType;
   family: Family;
   organization?: Organization;
   enrollments?: Array<Enrollment>;

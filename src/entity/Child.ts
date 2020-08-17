@@ -6,11 +6,14 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Child as ChildInterface } from 'shared/models';
+import {
+  Child as ChildInterface,
+  Gender,
+  SpecialEducationServicesType,
+} from 'shared/models';
 
 import { Enrollment } from './Enrollment';
 import { Family } from './Family';
-import { Gender } from './enums/Gender';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
@@ -72,6 +75,12 @@ export class Child implements ChildInterface {
 
   @Column({ default: false })
   recievesC4K?: boolean = false;
+
+  @Column({ nullable: true })
+  recievesSpecialEducationServices?: boolean;
+
+  @Column({ nullable: true, type: 'enum', enum: SpecialEducationServicesType })
+  specialEducationServicesType?: SpecialEducationServicesType;
 
   @ManyToOne((type) => Family, { nullable: false })
   family: Family;

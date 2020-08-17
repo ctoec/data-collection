@@ -1,10 +1,12 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
+import { User as UserInterface } from 'shared/models';
+
 import { OrganizationPermission, SitePermission } from './Permission';
 import { Site } from './Site';
 
 @Entity()
-export class User {
+export class User implements UserInterface {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()

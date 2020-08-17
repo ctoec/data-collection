@@ -1,12 +1,14 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 
+import { Funding as FundingInterface } from 'shared/models';
+
 import { Enrollment } from './Enrollment';
 import { ReportingPeriod } from './ReportingPeriod';
 import { FundingSpace } from './FundingSpace';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
-export class Funding {
+export class Funding implements FundingInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

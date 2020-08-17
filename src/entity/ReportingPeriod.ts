@@ -1,9 +1,12 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-import { FundingSource } from './enums';
+import {
+  ReportingPeriod as ReportingPeriodInterface,
+  FundingSource,
+} from 'shared/models';
 
 @Entity()
-export class ReportingPeriod {
+export class ReportingPeriod implements ReportingPeriodInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
