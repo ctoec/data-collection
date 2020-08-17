@@ -15,5 +15,5 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["src", "../shared/models"]
+  "include": ["src"]
 }
