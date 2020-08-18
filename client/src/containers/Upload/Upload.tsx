@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import queryString from 'query-string';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
@@ -6,8 +7,10 @@ import {
   Form,
   FormSubmitButton,
   Button,
+  TextWithIcon,
   Alert,
 } from '@ctoec/component-library';
+import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost } from '../../utils/api';
 
 const Upload: React.FC = () => {
@@ -81,6 +84,16 @@ const Upload: React.FC = () => {
         ) : (
           <Alert text={status.error} type="error" />
         ))}
+      <div className="margin-bottom-2 text-bold">
+        <Link to="/">
+          <TextWithIcon
+            text="Back"
+            Icon={Arrow}
+            direction="left"
+            iconSide="left"
+          />
+        </Link>
+      </div>
       <div className="grid-row">
         <h1>Upload your enrollment data</h1>
         <p>
@@ -104,10 +117,6 @@ const Upload: React.FC = () => {
               appearance="outline"
             />
           )}
-
-          <div className="margin-top-8">
-            <Button appearance="unstyled" href="/getting-started" text="Back" />
-          </div>
         </Form>
       </div>
     </div>
