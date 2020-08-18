@@ -3,4 +3,6 @@ export enum FundingSource {
   SchoolReadiness = 'SchoolReadiness',
   CSR = 'CSR',
   PSR = 'PSR',
+  SHS = 'SHS',
+  SS = 'SS',
 }

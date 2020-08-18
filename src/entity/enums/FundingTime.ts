@@ -2,6 +2,7 @@ export enum FundingTime {
   Full = 'Full',
   Part = 'Part',
   Split = 'Split',
-  Extended = 'Extended',
+  ExtendedDay = 'ExtendedDay',
+  ExtendedYear = 'ExtendedYear',
   School = 'School',
 }
