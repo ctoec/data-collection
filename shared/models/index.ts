@@ -1,5 +1,6 @@
 export * from './AgeGroup';
 export * from './Child';
+export * from './Community';
 export * from './DataDefinitionInfo';
 export * from './Enrollment';
 export * from './EnrollmentReport';

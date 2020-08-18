@@ -5,4 +5,5 @@ export interface Organization {
   name: string;
   sites?: Array<Site>;
   fundingSpaces?: Array<FundingSpace>;
+  communityId?: number;
 }

@@ -21,4 +21,7 @@ export class Organization implements OrganizationInterface {
     (fundingSpace) => fundingSpace.organization
   )
   fundingSpaces?: Array<FundingSpace>;
+
+  @Column()
+  communityId?: number;
 }
