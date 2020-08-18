@@ -1,5 +1,9 @@
 .CheckData__content {
   margin-bottom: 5rem;
+  .ps__rail-x {
+    bottom: auto;
+    top: 0px;
+  }
 }
 
 .CheckData__button-container {
@@ -13,8 +17,4 @@
     background-color: #fff;
     padding: 1rem;
   }
-}
-
-.no-wrap {
-  width: max-content;
 }

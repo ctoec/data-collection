@@ -2,7 +2,9 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import pluralize from 'pluralize';
-
+import moment from 'moment';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { FlattenedEnrollment, DataDefinitionInfo } from 'shared/models';
 import { apiGet } from '../../utils/api';
@@ -15,7 +17,6 @@ import {
   ExpandRow,
 } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
-import moment from 'moment';
 
 const CheckData: React.FC = () => {
   const reportId = parseInt(
@@ -56,7 +57,7 @@ const CheckData: React.FC = () => {
             <td>
               <ExpandRow>
                 <Button
-                  className="no-wrap"
+                  className="text-no-wrap"
                   appearance="unstyled"
                   text={row.name || ''}
                 />
@@ -78,14 +79,9 @@ const CheckData: React.FC = () => {
     })
   );
 
-  // LE HACK to fix the size of the table so it fits on the page, vertical scroll
-  // ends up on the same div as horizontal scroll, thus making horizontal scroll
-  // always visible. PLEASE HELP!
-  const height = window.innerHeight;
-  const tableHeight = height * 0.6;
   return (
     <>
-      <div className="CheckData__content margin-top-4 ">
+      <div className="CheckData__content margin-top-4">
         <div className="margin-x-4">
           <Button
             className="margin-bottom-2 text-bold"
@@ -104,7 +100,7 @@ const CheckData: React.FC = () => {
           <p>Make sure all of your data was uploaded correctly. </p>
           <p>If everything looks good, submit to OEC.</p>
           {reportData.length ? (
-            <div className="overflow-auto" style={{ height: tableHeight }}>
+            <PerfectScrollbar>
               <Table<FlattenedEnrollment>
                 id="enrollment-report-table"
                 rowKey={(row) => row.id}
@@ -133,7 +129,7 @@ const CheckData: React.FC = () => {
                   </div>
                 )}
               />
-            </div>
+            </PerfectScrollbar>
           ) : (
             'Loading...'
           )}
