@@ -18,12 +18,36 @@ import {
 } from '../../shared/models';
 import { getManager } from 'typeorm';
 
+/**
+ * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
+ * from source FlattenedEnrollment.
+ * Also looks up existing Organization and Site by name.
+ *
+ *
+ * TODO: Implement some Org/Site access authorization layer.
+ * When/where/how do we layer in internal app authorization?
+ *
+ * TODO: We ran into problems before implementing a REST api but
+ * treating objects like arbitrary GraphQL-style graphs. What shape
+ * should all these data objects be returned in? Nested (implemented
+ * now, mirrors how we did it in ECE Reporter)? Array of dicts containing
+ * objects for every row a la:
+ * [
+ * 	{
+ * 		child,
+ * 		family,
+ * 		incomeDetermination,
+ * 		enrollment,
+ * 	},
+ * 	{...},
+ * 	{...}
+ * ] ?
+ * @param source
+ */
 export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
   try {
     const organization = await mapOrganization(source);
-    // TODO: check org access
     const site = await mapSite(source);
-    // TODO: check site access
     const child = mapChild(source);
     const family = mapFamily(source);
     const enrollment = await mapEnrollment(source, site);
@@ -38,7 +62,13 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
   }
 };
 
-// TODO: How do we want to implement fuzzy matching here?
+/**
+ * Get organization from our system that matches FlattenedEnrollment
+ * source provider name.
+ * TODO: How do we want to implement fuzzy matching here?
+ * TODO: What do we want to do if the organization does not exist?
+ * @param source
+ */
 const mapOrganization = (source: FlattenedEnrollment) => {
   if (!source.provider) return Promise.reject('Provider is required');
   return getManager().findOneOrFail(Organization, {
@@ -46,12 +76,24 @@ const mapOrganization = (source: FlattenedEnrollment) => {
   });
 };
 
-// TODO: How do we want to implement fuzzy matching here?
+/**
+ * Get Site from our system that matches FlattenedEnrollment source
+ * site name.
+ * TODO: Confirm that site belongs to org from same row
+ * TODO: How do we want to implement fuzzy matching here?
+ * TODO: What do we want to do if the organization does not exist?
+ * @param source
+ */
 const mapSite = (source: FlattenedEnrollment) => {
   if (!source.site) return Promise.reject('Site is required');
   return getManager().findOneOrFail(Site, { where: { name: source.site } });
 };
 
+/**
+ * Create Child object from FlattenedEnrollment source.
+ * TODO: How do we handle blocking data errors in a single row?
+ * @param source
+ */
 const mapChild = (source: FlattenedEnrollment) => {
   const SUFFIXES = ['sr', 'jr', 'ii', 'iii'];
   const nameParts = (source.name || '').split(' ');
@@ -91,8 +133,9 @@ const mapChild = (source: FlattenedEnrollment) => {
       }
     });
   }
-  // Could do city/state verification here for birth cert location
-  // Could do birthdate verification (post-20??)
+
+  // TODO: Could do city/state verification here for birth cert location
+  // TODO: Could do birthdate verification (post-20??)
 
   return Object.assign(new Child(), {
     sasid: source.sasid,
@@ -118,6 +161,12 @@ const mapChild = (source: FlattenedEnrollment) => {
   });
 };
 
+/**
+ * Create Family object (with IncomeDetermination) from FlattenedEnrollment
+ * source.
+ * TODO: Lookup existing families before creating new one
+ * @param source
+ */
 const mapFamily = (source: FlattenedEnrollment) => {
   const incomeDetermination = mapIncomeDetermination(source);
   return Object.assign(new Family(), {
@@ -130,6 +179,10 @@ const mapFamily = (source: FlattenedEnrollment) => {
   });
 };
 
+/**
+ * Create IncomeDetermination object from FlattenedEnrollment source.
+ * @param source
+ */
 const mapIncomeDetermination = (source: FlattenedEnrollment) => {
   return Object.assign(new IncomeDetermination(), {
     numberOfPeople: source.householdSize,
@@ -138,6 +191,12 @@ const mapIncomeDetermination = (source: FlattenedEnrollment) => {
   });
 };
 
+/**
+ * Create Enrollment object from FlattenedEnrollment source,
+ * for given site (already parsed from source).
+ * @param source
+ * @param site
+ */
 const mapEnrollment = async (source: FlattenedEnrollment, site: Site) => {
   let ageGroup;
   if (source.ageGroup) {
@@ -159,6 +218,14 @@ const mapEnrollment = async (source: FlattenedEnrollment, site: Site) => {
   });
 };
 
+/**
+ * Create Funding object from FlattenedEnrollment source,
+ * associated with a FundingSpace for given organization and ageGroup
+ * (already parsed from source).
+ * @param source
+ * @param organization
+ * @param ageGroup
+ */
 const mapFunding = async (
   source: FlattenedEnrollment,
   organization: Organization,
@@ -182,10 +249,15 @@ const mapFunding = async (
     });
   }
 
+  // Cannot create funding without FundingSpace, and cannot find FundingSpace
+  // without fundingSource AND fundingTime, so if you don't have them
+  // MOVE ALONG
   if (fundingSource && fundingTime) {
-    // Get the FundingSpace with associated funding source and funding time
+    // Get the FundingSpace with associated funding source and agegroup for the given organization
     let fundingSpace;
-    const fundingSpaces = await getManager().find(FundingSpace);
+    const fundingSpaces = await getManager().find(FundingSpace, {
+      where: { source: fundingSource, ageGroup, organization },
+    });
     fundingSpace = fundingSpaces.find((space) => space.time === fundingTime);
 
     // If no direct match on time and source === CDC, look for a split
@@ -195,6 +267,8 @@ const mapFunding = async (
       );
     }
 
+    // Cannot create funding without FundingSpace, so if you don't have one
+    // MOVE ALONG
     if (fundingSpace) {
       let firstReportingPeriod, lastReportingPeriod;
       if (source.firstFundingPeriod) {
@@ -217,16 +291,17 @@ const mapFunding = async (
     }
   }
 
-  // If we could not determine a fundingSpace, return nothing.
-  // TODO: If the user supplied fundingType or spaceType, capture that
-  // there was an error ingesting the funding info for this row so UI can
-  // prompt user to fix it
+  // If we could not find a fundingSpace, we cannot create a funding
+  // so NOTHING is returned.
   if (
     source.fundingType ||
     source.spaceType ||
     source.firstFundingPeriod ||
     source.lastFundingPeriod
   ) {
+    // TODO: If the user supplied fundingType or spaceType, capture that
+    // there was an error ingesting the funding info for this row so UI can
+    // prompt user to fix it
     console.log(
       "User tried to enter funding information but we couldn't figure it out"
     );
