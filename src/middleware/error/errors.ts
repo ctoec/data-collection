@@ -1,7 +1,7 @@
 import { UnauthorizedError } from 'express-jwt';
 
 export class ApiError extends Error {
-	status: number;
+  status: number;
 }
 /**
  * Custom error class to extend jwt-express UnauthorizedError, which reuses
@@ -10,7 +10,7 @@ export class ApiError extends Error {
  */
 export class InvalidSubClaimError extends ApiError {
   constructor() {
-		super("No valid user found for decided sub claim");
+    super('No valid user found for decided sub claim');
     this.name = UnauthorizedError.name;
     this.status = 401;
   }
@@ -21,7 +21,7 @@ export class InvalidSubClaimError extends ApiError {
  */
 export class NotFoundError extends ApiError {
   constructor() {
-		super("Resource not found");
+    super('Resource not found');
     this.name = 'NotFoundError';
     this.status = 404;
   }
@@ -31,9 +31,9 @@ export class NotFoundError extends ApiError {
  * Custom error class for 400 Bad Request
  */
 export class BadRequestError extends ApiError {
-	constructor(message: string) {
-		super(message);
-		this.name = 'BadRequestError';
-		this.status = 400;
-	}
+  constructor(message: string) {
+    super(message);
+    this.name = 'BadRequestError';
+    this.status = 400;
+  }
 }

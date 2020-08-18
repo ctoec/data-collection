@@ -1,10 +1,12 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
+import { Organization as OrganizationInterface } from '../../shared/models';
+
 import { FundingSpace } from './FundingSpace';
 import { Site } from './Site';
 
 @Entity()
-export class Organization {
+export class Organization implements OrganizationInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

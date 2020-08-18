@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { DataDefinitionInfo as DataDefinitionInfoInterface } from 'shared/models';
+import { DataDefinitionInfo as DataDefinitionInfoInterface } from '../../../shared/models';
 
 // Formats
 export const BOOLEAN_FORMAT = 'Yes, Y, No, N';

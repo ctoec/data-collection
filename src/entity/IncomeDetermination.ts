@@ -1,10 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 
+import { IncomeDetermination as IncomeDeterminationInterface } from '../../shared/models';
+
 import { Family } from './Family';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 
 @Entity()
-export class IncomeDetermination {
+export class IncomeDetermination implements IncomeDeterminationInterface {
   @PrimaryGeneratedColumn()
   id: number;
 

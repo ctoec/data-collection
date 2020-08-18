@@ -1,5 +1,8 @@
 import express from 'express';
 import { getManager } from 'typeorm';
+import { format } from '@fast-csv/format';
+import fs from 'fs';
+import { v4 as uuid } from 'uuid';
 import { EnrollmentReport } from '../entity';
 import multer from 'multer';
 import { parseUploadedTemplate } from '../utils/parseUploadedTemplate';
@@ -57,5 +60,35 @@ router.post(
       console.error('Error parsing uploaded enrollment report: ', err);
       throw new BadRequestError('Unable to parse uploaded report');
     }
+  })
+);
+
+/**
+ * /enrollment-reports/:reportId GET
+ *
+ * Returns the given EnrollmentReport as a CSV
+ */
+router.get(
+  '/download/:reportId',
+  passAsyncError(async (req, res, next) => {
+    const id = parseInt(req.params.reportId) || 0;
+    const report = await getManager().findOne(EnrollmentReport, id);
+    if (!report) throw new NotFoundError();
+
+    const enrollments = report.enrollments;
+    const stream = format();
+
+    const randomString = uuid();
+    const filename = `/tmp/downloads/${randomString}.csv`;
+
+    const fileStream = fs.createWriteStream(filename);
+    fileStream.on('finish', () => res.download(filename));
+    stream.pipe(fileStream);
+
+    stream.write(Object.keys(enrollments[0])); // TODO: Use generated headers
+    enrollments.forEach((enrollment) =>
+      stream.write(Object.values(enrollment))
+    );
+    stream.end();
   })
 );

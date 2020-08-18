@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const MailToLink = () => (
+export const MailToLink = ({ text }: { text?: string }) => (
   // TODO: MAKE THE BODY CONTAIN USEFUL INFORMATION LIKE URL?
   // TODO: MAKE THIS SEPARATE COMPONENT IN COMPONENT LIBRARY?
   <a
@@ -8,6 +8,6 @@ export const MailToLink = () => (
     target="_blank"
     rel="noopener noreferrer"
   >
-    oec-data-pilot@skylight.digital
+    {text || 'oec-data-pilot@skylight.digital'}
   </a>
 );

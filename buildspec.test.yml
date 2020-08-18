@@ -8,7 +8,11 @@ phases:
     commands:
       - yarn install --frozen-lockfile
       - cd client
-      - yarn install --frozen-lockfile
+
+      # Workaround to allow the NPM "prepare" hook of the component-library dep
+      # to fire and complete without erroring out
+      # https://github.com/ctoec/data-collection/pull/168
+      - yarn install --frozen-lockfile --network-concurrency 1
   build:
     commands:
       - CI=true yarn test --coverage

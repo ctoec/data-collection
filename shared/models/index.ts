@@ -18,4 +18,5 @@ export * from './Region';
 export * from './ReportingPeriod';
 export * from './Site';
 export * from './SitePermission';
+export * from './SpecialEducationServicesType';
 export * from './User';
