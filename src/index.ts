@@ -45,7 +45,7 @@ createConnection()
     if (!isDevelopment()) {
       // Register the fallback route to index.html
       app.get('*', (_, res) =>
-        res.sendFile(path.join(__dirname, '../client/build/index.html'))
+        res.sendFile(path.join(__dirname, '../../client/build/index.html'))
       );
     } else {
       // When in development, proxy requests to the docker container for the client
