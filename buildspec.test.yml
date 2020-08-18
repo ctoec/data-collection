@@ -6,8 +6,11 @@ phases:
       nodejs: 12
   pre_build:
     commands:
-      - yarn install --frozen-lockfile --network-concurrency 1
+      - yarn install --frozen-lockfile
       - cd client
+
+      # Workaround to allow for post-installation build hook of component-library lib
+      # TODO: Put GitHub PR link in here
       - yarn install --frozen-lockfile --network-concurrency 1
   build:
     commands:
