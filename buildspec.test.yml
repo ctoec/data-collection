@@ -9,7 +9,8 @@ phases:
       - yarn install --frozen-lockfile
       - cd client
 
-      # Workaround to allow for post-installation build hook of component-library lib
+      # Workaround to allow the NPM "prepare" hook of the component-library dep
+      # to fire and complete without erroring out
       # TODO: Put GitHub PR link in here
       - yarn install --frozen-lockfile --network-concurrency 1
   build:
