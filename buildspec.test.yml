@@ -6,6 +6,7 @@ phases:
       nodejs: 12
   pre_build:
     commands:
+      - yarn policies set-version 1.21.1
       - yarn install --frozen-lockfile
       - cd client
       - yarn install --frozen-lockfile
