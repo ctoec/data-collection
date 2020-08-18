@@ -8,8 +8,6 @@ services:
       - ./client:/home/node/app:cached
       - ./shared:/home/node/shared:cached
     working_dir: /home/node/app
-    ports:
-      - 5000:3000
     entrypoint:
       - yarn
       - start
