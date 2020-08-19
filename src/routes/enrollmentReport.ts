@@ -29,7 +29,7 @@ router.get(
     const enrollments = await Promise.all(
       report.enrollments.map(mapFlattenedEnrollment)
     );
-    res.send(enrollments);
+    res.send(enrollments.filter((e) => !!e));
   })
 );
 

@@ -10,7 +10,7 @@ export class Organization implements OrganizationInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @OneToMany(() => Site, (site) => site.organization)
@@ -19,6 +19,6 @@ export class Organization implements OrganizationInterface {
   @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.organization)
   fundingSpaces?: Array<FundingSpace>;
 
-  @Column()
+  @Column({ nullable: true })
   communityId?: number;
 }

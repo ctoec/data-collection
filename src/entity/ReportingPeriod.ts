@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 import {
   ReportingPeriod as ReportingPeriodInterface,
@@ -6,6 +6,7 @@ import {
 } from '../../shared/models';
 
 @Entity()
+@Unique('UQ_Type_Period', ['type', 'period'])
 export class ReportingPeriod implements ReportingPeriodInterface {
   @PrimaryGeneratedColumn()
   id: number;

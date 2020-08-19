@@ -16,7 +16,7 @@ export class Site implements SiteInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
   @Column()

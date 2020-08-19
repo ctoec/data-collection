@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToOne,
+  Unique,
 } from 'typeorm';
 
 import {
@@ -17,6 +18,7 @@ import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';
 
 @Entity()
+@Unique('UQ_Source_AgeGroup_Time', ['source', 'ageGroup', 'time'])
 export class FundingSpace implements FundingSpaceInterface {
   @PrimaryGeneratedColumn()
   id: number;
@@ -24,7 +26,7 @@ export class FundingSpace implements FundingSpaceInterface {
   @Column()
   capacity: number;
 
-  @ManyToOne(() => Organization)
+  @ManyToOne(() => Organization, { nullable: false })
   organization: Organization;
 
   @Column({ type: 'enum', enum: FundingSource })

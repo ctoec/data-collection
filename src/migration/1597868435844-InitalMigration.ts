@@ -1,38 +1,38 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitialMigration1597329631347 implements MigrationInterface {
-  name = 'InitialMigration1597329631347';
+export class InitalMigration1597868435844 implements MigrationInterface {
+  name = 'InitalMigration1597868435844';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TYPE "reporting_period_type_enum" AS ENUM('CDC', 'SchoolReadiness')`
+      `CREATE TYPE "reporting_period_type_enum" AS ENUM('CDC', 'CSR', 'PSR', 'SHS', 'SS')`
     );
     await queryRunner.query(
-      `CREATE TABLE "reporting_period" ("id" SERIAL NOT NULL, "type" "reporting_period_type_enum" NOT NULL, "period" date NOT NULL, "periodStart" date NOT NULL, "periodEnd" date NOT NULL, "dueAt" date NOT NULL, CONSTRAINT "PK_273d2b68dc1854618ec53e144d0" PRIMARY KEY ("id"))`
+      `CREATE TABLE "reporting_period" ("id" SERIAL NOT NULL, "type" "reporting_period_type_enum" NOT NULL, "period" date NOT NULL, "periodStart" date NOT NULL, "periodEnd" date NOT NULL, "dueAt" date NOT NULL, CONSTRAINT "UQ_Type_Period" UNIQUE ("type", "period"), CONSTRAINT "PK_273d2b68dc1854618ec53e144d0" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TYPE "site_region_enum" AS ENUM('East', 'NorthCentral', 'NorthWest', 'SouthCentral', 'SouthWest')`
     );
     await queryRunner.query(
-      `CREATE TABLE "site" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "titleI" boolean NOT NULL, "region" "site_region_enum" NOT NULL, "facilityCode" integer, "licenseNumber" integer, "naeycId" integer, "registryId" integer, "organizationId" integer NOT NULL, CONSTRAINT "PK_635c0eeabda8862d5b0237b42b4" PRIMARY KEY ("id"))`
+      `CREATE TABLE "site" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "titleI" boolean NOT NULL, "region" "site_region_enum" NOT NULL, "facilityCode" integer, "licenseNumber" integer, "naeycId" integer, "registryId" integer, "organizationId" integer NOT NULL, CONSTRAINT "UQ_9669a09fcc0eb6d2794a658f647" UNIQUE ("name"), CONSTRAINT "PK_635c0eeabda8862d5b0237b42b4" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "organization" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_472c1f99a32def1b0abb219cd67" PRIMARY KEY ("id"))`
+      `CREATE TABLE "organization" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "communityId" integer, CONSTRAINT "UQ_c21e615583a3ebbb0977452afb0" UNIQUE ("name"), CONSTRAINT "PK_472c1f99a32def1b0abb219cd67" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "funding_time_split" ("id" SERIAL NOT NULL, "fullTimeWeeks" integer NOT NULL, "partTimeWeeks" integer NOT NULL, "fundingSpaceId" integer NOT NULL, CONSTRAINT "PK_b7e03c4f3dc577282ba66e70663" PRIMARY KEY ("id"))`
+      `CREATE TABLE "funding_time_split" ("id" SERIAL NOT NULL, "fullTimeWeeks" integer NOT NULL, "partTimeWeeks" integer NOT NULL, "fundingSpaceId" integer NOT NULL, CONSTRAINT "REL_4c23c29a718e7ffda0223e5aeb" UNIQUE ("fundingSpaceId"), CONSTRAINT "PK_b7e03c4f3dc577282ba66e70663" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TYPE "funding_space_source_enum" AS ENUM('CDC', 'SchoolReadiness')`
+      `CREATE TYPE "funding_space_source_enum" AS ENUM('CDC', 'CSR', 'PSR', 'SHS', 'SS')`
     );
     await queryRunner.query(
       `CREATE TYPE "funding_space_agegroup_enum" AS ENUM('InfantToddler', 'Preschool', 'SchoolAge')`
     );
     await queryRunner.query(
-      `CREATE TYPE "funding_space_time_enum" AS ENUM('Full', 'Part', 'Split')`
+      `CREATE TYPE "funding_space_time_enum" AS ENUM('Full', 'Part', 'Split', 'ExtendedDay', 'ExtendedYear', 'School')`
     );
     await queryRunner.query(
-      `CREATE TABLE "funding_space" ("id" SERIAL NOT NULL, "capacity" integer NOT NULL, "source" "funding_space_source_enum" NOT NULL, "ageGroup" "funding_space_agegroup_enum" NOT NULL, "time" "funding_space_time_enum" NOT NULL, "organizationId" integer, CONSTRAINT "PK_0f92a2c9df81f7cecc05d28c99d" PRIMARY KEY ("id"))`
+      `CREATE TABLE "funding_space" ("id" SERIAL NOT NULL, "capacity" integer NOT NULL, "source" "funding_space_source_enum" NOT NULL, "ageGroup" "funding_space_agegroup_enum" NOT NULL, "time" "funding_space_time_enum" NOT NULL, "organizationId" integer NOT NULL, CONSTRAINT "UQ_Source_AgeGroup_Time" UNIQUE ("source", "ageGroup", "time"), CONSTRAINT "PK_0f92a2c9df81f7cecc05d28c99d" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TYPE "permission_type_enum" AS ENUM('1', '2')`
@@ -59,13 +59,19 @@ export class InitialMigration1597329631347 implements MigrationInterface {
       `CREATE TABLE "income_determination" ("id" SERIAL NOT NULL, "numberOfPeople" integer, "income" numeric(14,2), "determinationDate" TIMESTAMP, "familyId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_bab8509559a5caf486bf1bdd99b" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "family" ("id" SERIAL NOT NULL, "addressLine1" character varying, "addressLine2" character varying, "town" character varying, "state" character varying, "zip" character varying, "homelessness" boolean, "organizationId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_ba386a5a59c3de8593cda4e5626" PRIMARY KEY ("id"))`
+      `CREATE TABLE "family" ("id" SERIAL NOT NULL, "streetAddress" character varying, "town" character varying, "state" character varying, "zip" character varying, "homelessness" boolean, "organizationId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_ba386a5a59c3de8593cda4e5626" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TYPE "child_gender_enum" AS ENUM('Male', 'Female', 'Nonbinary', 'Unknown', 'Unspecified')`
+      `CREATE TYPE "child_gender_enum" AS ENUM('Male', 'Female', 'Nonbinary', 'Unknown', 'Not Specified')`
     );
     await queryRunner.query(
-      `CREATE TABLE "child" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "sasid" character varying, "firstName" character varying NOT NULL, "middleName" character varying, "lastName" character varying NOT NULL, "suffix" character varying, "birthdate" TIMESTAMP, "birthTown" character varying, "birthState" character varying, "birthCertificateId" character varying, "americanIndianOrAlaskaNative" boolean, "asian" boolean, "blackOrAfricanAmerican" boolean, "nativeHawaiianOrPacificIslander" boolean, "white" boolean, "hispanicOrLatinxEthnicity" boolean, "gender" "child_gender_enum", "foster" boolean, "recievesC4K" boolean NOT NULL DEFAULT false, "familyId" integer NOT NULL, "organizationId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_4609b9b323ca37c6bc435ec4b6b" PRIMARY KEY ("id"))`
+      `CREATE TYPE "child_specialeducationservicestype_enum" AS ENUM('LEA', 'Non LEA')`
+    );
+    await queryRunner.query(
+      `CREATE TABLE "child" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "sasid" character varying, "firstName" character varying NOT NULL, "middleName" character varying, "lastName" character varying NOT NULL, "suffix" character varying, "birthdate" TIMESTAMP, "birthTown" character varying, "birthState" character varying, "birthCertificateId" character varying, "americanIndianOrAlaskaNative" boolean, "asian" boolean, "blackOrAfricanAmerican" boolean, "nativeHawaiianOrPacificIslander" boolean, "white" boolean, "hispanicOrLatinxEthnicity" boolean, "gender" "child_gender_enum", "foster" boolean, "recievesC4K" boolean NOT NULL DEFAULT false, "recievesSpecialEducationServices" boolean, "specialEducationServicesType" "child_specialeducationservicestype_enum", "familyId" integer NOT NULL, "organizationId" integer NOT NULL, "authorId" integer, "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_4609b9b323ca37c6bc435ec4b6b" PRIMARY KEY ("id"))`
+    );
+    await queryRunner.query(
+      `CREATE TABLE "community" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_cae794115a383328e8923de4193" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "flattened_enrollment" ("id" SERIAL NOT NULL, "name" character varying, "sasid" integer, "dateOfBirth" TIMESTAMP, "birthCertificateId" character varying, "townOfBirth" character varying, "stateOfBirth" character varying, "americanIndianOrAlaskaNative" boolean, "asian" boolean, "blackOrAfricanAmerican" boolean, "nativeHawaiianOrPacificIslander" boolean, "white" boolean, "hispanicOrLatinxEthnicity" boolean, "gender" character varying, "dualLanguageLearner" boolean, "receivingSpecialEducationServices" boolean, "specialEducationServicesType" character varying, "streetAddress" character varying, "town" character varying, "state" character varying, "zipcode" character varying, "livesWithFosterFamily" boolean, "experiencedHomelessnessOrHousingInsecurity" boolean, "householdSize" integer, "annualHouseholdIncome" numeric(14,2), "incomeDeterminationDate" TIMESTAMP, "provider" character varying, "site" character varying, "model" character varying, "ageGroup" character varying, "enrollmentStartDate" TIMESTAMP, "enrollmentEndDate" TIMESTAMP, "enrollmentExitReason" character varying, "fundingType" character varying, "spaceType" character varying, "firstFundingPeriod" character varying, "lastFundingPeriod" character varying, "receivingCareForKids" boolean, "reportId" integer NOT NULL, CONSTRAINT "PK_ec816f97751eaf598f110e72340" PRIMARY KEY ("id"))`
@@ -210,7 +216,11 @@ export class InitialMigration1597329631347 implements MigrationInterface {
     );
     await queryRunner.query(`DROP TABLE "enrollment_report"`);
     await queryRunner.query(`DROP TABLE "flattened_enrollment"`);
+    await queryRunner.query(`DROP TABLE "community"`);
     await queryRunner.query(`DROP TABLE "child"`);
+    await queryRunner.query(
+      `DROP TYPE "child_specialeducationservicestype_enum"`
+    );
     await queryRunner.query(`DROP TYPE "child_gender_enum"`);
     await queryRunner.query(`DROP TABLE "family"`);
     await queryRunner.query(`DROP TABLE "income_determination"`);

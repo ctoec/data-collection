@@ -1,27 +1,21 @@
 import express, { json } from 'express';
-
 import path from 'path';
 import httpProxy from 'http-proxy';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';
-import { createConnection, getManager } from 'typeorm';
-import { User } from './entity';
+import { createConnection } from 'typeorm';
 import { router as apiRouter } from './routes';
+import { initialize } from './data/initialize';
 
 createConnection()
   .then(async () => {
     console.log('Successfully established TypeORM DB connection');
 
-    if (isDevelopment()) {
-      // set up user!
-      const user = getManager().create(User, {
-        id: 1,
-        wingedKeysId: '2c0ec653-8829-4aa1-82ba-37c8832bbb88',
-        firstName: 'Voldy',
-        lastName: 'Mort',
-      });
-      getManager().save(user);
-    }
+    // Staging != 'development', and we don't currently have a way of distinguishing
+    // env in deployed app BUT we don't have prod env so just always init seed data!
+    // if (isDevelopment()) {
+    await initialize();
+    // }
 
     // Instantiate the application server
     const app = express();
@@ -38,8 +32,9 @@ createConnection()
     // Handle non-existant API routes
     app.use('/api', (_, res) => res.sendStatus(400));
 
-    const pathToReactApp = isDevelopment() ? 
-      path.join(__dirname, '../client/build') : path.join(__dirname, '../../client/build');
+    const pathToReactApp = isDevelopment()
+      ? path.join(__dirname, '../client/build')
+      : path.join(__dirname, '../../client/build');
 
     /* Register SPA-serving middlewares */
     // Serve the static files from the React app
