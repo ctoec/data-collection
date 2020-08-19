@@ -1,7 +1,5 @@
 import express from 'express';
-import { getConnection } from 'typeorm';
-import { FlattenedEnrollment } from '../entity';
-import { getDataDefinition } from '../entity/decorators/dataDefinition';
+import { getAllEnrollmentColumns } from './template';
 
 export const router = express.Router();
 
@@ -12,12 +10,5 @@ export const router = express.Router();
  * as an array of DataDefinitionInfo objects
  */
 router.get('/', (_, res) => {
-  const dataDefinitions = getConnection()
-    .getMetadata(FlattenedEnrollment)
-    .columns.map((column) =>
-      getDataDefinition(new FlattenedEnrollment(), column.propertyName)
-    )
-    .filter((dataDefinition) => !!dataDefinition);
-
-  res.send(dataDefinitions);
+  res.send(getAllEnrollmentColumns());
 });

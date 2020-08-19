@@ -1,4 +1,4 @@
-export interface DataDefinitionInfo {
+export interface ECEColumnMetadata {
   section: string;
   example: string;
   format: string;

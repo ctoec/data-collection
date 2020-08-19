@@ -5,7 +5,7 @@ import { ReactComponent as DownloadArrow } from '@ctoec/component-library/dist/a
 export const ExcelTemplateDownloadLink = () => (
   <Button
     appearance="unstyled"
-    href="/upload_template/ECE Data Collection Template.xlsx"
+    href="/template/xlsx"
     className="text-bold margin-bottom-3 display-block"
     external
     text={
