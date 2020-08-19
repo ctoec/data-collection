@@ -82,19 +82,15 @@ function generateTemplate(
   type: 'csv' | 'xlsx'
 ) {
   const template = getTemplateWorkbook(type);
-  const filePath = path.join('/tmp', `template.${type}`);
+  const filePath = path.join('/tmp', `ECE Data Collection Template.${type}`);
 
   writeFile(template, filePath, { bookType: type });
 
-  response.setHeader(
-    'Content-Type',
-    type === 'csv' ? CSV_MIME_TYPE : XLSX_MIME_TYPE
-  );
-  response.setHeader(
-    'Content-Disposition',
-    `attachment; filename="ECE Data Collection Template.${type}"`
-  );
-  response.sendFile(filePath);
+  // response.setHeader(
+  //   'Content-Type',
+  //   type === 'csv' ? CSV_MIME_TYPE : XLSX_MIME_TYPE
+  // );
+  response.download(filePath);
 };
 
 /**
@@ -105,28 +101,28 @@ const getTemplateWorkbook = (type: 'csv' | 'xlsx') => {
   const columnMetadatas: ECEColumnMetadata[] = getAllEnrollmentColumns().sort();
 
   if (type === 'csv') {
-    const columnNames: Array<String[]> = columnMetadatas.map(c => [c.propertyName]);
-    const sheet = utils.aoa_to_sheet(columnNames);
+    const formattedColumnNames: String[] = columnMetadatas.map(c => c.formattedName);
+    const sheet = utils.aoa_to_sheet([formattedColumnNames]);
 
     const workbook = utils.book_new();
     utils.book_append_sheet(workbook, sheet);
 
     return workbook;
   } else {
-    let columnNames: Array<String[]>;
-    let definitions: Array<String[]>;
-    let sections: Array<String[]>;
+    let columnNames: String[];
+    let definitions: String[];
+    let sections: String[];
 
     columnMetadatas.forEach((columnMetadata, index) => {
-      columnNames[index] = [columnMetadata.propertyName];
-      definitions[index] = [columnMetadata.definition];
-      sections[index] = [columnMetadata.section];
+      columnNames[index] = columnMetadata.propertyName;
+      definitions[index] = columnMetadata.definition;
+      sections[index] = columnMetadata.section;
     });
 
     const aoa = [
-      sections,
-      columnNames,
-      definitions,
+      [sections],
+      [columnNames],
+      [definitions],
     ];
   const sheet = utils.aoa_to_sheet(aoa);
 

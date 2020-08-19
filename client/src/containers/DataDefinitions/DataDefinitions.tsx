@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ReactComponent as ArrowLeft } from 'uswds/dist/img/arrow-left.svg';
-import { DataDefinitionInfo } from 'shared/models';
+import { ECEColumnMetadata } from 'shared/models';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
 import { SECTION_COPY } from './Sections';
@@ -9,7 +9,7 @@ import { apiGet } from '../../utils/api';
 
 const DataDefinitions: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
-  const [dataDefinitions, setDataDefinitions] = useState<DataDefinitionInfo[]>(
+  const [dataDefinitions, setDataDefinitions] = useState<ECEColumnMetadata[]>(
     []
   );
 
@@ -19,7 +19,7 @@ const DataDefinitions: React.FC = () => {
     );
   }, [accessToken]);
 
-  const columns: Column<DataDefinitionInfo>[] = [
+  const columns: Column<ECEColumnMetadata>[] = [
     {
       name: 'Field name',
       cell: ({ row }) =>
@@ -64,7 +64,7 @@ const DataDefinitions: React.FC = () => {
     },
   ];
 
-  const dataDefinitionsBySection: { [key: string]: DataDefinitionInfo[] } = {};
+  const dataDefinitionsBySection: { [key: string]: ECEColumnMetadata[] } = {};
   dataDefinitions.reduce((acc, cur) => {
     if (acc[cur.section]) {
       acc[cur.section].push(cur);
