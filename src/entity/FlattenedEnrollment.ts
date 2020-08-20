@@ -4,7 +4,7 @@ import { FlattenedEnrollment as FlattenedEnrollmentInterface } from '../../share
 
 import { EnrollmentReport } from './EnrollmentReport';
 import {
-  ColumnMetadata as ColumnMetadata,
+  ColumnMetadata,
   REQUIRED,
   OPTIONAL,
   REQUIRED_IF_US_BORN,

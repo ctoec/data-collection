@@ -1,7 +1,7 @@
 import express from 'express';
 import { Response, Request } from 'express';
 import { utils, WorkBook, write, ColInfo, WorkSheet } from 'xlsx';
-import { ECEColumnMetadata } from '../../shared/models';
+import { ColumnMetadata } from '../../shared/models';
 import { EntityMetadata, getConnection } from 'typeorm';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { FlattenedEnrollment } from '../entity';
@@ -40,7 +40,7 @@ function streamTemplate(response: Response, bookType: 'csv' | 'xlsx') {
 };
 
 function generateCsvWorkbook(): WorkBook {
-  const columnMetadatas: ECEColumnMetadata[] = getAllEnrollmentColumns();
+  const columnMetadatas: ColumnMetadata[] = getAllEnrollmentColumns();
 
   const formattedColumnNames: string[] = columnMetadatas.map(c => c.formattedName);
     const sheet = utils.aoa_to_sheet([formattedColumnNames]);
@@ -52,7 +52,7 @@ function generateCsvWorkbook(): WorkBook {
 }
 
 function generateExcelWorkbook(): WorkBook {
-  const columnMetadatas: ECEColumnMetadata[] = getAllEnrollmentColumns();
+  const columnMetadatas: ColumnMetadata[] = getAllEnrollmentColumns();
 
   let columnNames: string[] = [];
     let formats: string[] = [];
@@ -119,7 +119,7 @@ function generateExcelWorkbook(): WorkBook {
  *
  * Only entity properties with column comments are exposed via the template.
  */
-export function getAllEnrollmentColumns(): ECEColumnMetadata[] {
+export function getAllEnrollmentColumns(): ColumnMetadata[] {
   const metadata: EntityMetadata = getConnection().getMetadata(FlattenedEnrollment);
 
   return metadata.columns.map((column) =>

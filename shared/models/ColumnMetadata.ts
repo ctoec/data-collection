@@ -1,4 +1,4 @@
-export interface ECEColumnMetadata {
+export interface ColumnMetadata {
   section: string;
   example: string;
   format: string;
