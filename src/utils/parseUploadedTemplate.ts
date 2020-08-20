@@ -132,7 +132,13 @@ function parseFlattenedEnrollment(
     }
 
     if (value instanceof Date) {
-      rawEnrollment[prop] = moment.utc(value);
+      const date = moment.utc(value);
+      if (!date.isValid()) {
+        console.log(rawEnrollment);
+      }
+      if (date.isValid()) {
+        rawEnrollment[prop] = date;
+      }
     }
   });
 
