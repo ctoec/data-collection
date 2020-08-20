@@ -1,38 +1,34 @@
 import express from 'express';
 import { Response, Request } from 'express';
-import { utils, WorkBook, write } from 'xlsx';
+import { utils, WorkBook, write, ColInfo, WorkSheet } from 'xlsx';
 import { ECEColumnMetadata } from '../../shared/models';
 import { EntityMetadata, getConnection } from 'typeorm';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { FlattenedEnrollment } from '../entity';
 
 
-export const dataDefinitionRouter = express.Router();
+export const columnMetadataRouter = express.Router();
 
 /**
- * /data-definitions GET
+ * /column-metadata GET
  *
  * Returns all data-definition metadata from the FlattenedEnrollment model,
  * as an array of DataDefinitionInfo objects
  */
-dataDefinitionRouter.get('/', (_, res) => {
+columnMetadataRouter.get('/', (_, res) => {
   res.send(getAllEnrollmentColumns());
 });
 
-dataDefinitionRouter.get('/csv', (req: Request, res: Response) => {
-  generateTemplate(res, 'csv');
+columnMetadataRouter.get('/csv', (req: Request, res: Response) => {
+  streamTemplate(res, 'csv');
 });
 
-dataDefinitionRouter.get('/xlsx', (req: Request, res: Response) => {
-  generateTemplate(res, 'xlsx');
+columnMetadataRouter.get('/xlsx', (req: Request, res: Response) => {
+  streamTemplate(res, 'xlsx');
 });
 
-function generateTemplate(response: Response, bookType: 'csv' | 'xlsx') {
-  const template: WorkBook = getTemplateWorkbook(bookType);
-
-  // const filePath = path.join('/tmp', `ECE Data Collection Template.${bookType}`);
-  // writeFile(template, filePath, { bookType });
-  // response.download(filePath);
+function streamTemplate(response: Response, bookType: 'csv' | 'xlsx') {
+  const template: WorkBook = bookType === 'csv' ? generateCsvWorkbook() : generateExcelWorkbook();
 
   const templateStream = write(template, {
     bookType,
@@ -42,31 +38,42 @@ function generateTemplate(response: Response, bookType: 'csv' | 'xlsx') {
   response.send(templateStream);
 };
 
-/**
- * Creates Workbook object containing a single worksheet,
- * which contains the data collection template data.
- */
-function getTemplateWorkbook(type: 'csv' | 'xlsx'): WorkBook {
-  const columnMetadatas: ECEColumnMetadata[] = getAllEnrollmentColumns().sort();
+function generateCsvWorkbook(): WorkBook {
+  const columnMetadatas: ECEColumnMetadata[] = getAllEnrollmentColumns();
 
-  if (type === 'csv') {
-    const formattedColumnNames: string[] = columnMetadatas.map(c => c.formattedName);
+  const formattedColumnNames: string[] = columnMetadatas.map(c => c.formattedName);
     const sheet = utils.aoa_to_sheet([formattedColumnNames]);
 
     const workbook = utils.book_new();
     utils.book_append_sheet(workbook, sheet);
 
     return workbook;
-  } else {
-    let columnNames: string[] = [];
-    let definitions: string[] = [];
+}
+
+function generateExcelWorkbook(): WorkBook {
+  const columnMetadatas: ECEColumnMetadata[] = getAllEnrollmentColumns();
+
+  let columnNames: string[] = [];
+    let formats: string[] = [];
     let sections: string[] = [];
     let sectionCounts: any = {};
+    let cols: ColInfo[] = [];
 
     columnMetadatas.forEach((columnMetadata, index) => {
-      columnNames[index] = columnMetadata.formattedName;
-      definitions[index] = columnMetadata.definition;
       sections[index] = columnMetadata.section;
+      columnNames[index] = columnMetadata.formattedName;
+      formats[index] = columnMetadata.format;
+
+      //  Reserve AT LEAST 14 characters for column widths, for the sake of
+      //  having actually readable format descriptors
+      const displayNameLength: number = columnMetadata.formattedName.length;
+      const columnCharCount: number = displayNameLength > 14 ? displayNameLength : 14;
+
+      cols[index] = {
+        wch: columnCharCount
+      };
+
+      formats[index] = columnMetadata.format.match(new RegExp('.{1,' + columnCharCount + '}', 'g')).join('\n');
 
       if (!sectionCounts[columnMetadata.section]) {
         sectionCounts[columnMetadata.section] = 0;
@@ -78,28 +85,28 @@ function getTemplateWorkbook(type: 'csv' | 'xlsx'): WorkBook {
     const aoa = [
       sections,
       columnNames,
-      definitions,
+      formats,
     ];
 
-  const sheet = utils.aoa_to_sheet(aoa);
+  const sheet: WorkSheet = utils.aoa_to_sheet(aoa);
 
   let merges = [];
-  let lastEnd = 0;
-  sections.forEach((sectionName) => {
-    const start = lastEnd > 0 ? lastEnd + 1 : lastEnd;
-    const end = lastEnd + sectionCounts[sectionName];
-    merges.push({ s: { c: start, r: 0 }, e: { c: end, r: 0 } });
+  let start = 0;
 
-    lastEnd = end;
+  sections.forEach((sectionName, index) => {
+    if (index === sections.length - 1 || sectionName !== sections[index + 1]) {
+      merges.push({ s: { c: start, r: 0 }, e: { c: index, r: 0 } });
+      start = index + 1;
+    }
   });
 
+  sheet["!cols"] = cols;
   sheet['!merges'] = merges;
 
   const workbook = utils.book_new();
   utils.book_append_sheet(workbook, sheet);
 
   return workbook;
-  }
 }
 
 /**

@@ -14,7 +14,7 @@ const DataDefinitions: React.FC = () => {
   );
 
   useEffect(() => {
-    apiGet('data-definitions').then((definitions) =>
+    apiGet('column-metadata').then((definitions) =>
       setDataDefinitions(definitions)
     );
   }, [accessToken]);

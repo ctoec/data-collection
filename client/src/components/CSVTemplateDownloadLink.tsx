@@ -5,7 +5,7 @@ import { downloadStreamToFile } from '../utils/fileDownload';
 
 export const CSVTemplateDownloadLink = () => {
   async function downloadCsvTemplate() {
-    await downloadStreamToFile('data-definitions/csv', 'ECE Data Collection Template.csv');
+    await downloadStreamToFile('column-metadata/csv', 'ECE Data Collection Template.csv');
   }
 
   return (

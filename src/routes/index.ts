@@ -3,12 +3,12 @@ import express from 'express';
 import { authenticate } from '../middleware/authenticate';
 import { router as userRouter } from './user';
 import { router as enrollmentReportRouter } from './enrollmentReport';
-import { dataDefinitionRouter } from './dataDefinition';
+import { columnMetadataRouter } from './columnMetadata';
 
 export const router = express.Router();
 
 /* PUBLIC ROUTES */
-router.use('/data-definitions', dataDefinitionRouter);
+router.use('/column-metadata', columnMetadataRouter);
 
 /* AUTHENTICATED ROUTES */
 router.use('/users', authenticate, userRouter);

@@ -5,7 +5,7 @@ import { downloadStreamToFile } from '../utils/fileDownload';
 
 export const ExcelTemplateDownloadLink = () => {
   async function downloadExcelTemplate() {
-    await downloadStreamToFile('data-definitions/xlsx', 'ECE Data Collection Template.xlsx')
+    await downloadStreamToFile('column-metadata/xlsx', 'ECE Data Collection Template.xlsx')
   }
 
   return (
