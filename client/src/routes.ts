@@ -5,7 +5,7 @@ import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
 import CheckData from './containers/CheckData/CheckData';
-import DataDefinitions from './containers/DataDefinitions/DataDefinitions';
+import ColumnMetadata from './containers/ColumnMetadata/ColumnMetadata';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 
 export type RouteConfig = {
@@ -40,8 +40,8 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/data-definitions',
-    component: DataDefinitions,
+    path: '/column-metadata',
+    component: ColumnMetadata,
     unauthorized: true,
   },
   {

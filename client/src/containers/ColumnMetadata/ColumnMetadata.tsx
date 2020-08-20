@@ -7,15 +7,15 @@ import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
 import { SECTION_COPY } from './Sections';
 import { apiGet } from '../../utils/api';
 
-const DataDefinitions: React.FC = () => {
+const ColumnMetadata: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
-  const [dataDefinitions, setDataDefinitions] = useState<ECEColumnMetadata[]>(
+  const [dataDefinitions, setColumnMetadata] = useState<ECEColumnMetadata[]>(
     []
   );
 
   useEffect(() => {
     apiGet('column-metadata').then((definitions) =>
-      setDataDefinitions(definitions)
+      setColumnMetadata(definitions)
     );
   }, [accessToken]);
 
@@ -64,7 +64,7 @@ const DataDefinitions: React.FC = () => {
     },
   ];
 
-  const dataDefinitionsBySection: { [key: string]: ECEColumnMetadata[] } = {};
+  const columnMetadataBySection: { [key: string]: ECEColumnMetadata[] } = {};
   dataDefinitions.reduce((acc, cur) => {
     if (acc[cur.section]) {
       acc[cur.section].push(cur);
@@ -73,7 +73,7 @@ const DataDefinitions: React.FC = () => {
     }
 
     return acc;
-  }, dataDefinitionsBySection);
+  }, columnMetadataBySection);
 
   return (
     <div className="grid-container margin-top-4">
@@ -84,7 +84,7 @@ const DataDefinitions: React.FC = () => {
         text={<TextWithIcon text="Back" Icon={ArrowLeft} iconSide="left" />}
       />
       <h1>OEC's enrollment data requirements</h1>
-      {Object.entries(dataDefinitionsBySection).map(
+      {Object.entries(columnMetadataBySection).map(
         ([sectionKey, sectionData]) => (
           <div className="margin-top-4">
             <h2>{SECTION_COPY[sectionKey].formattedName}</h2>
@@ -92,7 +92,7 @@ const DataDefinitions: React.FC = () => {
               {SECTION_COPY[sectionKey].description}
             </p>
             <Table
-              id="data-definitions-table"
+              id="column-metadata-table"
               data={sectionData}
               rowKey={(row) => (row ? row.formattedName : '')}
               columns={columns}
@@ -105,4 +105,4 @@ const DataDefinitions: React.FC = () => {
   );
 };
 
-export default DataDefinitions;
+export default ColumnMetadata;
