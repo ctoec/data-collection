@@ -14,7 +14,7 @@ export const columnMetadataRouter = express.Router();
  * /column-metadata GET
  *
  * Returns all column metadata from the FlattenedEnrollment model,
- * as an array of ECEColumnMetadata objects
+ * as an array of ColumnMetadata objects
  */
 columnMetadataRouter.get('/', (req: Request, res: Response) => {
   res.send(getAllEnrollmentColumns());
@@ -113,11 +113,7 @@ function generateExcelWorkbook(): WorkBook {
 }
 
 /**
- * Creates template data as array of arrays, derived from FlattenedEnrollment entity.
- * Template data includes column headers and optionally descriptions, which are stored
- * along with the entity as DB column comments.
- *
- * Only entity properties with column comments are exposed via the template.
+ * Retrieve our own custom ColumnMetadata for all columns on the FlattenedEnrollment model.
  */
 export function getAllEnrollmentColumns(): ColumnMetadata[] {
   const metadata: EntityMetadata = getConnection().getMetadata(FlattenedEnrollment);
