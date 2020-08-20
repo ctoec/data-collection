@@ -1,5 +1,5 @@
 export enum AgeGroup {
-  InfantToddler = 'InfantToddler',
+  InfantToddler = 'Infant/toddler',
   Preschool = 'Preschool',
-  SchoolAge = 'SchoolAge',
+  SchoolAge = 'School aged',
 }

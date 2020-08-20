@@ -1,20 +1,35 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import pluralize from 'pluralize';
-import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { FlattenedEnrollment, ColumnMetadata } from 'shared/models';
 import { apiGet } from '../../utils/api';
 import {
-  TextWithIcon,
-  Button,
-  Table,
-  Column,
-} from '@ctoec/component-library';
+  FlattenedEnrollment,
+  Organization,
+  Site,
+  Child,
+  Family,
+  IncomeDetermination,
+  Enrollment,
+  Funding,
+} from 'shared/models';
+import { apiGet } from '../../utils/api';
+import { TextWithIcon, Button, Table, Column } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
+import { tableColumns } from './TableColumns';
+
+export type TableRow = {
+  organization: Organization;
+  site: Site;
+  child: Child;
+  family?: Family;
+  incomeDetermination?: IncomeDetermination;
+  enrollment?: Enrollment;
+  funding?: Funding;
+};
 
 const CheckData: React.FC = () => {
   const reportId = parseInt(
@@ -22,6 +37,7 @@ const CheckData: React.FC = () => {
   );
 
   const { accessToken } = useContext(AuthenticationContext);
+<<<<<<< HEAD
   const [reportData, setReportData] = useState<FlattenedEnrollment[]>([]);
   const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>(
     []
@@ -30,62 +46,21 @@ const CheckData: React.FC = () => {
   useEffect(() => {
     apiGet('column-metadata').then((metadata) => setColumnMetadata(metadata));
   }, []);
+=======
+  const [reportData, setReportData] = useState<TableRow[]>([]);
+>>>>>>> A bunch of changes
 
   useEffect(() => {
     if (reportId && accessToken) {
       apiGet(`enrollment-reports/${reportId}`, { accessToken }).then(
-        (enrollments) => {
-          if (enrollments) {
-            setReportData(enrollments);
+        (_reportData) => {
+          if (_reportData) {
+            setReportData(_reportData);
           }
         }
       );
     }
   }, [reportId, accessToken]);
-
-  const tableColumns: Column<FlattenedEnrollment>[] = columnMetadata.map(
-    (columnMeta) => ({
-      className: 'text-pre text-center font-body-2xs',
-      name: columnMeta.formattedName,
-      title: columnMeta.propertyName,
-      sort: row => (row as any)[columnMeta.propertyName],
-      cell: ({ row }) => {
-        // special case for clickable name column that sends user to edit page
-        if (columnMeta.propertyName === 'name') {
-          return (
-            // Pass reportId to save/send data back once editing is done
-            <td>
-              <Link to={
-                {
-                  pathname: "/edit-record/" + row.name,
-                  state: {
-                    'reportId': reportId,
-                    'childName': row.name,
-                  },
-                }
-              }>
-                <Button
-                  className="text-no-wrap font-body-2xs"
-                  appearance="unstyled"
-                  text={row.name || ''}
-                />
-              </Link>
-            </td>
-          );
-        }
-
-        // all other columns
-        let cellContent: any = (row as any)[columnMeta.propertyName];
-        if (typeof cellContent === 'boolean') {
-          cellContent = cellContent ? 'yes' : 'no';
-        } else if (moment.isMoment(cellContent)) {
-          cellContent = cellContent.format('MM/DD/YYYY');
-        }
-
-        return <td className="font-body-2xs">{cellContent}</td>;
-      },
-    })
-  );
 
   return (
     <>
@@ -109,16 +84,16 @@ const CheckData: React.FC = () => {
           <p>If everything looks good, submit to OEC.</p>
           {reportData.length ? (
             <PerfectScrollbar>
-              <Table<FlattenedEnrollment>
+              <Table<TableRow>
                 id="enrollment-report-table"
-                rowKey={(row) => row.id}
+                rowKey={(row) => row.child.id}
                 data={reportData}
-                columns={tableColumns}
+                columns={tableColumns(reportId)}
               />
             </PerfectScrollbar>
           ) : (
-              'Loading...'
-            )}
+            'Loading...'
+          )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">

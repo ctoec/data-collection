@@ -16,6 +16,8 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
+import { Moment } from 'moment';
+import { momentTransformer } from './transformers/momentTransformer';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -37,8 +39,8 @@ export class Child implements ChildInterface {
   @Column({ nullable: true })
   suffix?: string;
 
-  @Column({ nullable: true })
-  birthdate?: Date;
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
+  birthdate?: Moment;
 
   @Column({ nullable: true })
   birthTown?: string;

@@ -2,6 +2,7 @@ import { readFile, utils, WorkSheet } from 'xlsx';
 import { getConnection, getManager } from 'typeorm';
 import { FlattenedEnrollment } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
+import moment from 'moment';
 
 /**
  * Parses the uploaded file into:
@@ -128,6 +129,10 @@ function parseFlattenedEnrollment(
   Object.entries(rawEnrollment).forEach(([prop, value]) => {
     if (booleanProperties.includes(prop)) {
       rawEnrollment[prop] = getBoolean(value);
+    }
+
+    if (value instanceof Date) {
+      rawEnrollment[prop] = moment.utc(value);
     }
   });
 

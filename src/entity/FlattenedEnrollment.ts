@@ -18,6 +18,8 @@ import {
   REPORTING_REASON,
   REPORTING_PERIOD_FORMAT,
 } from './decorators/columnMetadata';
+import { Moment } from 'moment';
+import { momentTransformer } from './transformers/momentTransformer';
 
 const SECTIONS = {
   CHILD_INFO: 'child-info',
@@ -59,7 +61,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   })
   sasid?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Date of birth',
     required: REQUIRED,
@@ -70,7 +72,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/01/2016',
     section: SECTIONS.CHILD_INFO,
   })
-  dateOfBirth?: Date;
+  dateOfBirth?: Moment;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -337,7 +339,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   })
   annualHouseholdIncome?: number;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Determination date',
     required: REQUIRED_NOT_FOSTER,
@@ -349,7 +351,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: `10/01/${new Date().getFullYear()}`,
     section: SECTIONS.FAMILY_INCOME,
   })
-  incomeDeterminationDate?: Date;
+  incomeDeterminationDate?: Moment;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -400,7 +402,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   })
   ageGroup?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Enrollment Start Date',
     required: REQUIRED,
@@ -410,9 +412,9 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/01/2016',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentStartDate?: Date;
+  enrollmentStartDate?: Moment;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Enrollment End Date',
     required: 'Required if exited',
@@ -422,7 +424,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '08/30/2017',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentEndDate?: Date;
+  enrollmentEndDate?: Moment;
 
   @Column({ nullable: true })
   @ColumnMetadata({

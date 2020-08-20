@@ -15,6 +15,7 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
+  SpecialEducationServicesType,
 } from '../../shared/models';
 import { getManager } from 'typeorm';
 import moment from 'moment';
@@ -35,9 +36,19 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
     const site = await mapSite(source);
     const child = mapChild(source);
     const family = mapFamily(source);
-    const enrollment = await mapEnrollment(source, site);
+    const incomeDetermination = mapIncomeDetermination(source);
+    const enrollment = mapEnrollment(source, site, child);
+    const funding = await mapFunding(source, organization, enrollment.ageGroup);
 
-    return { organization, site, child, family, enrollment };
+    return {
+      organization,
+      site,
+      child,
+      family,
+      incomeDetermination,
+      enrollment,
+      funding,
+    };
   } catch (err) {
     console.error('Unable to map row: ', err);
     return;
@@ -107,21 +118,19 @@ const mapChild = (source: FlattenedEnrollment) => {
   }
 
   // Gender
-  let gender = Gender.NotSpecified;
-  if (source.gender) {
-    Object.values(Gender).forEach((g) => {
-      if (
-        g.slice(0, 1).toLowerCase() === source.gender.slice(0, 1).toLowerCase()
-      ) {
-        gender = g;
-      }
-    });
-  }
+  const gender: Gender =
+    mapEnum(Gender, source.gender, true) || Gender.NotSpecified;
+
+  // Special education services type
+  const specialEducationServicesType: SpecialEducationServicesType = mapEnum(
+    SpecialEducationServicesType,
+    source.specialEducationServicesType
+  );
 
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
-  return Object.assign(new Child(), {
+  return getManager().create(Child, {
     sasid: source.sasid,
     firstName,
     middleName,
@@ -141,7 +150,7 @@ const mapChild = (source: FlattenedEnrollment) => {
     foster: source.livesWithFosterFamily,
     recievesC4K: source.receivingCareForKids,
     recievesSpecialEducationServices: source.receivingSpecialEducationServices,
-    specialEducationServicesType: source.specialEducationServicesType,
+    specialEducationServicesType,
   });
 };
 
@@ -153,7 +162,7 @@ const mapChild = (source: FlattenedEnrollment) => {
  */
 const mapFamily = (source: FlattenedEnrollment) => {
   const incomeDetermination = mapIncomeDetermination(source);
-  return Object.assign(new Family(), {
+  return getManager().create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
@@ -168,7 +177,7 @@ const mapFamily = (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapIncomeDetermination = (source: FlattenedEnrollment) => {
-  return Object.assign(new IncomeDetermination(), {
+  return getManager().create(IncomeDetermination, {
     numberOfPeople: source.householdSize,
     income: source.annualHouseholdIncome,
     determinationDate: source.incomeDeterminationDate,
@@ -181,24 +190,20 @@ const mapIncomeDetermination = (source: FlattenedEnrollment) => {
  * @param source
  * @param site
  */
-const mapEnrollment = async (source: FlattenedEnrollment, site: Site) => {
-  let ageGroup;
-  if (source.ageGroup) {
-    Object.values(AgeGroup).forEach((a) => {
-      if (a.toLowerCase() === source.ageGroup.toLowerCase()) {
-        ageGroup = a;
-      }
-    });
-  }
+const mapEnrollment = (
+  source: FlattenedEnrollment,
+  site: Site,
+  child: Child
+) => {
+  const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
 
-  const funding = await mapFunding(source, site.organization, ageGroup);
-  return Object.assign(new Enrollment(), {
-    site,
+  return getManager().create(Enrollment, {
+    siteId: site.id,
+    childId: child.id,
     ageGroup,
     entry: source.enrollmentStartDate,
     exit: source.enrollmentEndDate,
     exitReason: source.enrollmentExitReason,
-    fundings: [funding],
   });
 };
 
@@ -215,30 +220,18 @@ const mapFunding = async (
   organization: Organization,
   ageGroup: AgeGroup
 ) => {
-  let fundingSource;
-  if (source.fundingType) {
-    Object.values(FundingSource).forEach((fs) => {
-      if (fs.toLowerCase() === source.fundingType.toLowerCase()) {
-        fundingSource = fs;
-      }
-    });
-  }
-
-  let fundingTime;
-  if (source.spaceType) {
-    Object.values(FundingTime).forEach((ft) => {
-      if (ft.toLowerCase() === source.spaceType.toLowerCase()) {
-        fundingTime = ft;
-      }
-    });
-  }
+  const fundingSource: FundingSource = mapEnum(
+    FundingSource,
+    source.fundingType
+  );
+  const fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
 
   // Cannot create funding without FundingSpace, and cannot find FundingSpace
   // without fundingSource AND fundingTime, so if you don't have them
   // MOVE ALONG
   if (fundingSource && fundingTime) {
     // Get the FundingSpace with associated funding source and agegroup for the given organization
-    let fundingSpace;
+    let fundingSpace: FundingSpace;
     const fundingSpaces = await getManager().find(FundingSpace, {
       where: { source: fundingSource, ageGroup, organization },
     });
@@ -254,7 +247,8 @@ const mapFunding = async (
     // Cannot create funding without FundingSpace, so if you don't have one
     // MOVE ALONG
     if (fundingSpace) {
-      let firstReportingPeriod, lastReportingPeriod;
+      let firstReportingPeriod: ReportingPeriod,
+        lastReportingPeriod: ReportingPeriod;
       if (source.firstFundingPeriod) {
         const period = moment(source.firstFundingPeriod, [
           'MM/YYYY',
@@ -275,7 +269,7 @@ const mapFunding = async (
           where: { type: fundingSource, period: period.format('YYYY-MM-DD') },
         });
       }
-      return Object.assign(new Funding(), {
+      return getManager().create(Funding, {
         firstReportingPeriod,
         lastReportingPeriod,
         fundingSpace,
@@ -298,4 +292,36 @@ const mapFunding = async (
       "User tried to enter funding information but we couldn't figure it out"
     );
   }
+};
+
+const mapEnum = <T>(
+  referenceEnum:
+    | typeof Gender
+    | typeof AgeGroup
+    | typeof FundingSource
+    | typeof FundingTime
+    | typeof SpecialEducationServicesType,
+  value: string | undefined,
+  firstLetterComparison: boolean = false
+) => {
+  if (!value) return;
+
+  const stripRegex = /[-\/\s]+/;
+  const normalizedValue = value.trim().replace(stripRegex, '').toLowerCase();
+  let ret: T;
+  Object.values(referenceEnum).forEach((ref) => {
+    const normalizedRef = ref.replace(stripRegex, '').toLowerCase();
+    if (firstLetterComparison) {
+      if (normalizedRef[0] === normalizedValue[0]) {
+        ret = ref;
+      }
+    } else if (
+      normalizedValue.startsWith(normalizedRef) ||
+      normalizedRef.startsWith(normalizedValue)
+    ) {
+      ret = ref;
+    }
+  });
+
+  return ret;
 };

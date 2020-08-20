@@ -15,6 +15,8 @@ import { Child } from './Child';
 import { Funding } from './Funding';
 import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
+import { Moment } from 'moment';
+import { momentTransformer } from './transformers/momentTransformer';
 
 @Entity()
 export class Enrollment implements EnrollmentInterface {
@@ -36,11 +38,11 @@ export class Enrollment implements EnrollmentInterface {
   @Column({ type: 'enum', enum: AgeGroup, nullable: true })
   ageGroup?: AgeGroup;
 
-  @Column({ type: 'date', nullable: true })
-  entry?: Date;
+  @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  entry?: Moment;
 
-  @Column({ type: 'date', nullable: true })
-  exit?: Date;
+  @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  exit?: Moment;
 
   @Column({ nullable: true })
   exitReason?: string;

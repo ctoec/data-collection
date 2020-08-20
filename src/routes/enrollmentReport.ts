@@ -20,7 +20,7 @@ export const router = express.Router();
  */
 router.get(
   '/:reportId',
-  passAsyncError(async (req, res, next) => {
+  passAsyncError(async (req, res) => {
     const id = parseInt(req.params['reportId']) || 0;
     const report = await getManager().findOne(EnrollmentReport, id);
 
@@ -45,7 +45,7 @@ const upload = multer({ dest: '/tmp/uploads' }).single('file');
 router.post(
   '/',
   upload,
-  passAsyncError(async (req, res, next) => {
+  passAsyncError(async (req, res) => {
     try {
       const { EXPECTED_HEADERS, headers, enrollments } = parseUploadedTemplate(
         req.file
@@ -67,7 +67,9 @@ router.post(
       if (err instanceof BadRequestError) throw err;
 
       console.error('Error parsing uploaded enrollment report: ', err);
-      throw new BadRequestError('Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.');
+      throw new BadRequestError(
+        'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
+      );
     }
   })
 );
@@ -79,7 +81,7 @@ router.post(
  */
 router.get(
   '/download/:reportId',
-  passAsyncError(async (req, res, next) => {
+  passAsyncError(async (req, res) => {
     const id = parseInt(req.params.reportId) || 0;
     const report = await getManager().findOne(EnrollmentReport, id);
     if (!report) throw new NotFoundError();
