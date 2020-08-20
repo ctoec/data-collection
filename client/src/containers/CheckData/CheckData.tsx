@@ -30,7 +30,7 @@ const CheckData: React.FC = () => {
   );
 
   useEffect(() => {
-    apiGet('data-definitions').then((metadata) => setColumnMetadata(metadata));
+    apiGet('column-metadata').then((metadata) => setColumnMetadata(metadata));
   }, []);
 
   useEffect(() => {

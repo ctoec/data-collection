@@ -41,7 +41,7 @@ const App: React.FC = () => {
           {
             id: 'data-definitions-nav',
             title: 'Data definitions',
-            path: '/data-definitions',
+            path: '/column-metadata',
           },
           {
             id: 'feedback-nav',
