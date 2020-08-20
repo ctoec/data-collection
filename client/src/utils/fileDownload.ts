@@ -2,6 +2,10 @@ import { apiGet } from './api';
 import { ContentDisposition, parse } from 'content-disposition';
 import { saveAs } from 'file-saver';
 
+/**
+ * Download a file stream from the route specified and save it to browser,
+ * either with the file name specified or as "download".
+ */
 export async function downloadStreamToFile(route: string, defaultFileName?: string) {
   const res: Response = await apiGet(route, { jsonParse: false });
 

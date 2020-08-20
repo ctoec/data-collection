@@ -5,6 +5,7 @@ import { ECEColumnMetadata } from '../../shared/models';
 import { EntityMetadata, getConnection } from 'typeorm';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { FlattenedEnrollment } from '../entity';
+import { wrapText } from 'src/utils/string';
 
 
 export const columnMetadataRouter = express.Router();
@@ -12,10 +13,10 @@ export const columnMetadataRouter = express.Router();
 /**
  * /column-metadata GET
  *
- * Returns all data-definition metadata from the FlattenedEnrollment model,
- * as an array of DataDefinitionInfo objects
+ * Returns all column metadata from the FlattenedEnrollment model,
+ * as an array of ECEColumnMetadata objects
  */
-columnMetadataRouter.get('/', (_, res) => {
+columnMetadataRouter.get('/', (req: Request, res: Response) => {
   res.send(getAllEnrollmentColumns());
 });
 
@@ -64,16 +65,16 @@ function generateExcelWorkbook(): WorkBook {
       columnNames[index] = columnMetadata.formattedName;
       formats[index] = columnMetadata.format;
 
-      //  Reserve AT LEAST 14 characters for column widths, for the sake of
+      //  Reserve a certain number of minimum characters for column widths, for the sake of
       //  having actually readable format descriptors
       const displayNameLength: number = columnMetadata.formattedName.length;
-      const columnCharCount: number = displayNameLength > 14 ? displayNameLength : 14;
+      const columnCharCount: number = displayNameLength > 16 ? displayNameLength : 16;
 
       cols[index] = {
         wch: columnCharCount
       };
 
-      formats[index] = columnMetadata.format.match(new RegExp('.{1,' + columnCharCount + '}', 'g')).join('\n');
+      formats[index] = wrapText(columnMetadata.format, columnCharCount);
 
       if (!sectionCounts[columnMetadata.section]) {
         sectionCounts[columnMetadata.section] = 0;
@@ -93,6 +94,8 @@ function generateExcelWorkbook(): WorkBook {
   let merges = [];
   let start = 0;
 
+  //  Iterate through each column's section and add merge points whenever
+  //  the section changes
   sections.forEach((sectionName, index) => {
     if (index === sections.length - 1 || sectionName !== sections[index + 1]) {
       merges.push({ s: { c: start, r: 0 }, e: { c: index, r: 0 } });
