@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import queryString from 'query-string';
 import pluralize from 'pluralize';
 import moment from 'moment';
@@ -13,11 +13,9 @@ import {
   Button,
   Table,
   Column,
-  TextInput,
-  ExpandRow,
 } from '@ctoec/component-library';
-import { TabNav } from './TabNav';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
+import { ProcessStep } from '@ctoec/component-library/dist/components/ProcessList/ProcessStep';
 
 const CheckData: React.FC = () => {
   const reportId = parseInt(
@@ -52,17 +50,27 @@ const CheckData: React.FC = () => {
       name: columnMeta.formattedName,
       title: columnMeta.propertyName,
       cell: ({ row }) => {
-        // special case for clickable name column that expands row
+        // special case for clickable name column that sends user to edit page
         if (columnMeta.propertyName === 'name') {
           return (
             <td>
-              <ExpandRow>
+
+              // Pass reportId to save/send data back once editing is done
+              <Link to={
+                {
+                  pathname: "/edit-record/" + row.name,
+                  state: {
+                    'reportId': reportId,
+                    'childName': row.name,
+                  },
+                }
+              }>
                 <Button
                   className="text-no-wrap"
                   appearance="unstyled"
                   text={row.name || ''}
                 />
-              </ExpandRow>
+              </Link>
             </td>
           );
         }
@@ -107,58 +115,6 @@ const CheckData: React.FC = () => {
                 rowKey={(row) => row.id}
                 data={reportData}
                 columns={tableColumns}
-
-                rowExpansionRender={(row) => (
-                  <div className="grid-row flex-row">
-                    <div >
-                      <h3>Edit information about {row.name} </h3>
-
-                      <div >
-                        <TabNav
-                            items={[
-
-                              // TODO: Each of these can be refactored into a form element that
-                              // we store somewhere in the repo and just call here. This is
-                              // just a placeholder as we develop the forms.
-                                {
-                                    id: "child-tab",
-                                    text: "Child Info",
-                                    content: <span>This is where the child info form goes</span>
-                                },
-                                {
-                                    id: "family-tab",
-                                    text: "Family Info",
-                                    content: <span>This is where the family info form goes</span>
-                                },
-                                {
-                                    id: "income-tab",
-                                    text: "Family Income",
-                                    content: <span>This is where the family income form goes</span>
-                                },
-                                {
-                                    id: "enrollment-tab",
-                                    text: "Enrollment and funding",
-                                    content: <span>This is where the enrollment form goes</span>
-                                },
-                                {
-                                    id: "care-tab",
-                                    text: "Care 4 Kids",
-                                    content: <span>This is where the care for kids form goes</span>
-                                }
-                            ]}
-                            activeId="child-tab"
-                        />
-                      </div>
-                      <div className="margin-bottom-2"></div>
-                    <div className="margin-bottom-2">
-                      <ExpandRow>
-                        <Button text="CLOSE THIS EXPANSION" />
-                      </ExpandRow>
-                    </div>
-                    </div>
-                  </div>
-                )}
-                
               />
             </PerfectScrollbar>
           ) : (
