@@ -1,4 +1,4 @@
-import { write, WorkBook, utils, ColInfo, WorkSheet } from "xlsx/types";
+import { write, WorkBook, utils, ColInfo, WorkSheet } from "xlsx";
 import { ColumnMetadata } from "../../shared/models";
 import { wrapText } from "../utils/string";
 import { EntityMetadata, getConnection } from "typeorm";
