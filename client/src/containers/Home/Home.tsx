@@ -88,7 +88,7 @@ const Home: React.FC = () => {
               />
               <Button
                 appearance="unstyled"
-                href="/column-metadata"
+                href="/data-definitions"
                 className="text-bold margin-bottom-3 display-block"
                 text={
                   <TextWithIcon

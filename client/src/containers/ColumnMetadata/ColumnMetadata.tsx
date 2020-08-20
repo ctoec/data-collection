@@ -92,7 +92,7 @@ const ColumnMetadata: React.FC = () => {
               {SECTION_COPY[sectionKey].description}
             </p>
             <Table
-              id="column-metadata-table"
+              id="data-definitions-table"
               data={sectionData}
               rowKey={(row) => (row ? row.formattedName : '')}
               columns={columns}

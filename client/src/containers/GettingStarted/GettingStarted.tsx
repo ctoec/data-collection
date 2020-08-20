@@ -25,7 +25,7 @@ const GettingStarted: React.FC = () => {
           text={
             <span>
               To see all required data fields, definitions, and rationale, see{' '}
-              <Link to="/column-metadata">enrollment data requirements.</Link>
+              <Link to="/data-definitions">enrollment data requirements.</Link>
             </span>
           }
         />
