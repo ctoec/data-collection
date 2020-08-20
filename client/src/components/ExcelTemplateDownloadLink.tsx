@@ -1,11 +1,17 @@
 import React from 'react';
 import { Button, TextWithIcon } from '@ctoec/component-library';
 import { ReactComponent as DownloadArrow } from '@ctoec/component-library/dist/assets/images/download.svg';
+import { downloadStreamToFile } from '../utils/fileDownload';
 
-export const ExcelTemplateDownloadLink = () => (
+export const ExcelTemplateDownloadLink = () => {
+  async function downloadExcelTemplate() {
+    await downloadStreamToFile('data-definitions/xlsx', 'ECE Data Collection Template.xlsx')
+  }
+
+  return (
   <Button
     appearance="unstyled"
-    href="/template/xlsx"
+    onClick={downloadExcelTemplate}
     className="text-bold margin-bottom-3 display-block"
     external
     text={
@@ -18,3 +24,4 @@ export const ExcelTemplateDownloadLink = () => (
     }
   />
 );
+}

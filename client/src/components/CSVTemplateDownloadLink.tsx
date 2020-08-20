@@ -1,33 +1,11 @@
 import React from 'react';
 import { Button, TextWithIcon } from '@ctoec/component-library';
 import { ReactComponent as DownloadArrow } from '@ctoec/component-library/dist/assets/images/download.svg';
-import { apiGet } from '../utils/api';
-
-import { saveAs } from 'file-saver';
-import { parse, ContentDisposition } from 'content-disposition';
-
-const DEFAULT_CSV_TEMPLATE_NAME = "ECE Data Collection Template.csv";
+import { downloadStreamToFile } from '../utils/fileDownload';
 
 export const CSVTemplateDownloadLink = () => {
   async function downloadCsvTemplate() {
-    const res: Response = await apiGet('template/csv', { jsonParse: false });
-    const fileBlob: Blob = await res.blob();
-
-    saveAs(fileBlob, parseFileName(res));
-  }
-
-  function parseFileName(res: Response): string {
-    const cdHeader = res.headers.get('Content-Disposition');
-
-    if (cdHeader) {
-      const cd: ContentDisposition = parse(cdHeader);
-
-      if (cd && cd.parameters && cd.parameters.fileName) {
-        return cd.parameters.fileName;
-      }
-    }
-
-    return DEFAULT_CSV_TEMPLATE_NAME;
+    await downloadStreamToFile('data-definitions/csv', 'ECE Data Collection Template.csv');
   }
 
   return (
