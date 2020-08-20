@@ -18,7 +18,6 @@ import {
   TabNav,
 } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
-import { ProcessStep } from '@ctoec/component-library/dist/components/ProcessList/ProcessStep';
 
 const CheckData: React.FC = () => {
   const reportId = parseInt(
@@ -49,9 +48,10 @@ const CheckData: React.FC = () => {
 
   const tableColumns: Column<FlattenedEnrollment>[] = columnMetadata.map(
     (columnMeta) => ({
-      className: 'text-pre text-center',
+      className: 'text-pre text-center font-body-2xs',
       name: columnMeta.formattedName,
       title: columnMeta.propertyName,
+      sort: row => (row as any)[columnMeta.propertyName],
       cell: ({ row }) => {
         // special case for clickable name column that sends user to edit page
         if (columnMeta.propertyName === 'name') {
@@ -69,7 +69,7 @@ const CheckData: React.FC = () => {
                 }
               }>
                 <Button
-                  className="text-no-wrap"
+                  className="text-no-wrap font-body-2xs"
                   appearance="unstyled"
                   text={row.name || ''}
                 />
@@ -121,8 +121,8 @@ const CheckData: React.FC = () => {
               />
             </PerfectScrollbar>
           ) : (
-            'Loading...'
-          )}
+              'Loading...'
+            )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
