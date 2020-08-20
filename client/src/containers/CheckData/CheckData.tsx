@@ -47,9 +47,10 @@ const CheckData: React.FC = () => {
 
   const tableColumns: Column<FlattenedEnrollment>[] = columnMetadata.map(
     (columnMeta) => ({
-      className: 'text-pre text-center',
+      className: 'text-pre text-center font-body-2xs',
       name: columnMeta.formattedName,
       title: columnMeta.propertyName,
+      sort: row => (row as any)[columnMeta.propertyName],
       cell: ({ row }) => {
         // special case for clickable name column that expands row
         if (columnMeta.propertyName === 'name') {
@@ -57,7 +58,7 @@ const CheckData: React.FC = () => {
             <td>
               <ExpandRow>
                 <Button
-                  className="text-no-wrap"
+                  className="text-no-wrap font-body-2xs"
                   appearance="unstyled"
                   text={row.name || ''}
                 />
@@ -114,7 +115,7 @@ const CheckData: React.FC = () => {
                         label="An input can go here"
                         id="text-input"
                         type="input"
-                        onChange={() => {}}
+                        onChange={() => { }}
                       />
                       <Button
                         className="margin-top-2"
@@ -131,8 +132,8 @@ const CheckData: React.FC = () => {
               />
             </PerfectScrollbar>
           ) : (
-            'Loading...'
-          )}
+              'Loading...'
+            )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
