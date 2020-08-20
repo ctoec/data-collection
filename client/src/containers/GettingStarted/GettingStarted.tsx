@@ -2,8 +2,7 @@ import React from 'react';
 import { MailToLink } from '../../components/MailToLink';
 import { Button, Alert } from '@ctoec/component-library';
 import { Link } from 'react-router-dom';
-import { ExcelTemplateDownloadLink } from '../../components/ExcelTemplateDownloadLink';
-import { CSVTemplateDownloadLink } from '../../components/CSVTemplateDownloadLink';
+import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
 
 const GettingStarted: React.FC = () => {
   return (
@@ -36,8 +35,8 @@ const GettingStarted: React.FC = () => {
             Use one of these templates to enter your enrollment data for all
             state-funded children.
           </p>
-          <ExcelTemplateDownloadLink />
-          <CSVTemplateDownloadLink />
+          <TemplateDownloadLink type="xlsx" />
+          <TemplateDownloadLink type="csv" />
         </div>
       </div>
       <div className="grid-row margin-top-2">

@@ -8,8 +8,7 @@ import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/hom
 import UserContext from '../../contexts/UserContext/UserContext';
 
 import { MailToLink } from '../../components/MailToLink';
-import { ExcelTemplateDownloadLink } from '../../components/ExcelTemplateDownloadLink';
-import { CSVTemplateDownloadLink } from '../../components/CSVTemplateDownloadLink';
+import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
 
 const Home: React.FC = () => {
   const { user, loading } = useContext(UserContext);
@@ -103,8 +102,8 @@ const Home: React.FC = () => {
             </div>
             <div>
               <p className="text-bold">Download the data collection template</p>
-              <ExcelTemplateDownloadLink />
-              <CSVTemplateDownloadLink />
+              <TemplateDownloadLink type='xlsx' />
+              <TemplateDownloadLink type='csv' />
             </div>
           </div>
         </div>
