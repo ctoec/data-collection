@@ -21,11 +21,17 @@ export class Enrollment implements EnrollmentInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Child, { nullable: false })
+  @ManyToOne(() => Child, { nullable: false })
   child: Child;
 
-  @ManyToOne((type) => Site, { nullable: false })
+  @Column({ type: 'uuid' })
+  childId: string;
+
+  @ManyToOne(() => Site, { nullable: false })
   site: Site;
+
+  @Column()
+  siteId: number;
 
   @Column({ type: 'enum', enum: AgeGroup, nullable: true })
   ageGroup?: AgeGroup;
@@ -39,9 +45,9 @@ export class Enrollment implements EnrollmentInterface {
   @Column({ nullable: true })
   exitReason?: string;
 
-  @OneToMany((type) => Funding, (funding) => funding.enrollment)
+  @OneToMany(() => Funding, (funding) => funding.enrollment)
   fundings?: Array<Funding>;
 
-  @Column((type) => UpdateMetaData, { prefix: false })
+  @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData?: UpdateMetaData;
 }

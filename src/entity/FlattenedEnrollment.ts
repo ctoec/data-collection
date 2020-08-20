@@ -57,7 +57,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '0123456789',
     section: SECTIONS.CHILD_INFO,
   })
-  sasid?: number;
+  sasid?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({

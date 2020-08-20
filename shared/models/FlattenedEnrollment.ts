@@ -4,7 +4,7 @@ export interface FlattenedEnrollment {
   id: number;
   report: EnrollmentReport;
   name?: string;
-  sasid?: number;
+  sasid?: string;
   dateOfBirth?: Date;
   birthCertificateId?: string;
   townOfBirth?: string;

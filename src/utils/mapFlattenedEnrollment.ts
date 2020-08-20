@@ -17,6 +17,7 @@ import {
   FundingTime,
 } from '../../shared/models';
 import { getManager } from 'typeorm';
+import moment from 'moment';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -26,22 +27,6 @@ import { getManager } from 'typeorm';
  *
  * TODO: Implement some Org/Site access authorization layer.
  * When/where/how do we layer in internal app authorization?
- *
- * TODO: We ran into problems before implementing a REST api but
- * treating objects like arbitrary GraphQL-style graphs. What shape
- * should all these data objects be returned in? Nested (implemented
- * now, mirrors how we did it in ECE Reporter)? Array of dicts containing
- * objects for every row a la:
- * [
- * 	{
- * 		child,
- * 		family,
- * 		incomeDetermination,
- * 		enrollment,
- * 	},
- * 	{...},
- * 	{...}
- * ] ?
  * @param source
  */
 export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
@@ -52,10 +37,7 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
     const family = mapFamily(source);
     const enrollment = await mapEnrollment(source, site);
 
-    child.family = family;
-    child.enrollments = [enrollment];
-
-    return child;
+    return { organization, site, child, family, enrollment };
   } catch (err) {
     console.error('Unable to map row: ', err);
     return;
@@ -92,11 +74,13 @@ const mapSite = (source: FlattenedEnrollment) => {
 /**
  * Create Child object from FlattenedEnrollment source.
  * TODO: How do we handle blocking data errors in a single row?
+ * TODO: Also accept "Lastname, Firstname Middlename[,] Suffix" ?
  * @param source
  */
 const mapChild = (source: FlattenedEnrollment) => {
   const SUFFIXES = ['sr', 'jr', 'ii', 'iii'];
-  const nameParts = (source.name || '').split(' ');
+  const normalizedName = source.name.trim().replace(/\s+/, ' ');
+  const nameParts = (normalizedName || '').split(' ');
   if (nameParts.length < 2) {
     throw new Error(
       'Name is required, and must include at least first and last name separated by space'
@@ -272,15 +256,23 @@ const mapFunding = async (
     if (fundingSpace) {
       let firstReportingPeriod, lastReportingPeriod;
       if (source.firstFundingPeriod) {
-        const [month, year] = source.firstFundingPeriod.split('/');
+        const period = moment(source.firstFundingPeriod, [
+          'MM/YYYY',
+          'MM/YY',
+          'MMM-YY',
+        ]);
         firstReportingPeriod = await getManager().findOne(ReportingPeriod, {
-          where: { type: fundingSource, period: `${year}-${month}-01` },
+          where: { type: fundingSource, period: period.format('YYYY-MM-DD') },
         });
       }
       if (source.lastFundingPeriod) {
-        const [month, year] = source.lastFundingPeriod.split('/');
+        const period = moment(source.firstFundingPeriod, [
+          'MM/YYYY',
+          'MM/YY',
+          'MMM-YY',
+        ]);
         lastReportingPeriod = await getManager().findOne(ReportingPeriod, {
-          where: { type: fundingSource, period: `${year}-${month}-01` },
+          where: { type: fundingSource, period: period.format('YYYY-MM-DD') },
         });
       }
       return Object.assign(new Funding(), {
