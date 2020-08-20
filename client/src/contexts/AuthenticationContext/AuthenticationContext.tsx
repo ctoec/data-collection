@@ -22,7 +22,6 @@ import { getCurrentHost } from '../../utils/getCurrentHost';
 
 export type AuthenticationContextType = {
   accessToken: string | null;
-  withFreshToken: () => Promise<void>;
   loading: boolean;
 };
 
@@ -42,7 +41,6 @@ export type AuthenticationProviderPropsType = {
 
 const AuthenticationContext = React.createContext<AuthenticationContextType>({
   accessToken: null,
-  withFreshToken: async () => {},
   loading: true,
 });
 
@@ -246,6 +244,13 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = ({
     redirectUrl,
   ]);
 
+  // ensure token is always fresh
+  // (function exits early if token is still valid
+  // -- only does request if necessary)
+  useEffect(() => {
+    makeRefreshTokenRequest();
+  });
+
   /**
    * Create and perform authorization code-based token request.
    * This type of token request is only executed after the initial auth request,
@@ -312,7 +317,6 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = ({
     <Provider
       value={{
         accessToken: accessToken,
-        withFreshToken: makeRefreshTokenRequest,
         loading: loading,
       }}
     >

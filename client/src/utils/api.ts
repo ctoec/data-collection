@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { getCurrentHost } from './getCurrentHost';
 
 type ApiOpts = {
@@ -66,6 +67,15 @@ async function api(
       return res;
     }
 
-    return await res.json();
+    const jsonString = await res.text();
+    return JSON.parse(jsonString, dateReviver);
   }
 }
+
+const dateReviver = (_: any, value: string) => {
+  if (typeof value === 'string') {
+    const parsedDate = moment(value, undefined, true);
+    if (parsedDate.isValid()) return parsedDate;
+  }
+  return value;
+};
