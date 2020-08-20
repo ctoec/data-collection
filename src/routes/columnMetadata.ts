@@ -5,7 +5,7 @@ import { ColumnMetadata } from '../../shared/models';
 import { EntityMetadata, getConnection } from 'typeorm';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { FlattenedEnrollment } from '../entity';
-import { wrapText } from 'src/utils/string';
+import { wrapText } from '../utils/string';
 
 
 export const columnMetadataRouter = express.Router();
