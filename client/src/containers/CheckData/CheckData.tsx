@@ -16,6 +16,7 @@ import {
   TextInput,
   ExpandRow,
 } from '@ctoec/component-library';
+import { TabNav } from './TabNav';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 
 const CheckData: React.FC = () => {
@@ -106,28 +107,58 @@ const CheckData: React.FC = () => {
                 rowKey={(row) => row.id}
                 data={reportData}
                 columns={tableColumns}
+
                 rowExpansionRender={(row) => (
                   <div className="grid-row flex-row">
-                    <div className="grid-col-1">
-                      <h3>Edit the stuff about {row.name} </h3>
-                      <TextInput
-                        label="An input can go here"
-                        id="text-input"
-                        type="input"
-                        onChange={() => {}}
-                      />
-                      <Button
-                        className="margin-top-2"
-                        text="A button can go here"
-                      />
-                    </div>
-                    <div className="grid-col-1">
+                    <div >
+                      <h3>Edit information about {row.name} </h3>
+
+                      <div >
+                        <TabNav
+                            items={[
+
+                              // TODO: Each of these can be refactored into a form element that
+                              // we store somewhere in the repo and just call here. This is
+                              // just a placeholder as we develop the forms.
+                                {
+                                    id: "child-tab",
+                                    text: "Child Info",
+                                    content: <span>This is where the child info form goes</span>
+                                },
+                                {
+                                    id: "family-tab",
+                                    text: "Family Info",
+                                    content: <span>This is where the family info form goes</span>
+                                },
+                                {
+                                    id: "income-tab",
+                                    text: "Family Income",
+                                    content: <span>This is where the family income form goes</span>
+                                },
+                                {
+                                    id: "enrollment-tab",
+                                    text: "Enrollment and funding",
+                                    content: <span>This is where the enrollment form goes</span>
+                                },
+                                {
+                                    id: "care-tab",
+                                    text: "Care 4 Kids",
+                                    content: <span>This is where the care for kids form goes</span>
+                                }
+                            ]}
+                            activeId="child-tab"
+                        />
+                      </div>
+                      <div className="margin-bottom-2"></div>
+                    <div className="margin-bottom-2">
                       <ExpandRow>
                         <Button text="CLOSE THIS EXPANSION" />
                       </ExpandRow>
                     </div>
+                    </div>
                   </div>
                 )}
+                
               />
             </PerfectScrollbar>
           ) : (
