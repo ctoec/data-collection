@@ -40,7 +40,7 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/column-metadata',
+    path: '/data-requirements',
     component: ColumnMetadata,
     unauthorized: true,
   },
