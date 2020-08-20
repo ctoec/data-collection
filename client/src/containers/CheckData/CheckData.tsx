@@ -15,8 +15,8 @@ import {
   Column,
   TextInput,
   ExpandRow,
+  TabNav,
 } from '@ctoec/component-library';
-import { TabNav } from './TabNav';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 
 const CheckData: React.FC = () => {
