@@ -58,7 +58,7 @@ router.post(
       res.send(report);
     } catch (err) {
       console.error('Error parsing uploaded enrollment report: ', err);
-      throw new BadRequestError('Unable to parse uploaded report');
+      throw new BadRequestError('Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.');
     }
   })
 );
