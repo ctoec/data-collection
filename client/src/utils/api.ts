@@ -74,7 +74,7 @@ async function api(
 
 const dateReviver = (_: any, value: string) => {
   if (typeof value === 'string') {
-    const parsedDate = moment(value, undefined, true);
+    const parsedDate = moment.utc(value, undefined, true);
     if (parsedDate.isValid()) return parsedDate;
   }
   return value;
