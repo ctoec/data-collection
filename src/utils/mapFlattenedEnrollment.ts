@@ -18,7 +18,6 @@ import {
   SpecialEducationServicesType,
 } from '../../shared/models';
 import { getManager } from 'typeorm';
-import moment from 'moment';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -28,6 +27,7 @@ import moment from 'moment';
  *
  * TODO: Implement some Org/Site access authorization layer.
  * When/where/how do we layer in internal app authorization?
+ * TODO: Cache Org/Site, since they are definitely reused a lot in an enrollment report
  * @param source
  */
 export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
@@ -233,6 +233,7 @@ const mapFunding = async (
   // MOVE ALONG
   if (fundingSource && fundingTime) {
     // Get the FundingSpace with associated funding source and agegroup for the given organization
+    // TODO: Cache FundingSpace, as they'll be reused a lot
     let fundingSpace: FundingSpace;
     const fundingSpaces = await getManager().find(FundingSpace, {
       where: {
@@ -253,6 +254,7 @@ const mapFunding = async (
     // Cannot create funding without FundingSpace, so if you don't have one
     // MOVE ALONG
     if (fundingSpace) {
+      // TODO: Cache ReportingPeriods, as they'll be reused a lot
       let firstReportingPeriod: ReportingPeriod,
         lastReportingPeriod: ReportingPeriod;
       if (source.firstFundingPeriod) {

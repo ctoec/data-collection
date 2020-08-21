@@ -16,7 +16,22 @@ export const router = express.Router();
 /**
  * /enrollment-reports/:reportId GET
  *
- * Returns the given EnrollmentReport, or a 404
+ * Returns the parsed data from the given EnrollmentReport, as
+ * an array of object dicts like:
+ * [
+ * 	{
+ * 		organization: {...},
+ * 		site: {...},
+ * 		child: {...},
+ * 		family: {...},
+ * 		incomeDetermination: {...},
+ * 		enrollment: {...},
+ * 		funding: {...}
+ * 	},
+ * 	...
+ * ]
+ * or a 404
+ * TODO: Does this data type need a shared interface?
  */
 router.get(
   '/:reportId',
