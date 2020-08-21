@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { DataDefinitionInfo as DataDefinitionInfoInterface } from '../../../shared/models';
+import { ColumnMetadata as ECEColumnMetadata } from '../../../shared/models';
 
 // Formats
 export const BOOLEAN_FORMAT = 'Yes, Y, No, N';
@@ -23,38 +23,19 @@ export const UTILIZATION_REPORTING_REASON =
 
 const DATA_DEFINITION_KEY = Symbol('definitionMetadata');
 
-export class DataDefinitionInfo implements DataDefinitionInfoInterface {
-  formattedName: string;
-  required: string;
-  definition: string;
-  reason: string;
-  format: string;
-  example: string;
-  section: string;
-  propertyName: string;
-}
-
 /**
  * This type exists to allow the user to set the DataDefinition metadata
  * without providing the `propertyName` value, as this should come from the
  * property itself. It is added to the metadata object returned by
  * `getDataDefinition` (see below)
  */
-type DataDefinitionInfoInput = {
-  formattedName: string;
-  required: string;
-  definition: string;
-  reason: string;
-  format: string;
-  example: string;
-  section: string;
-};
+type ColumnMetadataInput = Omit<ECEColumnMetadata, "propertyName">
 
 /**
  * Set the provided data definition object as metadata for the given property
  * @param definition
  */
-export const DataDefinition = (definition: DataDefinitionInfoInput) =>
+export const ColumnMetadata = (definition: ColumnMetadataInput) =>
   Reflect.metadata(DATA_DEFINITION_KEY, definition);
 
 /**
@@ -63,13 +44,13 @@ export const DataDefinition = (definition: DataDefinitionInfoInput) =>
  * @param target
  * @param propertyKey
  */
-export const getDataDefinition = (target: any, propertyKey: string) => {
-  const dataDef = Reflect.getMetadata(DATA_DEFINITION_KEY, target, propertyKey);
+export const getColumnMetadata = (target: any, propertyName: string): ECEColumnMetadata => {
+  const dataDef = Reflect.getMetadata(DATA_DEFINITION_KEY, target, propertyName);
 
   return !dataDef
     ? dataDef
     : ({
         ...dataDef,
-        propertyName: propertyKey,
-      } as DataDefinitionInfo);
+        propertyName,
+      } as ECEColumnMetadata);
 };

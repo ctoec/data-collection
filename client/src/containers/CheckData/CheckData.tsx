@@ -6,7 +6,7 @@ import moment from 'moment';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { FlattenedEnrollment, DataDefinitionInfo } from 'shared/models';
+import { FlattenedEnrollment, ColumnMetadata } from 'shared/models';
 import { apiGet } from '../../utils/api';
 import {
   TextWithIcon,
@@ -23,12 +23,12 @@ const CheckData: React.FC = () => {
 
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<FlattenedEnrollment[]>([]);
-  const [columnMetadata, setColumnMetadata] = useState<DataDefinitionInfo[]>(
+  const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>(
     []
   );
 
   useEffect(() => {
-    apiGet('data-definitions').then((metadata) => setColumnMetadata(metadata));
+    apiGet('column-metadata').then((metadata) => setColumnMetadata(metadata));
   }, []);
 
   useEffect(() => {

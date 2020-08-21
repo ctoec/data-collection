@@ -1,25 +1,25 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ReactComponent as ArrowLeft } from 'uswds/dist/img/arrow-left.svg';
-import { DataDefinitionInfo } from 'shared/models';
+import { ColumnMetadata } from 'shared/models';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
 import { SECTION_COPY } from './Sections';
 import { apiGet } from '../../utils/api';
 
-const DataDefinitions: React.FC = () => {
+const DataRequirements: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
-  const [dataDefinitions, setDataDefinitions] = useState<DataDefinitionInfo[]>(
+  const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>(
     []
   );
 
   useEffect(() => {
-    apiGet('data-definitions').then((definitions) =>
-      setDataDefinitions(definitions)
+    apiGet('column-metadata').then((definitions) =>
+      setColumnMetadata(definitions)
     );
   }, [accessToken]);
 
-  const columns: Column<DataDefinitionInfo>[] = [
+  const columns: Column<ColumnMetadata>[] = [
     {
       name: 'Field name',
       cell: ({ row }) =>
@@ -64,8 +64,8 @@ const DataDefinitions: React.FC = () => {
     },
   ];
 
-  const dataDefinitionsBySection: { [key: string]: DataDefinitionInfo[] } = {};
-  dataDefinitions.reduce((acc, cur) => {
+  const columnMetadataBySection: { [key: string]: ColumnMetadata[] } = {};
+  columnMetadata.reduce((acc, cur) => {
     if (acc[cur.section]) {
       acc[cur.section].push(cur);
     } else {
@@ -73,7 +73,7 @@ const DataDefinitions: React.FC = () => {
     }
 
     return acc;
-  }, dataDefinitionsBySection);
+  }, columnMetadataBySection);
 
   return (
     <div className="grid-container margin-top-4">
@@ -84,7 +84,7 @@ const DataDefinitions: React.FC = () => {
         text={<TextWithIcon text="Back" Icon={ArrowLeft} iconSide="left" />}
       />
       <h1>OEC's enrollment data requirements</h1>
-      {Object.entries(dataDefinitionsBySection).map(
+      {Object.entries(columnMetadataBySection).map(
         ([sectionKey, sectionData]) => (
           <div className="margin-top-4">
             <h2>{SECTION_COPY[sectionKey].formattedName}</h2>
@@ -92,7 +92,7 @@ const DataDefinitions: React.FC = () => {
               {SECTION_COPY[sectionKey].description}
             </p>
             <Table
-              id="data-definitions-table"
+              id="data-requirements-table"
               data={sectionData}
               rowKey={(row) => (row ? row.formattedName : '')}
               columns={columns}
@@ -105,4 +105,4 @@ const DataDefinitions: React.FC = () => {
   );
 };
 
-export default DataDefinitions;
+export default DataRequirements;

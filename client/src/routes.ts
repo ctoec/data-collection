@@ -6,7 +6,7 @@ import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
 import CheckData from './containers/CheckData/CheckData';
 import EditRecord from './containers/EditRecord/EditRecord';
-import DataDefinitions from './containers/DataDefinitions/DataDefinitions';
+import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 
 export type RouteConfig = {
@@ -41,8 +41,8 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/data-definitions',
-    component: DataDefinitions,
+    path: '/data-requirements',
+    component: DataRequirements,
     unauthorized: true,
   },
   {

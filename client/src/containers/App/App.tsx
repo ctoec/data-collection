@@ -6,9 +6,17 @@ import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { MailToLink } from '../../components/MailToLink';
+import { downloadStreamToFile } from '../../utils/fileDownload';
 
 const App: React.FC = () => {
   const { user } = useContext(UserContext);
+
+  async function downloadTemplate(title: string) {
+    const type: string = title === 'Excel' ? 'xlsx' : 'csv';
+
+    await downloadStreamToFile(`column-metadata/${type}`, `ECE Data Collection Template.${type}`);
+  }
+
   return (
     <div className="App">
       <SimpleHeader
@@ -23,25 +31,23 @@ const App: React.FC = () => {
             children: [
               {
                 id: 'excel-template-nav',
-                title: 'Excel',
-                path: '/upload_template/ECE Data Collection Template.xlsx',
+                title: 'Excel'
               },
               {
                 id: 'csv-template-nav',
-                title: '.csv',
-                path: '/upload_template/ECE Data Collection Template.csv',
+                title: '.csv'
               },
             ],
             renderer: (props) => (
-              <a {...props} onClick={undefined} href={props.value}>
+              <a {...props}  onClick={() => downloadTemplate(props.text)}>
                 {props.text}
               </a>
             ),
           },
           {
-            id: 'data-definitions-nav',
-            title: 'Data definitions',
-            path: '/data-definitions',
+            id: 'data-requirements-nav',
+            title: 'Data requirements',
+            path: '/data-requirements',
           },
           {
             id: 'feedback-nav',

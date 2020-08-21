@@ -1,7 +1,7 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
 import { getConnection, getManager } from 'typeorm';
 import { FlattenedEnrollment } from '../entity';
-import { getDataDefinition } from '../entity/decorators/dataDefinition';
+import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 
 /**
  * Parses the uploaded file into:
@@ -21,7 +21,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   const [OBJECT_PROPERTIES, EXPECTED_HEADERS] = FLATTENED_ENROLLMENT_COLUMNS
     // get DataDefinition metadata
     .map((column) =>
-      getDataDefinition(new FlattenedEnrollment(), column.propertyName)
+      getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
     )
     // remove any columns without data definitions, as these are not present in the template
     .filter((dataDefinition) => !!dataDefinition)

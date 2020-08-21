@@ -4,7 +4,7 @@ import { FlattenedEnrollment as FlattenedEnrollmentInterface } from '../../share
 
 import { EnrollmentReport } from './EnrollmentReport';
 import {
-  DataDefinition,
+  ColumnMetadata,
   REQUIRED,
   OPTIONAL,
   REQUIRED_IF_US_BORN,
@@ -17,7 +17,7 @@ import {
   UTILIZATION_REPORTING_REASON,
   REPORTING_REASON,
   REPORTING_PERIOD_FORMAT,
-} from './decorators/dataDefinition';
+} from './decorators/columnMetadata';
 
 const SECTIONS = {
   CHILD_INFO: 'child-info',
@@ -35,7 +35,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   report: EnrollmentReport;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Name',
     required: REQUIRED,
     definition: "Legal name as it appears on the child's birth certificate.",
@@ -48,7 +48,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   name?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'SASID',
     required: OPTIONAL,
     definition: 'The State Assigned Student ID',
@@ -60,7 +60,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   sasid?: number;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Date of birth',
     required: REQUIRED,
     definition: "Date of birth as it appears on the child's birth certificate",
@@ -73,7 +73,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   dateOfBirth?: Date;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Birth certificate ID #',
     required: REQUIRED_IF_US_BORN,
     definition: "The identification number of the child's birth certificate.",
@@ -86,7 +86,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   birthCertificateId?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Town of birth',
     required: REQUIRED_IF_US_BORN,
     definition:
@@ -99,7 +99,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   townOfBirth?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'State of birth',
     required: REQUIRED_IF_US_BORN,
     definition:
@@ -112,7 +112,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   stateOfBirth?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Race: American Indian or Alaska Native',
     required: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -124,7 +124,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   americanIndianOrAlaskaNative?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Race: Asian',
     required: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -136,7 +136,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   asian?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Race: Black or African American',
     required: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -148,7 +148,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   blackOrAfricanAmerican?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Race: Native Hawaiian or Pacific Islander',
     required: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -160,7 +160,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   nativeHawaiianOrPacificIslander?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Race: White',
     required: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -172,7 +172,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   white?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Hispanic or Latinx Ethnicity',
     required: REQUIRED,
     definition: "The child's ethnicity, has identified by the family.",
@@ -184,7 +184,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   hispanicOrLatinxEthnicity?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Gender',
     required: REQUIRED,
     definition:
@@ -197,7 +197,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   gender?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Dual language learner',
     required: REQUIRED,
     definition:
@@ -210,7 +210,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   dualLanguageLearner?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Receiving Special Education Services',
     required: REQUIRED,
     definition:
@@ -223,7 +223,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   receivingSpecialEducationServices?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Special Education Services Type',
     required: 'Required if child is receiving special education services.',
     definition:
@@ -236,7 +236,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   specialEducationServicesType?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Street address',
     required: REQUIRED,
     definition: 'The primary residence of the family.',
@@ -248,7 +248,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   streetAddress?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Town',
     required: REQUIRED,
     definition: 'The primary residence of the family.',
@@ -260,7 +260,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   town?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'State',
     required: REQUIRED,
     definition: 'The primary residence of the family.',
@@ -272,7 +272,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   state?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Zipcode',
     required: REQUIRED,
     definition: 'The primary residence of the family.',
@@ -284,7 +284,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   zipcode?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Lives with foster family',
     required: OPTIONAL,
     definition: 'Whether the child lives with a foster family.',
@@ -297,7 +297,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   livesWithFosterFamily?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Experienced homelessness or housing insecurity',
     required: OPTIONAL,
     definition:
@@ -311,7 +311,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   experiencedHomelessnessOrHousingInsecurity?: boolean;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Household size',
     required: REQUIRED_NOT_FOSTER,
     definition:
@@ -325,7 +325,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   householdSize?: number;
 
   @Column({ nullable: true, type: 'decimal', precision: 14, scale: 2 })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Annual household income',
     required: REQUIRED_NOT_FOSTER,
     definition: 'The documented household income, for eligibility purposes.',
@@ -338,7 +338,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   annualHouseholdIncome?: number;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Determination date',
     required: REQUIRED_NOT_FOSTER,
     definition:
@@ -352,7 +352,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   incomeDeterminationDate?: Date;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Provider',
     required: REQUIRED,
     definition: 'The provider from which the child is receiving services.',
@@ -364,7 +364,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   provider?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Site',
     required: REQUIRED,
     definition: 'The location at which the child receives ECE services.',
@@ -376,7 +376,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   site?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Model',
     required: REQUIRED,
     definition: 'The type of services received by the child.',
@@ -388,7 +388,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   model?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Age Group',
     required: REQUIRED,
     definition:
@@ -401,7 +401,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   ageGroup?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Enrollment Start Date',
     required: REQUIRED,
     definition: 'The first date the child attended the program.',
@@ -413,7 +413,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   enrollmentStartDate?: Date;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Enrollment End Date',
     required: 'Required if exited',
     definition: 'The last date the child attended the program.',
@@ -425,7 +425,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   enrollmentEndDate?: Date;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Enrollment Exit Reason',
     required: 'Required if exited',
     definition: 'The reason for ending an enrollment',
@@ -437,7 +437,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   enrollmentExitReason?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Funding Type',
     required: REQUIRED,
     definition:
@@ -450,7 +450,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   fundingType?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Space type',
     required: REQUIRED,
     definition: 'The period during the day when services are provided',
@@ -463,7 +463,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   spaceType?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'First funding period',
     required: REQUIRED,
     definition:
@@ -476,7 +476,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   firstFundingPeriod?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Last funding period',
     required: REQUIRED,
     definition:
@@ -489,7 +489,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   lastFundingPeriod?: string;
 
   @Column({ nullable: true })
-  @DataDefinition({
+  @ColumnMetadata({
     formattedName: 'Receiving Care 4 Kids?',
     required: REQUIRED,
     definition: "Whether the child's family is receiving a Care 4 Kids subsidy",
