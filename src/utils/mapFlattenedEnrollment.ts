@@ -41,6 +41,7 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
     const funding = await mapFunding(source, organization, enrollment);
 
     return {
+      rowId: source.id,
       organization,
       site,
       child,

@@ -51,12 +51,13 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/check-data',
+    path: '/check-data/:reportId',
     component: CheckData,
     unauthorized: false,
+    exact: true,
   },
   {
-    path: '/edit-record',
+    path: '/check-data/:reportId/edit-record/:rowId',
     component: EditRecord,
     unauthorized: false,
   },

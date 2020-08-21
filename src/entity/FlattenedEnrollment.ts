@@ -36,6 +36,9 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   @ManyToOne((type) => EnrollmentReport, { nullable: false })
   report: EnrollmentReport;
 
+  @Column()
+  reportId: number;
+
   @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Name',

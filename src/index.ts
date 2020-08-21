@@ -1,6 +1,6 @@
 import express, { json } from 'express';
-
 import path from 'path';
+
 import httpProxy from 'http-proxy';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';

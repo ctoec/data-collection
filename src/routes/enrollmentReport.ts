@@ -5,7 +5,7 @@ import fs from 'fs';
 import { v4 as uuid } from 'uuid';
 import multer from 'multer';
 
-import { EnrollmentReport } from '../entity';
+import { EnrollmentReport, FlattenedEnrollment } from '../entity';
 import { parseUploadedTemplate } from '../utils/parseUploadedTemplate';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
@@ -45,6 +45,35 @@ router.get(
       report.enrollments.map(mapFlattenedEnrollment)
     );
     res.send(enrollments.filter((e) => !!e));
+  })
+);
+
+/**
+ * /enrollment-reports/:reportId/row/:rowId
+ *
+ * Returns parsed given row from the given report as object
+ * of dicts like:
+ * 	{
+ * 		organization: {...},
+ * 		site: {...},
+ * 		child: {...},
+ * 		family: {...},
+ * 		incomeDetermination: {...},
+ * 		enrollment: {...},
+ * 		funding: {...}
+ * 	}
+ */
+router.get(
+  '/:reportId/row/:rowId',
+  passAsyncError(async (req, res) => {
+    const reportId = parseInt(req.params['reportId']) || 0;
+    const rowId = parseInt(req.params['rowId']) || 0;
+    const row = await getManager().findOne(FlattenedEnrollment, rowId);
+
+    if (!row || row.reportId !== reportId) throw new NotFoundError();
+
+    const mappedRow = await mapFlattenedEnrollment(row);
+    res.send(mappedRow);
   })
 );
 

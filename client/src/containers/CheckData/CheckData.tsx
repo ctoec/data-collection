@@ -1,13 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import queryString from 'query-string';
+import { useParams } from 'react-router-dom';
 import pluralize from 'pluralize';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import {
-  FlattenedEnrollment,
   Organization,
   Site,
   Child,
@@ -22,6 +20,7 @@ import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/im
 import { tableColumns } from './TableColumns';
 
 export type TableRow = {
+  rowId: number;
   organization: Organization;
   site: Site;
   child: Child;
@@ -32,9 +31,7 @@ export type TableRow = {
 };
 
 const CheckData: React.FC = () => {
-  const reportId = parseInt(
-    (queryString.parse(useLocation().search).reportId as string) || ''
-  );
+  const { reportId } = useParams();
 
   const { accessToken } = useContext(AuthenticationContext);
 <<<<<<< HEAD
@@ -64,7 +61,7 @@ const CheckData: React.FC = () => {
 
   return (
     <>
-      <div className="CheckData__content margin-top-4">
+      <div className="CheckData__content margin-top-4 grid-container">
         <div className="margin-x-4">
           <Button
             className="margin-bottom-2 text-bold"

@@ -1,20 +1,28 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { TabNav } from '@ctoec/component-library';
 import { TableRow } from '../CheckData/CheckData';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiGet } from '../../utils/api';
 
-type EditRecordState = {
-  record: TableRow;
-  reportId: number;
-};
 const EditRecord: React.FC = () => {
-  const { record, reportId } = useLocation().state as EditRecordState;
-  return (
+  const { reportId, rowId } = useParams();
+  const { accessToken } = useContext(AuthenticationContext);
+  const [rowData, setRowData] = useState<TableRow>();
+
+  useEffect(() => {
+    apiGet(`enrollment-reports/${reportId}/row/${rowId}`, {
+      accessToken,
+    }).then((_rowData) => setRowData(_rowData));
+  }, [accessToken, reportId, rowId]);
+
+  return rowData ? (
     <div className="grid-container">
       <div className="margin-top-4">
         <h2>
-          Edit information for {record.child.firstName} {record.child.lastName}
+          Edit information for {rowData.child.firstName}{' '}
+          {rowData.child.lastName}
         </h2>
       </div>
       <TabNav
@@ -51,6 +59,8 @@ const EditRecord: React.FC = () => {
         activeId="child-tab"
       />
     </div>
+  ) : (
+    <> </>
   );
 };
 
