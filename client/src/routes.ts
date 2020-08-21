@@ -5,6 +5,7 @@ import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
 import CheckData from './containers/CheckData/CheckData';
+import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 
@@ -52,6 +53,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/check-data',
     component: CheckData,
+    unauthorized: false,
+  },
+  {
+    path: '/edit-record',
+    component: EditRecord,
     unauthorized: false,
   },
   {

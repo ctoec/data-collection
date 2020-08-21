@@ -59,6 +59,7 @@ const Home: React.FC = () => {
               <p className="text-bold">Learn more</p>
               <Button
                 appearance="unstyled"
+                external={true}
                 href="https://ctoec.org"
                 className="text-bold margin-bottom-3 display-block"
                 text={

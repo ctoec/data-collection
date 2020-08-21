@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import queryString from 'query-string';
 import pluralize from 'pluralize';
 import moment from 'moment';
@@ -13,8 +13,6 @@ import {
   Button,
   Table,
   Column,
-  TextInput,
-  ExpandRow,
 } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 
@@ -47,21 +45,31 @@ const CheckData: React.FC = () => {
 
   const tableColumns: Column<FlattenedEnrollment>[] = columnMetadata.map(
     (columnMeta) => ({
-      className: 'text-pre text-center',
+      className: 'text-pre text-center font-body-2xs',
       name: columnMeta.formattedName,
       title: columnMeta.propertyName,
+      sort: row => (row as any)[columnMeta.propertyName],
       cell: ({ row }) => {
-        // special case for clickable name column that expands row
+        // special case for clickable name column that sends user to edit page
         if (columnMeta.propertyName === 'name') {
           return (
+            // Pass reportId to save/send data back once editing is done
             <td>
-              <ExpandRow>
+              <Link to={
+                {
+                  pathname: "/edit-record/" + row.name,
+                  state: {
+                    'reportId': reportId,
+                    'childName': row.name,
+                  },
+                }
+              }>
                 <Button
-                  className="text-no-wrap"
+                  className="text-no-wrap font-body-2xs"
                   appearance="unstyled"
                   text={row.name || ''}
                 />
-              </ExpandRow>
+              </Link>
             </td>
           );
         }
@@ -106,33 +114,11 @@ const CheckData: React.FC = () => {
                 rowKey={(row) => row.id}
                 data={reportData}
                 columns={tableColumns}
-                rowExpansionRender={(row) => (
-                  <div className="grid-row flex-row">
-                    <div className="grid-col-1">
-                      <h3>Edit the stuff about {row.name} </h3>
-                      <TextInput
-                        label="An input can go here"
-                        id="text-input"
-                        type="input"
-                        onChange={() => {}}
-                      />
-                      <Button
-                        className="margin-top-2"
-                        text="A button can go here"
-                      />
-                    </div>
-                    <div className="grid-col-1">
-                      <ExpandRow>
-                        <Button text="CLOSE THIS EXPANSION" />
-                      </ExpandRow>
-                    </div>
-                  </div>
-                )}
               />
             </PerfectScrollbar>
           ) : (
-            'Loading...'
-          )}
+              'Loading...'
+            )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
