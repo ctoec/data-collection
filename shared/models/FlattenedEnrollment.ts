@@ -38,7 +38,7 @@ export interface FlattenedEnrollment {
   enrollmentExitReason?: string;
   fundingType?: string;
   spaceType?: string;
-  firstFundingPeriod?: string;
-  lastFundingPeriod?: string;
+  firstFundingPeriod?: Moment;
+  lastFundingPeriod?: Moment;
   receivingCareForKids?: boolean;
 }

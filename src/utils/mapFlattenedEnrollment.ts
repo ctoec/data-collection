@@ -161,14 +161,12 @@ const mapChild = (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapFamily = (source: FlattenedEnrollment) => {
-  const incomeDetermination = mapIncomeDetermination(source);
   return getManager().create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zip: source.zipcode,
     homelessness: source.experiencedHomelessnessOrHousingInsecurity,
-    incomeDeterminations: [incomeDetermination],
   });
 };
 
@@ -250,23 +248,13 @@ const mapFunding = async (
       let firstReportingPeriod: ReportingPeriod,
         lastReportingPeriod: ReportingPeriod;
       if (source.firstFundingPeriod) {
-        const period = moment(source.firstFundingPeriod, [
-          'MM/YYYY',
-          'MM/YY',
-          'MMM-YY',
-        ]);
         firstReportingPeriod = await getManager().findOne(ReportingPeriod, {
-          where: { type: fundingSource, period: period.format('YYYY-MM-DD') },
+          where: { type: fundingSource, period: source.firstFundingPeriod },
         });
       }
       if (source.lastFundingPeriod) {
-        const period = moment(source.firstFundingPeriod, [
-          'MM/YYYY',
-          'MM/YY',
-          'MMM-YY',
-        ]);
         lastReportingPeriod = await getManager().findOne(ReportingPeriod, {
-          where: { type: fundingSource, period: period.format('YYYY-MM-DD') },
+          where: { type: fundingSource, period: source.lastFundingPeriod },
         });
       }
       return getManager().create(Funding, {

@@ -119,7 +119,8 @@ function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
 
 /**
  * Converts a raw object parsed from the uploaded file into
- * a FlattenedEnrollment, with parsed boolean values.
+ * a FlattenedEnrollment, with parsed boolean values and
+ * date values (as Moment instances).
  * @param rawEnrollment
  */
 function parseFlattenedEnrollment(
@@ -132,13 +133,7 @@ function parseFlattenedEnrollment(
     }
 
     if (value instanceof Date) {
-      const date = moment.utc(value);
-      if (!date.isValid()) {
-        console.log(rawEnrollment);
-      }
-      if (date.isValid()) {
-        rawEnrollment[prop] = date;
-      }
+      rawEnrollment[prop] = moment.utc(value);
     }
   });
 

@@ -464,7 +464,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   })
   spaceType?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'First funding period',
     required: REQUIRED,
@@ -475,9 +475,9 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/2016',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  firstFundingPeriod?: string;
+  firstFundingPeriod?: Moment;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Last funding period',
     required: REQUIRED,
@@ -488,7 +488,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '08/2017',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  lastFundingPeriod?: string;
+  lastFundingPeriod?: Moment;
 
   @Column({ nullable: true })
   @ColumnMetadata({

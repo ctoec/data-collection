@@ -13,6 +13,7 @@ import {
   FundingTime,
 } from '../../shared/models';
 import { reportingPeriods } from './reportingPeriods';
+import moment from 'moment';
 
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
@@ -61,8 +62,9 @@ export const initialize = async () => {
     await qb.insert().into(Site).values([site1, site2]).orIgnore().execute();
   } catch {}
 
-  Object.values(AgeGroup).forEach(async (ageGroup) => {
-    try {
+  try {
+    const fundingSpacesToAdd = [];
+    Object.values(AgeGroup).forEach((ageGroup) => {
       const CDCFullTime = getManager().create(FundingSpace, {
         ageGroup,
         capacity: 10,
@@ -94,14 +96,15 @@ export const initialize = async () => {
         time: FundingTime.Part,
         organization,
       });
-      await qb
-        .insert()
-        .into(FundingSpace)
-        .values([CDCFullTime, CDCPartTime, PSRFull, PSRPart])
-        .orIgnore()
-        .execute();
-    } catch {}
-  });
+      fundingSpacesToAdd.push(CDCFullTime, CDCPartTime, PSRFull, PSRPart);
+    });
+    await qb
+      .insert()
+      .into(FundingSpace)
+      .values(fundingSpacesToAdd)
+      .orIgnore()
+      .execute();
+  } catch {}
 
   try {
     const reportingPeriodsToAdd = [];
@@ -109,10 +112,10 @@ export const initialize = async () => {
       for (let dates of reportingPeriods) {
         const reportingPeriod = getManager().create(ReportingPeriod, {
           type: fundingSource,
-          period: dates[0],
-          periodStart: dates[1],
-          periodEnd: dates[2],
-          dueAt: dates[3],
+          period: moment.utc(dates[0]),
+          periodStart: moment.utc(dates[1]),
+          periodEnd: moment.utc(dates[2]),
+          dueAt: moment.utc(dates[3]),
         });
         reportingPeriodsToAdd.push(reportingPeriod);
       }
