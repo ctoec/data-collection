@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { TabNav } from '@ctoec/component-library';
 
 const EditRecord: React.FC = () => {
-    const record = useLocation().state['childName'];
-    const reportId = useLocation().state['reportId'];
+    const record = (useLocation().state as any)['childName'];
+    const reportId = (useLocation().state as any)['reportId'];
     return (
         <div className='grid-container'>
             <div className='margin-top-4'>
