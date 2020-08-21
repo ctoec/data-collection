@@ -25,6 +25,9 @@ export class IncomeDetermination implements IncomeDeterminationInterface {
   @ManyToOne((type) => Family, { nullable: false })
   family: Family;
 
+  @Column()
+  familyId: number;
+
   @Column((type) => UpdateMetaData, { prefix: false })
   updateMetaData?: UpdateMetaData;
 }

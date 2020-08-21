@@ -15,6 +15,9 @@ export class Funding implements FundingInterface {
   @ManyToOne((type) => Enrollment, { nullable: false })
   enrollment: Enrollment;
 
+  @Column()
+  enrollmentId: number;
+
   @ManyToOne((type) => FundingSpace, { nullable: false, eager: true })
   fundingSpace: FundingSpace;
 

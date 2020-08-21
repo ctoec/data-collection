@@ -43,7 +43,6 @@ const App: React.FC = () => {
                 {props.text}
               </a>
             ),
-            path: '///',
           },
           {
             id: 'data-requirements-nav',
@@ -54,7 +53,6 @@ const App: React.FC = () => {
             id: 'feedback-nav',
             title: 'Feedback',
             renderer: () => <MailToLink text="Feedback" />,
-            path: '',
           },
         ]}
         userFirstName={user?.firstName}

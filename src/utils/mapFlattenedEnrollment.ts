@@ -36,9 +36,9 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
     const site = await mapSite(source);
     const child = mapChild(source);
     const family = mapFamily(source);
-    const incomeDetermination = mapIncomeDetermination(source);
+    const incomeDetermination = mapIncomeDetermination(source, family);
     const enrollment = mapEnrollment(source, site, child);
-    const funding = await mapFunding(source, organization, enrollment.ageGroup);
+    const funding = await mapFunding(source, organization, enrollment);
 
     return {
       organization,
@@ -174,11 +174,15 @@ const mapFamily = (source: FlattenedEnrollment) => {
  * Create IncomeDetermination object from FlattenedEnrollment source.
  * @param source
  */
-const mapIncomeDetermination = (source: FlattenedEnrollment) => {
+const mapIncomeDetermination = (
+  source: FlattenedEnrollment,
+  family: Family
+) => {
   return getManager().create(IncomeDetermination, {
     numberOfPeople: source.householdSize,
     income: source.annualHouseholdIncome,
     determinationDate: source.incomeDeterminationDate,
+    familyId: family.id,
   });
 };
 
@@ -216,7 +220,7 @@ const mapEnrollment = (
 const mapFunding = async (
   source: FlattenedEnrollment,
   organization: Organization,
-  ageGroup: AgeGroup
+  enrollment: Enrollment
 ) => {
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
@@ -231,7 +235,11 @@ const mapFunding = async (
     // Get the FundingSpace with associated funding source and agegroup for the given organization
     let fundingSpace: FundingSpace;
     const fundingSpaces = await getManager().find(FundingSpace, {
-      where: { source: fundingSource, ageGroup, organization },
+      where: {
+        source: fundingSource,
+        ageGroup: enrollment.ageGroup,
+        organization,
+      },
     });
     fundingSpace = fundingSpaces.find((space) => space.time === fundingTime);
 
@@ -261,6 +269,7 @@ const mapFunding = async (
         firstReportingPeriod,
         lastReportingPeriod,
         fundingSpace,
+        enrollmentId: enrollment.id,
       });
     }
   }
