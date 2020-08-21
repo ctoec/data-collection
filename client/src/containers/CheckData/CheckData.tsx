@@ -13,9 +13,6 @@ import {
   Button,
   Table,
   Column,
-  TextInput,
-  ExpandRow,
-  TabNav,
 } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 
@@ -56,9 +53,8 @@ const CheckData: React.FC = () => {
         // special case for clickable name column that sends user to edit page
         if (columnMeta.propertyName === 'name') {
           return (
+            // Pass reportId to save/send data back once editing is done
             <td>
-
-              // Pass reportId to save/send data back once editing is done
               <Link to={
                 {
                   pathname: "/edit-record/" + row.name,
