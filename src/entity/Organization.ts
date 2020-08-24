@@ -10,18 +10,15 @@ export class Organization implements OrganizationInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
-  @OneToMany((type) => Site, (site) => site.organization)
+  @OneToMany(() => Site, (site) => site.organization)
   sites?: Array<Site>;
 
-  @OneToMany(
-    (type) => FundingSpace,
-    (fundingSpace) => fundingSpace.organization
-  )
+  @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.organization)
   fundingSpaces?: Array<FundingSpace>;
 
-  @Column()
+  @Column({ nullable: true })
   communityId?: number;
 }

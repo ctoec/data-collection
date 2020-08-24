@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 import { FundingTimeSplit as FundingTimeSplitInterface } from '../../shared/models';
 
@@ -9,7 +15,8 @@ export class FundingTimeSplit implements FundingTimeSplitInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => FundingSpace, { nullable: false })
+  @OneToOne(() => FundingSpace, { nullable: false })
+  @JoinColumn()
   fundingSpace: FundingSpace;
 
   @Column()

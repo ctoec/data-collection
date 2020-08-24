@@ -5,6 +5,7 @@ import {
   Organization,
   SpecialEducationServicesType,
 } from '.';
+import { Moment } from 'moment';
 
 export interface Child {
   id: string;
@@ -13,7 +14,7 @@ export interface Child {
   middleName?: string;
   lastName: string;
   suffix?: string;
-  birthdate?: Date;
+  birthdate?: Moment;
   birthTown?: string;
   birthState?: string;
   birthCertificateId?: string;

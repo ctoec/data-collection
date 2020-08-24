@@ -1,11 +1,12 @@
 import { EnrollmentReport } from '.';
+import { Moment } from 'moment';
 
 export interface FlattenedEnrollment {
   id: number;
   report: EnrollmentReport;
   name?: string;
-  sasid?: number;
-  dateOfBirth?: Date;
+  sasid?: string;
+  dateOfBirth?: Moment;
   birthCertificateId?: string;
   townOfBirth?: string;
   stateOfBirth?: string;
@@ -27,17 +28,17 @@ export interface FlattenedEnrollment {
   experiencedHomelessnessOrHousingInsecurity?: boolean;
   householdSize?: number;
   annualHouseholdIncome?: number;
-  incomeDeterminationDate?: Date;
+  incomeDeterminationDate?: Moment;
   provider?: string;
   site?: string;
   model?: string;
   ageGroup?: string;
-  enrollmentStartDate?: Date;
-  enrollmentEndDate?: Date;
+  enrollmentStartDate?: Moment;
+  enrollmentEndDate?: Moment;
   enrollmentExitReason?: string;
   fundingType?: string;
   spaceType?: string;
-  firstFundingPeriod?: string;
-  lastFundingPeriod?: string;
+  firstFundingPeriod?: Moment;
+  lastFundingPeriod?: Moment;
   receivingCareForKids?: boolean;
 }

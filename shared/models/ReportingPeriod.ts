@@ -1,10 +1,11 @@
 import { FundingSource } from '.';
+import { Moment } from 'moment';
 
 export interface ReportingPeriod {
   id: number;
   type: FundingSource;
-  period: Date;
-  periodStart: Date;
-  periodEnd: Date;
-  dueAt: Date;
+  period: Moment;
+  periodStart: Moment;
+  periodEnd: Moment;
+  dueAt: Moment;
 }

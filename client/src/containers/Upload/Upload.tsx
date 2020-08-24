@@ -41,6 +41,7 @@ const Upload: React.FC = () => {
           setFile(undefined);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
 
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
