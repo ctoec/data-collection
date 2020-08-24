@@ -6,6 +6,12 @@ import {
     RadioButtonGroupProps,
     RadioButtonGroup,
     RadioButton } from '@ctoec/component-library';
+import { Child } from 'shared/models';
+
+type CareForKidsProps = {
+    initState: Child,
+    passData(_: Child): void;
+}
 
 /*
 * Basic functional component designed to allow user to edit
@@ -18,27 +24,15 @@ import {
 * changes to the state of individual fields without needing
 * to make repeated calls to the databse via API methods.
 */
-export const CareForKidsForm: React.FC = (props) => {
-
-    const [currentState, setcurrentState] = useState(props.initState);
-
-    // Updates only the changed information by using the object spread
-    // to only edit the form field value
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        e.preventDefault();
-        var newState = {...currentState};
-        newState['recievesC4K'] = e.target.value === 'Yes' ? true : false;
-        setcurrentState(newState);
-        return newState['recievesC4K'];
-    }
+export const CareForKidsForm: React.FC<CareForKidsProps> = 
+    ({initState, passData}) => {
 
     // Uses the inherited method from the parent on EditRecord to 
     // change the *state* inherited from EditRecord. This form
     // keeps a local copy of the state so that only changes the user
     // wishes to commit are pushed back up to the parent.
-    function saveButton() {
-        console.log(currentState);
-        props.passData(currentState);
+    function saveButton(newState: Child) {
+        passData(newState);
         alert('Data saved successfully!');
     }
 
@@ -48,15 +42,15 @@ export const CareForKidsForm: React.FC = (props) => {
             <div>
                 <Form<object>
                     className='CareForKidsForm'
-                    data={currentState}
+                    data={initState}
                     onSubmit={saveButton}
                     noValidate
                     autoComplete="off"
                 >
-                    <FormField<object, RadioButtonGroupProps, boolean>
+                    <FormField<Child, RadioButtonGroupProps, boolean>
                         getValue={(data) => data.at('recievesC4K')}
                         preprocessForDisplay={(data) => data == true ? 'yes' : 'no'}
-                        parseOnChangeEvent={(e) => handleChange(e)}
+                        parseOnChangeEvent={(e) => {return e.target.value === 'Yes'}}
                         inputComponent={RadioButtonGroup}
                         id='c4k-radio-group'
                         name='careforkids'
