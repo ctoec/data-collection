@@ -57,7 +57,7 @@ export const routes: RouteConfig[] = [
     exact: true,
   },
   {
-    path: '/check-data/:reportId/edit-record/:rowId',
+    path: '/edit-record/:childId',
     component: EditRecord,
     unauthorized: false,
   },

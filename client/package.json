@@ -20,6 +20,7 @@
     "@types/react-router-dom": "^5.1.5",
     "content-disposition": "^0.5.3",
     "file-saver": "^2.0.2",
+    "idx": "^2.5.6",
     "moment": "^2.27.0",
     "node-sass": "yarn:sass",
     "pluralize": "^8.0.0",

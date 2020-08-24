@@ -34,22 +34,18 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
   try {
     const organization = await mapOrganization(source);
     const site = await mapSite(source);
-    const child = mapChild(source);
-    const family = mapFamily(source);
-    const incomeDetermination = mapIncomeDetermination(source, family);
-    const enrollment = mapEnrollment(source, site, child);
+    const family = await mapFamily(source, organization);
+    const child = await mapChild(source, organization, family);
+    const incomeDetermination = await mapIncomeDetermination(source, family);
+    const enrollment = await mapEnrollment(source, site, child);
     const funding = await mapFunding(source, organization, enrollment);
 
-    return {
-      rowId: source.id,
-      organization,
-      site,
-      child,
-      family,
-      incomeDetermination,
-      enrollment,
-      funding,
-    };
+    family.incomeDeterminations = [incomeDetermination];
+    child.family = family;
+    enrollment.fundings = [funding];
+    child.enrollments = [enrollment];
+
+    return child;
   } catch (err) {
     console.error('Unable to map row: ', err);
     return;
@@ -89,9 +85,15 @@ const mapSite = (source: FlattenedEnrollment) => {
  * TODO: Also accept "Lastname, Firstname Middlename[,] Suffix" ?
  * @param source
  */
-const mapChild = (source: FlattenedEnrollment) => {
+const mapChild = (
+  source: FlattenedEnrollment,
+  organization: Organization,
+  family: Family
+) => {
   const SUFFIXES = ['sr', 'jr', 'ii', 'iii'];
-  const normalizedName = source.name.trim().replace(/\s+/, ' ');
+  const normalizedName = source.name
+    ? source.name.trim().replace(/\s+/, ' ')
+    : '';
   const nameParts = (normalizedName || '').split(' ');
   if (nameParts.length < 2) {
     throw new Error(
@@ -131,7 +133,7 @@ const mapChild = (source: FlattenedEnrollment) => {
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
-  return getManager().create(Child, {
+  const child = getManager().create(Child, {
     sasid: source.sasid,
     firstName,
     middleName,
@@ -148,11 +150,16 @@ const mapChild = (source: FlattenedEnrollment) => {
     white: source.white,
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
-    foster: source.livesWithFosterFamily,
-    recievesC4K: source.receivingCareForKids,
-    recievesSpecialEducationServices: source.receivingSpecialEducationServices,
+    foster: source.livesWithFosterFamily || false,
+    recievesC4K: source.receivingCareForKids || false,
+    recievesSpecialEducationServices:
+      source.receivingSpecialEducationServices || false,
     specialEducationServicesType,
+    organization,
+    familyId: family.id,
   });
+
+  return getManager().save(child);
 };
 
 /**
@@ -161,14 +168,17 @@ const mapChild = (source: FlattenedEnrollment) => {
  * TODO: Lookup existing families before creating new one
  * @param source
  */
-const mapFamily = (source: FlattenedEnrollment) => {
-  return getManager().create(Family, {
+const mapFamily = (source: FlattenedEnrollment, organization: Organization) => {
+  const family = getManager().create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zip: source.zipcode,
     homelessness: source.experiencedHomelessnessOrHousingInsecurity,
+    organization,
   });
+
+  return getManager().save(family);
 };
 
 /**
@@ -179,12 +189,14 @@ const mapIncomeDetermination = (
   source: FlattenedEnrollment,
   family: Family
 ) => {
-  return getManager().create(IncomeDetermination, {
+  const incomeDetermination = getManager().create(IncomeDetermination, {
     numberOfPeople: source.householdSize,
     income: source.annualHouseholdIncome,
     determinationDate: source.incomeDeterminationDate,
     familyId: family.id,
   });
+
+  return getManager().save(incomeDetermination);
 };
 
 /**
@@ -200,7 +212,7 @@ const mapEnrollment = (
 ) => {
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
 
-  return getManager().create(Enrollment, {
+  const enrollment = getManager().create(Enrollment, {
     siteId: site.id,
     childId: child.id,
     ageGroup,
@@ -208,6 +220,8 @@ const mapEnrollment = (
     exit: source.enrollmentEndDate,
     exitReason: source.enrollmentExitReason,
   });
+
+  return getManager().save(enrollment);
 };
 
 /**
@@ -268,12 +282,14 @@ const mapFunding = async (
           where: { type: fundingSource, period: source.lastFundingPeriod },
         });
       }
-      return getManager().create(Funding, {
+      const funding = getManager().create(Funding, {
         firstReportingPeriod,
         lastReportingPeriod,
         fundingSpace,
         enrollmentId: enrollment.id,
       });
+
+      return getManager().save(funding);
     }
   }
 

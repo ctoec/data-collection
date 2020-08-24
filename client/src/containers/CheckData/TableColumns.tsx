@@ -1,29 +1,28 @@
-import { Column, Button } from '@ctoec/component-library';
-import { Link } from 'react-router-dom';
 import React from 'react';
-import { TableRow } from './CheckData';
+import idx from 'idx';
+import { Link } from 'react-router-dom';
+import { Column, Button } from '@ctoec/component-library';
+import { Child } from 'shared/models';
 
 const tableColumnClassName = 'text-pre text-center font-body-2xs';
-export const tableColumns: (_: number) => Column<TableRow>[] = (
-  reportId: number
-) => {
+export const tableColumns: () => Column<Child>[] = () => {
   return [
     {
       className: tableColumnClassName,
       name: 'Name',
-      sort: (row) => row.child.lastName,
+      sort: (row) => row.lastName,
       cell: ({ row }) => {
         return (
           <td>
             <Link
               to={{
-                pathname: `/check-data/${reportId}/edit-record/${row.rowId}`,
+                pathname: `/edit-record/${row.id}`,
               }}
             >
               <Button
                 className="text-no-wrap font-body-2xs"
                 appearance="unstyled"
-                text={`${row.child.firstName} ${row.child.lastName}`}
+                text={`${row.firstName} ${row.lastName}`}
               />
             </Link>
           </td>
@@ -34,35 +33,43 @@ export const tableColumns: (_: number) => Column<TableRow>[] = (
       className: tableColumnClassName,
       name: 'Birth Date',
       cell: ({ row }) => (
-        <td>
-          {row.child.birthdate ? row.child.birthdate.format('MM/DD/YYYY') : ''}
-        </td>
+        <td>{row.birthdate ? row.birthdate.format('MM/DD/YYYY') : ''}</td>
       ),
     },
     {
       className: tableColumnClassName,
       name: 'Age group',
-      cell: ({ row }) => <td>{row.enrollment?.ageGroup}</td>,
+      cell: ({ row }) => <td>{idx(row, (_) => _.enrollments[0].ageGroup)}</td>,
     },
     {
       className: tableColumnClassName,
       name: 'Funding type',
-      cell: ({ row }) => <td>{row.funding?.fundingSpace.source}</td>,
+      cell: ({ row }) => (
+        <td>
+          {idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.source)}
+        </td>
+      ),
     },
     {
       className: tableColumnClassName,
       name: 'Contract space',
-      cell: ({ row }) => <td>{row.funding?.fundingSpace.time}</td>,
+      cell: ({ row }) => (
+        <td>
+          {idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.time)}
+        </td>
+      ),
     },
     {
       className: tableColumnClassName,
       name: 'Site',
-      cell: ({ row }) => <td>{row.site.name}</td>,
+      cell: ({ row }) => <td>{idx(row, (_) => _.enrollments[0].site.name)}</td>,
     },
     {
       className: tableColumnClassName,
       name: 'Enrollment date',
-      cell: ({ row }) => <td>{row.enrollment?.entry?.format('MM/DD/YYYY')}</td>,
+      cell: ({ row }) => (
+        <td>{idx(row, (_) => _.enrollments[0].entry.format('MM/DD/YYYY'))}</td>
+      ),
     },
   ];
 };

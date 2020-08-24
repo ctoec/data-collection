@@ -87,6 +87,9 @@ export class Child implements ChildInterface {
   @ManyToOne((type) => Family, { nullable: false })
   family: Family;
 
+  @Column()
+  familyId: number;
+
   @ManyToOne((type) => Organization, { nullable: false })
   organization?: Organization;
 
