@@ -1,4 +1,4 @@
-import express, { Response, Request } from 'express';
+import express, { Response, Request, json } from 'express';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import {
   NotFoundError,
@@ -6,6 +6,10 @@ import {
   ApiError,
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
+import { router } from './user';
+import { getManager } from 'typeorm';
+import { Child } from '../entity';
+
 
 export const childrenRouter = express.Router();
 
@@ -23,6 +27,28 @@ childrenRouter.get(
     if (!child) throw new NotFoundError();
 
     res.send(child);
+  })
+);
+
+/**
+ * /children PUT
+ */
+router.put(
+  '/:childId',
+  passAsyncError(async (req, res, next) => {
+    try {
+      const id = req.params['childId'];
+      const manager = getManager();
+      const _child = req.body;
+      // Delete relations from this object so we don't attempt to update them
+      delete _child.family;
+      delete _child.enrollments;
+      await manager.update(Child, id, _child);
+      res.sendStatus(200);
+    } catch (err) {
+      console.error('\nError saving changes to child: ', err, '\n');
+      throw new BadRequestError('Child information not saved');
+    }
   })
 );
 

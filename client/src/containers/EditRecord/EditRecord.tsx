@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-
 import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
@@ -8,6 +7,7 @@ import { Child } from '../../shared/models';
 import { CareForKidsForm } from './Forms/CareForKids';
 import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
 import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
+import ChildInfo from './ChildInfo';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -55,7 +55,7 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.CHILD,
             text: 'Child Info',
-            content: <span>This is where the child info form goes</span>,
+            content: <ChildInfo child={rowData} refetchChild={refetchChild} />,
           },
           {
             id: TAB_IDS.FAMILY,
@@ -99,8 +99,8 @@ const EditRecord: React.FC = () => {
       />
     </div>
   ) : (
-    <></>
-  );
+      <> </>
+    );
 };
 
 export default EditRecord;

@@ -75,6 +75,7 @@ async function api(
 
   // Handle API error response
   if (res.status >= 400) {
+    console.log(res)
     try {
       const errorResponse = await res.json();
       // return rejected promise instead of throwing error to avoid catch

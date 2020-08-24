@@ -14,7 +14,10 @@ const App: React.FC = () => {
   async function downloadTemplate(title: string) {
     const type: string = title === 'Excel' ? 'xlsx' : 'csv';
 
-    await downloadStreamToFile(`column-metadata/${type}`, `ECE Data Collection Template.${type}`);
+    await downloadStreamToFile(
+      `column-metadata/${type}`,
+      `ECE Data Collection Template.${type}`
+    );
   }
 
   return (
@@ -31,15 +34,15 @@ const App: React.FC = () => {
             children: [
               {
                 id: 'excel-template-nav',
-                title: 'Excel'
+                title: 'Excel',
               },
               {
                 id: 'csv-template-nav',
-                title: '.csv'
+                title: '.csv',
               },
             ],
             renderer: (props) => (
-              <a {...props}  onClick={() => downloadTemplate(props.text)}>
+              <a {...props} onClick={() => downloadTemplate(props.text)}>
                 {props.text}
               </a>
             ),

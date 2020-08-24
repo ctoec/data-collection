@@ -103,8 +103,8 @@ const Home: React.FC = () => {
             </div>
             <div>
               <p className="text-bold">Download the data collection template</p>
-              <TemplateDownloadLink type='xlsx' />
-              <TemplateDownloadLink type='csv' />
+              <TemplateDownloadLink type="xlsx" />
+              <TemplateDownloadLink type="csv" />
             </div>
           </div>
         </div>

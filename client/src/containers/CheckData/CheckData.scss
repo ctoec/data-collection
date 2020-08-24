@@ -1,31 +1,31 @@
 .CheckData__content {
-  margin-bottom: 5rem;
+	margin-bottom: 5rem;
 
-  // Make top scrollbar show rather than bottom
-  .ps__rail-x {
-    bottom: auto;
-    top: 0px;
-  }
+	// Make top scrollbar show rather than bottom
+	.ps__rail-x {
+		bottom: auto;
+		top: 0px;
+	}
 
-  td {
-    padding: 0.25rem 0.5rem;
-  }
+	td {
+		padding: 0.25rem 0.5rem;
+	}
 }
 
 .CheckData__button-container {
-  .margin-bottom-0 {
-    // USWDS grid container overrides this
-    margin-bottom: 0 !important;
-  }
-  .fixed-buttons {
-    box-shadow: 0 -2px 4px 0px rgba(0, 0, 0, 0.25) !important;
-    clip-path: inset(-1rem 0 0 0);
-    background-color: #fff;
-    padding: 1rem;
-  }
+	.margin-bottom-0 {
+		// USWDS grid container overrides this
+		margin-bottom: 0 !important;
+	}
+	.fixed-buttons {
+		box-shadow: 0 -2px 4px 0px rgba(0, 0, 0, 0.25) !important;
+		clip-path: inset(-1rem 0 0 0);
+		background-color: #fff;
+		padding: 1rem;
+	}
 }
 
 .header-normal {
-  font-weight: normal;
-  line-height: 2;
+	font-weight: normal;
+	line-height: 2;
 }
