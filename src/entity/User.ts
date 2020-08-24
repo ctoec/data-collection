@@ -2,7 +2,11 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 import { User as UserInterface } from '../../client/src/shared/models';
 
-import { OrganizationPermission, SitePermission } from './Permission';
+import {
+  OrganizationPermission,
+  SitePermission,
+  CommunityPermission,
+} from './Permission';
 import { Site } from './Site';
 
 @Entity()
@@ -25,6 +29,9 @@ export class User implements UserInterface {
 
   @OneToMany((type) => SitePermission, (perm) => perm.user)
   sitePermissions?: Array<SitePermission>;
+
+  @OneToMany(() => CommunityPermission, (perm) => perm.user)
+  communityPermissions?: Array<CommunityPermission>;
 
   // not mapped
   // convenience var: all sites the user has access to, via org + site permissions

@@ -36,6 +36,11 @@ const addUser = passAsyncError(
     if (req.claims.sub) {
       const user = await getManager().findOne(User, {
         where: { wingedKeysId: req.claims.sub },
+        relations: [
+          'orgPermissions',
+          'sitePermissions',
+          'communityPermissions',
+        ],
       });
       if (!user) throw new InvalidSubClaimError();
       req.user = user;
