@@ -2,27 +2,26 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { TabNav } from '@ctoec/component-library';
-import { TableRow } from '../CheckData/CheckData';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
+import { Child } from 'shared/models';
 
 const EditRecord: React.FC = () => {
-  const { reportId, rowId } = useParams();
+  const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
-  const [rowData, setRowData] = useState<TableRow>();
+  const [rowData, setRowData] = useState<Child>();
 
   useEffect(() => {
-    apiGet(`enrollment-reports/${reportId}/row/${rowId}`, {
+    apiGet(`children/${childId}`, {
       accessToken,
     }).then((_rowData) => setRowData(_rowData));
-  }, [accessToken, reportId, rowId]);
+  }, [accessToken, childId]);
 
   return rowData ? (
     <div className="grid-container">
       <div className="margin-top-4">
         <h2>
-          Edit information for {rowData.child.firstName}{' '}
-          {rowData.child.lastName}
+          Edit information for {rowData.firstName} {rowData.lastName}
         </h2>
       </div>
       <TabNav

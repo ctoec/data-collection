@@ -5,35 +5,16 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import {
-  Organization,
-  Site,
-  Child,
-  Family,
-  IncomeDetermination,
-  Enrollment,
-  Funding,
-} from 'shared/models';
-import { TextWithIcon, Button, Table, Column } from '@ctoec/component-library';
+import { Child } from 'shared/models';
+import { TextWithIcon, Button, Table } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { tableColumns } from './TableColumns';
-
-export type TableRow = {
-  rowId: number;
-  organization: Organization;
-  site: Site;
-  child: Child;
-  family?: Family;
-  incomeDetermination?: IncomeDetermination;
-  enrollment?: Enrollment;
-  funding?: Funding;
-};
 
 const CheckData: React.FC = () => {
   const { reportId } = useParams();
 
   const { accessToken } = useContext(AuthenticationContext);
-  const [reportData, setReportData] = useState<TableRow[]>([]);
+  const [reportData, setReportData] = useState<Child[]>([]);
 
   useEffect(() => {
     if (reportId && accessToken) {
@@ -69,11 +50,11 @@ const CheckData: React.FC = () => {
           <p>If everything looks good, submit to OEC.</p>
           {reportData.length ? (
             <PerfectScrollbar>
-              <Table<TableRow>
+              <Table<Child>
                 id="enrollment-report-table"
-                rowKey={(row) => row.child.id}
+                rowKey={(row) => row.id}
                 data={reportData}
-                columns={tableColumns(reportId)}
+                columns={tableColumns()}
               />
             </PerfectScrollbar>
           ) : (

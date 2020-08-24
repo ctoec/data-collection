@@ -32,9 +32,7 @@ const Upload: React.FC = () => {
       formData.set('file', file);
       apiPost('enrollment-reports', formData, { accessToken })
         .then((value) => {
-          history.push(
-            `check-data?${queryString.stringify({ reportId: value.id })}`
-          );
+          history.push(`check-data/${value.id}`);
         })
         .catch((err) => {
           setError(err);
