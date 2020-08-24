@@ -5,6 +5,7 @@ import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from 'shared/models';
+import { CareForKidsForm } from './Forms/CareForKidsForm';
 
 const EditRecord: React.FC = () => {
   const { childId } = useParams();
@@ -16,6 +17,15 @@ const EditRecord: React.FC = () => {
       accessToken,
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId]);
+
+  // Wrapped method to hand off to child forms to allow lifting
+  // state back up to the EditRecord page. This is good because
+  // then only the EditRecord page has to make any calls to the
+  // database or API, allowing for a single, unfiied formulation
+  // here rather than individual forms.
+  function handleChange(newRow: Child) {
+    setRowData(newRow);
+  }
 
   return rowData ? (
     <div className="grid-container">
@@ -52,7 +62,7 @@ const EditRecord: React.FC = () => {
           {
             id: 'care-tab',
             text: 'Care 4 Kids',
-            content: <span>This is where the care for kids form goes</span>,
+            content: <CareForKidsForm initState={rowData} passData={handleChange} />
           },
         ]}
         activeId="child-tab"
