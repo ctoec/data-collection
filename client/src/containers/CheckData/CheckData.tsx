@@ -14,7 +14,6 @@ import {
   Enrollment,
   Funding,
 } from 'shared/models';
-import { apiGet } from '../../utils/api';
 import { TextWithIcon, Button, Table, Column } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { tableColumns } from './TableColumns';
@@ -34,18 +33,7 @@ const CheckData: React.FC = () => {
   const { reportId } = useParams();
 
   const { accessToken } = useContext(AuthenticationContext);
-<<<<<<< HEAD
-  const [reportData, setReportData] = useState<FlattenedEnrollment[]>([]);
-  const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>(
-    []
-  );
-
-  useEffect(() => {
-    apiGet('column-metadata').then((metadata) => setColumnMetadata(metadata));
-  }, []);
-=======
   const [reportData, setReportData] = useState<TableRow[]>([]);
->>>>>>> A bunch of changes
 
   useEffect(() => {
     if (reportId && accessToken) {
