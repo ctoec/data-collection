@@ -4,14 +4,11 @@ import { ReactComponent as ArrowLeft } from 'uswds/dist/img/arrow-left.svg';
 import { ColumnMetadata } from 'shared/models';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
-import { SECTION_COPY } from './Sections';
 import { apiGet } from '../../utils/api';
 
 const DataRequirements: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
-  const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>(
-    []
-  );
+  const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>([]);
 
   useEffect(() => {
     apiGet('column-metadata').then((definitions) =>
@@ -85,12 +82,10 @@ const DataRequirements: React.FC = () => {
       />
       <h1>OEC's enrollment data requirements</h1>
       {Object.entries(columnMetadataBySection).map(
-        ([sectionKey, sectionData]) => (
+        ([sectionName, sectionData]) => (
           <div className="margin-top-4">
-            <h2>{SECTION_COPY[sectionKey].formattedName}</h2>
-            <p className="text-pre-line">
-              {SECTION_COPY[sectionKey].description}
-            </p>
+            <h2>{sectionName}</h2>
+            <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
             <Table
               id="data-requirements-table"
               data={sectionData}
@@ -105,4 +100,14 @@ const DataRequirements: React.FC = () => {
   );
 };
 
+const getSectionCopy = (section: string) => {
+  if (section.toLowerCase().includes('child'))
+    return 'A unique person enrolled in an ECE program.';
+  if (section.toLowerCase().includes('income'))
+    return "A determination by a provider of a family's income, for purposes of assessing eligibility for public funding; must be updated at least once a year.";
+  if (section.toLowerCase().includes('family'))
+    return 'One or more children that share the same address and household income.';
+  if (section.toLowerCase().includes('enrollment'))
+    return 'Enrollment: A period of time during which a child recieved ECE services.\nFunding: A period of time during which an enrollment was subsidized by a state-funded contract space.\nCare 4 Kids: Whether or not the enrollment was subsidized by the Care 4 Kids program.';
+};
 export default DataRequirements;

@@ -21,11 +21,11 @@ import {
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
 
-const SECTIONS = {
-  CHILD_INFO: 'child-info',
-  FAMILY_INFO: 'family-info',
-  FAMILY_INCOME: 'family-income',
-  ENROLLMENT_FUNDING: 'enrollment-funding',
+export const SECTIONS = {
+  CHILD_INFO: 'Child information',
+  FAMILY_INFO: 'Family information',
+  FAMILY_INCOME: 'Family income determination',
+  ENROLLMENT_FUNDING: 'Enrollment and funding',
 };
 
 @Entity()

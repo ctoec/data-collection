@@ -1,8 +1,9 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
 import { getConnection, getManager } from 'typeorm';
-import { FlattenedEnrollment } from '../entity';
+import { FlattenedEnrollment, SECTIONS } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import moment from 'moment';
+import { SpecialEducationServicesType } from 'shared/models';
 
 /**
  * Parses the uploaded file into:
@@ -114,7 +115,7 @@ function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
  * @param sheet
  */
 function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
-  return sheet['B1'].v === 'Child Info' ? 'xlxs' : 'csv';
+  return sheet['B1'].v === SECTIONS.CHILD_INFO ? 'xlxs' : 'csv';
 }
 
 /**
