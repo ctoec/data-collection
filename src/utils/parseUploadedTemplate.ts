@@ -3,7 +3,6 @@ import { getConnection, getManager } from 'typeorm';
 import { FlattenedEnrollment, SECTIONS } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import moment from 'moment';
-import { SpecialEducationServicesType } from 'shared/models';
 
 /**
  * Parses the uploaded file into:
