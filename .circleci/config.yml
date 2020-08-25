@@ -1,14 +1,20 @@
 version: 2.1
 
+orbs:
+  node: circleci/node@4.0.0
+
 jobs:
   install:
     docker:
-      - image: circleci/node@3.0.0
+      - image: circleci/node@4.0.0
     steps:
       - checkout
-      - run: yarn install --frozen-lockfile
-      - run: cd client
-      - run: yarn install --frozen-lockfile --network-concurrency 1
+      - node/install-packages:
+          pkg-manager: yarn
+      - node/install-packages:
+          pkg-manager: yarn
+          app-dir: ~/project/client
+          override-ci-command: yarn install --frozen-lockfile --network-concurrency 1
   build:
     docker:
       - image: circleci/node@3.0.0
