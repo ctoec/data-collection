@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { Organization as OrganizationInterface } from '../../client/shared/models';
+import { Organization as OrganizationInterface } from '../../client/src/shared/models';
 
 import { FundingSpace } from './FundingSpace';
 import { Site } from './Site';

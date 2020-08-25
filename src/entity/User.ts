@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { User as UserInterface } from '../../client/shared/models';
+import { User as UserInterface } from '../../client/src/shared/models';
 
 import { OrganizationPermission, SitePermission } from './Permission';
 import { Site } from './Site';

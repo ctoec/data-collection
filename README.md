@@ -50,7 +50,7 @@ A web application to collect information from child care providers in the State 
 This mono-repo consists of three main parts:
 1. Server, located in the root dir. The backend is an express server, with routes defined in `src/routes`
 1. Client, located in `client` dir. The frontend is a React SPA, created with create-react-app.
-1. Shared resources, located in `client/shared` dir. The shared resources live in the `client` namespace to play nice with create-react-app. They are included in each project via relative file path imports, and are included in the built resources for both client and server.
+1. Shared resources, located in `client/src/shared` dir. The shared resources live in the `client/src` directory to play nice with create-react-app. They are included in each project via relative file path imports, and are included in the built resources for both client and server.
 
 ## Deploy
 
