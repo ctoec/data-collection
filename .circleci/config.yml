@@ -3,6 +3,8 @@ version: 2.1
 orbs:
   node: circleci/node@4.0.0
 
+working_directory: ~/repo
+
 jobs:
   install:
     docker:
@@ -11,14 +13,24 @@ jobs:
       - checkout
       - node/install-packages:
           pkg-manager: yarn
+          cache-path: node_modules
       - node/install-packages:
           pkg-manager: yarn
-          app-dir: ~/project/client
+          app-dir: ./client
+          cache-path: node_modules
           override-ci-command: yarn install --frozen-lockfile --network-concurrency 1
+      # Save workspace for subsequent jobs (i.e. build and test)
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   build:
     docker:
       - image: circleci/node:12
     steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
       - run: yarn build
       - run: cd ../
       - run: yarn build
@@ -26,6 +38,9 @@ jobs:
     docker:
       - image: circleci/node:12
     steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
       - run: yarn run test
 
 workflows:
