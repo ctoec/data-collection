@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child } from '../../../shared/models';
+import { Child } from '../../shared/models';
 import { CareForKidsForm } from './Forms/CareForKidsForm';
 
 const EditRecord: React.FC = () => {
@@ -62,7 +62,9 @@ const EditRecord: React.FC = () => {
           {
             id: 'care-tab',
             text: 'Care 4 Kids',
-            content: <CareForKidsForm initState={rowData} passData={handleChange} />
+            content: (
+              <CareForKidsForm initState={rowData} passData={handleChange} />
+            ),
           },
         ]}
         activeId="child-tab"

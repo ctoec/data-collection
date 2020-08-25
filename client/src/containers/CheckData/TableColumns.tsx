@@ -2,7 +2,7 @@ import React from 'react';
 import idx from 'idx';
 import { Link } from 'react-router-dom';
 import { Column, Button } from '@ctoec/component-library';
-import { Child } from '../../../shared/models';
+import { Child } from '../../shared/models';
 
 const tableColumnClassName = 'text-pre text-center font-body-2xs';
 export const tableColumns: () => Column<Child>[] = () => {

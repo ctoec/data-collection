@@ -6,7 +6,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { FundingTimeSplit as FundingTimeSplitInterface } from '../../client/shared/models';
+import { FundingTimeSplit as FundingTimeSplitInterface } from '../../client/src/shared/modelss';
 
 import { FundingSpace } from './FundingSpace';
 

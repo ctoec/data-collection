@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { ColumnMetadata as ECEColumnMetadata } from '../../../client/shared/models';
+import { ColumnMetadata as ECEColumnMetadata } from '../../../client/src/shared/modelss';
 
 // Formats
 export const BOOLEAN_FORMAT = 'Yes, Y, No, N';

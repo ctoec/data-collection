@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Site as SiteInterface, Region } from '../../client/shared/models';
+import { Site as SiteInterface, Region } from '../../client/src/shared/modelss';
 
 import { Enrollment } from './Enrollment';
 import { Organization } from './Organization';

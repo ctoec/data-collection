@@ -16,7 +16,7 @@ import {
   FundingSource,
   FundingTime,
   SpecialEducationServicesType,
-} from '../../client/shared/models';
+} from '../../client/src/shared/modelss';
 import { getManager } from 'typeorm';
 
 /**

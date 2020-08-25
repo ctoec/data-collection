@@ -9,7 +9,7 @@ import {
 import {
   Enrollment as EnrollmentInterface,
   AgeGroup,
-} from '../../client/shared/models';
+} from '../../client/src/shared/modelss';
 
 import { Child } from './Child';
 import { Funding } from './Funding';

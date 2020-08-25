@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import queryString from 'query-string';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { FileInput, TextWithIcon, Alert } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';

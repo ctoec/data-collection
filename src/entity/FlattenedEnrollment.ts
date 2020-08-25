@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-import { FlattenedEnrollment as FlattenedEnrollmentInterface } from '../../client/shared/models';
+import { FlattenedEnrollment as FlattenedEnrollmentInterface } from '../../client/src/shared/modelss';
 
 import { EnrollmentReport } from './EnrollmentReport';
 import {
