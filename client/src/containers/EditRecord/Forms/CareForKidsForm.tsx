@@ -38,7 +38,7 @@ export const CareForKidsForm: React.FC<CareForKidsProps> =
 
     return(
         <div className='grid-container margin-top-2'>
-            <h2 className='grid-row'>Receiving Care For Kids?</h2>
+            <h1 className='grid-row'>Receiving Care For Kids?</h1>
             <div>
                 <Form<Child>
                     className='CareForKidsForm'
@@ -54,7 +54,7 @@ export const CareForKidsForm: React.FC<CareForKidsProps> =
                         inputComponent={RadioButtonGroup}
                         id='c4k-radio-group'
                         name='careforkids'
-                        legend='care4kids'
+                        legend='receives care for kids'
                         options={[
                             {
                                 render: (props) => <div><RadioButton text='Yes' {...props} /></div>,
