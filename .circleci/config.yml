@@ -6,7 +6,7 @@ orbs:
 jobs:
   install:
     docker:
-      - image: circleci/node@4.0.0
+      - image: circleci/node:12
     steps:
       - checkout
       - node/install-packages:
@@ -17,14 +17,14 @@ jobs:
           override-ci-command: yarn install --frozen-lockfile --network-concurrency 1
   build:
     docker:
-      - image: circleci/node@3.0.0
+      - image: circleci/node:12
     steps:
       - run: yarn build
       - run: cd ../
       - run: yarn build
   test:
     docker:
-      - image: circleci/node@3.0.0
+      - image: circleci/node:12
     steps:
       - run: yarn run test
 
