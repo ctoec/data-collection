@@ -1,7 +1,34 @@
 version: 2.1
-orbs:
-  node: circleci/node@3.0.0
+
+jobs:
+  install:
+    docker:
+      - image: circleci/node@3.0.0
+    steps:
+      - checkout
+      - run: yarn install --frozen-lockfile
+      - run: cd client
+      - run: yarn install --frozen-lockfile --network-concurrency 1
+  build:
+    docker:
+      - image: circleci/node@3.0.0
+    steps:
+      - run: yarn build
+      - run: cd ../
+      - run: yarn build
+  test:
+    docker:
+      - image: circleci/node@3.0.0
+    steps:
+      - run: yarn run test
+
 workflows:
-  node-tests:
+  build-and-test:
     jobs:
-      - node/test
+      - install
+      - build:
+          requires:
+            - install
+      - test:
+          requires:
+            - build
