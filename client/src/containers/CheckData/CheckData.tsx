@@ -5,7 +5,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child } from 'shared/models';
+import { Child } from '../../../shared/models';
 import { TextWithIcon, Button, Table } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { tableColumns } from './TableColumns';

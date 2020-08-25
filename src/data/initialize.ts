@@ -11,7 +11,7 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
-} from '../../shared/models';
+} from '../../client/shared/models';
 import { reportingPeriods } from './reportingPeriods';
 import moment from 'moment';
 

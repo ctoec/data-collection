@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import {
   ReportingPeriod as ReportingPeriodInterface,
   FundingSource,
-} from '../../shared/models';
+} from '../../client/shared/models';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
 

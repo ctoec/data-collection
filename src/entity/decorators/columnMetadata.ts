@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { ColumnMetadata as ECEColumnMetadata } from '../../../shared/models';
+import { ColumnMetadata as ECEColumnMetadata } from '../../../client/shared/models';
 
 // Formats
 export const BOOLEAN_FORMAT = 'Yes, Y, No, N';
@@ -29,7 +29,7 @@ const DATA_DEFINITION_KEY = Symbol('definitionMetadata');
  * property itself. It is added to the metadata object returned by
  * `getDataDefinition` (see below)
  */
-type ColumnMetadataInput = Omit<ECEColumnMetadata, "propertyName">
+type ColumnMetadataInput = Omit<ECEColumnMetadata, 'propertyName'>;
 
 /**
  * Set the provided data definition object as metadata for the given property
@@ -44,8 +44,15 @@ export const ColumnMetadata = (definition: ColumnMetadataInput) =>
  * @param target
  * @param propertyKey
  */
-export const getColumnMetadata = (target: any, propertyName: string): ECEColumnMetadata => {
-  const dataDef = Reflect.getMetadata(DATA_DEFINITION_KEY, target, propertyName);
+export const getColumnMetadata = (
+  target: any,
+  propertyName: string
+): ECEColumnMetadata => {
+  const dataDef = Reflect.getMetadata(
+    DATA_DEFINITION_KEY,
+    target,
+    propertyName
+  );
 
   return !dataDef
     ? dataDef

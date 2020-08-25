@@ -32,7 +32,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "sass": "^1.26.10",
-    "shared": "file:../shared",
     "typescript": "^3.9.5",
     "uswds": "^2.8.0"
   },
