@@ -9,7 +9,7 @@ import {
 import {
   SitePermission as SitePermissionInterface,
   OrganizationPermission as OrganizationPermissionInterface,
-} from '../../client/src/shared/modelss';
+} from '../../client/src/shared/models';
 
 import { User } from './User';
 import { Organization } from './Organization';

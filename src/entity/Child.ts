@@ -10,7 +10,7 @@ import {
   Child as ChildInterface,
   Gender,
   SpecialEducationServicesType,
-} from '../../client/src/shared/modelss';
+} from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
 import { Family } from './Family';

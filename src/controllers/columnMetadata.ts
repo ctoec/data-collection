@@ -1,5 +1,5 @@
 import { write, WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
-import { ColumnMetadata } from '../../client/src/shared/modelss';
+import { ColumnMetadata } from '../../client/src/shared/models';
 import { wrapText } from '../utils/string';
 import { EntityMetadata, getConnection } from 'typeorm';
 import { FlattenedEnrollment } from '../entity';

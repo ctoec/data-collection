@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { EnrollmentReport as EnrollmentReportInterface } from '../../client/src/shared/modelss';
+import { EnrollmentReport as EnrollmentReportInterface } from '../../client/src/shared/models';
 
 import { FlattenedEnrollment } from './FlattenedEnrollment';
 
