@@ -50,12 +50,7 @@ A web application to collect information from child care providers in the State 
 This mono-repo consists of three main parts:
 1. Server, located in the root dir. The backend is an express server, with routes defined in `src/routes`
 1. Client, located in `client` dir. The frontend is a React SPA, created with create-react-app.
-1. Shared resources, located in `/shared` dir. The shared resources are included in the server by relative imports (e.g. from `src/index.ts`, import would be `import { XXXXXX } from '../shared/models'`).
-They are included in the react app via a local package installation (see `client/package.json`). Changes to shared need to be propagated to the client via a `yarn upgrade`. They are automatically present in the server.
-To update the copy of `shared` in the client:
-```
-docker-compose exec client yarn upgrade file:../shared
-```
+1. Shared resources, located in `client/src/shared` dir. The shared resources live in the `client/src` directory to play nice with create-react-app. They are included in each project via relative file path imports, and are included in the built resources for both client and server.
 
 ## Deploy
 
@@ -71,27 +66,22 @@ NOTE: This option will require you to have the Elastic Beanstalk CLI installed o
 ```bash
 cd <path-to-project-root>/client && yarn install --frozen-lockfile
 ```
-
 1. Once the dependencies are installed, create a prod-ready build of the React app.
 ```bash
 yarn build
 ```
-
 1. Next, install dependencies for the Express server project.
 ```bash
 cd <path-to-project-root> && yarn install --frozen-lockfile
 ```
-
 1. Then, transpile the project, generating a Javascript build.
 ```bash
 yarn build
 ```
-
 1. Generate a bundled .zip artifact of both the React app and Express server, to be used in the proceeding step to deploy directly to Elastic Beanstalk:
 ```bash
 cd <path-to-project-root> && yarn run bundle
 ```
-
 1. Deploy the artifact you just created to the stage in question:
 ```bash
 eb deploy <elastic-beanstalk-environment> --staged

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ReactComponent as ArrowLeft } from 'uswds/dist/img/arrow-left.svg';
-import { ColumnMetadata } from 'shared/models';
+import { ColumnMetadata } from '../../shared/models';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
 import { apiGet } from '../../utils/api';

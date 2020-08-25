@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 
-import { Funding as FundingInterface } from '../../shared/models';
+import { Funding as FundingInterface } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
 import { ReportingPeriod } from './ReportingPeriod';

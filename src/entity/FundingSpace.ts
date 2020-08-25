@@ -12,7 +12,7 @@ import {
   FundingSource,
   FundingTime,
   AgeGroup,
-} from '../../shared/models';
+} from '../../client/src/shared/models';
 
 import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';

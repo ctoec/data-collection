@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
-import { User } from 'shared/models';
+import { User } from '../../shared/models';
 import { apiGet } from '../../utils/api';
 
 export type UserContextType = {

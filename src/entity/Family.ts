@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Family as FamilyInterface } from '../../shared/models';
+import { Family as FamilyInterface } from '../../client/src/shared/models';
 
 import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
