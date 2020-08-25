@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Form, 
     FormSubmitButton,
@@ -10,7 +10,7 @@ import { Child } from 'shared/models';
 
 type CareForKidsProps = {
     initState: Child,
-    passData(_: Child): void;
+    passData: (_: Child) => void;
 }
 
 /*
@@ -40,7 +40,7 @@ export const CareForKidsForm: React.FC<CareForKidsProps> =
         <div className='grid-container margin-top-2'>
             <h2 className='grid-row'>Receiving Care For Kids?</h2>
             <div>
-                <Form<object>
+                <Form<Child>
                     className='CareForKidsForm'
                     data={initState}
                     onSubmit={saveButton}
@@ -49,12 +49,12 @@ export const CareForKidsForm: React.FC<CareForKidsProps> =
                 >
                     <FormField<Child, RadioButtonGroupProps, boolean>
                         getValue={(data) => data.at('recievesC4K')}
-                        preprocessForDisplay={(data) => data == true ? 'yes' : 'no'}
+                        preprocessForDisplay={(data) => data === true ? 'yes' : 'no'}
                         parseOnChangeEvent={(e) => {return e.target.value === 'Yes'}}
                         inputComponent={RadioButtonGroup}
                         id='c4k-radio-group'
                         name='careforkids'
-                        legend=''
+                        legend='care4kids'
                         options={[
                             {
                                 render: (props) => <div><RadioButton text='Yes' {...props} /></div>,
