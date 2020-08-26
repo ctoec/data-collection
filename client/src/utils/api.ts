@@ -33,7 +33,13 @@ export function apiPost(path: string, body: any, opts?: ApiOpts) {
  * @param opts
  */
 export function apiPut(path: string, body: any, opts?: ApiOpts) {
-  return api(path, body, 'PUT', opts || {});
+  const _opts = opts || {};
+  if (!_opts.headers) {
+    _opts.headers = {}
+  }
+  _opts.headers['Content-Type'] = 'application/json';
+
+  return api(path, JSON.stringify(body), 'PUT', _opts);
 }
 
 /**
@@ -60,6 +66,7 @@ async function api(
     headers,
     body,
   });
+
   // Handle API error response
   if (res.status >= 400) {
     try {
