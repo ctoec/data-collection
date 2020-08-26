@@ -64,6 +64,7 @@ jobs:
       - run: yarn run bundle
       - run: eb deploy ece-fawkes-<< parameters.env >>-<< parameters.env >> --staged
 
+
 workflows:
   build-and-test:
     jobs:
@@ -81,7 +82,6 @@ workflows:
           filters:
             branches:
               only: base
-
   deploy-to-qa:
     jobs:
       - hold:
@@ -96,7 +96,6 @@ workflows:
           env: qa
           requires:
             - build
-
   deploy-to-devsecure:
     jobs:
       - hold:
