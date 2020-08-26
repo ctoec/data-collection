@@ -2,7 +2,8 @@ import express, { Response, Request } from 'express';
 import { getManager } from 'typeorm';
 import { Child } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { NotFoundError } from '..//middleware/error/errors';
+import { NotFoundError, BadRequestError } from '../middleware/error/errors';
+import * as controller from '../controllers/children';
 
 export const childrenRouter = express.Router();
 
@@ -16,16 +17,7 @@ childrenRouter.get(
   '/:childId',
   passAsyncError(async (req: Request, res: Response) => {
     const childId = req.params['childId'];
-    const child = await getManager().findOne(Child, {
-      where: { id: childId },
-      relations: [
-        'family',
-        'family.incomeDeterminations',
-        'enrollments',
-        'enrollments.fundings',
-      ],
-    });
-
+    const child = await controller.getChildById(childId);
     if (!child) throw new NotFoundError();
 
     res.send(child);

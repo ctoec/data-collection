@@ -1,9 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 
 import { Organization as OrganizationInterface } from '../../client/src/shared/models';
 
 import { FundingSpace } from './FundingSpace';
 import { Site } from './Site';
+import { Community } from './Community';
 
 @Entity()
 export class Organization implements OrganizationInterface {
@@ -19,6 +26,9 @@ export class Organization implements OrganizationInterface {
   @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.organization)
   fundingSpaces?: Array<FundingSpace>;
 
-  @Column({ nullable: true })
-  communityId?: number;
+  @ManyToOne(() => Community, { nullable: true })
+  community: Community;
+
+  @Column()
+  communityId: number;
 }

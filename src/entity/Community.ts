@@ -11,6 +11,6 @@ export class Community implements CommunityInterface {
   @Column()
   name: string;
 
-  @OneToMany((type) => Organization, (Organization) => Organization.communityId)
+  @OneToMany((type) => Organization, (organization) => organization.community)
   organizations?: Array<Organization>;
 }
