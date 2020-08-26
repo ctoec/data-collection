@@ -30,8 +30,7 @@ jobs:
       - attach_workspace:
           at: .
       - run: yarn build
-      - run: cd ../
-      - run: yarn build
+      - run: cd client && CI="" yarn build
       - persist_to_workspace:
           root: .
           paths:
@@ -44,8 +43,7 @@ jobs:
       - attach_workspace:
           at: .
       - run: yarn run test
-      - run: cd client/
-      - run: yarn run test
+      - run: cd client/ && yarn run test
 
   deploy-staging:
     docker:
@@ -60,8 +58,6 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
-      - run: cd client && CI="" yarn build
-      - run: cd ../ && CI="true" yarn build
       - run: yarn run bundle
       - run: ls -la && eb deploy ece-fawkes-staging-staging --staged
 
