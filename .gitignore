@@ -36,7 +36,7 @@ yarn-error.log*
 /winged-keys
 
 # Elastic Beanstalk Config
-/.elasticbeanstalk
+.elasticbeanstalk
 
 # Elastic Beanstalk Bundles
 /fawkes-bundle
