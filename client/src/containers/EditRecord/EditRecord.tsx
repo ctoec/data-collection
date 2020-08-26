@@ -4,8 +4,9 @@ import { useParams } from 'react-router-dom';
 import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child } from '../../shared/models';
+import { Child, Family } from 'shared/models';
 import { CareForKidsForm } from './Forms/CareForKidsForm';
+import { FamilyInfoForm } from './Forms/FamilyInfoForm';
 
 const EditRecord: React.FC = () => {
   const { childId } = useParams();
@@ -19,12 +20,19 @@ const EditRecord: React.FC = () => {
   }, [accessToken, childId]);
 
   // Wrapped method to hand off to child forms to allow lifting
-  // state back up to the EditRecord page. This is good because
-  // then only the EditRecord page has to make any calls to the
-  // database or API, allowing for a single, unfiied formulation
-  // here rather than individual forms.
-  function handleChange(newRow: Child) {
+  // state back up to the EditRecord page.
+  function handleChildChange(newRow: Child) {
     setRowData(newRow);
+  }
+
+  // Wrapped method that creates a deep clone of the local state
+  // to hand off to the family form so that changes it makes
+  // a) only affect the family (which is the only scope it needs
+  // to know), and b) can be passed back up and saved
+  function handleFamilyChange(newFam: Family) {
+    var newState: Child = JSON.parse(JSON.stringify(rowData));
+    newState.family = newFam;
+    setRowData(newState);
   }
 
   return rowData ? (
@@ -47,7 +55,13 @@ const EditRecord: React.FC = () => {
           {
             id: 'family-tab',
             text: 'Family Info',
-            content: <span>This is where the family info form goes</span>,
+            content: (
+              <FamilyInfoForm
+                childId={rowData.id}
+                initState={rowData.family}
+                passData={handleFamilyChange}
+              />
+            ),
           },
           {
             id: 'income-tab',
@@ -63,7 +77,10 @@ const EditRecord: React.FC = () => {
             id: 'care-tab',
             text: 'Care 4 Kids',
             content: (
-              <CareForKidsForm initState={rowData} passData={handleChange} />
+              <CareForKidsForm
+                initState={rowData}
+                passData={handleChildChange}
+              />
             ),
           },
         ]}
