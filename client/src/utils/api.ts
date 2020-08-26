@@ -51,6 +51,13 @@ async function api(
   opts: ApiOpts
 ) {
   const headers = opts.headers || {};
+
+  // The access token was supplied, but does not yet have a value
+  // Skip request
+  if (opts.accessToken === null) {
+    return;
+  }
+
   if (opts.accessToken) {
     headers['Authorization'] = `Bearer ${opts.accessToken}`;
   }

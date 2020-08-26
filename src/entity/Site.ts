@@ -40,6 +40,9 @@ export class Site implements SiteInterface {
   @ManyToOne(() => Organization, { nullable: false })
   organization: Organization;
 
+  @Column()
+  organizationId: number;
+
   @OneToMany(() => Enrollment, (enrollment) => enrollment.site)
   enrollments?: Array<Enrollment>;
 }
