@@ -59,7 +59,7 @@ jobs:
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
       - run: yarn run bundle
-      - run: ls -la && eb deploy ece-fawkes-staging-staging --staged
+      - run: eb deploy ece-fawkes-staging-staging --staged
 
   deploy-qa:
     docker:
