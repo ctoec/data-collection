@@ -4,6 +4,7 @@ export * from './Community';
 export * from './ColumnMetadata';
 export * from './Enrollment';
 export * from './EnrollmentReport';
+export * from './ExitReason';
 export * from './Family';
 export * from './FlattenedEnrollment';
 export * from './Funding';

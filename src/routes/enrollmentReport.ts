@@ -7,7 +7,11 @@ import multer from 'multer';
 
 import { EnrollmentReport, FlattenedEnrollment } from '../entity';
 import { parseUploadedTemplate } from '../utils/parseUploadedTemplate';
-import { NotFoundError, BadRequestError } from '../middleware/error/errors';
+import {
+  NotFoundError,
+  BadRequestError,
+  ApiError,
+} from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { mapFlattenedEnrollment } from '../utils/mapFlattenedEnrollment';
 
@@ -16,22 +20,8 @@ export const router = express.Router();
 /**
  * /enrollment-reports/:reportId GET
  *
- * Returns the parsed data from the given EnrollmentReport, as
- * an array of object dicts like:
- * [
- * 	{
- * 		organization: {...},
- * 		site: {...},
- * 		child: {...},
- * 		family: {...},
- * 		incomeDetermination: {...},
- * 		enrollment: {...},
- * 		funding: {...}
- * 	},
- * 	...
- * ]
- * or a 404
- * TODO: Does this data type need a shared interface?
+ * Returns the parsed data from the given EnrollmentReport,
+ * as nested data object with Child as root.
  */
 router.get(
   '/:reportId',
@@ -45,35 +35,6 @@ router.get(
       report.enrollments.map(mapFlattenedEnrollment)
     );
     res.send(enrollments.filter((e) => !!e));
-  })
-);
-
-/**
- * /enrollment-reports/:reportId/row/:rowId
- *
- * Returns parsed given row from the given report as object
- * of dicts like:
- * 	{
- * 		organization: {...},
- * 		site: {...},
- * 		child: {...},
- * 		family: {...},
- * 		incomeDetermination: {...},
- * 		enrollment: {...},
- * 		funding: {...}
- * 	}
- */
-router.get(
-  '/:reportId/row/:rowId',
-  passAsyncError(async (req, res) => {
-    const reportId = parseInt(req.params['reportId']) || 0;
-    const rowId = parseInt(req.params['rowId']) || 0;
-    const row = await getManager().findOne(FlattenedEnrollment, rowId);
-
-    if (!row || row.reportId !== reportId) throw new NotFoundError();
-
-    const mappedRow = await mapFlattenedEnrollment(row);
-    res.send(mappedRow);
   })
 );
 
@@ -108,7 +69,7 @@ router.post(
 
       res.status(201).json({ id: report.id });
     } catch (err) {
-      if (err instanceof BadRequestError) throw err;
+      if (err instanceof ApiError) throw err;
 
       console.error('Error parsing uploaded enrollment report: ', err);
       throw new BadRequestError(
