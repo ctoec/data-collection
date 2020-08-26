@@ -35,7 +35,6 @@ cd client && yarn install --frozen-lockfile --network-concurrency 1
 yarn build
 cd ../ && yarn build
 
-# Bundle the build up and deploy it!
-yarn run bundle
+# Now just init and deploy!
 eb init ece-fawkes-$1-app --region us-east-2 --platform node.js
-eb deploy ece-fawkes-$1-env --staged
+eb deploy ece-fawkes-$1-env
