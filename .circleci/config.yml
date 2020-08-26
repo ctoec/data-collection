@@ -32,6 +32,10 @@ jobs:
       - run: yarn build
       - run: cd ../
       - run: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
   test:
     docker:
       - image: circleci/node:12
@@ -43,6 +47,23 @@ jobs:
       - run: cd client/
       - run: yarn run test
 
+  deploy-staging:
+    docker:
+      - image: circleci/node:12
+    steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev build-essential
+            sudo pip3 install awsebcli
+      - run: yarn run bundle
+      - run: eb deploy ece-fawkes-staging-staging --staged
+
 workflows:
   build-and-test:
     jobs:
@@ -53,3 +74,17 @@ workflows:
       - test:
           requires:
             - build
+
+  build-and-deploy:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - deploy-staging:
+          requires:
+            - test
+          filters:
+            branches:
+              # TODO: change to master
+              only: circleci-project-setup
