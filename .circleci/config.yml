@@ -62,7 +62,7 @@ jobs:
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
       - run: yarn run bundle
-      - run: eb init ece-fawkes-qa
+      - run: eb init ece-fawkes-staging
       - run: eb deploy ece-fawkes-staging-staging --staged
 
   deploy-qa:
