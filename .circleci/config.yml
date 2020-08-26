@@ -76,7 +76,6 @@ jobs:
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
       - run: yarn run bundle
-      - run: eb init ece-fawkes-qa
       - run: eb deploy ece-fawkes-qa-qa --staged
 
 workflows:
@@ -101,8 +100,7 @@ workflows:
             - build
           filters:
             branches:
-              # TODO: change to master
-              only: circleci-project-setup
+              only: base
 
   build-and-deploy-qa:
     jobs:
