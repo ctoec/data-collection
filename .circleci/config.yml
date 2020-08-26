@@ -83,7 +83,7 @@ workflows:
             - install
       - deploy-staging:
           requires:
-            - test
+            - build
           filters:
             branches:
               # TODO: change to master
