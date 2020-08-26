@@ -20,6 +20,7 @@
 .env.production.local
 .cache
 .config
+.devcontainer
 
 # VS Code
 .vscode
