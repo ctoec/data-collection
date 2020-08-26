@@ -64,6 +64,23 @@ jobs:
       - run: yarn run bundle
       - run: eb deploy ece-fawkes-staging-staging --staged
 
+  deploy-qa:
+    docker:
+      - image: circleci/node:12
+    steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev build-essential
+            sudo pip3 install awsebcli
+      - run: yarn run bundle
+      - run: eb deploy ece-fawkes-qa-qa --staged
+
 workflows:
   build-and-test:
     jobs:
@@ -75,7 +92,7 @@ workflows:
           requires:
             - build
 
-  build-and-deploy:
+  build-and-deploy-staging:
     jobs:
       - install
       - build:
@@ -88,3 +105,17 @@ workflows:
             branches:
               # TODO: change to master
               only: circleci-project-setup
+
+  build-and-deploy-qa:
+    jobs:
+      - hold:
+          type: approval
+      - install:
+          requires: 
+            - hold
+      - build:
+          requires:
+            - install
+      - deploy-qa:
+          requires:
+            - build
