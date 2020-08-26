@@ -60,8 +60,8 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
-      - run: cd client && yarn build
-      - run: cd ../ && yarn build
+      - run: cd client && CI="" yarn build
+      - run: cd ../ && CI="true" yarn build
       - run: yarn run bundle
       - run: ls -la && eb deploy ece-fawkes-staging-staging --staged
 
