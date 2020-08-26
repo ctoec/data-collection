@@ -1,4 +1,5 @@
 import { getManager } from 'typeorm';
+import idx from 'idx';
 import { ExitReason } from '../../client/src/shared/models';
 import { Child, ReportingPeriod, Enrollment, Funding } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
@@ -36,8 +37,10 @@ export const changeEnrollment = async (
       if (currentFunding) {
         const oldEnrollmentLastReportingPeriod =
           changeEnrollmentData.oldEnrollment?.funding?.lastReportingPeriod;
-        const newEnrollmentNextReportingPeriod =
-          changeEnrollmentData.newEnrollment.funding?.firstReportingPeriod;
+        const newEnrollmentNextReportingPeriod = idx(
+          changeEnrollmentData,
+          (_) => _.newEnrollment.fundings[0].firstReportingPeriod
+        );
 
         if (
           !oldEnrollmentLastReportingPeriod &&
@@ -67,7 +70,7 @@ export const changeEnrollment = async (
           : ExitReason.MovedWithinProgram;
 
       const oldEnrollmentExit = changeEnrollmentData.oldEnrollment?.exitDate;
-      const newEnrollmentStart = changeEnrollmentData.newEnrollment.startDate;
+      const newEnrollmentStart = changeEnrollmentData.newEnrollment.entry;
       currentEnrollment.exit =
         oldEnrollmentExit || newEnrollmentStart.add(-1, 'day');
 
@@ -78,18 +81,23 @@ export const changeEnrollment = async (
     const enrollment = tManager.create(Enrollment, {
       ageGroup: changeEnrollmentData.newEnrollment.ageGroup,
       site: changeEnrollmentData.newEnrollment.site,
-      entry: changeEnrollmentData.newEnrollment.startDate,
+      entry: changeEnrollmentData.newEnrollment.entry,
       child,
     });
     await tManager.save(enrollment);
 
     // Create new funding, if exists
-    if (changeEnrollmentData.newEnrollment.funding) {
+    if (changeEnrollmentData.newEnrollment.fundings) {
       const funding = tManager.create(Funding, {
         enrollment,
-        fundingSpace: changeEnrollmentData.newEnrollment.funding.fundingSpace,
-        firstReportingPeriod:
-          changeEnrollmentData.newEnrollment.funding.firstReportingPeriod,
+        fundingSpace: idx(
+          changeEnrollmentData,
+          (_) => _.newEnrollment.fundings[0].fundingSpace
+        ),
+        firstReportingPeriod: idx(
+          changeEnrollmentData,
+          (_) => _.newEnrollment.fundings[0].firstReportingPeriod
+        ),
       });
       await tManager.save(funding);
     }

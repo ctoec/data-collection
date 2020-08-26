@@ -1,16 +1,14 @@
 import { Moment } from 'moment';
-import { AgeGroup, ReportingPeriod, Site, FundingSpace } from '../models';
+import {
+  AgeGroup,
+  ReportingPeriod,
+  Site,
+  FundingSpace,
+  Enrollment,
+} from '../models';
 
 export interface ChangeEnrollment {
-  newEnrollment: {
-    site: Site;
-    startDate: Moment;
-    ageGroup: AgeGroup;
-    funding?: {
-      fundingSpace: FundingSpace;
-      firstReportingPeriod: ReportingPeriod;
-    };
-  };
+  newEnrollment: Enrollment;
   oldEnrollment?: {
     exitDate?: Moment;
     funding?: {
