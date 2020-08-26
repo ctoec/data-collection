@@ -88,13 +88,6 @@ workflows:
       - test:
           requires:
             - build
-
-  build-and-deploy-staging:
-    jobs:
-      - install
-      - build:
-          requires:
-            - install
       - deploy-staging:
           requires:
             - build
