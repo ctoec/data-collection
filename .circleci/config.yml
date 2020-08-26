@@ -90,7 +90,7 @@ workflows:
             - build
       - deploy-staging:
           requires:
-            - build
+            - test
           filters:
             branches:
               only: base
