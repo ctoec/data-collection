@@ -1,0 +1,110 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.0.0
+
+jobs:
+  install:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+          cache-path: node_modules
+      - node/install-packages:
+          pkg-manager: yarn
+          app-dir: ./client
+          cache-path: node_modules
+          override-ci-command: yarn install --frozen-lockfile --network-concurrency 1
+      # Save workspace for subsequent jobs
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  build:
+    docker:
+      - image: circleci/node:12
+    steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
+      - run: yarn build
+      - run: cd client && CI="" yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  test:
+    docker:
+      - image: circleci/node:12
+    steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
+      - run: yarn run test
+      - run: cd client/ && yarn run test
+
+  deploy-staging:
+    docker:
+      - image: circleci/node:12
+    steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install deployment dependencies
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev build-essential
+            sudo pip3 install awsebcli
+      - run: yarn run bundle
+      - run: eb deploy ece-fawkes-staging-staging --staged
+
+  deploy-qa:
+    docker:
+      - image: circleci/node:12
+    steps:
+      # Reuse the workspace from the build job
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install deployment dependencies
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev build-essential
+            sudo pip3 install awsebcli
+      - run: yarn run bundle
+      - run: eb deploy ece-fawkes-qa-qa --staged
+
+workflows:
+  build-and-test:
+    jobs:
+      - install
+      - build:
+          requires:
+            - install
+      - test:
+          requires:
+            - build
+      - deploy-staging:
+          requires:
+            - test
+          filters:
+            branches:
+              only: base
+
+  build-and-deploy-qa:
+    jobs:
+      - hold:
+          type: approval
+      - install:
+          requires: 
+            - hold
+      - build:
+          requires:
+            - install
+      - deploy-qa:
+          requires:
+            - build
