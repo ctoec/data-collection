@@ -1,10 +1,17 @@
+branch-defaults:
+  circleci-project-setup:
+    environment: ece-fawkes-staging-staging
+deploy:
+  artifact: fawkes-bundle.zip
 environment-defaults:
   ece-fawkes-staging-staging:
     application_name: ece-fawkes-staging
+    branch: null
     default_ec2_keyname: keypair-devops-staging
-    branch: master
     repository: null
 global:
+  application_name: ece-fawkes-staging
+  default_ec2_keyname: keypair-devops-staging
   default_platform: Node.js 12 running on 64bit Amazon Linux 2
   default_region: us-east-2
   include_git_submodules: true
@@ -14,5 +21,3 @@ global:
   profile: null
   sc: git
   workspace_type: Application
-deploy:
-  artifact: fawkes-bundle.zip
