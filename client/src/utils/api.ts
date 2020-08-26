@@ -4,6 +4,7 @@ import { getCurrentHost } from './getCurrentHost';
 type ApiOpts = {
   accessToken?: string | null;
   jsonParse?: boolean;
+  rawBody?: boolean;
   headers?: { [key: string]: string };
 };
 
@@ -33,12 +34,7 @@ export function apiPost(path: string, body: any, opts?: ApiOpts) {
  * @param opts
  */
 export function apiPut(path: string, body: any, opts?: ApiOpts) {
-  const _opts = opts || {};
-  if (!_opts.headers) {
-    _opts.headers = {};
-  }
-  _opts.headers['Content-Type'] = 'application/json';
-  return api(path, JSON.stringify(body), 'PUT', _opts);
+  return api(path, body, 'PUT', opts || {});
 }
 
 /**
@@ -67,10 +63,14 @@ async function api(
     headers['Authorization'] = `Bearer ${opts.accessToken}`;
   }
 
+  if ((method === 'PUT' || method === 'POST') && !opts.rawBody) {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const res = await fetch(`${getCurrentHost()}/api/${path}`, {
     method,
     headers,
-    body,
+    body: opts.rawBody ? body : JSON.stringify(body),
   });
 
   // Handle API error response
@@ -86,7 +86,16 @@ async function api(
   }
   // Handle API success response
   else {
-    if (opts.jsonParse === false) {
+    // If no user-supplied jsonParse, defaut value is:
+    // - false for PUT requests (which return 200 OK with empty response body)
+    // - true for GET, POST
+    const jsonParse =
+      opts.jsonParse !== undefined
+        ? opts.jsonParse
+        : method === 'PUT'
+        ? false
+        : true;
+    if (!jsonParse) {
       return res;
     }
 

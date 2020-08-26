@@ -14,7 +14,7 @@ import {
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/enrollmentReports/index';
 
-export const router = express.Router();
+export const enrollmentReportsRouter = express.Router();
 
 /**
  * /enrollment-reports/:reportId GET
@@ -22,7 +22,7 @@ export const router = express.Router();
  * Returns the parsed data from the given EnrollmentReport,
  * as nested data object with Child as root.
  */
-router.get(
+enrollmentReportsRouter.get(
   '/:reportId',
   passAsyncError(async (req, res) => {
     const id = parseInt(req.params['reportId']) || 0;
@@ -46,7 +46,7 @@ router.get(
  * an EnrollmentReport, and returns the report.
  */
 const upload = multer({ dest: '/tmp/uploads' }).single('file');
-router.post(
+enrollmentReportsRouter.post(
   '/',
   upload,
   passAsyncError(async (req, res) => {
@@ -72,7 +72,7 @@ router.post(
  *
  * Returns the given EnrollmentReport as a CSV
  */
-router.get(
+enrollmentReportsRouter.get(
   '/download/:reportId',
   passAsyncError(async (req, res) => {
     const id = parseInt(req.params.reportId) || 0;

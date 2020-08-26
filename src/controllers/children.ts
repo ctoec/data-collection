@@ -11,16 +11,30 @@ import { BadRequestError } from '../middleware/error/errors';
  * related fundings
  * @param id
  */
-export const getChildById = (id: string) => {
-  return getManager().findOne(Child, {
+export const getChildById = async (id: string) => {
+  const child = await getManager().findOne(Child, {
     where: { id },
     relations: [
       'family',
       'family.incomeDeterminations',
       'enrollments',
+      'enrollments.site',
       'enrollments.fundings',
     ],
   });
+
+  // TODO update typeORM and sort related entities in DB
+  if (child) {
+    child.enrollments = child.enrollments.sort((a, b) => {
+      if (!a.exit) return -1;
+      if (!b.exit) return 1;
+      if (a.exit < b.exit) return -1;
+      if (b.exit < a.exit) return 1;
+      return 0;
+    });
+  }
+
+  return child;
 };
 
 /**
@@ -69,7 +83,6 @@ export const changeEnrollment = async (
             'Last reporting period for current funding must be provided if no new funding is provided'
           );
         }
-
         const lastReportingPeriod =
           oldEnrollmentLastReportingPeriod ||
           (await tManager.findOne(ReportingPeriod, {
