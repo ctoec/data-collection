@@ -5,6 +5,7 @@ import {
   Site,
   FundingSpace,
   ReportingPeriod,
+  OrganizationPermission,
 } from '../entity';
 import {
   Region,
@@ -17,6 +18,8 @@ import moment from 'moment';
 
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
+
+  let user;
   try {
     const user = getManager().create(User, {
       id: 1,
@@ -25,7 +28,10 @@ export const initialize = async () => {
       lastName: 'Mort',
     });
     await qb.insert().into(User).values([user]).orIgnore().execute();
-  } catch {}
+  } catch {
+  } finally {
+    user = await getManager().findOne(User, { where: { id: 1 } });
+  }
 
   let organization;
   const orgName = 'Hogwarts Childcare';
@@ -45,6 +51,19 @@ export const initialize = async () => {
       where: { name: orgName },
     });
   }
+
+  try {
+    const permission = getManager().create(OrganizationPermission, {
+      user,
+      organization,
+    });
+    await qb
+      .insert()
+      .into(OrganizationPermission)
+      .values([permission])
+      .orIgnore()
+      .execute();
+  } catch {}
 
   try {
     const site1 = getManager().create(Site, {

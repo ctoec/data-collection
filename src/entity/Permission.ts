@@ -1,45 +1,50 @@
 import {
   Entity,
-  TableInheritance,
   PrimaryGeneratedColumn,
   ManyToOne,
-  ChildEntity,
+  Unique,
+  Column,
 } from 'typeorm';
-
-import {
-  SitePermission as SitePermissionInterface,
-  OrganizationPermission as OrganizationPermissionInterface,
-} from '../../client/src/shared/models';
 
 import { User } from './User';
 import { Organization } from './Organization';
 import { Site } from './Site';
+import { Community } from './Community';
 
-enum PermissionType {
-  Organization = 1,
-  Site = 2,
-}
-
-@Entity()
-@TableInheritance({ column: { type: 'enum', enum: PermissionType } })
-export abstract class Permission {
+abstract class Permission {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => User, { nullable: false })
+  @ManyToOne(() => User, { nullable: false })
   user: User;
 }
 
-@ChildEntity(PermissionType.Organization)
-export class OrganizationPermission extends Permission
-  implements OrganizationPermissionInterface {
-  @ManyToOne((type) => Organization)
+@Entity()
+@Unique('UQ_USER_ORGANIZATION', ['user', 'organization'])
+export class OrganizationPermission extends Permission {
+  @ManyToOne(() => Organization)
   organization: Organization;
+
+  @Column()
+  organizationId: number;
 }
 
-@ChildEntity(PermissionType.Site)
-export class SitePermission extends Permission
-  implements SitePermissionInterface {
-  @ManyToOne((type) => Site)
+@Entity()
+@Unique('UQ_USER_SITE', ['user', 'site'])
+export class SitePermission extends Permission {
+  @ManyToOne(() => Site)
   site: Site;
+
+  @Column()
+  siteId: number;
+}
+
+@Entity()
+@Unique('UQ_USER_COMMUNITY', ['user', 'community'])
+export class CommunityPermission extends Permission {
+  @ManyToOne(() => Community)
+  community: Community;
+
+  @Column()
+  communityId: number;
 }
