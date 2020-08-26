@@ -16,9 +16,10 @@ EOF
 
 echo "Note that this script assumes you have yarn and the Elastic Beanstalk CLI installed on your machine."
 echo "If you're missing either of those dependencies, please install them prior to executing this script."
+echo "Also, ensure that your corresponding AWS credentials are set on the machine this is running on."
 echo ""
 
-if [[ "$1" != "qa" ]] || [[ "$1" != "staging" ]] || [[ "$1" != "devsecure" ]]
+if [[ "$1" != "qa" ]] && [[ "$1" != "staging" ]] && [[ "$1" != "devsecure" ]]
 then
    echo "Please supply a valid environment to deploy to.";
    echo "Options are: 'qa', 'staging', 'devsecure'"
@@ -36,5 +37,5 @@ cd ../ && yarn build
 
 # Bundle the build up and deploy it!
 yarn run bundle
-eb init ece-fawkes-$1
-eb deploy ece-fawkes-$1-$1 --staged
+eb init ece-fawkes-$1-app --region us-east-2 --platform node.js
+eb deploy ece-fawkes-$1-env --staged

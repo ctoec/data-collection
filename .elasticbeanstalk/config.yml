@@ -1,0 +1,2 @@
+deploy:
+  artifact: fawkes-bundle.zip
