@@ -1,8 +1,9 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
 import { getConnection, getManager } from 'typeorm';
-import { FlattenedEnrollment, SECTIONS } from '../entity';
-import { getColumnMetadata } from '../entity/decorators/columnMetadata';
+import { FlattenedEnrollment, SECTIONS } from '../../entity';
+import { getColumnMetadata } from '../../entity/decorators/columnMetadata';
 import moment from 'moment';
+import { BadRequestError } from '../../middleware/error/errors';
 
 /**
  * Parses the uploaded file into:
@@ -49,13 +50,16 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   update_sheet_range(sheet);
   const { headers, data } = parseSheet(sheet, OBJECT_PROPERTIES);
 
-  return {
-    EXPECTED_HEADERS,
-    headers,
-    enrollments: data.map((rawEnrollment) =>
-      parseFlattenedEnrollment(rawEnrollment, BOOLEAN_PROPERTIES)
-    ),
-  };
+  // Array comparison was returning false even when the strings matched
+  if (!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
+    throw new BadRequestError(
+      'Columns from uploaded template do not match expected values'
+    );
+  }
+
+  return data.map((rawEnrollment) =>
+    parseFlattenedEnrollment(rawEnrollment, BOOLEAN_PROPERTIES)
+  );
 }
 
 /**

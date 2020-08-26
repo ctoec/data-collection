@@ -1,8 +1,10 @@
 import express, { Response, Request } from 'express';
-import { getManager } from 'typeorm';
-import { Child } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { NotFoundError, BadRequestError } from '../middleware/error/errors';
+import {
+  NotFoundError,
+  BadRequestError,
+  ApiError,
+} from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 
 export const childrenRouter = express.Router();
@@ -21,5 +23,31 @@ childrenRouter.get(
     if (!child) throw new NotFoundError();
 
     res.send(child);
+  })
+);
+
+/**
+ * /children/:childId/change-enrollment POST
+ *
+ * Body: See `client/src/shared/payloads/ChangeEnrollment.ts
+ */
+
+childrenRouter.post(
+  '/:childId/change-enrollment',
+  passAsyncError(async (req: Request, res: Response) => {
+    const childId = req.params['childId'];
+
+    try {
+      await controller.changeEnrollment(childId, req.body);
+
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+
+      console.error('Error changing enrollment: ', err);
+      throw new BadRequestError(
+        'Unable to change enrollment. Make sure request payload has expected format.'
+      );
+    }
   })
 );
