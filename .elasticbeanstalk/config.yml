@@ -1,5 +1,5 @@
 branch-defaults:
-  circleci-project-setup:
+  base:
     environment: ece-fawkes-staging-staging
 deploy:
   artifact: fawkes-bundle.zip
