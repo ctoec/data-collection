@@ -27,6 +27,16 @@ export function apiPost(path: string, body: any, opts?: ApiOpts) {
 }
 
 /**
+ * Helper function to perform a fetch PUT request against the backend
+ * @param path
+ * @param body
+ * @param opts
+ */
+export function apiPut(path: string, body: any, opts?: ApiOpts) {
+  return api(path, body, 'PUT', opts || {});
+}
+
+/**
  * Internal function to perform a fetch request against the backend,
  * and handle any error responses, defined as responses with status >= 400
  * @param path
@@ -37,7 +47,7 @@ export function apiPost(path: string, body: any, opts?: ApiOpts) {
 async function api(
   path: string,
   body: any,
-  method: 'GET' | 'POST',
+  method: 'GET' | 'POST' | 'PUT',
   opts: ApiOpts
 ) {
   const headers = opts.headers || {};
