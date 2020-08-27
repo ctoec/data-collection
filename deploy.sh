@@ -27,14 +27,20 @@ then
    exit 1
 fi
 
-# This is a comment!
+echo "Installing yarn dependencies..."
 yarn install --frozen-lockfile
 cd client && yarn install --frozen-lockfile --network-concurrency 1
 
 # Build the React app and Express server
+echo "Building the React app..."
 yarn build
+
+echo "Building the Express server..."
 cd ../ && yarn build
 
 # Now just init and deploy!
+echo "Initializing and deploying to Elastic Beanstalk..."
 eb init ece-fawkes-$1-app --region us-east-2 --platform node.js
 eb deploy ece-fawkes-$1-env
+
+echo "Deploy complete!"
