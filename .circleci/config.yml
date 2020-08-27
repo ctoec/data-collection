@@ -28,8 +28,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: yarn build
-      - run: cd client && CI="" yarn build
+      - run:
+          name: Build Express server
+          command: yarn build
+      - run:
+          name: Build React app
+          command: cd client && CI="" yarn build
       - persist_to_workspace:
           root: .
           paths:
@@ -40,8 +44,12 @@ jobs:
     steps:
       - attach_workspace:
           at: .
-      - run: yarn run test
-      - run: cd client/ && yarn run test
+      - run:
+          name: Run back-end tests
+          command: yarn run test
+      - run:
+          name: Run front-end tests
+          command: cd client && yarn run test
 
   deploy:
     description: "Job for deploying Fawkes to the specified environment"
@@ -61,8 +69,12 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
-      - run: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
-      - run: eb deploy ece-fawkes-<< parameters.env >>-<< parameters.env >>-env
+      - run: 
+          name: Initialize Elastic Beanstalk
+          command: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
+      - run: 
+          name: Deploy to Elastic Beanstalk environment
+          command: eb deploy ece-fawkes-<< parameters.env >>-env
 
 
 workflows:
