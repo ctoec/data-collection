@@ -28,9 +28,7 @@ export const AddressFieldset: React.FC = () => {
           inputComponent={TextInput}
           id="street-address"
           label="Street address"
-          parseOnChangeEvent={(e) => {
-            return e.target.value;
-          }}
+          parseOnChangeEvent={(e) => e.target.value}
         />
       </div>
       <div className="grid-row grid-gap">
@@ -41,9 +39,7 @@ export const AddressFieldset: React.FC = () => {
             inputComponent={TextInput}
             id="town"
             label="Town"
-            parseOnChangeEvent={(e) => {
-              return e.target.value;
-            }}
+            parseOnChangeEvent={(e) => e.target.value}
           />
         </div>
         <div className="grid-col-4 display-inline-block">
@@ -52,9 +48,7 @@ export const AddressFieldset: React.FC = () => {
             label="State"
             inputComponent={Select}
             getValue={(data) => data.at('state')}
-            parseOnChangeEvent={(e) => {
-              return e.target.value;
-            }}
+            parseOnChangeEvent={(e) => e.target.value}
             options={POSSIBLE_STATES.map((state) => ({
               text: state,
               value: state,
@@ -70,9 +64,7 @@ export const AddressFieldset: React.FC = () => {
           inputComponent={TextInput}
           id="zip"
           label="Zip code"
-          parseOnChangeEvent={(e) => {
-            return e.target.value;
-          }}
+          parseOnChangeEvent={(e) => e.target.value}
         />
       </div>
     </FormFieldSet>

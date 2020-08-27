@@ -46,7 +46,7 @@ const EditRecord: React.FC = () => {
             text: 'Family Info',
             content: (
               <FamilyInfoForm
-                initState={rowData.family}
+                family={rowData.family}
                 refetchChild={refetchChild}
               />
             ),

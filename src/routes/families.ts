@@ -16,10 +16,9 @@ familyRouter.put(
     try {
       const newFam = req.body;
       await getManager().update(Family, { id: famId }, newFam);
-      res.status(200).json(newFam.id);
+      res.sendStatus(200);
     } catch (err) {
       console.log('Error saving changes to family: ', err);
-      res.status(400).json('Could not update family address information');
       throw new BadRequestError('Enrollment not saved');
     }
   })

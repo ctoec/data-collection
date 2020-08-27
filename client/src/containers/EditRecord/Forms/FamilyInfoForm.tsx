@@ -12,15 +12,12 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { apiPut } from '../../../utils/api';
 
 /*
-Simple props type to hold the state passed in from the edit
-record page and the state change function used to modify
-the root variable. Note that we need to use the id of the
-parent child object because it is unique in the backend
-database, so this allows updating an existing record rather
-than creating a new one or searching unsuccessfully.
+Simple props type to hold the family associated with the particular
+child record being examined, as well as the refetch method that 
+lets us get the updated DB record once we make changes.
 */
 export type FamilyFormProps = {
-  initState: Family;
+  family: Family;
   refetchChild: () => void;
 };
 
@@ -32,23 +29,11 @@ export type FamilyFormProps = {
  * to know about.
  */
 export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
-  initState,
+  family,
   refetchChild,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [saving, setSaving] = useState(false);
-
-  // Simple wrapper method that can be invoked via arrow function
-  // in the callback series of .thens while handling the API
-  // request. If the PUT update comes back with the family's
-  // correct ID number, that means we updated the DB successfully.
-  function responseWrapper(code: number) {
-    if (code == initState.id) {
-      refetchChild();
-    } else {
-      console.error("Unable to refetch Child's record");
-    }
-  }
 
   // Sends an API request to the backend with any changed information
   // to the family's address. The backend handles the DB lookup,
@@ -57,10 +42,8 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
   // display the change.
   function saveButton(newState: Family) {
     setSaving(true);
-    apiPut(`families/${initState.id}`, newState, { accessToken })
-      .then((_code) => {
-        responseWrapper(_code);
-      })
+    apiPut(`families/${family.id}`, newState, { accessToken })
+      .then(() => refetchChild())
       .catch((err) => {
         console.log(err);
       })
@@ -76,7 +59,7 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
 
       <Form<Family>
         className="FamilyInfoForm"
-        data={initState}
+        data={family}
         onSubmit={saveButton}
         noValidate
         autoComplete="off"
