@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { Child, Family } from 'shared/models';
+import { Child, Family } from '../../../shared/models';
 import { AddressFieldset } from './FormFields/AddressFieldset';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut, apiGet } from '../../../utils/api';
@@ -14,7 +14,6 @@ database, so this allows updating an existing record rather
 than creating a new one or searching unsuccessfully.
 */
 export type FamilyFormProps = {
-  childId: string;
   initState: Family;
   passData: (_: Family) => void;
 };
@@ -27,12 +26,24 @@ export type FamilyFormProps = {
  * to know about.
  */
 export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
-  childId,
   initState,
   passData,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [saving, setSaving] = useState(false);
+
+  // Simple wrapper method that can be invoked via arrow function
+  // in the callback series of .thens while handling the API
+  // request. If the PUT update comes back with the family's 
+  // correct ID number, that means we updated the DB successfully.
+  function responseWrapper(newState: Family, code: number) {
+    if (code == initState.id) {
+      passData(newState);
+    }
+    else{
+      console.error('Unable to update local state');
+    }
+  }
 
   // Sends an API request to the backend with any changed information
   // to the family's address. The backend handles the DB lookup,
@@ -42,11 +53,8 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
   function saveButton(newState: Family) {
     setSaving(true);
     apiPut(
-      `families/${initState.id}`,
-      { edits: newState, recordId: childId },
-      { accessToken }
-    )
-      .then((updatedRecord: Child) => passData(updatedRecord.family))
+      `families/${initState.id}`, newState, { accessToken })
+      .then((responseCode) => responseWrapper(newState, responseCode))
       .then(() => alert('Data saved successfully!'))
       .catch((err) => {
         console.log(err);

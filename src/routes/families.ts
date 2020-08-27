@@ -13,26 +13,13 @@ familyRouter.put(
   '/:familyId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const recordId = req.body['recordId'];
-      const newFam = req.body['edits'];
-
-      // The id of the parent child object contains the unique
-      // database identifier; use it to query
-      var record = await getManager().findOne(Child, {
-        where: { id: recordId, familyId: newFam.id },
-        relations: [
-          'family',
-          'family.incomeDeterminations',
-          'enrollments.fundings',
-          'enrollments',
-        ],
-      });
-
-      // Overwrite just the family attribute and use save to
-      // perform a partial update and retrieve the new record
-      record.family = newFam;
-      const response = await getManager().save(record);
-      res.send(response);
+      const newFam = req.body;
+      const updatedFam = await getManager().preload(Family, newFam);
+      if (!updatedFam) {
+        throw new BadRequestError('Could not initialize family field updates');
+      }
+      const response = await getManager().save(updatedFam);
+      res.status(200).json(newFam.id);
     } catch (err) {
       console.log('Error saving changes to family: ', err);
       throw new BadRequestError('Enrollment not saved');

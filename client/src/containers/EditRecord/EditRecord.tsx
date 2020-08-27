@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child, Family } from 'shared/models';
+import { Child, Family } from '../../shared/models';
 import { CareForKidsForm } from './Forms/CareForKidsForm';
 import { FamilyInfoForm } from './Forms/FamilyInfoForm';
 
@@ -57,7 +57,6 @@ const EditRecord: React.FC = () => {
             text: 'Family Info',
             content: (
               <FamilyInfoForm
-                childId={rowData.id}
                 initState={rowData.family}
                 passData={handleFamilyChange}
               />
