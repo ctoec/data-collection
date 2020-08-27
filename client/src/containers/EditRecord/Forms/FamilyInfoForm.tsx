@@ -9,7 +9,7 @@ import {
 import { Family } from '../../../shared/models';
 import { AddressFieldset } from './FormFields/AddressFieldset';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPut, apiGet } from '../../../utils/api';
+import { apiPut } from '../../../utils/api';
 
 /*
 Simple props type to hold the state passed in from the edit
@@ -21,7 +21,7 @@ than creating a new one or searching unsuccessfully.
 */
 export type FamilyFormProps = {
   initState: Family;
-  passData: (_: Family) => void;
+  refetchChild: () => void;
 };
 
 /*
@@ -33,7 +33,7 @@ export type FamilyFormProps = {
  */
 export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
   initState,
-  passData,
+  refetchChild,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [saving, setSaving] = useState(false);
@@ -42,11 +42,11 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
   // in the callback series of .thens while handling the API
   // request. If the PUT update comes back with the family's
   // correct ID number, that means we updated the DB successfully.
-  function responseWrapper(newState: Family, code: number) {
+  function responseWrapper(code: number) {
     if (code == initState.id) {
-      passData(newState);
+      refetchChild();
     } else {
-      console.error('Unable to update local state');
+      console.error("Unable to refetch Child's record");
     }
   }
 
@@ -58,8 +58,9 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
   function saveButton(newState: Family) {
     setSaving(true);
     apiPut(`families/${initState.id}`, newState, { accessToken })
-      .then((responseCode) => responseWrapper(newState, responseCode))
-      .then(() => alert('Data saved successfully!'))
+      .then((_code) => {
+        responseWrapper(_code);
+      })
       .catch((err) => {
         console.log(err);
       })

@@ -12,28 +12,33 @@ const EditRecord: React.FC = () => {
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
+  const [refetch, setRefetch] = useState<number>(0);
 
   useEffect(() => {
     apiGet(`children/${childId}`, {
       accessToken,
     }).then((_rowData) => setRowData(_rowData));
-  }, [accessToken, childId]);
+  }, [accessToken, childId, refetch]);
 
-  // Wrapped method to hand off to child forms to allow lifting
-  // state back up to the EditRecord page.
-  function handleChildChange(newRow: Child) {
-    setRowData(newRow);
-  }
+  const refetchChild = () => {
+    setRefetch((r) => r + 1);
+  };
 
-  // Wrapped method that creates a deep clone of the local state
-  // to hand off to the family form so that changes it makes
-  // a) only affect the family (which is the only scope it needs
-  // to know), and b) can be passed back up and saved
-  function handleFamilyChange(newFam: Family) {
-    var newState: Child = JSON.parse(JSON.stringify(rowData));
-    newState.family = newFam;
-    setRowData(newState);
-  }
+  // // Wrapped method to hand off to child forms to allow lifting
+  // // state back up to the EditRecord page.
+  // function handleChildChange(newRow: Child) {
+  //   setRowData(newRow);
+  // }
+
+  // // Wrapped method that creates a deep clone of the local state
+  // // to hand off to the family form so that changes it makes
+  // // a) only affect the family (which is the only scope it needs
+  // // to know), and b) can be passed back up and saved
+  // function handleFamilyChange(newFam: Family) {
+  //   var newState: Child = JSON.parse(JSON.stringify(rowData));
+  //   newState.family = newFam;
+  //   setRowData(newState);
+  // }
 
   return rowData ? (
     <div className="grid-container">
@@ -58,7 +63,7 @@ const EditRecord: React.FC = () => {
             content: (
               <FamilyInfoForm
                 initState={rowData.family}
-                passData={handleFamilyChange}
+                refetchChild={refetchChild}
               />
             ),
           },
@@ -78,7 +83,7 @@ const EditRecord: React.FC = () => {
             content: (
               <CareForKidsForm
                 initState={rowData}
-                passData={handleChildChange}
+                refetchChild={refetchChild}
               />
             ),
           },

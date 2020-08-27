@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { getManager } from 'typeorm';
-import { Child, Family } from '../entity';
+import { Family } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { BadRequestError } from '../middleware/error/errors';
 
