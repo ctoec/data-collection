@@ -11,7 +11,7 @@ import { Child } from '../../../shared/models';
 
 type CareForKidsProps = {
   initState: Child;
-  passData: (_: Child) => void;
+  refetchChild: () => void;
 };
 
 /*
@@ -27,14 +27,14 @@ type CareForKidsProps = {
  */
 export const CareForKidsForm: React.FC<CareForKidsProps> = ({
   initState,
-  passData,
+  refetchChild,
 }) => {
   // Uses the inherited method from the parent on EditRecord to
   // change the *state* inherited from EditRecord. This form
   // keeps a local copy of the state so that only changes the user
   // wishes to commit are pushed back up to the parent.
   function saveButton(newState: Child) {
-    passData(newState);
+    refetchChild();
     alert('Data saved successfully!');
   }
 
