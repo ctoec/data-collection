@@ -2,9 +2,9 @@ import React, { useState, useContext } from 'react';
 import {
   Form,
   FormSubmitButton,
-  FormField,
-  CheckboxProps,
-  Checkbox,
+//   FormField,
+//   CheckboxProps,
+//   Checkbox,
 } from '@ctoec/component-library';
 import { Family } from '../../../shared/models';
 import { AddressFieldset } from './FormFields/AddressFieldset';
@@ -83,7 +83,7 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
       >
         <h2 className="grid-row margin-top-4">Address</h2>
         <AddressFieldset />​
-        <div className="grid-row margin-top-4">
+<!--         <div className="grid-row margin-top-4">
           <FormField<Family, CheckboxProps, boolean | null>
             id="homelessness"
             getValue={(data) => data.at('homelessness')}
@@ -92,7 +92,7 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
             inputComponent={Checkbox}
             text="Family has experienced homelessness / housing insecurity within the last year"
           />
-        </div>
+        </div> -->
         <div className="grid-row margin-top-2">
           <FormSubmitButton
             text={saving ? 'Saving...' : 'Save edits'}
