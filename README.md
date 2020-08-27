@@ -54,35 +54,16 @@ This mono-repo consists of three main parts:
 
 ## Deploy
 
-Deployments can either be triggered directly through the corresponding AWS CodePipeline for the applicable stage, or directly from the CLI.  Additionally, we also don't utilize Docker in any of our deployment environments, but rather Linux/Node for the sake of simplicity.
+Deployments can either be triggered directly through the corresponding CircleCI workflow for the branch you're working with, or directly from the CLI.  Additionally, we also don't utilize Docker in any of our deployment environments, but rather Linux/Node for the sake of simplicity.
 
-### Pipeline
-The preferred way of Fawkes deployment would be through AWS CodePipeline, which should automatically be set up for whatever stage you're looking to deploy.  Triggering a new deploy is a simple button click after navigating to the corresponding CodePipeline in the AWS console.
+### CircleCI
+The preferred way of Fawkes deployment would be through CircleCI (our CI/CD pipeline solution), which should automatically be set up for whatever stage you're looking to deploy.  Triggering a new deploy is simply a matter of approving the deploy workflow in [the CircleCI UI](https://app.circleci.com/pipelines/github/ctoec/data-collection).
 
 ### Command Line
 NOTE: This option will require you to have the Elastic Beanstalk CLI installed on your machine.  If you're on OSX, [Homebrew](https://formulae.brew.sh/formula/aws-elasticbeanstalk) is your best bet - otherwise, following the setup scripts outlined in the [AWS docs](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html) works just fine.
 
-1. Install the dependencies for the React application.
+Once you've done this, deploying is simply a matter of running `deploy.sh` with the stage you'd like to deploy to.
+
 ```bash
-cd <path-to-project-root>/client && yarn install --frozen-lockfile
-```
-1. Once the dependencies are installed, create a prod-ready build of the React app.
-```bash
-yarn build
-```
-1. Next, install dependencies for the Express server project.
-```bash
-cd <path-to-project-root> && yarn install --frozen-lockfile
-```
-1. Then, transpile the project, generating a Javascript build.
-```bash
-yarn build
-```
-1. Generate a bundled .zip artifact of both the React app and Express server, to be used in the proceeding step to deploy directly to Elastic Beanstalk:
-```bash
-cd <path-to-project-root> && yarn run bundle
-```
-1. Deploy the artifact you just created to the stage in question:
-```bash
-eb deploy <elastic-beanstalk-environment> --staged
+./deploy.sh <stage>
 ```

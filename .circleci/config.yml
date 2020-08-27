@@ -23,14 +23,21 @@ jobs:
           paths:
             - .
   build:
+    parameters:
+      env:
+        description: "The environment to deploy Fawkes to (qa, devsecure, staging)"
+        type: string
     docker:
       - image: circleci/node:12
     steps:
-      # Reuse the workspace from the build job
       - attach_workspace:
           at: .
-      - run: yarn build
-      - run: cd client && CI="" yarn build
+      - run:
+          name: Build Express server
+          command: yarn build
+      - run:
+          name: Build React app
+          command: cd client && CI="" REACT_APP_STAGE="<< parameters.env >>" yarn build
       - persist_to_workspace:
           root: .
           paths:
@@ -39,33 +46,24 @@ jobs:
     docker:
       - image: circleci/node:12
     steps:
-      # Reuse the workspace from the build job
-      - attach_workspace:
-          at: .
-      - run: yarn run test
-      - run: cd client/ && yarn run test
-
-  deploy-staging:
-    docker:
-      - image: circleci/node:12
-    steps:
-      # Reuse the workspace from the build job
       - attach_workspace:
           at: .
       - run:
-          name: Install deployment dependencies
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get install python3-pip python3-dev build-essential
-            sudo pip3 install awsebcli
-      - run: yarn run bundle
-      - run: eb deploy ece-fawkes-staging-staging --staged
+          name: Run back-end tests
+          command: yarn run test
+      - run:
+          name: Run front-end tests
+          command: cd client && yarn run test
 
-  deploy-qa:
+  deploy:
+    description: "Job for deploying Fawkes to the specified environment"
+    parameters:
+      env:
+        description: "The environment to deploy Fawkes to (qa, devsecure, staging)"
+        type: string
     docker:
       - image: circleci/node:12
     steps:
-      # Reuse the workspace from the build job
       - attach_workspace:
           at: .
       - run:
@@ -75,27 +73,33 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
-      - run: yarn run bundle
-      - run: eb deploy ece-fawkes-qa-qa --staged
+      - run: 
+          name: Initialize Elastic Beanstalk
+          command: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
+      - run: 
+          name: Deploy to Elastic Beanstalk environment
+          command: eb deploy ece-fawkes-<< parameters.env >>-env
+
 
 workflows:
   build-and-test:
     jobs:
       - install
       - build:
+          env: staging
           requires:
             - install
       - test:
           requires:
             - build
-      - deploy-staging:
+      - deploy:
+          env: staging
           requires:
             - test
           filters:
             branches:
               only: base
-
-  build-and-deploy-qa:
+  deploy-to-qa:
     jobs:
       - hold:
           type: approval
@@ -103,8 +107,25 @@ workflows:
           requires: 
             - hold
       - build:
+          env: qa
           requires:
             - install
-      - deploy-qa:
+      - deploy:
+          env: qa
+          requires:
+            - build
+  deploy-to-devsecure:
+    jobs:
+      - hold:
+          type: approval
+      - install:
+          requires: 
+            - hold
+      - build:
+          env: devsecure
+          requires:
+            - install
+      - deploy:
+          env: devsecure
           requires:
             - build
