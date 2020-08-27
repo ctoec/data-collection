@@ -24,22 +24,6 @@ const EditRecord: React.FC = () => {
     setRefetch((r) => r + 1);
   };
 
-  // // Wrapped method to hand off to child forms to allow lifting
-  // // state back up to the EditRecord page.
-  // function handleChildChange(newRow: Child) {
-  //   setRowData(newRow);
-  // }
-
-  // // Wrapped method that creates a deep clone of the local state
-  // // to hand off to the family form so that changes it makes
-  // // a) only affect the family (which is the only scope it needs
-  // // to know), and b) can be passed back up and saved
-  // function handleFamilyChange(newFam: Family) {
-  //   var newState: Child = JSON.parse(JSON.stringify(rowData));
-  //   newState.family = newFam;
-  //   setRowData(newState);
-  // }
-
   return rowData ? (
     <div className="grid-container">
       <div className="margin-top-4">

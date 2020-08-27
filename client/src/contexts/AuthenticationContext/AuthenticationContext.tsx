@@ -19,6 +19,7 @@ import {
   QueryStringUtils,
 } from '@openid/appauth';
 import { getCurrentHost } from '../../utils/getCurrentHost';
+import { getConfig } from '../../config/getConfig';
 
 export type AuthenticationContextType = {
   accessToken: string | null;
@@ -123,7 +124,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = ({
       if (!!defaultOpenIdConnectUrl) {
         setOpenIdConnectUrl(defaultOpenIdConnectUrl);
       } else if (!openIdConnectUrl) {
-        const wingedKeysUri = process.env.REACT_APP_WINGED_KEYS_HOST;
+        const wingedKeysUri = await getConfig('WingedKeysUri');
         if (!wingedKeysUri) {
           throw new Error('No winged keys uri found');
         }

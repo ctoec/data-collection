@@ -65,6 +65,7 @@ async function api(
     headers,
     body,
   });
+
   // Handle API error response
   if (res.status >= 400) {
     try {
