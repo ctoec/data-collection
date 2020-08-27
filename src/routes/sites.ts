@@ -1,6 +1,6 @@
 import express, { Response, Request } from 'express';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { parseQS } from '../utils/parseQS';
+import { parseQueryString } from '../utils/parseQueryString';
 import * as controller from '../controllers/sites';
 
 export const sitesRouter = express.Router();
@@ -10,27 +10,24 @@ export const sitesRouter = express.Router();
  * /sites?id=1&organizationId=1&organizationId=2&communityId=3&communityId=4
  *
  * Returns all sites the currently authenticated user has
- * permissions to access. Supports filtering on multiple organization
- * and community ids.
+ * permissions to access. Supports filtering on multiple site,
+ * organization and community ids.
  */
 sitesRouter.get(
   '/',
   passAsyncError(async (req: Request, res: Response) => {
-    // Apply user-supplied filters
-    const siteIds = parseQS(req, 'id', {
+    const siteIds = parseQueryString(req, 'id', {
       post: parseInt,
       forceArray: true,
     }) as number[];
-    const organizationIds = parseQS(req, 'organizationId', {
+    const organizationIds = parseQueryString(req, 'organizationId', {
       post: parseInt,
       forceArray: true,
     }) as number[];
-    const communityIds = parseQS(req, 'communityId', {
+    const communityIds = parseQueryString(req, 'communityId', {
       post: parseInt,
       forceArray: true,
     }) as number[];
-
-    console.log(siteIds);
 
     const sites = await controller.getSites(
       req.user,

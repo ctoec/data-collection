@@ -1,6 +1,6 @@
 import { Request } from 'express';
 
-export const parseQS = <T = string>(
+export const parseQueryString = <T = string>(
   req: Request,
   name: string,
   opts?: { post?: (_: string) => T; forceArray?: boolean }
@@ -21,5 +21,5 @@ export const parseQS = <T = string>(
     value = opts.post(values as string);
   }
 
-  return opts.forceArray ? (value ? [value] : []) : value;
+  return opts.forceArray ? ((value ? [value] : []) as T[]) : (value as T);
 };
