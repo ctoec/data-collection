@@ -4,28 +4,25 @@ import { useParams } from 'react-router-dom';
 import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child } from '../../shared/models';
+import { Child, Family } from '../../shared/models';
 import { CareForKidsForm } from './Forms/CareForKidsForm';
+import { FamilyInfoForm } from './Forms/FamilyInfoForm';
 
 const EditRecord: React.FC = () => {
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
+  const [refetch, setRefetch] = useState<number>(0);
 
   useEffect(() => {
     apiGet(`children/${childId}`, {
       accessToken,
     }).then((_rowData) => setRowData(_rowData));
-  }, [accessToken, childId]);
+  }, [accessToken, childId, refetch]);
 
-  // Wrapped method to hand off to child forms to allow lifting
-  // state back up to the EditRecord page. This is good because
-  // then only the EditRecord page has to make any calls to the
-  // database or API, allowing for a single, unfiied formulation
-  // here rather than individual forms.
-  function handleChange(newRow: Child) {
-    setRowData(newRow);
-  }
+  const refetchChild = () => {
+    setRefetch((r) => r + 1);
+  };
 
   return rowData ? (
     <div className="grid-container">
@@ -47,7 +44,12 @@ const EditRecord: React.FC = () => {
           {
             id: 'family-tab',
             text: 'Family Info',
-            content: <span>This is where the family info form goes</span>,
+            content: (
+              <FamilyInfoForm
+                family={rowData.family}
+                refetchChild={refetchChild}
+              />
+            ),
           },
           {
             id: 'income-tab',
@@ -63,7 +65,10 @@ const EditRecord: React.FC = () => {
             id: 'care-tab',
             text: 'Care 4 Kids',
             content: (
-              <CareForKidsForm initState={rowData} passData={handleChange} />
+              <CareForKidsForm
+                initState={rowData}
+                refetchChild={refetchChild}
+              />
             ),
           },
         ]}
