@@ -6,6 +6,7 @@ import { handleError } from './middleware/error/handleError';
 import { createConnection } from 'typeorm';
 import { router as apiRouter } from './routes';
 import { initialize } from './data/initialize';
+import moment from 'moment';
 
 createConnection()
   .then(async () => {
@@ -21,7 +22,14 @@ createConnection()
     const app = express();
 
     // Register pre-processing middlewares
-    app.use(json());
+    const dateReviver = (_: any, value: string) => {
+      if (typeof value === 'string') {
+        const parsedDate = moment.utc(value, undefined, true);
+        if (parsedDate.isValid()) return parsedDate;
+      }
+      return value;
+    };
+    app.use(json({ reviver: dateReviver }));
 
     // Register business logic routes
     app.use('/api', apiRouter);

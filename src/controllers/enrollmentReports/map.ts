@@ -9,14 +9,14 @@ import {
   Organization,
   FundingSpace,
   ReportingPeriod,
-} from '../entity';
+} from '../../entity';
 import {
   Gender,
   AgeGroup,
   FundingSource,
   FundingTime,
   SpecialEducationServicesType,
-} from '../../client/src/shared/models';
+} from '../../../client/src/shared/models';
 import { getManager } from 'typeorm';
 
 /**
