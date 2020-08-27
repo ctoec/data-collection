@@ -7,7 +7,7 @@ import {
   SelectProps,
   Select,
 } from '@ctoec/component-library';
-import { Family } from 'shared/models';
+import { Family } from '../../../../shared/models';
 
 // Listing of all possible US states to serve as options
 // in the address selector
