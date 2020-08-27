@@ -33,7 +33,7 @@ cd client && yarn install --frozen-lockfile --network-concurrency 1
 
 # Build the React app and Express server
 echo "Building the React app..."
-yarn build
+REACT_APP_STAGE="$1" yarn build
 
 echo "Building the Express server..."
 cd ../ && yarn build
