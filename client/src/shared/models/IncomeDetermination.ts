@@ -5,6 +5,6 @@ export interface IncomeDetermination {
   id: number;
   numberOfPeople?: number;
   income?: number;
-  determinationDate?: Moment;
+  determinationDate?: Date;
   family: Family;
 }

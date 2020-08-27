@@ -2,7 +2,6 @@ import React from 'react';
 import { FormField, TextInputProps, TextInput } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
 import parseCurrencyFromString from '../../../../../utils/parseCurrencyFromString';
-import { IncomeFormProps } from './Common';
 
 export const AnnualHouseholdIncomeField: React.FC = () => {
   return (
