@@ -7,7 +7,7 @@ import {
   RadioButtonGroup,
   RadioButton,
 } from '@ctoec/component-library';
-import { Child } from 'shared/models';
+import { Child } from '../../../shared/models';
 
 type CareForKidsProps = {
   initState: Child;
