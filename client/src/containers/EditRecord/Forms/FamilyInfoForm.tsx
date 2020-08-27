@@ -1,6 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { Child, Family } from '../../../shared/models';
+import {
+  Form,
+  FormSubmitButton,
+  FormField,
+  CheckboxProps,
+  Checkbox,
+} from '@ctoec/component-library';
+import { Family } from '../../../shared/models';
 import { AddressFieldset } from './FormFields/AddressFieldset';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut, apiGet } from '../../../utils/api';
@@ -34,13 +40,12 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
 
   // Simple wrapper method that can be invoked via arrow function
   // in the callback series of .thens while handling the API
-  // request. If the PUT update comes back with the family's 
+  // request. If the PUT update comes back with the family's
   // correct ID number, that means we updated the DB successfully.
   function responseWrapper(newState: Family, code: number) {
     if (code == initState.id) {
       passData(newState);
-    }
-    else{
+    } else {
       console.error('Unable to update local state');
     }
   }
@@ -52,8 +57,7 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
   // display the change.
   function saveButton(newState: Family) {
     setSaving(true);
-    apiPut(
-      `families/${initState.id}`, newState, { accessToken })
+    apiPut(`families/${initState.id}`, newState, { accessToken })
       .then((responseCode) => responseWrapper(newState, responseCode))
       .then(() => alert('Data saved successfully!'))
       .catch((err) => {
@@ -77,7 +81,17 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
         autoComplete="off"
       >
         <h2 className="grid-row margin-top-4">Address</h2>
-        <AddressFieldset />
+        <AddressFieldset />​
+        <div className="grid-row margin-top-4">
+          <FormField<Family, CheckboxProps, boolean | null>
+            id="homelessness"
+            getValue={(data) => data.at('homelessness')}
+            value={'homelessness'}
+            parseOnChangeEvent={(e) => e.target.checked}
+            inputComponent={Checkbox}
+            text="Family has experienced homelessness / housing insecurity within the last year"
+          />
+        </div>
         <div className="grid-row margin-top-2">
           <FormSubmitButton
             text={saving ? 'Saving...' : 'Save edits'}
