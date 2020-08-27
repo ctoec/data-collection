@@ -12,16 +12,14 @@ export const familyRouter = express.Router();
 familyRouter.put(
   '/:familyId',
   passAsyncError(async (req: Request, res: Response) => {
+    const famId = req.params['familyId'];
     try {
       const newFam = req.body;
-      const updatedFam = await getManager().preload(Family, newFam);
-      if (!updatedFam) {
-        throw new BadRequestError('Could not initialize family field updates');
-      }
-      const response = await getManager().save(updatedFam);
+      await getManager().update(Family, { id: famId }, newFam);
       res.status(200).json(newFam.id);
     } catch (err) {
       console.log('Error saving changes to family: ', err);
+      res.status(400).json('Could not update family address information');
       throw new BadRequestError('Enrollment not saved');
     }
   })
