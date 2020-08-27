@@ -1,12 +1,12 @@
 {
   "qa": {
-    "WingedKeysUri": "https://qa.ece-wingedkeys.ctoecskylight.com/"
+    "WingedKeysUri": "https://qa.ece-wingedkeys.ctoecskylight.com"
   },
   "devsecure": {
-    "WingedKeysUri": "https://devsecure.ece-wingedkeys.ctoecskylight.com/"
+    "WingedKeysUri": "https://devsecure.ece-wingedkeys.ctoecskylight.com"
   },
   "staging": {
-    "WingedKeysUri": "https://staging.ece-wingedkeys.ctoecskylight.com/"
+    "WingedKeysUri": "https://staging.ece-wingedkeys.ctoecskylight.com"
   },
   "local": {
     "WingedKeysUri": "https://localhost:5050"
