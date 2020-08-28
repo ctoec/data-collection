@@ -72,7 +72,21 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.INCOME,
             text: 'Family Income',
-            content: <span>This is where the family income form goes</span>,
+            content: (
+              <Summary
+                familyId={rowData.family.id}
+                isFoster={rowData.foster}
+                hasDisclosed={
+                  rowData.family.incomeDeterminations ? true : false
+                }
+                determinations={
+                  rowData.family.incomeDeterminations
+                    ? rowData.family.incomeDeterminations
+                    : []
+                }
+                refetchChild={refetchChild}
+              />
+            ),
           },
           {
             id: TAB_IDS.ENROLLMENT,
