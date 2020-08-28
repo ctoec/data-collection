@@ -94,7 +94,6 @@ const EditRecord: React.FC = () => {
         ]}
         activeId={activeTab}
         onClick={(tabId) => {
-          console.log('ON CLICK');
           history.push({ hash: tabId });
         }}
       />
