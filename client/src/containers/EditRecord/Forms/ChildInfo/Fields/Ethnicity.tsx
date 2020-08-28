@@ -5,7 +5,7 @@ import {
   RadioButtonGroup,
   RadioButton,
 } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 
 /**
  * Component for entering the enthicity of a child in an enrollment.

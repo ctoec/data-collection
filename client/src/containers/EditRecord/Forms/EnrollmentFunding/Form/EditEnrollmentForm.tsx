@@ -37,6 +37,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
+  // to make form re-openable
   // (not only when closeCard changes)
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -109,7 +110,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
               <EnrollmentEndDateField />
             </>
           )}
-          <h3 className="font-haeding-md margin-bottom-0">Age group</h3>
+          <h3 className="font-heading-md margin-bottom-0">Age group</h3>
           <AgeGroupField />
 
           <ExpandCard>

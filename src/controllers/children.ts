@@ -3,7 +3,8 @@ import idx from 'idx';
 import { ExitReason } from '../../client/src/shared/models';
 import { Child, ReportingPeriod, Enrollment, Funding } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
-import { BadRequestError } from '../middleware/error/errors';
+import { BadRequestError, NotFoundError } from '../middleware/error/errors';
+import { Moment } from 'moment';
 
 /**
  * Get child by id, with related family and related
@@ -12,29 +13,50 @@ import { BadRequestError } from '../middleware/error/errors';
  * @param id
  */
 export const getChildById = async (id: string) => {
-  const child = await getManager().findOne(Child, {
-    where: { id },
+  const child = await getManager().findOne(Child, id, {
     relations: [
       'family',
       'family.incomeDeterminations',
       'enrollments',
       'enrollments.site',
+      'enrollments.site.organization',
       'enrollments.fundings',
     ],
   });
 
-  // TODO update typeORM and sort related entities in DB
+  // Sort enrollments by exit date
   if (child) {
-    child.enrollments = child.enrollments.sort((a, b) => {
-      if (!a.exit) return -1;
-      if (!b.exit) return 1;
-      if (a.exit < b.exit) return -1;
-      if (b.exit < a.exit) return 1;
-      return 0;
+    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
+      if (enrollmentA.fundings) {
+        // Sort fundings by last reporting period
+        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
+          propertyDateSorter(
+            fundingA,
+            fundingB,
+            (f) => f.lastReportingPeriod?.period
+          )
+        );
+      }
+
+      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-
   return child;
+};
+
+const propertyDateSorter = <T>(
+  a: T,
+  b: T,
+  accessor: (_: T) => Moment | null | undefined
+) => {
+  const aDate = accessor(a);
+  const bDate = accessor(b);
+
+  if (!aDate) return 1;
+  if (!bDate) return -1;
+  if (aDate < bDate) return 1;
+  if (bDate < aDate) return -1;
+  return 0;
 };
 
 /**
@@ -55,7 +77,7 @@ export const changeEnrollment = async (
 ) => {
   const child = await getChildById(id);
 
-  if (!child) return;
+  if (!child) throw new NotFoundError();
 
   // Get current enrollment
   return getManager().transaction(async (tManager) => {
@@ -88,6 +110,7 @@ export const changeEnrollment = async (
           (await tManager.findOne(ReportingPeriod, {
             where: {
               period: newEnrollmentNextReportingPeriod.period.add(-1, 'month'),
+              type: currentFunding.fundingSpace.source,
             },
           }));
 

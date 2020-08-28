@@ -1,4 +1,4 @@
-import { User, Site, Organization } from '../entity';
+import { User, Site } from '../entity';
 import { getManager } from 'typeorm';
 
 /**
@@ -6,10 +6,7 @@ import { getManager } from 'typeorm';
  * @param user
  */
 export const getSites = async (user: User) => {
-  return (
-    await getManager().findByIds(Site, user.siteIds || []),
-    {
-      relations: ['organization'],
-    }
-  );
+  return await getManager().findByIds(Site, user.siteIds || [], {
+    relations: ['organization'],
+  });
 };

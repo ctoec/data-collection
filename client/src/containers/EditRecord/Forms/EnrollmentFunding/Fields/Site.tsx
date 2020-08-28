@@ -17,7 +17,7 @@ export const SiteField: React.FC<EnrollmentFieldProps & { sites: Site[] }> = ({
 }) => {
   const commonProps = {
     parseOnChangeEvent: (e: React.ChangeEvent<any>) =>
-      sites.find((s) => s.id === parseInt(e.target.value)) || null,
+      parseInt(e.target.value) || null,
     inputComponent: RadioButtonGroup,
     name: 'site',
     id: 'site-radiogroup',
@@ -31,13 +31,13 @@ export const SiteField: React.FC<EnrollmentFieldProps & { sites: Site[] }> = ({
   };
 
   return isChangeEnrollment ? (
-    <FormField<ChangeEnrollment, RadioButtonGroupProps, Site | null>
-      getValue={(data) => data.at('newEnrollment').at('site')}
+    <FormField<ChangeEnrollment, RadioButtonGroupProps, number | null>
+      getValue={(data) => data.at('newEnrollment').at('site').at('id')}
       {...commonProps}
     />
   ) : (
-    <FormField<Enrollment, RadioButtonGroupProps, Site | null>
-      getValue={(data) => data.at('site')}
+    <FormField<Enrollment, RadioButtonGroupProps, number | null>
+      getValue={(data) => data.at('site').at('id')}
       {...commonProps}
     />
   );
