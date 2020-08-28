@@ -1,4 +1,4 @@
-import express, { Response, Request, json } from 'express';
+import express, { Response, Request } from 'express';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import {
   NotFoundError,
@@ -6,10 +6,8 @@ import {
   ApiError,
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
-import { router } from './user';
 import { getManager } from 'typeorm';
 import { Child } from '../entity';
-
 
 export const childrenRouter = express.Router();
 
@@ -33,21 +31,24 @@ childrenRouter.get(
 /**
  * /children PUT
  */
-router.put(
+childrenRouter.put(
   '/:childId',
-  passAsyncError(async (req, res, next) => {
+  passAsyncError(async (req, res) => {
     try {
       const id = req.params['childId'];
-      const manager = getManager();
-      const _child = req.body;
+      const child = await getManager().findOne(Child, id);
+      if (!child) throw new NotFoundError();
+
+      delete child.family;
+      delete child.enrollments;
+      await getManager().save(getManager().merge(Child, child, req.body));
       // Delete relations from this object so we don't attempt to update them
-      delete _child.family;
-      delete _child.enrollments;
-      await manager.update(Child, id, _child);
+      // await manager.update(Child, id, _child);
       res.sendStatus(200);
     } catch (err) {
-      console.error('\nError saving changes to child: ', err, '\n');
-      throw new BadRequestError('Child information not saved');
+      if (err instanceof ApiError) throw err;
+      console.error('Error saving changes to child: ', err);
+      throw new BadRequestError('Child information not saved.');
     }
   })
 );

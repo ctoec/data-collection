@@ -35,14 +35,10 @@ export default ({
 
   const onFormSubmit = (_child: Child) => {
     setSaving(true);
-    apiPut(`children/${child.id}`, _child, {
-      accessToken,
-      jsonParse: false
-    })
-      .then(refetchChild)
+    apiPut(`children/${child.id}`, _child, { accessToken })
+      .then(() => refetchChild())
       .catch((err) => {
-        // TODO: HOW ARE WE HANDLING ERRORS?  Do validation errors come back with the child?
-        console.error(`There was an error saving child info: ${err}`);
+        console.log(err);
       })
       .finally(() => setSaving(false));
   };
