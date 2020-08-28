@@ -5,8 +5,6 @@ import { WithNewDetermination, IncomeDeterminationFieldSet, NotDisclosedField } 
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import idx from 'idx';
 import { IncomeDetermination } from '../../../../shared/models';
-// import FamilyIncome from '.';
-// import { NotDisclosedField } from './Fields/NotDisclosed';
 
 /**
  * The form rendered in EnrollmentNew flow, which optionally adds a family income determination
