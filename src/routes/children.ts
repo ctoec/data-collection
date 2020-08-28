@@ -39,11 +39,7 @@ childrenRouter.put(
       const child = await getManager().findOne(Child, id);
       if (!child) throw new NotFoundError();
 
-      delete child.family;
-      delete child.enrollments;
       await getManager().save(getManager().merge(Child, child, req.body));
-      // Delete relations from this object so we don't attempt to update them
-      // await manager.update(Child, id, _child);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
