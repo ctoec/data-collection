@@ -29,7 +29,7 @@ const Upload: React.FC = () => {
     if (file) {
       const formData = new FormData();
       formData.set('file', file);
-      apiPost('enrollment-reports', formData, { accessToken })
+      apiPost('enrollment-reports', formData, { accessToken, rawBody: true })
         .then((value) => {
           history.push(`check-data/${value.id}`);
         })

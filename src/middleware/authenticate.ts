@@ -42,6 +42,7 @@ const addUser = passAsyncError(
           'communityPermissions',
         ],
       });
+
       if (!user) throw new InvalidSubClaimError();
       req.user = user;
       next();

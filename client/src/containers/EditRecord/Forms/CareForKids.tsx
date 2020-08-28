@@ -10,42 +10,31 @@ import {
 import { Child } from '../../../shared/models';
 
 type CareForKidsProps = {
-  initState: Child;
+  child: Child;
   refetchChild: () => void;
 };
 
 /*
  * Basic functional component designed to allow user to edit
- * the Care For Kids field of a data record.
- * Data is not processed using a FlattenedEnrollment.
- * Rather, information is inherited via props from the parent
- * object (the EditRecord page), which will bundle all
- * edits together and make a single unified record update
- * when the user is done editing. This allows users to make
- * changes to the state of individual fields without needing
- * to make repeated calls to the databse via API methods.
+ * the Care For Kids field of a Child object.
  */
 export const CareForKidsForm: React.FC<CareForKidsProps> = ({
-  initState,
+  child,
   refetchChild,
 }) => {
-  // Uses the inherited method from the parent on EditRecord to
-  // change the *state* inherited from EditRecord. This form
-  // keeps a local copy of the state so that only changes the user
-  // wishes to commit are pushed back up to the parent.
-  function saveButton(newState: Child) {
+  const onSubmit = (updatedChild: Child) => {
     refetchChild();
     alert('Data saved successfully!');
-  }
+  };
 
   return (
     <div className="grid-container margin-top-2">
-      <h1 className="grid-row">Receiving Care For Kids?</h1>
+      <h2 className="grid-row">Receiving Care For Kids?</h2>
       <div>
         <Form<Child>
           className="CareForKidsForm"
-          data={initState}
-          onSubmit={saveButton}
+          data={child}
+          onSubmit={onSubmit}
           noValidate
           autoComplete="off"
         >

@@ -1,18 +1,41 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 
 import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child, Family } from '../../shared/models';
-import { CareForKidsForm } from './Forms/CareForKidsForm';
-import { FamilyInfoForm } from './Forms/FamilyInfoForm';
+import { Child } from '../../shared/models';
+import { CareForKidsForm } from './Forms/CareForKids';
+import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
+import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
+
+const TAB_IDS = {
+  CHILD: 'child',
+  FAMILY: 'family',
+  INCOME: 'income',
+  ENROLLMENT: 'enrollment',
+  C4K: 'c4k',
+};
 
 const EditRecord: React.FC = () => {
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
+
+  // Counter to trigger re-run of child fetch in
+  // useEffect hook
   const [refetch, setRefetch] = useState<number>(0);
+  const refetchChild = () => {
+    setRefetch((r) => r + 1);
+  };
+
+  const activeTab = useLocation().hash.slice(1);
+  const history = useHistory();
+  useEffect(() => {
+    if (!activeTab) {
+      history.replace({ hash: TAB_IDS.CHILD });
+    }
+  }, []);
 
   useEffect(() => {
     apiGet(`children/${childId}`, {
@@ -20,29 +43,22 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
-  const refetchChild = () => {
-    setRefetch((r) => r + 1);
-  };
-
   return rowData ? (
     <div className="grid-container">
       <div className="margin-top-4">
-        <h2>
+        <h1>
           Edit information for {rowData.firstName} {rowData.lastName}
-        </h2>
+        </h1>
       </div>
       <TabNav
         items={[
-          // TODO: Each of these can be refactored into a form element that
-          // we store somewhere in the repo and just call here. This is
-          // just a placeholder as we develop the forms.
           {
-            id: 'child-tab',
+            id: TAB_IDS.CHILD,
             text: 'Child Info',
             content: <span>This is where the child info form goes</span>,
           },
           {
-            id: 'family-tab',
+            id: TAB_IDS.FAMILY,
             text: 'Family Info',
             content: (
               <FamilyInfoForm
@@ -52,31 +68,39 @@ const EditRecord: React.FC = () => {
             ),
           },
           {
-            id: 'income-tab',
+            id: TAB_IDS.INCOME,
             text: 'Family Income',
             content: <span>This is where the family income form goes</span>,
           },
           {
-            id: 'enrollment-tab',
+            id: TAB_IDS.ENROLLMENT,
             text: 'Enrollment and funding',
-            content: <span>This is where the enrollment form goes</span>,
-          },
-          {
-            id: 'care-tab',
-            text: 'Care 4 Kids',
             content: (
-              <CareForKidsForm
-                initState={rowData}
+              <EnrollmentFundingForm
+                enrollments={rowData.enrollments || []}
+                childName={rowData.firstName}
+                childId={rowData.id}
                 refetchChild={refetchChild}
               />
             ),
           },
+          {
+            id: TAB_IDS.C4K,
+            text: 'Care 4 Kids',
+            content: (
+              <CareForKidsForm child={rowData} refetchChild={refetchChild} />
+            ),
+          },
         ]}
-        activeId="child-tab"
+        activeId={activeTab}
+        onClick={(tabId) => {
+          console.log('ON CLICK');
+          history.push({ hash: tabId });
+        }}
       />
     </div>
   ) : (
-    <> </>
+    <></>
   );
 };
 

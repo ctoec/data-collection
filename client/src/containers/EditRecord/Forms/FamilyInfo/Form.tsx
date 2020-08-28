@@ -1,15 +1,9 @@
 import React, { useState, useContext } from 'react';
-import {
-  Form,
-  FormSubmitButton,
-  FormField,
-  CheckboxProps,
-  Checkbox,
-} from '@ctoec/component-library';
-import { Family } from '../../../shared/models';
-import { AddressFieldset } from './FormFields/AddressFieldset';
-import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPut } from '../../../utils/api';
+import { Form, FormSubmitButton } from '@ctoec/component-library';
+import { Family } from '../../../../shared/models';
+import { AddressFieldset, HomelessnessField } from './Fields';
+import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiPut } from '../../../../utils/api';
 
 /*
 Simple props type to hold the family associated with the particular
@@ -35,12 +29,7 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
   const [saving, setSaving] = useState(false);
 
-  // Sends an API request to the backend with any changed information
-  // to the family's address. The backend handles the DB lookup,
-  // then overwrites the information and persists it. The changed
-  // result is handed back, and we update the local state to
-  // display the change.
-  function saveButton(newState: Family) {
+  const onSubmit = (newState: Family) => {
     setSaving(true);
     apiPut(`families/${family.id}`, newState, { accessToken })
       .then(() => refetchChild())
@@ -48,7 +37,7 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
         console.log(err);
       })
       .finally(() => setSaving(false));
-  }
+  };
 
   return (
     <div className="grid-container margin-top-2">
@@ -60,21 +49,14 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
       <Form<Family>
         className="FamilyInfoForm"
         data={family}
-        onSubmit={saveButton}
+        onSubmit={onSubmit}
         noValidate
         autoComplete="off"
       >
         <h2 className="grid-row margin-top-4">Address</h2>
         <AddressFieldset />​
         <div className="grid-row margin-top-4">
-          <FormField<Family, CheckboxProps, boolean | null>
-            id="homelessness"
-            getValue={(data) => data.at('homelessness')}
-            value={'homelessness'}
-            parseOnChangeEvent={(e) => e.target.checked}
-            inputComponent={Checkbox}
-            text="Family has experienced homelessness / housing insecurity within the last year"
-          />
+          <HomelessnessField />
         </div>
         <div className="grid-row margin-top-2">
           <FormSubmitButton
