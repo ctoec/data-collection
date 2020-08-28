@@ -96,9 +96,9 @@ workflows:
           env: staging
           requires:
             - test
-          # filters:
-          #   branches:
-          #     only: base
+          filters:
+            branches:
+              only: base
   deploy-to-qa:
     jobs:
       - hold:
