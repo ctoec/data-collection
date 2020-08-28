@@ -67,7 +67,7 @@ jobs:
       - attach_workspace:
           at: .
       - run:
-          name: Install deployment dependencies
+          name: Install Elastic Beanstalk CLI
           working_directory: /
           command: |
             sudo apt-get -y -qq update
@@ -78,7 +78,7 @@ jobs:
           command: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
       - run: 
           name: Deploy to Elastic Beanstalk environment
-          command: eb deploy ece-fawkes-<< parameters.env >>-env
+          command: eb deploy ece-fawkes-<< parameters.env >>-<< parameters.env >>
 
 
 workflows:
