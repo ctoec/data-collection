@@ -2,7 +2,11 @@ import express, { Request, Response } from 'express';
 import { getManager } from 'typeorm';
 import { Family } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { BadRequestError } from '../middleware/error/errors';
+import {
+  BadRequestError,
+  NotFoundError,
+  ApiError,
+} from '../middleware/error/errors';
 
 export const familyRouter = express.Router();
 
@@ -12,14 +16,18 @@ export const familyRouter = express.Router();
 familyRouter.put(
   '/:familyId',
   passAsyncError(async (req: Request, res: Response) => {
-    const famId = req.params['familyId'];
+    const familyId = req.params['familyId'];
     try {
-      const newFam = req.body;
-      await getManager().update(Family, { id: famId }, newFam);
+      const family = await getManager().findOne(Family, familyId);
+      if (!family) throw new NotFoundError();
+
+      await getManager().save(getManager().merge(Family, family, req.body));
       res.sendStatus(200);
     } catch (err) {
+      if (err instanceof ApiError) throw err;
+
       console.log('Error saving changes to family: ', err);
-      throw new BadRequestError('Enrollment not saved');
+      throw new BadRequestError('Family not saved.');
     }
   })
 );
