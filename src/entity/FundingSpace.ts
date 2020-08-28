@@ -18,7 +18,12 @@ import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';
 
 @Entity()
-@Unique('UQ_Source_AgeGroup_Time', ['source', 'ageGroup', 'time'])
+@Unique('UQ_Source_AgeGroup_Time_Organization', [
+  'source',
+  'ageGroup',
+  'time',
+  'organization',
+])
 export class FundingSpace implements FundingSpaceInterface {
   @PrimaryGeneratedColumn()
   id: number;

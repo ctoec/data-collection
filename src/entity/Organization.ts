@@ -27,8 +27,8 @@ export class Organization implements OrganizationInterface {
   fundingSpaces?: Array<FundingSpace>;
 
   @ManyToOne(() => Community, { nullable: true })
-  community: Community;
+  community?: Community;
 
-  @Column()
-  communityId: number;
+  @Column({ nullable: true })
+  communityId?: number;
 }

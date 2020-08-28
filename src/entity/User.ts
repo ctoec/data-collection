@@ -7,20 +7,24 @@ import {
   SitePermission,
   CommunityPermission,
 } from './Permission';
-import { Site } from './Site';
 
 @Entity()
 export class User implements UserInterface {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+
+  @Column({ unique: true })
   wingedKeysId: string;
+
   @Column()
   firstName: string;
+
   @Column()
   lastName: string;
+
   @Column({ nullable: true })
   middleName?: string;
+
   @Column({ nullable: true })
   suffix?: string;
 
@@ -33,7 +37,11 @@ export class User implements UserInterface {
   @OneToMany(() => CommunityPermission, (perm) => perm.user)
   communityPermissions?: Array<CommunityPermission>;
 
-  // not mapped
-  // convenience var: all sites the user has access to, via org + site permissions
-  sites?: Array<Site>;
+  // [virtual property] all sites the user has access to
+  // via site, org and community perms
+  siteIds?: Array<number>;
+
+  // [virtual property] add organizations the user has access to
+  // via org and community perms
+  organizationIds?: Array<number>;
 }

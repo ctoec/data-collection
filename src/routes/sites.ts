@@ -16,25 +16,7 @@ export const sitesRouter = express.Router();
 sitesRouter.get(
   '/',
   passAsyncError(async (req: Request, res: Response) => {
-    const siteIds = parseQueryString(req, 'id', {
-      post: parseInt,
-      forceArray: true,
-    }) as number[];
-    const organizationIds = parseQueryString(req, 'organizationId', {
-      post: parseInt,
-      forceArray: true,
-    }) as number[];
-    const communityIds = parseQueryString(req, 'communityId', {
-      post: parseInt,
-      forceArray: true,
-    }) as number[];
-
-    const sites = await controller.getSites(
-      req.user,
-      siteIds,
-      organizationIds,
-      communityIds
-    );
+    const sites = await controller.getSites(req.user);
 
     res.send(sites);
   })
