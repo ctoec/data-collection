@@ -2,7 +2,7 @@ import React, { useEffect, PropsWithChildren } from 'react';
 import { FormContext, useGenericContext } from '@ctoec/component-library';
 import produce from 'immer';
 import { IncomeDetermination } from '../../../../../shared/models';
-
+    
 type WithNewDetermintionProps = {
 	shouldCreate: boolean;
 };
