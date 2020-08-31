@@ -5,23 +5,24 @@ import { useHistory } from 'react-router-dom';
 
 type BackButtonParams = {
   text?: string;
-}
+};
 
 export default ({ text = 'Back' }: BackButtonParams) => {
-
   const { goBack } = useHistory();
 
-  return (<Button
-    className="margin-bottom-2 text-bold"
-    appearance="unstyled"
-    text={
-      <TextWithIcon
-        text={text}
-        Icon={Arrow}
-        direction="left"
-        iconSide="left"
-      />
-    }
-    onClick={goBack}
-  />)
-}
+  return (
+    <Button
+      className="margin-bottom-2 text-bold"
+      appearance="unstyled"
+      text={
+        <TextWithIcon
+          text={text}
+          Icon={Arrow}
+          direction="left"
+          iconSide="left"
+        />
+      }
+      onClick={goBack}
+    />
+  );
+};
