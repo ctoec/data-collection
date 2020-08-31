@@ -6,10 +6,9 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
-import { TextWithIcon, Button, Table } from '@ctoec/component-library';
-import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
+import { Button, Table } from '@ctoec/component-library';
 import { tableColumns } from './TableColumns';
-import BackButton from '../../components/BackButton';
+import { BackButton } from '../../components/BackButton';
 
 const CheckData: React.FC = () => {
   const { reportId } = useParams();
@@ -47,8 +46,8 @@ const CheckData: React.FC = () => {
               />
             </PerfectScrollbar>
           ) : (
-            'Loading...'
-          )}
+              'Loading...'
+            )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">

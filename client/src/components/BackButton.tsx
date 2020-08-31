@@ -7,7 +7,7 @@ type BackButtonParams = {
   text?: string;
 };
 
-export default ({ text = 'Back' }: BackButtonParams) => {
+export const BackButton = ({ text = 'Back' }: BackButtonParams) => {
   const { goBack } = useHistory();
 
   return (
