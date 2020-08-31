@@ -5,6 +5,7 @@ import { ColumnMetadata } from '../../shared/models';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Table, Column, TextWithIcon, Button } from '@ctoec/component-library';
 import { apiGet } from '../../utils/api';
+import BackButton from '../../components/BackButton';
 
 const DataRequirements: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -25,8 +26,8 @@ const DataRequirements: React.FC = () => {
             <span className="text-bold">{row.formattedName}</span>
           </th>
         ) : (
-          <></>
-        ),
+            <></>
+          ),
     },
     {
       name: 'Required/ Optional',
@@ -40,8 +41,8 @@ const DataRequirements: React.FC = () => {
             <ReactMarkdown source={row.definition} />
           </td>
         ) : (
-          <></>
-        ),
+            <></>
+          ),
     },
     {
       name: 'Reason for collecting',
@@ -56,8 +57,8 @@ const DataRequirements: React.FC = () => {
             <div className="margin-top-1">Ex: {row.example}</div>
           </td>
         ) : (
-          <></>
-        ),
+            <></>
+          ),
     },
   ];
 
@@ -74,12 +75,7 @@ const DataRequirements: React.FC = () => {
 
   return (
     <div className="grid-container margin-top-4">
-      <Button
-        className="text-bold margin-bottom-4"
-        appearance="unstyled"
-        href="/"
-        text={<TextWithIcon text="Back" Icon={ArrowLeft} iconSide="left" />}
-      />
+      <BackButton />
       <h1>OEC's enrollment data requirements</h1>
       {Object.entries(columnMetadataBySection).map(
         ([sectionName, sectionData]) => (

@@ -8,6 +8,7 @@ import { CareForKidsForm } from './Forms/CareForKids';
 import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
 import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
 import ChildInfo from './ChildInfo';
+import BackButton from '../../components/BackButton';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -45,6 +46,7 @@ const EditRecord: React.FC = () => {
 
   return rowData ? (
     <div className="grid-container">
+      <BackButton />
       <div className="margin-top-4">
         <h1>
           Edit information for {rowData.firstName} {rowData.lastName}
@@ -99,8 +101,8 @@ const EditRecord: React.FC = () => {
       />
     </div>
   ) : (
-    <> </>
-  );
+      <> </>
+    );
 };
 
 export default EditRecord;

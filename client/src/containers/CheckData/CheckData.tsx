@@ -9,6 +9,7 @@ import { Child } from '../../shared/models';
 import { TextWithIcon, Button, Table } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { tableColumns } from './TableColumns';
+import BackButton from '../../components/BackButton';
 
 const CheckData: React.FC = () => {
   const { reportId } = useParams();
@@ -32,19 +33,7 @@ const CheckData: React.FC = () => {
     <>
       <div className="CheckData__content margin-top-4 grid-container">
         <div className="margin-x-4">
-          <Button
-            className="margin-bottom-2 text-bold"
-            appearance="unstyled"
-            text={
-              <TextWithIcon
-                text="Back"
-                Icon={Arrow}
-                direction="left"
-                iconSide="left"
-              />
-            }
-            href="/upload"
-          />
+          <BackButton />
           <h1>Check data for {pluralize('child', reportData.length, true)}</h1>
           <p>Make sure all of your data was uploaded correctly. </p>
           <p>If everything looks good, submit to OEC.</p>
@@ -58,8 +47,8 @@ const CheckData: React.FC = () => {
               />
             </PerfectScrollbar>
           ) : (
-            'Loading...'
-          )}
+              'Loading...'
+            )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
