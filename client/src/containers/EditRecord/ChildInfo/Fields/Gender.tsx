@@ -7,7 +7,7 @@ import { Child, Gender } from '../../../../shared/models';
  */
 export const GenderField: React.FC = () => {
   return (
-    <FormField<Child, SelectProps, string>
+    <FormField<Child, SelectProps, Gender>
       getValue={(data) => data.at('gender')}
       // Gender will always be defined, so the cast will always succeed
       preprocessForDisplay={(data) => data}

@@ -7,7 +7,6 @@ export const momentTransformer = {
     let _entityDate = entityDate;
     if (!moment.isMoment(entityDate)) {
       // Need to do this so upload works
-      console.log('ENTITY DATE ', entityDate)
       _entityDate = moment(entityDate);
     }
     return _entityDate.format('YYYY-MM-DD');

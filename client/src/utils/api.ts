@@ -93,8 +93,8 @@ async function api(
       opts.jsonParse !== undefined
         ? opts.jsonParse
         : method === 'PUT'
-          ? false
-          : true;
+        ? false
+        : true;
     if (!jsonParse) {
       return res;
     }

@@ -99,8 +99,8 @@ const EditRecord: React.FC = () => {
       />
     </div>
   ) : (
-      <> </>
-    );
+    <> </>
+  );
 };
 
 export default EditRecord;

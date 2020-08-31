@@ -10,7 +10,7 @@ import {
   RaceField,
   EthnicityField,
   GenderField,
-  FosterCheckbox
+  FosterCheckbox,
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -86,7 +86,10 @@ export default ({
       <GenderField />
       <h2>Foster</h2>
       <FosterCheckbox />
-      <FormSubmitButton text={saving ? 'Saving...' : 'Save'} disabled={saving} />
+      <FormSubmitButton
+        text={saving ? 'Saving...' : 'Save'}
+        disabled={saving}
+      />
     </Form>
   );
 };
