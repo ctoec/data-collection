@@ -6,6 +6,8 @@ import {
   ApiError,
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
+import { getManager } from 'typeorm';
+import { Child } from '../entity';
 
 export const childrenRouter = express.Router();
 
@@ -23,6 +25,27 @@ childrenRouter.get(
     if (!child) throw new NotFoundError();
 
     res.send(child);
+  })
+);
+
+/**
+ * /children PUT
+ */
+childrenRouter.put(
+  '/:childId',
+  passAsyncError(async (req, res) => {
+    try {
+      const id = req.params['childId'];
+      const child = await getManager().findOne(Child, id);
+      if (!child) throw new NotFoundError();
+
+      await getManager().save(getManager().merge(Child, child, req.body));
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error('Error saving changes to child: ', err);
+      throw new BadRequestError('Child information not saved.');
+    }
   })
 );
 

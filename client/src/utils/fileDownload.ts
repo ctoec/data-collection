@@ -6,11 +6,14 @@ import { saveAs } from 'file-saver';
  * Download a file stream from the route specified and save it to browser,
  * either with the file name specified or as "download".
  */
-export async function downloadStreamToFile(route: string, defaultFileName?: string) {
+export async function downloadStreamToFile(
+  route: string,
+  defaultFileName?: string
+) {
   const res: Response = await apiGet(route, { jsonParse: false });
 
-  const fileBlob = new Blob([(await res.arrayBuffer())], {
-    type: 'application/octet-stream'
+  const fileBlob = new Blob([await res.arrayBuffer()], {
+    type: 'application/octet-stream',
   });
 
   saveAs(fileBlob, parseFileName(res, defaultFileName));

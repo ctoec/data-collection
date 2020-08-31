@@ -2,7 +2,6 @@ import express from 'express';
 import { Response, Request } from 'express';
 import * as controller from '../controllers/columnMetadata';
 
-
 export const columnMetadataRouter = express.Router();
 
 /**

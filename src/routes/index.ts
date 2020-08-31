@@ -3,11 +3,11 @@ import express from 'express';
 import { authenticate } from '../middleware/authenticate';
 import { router as userRouter } from './user';
 import { enrollmentReportsRouter } from './enrollmentReports';
-import { columnMetadataRouter } from './columnMetadata';
 import { childrenRouter } from './children';
-import { familyRouter } from './families';
+import { columnMetadataRouter } from './columnMetadata';
 import { sitesRouter } from './sites';
 import { enrollmentsRouter } from './enrollments';
+import { familyRouter } from './families';
 
 export const router = express.Router();
 
