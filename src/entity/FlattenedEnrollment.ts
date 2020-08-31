@@ -1,6 +1,13 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
-import { FlattenedEnrollment as FlattenedEnrollmentInterface } from '../../client/src/shared/models';
+import {
+  FlattenedEnrollment as FlattenedEnrollmentInterface,
+  Gender,
+  SpecialEducationServicesType,
+  AgeGroup,
+  FundingSource,
+  FundingTime,
+} from '../../client/src/shared/models';
 
 import { EnrollmentReport } from './EnrollmentReport';
 import {
@@ -195,7 +202,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     definition:
       "The child's gender, as identified by the family (not as it appears on the birth certificate).",
     reason: 'Allows linking to SASID-backed data',
-    format: 'Male, Female, Nonbinary, Unspecified',
+    format: Object.values(Gender).join(', '),
     example: 'Nonbinary',
     section: SECTIONS.CHILD_INFO,
   })
@@ -234,7 +241,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     definition:
       'Whether a child receives special education services from a Local Education Agency (LEA) or another provider.',
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: 'LEA, Non-LEA',
+    format: Object.values(SpecialEducationServicesType).join(', '),
     example: 'Non-LEA',
     section: SECTIONS.CHILD_INFO,
   })
@@ -399,7 +406,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     definition:
       'The type of service being provided, as described by the age of the participating children.',
     reason: UTILIZATION_REPORTING_REASON,
-    format: 'Infant/toddler, Preschool, School age',
+    format: Object.values(AgeGroup).join(', '),
     example: 'School age',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -448,7 +455,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     definition:
       'The type of service being provided, as described by the funding source',
     reason: UTILIZATION_REPORTING_REASON,
-    format: 'CDC, SR',
+    format: Object.values(FundingSource).join(', '),
     example: 'SR',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -460,8 +467,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     required: REQUIRED,
     definition: 'The period during the day when services are provided',
     reason: UTILIZATION_REPORTING_REASON,
-    format:
-      'Part-time, Full-time, Part-time / full-time, School day, Wraparound',
+    format: Object.values(FundingTime).join(', '),
     example: 'Wraparound',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })

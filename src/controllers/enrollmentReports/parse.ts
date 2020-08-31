@@ -1,7 +1,11 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
 import { getConnection, getManager } from 'typeorm';
 import { FlattenedEnrollment, SECTIONS } from '../../entity';
-import { getColumnMetadata } from '../../entity/decorators/columnMetadata';
+import {
+  getColumnMetadata,
+  DATE_FORMATS,
+  REPORTING_PERIOD_FORMATS,
+} from '../../entity/decorators/columnMetadata';
 import moment from 'moment';
 import { BadRequestError } from '../../middleware/error/errors';
 
@@ -42,9 +46,11 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     column.type.toString().includes('Boolean')
   ).map((column) => column.propertyName);
 
-  const fileData = readFile(file.path, {
-    cellDates: true,
-  });
+  const DATE_PROPERTIES = FLATTENED_ENROLLMENT_COLUMNS.filter(
+    (column) => column.type === 'date'
+  ).map((column) => column.propertyName);
+
+  const fileData = readFile(file.path);
   const sheet = Object.values(fileData.Sheets)[0];
 
   update_sheet_range(sheet);
@@ -58,7 +64,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   }
 
   return data.map((rawEnrollment) =>
-    parseFlattenedEnrollment(rawEnrollment, BOOLEAN_PROPERTIES)
+    parseFlattenedEnrollment(rawEnrollment, BOOLEAN_PROPERTIES, DATE_PROPERTIES)
   );
 }
 
@@ -111,7 +117,7 @@ function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
   return { headers, data };
 }
 
-/**
+/*
  * Gets the type of template uploaded by the user.
  * If the value of cell B1 is 'Child Info', that means the
  * template has section headers, and is excel template.
@@ -129,19 +135,55 @@ function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
  */
 function parseFlattenedEnrollment(
   rawEnrollment: object,
-  booleanProperties: string[]
+  booleanProperties: string[],
+  dateProperties: string[]
 ) {
   Object.entries(rawEnrollment).forEach(([prop, value]) => {
+    // Parse booleans
     if (booleanProperties.includes(prop)) {
       rawEnrollment[prop] = getBoolean(value);
     }
 
-    if (value instanceof Date) {
-      rawEnrollment[prop] = moment.utc(value);
+    // Parse dates
+    if (dateProperties.includes(prop)) {
+      if (typeof value === 'string') {
+        const m = moment.utc(value, [
+          ...DATE_FORMATS,
+          ...REPORTING_PERIOD_FORMATS,
+        ]);
+        rawEnrollment[prop] = m.isValid() ? m : undefined;
+      } else if (typeof value === 'number') {
+        rawEnrollment[prop] = excelDateToDate(value);
+      }
+    }
+
+    // Parse zip codes
+    if (prop.match(/zipcode/i)) {
+      const zipString = value.toString();
+      if (zipString.length === 4) {
+        rawEnrollment[prop] = `0${zipString}`;
+      }
+
+      if (zipString.length > 5) {
+        rawEnrollment[prop] = zipString.slice(0, 5);
+      }
     }
   });
 
   return getManager().create(FlattenedEnrollment, rawEnrollment);
+}
+
+/**
+ * Convert proprietary excel date serial number to Moment,
+ * inspired by https://stackoverflow.com/questions/16229494/converting-excel-date-serial-number-to-date-using-javascript
+ */
+function excelDateToDate(excelDate: number) {
+  const SERIAL_UNIX_DAY_DIFF = 25569;
+  const DAY_TO_SECONDS = 60 * 60 * 24;
+
+  var timestamp = Math.floor(excelDate - SERIAL_UNIX_DAY_DIFF) * DAY_TO_SECONDS;
+  const m = moment.unix(timestamp);
+  return m.isValid() ? m : undefined;
 }
 
 /**
