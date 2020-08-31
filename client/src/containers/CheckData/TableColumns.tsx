@@ -53,9 +53,7 @@ export const tableColumns: Column<Child>[] = [
     className: tableColumnClassName,
     name: 'Contract space',
     cell: ({ row }) => (
-      <td>
-        {idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.time)}
-      </td>
+      <td>{idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.time)}</td>
     ),
   },
   {

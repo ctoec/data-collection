@@ -214,6 +214,7 @@ const mapEnrollment = (
 
   const enrollment = getManager().create(Enrollment, {
     siteId: site.id,
+    site,
     childId: child.id,
     ageGroup,
     entry: source.enrollmentStartDate,
