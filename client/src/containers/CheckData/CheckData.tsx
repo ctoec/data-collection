@@ -42,7 +42,7 @@ const CheckData: React.FC = () => {
                 id="enrollment-report-table"
                 rowKey={(row) => row.id}
                 data={reportData}
-                columns={tableColumns()}
+                columns={tableColumns}
               />
             </PerfectScrollbar>
           ) : (
