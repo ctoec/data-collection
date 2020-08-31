@@ -39,7 +39,7 @@ export const WithNewDetermination = ({
   // them with that id and put it in their array of dets
   useEffect(() => {
     if (shouldCreate && newDet.value == undefined) {
-      // console.log(newDet);
+      console.log(newDet);
 
       // Hacky way to make a copy of the object with a change
       // to the determination ID
@@ -63,7 +63,7 @@ export const WithNewDetermination = ({
       // Weird React workaround to force the update trigger
       setTimeout(() => updateData(detToAdd), 0);
     }
-  }, [shouldCreate, data]);
+  }, [shouldCreate]);
 
   return <>{determinationFields}</>;
 };
