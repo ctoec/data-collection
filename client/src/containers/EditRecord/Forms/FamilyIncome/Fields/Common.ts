@@ -7,3 +7,7 @@ export type IncomeFormProps = {
   determinations: IncomeDetermination[];
   refetchChild: () => void;
 };
+
+export type IncomeFormFieldProps = {
+  determinationId: number;
+};
