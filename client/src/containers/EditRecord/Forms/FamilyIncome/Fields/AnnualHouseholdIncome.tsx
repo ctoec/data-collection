@@ -8,10 +8,8 @@ export const AnnualHouseholdIncomeField: React.FC<IncomeFormFieldProps> = ({
   determinationId,
 }) => {
   return (
-    <FormField<IncomeDetermination[], TextInputProps, number | null>
-      getValue={(data) =>
-        data.find((det) => det.id === determinationId).at('income')
-      }
+    <FormField<IncomeDetermination, TextInputProps, number | null>
+      getValue={(data) => data.at('income')}
       type="input"
       parseOnChangeEvent={(e) => parseCurrencyFromString(e.target.value)}
       inputComponent={TextInput}

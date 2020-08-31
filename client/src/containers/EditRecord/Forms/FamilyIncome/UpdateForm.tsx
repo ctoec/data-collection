@@ -36,8 +36,6 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
 
   const { accessToken } = useContext(AuthenticationContext);
 
-  // const [mutatedEnrollment, setMutatedEnrollment] = useState<Enrollment>(enrollment);
-
   // Set up form state
   const [showNew, setShowNew] = useState(false);
   const [forceCloseEditForms, setForceCloseEditForms] = useState(false);
@@ -46,50 +44,13 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
 
   const [saving, setSaving] = useState(false);
 
-  // Set up API request (enrollment PUT)
-  // const [attemptingSave, setAttemptingSave] = useState(false);
-  // const { user } = useContext(UserContext);
-  // const putParams: ApiOrganizationsOrgIdSitesSiteIdEnrollmentsIdPutRequest = {
-  // 	id: enrollment.id,
-  // 	siteId: validatePermissions(user, 'site', siteId) ? siteId : 0,
-  // 	orgId: getIdForUser(user, 'org'),
-  // 	enrollment: mutatedEnrollment,
-  // };
-
-  // const { error: saveError } = useApi<Enrollment>(
-  // 	(api) => api.apiOrganizationsOrgIdSitesSiteIdEnrollmentsIdPut(putParams),
-  // 	{
-  // 		skip: !user || !attemptingSave,
-  // 		callback: () => {
-  // 			setAttemptingSave(false);
-  // 		},
-  // 		successCallback: (returnedEnrollment) => {
-  // 			setMutatedEnrollment(returnedEnrollment);
-  // 			if (didAddNew) {
-  // 				setIsNew(true);
-  // 			}
-
-  // 			setShowNew(false);
-  // 			setForceCloseEditForms(false);
-  // 		},
-  // 	}
-  // );
-
-  // Handle API error
-  // display CatchAll error alert on any API error
-  // useCatchAllErrorAlert(saveError);
-
   // Convenience vars for rendering the form
-  const formOnSubmit = (userModifiedDets: IncomeDetermination[]) => {
-    // setMutatedEnrollment(_data);
-    // setAttemptingSave(true);
-    // setForceCloseEditForms(true);
+  const formOnSubmit = (userModifiedDet: IncomeDetermination) => {
     setSaving(true);
-    console.log(userModifiedDets);
+    console.log(userModifiedDet);
     setSaving(false);
   };
 
-  // mutatedEnrollment is known to have child & family from check above on enrollment
   const sortedDeterminations = (determinations || []).sort((a, b) =>
     propertyDateSorter(a, b, (det) => det.determinationDate, true)
   );
@@ -108,7 +69,7 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
           <Card>
             <DeterminationFormInCard
               determinationId={0}
-              formData={determinations}
+              formData={determinations[0]}
               onSubmit={(_data) => {
                 setDidAddNew(true);
                 formOnSubmit(_data);
@@ -144,7 +105,7 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
               expansion={
                 <DeterminationFormInCard
                   determinationId={currentDetermination.id}
-                  formData={determinations}
+                  formData={currentDetermination}
                   onSubmit={formOnSubmit}
                 />
               }
@@ -170,7 +131,7 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
                   expansion={
                     <DeterminationFormInCard
                       determinationId={determination.id}
-                      formData={determinations}
+                      formData={determination}
                       onSubmit={formOnSubmit}
                     />
                   }

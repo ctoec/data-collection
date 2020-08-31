@@ -15,8 +15,8 @@ import { IncomeDetermination } from '../../../../../shared/models';
 
 type DeterminationFormInCardProps = {
   determinationId: number;
-  formData: IncomeDetermination[];
-  onSubmit: (_: IncomeDetermination[]) => void;
+  formData: IncomeDetermination;
+  onSubmit: (_: IncomeDetermination) => void;
   onCancel?: () => void;
 };
 
@@ -55,7 +55,7 @@ const DeterminationFormInCard: React.FC<DeterminationFormInCardProps> = ({
   //   const saveButton = () => {};
 
   return (
-    <Form
+    <Form<IncomeDetermination>
       id={`update-family-income-${determinationId}`}
       data={formData}
       onSubmit={onSubmit}

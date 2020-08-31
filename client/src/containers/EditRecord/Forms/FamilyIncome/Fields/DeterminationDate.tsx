@@ -8,10 +8,8 @@ export const DeterminationDateField: React.FC<IncomeFormFieldProps> = ({
   determinationId,
 }) => {
   return (
-    <FormField<IncomeDetermination[], DateInputProps, Date | null>
-      getValue={(data) =>
-        data.find((det) => det.id === determinationId).at('determinationDate')
-      }
+    <FormField<IncomeDetermination, DateInputProps, Date | null>
+      getValue={(data) => data.at('determinationDate')}
       // Workaround to fix the infinite date render bug
       parseOnChangeEvent={(e: any) => e}
       inputComponent={DateInput}

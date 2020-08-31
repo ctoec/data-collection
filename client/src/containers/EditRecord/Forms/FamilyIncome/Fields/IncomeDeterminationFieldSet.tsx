@@ -38,7 +38,7 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
   }
 
   return (
-    <FormFieldSet<IncomeDetermination[]>
+    <FormFieldSet<IncomeDetermination>
       id={elementId}
       legend={legend}
       showLegend={showLegend}
@@ -51,7 +51,7 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
         <AnnualHouseholdIncomeField determinationId={determinationId} />
       </div>
       <div>
-        {/* <DeterminationDateField determinationId={determinationId} /> */}
+        <DeterminationDateField determinationId={determinationId} />
       </div>
     </FormFieldSet>
   );
