@@ -1,5 +1,4 @@
 import React from 'react';
-// import { FamilyDetermination } from '../../../../../generated';
 import {
   Card,
   InlineIcon,
@@ -9,13 +8,13 @@ import {
   ExpandCard,
   Pencil,
 } from '@ctoec/component-library';
-// import { CardExpansion } from '../../../../../components/Card/CardExpansion';
 import currencyFormatter from '../../../../../utils/currencyFormatter';
 import dateFormatter from '../../../../../utils/dateFormatter';
-// import { ExpandCard } from '../../../../../components/Card/ExpandCard';
-// import { ReactComponent as Pencil } from '../../../../../assets/images/pencil.svg';
 import { IncomeDetermination } from '../../../../../shared/models';
 
+/**
+ * Type to hold the basic properties of an income determination card.
+ */
 type IncomeDeterminationCardProps = {
   determination: IncomeDetermination;
   isCurrent: boolean;
@@ -27,7 +26,7 @@ type IncomeDeterminationCardProps = {
 /**
  * Card that displays an income determination record.
  * Renders an expansion prop as the CardExpansion content,
- * which will be a FamilyDeterminationFormForCard
+ * which will be a DeterminationFormInCard element.
  */
 export const IncomeDeterminationCard = ({
   determination,

@@ -76,10 +76,6 @@ const EditRecord: React.FC = () => {
             content: (
               <UpdateForm
                 familyId={rowData.family.id}
-                isFoster={rowData.foster}
-                hasDisclosed={
-                  rowData.family.incomeDeterminations ? true : false
-                }
                 determinations={
                   rowData.family.incomeDeterminations
                     ? rowData.family.incomeDeterminations

@@ -4,6 +4,10 @@ import { IncomeDetermination } from '../../../../../shared/models';
 import parseCurrencyFromString from '../../../../../utils/parseCurrencyFromString';
 import { IncomeFormFieldProps } from './Common';
 
+/**
+ * Component that receives the annual household income of a given
+ * family and records that as part of the income determination.
+ */
 export const AnnualHouseholdIncomeField: React.FC<IncomeFormFieldProps> = ({
   determinationId,
 }) => {

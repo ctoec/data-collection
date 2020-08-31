@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Enrollment } from '../../../../../generated';
 import { WithNewDetermination, IncomeDeterminationFieldSet } from '../Fields';
 import {
   Button,
@@ -8,11 +7,14 @@ import {
   ExpandCard,
 } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
-// import FormSubmitButton from '../../../../../components/Form_New/FormSubmitButton';
-// import Form from '../../../../../components/Form_New/Form';
-// import { ExpandCard } from '../../../../../components/Card/ExpandCard';
-// import { headerLevels } from '../../../enrollmentTypes';
 
+/**
+ * Type to hold the intermediary props that connect the high-
+ * level / overall income determinatino form to the individual
+ * form fields. This bridges the gap between operating on the
+ * whole array of determinations and operating on a single
+ * determination, which the individual fields do.
+ */
 type DeterminationFormInCardProps = {
   determinationId: number;
   formData: IncomeDetermination;
@@ -21,11 +23,15 @@ type DeterminationFormInCardProps = {
 };
 
 /**
- * The single-determination form to be embedded in FamilyDeterminationCard in the UpdateForm.
+ * The single-determination form to be embedded in a
+ * DeterminationFormInCard on the UpdateForm page.
  *
- * The component relies on determinationId to determine which flavor of CardForm it is:
- * - determinationId = 0: displayed in a Card as the primary content to create a new determination
- * - determinationId != 0: displayed in a CardExpansion as the expanded context to edit existing determination with given id
+ * The component relies on determinationId to determine
+ * which flavor of CardForm it is:
+ * - determinationId = 0: displayed in a Card as the primary
+ *      content to create a new determination
+ * - determinationId != 0: displayed in a CardExpansion as
+ *      the expanded context to edit an existing determination
  */
 const DeterminationFormInCard: React.FC<DeterminationFormInCardProps> = ({
   determinationId,
@@ -36,8 +42,6 @@ const DeterminationFormInCard: React.FC<DeterminationFormInCardProps> = ({
   // determinationId !== 0 means edit, not redetermination
   const isEditExpansion = determinationId !== 0;
 
-  // Use a basic button to cancel adding new determination,
-  // or an ExpandCard button to collapse the card expansion edit form for an existing determination
   const cancelElement = !isEditExpansion ? (
     <Button
       text="Cancel"
@@ -51,8 +55,6 @@ const DeterminationFormInCard: React.FC<DeterminationFormInCardProps> = ({
       <Button text="Cancel" appearance="outline" />
     </ExpandCard>
   );
-
-  //   const saveButton = () => {};
 
   return (
     <Form<IncomeDetermination>

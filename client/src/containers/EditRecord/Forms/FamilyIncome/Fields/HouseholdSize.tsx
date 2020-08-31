@@ -3,6 +3,10 @@ import { FormField, TextInputProps, TextInput } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
 import { IncomeFormFieldProps } from './Common';
 
+/**
+ * Component that holds a field allowing the input and modification
+ * of a household size number for an income determination.
+ */
 export const HouseholdSizeField: React.FC<IncomeFormFieldProps> = ({
   determinationId,
 }) => {

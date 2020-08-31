@@ -7,16 +7,27 @@ import {
 } from '.';
 import { IncomeDetermination } from '../../../../../shared/models';
 
+/**
+ * Simple prop holder to identify the kind of operation the
+ * form field is performing (creating a new determination or
+ * editing an existing one) as well as well as to maintain a
+ * copy of the ID of the determination being edited.
+ */
 type IncomeDeterminationFieldSetProps = {
   type: 'new' | 'redetermine' | 'edit';
   determinationId: number;
 };
 
+/**
+ * Component that uses scenario-based reasoning to assign variables
+ * based on whether we're making a new determination or editing an
+ * existing one.
+ */
 export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetProps> = ({
   type,
   determinationId,
 }) => {
-  let status, elementId, legend, showLegend;
+  let elementId, legend, showLegend;
   switch (type) {
     case 'redetermine':
       elementId = 'family-income-redetermination';
