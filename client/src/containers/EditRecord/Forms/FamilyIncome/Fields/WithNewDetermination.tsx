@@ -22,16 +22,21 @@ export const WithNewDetermination = ({
     // Verify whether the family has a determination with ID 0
     // NOTE: Changed from the ECE Reporter implementation
     // to use different functions; logic is preserved
-    const hasNoZero = !(data.family.incomeDeterminations) || 
-        data.family.incomeDeterminations.
-        findIndex((det) => det.id === 0) == -1;
+    // const hasNoZero = !(data.family.incomeDeterminations) || 
+    //     (data.family.incomeDeterminations && data.family.incomeDeterminations)
+    //     .findIndex((det) => det.id === 0) == -1;
+
+    const newDet = dataDriller
+		.at('family')
+		.at('incomeDeterminations')
+		.find((det) => det.id === 0);
 
     // Changed from ECE Reporter to not use the 'set' function
     // from 'lodash' package--logic is that if the family lacks
     // a determination with id 0, make a new determination for 
     // them with that id and put it in their array of dets
 	useEffect(() => {
-        if (shouldCreate && hasNoZero) {
+        if (shouldCreate && newDet.value == undefined) {
             // Make a copy of existing det with the zero-id det
             // added so that we can statefully replace
             const newDet = produce<IncomeDetermination>(data, (draft) => {

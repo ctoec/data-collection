@@ -73,7 +73,7 @@ const EditRecord: React.FC = () => {
             id: TAB_IDS.INCOME,
             text: 'Family Income',
             content: (
-              <Summary
+              <UpdateForm
                 familyId={rowData.family.id}
                 isFoster={rowData.foster}
                 hasDisclosed={

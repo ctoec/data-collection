@@ -95,7 +95,14 @@ export const NewForm: React.FC<IncomeFormProps> = ({
 	 * If there is no determination, then they did not disclose.
 	 */
 	// const isReturnVisit = touchedSections && touchedSections[FamilyIncome.key];
+
+
+	// So what's going on is that this determinationID variable I created isn't doing
+	// what I think it does. I'm treating it as if it can directly index into the 
+	// array, but that's not what it is. It's a determination id. So different
+	// logic is required.
 	const determinationId = idx(determinations, () => determinations[0].id) || 0;
+	console.log(hasDisclosed, determinationId);
 	const [notDisclosed, setNotDisclosed] = useState(determinationId === 0 ? !hasDisclosed : false);
 
 	const onFormSubmit = (userModifiedDet: IncomeDetermination) => {
@@ -108,7 +115,9 @@ export const NewForm: React.FC<IncomeFormProps> = ({
 			{notDisclosed && <Alert type="info" text='You must disclose income 
 					information to enroll a child in a funded program' />}
 			<Form<IncomeDetermination>
-				data={determinations[determinationId]}
+				// THIS IS THE REAL LINE--COMMENTED OUT TO TEST UPDATE LANDING PAGE
+				// data={determinations[determinationId]}
+				data = {determinations[0]}
 				onSubmit={onFormSubmit}
 				className="enrollment-new-family-income-section usa-form"
 				noValidate
