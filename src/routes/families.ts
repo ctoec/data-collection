@@ -57,22 +57,45 @@ familyRouter.put(
         detToModify,
         req.body
       );
-      // await getManager().save(mergedEntity);
+      await getManager().save(mergedEntity);
 
       // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, req.body['income']);
 
-      res.send(mergedEntity);
+      // res.send(mergedEntity);
 
       // await getManager().save(
       // getManager().merge(IncomeDetermination, detToModify, req.body)
       // );
 
       // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, newDet);
-      // res.sendStatus(200);
+      res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.log('Error saving changes to income determination: ', err);
       throw new BadRequestError('Edited determination not saved');
+    }
+  })
+);
+
+familyRouter.post(
+  '/:familyId/incomeDetermination',
+  passAsyncError(async (req: Request, res: Response) => {
+    try {
+      const famId = parseInt(req.params['familyId']);
+      const rootFam = await getManager().findOne(Family, { id: famId });
+      const determination = getManager().create(IncomeDetermination, {
+        id: req.body.id,
+        numberOfPeople: req.body.numberOfPeople,
+        income: req.body.income,
+        determinationDate: req.body.determinationDate,
+        family: rootFam,
+      });
+      await getManager().save(determination);
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.log('Error creating new income determination: ', err);
+      throw new BadRequestError('Redetermination not saved');
     }
   })
 );

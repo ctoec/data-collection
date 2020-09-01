@@ -7,6 +7,7 @@ import DeterminationFormInCard from './Fields/DeterminationFormInCard';
 import { IncomeFormProps } from './Fields/Common';
 import { IncomeDetermination } from '../../../../shared/models';
 import { EditDeterminationForm } from './EditDeterminationForm';
+import { RedeterminationForm } from './RedeterminationForm';
 
 /**
  * The main form rendered in the EditRecord TabNav that allows a user
@@ -56,14 +57,9 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
             New income determination
           </h2>
           <Card>
-            <DeterminationFormInCard
-              determinationId={0}
-              formData={sortedDeterminations[0]}
-              onSubmit={(_data) => {
-                setDidAddNew(true);
-                formOnSubmit(_data, 0);
-              }}
-              onCancel={() => setShowNew(false)}
+            <RedeterminationForm
+              familyId={familyId}
+              refetchChild={refetchChild}
             />
           </Card>
         </>
