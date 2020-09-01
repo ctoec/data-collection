@@ -25,8 +25,8 @@ const DataRequirements: React.FC = () => {
             <span className="text-bold">{row.formattedName}</span>
           </th>
         ) : (
-            <></>
-          ),
+          <></>
+        ),
     },
     {
       name: 'Required/ Optional',
@@ -40,8 +40,8 @@ const DataRequirements: React.FC = () => {
             <ReactMarkdown source={row.definition} />
           </td>
         ) : (
-            <></>
-          ),
+          <></>
+        ),
     },
     {
       name: 'Reason for collecting',
@@ -56,8 +56,8 @@ const DataRequirements: React.FC = () => {
             <div className="margin-top-1">Ex: {row.example}</div>
           </td>
         ) : (
-            <></>
-          ),
+          <></>
+        ),
     },
   ];
 

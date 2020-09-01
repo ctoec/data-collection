@@ -46,8 +46,8 @@ const CheckData: React.FC = () => {
               />
             </PerfectScrollbar>
           ) : (
-              'Loading...'
-            )}
+            'Loading...'
+          )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
