@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { getManager } from 'typeorm';
-import { Family } from '../entity';
+import { Family, IncomeDetermination } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import {
   BadRequestError,
@@ -27,7 +27,52 @@ familyRouter.put(
       if (err instanceof ApiError) throw err;
 
       console.log('Error saving changes to family: ', err);
-      throw new BadRequestError('Family not saved.');
+      throw new BadRequestError('Family not saved');
+    }
+  })
+);
+
+/**
+ * /families/:familyId/incomeDetermination/:determinationId PUT
+ */
+familyRouter.put(
+  '/:familyId/incomeDetermination/:determinationId',
+  passAsyncError(async (req: Request, res: Response) => {
+    // const parsedBody = JSON.parse(req.body);
+
+    try {
+      const famId = parseInt(req.params['familyId']);
+      const detId = parseInt(req.params['determinationId']);
+
+      const detToModify = await getManager().findOne(IncomeDetermination, {
+        id: detId,
+        familyId: famId,
+      });
+
+      if (!detToModify) throw new NotFoundError();
+      // res.send(detToModify);
+
+      const mergedEntity = getManager().merge(
+        IncomeDetermination,
+        detToModify,
+        req.body
+      );
+      // await getManager().save(mergedEntity);
+
+      // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, req.body['income']);
+
+      res.send(mergedEntity);
+
+      // await getManager().save(
+      // getManager().merge(IncomeDetermination, detToModify, req.body)
+      // );
+
+      // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, newDet);
+      // res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.log('Error saving changes to income determination: ', err);
+      throw new BadRequestError('Edited determination not saved');
     }
   })
 );

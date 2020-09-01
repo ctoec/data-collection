@@ -35,7 +35,7 @@ export const WithNewDetermination = ({
   // one for them with id 0 based on a shallow copy of their most
   // recent existing income determination.
   useEffect(() => {
-    if (shouldCreate && newDet.value == undefined) {
+    if (shouldCreate && newDet.value === undefined) {
       var detToAdd = JSON.parse(JSON.stringify(data));
       detToAdd.id = 0;
       setTimeout(() => updateData(detToAdd), 0);

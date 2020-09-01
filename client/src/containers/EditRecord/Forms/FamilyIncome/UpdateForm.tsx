@@ -6,6 +6,7 @@ import { IncomeDeterminationCard } from './Fields/DeterminationCard';
 import DeterminationFormInCard from './Fields/DeterminationFormInCard';
 import { IncomeFormProps } from './Fields/Common';
 import { IncomeDetermination } from '../../../../shared/models';
+import { EditDeterminationForm } from './EditDeterminationForm';
 
 /**
  * The main form rendered in the EditRecord TabNav that allows a user
@@ -47,8 +48,6 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
   const currentDetermination = sortedDeterminations[0];
   const pastDeterminations = sortedDeterminations.slice(1);
 
-  console.log(determinations[0]);
-
   return (
     <>
       {showNew && (
@@ -87,20 +86,12 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
         </div>
         <div>
           {currentDetermination && (
-            <IncomeDeterminationCard
+            <EditDeterminationForm
               determination={currentDetermination}
+              familyId={familyId}
               isCurrent={true}
               isNew={isNew}
-              forceClose={forceCloseEditForms}
-              expansion={
-                <DeterminationFormInCard
-                  determinationId={currentDetermination.id}
-                  formData={currentDetermination}
-                  onSubmit={(_data) =>
-                    formOnSubmit(_data, currentDetermination.id)
-                  }
-                />
-              }
+              refetchChild={refetchChild}
             />
           )}
         </div>
@@ -114,20 +105,13 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
             </div>
             <div>
               {pastDeterminations.map((determination) => (
-                <IncomeDeterminationCard
+                <EditDeterminationForm
                   key={determination.id}
                   determination={determination}
+                  familyId={familyId}
                   isCurrent={false}
-                  forceClose={forceCloseEditForms}
-                  expansion={
-                    <DeterminationFormInCard
-                      determinationId={determination.id}
-                      formData={determination}
-                      onSubmit={(_data) =>
-                        formOnSubmit(_data, determination.id)
-                      }
-                    />
-                  }
+                  isNew={false}
+                  refetchChild={refetchChild}
                 />
               ))}
             </div>
