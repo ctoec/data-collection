@@ -1,6 +1,8 @@
+import { Moment } from 'moment';
+
 export function dateSorter(
-  a: Date | null | undefined,
-  b: Date | null | undefined,
+  a: Date | Moment | null | undefined,
+  b: Date | Moment | null | undefined,
   inverse?: true
 ): number {
   let result = 0;
@@ -18,7 +20,7 @@ export function dateSorter(
 export function propertyDateSorter<T>(
   a: T,
   b: T,
-  accessor: (_: T) => Date | null | undefined,
+  accessor: (_: T) => Date | Moment | null | undefined,
   inverse?: true
 ) {
   const aDate = accessor(a);

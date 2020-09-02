@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormField, DateInput, DateInputProps } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
+import { Moment } from 'moment';
 
 /**
  * Component that holds a date picker calendar object that
@@ -11,7 +12,7 @@ import { IncomeDetermination } from '../../../../../shared/models';
  */
 export const DeterminationDateField: React.FC = () => {
   return (
-    <FormField<IncomeDetermination, DateInputProps, Date | null>
+    <FormField<IncomeDetermination, DateInputProps, Moment | null>
       getValue={(data) => data.at('determinationDate')}
       parseOnChangeEvent={(e: any) => e}
       inputComponent={DateInput}
