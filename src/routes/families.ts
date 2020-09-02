@@ -50,25 +50,26 @@ familyRouter.put(
       });
 
       if (!detToModify) throw new NotFoundError();
-      // res.send(detToModify);
 
       const mergedEntity = getManager().merge(
         IncomeDetermination,
         detToModify,
         req.body
       );
-      await getManager().save(mergedEntity);
+
+      // WHY DO YOU REFUSE TO SAVE
+      await getManager().save(IncomeDetermination, mergedEntity);
 
       // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, req.body['income']);
 
-      // res.send(mergedEntity);
+      res.send(mergedEntity);
 
       // await getManager().save(
       // getManager().merge(IncomeDetermination, detToModify, req.body)
       // );
 
       // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, newDet);
-      res.sendStatus(200);
+      // res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.log('Error saving changes to income determination: ', err);
