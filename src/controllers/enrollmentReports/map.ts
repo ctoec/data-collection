@@ -213,7 +213,7 @@ const mapEnrollment = (
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
 
   const enrollment = getManager().create(Enrollment, {
-    siteId: site.id,
+    site,
     childId: child.id,
     ageGroup,
     entry: source.enrollmentStartDate,
