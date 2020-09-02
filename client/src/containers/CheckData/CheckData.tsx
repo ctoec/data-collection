@@ -42,12 +42,12 @@ const CheckData: React.FC = () => {
                 id="enrollment-report-table"
                 rowKey={(row) => row.id}
                 data={reportData}
-                columns={tableColumns()}
+                columns={tableColumns}
               />
             </PerfectScrollbar>
           ) : (
-              'Loading...'
-            )}
+            'Loading...'
+          )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
