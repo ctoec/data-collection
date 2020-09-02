@@ -13,7 +13,7 @@ import { RedeterminationForm } from './RedeterminationForm';
  * passed off to the accessible forms (Edit and Redetermine) reached
  * through this page.
  */
-export const UpdateForm: React.FC<IncomeFormProps> = ({
+export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
   familyId,
   determinations,
   refetchChild,

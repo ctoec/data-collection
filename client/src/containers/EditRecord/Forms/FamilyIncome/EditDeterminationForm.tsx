@@ -36,6 +36,9 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
   const [closeCard, setCloseCard] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Explicitly don't want `closeCard` as a dep, as this
+  // needs to be triggered on render caused by child refetch
+  // (not only when closeCard changes)
   useEffect(() => {
     if (closeCard) setCloseCard(false);
   });

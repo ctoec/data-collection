@@ -9,7 +9,7 @@ import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
 import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
 import ChildInfo from './ChildInfo';
 import { BackButton } from '../../components/BackButton';
-import { UpdateForm } from './Forms/FamilyIncome/UpdateForm';
+import { FamilyIncomeForm } from './Forms/FamilyIncome/Form';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -74,7 +74,7 @@ const EditRecord: React.FC = () => {
             id: TAB_IDS.INCOME,
             text: 'Family Income',
             content: (
-              <UpdateForm
+              <FamilyIncomeForm
                 familyId={rowData.family.id}
                 determinations={
                   rowData.family.incomeDeterminations
@@ -112,8 +112,8 @@ const EditRecord: React.FC = () => {
       />
     </div>
   ) : (
-      <> </>
-    );
+    <> </>
+  );
 };
 
 export default EditRecord;

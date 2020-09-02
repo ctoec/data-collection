@@ -33,6 +33,9 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
 
   var newDet = { id: 0, numberOfPeople: 0, income: 0 } as IncomeDetermination;
 
+  // Explicitly don't want `closeCard` as a dep, as this
+  // needs to be triggered on render caused by child refetch
+  // (not only when closeCard changes)
   useEffect(() => {
     if (closeCard) setCloseCard(false);
   });
