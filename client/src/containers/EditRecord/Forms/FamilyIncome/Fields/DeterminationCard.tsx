@@ -25,8 +25,9 @@ type IncomeDeterminationCardProps = {
 
 /**
  * Card that displays an income determination record.
- * Renders an expansion prop as the CardExpansion content,
- * which will be a DeterminationFormInCard element.
+ * This is the basic unit of displaying income determinations
+ * in the TabNav form, and is used for both redetermining
+ * income as well as editing a determination.
  */
 export const IncomeDeterminationCard = ({
   determination,

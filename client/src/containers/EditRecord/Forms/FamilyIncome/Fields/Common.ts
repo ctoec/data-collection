@@ -10,11 +10,3 @@ export type IncomeFormProps = {
   determinations: IncomeDetermination[];
   refetchChild: () => void;
 };
-
-/**
- * Small props to hold the determination ID number of an
- * individual form field. Used to make a specific update.
- */
-export type IncomeFormFieldProps = {
-  determinationId: number;
-};

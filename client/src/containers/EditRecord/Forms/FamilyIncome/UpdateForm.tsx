@@ -1,11 +1,7 @@
-import React, { useState, useContext } from 'react';
-import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import React, { useState } from 'react';
 import { Button, Card } from '@ctoec/component-library';
 import { propertyDateSorter } from '../../../../utils/dateSorter';
-import { IncomeDeterminationCard } from './Fields/DeterminationCard';
-import DeterminationFormInCard from './Fields/DeterminationFormInCard';
 import { IncomeFormProps } from './Fields/Common';
-import { IncomeDetermination } from '../../../../shared/models';
 import { EditDeterminationForm } from './EditDeterminationForm';
 import { RedeterminationForm } from './RedeterminationForm';
 
@@ -13,34 +9,17 @@ import { RedeterminationForm } from './RedeterminationForm';
  * The main form rendered in the EditRecord TabNav that allows a user
  * to update the income determination for a given Child record
  * object. Updates are performed on individual income determinations
- * before being re-persisted to the database.
+ * before being re-persisted to the database, but these updates are
+ * passed off to the accessible forms (Edit and Redetermine) reached
+ * through this page.
  */
 export const UpdateForm: React.FC<IncomeFormProps> = ({
   familyId,
   determinations,
   refetchChild,
 }) => {
-  const { accessToken } = useContext(AuthenticationContext);
-
-  // Set up form state
   const [showNew, setShowNew] = useState(false);
-  const [forceCloseEditForms, setForceCloseEditForms] = useState(false);
-  const [didAddNew, setDidAddNew] = useState(false);
   const [isNew, setIsNew] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  // Save function that handles API protocols
-  // Uses the ID of the user-modified determination to make the correct
-  // update to the determinations array before pushing the whole
-  // thing to the DB.
-  const formOnSubmit = (
-    userModifiedDet: IncomeDetermination,
-    detId: number
-  ) => {
-    setSaving(true);
-    console.log(userModifiedDet);
-    setSaving(false);
-  };
 
   // Tracking variables for easy reference in element creation
   const sortedDeterminations = (determinations || []).sort((a, b) =>
@@ -76,7 +55,10 @@ export const UpdateForm: React.FC<IncomeFormProps> = ({
             <Button
               text="Redetermine income"
               appearance="unstyled"
-              onClick={() => setShowNew(true)}
+              onClick={() => {
+                setShowNew(true);
+                setIsNew(true);
+              }}
             />
           )}
         </div>

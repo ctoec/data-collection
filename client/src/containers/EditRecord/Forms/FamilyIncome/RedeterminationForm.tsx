@@ -8,9 +8,8 @@ import {
   Card,
   CardExpansion,
 } from '@ctoec/component-library';
-import { IncomeDeterminationCard } from './Fields/DeterminationCard';
 import { IncomeDetermination } from '../../../../shared/models';
-import { apiPut, apiPost } from '../../../../utils/api';
+import { apiPost } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from './Fields';
 
 type RedeterminationFormProps = {
@@ -19,10 +18,9 @@ type RedeterminationFormProps = {
 };
 
 /**
- * The main form rendered in the EditRecord TabNav that allows a user
- * to update the income determination for a given Child record
- * object. Updates are performed on individual income determinations
- * before being re-persisted to the database.
+ * Form component that allows the generation of a new income determination.
+ * Form is accessed via a button revealed by clicking "Redetermine income,"
+ * and values default to 0 but are overwritten by user input.
  */
 export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   familyId,
@@ -39,12 +37,12 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
     if (closeCard) setCloseCard(false);
   });
 
-  // Save function that handles API protocols
-  // Uses the ID of the user-modified determination to make the correct
-  // update to the determinations array before pushing the whole
-  // thing to the DB.
+  // Save function that handles API protocols. Invokes an api.POST
+  // call to create a new resource in the database to hold the values
+  // of the associated redetermination. FamilyID is also sent so
+  // that the new determination can be associated with the right
+  // family object.
   const onFormSubmit = (newDet: IncomeDetermination) => {
-    console.log(newDet);
     setLoading(true);
     apiPost(`families/${familyId}/incomeDetermination/`, newDet, {
       accessToken,

@@ -38,8 +38,6 @@ familyRouter.put(
 familyRouter.put(
   '/:familyId/incomeDetermination/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
-    // const parsedBody = JSON.parse(req.body);
-
     try {
       const famId = parseInt(req.params['familyId']);
       const detId = parseInt(req.params['determinationId']);
@@ -48,7 +46,6 @@ familyRouter.put(
         id: detId,
         familyId: famId,
       });
-
       if (!detToModify) throw new NotFoundError();
 
       const mergedEntity = getManager().merge(
@@ -57,19 +54,8 @@ familyRouter.put(
         req.body
       );
 
-      // WHY DO YOU REFUSE TO SAVE
       await getManager().save(IncomeDetermination, mergedEntity);
-
-      // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, req.body['income']);
-
-      res.send(mergedEntity);
-
-      // await getManager().save(
-      // getManager().merge(IncomeDetermination, detToModify, req.body)
-      // );
-
-      // await getManager().update(IncomeDetermination, {id: detId, familyId: famId}, newDet);
-      // res.sendStatus(200);
+      res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.log('Error saving changes to income determination: ', err);

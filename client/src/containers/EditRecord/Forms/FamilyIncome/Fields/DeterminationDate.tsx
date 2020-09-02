@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormField, DateInput, DateInputProps } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
-import { IncomeFormFieldProps } from './Common';
 
 /**
  * Component that holds a date picker calendar object that
@@ -10,9 +9,7 @@ import { IncomeFormFieldProps } from './Common';
  * that can result from takinga  date input because it returns
  * a moment but the function expects a simple date.
  */
-export const DeterminationDateField: React.FC<IncomeFormFieldProps> = ({
-  determinationId,
-}) => {
+export const DeterminationDateField: React.FC = () => {
   return (
     <FormField<IncomeDetermination, DateInputProps, Date | null>
       getValue={(data) => data.at('determinationDate')}

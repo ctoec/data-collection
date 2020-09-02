@@ -20,10 +20,9 @@ type EditDeterminationFormProps = {
 };
 
 /**
- * The main form rendered in the EditRecord TabNav that allows a user
- * to update the income determination for a given Child record
- * object. Updates are performed on individual income determinations
- * before being re-persisted to the database.
+ * Form component used for editing an existing income determination.
+ * This form handles its own change events, as well as processes
+ * its own interactions with the backend and the API.
  */
 export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
   determination,
@@ -41,10 +40,9 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
     if (closeCard) setCloseCard(false);
   });
 
-  // Save function that handles API protocols
-  // Uses the ID of the user-modified determination to make the correct
-  // update to the determinations array before pushing the whole
-  // thing to the DB.
+  // Save function that handles API protocols. Uses an api.PUT
+  // request to update an existing determination with the one
+  // that the user has spent time modifying.
   const onFormSubmit = (userModifiedDet: IncomeDetermination) => {
     setLoading(true);
     apiPut(
@@ -52,8 +50,7 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
       userModifiedDet,
       { accessToken }
     )
-      .then((resp) => {
-        console.log(resp);
+      .then(() => {
         setCloseCard(true);
         refetchChild();
       })

@@ -21,7 +21,8 @@ type IncomeDeterminationFieldSetProps = {
 /**
  * Component that uses scenario-based reasoning to assign variables
  * based on whether we're making a new determination or editing an
- * existing one.
+ * existing one. Renders the appropriate individual fields that
+ * allow a user to redetermine income or edit an existing determination.
  */
 export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetProps> = ({
   type,
@@ -56,13 +57,13 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
       legendStyle="title"
     >
       <div>
-        <HouseholdSizeField determinationId={determinationId} />
+        <HouseholdSizeField />
       </div>
       <div>
-        <AnnualHouseholdIncomeField determinationId={determinationId} />
+        <AnnualHouseholdIncomeField />
       </div>
       <div>
-        <DeterminationDateField determinationId={determinationId} />
+        <DeterminationDateField />
       </div>
     </FormFieldSet>
   );
