@@ -63,10 +63,7 @@ async function api(
     headers['Authorization'] = `Bearer ${opts.accessToken}`;
   }
 
-  console.log('opts', opts);
-
   if ((method === 'PUT' || method === 'POST') && !opts.rawBody) {
-    console.log('adding header');
     headers['Content-Type'] = 'application/json';
   }
 

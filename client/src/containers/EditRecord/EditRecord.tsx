@@ -38,10 +38,12 @@ const EditRecord: React.FC = () => {
   const activeTab = useLocation().hash.slice(1);
   const history = useHistory();
   // and make child tab active by default if no hash
+  // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
       history.replace({ hash: TAB_IDS.CHILD });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

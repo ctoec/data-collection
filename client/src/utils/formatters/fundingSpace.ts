@@ -2,9 +2,9 @@ import {
   FundingSpace,
   FundingTime,
   FundingTimeSplit,
-} from '../../../../../../../shared/models';
+} from '../../shared/models';
 
-export const getContractSpaceString = (fundingSpace: FundingSpace) => {
+export const fundingSpaceFormatter = (fundingSpace: FundingSpace) => {
   const FULL_YEAR_WEEKS = 52;
   if (fundingSpace.time !== FundingTime.Split) {
     return `${fundingSpace.time} (${FULL_YEAR_WEEKS} weeks)`;

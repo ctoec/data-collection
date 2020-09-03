@@ -38,7 +38,9 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
+  // to make form re-openable
   // (not only when closeCard changes)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (closeCard) setCloseCard(false);
   });

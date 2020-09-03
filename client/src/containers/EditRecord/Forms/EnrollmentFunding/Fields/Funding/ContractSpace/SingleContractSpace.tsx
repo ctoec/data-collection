@@ -6,7 +6,7 @@ import {
   TObjectDriller,
 } from '@ctoec/component-library';
 import { FundingSpace, Funding } from '../../../../../../../shared/models';
-import { getContractSpaceString } from './common';
+import { fundingSpaceFormatter } from '../../../../../../../utils/formatters';
 import {
   ChangeEnrollment,
   ChangeFunding,
@@ -32,12 +32,12 @@ export const SingleContractSpaceField = <
         set({ ..._data }, currentFundingSpace.path, fundingSpace)
       );
     }
-  }, [fundingSpace]);
+  }, [fundingSpace, currentFundingSpace, updateData]);
 
   return (
     <div>
       <span className="usa-hint text-italic">
-        {getContractSpaceString(fundingSpace)}
+        {fundingSpaceFormatter(fundingSpace)}
       </span>
     </div>
   );

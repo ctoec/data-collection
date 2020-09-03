@@ -13,6 +13,7 @@ import {
   ChangeFunding,
   ChangeEnrollment,
 } from '../../../../../../shared/payloads';
+import { reportingPeriodFormatter } from '../../../../../../utils/formatters';
 
 type ReportingPeriodProps<T> = {
   reportingPeriods: ReportingPeriod[];
@@ -59,7 +60,7 @@ export const ReportingPeriodField = <
     );
 
     setReportingPeriodOptions(_reportingPeriodOptions);
-  }, [reportingPeriods]);
+  }, [reportingPeriods, reportingPeriod]);
 
   return (
     <FormField<T, SelectProps, number | null>
@@ -70,21 +71,10 @@ export const ReportingPeriodField = <
       name={`${isLast ? 'last' : 'first'}-reporting-period`}
       label={label || `${isLast ? 'Last' : 'First'} reporting period`}
       options={reportingPeriodOptions.map((rp) => ({
-        text: getReportingPeriodString(rp),
+        text: reportingPeriodFormatter(rp),
         value: `${rp.id}`,
       }))}
       optional={optional}
     />
   );
 };
-
-/**
- * Util to format reporting period like: "March 2020 (3/2-3/31)""
- * @param reportingPeriod
- */
-const getReportingPeriodString = (reportingPeriod: ReportingPeriod) =>
-  `${reportingPeriod.period.format(
-    'MMMM YYYY'
-  )} (${reportingPeriod.periodStart.format(
-    'M/D'
-  )}-${reportingPeriod.periodEnd.format('M/D')})`;

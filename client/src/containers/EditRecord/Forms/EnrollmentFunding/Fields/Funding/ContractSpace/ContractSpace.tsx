@@ -7,11 +7,11 @@ import {
 } from '@ctoec/component-library';
 import { FundingSpace, Funding } from '../../../../../../../shared/models';
 import { SingleContractSpaceField } from './SingleContractSpace';
-import { getContractSpaceString } from './common';
 import {
   ChangeFunding,
   ChangeEnrollment,
 } from '../../../../../../../shared/payloads';
+import { fundingSpaceFormatter } from '../../../../../../../utils/formatters';
 
 type ContractSpaceProps<T> = {
   fundingSpaceOptions: FundingSpace[];
@@ -44,7 +44,7 @@ export const ContractSpaceField = <
       label="Contract space"
       id="contract-space"
       options={fundingSpaceOptions.map((fs) => ({
-        text: getContractSpaceString(fs),
+        text: fundingSpaceFormatter(fs),
         value: `${fs.id}`,
       }))}
     />

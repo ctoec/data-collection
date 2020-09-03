@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  AgeGroup,
   FundingSpace,
-  Site,
   FundingSource,
   ReportingPeriod,
   Funding,
