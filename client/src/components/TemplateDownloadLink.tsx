@@ -3,14 +3,34 @@ import { Button, TextWithIcon } from '@ctoec/component-library';
 import { ReactComponent as DownloadArrow } from '@ctoec/component-library/dist/assets/images/download.svg';
 import { downloadStreamToFile } from '../utils/fileDownload';
 
-export const TemplateDownloadLink = ({ type }: { type?: 'xlsx' | 'csv' }) => {
-  const downloadText =
+type TemplateDownloadLinkProps = {
+  type?: 'xlsx' | 'csv';
+  nav?: boolean;
+};
+
+export const TemplateDownloadLink = ({
+  type,
+  nav,
+}: TemplateDownloadLinkProps) => {
+  let downloadText =
     type === 'csv' ? 'Download .csv Template' : 'Download Excel Template';
 
   async function downloadTemplate() {
     await downloadStreamToFile(
       `column-metadata/${type}`,
       `ECE Data Collection Template.${type}`
+    );
+  }
+
+  if (nav) {
+    downloadText = type === 'csv' ? '.csv' : 'Excel';
+
+    return (
+      <Button
+        appearance="unstyled"
+        onClick={downloadTemplate}
+        text={downloadText}
+      />
     );
   }
 
