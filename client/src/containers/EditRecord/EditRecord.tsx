@@ -24,6 +24,16 @@ const EditRecord: React.FC = () => {
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  // Basic trigger functions to operate the delete warning modal
+  function openModal() {
+    console.log('modal open!');
+    setDeleteModalOpen(true);
+  }
+  function closeModal() {
+    setDeleteModalOpen(false);
+  }
 
   // Counter to trigger re-run of child fetch in
   // useEffect hook
@@ -64,23 +74,22 @@ const EditRecord: React.FC = () => {
           <h1>
             Edit information for {rowData.firstName} {rowData.lastName}
           </h1>
-
-          <FormStatus
-            type="warning"
-            id="warn"
-            message="Deleting an enrollment record will permanently remove all of its data"
-            // heading={`Do you want to delete the enrollment for ${rowData.firstName} ${rowData.lastName}`}
-          />
         </div>
-        {/* <div className='margin-right-2'> */}
         <Button
+          appearance="unstyled"
+          onClick={openModal}
           text="Delete record"
           className="margin-right-0"
-          appearance="unstyled"
-          onClick={deleteRecord}
         />
-        {/* </div> */}
-        {/* </div> */}
+        <Modal
+          isOpen={deleteModalOpen}
+          onAfterOpen={() => console.log('MODAL IS OPEN')}
+          onRequestClose={closeModal}
+          contentLabel="Delete Modal"
+        >
+          <div>I am a modal</div>
+        </Modal>
+        {/* </Button> */}
       </div>
       <TabNav
         items={[
