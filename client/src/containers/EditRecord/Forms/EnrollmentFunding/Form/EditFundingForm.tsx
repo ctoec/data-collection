@@ -30,6 +30,12 @@ type EditFundingFormProps = {
   refetchChild: () => void;
 };
 
+/**
+ * Component for displaying and editing an existing Funding.
+ * Does not enable fundingSource to be updated, as this invalidates
+ * reporting period and fundingSpace information, and should
+ * instead be handled by deleting and creating new funding.
+ */
 export const EditFundingForm: React.FC<EditFundingFormProps> = ({
   fundingSpaces,
   reportingPeriods,
@@ -108,30 +114,27 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
           data={funding}
           onSubmit={onSubmit}
         >
-          {/* <FundingField
-            fundingSpaces={fundingSpaces}
-            reportingPeriods={reportingPeriods}
-            ageGroup={enrollment.ageGroup}
-            site={enrollment.site}
-          /> */}
-          <ContractSpaceField
+          <ContractSpaceField<Funding>
             fundingSpaceOptions={fundingSpaces.filter(
               (fs) =>
                 fs.ageGroup === enrollment.ageGroup &&
                 fs.source === funding.fundingSpace.source &&
                 fs.organization.id === enrollment.site.organization.id
             )}
+            accessor={(data) => data.at('fundingSpace')}
           />
-          <ReportingPeriodField
+          <ReportingPeriodField<Funding>
             reportingPeriods={reportingPeriods.filter(
               (rp) => rp.type === funding.fundingSpace.source
             )}
+            accessor={(data) => data.at('firstReportingPeriod')}
           />
           {!!funding.lastReportingPeriod && (
-            <ReportingPeriodField
+            <ReportingPeriodField<Funding>
               reportingPeriods={reportingPeriods.filter(
                 (rp) => rp.type === funding.fundingSpace.source
               )}
+              accessor={(data) => data.at('lastReportingPeriod')}
               isLast={true}
             />
           )}

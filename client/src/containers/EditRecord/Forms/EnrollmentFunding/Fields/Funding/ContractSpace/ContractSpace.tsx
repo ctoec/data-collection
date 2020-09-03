@@ -1,53 +1,52 @@
 import React from 'react';
-import { FundingSpace, Funding } from '../../../../../../../shared/models';
-import { SelectProps, FormField, Select } from '@ctoec/component-library';
-import { ChangeFunding } from '../../../../../../../shared/payloads/ChangeFunding';
 import {
-  ChangeFundingSingleContractSpaceField,
-  FundingSingleContractSpaceField,
-} from './SingleContractSpace';
+  SelectProps,
+  FormField,
+  Select,
+  TObjectDriller,
+} from '@ctoec/component-library';
+import { FundingSpace, Funding } from '../../../../../../../shared/models';
+import { SingleContractSpaceField } from './SingleContractSpace';
 import { getContractSpaceString } from './common';
+import {
+  ChangeFunding,
+  ChangeEnrollment,
+} from '../../../../../../../shared/payloads';
 
-type ContractSpaceProps = {
+type ContractSpaceProps<T> = {
   fundingSpaceOptions: FundingSpace[];
-  isChangeFunding?: boolean;
+  accessor: (_: TObjectDriller<T>) => TObjectDriller<FundingSpace>;
 };
 
-export const ContractSpaceField: React.FC<ContractSpaceProps> = ({
+export const ContractSpaceField = <
+  T extends Funding | ChangeFunding | ChangeEnrollment
+>({
   fundingSpaceOptions,
-  isChangeFunding = false,
-}) => {
+  accessor,
+}: ContractSpaceProps<T>) => {
   if (fundingSpaceOptions.length === 1) {
-    return isChangeFunding ? (
-      <ChangeFundingSingleContractSpaceField
+    return (
+      <SingleContractSpaceField<T>
         fundingSpace={fundingSpaceOptions[0]}
+        accessor={accessor}
       />
-    ) : (
-      <FundingSingleContractSpaceField fundingSpace={fundingSpaceOptions[0]} />
     );
   }
 
-  const commonProps = {
-    parseOnChangeEvent: (e: React.ChangeEvent<any>) =>
-      parseInt(e.target.value) || null,
-    name: 'contract-space',
-    inputComponent: Select,
-    label: 'Contract space',
-    id: 'contract-space',
-    options: fundingSpaceOptions.map((fs) => ({
-      text: getContractSpaceString(fs),
-      value: `${fs.id}`,
-    })),
-  };
-  return isChangeFunding ? (
-    <FormField<ChangeFunding, SelectProps, number | null>
-      getValue={(data) => data.at('newFunding').at('fundingSpace').at('id')}
-      {...commonProps}
-    />
-  ) : (
-    <FormField<Funding, SelectProps, number | null>
-      getValue={(data) => data.at('fundingSpace').at('id')}
-      {...commonProps}
+  return (
+    <FormField<T, SelectProps, number | null>
+      getValue={(data) => accessor(data).at('id')}
+      parseOnChangeEvent={(e: React.ChangeEvent<any>) =>
+        parseInt(e.target.value) || null
+      }
+      name="contract-space"
+      inputComponent={Select}
+      label="Contract space"
+      id="contract-space"
+      options={fundingSpaceOptions.map((fs) => ({
+        text: getContractSpaceString(fs),
+        value: `${fs.id}`,
+      }))}
     />
   );
 };

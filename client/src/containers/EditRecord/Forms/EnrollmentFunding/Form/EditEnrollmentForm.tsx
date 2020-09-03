@@ -12,11 +12,7 @@ import {
   Alert,
 } from '@ctoec/component-library';
 import { Enrollment } from '../../../../../shared/models';
-import {
-  AgeGroupField,
-  EnrollmentEndDateField,
-  EnrollmentStartDateField,
-} from '../Fields';
+import { EnrollmentEndDateField, EnrollmentStartDateField } from '../Fields';
 import { apiPut } from '../../../../../utils/api';
 import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
 
@@ -25,6 +21,13 @@ type EditEnrollmentFormProps = {
   isCurrent?: boolean;
   refetchChild: () => void;
 };
+
+/**
+ * Component for displaying and editing an existing Enrollment.
+ * Does not enable ageGroup to be updated, as this invalidates
+ * all funding information, and should instead be handled by deleting
+ * and creating a new Enrollment object.
+ */
 export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
   enrollment,
   isCurrent = false,
@@ -103,15 +106,17 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
           onSubmit={onSubmit}
         >
           <h3 className="font-heading-md margin-bottom-0">Start date</h3>
-          <EnrollmentStartDateField />
+          <EnrollmentStartDateField<Enrollment>
+            accessor={(data) => data.at('entry')}
+          />
           {enrollment.exit && (
             <>
               <h3 className="font-heading-md margin-bottom-0">End date</h3>
-              <EnrollmentEndDateField />
+              <EnrollmentEndDateField<Enrollment>
+                accessor={(data) => data.at('exit')}
+              />
             </>
           )}
-          <h3 className="font-heading-md margin-bottom-0">Age group</h3>
-          <AgeGroupField />
 
           <ExpandCard>
             <Button text="Cancel" appearance="outline" />

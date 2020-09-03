@@ -6,6 +6,7 @@ import {
   FundingSource,
   ReportingPeriod,
   Funding,
+  Enrollment,
 } from '../../../../../../shared/models';
 import {
   RadioButtonGroup,
@@ -13,28 +14,36 @@ import {
   RadioOptionRenderProps,
   useGenericContext,
   FormContext,
+  TObjectDriller,
 } from '@ctoec/component-library';
 import { ContractSpaceField } from './ContractSpace/ContractSpace';
 import { ReportingPeriodField } from './ReportingPeriod';
+import {
+  ChangeFunding,
+  ChangeEnrollment,
+} from '../../../../../../shared/payloads';
 
 const PRIVATE_PAY = 'private-pay';
 
-type FundingFieldProps = {
-  ageGroup: AgeGroup | undefined;
-  site: Site;
+type FundingFieldProps<T> = {
   fundingSpaces: FundingSpace[];
   reportingPeriods: ReportingPeriod[];
-  isChangeFunding?: boolean;
+  fundingAccessor: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
+  getEnrollment: (_: TObjectDriller<T>) => Enrollment;
 };
 
-export const FundingField: React.FC<FundingFieldProps> = ({
-  ageGroup,
-  site,
+/**
+ * Component for creating a new funding, either for an existing enrollment
+ * or as part of creating a new enrollment.
+ */
+export const FundingField = <T extends ChangeFunding | ChangeEnrollment>({
   fundingSpaces,
   reportingPeriods,
-  isChangeFunding = false,
-}) => {
-  const { data } = useGenericContext<Funding>(FormContext);
+  fundingAccessor,
+  getEnrollment,
+}: FundingFieldProps<T>) => {
+  const { dataDriller } = useGenericContext<T>(FormContext);
+  const enrollment = getEnrollment(dataDriller);
 
   const [fundingSpaceOptions, setFundingSpaceOptions] = useState<
     FundingSpace[]
@@ -49,7 +58,8 @@ export const FundingField: React.FC<FundingFieldProps> = ({
   useEffect(() => {
     const _fundingSpaceOptions = fundingSpaces.filter(
       (fs) =>
-        fs.ageGroup === ageGroup && fs.organization.id === site.organization.id
+        fs.ageGroup === enrollment?.ageGroup &&
+        fs.organization.id === enrollment?.site.organization.id
     );
     setFundingSpaceOptions(_fundingSpaceOptions);
 
@@ -58,76 +68,45 @@ export const FundingField: React.FC<FundingFieldProps> = ({
     );
 
     setFundingSourceOptions(Array.from(_fundingSourceOptions));
-  }, [ageGroup, site, fundingSpaces]);
-
-  const radioOptions = [
-    {
-      render: (props: RadioOptionRenderProps) => (
-        <RadioButton {...props} text="Private pay" />
-      ),
-      value: PRIVATE_PAY,
-    },
-    ...fundingSourceOptions.map((fundingSource) => ({
-      render: (props: RadioOptionRenderProps) => (
-        <RadioButton {...props} text={fundingSource} />
-      ),
-      value: fundingSource,
-      expansion: (
-        <FundingOptionExpansion
-          fundingSpaceOptions={fundingSpaceOptions.filter(
-            (fs) => fs.source === fundingSource
-          )}
-          reportingPeriodOptions={reportingPeriods.filter(
-            (rp) => rp.type === fundingSource
-          )}
-          showLastReportingPeriod={!!data.lastReportingPeriod}
-          isChangeFunding={isChangeFunding}
-        />
-      ),
-    })),
-  ];
+  }, [enrollment, fundingSpaces]);
 
   return (
     <RadioButtonGroup
-      defaultValue={data.fundingSpace ? data.fundingSpace.source : PRIVATE_PAY}
       id="funding-source"
       name="funding-source"
-      options={radioOptions}
       legend="Funding source options"
+      options={[
+        {
+          render: (props: RadioOptionRenderProps) => (
+            <RadioButton {...props} text="Private pay" />
+          ),
+          value: PRIVATE_PAY,
+        },
+        ...fundingSourceOptions.map((fundingSource) => ({
+          render: (props: RadioOptionRenderProps) => (
+            <RadioButton {...props} text={fundingSource} />
+          ),
+          value: fundingSource,
+          expansion: (
+            <>
+              <ContractSpaceField<T>
+                fundingSpaceOptions={fundingSpaceOptions.filter(
+                  (fs) => fs.source === fundingSource
+                )}
+                accessor={(data) => fundingAccessor(data).at('fundingSpace')}
+              />
+              <ReportingPeriodField<T>
+                reportingPeriods={reportingPeriods.filter(
+                  (rp) => rp.type === fundingSource
+                )}
+                accessor={(data) =>
+                  fundingAccessor(data).at('firstReportingPeriod')
+                }
+              />
+            </>
+          ),
+        })),
+      ]}
     />
-  );
-};
-
-type FundingOptionExpansionProps = {
-  fundingSpaceOptions: FundingSpace[];
-  reportingPeriodOptions: ReportingPeriod[];
-  showLastReportingPeriod?: boolean;
-  isChangeFunding?: boolean;
-};
-
-const FundingOptionExpansion: React.FC<FundingOptionExpansionProps> = ({
-  fundingSpaceOptions,
-  reportingPeriodOptions,
-  showLastReportingPeriod = false,
-  isChangeFunding = false,
-}) => {
-  return (
-    <>
-      <ContractSpaceField
-        fundingSpaceOptions={fundingSpaceOptions}
-        isChangeFunding={isChangeFunding}
-      />
-      <ReportingPeriodField
-        reportingPeriods={reportingPeriodOptions}
-        isChangeFunding={isChangeFunding}
-      />
-      {showLastReportingPeriod && (
-        <ReportingPeriodField
-          reportingPeriods={reportingPeriodOptions}
-          isLast={true}
-          isChangeFunding={isChangeFunding}
-        />
-      )}
-    </>
   );
 };

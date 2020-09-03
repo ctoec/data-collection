@@ -60,7 +60,10 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
   return (
     <>
       <ChangeEnrollmentForm
+        reportingPeriods={reportingPeriods}
+        fundingSpaces={fundingSpaces}
         childName={childName}
+        currentEnrollment={currentEnrollment}
         childId={childId}
         sites={sites}
         refetchChild={refetchChild}

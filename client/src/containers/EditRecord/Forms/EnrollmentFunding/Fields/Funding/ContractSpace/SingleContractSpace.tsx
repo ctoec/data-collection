@@ -1,52 +1,36 @@
 import React, { useEffect } from 'react';
-import { useGenericContext, FormContext } from '@ctoec/component-library';
+import set from 'lodash/set';
+import {
+  useGenericContext,
+  FormContext,
+  TObjectDriller,
+} from '@ctoec/component-library';
 import { FundingSpace, Funding } from '../../../../../../../shared/models';
-import { ChangeFunding } from '../../../../../../../shared/payloads/ChangeFunding';
 import { getContractSpaceString } from './common';
+import {
+  ChangeEnrollment,
+  ChangeFunding,
+} from '../../../../../../../shared/payloads';
 
-type SingleContractSpaceProps = {
+type SingleContractSpaceProps<T> = {
   fundingSpace: FundingSpace;
+  accessor: (_: TObjectDriller<T>) => TObjectDriller<FundingSpace>;
 };
 
-export const FundingSingleContractSpaceField: React.FC<SingleContractSpaceProps> = ({
+export const SingleContractSpaceField = <
+  T extends Funding | ChangeFunding | ChangeEnrollment
+>({
   fundingSpace,
-}) => {
-  const { updateData, data } = useGenericContext<Funding>(FormContext);
-  const currentFundingSpaceId = data?.fundingSpace?.id;
+  accessor,
+}: SingleContractSpaceProps<T>) => {
+  const { updateData, dataDriller } = useGenericContext<T>(FormContext);
+  const currentFundingSpace = accessor(dataDriller);
 
   useEffect(() => {
-    if (currentFundingSpaceId !== fundingSpace.id) {
-      updateData((_data) => ({
-        ..._data,
-        fundingSpace,
-      }));
-    }
-  }, [fundingSpace]);
-
-  return (
-    <div>
-      <span className="usa-hint text-italic">
-        {getContractSpaceString(fundingSpace)}
-      </span>
-    </div>
-  );
-};
-
-export const ChangeFundingSingleContractSpaceField: React.FC<SingleContractSpaceProps> = ({
-  fundingSpace,
-}) => {
-  const { updateData, data } = useGenericContext<ChangeFunding>(FormContext);
-  const currentFundingSpaceId = data?.newFunding?.fundingSpace?.id;
-
-  useEffect(() => {
-    if (currentFundingSpaceId !== fundingSpace.id) {
-      updateData((_data) => ({
-        ..._data,
-        newFunding: {
-          ..._data.newFunding,
-          fundingSpace,
-        } as Funding,
-      }));
+    if (currentFundingSpace.at('id').value !== fundingSpace.id) {
+      updateData((_data) =>
+        set({ ..._data }, currentFundingSpace.path, fundingSpace)
+      );
     }
   }, [fundingSpace]);
 

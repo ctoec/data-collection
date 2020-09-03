@@ -6,32 +6,50 @@ import {
   SelectProps,
   FormField,
   Select,
+  TObjectDriller,
 } from '@ctoec/component-library';
 import moment from 'moment';
-import { ChangeFunding } from '../../../../../../shared/payloads/ChangeFunding';
+import {
+  ChangeFunding,
+  ChangeEnrollment,
+} from '../../../../../../shared/payloads';
 
-type LastReportingPeriodProps = {
+type ReportingPeriodProps<T> = {
   reportingPeriods: ReportingPeriod[];
+  accessor: (_: TObjectDriller<T>) => TObjectDriller<ReportingPeriod>;
   isLast?: boolean;
-  isChangeFunding?: boolean;
+  label?: string;
+  optional?: boolean;
 };
 
-export const ReportingPeriodField: React.FC<LastReportingPeriodProps> = ({
+/**
+ * Component for altering the first or last reporting period on a
+ * funding.
+ *
+ * Expects that provided reporting periods are already filtered by FundingSource;
+ * this component does not do any funding source checking/filtering
+ */
+export const ReportingPeriodField = <
+  T extends Funding | ChangeFunding | ChangeEnrollment
+>({
   reportingPeriods,
-  isLast = false,
-  isChangeFunding = false,
-}) => {
-  const { data } = useGenericContext<Funding>(FormContext);
+  accessor,
+  isLast,
+  label,
+  optional,
+}: ReportingPeriodProps<T>) => {
+  const { dataDriller } = useGenericContext<T>(FormContext);
   const [reportingPeriodOptions, setReportingPeriodOptions] = useState<
     ReportingPeriod[]
   >([]);
 
+  const reportingPeriod = accessor(dataDriller).value;
   useEffect(() => {
     // Only display 5 options, centered around existing value or today
+    // No need to account for "isChangeFunding", because in that situation
+    // a reporting period value will never exist
     const existingValueOrThisMonth =
-      (isLast
-        ? data.lastReportingPeriod?.period
-        : data.firstReportingPeriod?.period) || moment.utc().startOf('month');
+      reportingPeriod?.period || moment.utc().startOf('month');
     const twoMonthsPrior = existingValueOrThisMonth.clone().add(-2, 'months');
     const twoMonthsAfter = existingValueOrThisMonth.clone().add(2, 'months');
     const _reportingPeriodOptions = reportingPeriods.filter(
@@ -43,44 +61,27 @@ export const ReportingPeriodField: React.FC<LastReportingPeriodProps> = ({
     setReportingPeriodOptions(_reportingPeriodOptions);
   }, [reportingPeriods]);
 
-  const commonProps = {
-    parseOnChangeEvent: (e: React.ChangeEvent<any>) =>
-      parseInt(e.target.value) || null,
-    inputComponent: Select,
-    id: !isLast ? 'first-reporting-period' : 'last-reporting-period',
-    name: !isLast ? 'first-reporting-period' : 'last-reporting-period',
-    label: !isLast
-      ? 'First reporting period'
-      : !isChangeFunding
-      ? 'Last reporting period'
-      : 'Last reporting period for current funding',
-    options: reportingPeriodOptions.map((rp) => ({
-      text: getReportingPeriodString(rp),
-      value: `${rp.id}`,
-    })),
-  };
-
-  return isChangeFunding ? (
-    <FormField<ChangeFunding, SelectProps, number | null>
-      getValue={(data) =>
-        isLast
-          ? data.at('oldFunding').at('lastReportingPeriod').at('id')
-          : data.at('newFunding').at('firstReportingPeriod').at('id')
-      }
-      {...commonProps}
-    />
-  ) : (
-    <FormField<Funding, SelectProps, number | null>
-      getValue={(data) =>
-        data
-          .at(!isLast ? 'firstReportingPeriod' : 'lastReportingPeriod')
-          .at('id')
-      }
-      {...commonProps}
+  return (
+    <FormField<T, SelectProps, number | null>
+      getValue={(data) => accessor(data).at('id')}
+      parseOnChangeEvent={(e) => parseInt(e.target.value) || null}
+      inputComponent={Select}
+      id={`${isLast ? 'last' : 'first'}-reporting-period`}
+      name={`${isLast ? 'last' : 'first'}-reporting-period`}
+      label={label || `${isLast ? 'Last' : 'First'} reporting period`}
+      options={reportingPeriodOptions.map((rp) => ({
+        text: getReportingPeriodString(rp),
+        value: `${rp.id}`,
+      }))}
+      optional={optional}
     />
   );
 };
 
+/**
+ * Util to format reporting period like: "March 2020 (3/2-3/31)""
+ * @param reportingPeriod
+ */
 const getReportingPeriodString = (reportingPeriod: ReportingPeriod) =>
   `${reportingPeriod.period.format(
     'MMMM YYYY'

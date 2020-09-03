@@ -3,7 +3,6 @@ import {
   Enrollment,
   FundingSpace,
   ReportingPeriod,
-  Funding,
 } from '../../../../../shared/models';
 import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { ChangeFunding } from '../../../../../shared/payloads/ChangeFunding';
@@ -25,6 +24,12 @@ type ChangeFundingFormProps = {
   refetchChild: () => void;
 };
 
+/**
+ * Component for gathering user input to change enrollment's funding.
+ * Uses a ChangeFunding data object to enable the user to provide
+ * new funding data and/or last reporting period for previously current
+ * funding, based on user's chosen action (start new funding vs end current funding)
+ */
 export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
   fundingSpaces,
   reportingPeriods,
@@ -80,21 +85,23 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
               onSubmit={onSubmit}
             >
               {visibleForm === 'start' && (
-                <FundingField
+                <FundingField<ChangeFunding>
+                  fundingAccessor={(data) => data.at('newFunding')}
+                  getEnrollment={() => enrollment}
                   reportingPeriods={reportingPeriods}
                   fundingSpaces={fundingSpaces}
-                  ageGroup={enrollment.ageGroup}
-                  site={enrollment.site}
-                  isChangeFunding={true}
                 />
               )}
               {!!activeFunding && (
-                <ReportingPeriodField
+                <ReportingPeriodField<ChangeFunding>
+                  accessor={(data) =>
+                    data.at('oldFunding').at('lastReportingPeriod')
+                  }
                   reportingPeriods={reportingPeriods.filter(
                     (rp) => rp.type === activeFunding.fundingSpace.source
                   )}
                   isLast={true}
-                  isChangeFunding={true}
+                  optional={visibleForm === 'start'}
                 />
               )}
               <Button

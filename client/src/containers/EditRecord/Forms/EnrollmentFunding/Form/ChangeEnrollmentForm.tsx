@@ -10,20 +10,43 @@ import {
   Alert,
 } from '@ctoec/component-library';
 import { ChangeEnrollment } from '../../../../../shared/payloads';
-import { Enrollment, Site } from '../../../../../shared/models';
+import {
+  Enrollment,
+  Site,
+  ReportingPeriod,
+  FundingSpace,
+} from '../../../../../shared/models';
 import { apiPost } from '../../../../../utils/api';
-import { SiteField, AgeGroupField, EnrollmentStartDateField } from '../Fields';
+import {
+  SiteField,
+  AgeGroupField,
+  EnrollmentStartDateField,
+  EnrollmentEndDateField,
+  ReportingPeriodField,
+  FundingField,
+} from '../Fields';
 
 type ChangeEnrollmentFormProps = {
   childName: string;
   childId: string;
+  currentEnrollment?: Enrollment;
+  reportingPeriods: ReportingPeriod[];
+  fundingSpaces: FundingSpace[];
   sites: Site[];
   refetchChild: () => void;
 };
 
+/**
+ * Component for gathering user input to change child's Enrollment.
+ * Uses a ChangeEnrollment data object to enable the user to provide
+ * enrollment end date and funding last reporting period for previously current data.
+ */
 export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   childName,
   childId,
+  currentEnrollment,
+  reportingPeriods,
+  fundingSpaces,
   sites,
   refetchChild,
 }) => {
@@ -60,6 +83,9 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       .finally(() => setLoading(false));
   };
 
+  const activeFunding = (currentEnrollment?.fundings || []).find(
+    (f) => !f.lastReportingPeriod
+  );
   return (
     <Card forceClose={closeCard}>
       <div className="display-flex flex-justify">
@@ -81,12 +107,55 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           data={{ newEnrollment: {} as Enrollment }}
           onSubmit={onSubmit}
         >
+          <h4>New enrollment</h4>
           <h4 className="font-heading-md margin-bottom-0">Site</h4>
-          <SiteField sites={sites} isChangeEnrollment={true} />
+          <SiteField<ChangeEnrollment>
+            sites={sites}
+            accessor={(data) => data.at('newEnrollment').at('site')}
+          />
           <h4 className="font-heading-md margin-bottom-0">Start date</h4>
-          <EnrollmentStartDateField isChangeEnrollment={true} />
+          <EnrollmentStartDateField<ChangeEnrollment>
+            accessor={(data) => data.at('newEnrollment').at('entry')}
+          />
           <h4 className="font-heading-md margin-bottom-0">Age group</h4>
-          <AgeGroupField isChangeEnrollment={true} />
+          <AgeGroupField<ChangeEnrollment>
+            accessor={(data) => data.at('newEnrollment').at('ageGroup')}
+          />
+
+          <FundingField<ChangeEnrollment>
+            fundingAccessor={(data) =>
+              data.at('newEnrollment').at('fundings').at(0)
+            }
+            getEnrollment={(data) => data.at('newEnrollment').value}
+            fundingSpaces={fundingSpaces}
+            reportingPeriods={reportingPeriods}
+          />
+
+          {!!currentEnrollment && (
+            <>
+              <h4>Previous enrollment</h4>
+              <h4 className="font-heading-md margin-bottom-0">End date</h4>
+              <EnrollmentEndDateField<ChangeEnrollment>
+                accessor={(data) => data.at('oldEnrollment').at('exitDate')}
+                optional={true}
+              />
+              {activeFunding && (
+                <ReportingPeriodField<ChangeEnrollment>
+                  accessor={(data) =>
+                    data
+                      .at('oldEnrollment')
+                      .at('funding')
+                      .at('lastReportingPeriod')
+                  }
+                  reportingPeriods={reportingPeriods.filter(
+                    (rp) => rp.type === activeFunding.fundingSpace?.source
+                  )}
+                  isLast={true}
+                  optional={true}
+                />
+              )}
+            </>
+          )}
 
           <ExpandCard>
             <Button text="Cancel" appearance="outline" />
