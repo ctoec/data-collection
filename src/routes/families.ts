@@ -64,6 +64,9 @@ familyRouter.put(
   })
 );
 
+/**
+ * /families/:familyId/income-determination POST
+ */
 familyRouter.post(
   '/:familyId/income-determination',
   passAsyncError(async (req: Request, res: Response) => {
