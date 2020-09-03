@@ -6,8 +6,8 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
-import { FamilyIncomeForm } from './Forms/FamilyIncome/Form';
 import {
+  FamilyIncomeForm,
   ChildInfoForm,
   CareForKidsForm,
   FamilyInfoForm,
