@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav, Button, Alert, FormStatus } from '@ctoec/component-library';
+import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiGet } from '../../utils/api';
+import { apiGet, apiDelete } from '../../utils/api';
 import { Child } from '../../shared/models';
 import { CareForKidsForm } from './Forms/CareForKids';
 import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
@@ -25,10 +25,11 @@ const EditRecord: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  // const [checkDataId, setCheckDataId] = useState();
 
   // Basic trigger functions to operate the delete warning modal
   function openModal() {
-    console.log('modal open!');
     setDeleteModalOpen(true);
   }
   function closeModal() {
@@ -57,13 +58,16 @@ const EditRecord: React.FC = () => {
   }, [accessToken, childId, refetch]);
 
   function deleteRecord() {
-    return (
-      <Alert
-        type="error"
-        text="Deleting an enrollment record will permanently remove all of its data"
-        // heading={`Do you want to delete the enrollment for ${rowData.firstName} ${rowData.lastName}`}
-      />
-    );
+    setIsDeleting(true);
+    apiDelete(`children/${childId}`, { accessToken })
+      .then(() => history.push(``))
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setDeleteModalOpen(false);
+        setIsDeleting(false);
+      });
   }
 
   return rowData ? (
@@ -81,15 +85,33 @@ const EditRecord: React.FC = () => {
           text="Delete record"
           className="margin-right-0"
         />
-        <Modal
-          isOpen={deleteModalOpen}
-          onAfterOpen={() => console.log('MODAL IS OPEN')}
-          onRequestClose={closeModal}
-          contentLabel="Delete Modal"
-        >
-          <div>I am a modal</div>
-        </Modal>
-        {/* </Button> */}
+          <Modal
+            isOpen={deleteModalOpen}
+            contentLabel="Delete Modal"
+          >
+            <div className='grid-container'>
+              <div className='grid-row margin-top-2'>
+                <h2>Do you want to delete the enrollment for {rowData.firstName} {rowData.lastName}?</h2>
+              </div>
+              <div className='grid-row margin-top-2'>
+                <span>Deleting an enrollment record will permanently remove all of its data</span>
+              </div>
+              <div className='margin-top-4'>
+                <div className='grid-row flex-first-baseline space-between-4'>
+                  <Button 
+                    appearance='outline'
+                    onClick={closeModal}
+                    text='No, cancel'
+                  />
+                  <Button
+                    appearance={isDeleting ? 'outline' : 'default'}
+                    onClick={deleteRecord}
+                    text={isDeleting ? 'Deleting record...' : 'Yes, delete record'}
+                  />
+                </div>
+              </div>
+            </div>
+          </Modal>
       </div>
       <TabNav
         items={[
