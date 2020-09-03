@@ -40,12 +40,12 @@ const App: React.FC = () => {
             path: '/data-requirements',
           },
           {
-            // TODO: FIX-- needs to not be a nav link :/
             text: 'Feedback',
             type: 'secondary',
             path: mailToLinkProps.href,
             target: mailToLinkProps.target,
-            rel: mailToLinkProps.rel,
+            // TODO: MERGE COMPONENT LIBRARY PR AND UNCOMMENT
+            // external: true,
           },
         ]}
         userFirstName={user?.firstName}
