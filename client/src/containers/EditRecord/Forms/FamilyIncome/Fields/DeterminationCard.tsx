@@ -8,8 +8,8 @@ import {
   ExpandCard,
   Pencil,
 } from '@ctoec/component-library';
-import { currencyFormatter } from '../../../../../utils/formatters';
 import { IncomeDetermination } from '../../../../../shared/models';
+import currencyFormatter from '../../../../../utils/formatters/currency';
 
 /**
  * Type to hold the basic properties of an income determination card.

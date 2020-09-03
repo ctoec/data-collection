@@ -1,6 +1,9 @@
 import { isNull } from 'util';
 
-export const currencyFormatter = (number: number, excludeDollarSign?: true) => {
+export default function currencyFormatter(
+  number: number,
+  excludeDollarSign?: true
+) {
   if (isNull(number)) {
     return '';
   }
@@ -12,4 +15,4 @@ export const currencyFormatter = (number: number, excludeDollarSign?: true) => {
     (!excludeDollarSign ? '$' : '') +
     val.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   );
-};
+}

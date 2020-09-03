@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ReportingPeriod, Funding } from '../../../../../../shared/models';
+import {
+  ReportingPeriod,
+  Funding,
+  Enrollment,
+} from '../../../../../../shared/models';
 import {
   useGenericContext,
   FormContext,
@@ -32,7 +36,7 @@ type ReportingPeriodProps<T> = {
  * this component does not do any funding source checking/filtering
  */
 export const ReportingPeriodField = <
-  T extends Funding | ChangeFunding | Withdraw | ChangeEnrollment
+  T extends Funding | ChangeFunding | Withdraw | ChangeEnrollment | Enrollment
 >({
   reportingPeriods,
   accessor,

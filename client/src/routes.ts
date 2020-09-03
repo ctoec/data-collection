@@ -8,6 +8,7 @@ import CheckData from './containers/CheckData/CheckData';
 import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
+import AddChild from './containers/AddChild/AddChild';
 
 export type RouteConfig = {
   path: string;
@@ -55,6 +56,16 @@ export const routes: RouteConfig[] = [
     component: CheckData,
     unauthorized: false,
     exact: true,
+  },
+  {
+    path: '/create-record/:childId',
+    component: AddChild,
+    unauthorized: false,
+  },
+  {
+    path: '/create-record',
+    component: AddChild,
+    unauthorized: false,
   },
   {
     path: '/edit-record/:childId',

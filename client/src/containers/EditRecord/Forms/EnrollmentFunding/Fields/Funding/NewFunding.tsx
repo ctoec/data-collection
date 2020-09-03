@@ -34,7 +34,9 @@ type FundingFieldProps<T> = {
  * Component for creating a new funding, either for an existing enrollment
  * or as part of creating a new enrollment.
  */
-export const FundingField = <T extends ChangeFunding | ChangeEnrollment>({
+export const FundingField = <
+  T extends ChangeFunding | ChangeEnrollment | Enrollment
+>({
   fundingSpaces,
   reportingPeriods,
   fundingAccessor,
@@ -73,6 +75,7 @@ export const FundingField = <T extends ChangeFunding | ChangeEnrollment>({
       id="funding-source"
       name="funding-source"
       legend="Funding source options"
+      showLegend
       options={[
         {
           render: (props: RadioOptionRenderProps) => (

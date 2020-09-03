@@ -4,16 +4,8 @@ import { Family } from '../../../../shared/models';
 import { AddressFieldset, HomelessnessField } from './Fields';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut } from '../../../../utils/api';
-
-/*
-Simple props type to hold the family associated with the particular
-child record being examined, as well as the refetch method that 
-lets us get the updated DB record once we make changes.
-*/
-export type FamilyFormProps = {
-  family: Family;
-  refetchChild: () => void;
-};
+import { EditFormProps } from '../types';
+import useIsMounted from '../../../../hooks/useIsMounted';
 
 /*
  * Functional component that allows a user to modify the address
@@ -22,21 +14,26 @@ export type FamilyFormProps = {
  * with the Child object that the family form doesn't need
  * to know about.
  */
-export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
-  family,
-  refetchChild,
+export const FamilyInfoForm: React.FC<EditFormProps> = ({
+  child,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
+  const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
+
+  if (!child) return <></>;
+
+  const { family } = child;
 
   const onSubmit = (newState: Family) => {
     setSaving(true);
     apiPut(`families/${family.id}`, newState, { accessToken })
-      .then(() => refetchChild())
+      .then(onSuccess)
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => setSaving(false));
+      .finally(() => (isMounted() ? setSaving(false) : null));
   };
 
   return (
@@ -54,7 +51,7 @@ export const FamilyInfoForm: React.FC<FamilyFormProps> = ({
         autoComplete="off"
       >
         <h2 className="grid-row margin-top-4">Address</h2>
-        <AddressFieldset />​
+        <AddressFieldset />
         <div className="grid-row margin-top-4">
           <HomelessnessField />
         </div>

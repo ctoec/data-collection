@@ -10,27 +10,25 @@ import {
 import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-
-type CareForKidsProps = {
-  child: Child;
-  refetchChild: () => void;
-};
+import { EditFormProps } from './types';
 
 /*
  * Basic functional component designed to allow user to edit
  * the Care For Kids field of a Child object.
  */
-export const CareForKidsForm: React.FC<CareForKidsProps> = ({
+export const CareForKidsForm: React.FC<EditFormProps> = ({
   child,
-  refetchChild,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [isSaving, setIsSaving] = useState(false);
 
+  if (!child) return <></>;
+
   const onSubmit = (updatedChild: Child) => {
     setIsSaving(true);
     apiPut(`children/${child.id}`, updatedChild, { accessToken })
-      .then(() => refetchChild())
+      .then(() => onSuccess())
       .catch((err) => {
         console.log(err);
       })

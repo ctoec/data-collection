@@ -1,49 +1,34 @@
-import React, { useContext, useEffect, useState } from 'react';
-import {
-  Site,
-  Enrollment,
-  FundingSpace,
-  ReportingPeriod,
-} from '../../../../../shared/models';
-import { apiGet } from '../../../../../utils/api';
-import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
+import React from 'react';
 import { ChangeEnrollmentForm } from './ChangeEnrollmentForm';
 import { EditEnrollmentForm } from './EditEnrollmentForm';
 import { EditFundingForm } from './EditFundingForm';
 import { ChangeFundingForm } from './ChangeFundingForm';
+import { EditFormProps } from '../../types';
+import { useSites } from '../../../../../hooks/useSites';
+import { useFundingSpaces } from '../../../../../hooks/useFundingSpaces';
+import { useReportingPeriods } from '../../../../../hooks/useReportingPeriods';
 
-type EnrollmentFundingFormProps = {
-  reportingPeriods: ReportingPeriod[];
-  enrollments: Enrollment[];
-  childName: string;
-  childId: string;
-  refetchChild: () => void;
-};
-export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
-  reportingPeriods,
-  enrollments,
-  childName,
-  childId,
-  refetchChild,
+export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
+  child,
+  onSuccess,
+  reportingPeriods: inputReportingPeriods,
 }) => {
-  const { accessToken } = useContext(AuthenticationContext);
-
   // Get site options for new enrollments
-  const [sites, setSites] = useState<Site[]>([]);
-  useEffect(() => {
-    apiGet('sites', { accessToken }).then((_sites) => setSites(_sites));
-  }, [accessToken]);
+  const { sites } = useSites();
 
   // Get fundingSpaces for new fundings
-  const [fundingSpaces, setFundingSpaces] = useState<FundingSpace[]>([]);
-  useEffect(() => {
-    apiGet('funding-spaces', { accessToken }).then((_fundingSpaces) =>
-      setFundingSpaces(_fundingSpaces)
-    );
-  }, [accessToken]);
+  const { fundingSpaces } = useFundingSpaces();
+
+  // Get reporting periods (needed to update enrollments with fundings)
+  const { reportingPeriods } = useReportingPeriods(inputReportingPeriods);
 
   // Separate enrollments into current (no end date) and past
   // (with end date). Either may not exist
+  if (!child) {
+    return <></>;
+  }
+
+  const enrollments = child.enrollments || [];
   const currentEnrollment = enrollments.find((e) => !e.exit);
   const pastEnrollments = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
@@ -54,11 +39,11 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
       <ChangeEnrollmentForm
         reportingPeriods={reportingPeriods}
         fundingSpaces={fundingSpaces}
-        childName={childName}
+        childName={child.firstName}
         currentEnrollment={currentEnrollment}
-        childId={childId}
+        childId={child.id}
         sites={sites}
-        refetchChild={refetchChild}
+        refetchChild={onSuccess}
       />
       {currentEnrollment && (
         <>
@@ -68,7 +53,7 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
           <EditEnrollmentForm
             isCurrent={true}
             enrollment={currentEnrollment}
-            refetchChild={refetchChild}
+            refetchChild={onSuccess}
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingForm
@@ -78,14 +63,14 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
               fundingSpaces={fundingSpaces}
               funding={funding}
               enrollment={currentEnrollment}
-              refetchChild={refetchChild}
+              refetchChild={onSuccess}
             />
           ))}
           <ChangeFundingForm
             fundingSpaces={fundingSpaces}
             reportingPeriods={reportingPeriods}
             enrollment={currentEnrollment}
-            refetchChild={refetchChild}
+            refetchChild={onSuccess}
           />
         </>
       )}
@@ -99,7 +84,7 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
               <EditEnrollmentForm
                 key={enrollment.id}
                 enrollment={enrollment}
-                refetchChild={refetchChild}
+                refetchChild={onSuccess}
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingForm
@@ -108,7 +93,7 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
                   fundingSpaces={fundingSpaces}
                   funding={funding}
                   enrollment={enrollment}
-                  refetchChild={refetchChild}
+                  refetchChild={onSuccess}
                 />
               ))}
             </>
