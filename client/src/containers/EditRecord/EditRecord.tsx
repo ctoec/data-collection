@@ -52,8 +52,8 @@ const EditRecord: React.FC = () => {
 
   return rowData ? (
     <div className="grid-container">
-      <BackButton />
       <div className="margin-top-4">
+        <BackButton />
         <h1>
           Edit information for {rowData.firstName} {rowData.lastName}
         </h1>
@@ -110,7 +110,7 @@ const EditRecord: React.FC = () => {
         ]}
         activeId={activeTab}
         onClick={(tabId) => {
-          history.push({ hash: tabId });
+          history.replace({ hash: tabId });
         }}
       />
     </div>
