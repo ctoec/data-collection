@@ -44,8 +44,7 @@ const App: React.FC = () => {
             type: 'secondary',
             path: mailToLinkProps.href,
             target: mailToLinkProps.target,
-            // TODO: MERGE COMPONENT LIBRARY PR AND UNCOMMENT
-            // external: true,
+            external: true,
           },
         ]}
         userFirstName={user?.firstName}
