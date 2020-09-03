@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams, useLocation, useHistory, Link } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
 
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';

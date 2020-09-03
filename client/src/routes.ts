@@ -8,7 +8,6 @@ import CheckData from './containers/CheckData/CheckData';
 import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
-import { WithdrawForm } from './containers/EditRecord/Forms/Withdraw/Form';
 
 export type RouteConfig = {
   path: string;

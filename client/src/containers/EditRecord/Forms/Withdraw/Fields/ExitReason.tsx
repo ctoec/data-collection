@@ -1,6 +1,6 @@
 import { FormField, SelectProps, Select } from '@ctoec/component-library';
 import React from 'react';
-import { Enrollment, ExitReason } from '../../../../../shared/models';
+import { ExitReason } from '../../../../../shared/models';
 import { Withdraw } from '../../../../../shared/payloads';
 
 export const ExitReasonField: React.FC = () => {

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  ReportingPeriod,
-  Funding,
-  Enrollment,
-} from '../../../../../../shared/models';
+import { ReportingPeriod, Funding } from '../../../../../../shared/models';
 import {
   useGenericContext,
   FormContext,
