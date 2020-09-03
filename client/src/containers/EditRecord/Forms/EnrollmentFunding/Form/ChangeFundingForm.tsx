@@ -101,6 +101,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
                     (rp) => rp.type === activeFunding.fundingSpace.source
                   )}
                   isLast={true}
+                  label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
                   optional={visibleForm === 'start'}
                 />
               )}

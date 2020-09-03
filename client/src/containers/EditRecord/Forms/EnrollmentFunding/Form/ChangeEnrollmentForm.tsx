@@ -107,7 +107,6 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           data={{ newEnrollment: {} as Enrollment }}
           onSubmit={onSubmit}
         >
-          <h4>New enrollment</h4>
           <h4 className="font-heading-md margin-bottom-0">Site</h4>
           <SiteField<ChangeEnrollment>
             sites={sites}
@@ -133,7 +132,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
 
           {!!currentEnrollment && (
             <>
-              <h4>Previous enrollment</h4>
+              <h3>Previous enrollment</h3>
               <h4 className="font-heading-md margin-bottom-0">End date</h4>
               <EnrollmentEndDateField<ChangeEnrollment>
                 accessor={(data) => data.at('oldEnrollment').at('exitDate')}
@@ -152,6 +151,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
                   )}
                   isLast={true}
                   optional={true}
+                  label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
                 />
               )}
             </>

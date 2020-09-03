@@ -8,6 +8,7 @@ import {
 import { ChangeEnrollment } from '../../../../../shared/payloads';
 import { Moment } from 'moment';
 import { Enrollment } from '../../../../../shared/models';
+import moment from 'moment';
 
 type EnrollmentEndDateProps<T> = {
   accessor: (_: TObjectDriller<T>) => TObjectDriller<Moment>;
@@ -24,6 +25,7 @@ export const EnrollmentEndDateField = <
 }: EnrollmentEndDateProps<T>) => {
   return (
     <FormField<T, DateInputProps, Moment | null>
+      defaultValue={null}
       getValue={(data) => accessor(data)}
       optional={optional}
       parseOnChangeEvent={(e: any) => e}

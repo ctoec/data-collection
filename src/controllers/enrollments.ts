@@ -32,8 +32,8 @@ export const changeFunding = async (
       }
 
       // If the new funding first reporting period only has id
-      // look up period from DB to enable later look up of
-      // previous reporting period
+      // look up period from DB to enable later look ups based
+      // on that value
       if (
         !oldFundingLastReportingPeriod &&
         newFundingFirstReportingPeriod.id &&

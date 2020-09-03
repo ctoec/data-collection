@@ -105,6 +105,23 @@ export const changeEnrollment = async (
             'Last reporting period for current funding must be provided if no new funding is provided'
           );
         }
+
+        // If the new funding first reporting period only has id
+        // look up period from DB to enable later look ups based
+        // on that value
+        if (
+          !oldEnrollmentLastReportingPeriod &&
+          newEnrollmentNextReportingPeriod.id &&
+          !newEnrollmentNextReportingPeriod.period
+        ) {
+          newEnrollmentNextReportingPeriod.period = (
+            await tManager.findOne(
+              ReportingPeriod,
+              newEnrollmentNextReportingPeriod.id
+            )
+          ).period;
+        }
+
         const lastReportingPeriod =
           oldEnrollmentLastReportingPeriod ||
           (await tManager.findOne(ReportingPeriod, {
