@@ -9,6 +9,7 @@ import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
 import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
 import ChildInfo from './ChildInfo';
 import { BackButton } from '../../components/BackButton';
+import { FamilyIncomeForm } from './Forms/FamilyIncome/Form';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -72,7 +73,13 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.INCOME,
             text: 'Family Income',
-            content: <span>This is where the family income form goes</span>,
+            content: (
+              <FamilyIncomeForm
+                familyId={rowData.family.id}
+                determinations={rowData.family.incomeDeterminations || []}
+                refetchChild={refetchChild}
+              />
+            ),
           },
           {
             id: TAB_IDS.ENROLLMENT,
