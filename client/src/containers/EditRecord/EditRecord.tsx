@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav } from '@ctoec/component-library';
+import { TabNav, Button, Alert, FormStatus } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
@@ -10,6 +10,7 @@ import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
 import ChildInfo from './ChildInfo';
 import { BackButton } from '../../components/BackButton';
 import { FamilyIncomeForm } from './Forms/FamilyIncome/Form';
+import Modal from 'react-modal';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -45,13 +46,41 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
+  function deleteRecord() {
+    return (
+      <Alert
+        type="error"
+        text="Deleting an enrollment record will permanently remove all of its data"
+        // heading={`Do you want to delete the enrollment for ${rowData.firstName} ${rowData.lastName}`}
+      />
+    );
+  }
+
   return rowData ? (
     <div className="grid-container">
       <BackButton />
-      <div className="margin-top-4">
-        <h1>
-          Edit information for {rowData.firstName} {rowData.lastName}
-        </h1>
+      <div className="grid-row flex-first-baseline flex-space-between">
+        <div className="margin-top-4">
+          <h1>
+            Edit information for {rowData.firstName} {rowData.lastName}
+          </h1>
+
+          <FormStatus
+            type="warning"
+            id="warn"
+            message="Deleting an enrollment record will permanently remove all of its data"
+            // heading={`Do you want to delete the enrollment for ${rowData.firstName} ${rowData.lastName}`}
+          />
+        </div>
+        {/* <div className='margin-right-2'> */}
+        <Button
+          text="Delete record"
+          className="margin-right-0"
+          appearance="unstyled"
+          onClick={deleteRecord}
+        />
+        {/* </div> */}
+        {/* </div> */}
       </div>
       <TabNav
         items={[

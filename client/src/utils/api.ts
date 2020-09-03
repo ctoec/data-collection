@@ -37,6 +37,10 @@ export function apiPut(path: string, body: any, opts?: ApiOpts) {
   return api(path, body, 'PUT', opts || {});
 }
 
+export function apiDelete(path: string, body: any, opts?: ApiOpts) {
+  return api(path, body, 'DELETE', opts || {});
+}
+
 /**
  * Internal function to perform a fetch request against the backend,
  * and handle any error responses, defined as responses with status >= 400
@@ -48,7 +52,7 @@ export function apiPut(path: string, body: any, opts?: ApiOpts) {
 async function api(
   path: string,
   body: any,
-  method: 'GET' | 'POST' | 'PUT',
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   opts: ApiOpts
 ) {
   const headers = opts.headers || {};
@@ -87,12 +91,12 @@ async function api(
   // Handle API success response
   else {
     // If no user-supplied jsonParse, defaut value is:
-    // - false for PUT requests (which return 200 OK with empty response body)
+    // - false for PUT, DELETE (which return 200 OK with empty response body)
     // - true for GET, POST
     const jsonParse =
       opts.jsonParse !== undefined
         ? opts.jsonParse
-        : method === 'PUT'
+        : method === 'PUT' || method === 'DELETE'
         ? false
         : true;
     if (!jsonParse) {
