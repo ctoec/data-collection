@@ -33,10 +33,10 @@ familyRouter.put(
 );
 
 /**
- * /families/:familyId/incomeDetermination/:determinationId PUT
+ * /families/:familyId/income-determination/:determinationId PUT
  */
 familyRouter.put(
-  '/:familyId/incomeDetermination/:determinationId',
+  '/:familyId/income-determination/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const famId = parseInt(req.params['familyId']);
@@ -65,17 +65,14 @@ familyRouter.put(
 );
 
 familyRouter.post(
-  '/:familyId/incomeDetermination',
+  '/:familyId/income-determination',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const famId = parseInt(req.params['familyId']);
       const rootFam = await getManager().findOne(Family, { id: famId });
       const determination = getManager().create(IncomeDetermination, {
-        id: req.body.id,
-        numberOfPeople: req.body.numberOfPeople,
-        income: req.body.income,
-        determinationDate: req.body.determinationDate,
-        family: rootFam,
+        ...req.body,
+        rootFam,
       });
       await getManager().save(determination);
       res.sendStatus(200);

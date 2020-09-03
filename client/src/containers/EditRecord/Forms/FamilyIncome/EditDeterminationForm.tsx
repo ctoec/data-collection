@@ -49,7 +49,7 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
   const onFormSubmit = (userModifiedDet: IncomeDetermination) => {
     setLoading(true);
     apiPut(
-      `families/${familyId}/incomeDetermination/${determination.id}`,
+      `families/${familyId}/income-determination/${determination.id}`,
       userModifiedDet,
       { accessToken }
     )

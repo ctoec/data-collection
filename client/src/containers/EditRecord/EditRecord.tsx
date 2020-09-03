@@ -76,11 +76,7 @@ const EditRecord: React.FC = () => {
             content: (
               <FamilyIncomeForm
                 familyId={rowData.family.id}
-                determinations={
-                  rowData.family.incomeDeterminations
-                    ? rowData.family.incomeDeterminations
-                    : []
-                }
+                determinations={rowData.family.incomeDeterminations || []}
                 refetchChild={refetchChild}
               />
             ),

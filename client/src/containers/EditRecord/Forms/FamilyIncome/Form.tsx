@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
 import { Button, Card } from '@ctoec/component-library';
 import { propertyDateSorter } from '../../../../utils/dateSorter';
-import { IncomeFormProps } from './Fields/Common';
+import { IncomeDetermination } from '../../../../shared/models';
 import { EditDeterminationForm } from './EditDeterminationForm';
 import { RedeterminationForm } from './RedeterminationForm';
+
+/**
+ * Generic type to hold the props of the high-level income forms,
+ * specifically to allow indexing into the desire determination as
+ * well as persisting back to the DB.
+ */
+export type IncomeFormProps = {
+  familyId: number;
+  determinations: IncomeDetermination[];
+  refetchChild: () => void;
+};
 
 /**
  * The main form rendered in the EditRecord TabNav that allows a user

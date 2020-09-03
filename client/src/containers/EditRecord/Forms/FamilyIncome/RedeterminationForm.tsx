@@ -47,7 +47,7 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   // family object.
   const onFormSubmit = (newDet: IncomeDetermination) => {
     setLoading(true);
-    apiPost(`families/${familyId}/incomeDetermination/`, newDet, {
+    apiPost(`families/${familyId}/income-determination/`, newDet, {
       accessToken,
       jsonParse: false,
     })
