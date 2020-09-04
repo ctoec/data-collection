@@ -26,7 +26,6 @@ const EditRecord: React.FC = () => {
   const [rowData, setRowData] = useState<Child>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  // const [checkDataId, setCheckDataId] = useState();
 
   // Basic trigger functions to operate the delete warning modal
   function openModal() {
@@ -60,7 +59,10 @@ const EditRecord: React.FC = () => {
   function deleteRecord() {
     setIsDeleting(true);
     apiDelete(`children/${childId}`, { accessToken })
-      .then(() => history.push(``))
+      // TODO: Swap this total hack out for the roster page
+      // once we have that implemented
+      .then(() => history.push('/check-data/1'))
+
       .catch((err) => {
         console.log(err);
       })
@@ -85,33 +87,49 @@ const EditRecord: React.FC = () => {
           text="Delete record"
           className="margin-right-0"
         />
-          <Modal
-            isOpen={deleteModalOpen}
-            contentLabel="Delete Modal"
-          >
-            <div className='grid-container'>
-              <div className='grid-row margin-top-2'>
-                <h2>Do you want to delete the enrollment for {rowData.firstName} {rowData.lastName}?</h2>
-              </div>
-              <div className='grid-row margin-top-2'>
-                <span>Deleting an enrollment record will permanently remove all of its data</span>
-              </div>
-              <div className='margin-top-4'>
-                <div className='grid-row flex-first-baseline space-between-4'>
-                  <Button 
-                    appearance='outline'
-                    onClick={closeModal}
-                    text='No, cancel'
-                  />
-                  <Button
-                    appearance={isDeleting ? 'outline' : 'default'}
-                    onClick={deleteRecord}
-                    text={isDeleting ? 'Deleting record...' : 'Yes, delete record'}
-                  />
-                </div>
+        <Modal
+          isOpen={deleteModalOpen}
+          onRequestClose={closeModal}
+          shouldCloseOnEsc={true}
+          shouldCloseOnOverlayClick={true}
+          contentLabel="Delete Modal"
+          // Use style to dynamically trim the bottom to fit the
+          // message, then center in middle of form
+          style={{
+            content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
+          }}
+        >
+          <div className="grid-container">
+            <div className="grid-row margin-top-2">
+              <h2>
+                Do you want to delete the enrollment for {rowData.firstName}{' '}
+                {rowData.lastName}?
+              </h2>
+            </div>
+            <div className="grid-row margin-top-2">
+              <span>
+                Deleting an enrollment record will permanently remove all of its
+                data
+              </span>
+            </div>
+            <div className="margin-top-4">
+              <div className="grid-row flex-first-baseline space-between-4">
+                <Button
+                  appearance="outline"
+                  onClick={closeModal}
+                  text="No, cancel"
+                />
+                <Button
+                  appearance={isDeleting ? 'outline' : 'default'}
+                  onClick={deleteRecord}
+                  text={
+                    isDeleting ? 'Deleting record...' : 'Yes, delete record'
+                  }
+                />
               </div>
             </div>
-          </Modal>
+          </div>
+        </Modal>
       </div>
       <TabNav
         items={[

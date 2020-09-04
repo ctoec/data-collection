@@ -37,8 +37,13 @@ export function apiPut(path: string, body: any, opts?: ApiOpts) {
   return api(path, body, 'PUT', opts || {});
 }
 
-export function apiDelete(path: string, body: any, opts?: ApiOpts) {
-  return api(path, body, 'DELETE', opts || {});
+/**
+ * Helper function to perform a fetch DELETE request against the backend
+ * @param path
+ * @param opts
+ */
+export function apiDelete(path: string, opts?: ApiOpts) {
+  return api(path, undefined, 'DELETE', opts || {});
 }
 
 /**
