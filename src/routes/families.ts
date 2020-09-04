@@ -88,3 +88,18 @@ familyRouter.post(
     }
   })
 );
+
+familyRouter.delete(
+  '/income-determination/:determinationId',
+  passAsyncError(async (req: Request, res: Response) => {
+    try {
+      const detId = parseInt(req.params['determinationId']);
+      await getManager().delete(IncomeDetermination, { id: detId });
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.log('Error deleting requested determination: ', err);
+      throw new BadRequestError('Determination not deleted');
+    }
+  })
+);
