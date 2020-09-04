@@ -43,7 +43,6 @@ export const IncomeDeterminationCard = ({
   const { accessToken } = useContext(AuthenticationContext);
 
   function deleteDetermination() {
-    console.log(determination);
     apiDelete(`families/income-determination/${determination.id}`, {
       accessToken,
     })
