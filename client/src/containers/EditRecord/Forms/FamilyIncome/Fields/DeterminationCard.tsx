@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Card,
   InlineIcon,
@@ -7,9 +7,12 @@ import {
   CardExpansion,
   ExpandCard,
   Pencil,
+  TrashCan,
 } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
 import { currencyFormatter } from '../../../../../utils/formatters';
+import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiDelete } from '../../../../../utils/api';
 
 /**
  * Type to hold the basic properties of an income determination card.
@@ -20,6 +23,7 @@ type IncomeDeterminationCardProps = {
   isNew?: boolean;
   forceClose: boolean;
   expansion: JSX.Element;
+  refetchChild: () => void;
 };
 
 /**
@@ -34,6 +38,7 @@ export const IncomeDeterminationCard = ({
   isNew = false,
   forceClose,
   expansion,
+  refetchChild,
 }: IncomeDeterminationCardProps) => {
   return (
     <Card
