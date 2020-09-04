@@ -4,7 +4,7 @@ import { TabNav } from '@ctoec/component-library';
 
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child } from '../../shared/models';
+import { Child, Family } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
   FamilyIncomeForm,
@@ -52,12 +52,12 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
-  return rowData ? (
+  return (
     <div className="grid-container">
       <div className="margin-top-4">
         <BackButton />
         <h1>
-          Edit information for {rowData.firstName} {rowData.lastName}
+          Edit information for {rowData?.firstName} {rowData?.lastName}
         </h1>
       </div>
       <TabNav
@@ -66,7 +66,10 @@ const EditRecord: React.FC = () => {
             id: TAB_IDS.CHILD,
             text: 'Child Info',
             content: (
-              <ChildInfoForm child={rowData} refetchChild={refetchChild} />
+              <ChildInfoForm
+                child={rowData || ({} as Child)}
+                refetchChild={refetchChild}
+              />
             ),
           },
           {
@@ -74,7 +77,7 @@ const EditRecord: React.FC = () => {
             text: 'Family Info',
             content: (
               <FamilyInfoForm
-                family={rowData.family}
+                family={rowData?.family || ({} as Family)}
                 refetchChild={refetchChild}
               />
             ),
@@ -84,8 +87,8 @@ const EditRecord: React.FC = () => {
             text: 'Family Income',
             content: (
               <FamilyIncomeForm
-                familyId={rowData.family.id}
-                determinations={rowData.family.incomeDeterminations || []}
+                familyId={rowData?.family.id || 0}
+                determinations={rowData?.family.incomeDeterminations || []}
                 refetchChild={refetchChild}
               />
             ),
@@ -95,9 +98,9 @@ const EditRecord: React.FC = () => {
             text: 'Enrollment and funding',
             content: (
               <EnrollmentFundingForm
-                enrollments={rowData.enrollments || []}
-                childName={rowData.firstName}
-                childId={rowData.id}
+                enrollments={rowData?.enrollments || []}
+                childName={rowData?.firstName || ''}
+                childId={rowData?.id || ''}
                 refetchChild={refetchChild}
               />
             ),
@@ -106,7 +109,10 @@ const EditRecord: React.FC = () => {
             id: TAB_IDS.C4K,
             text: 'Care 4 Kids',
             content: (
-              <CareForKidsForm child={rowData} refetchChild={refetchChild} />
+              <CareForKidsForm
+                child={rowData || ({} as Child)}
+                refetchChild={refetchChild}
+              />
             ),
           },
         ]}
@@ -116,8 +122,6 @@ const EditRecord: React.FC = () => {
         }}
       />
     </div>
-  ) : (
-    <> </>
   );
 };
 

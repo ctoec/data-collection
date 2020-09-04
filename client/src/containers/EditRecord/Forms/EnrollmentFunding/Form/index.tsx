@@ -29,15 +29,17 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
   // Get site options for new enrollments
   const [sites, setSites] = useState<Site[]>([]);
   useEffect(() => {
-    apiGet('sites', { accessToken }).then((_sites) => setSites(_sites));
+    apiGet('sites', { accessToken }).then((_sites) => {
+      if (_sites) setSites(_sites);
+    });
   }, [accessToken]);
 
   // Get fundingSpaces for new fundings
   const [fundingSpaces, setFundingSpaces] = useState<FundingSpace[]>([]);
   useEffect(() => {
-    apiGet('funding-spaces', { accessToken }).then((_fundingSpaces) =>
-      setFundingSpaces(_fundingSpaces)
-    );
+    apiGet('funding-spaces', { accessToken }).then((_fundingSpaces) => {
+      if (_fundingSpaces) setFundingSpaces(_fundingSpaces);
+    });
   }, [accessToken]);
 
   // Get reporting periods for new fundings
@@ -45,9 +47,9 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
     []
   );
   useEffect(() => {
-    apiGet('reporting-periods', { accessToken }).then((_reportingPeriods) =>
-      setReportingPeriods(_reportingPeriods)
-    );
+    apiGet('reporting-periods', { accessToken }).then((_reportingPeriods) => {
+      if (_reportingPeriods) setReportingPeriods(_reportingPeriods);
+    });
   }, [accessToken]);
 
   // Separate enrollments into current (no end date) and past

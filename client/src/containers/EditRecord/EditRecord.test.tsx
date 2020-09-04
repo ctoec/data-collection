@@ -1,16 +1,14 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import EditRecord from './EditRecord';
 import { accessibilityTestHelper, snapshotTestHelper } from '../../testHelpers';
+import { BrowserRouter } from 'react-router-dom';
 
 const routerWrapped = (
   <BrowserRouter>
-    <App />
+    <EditRecord />
   </BrowserRouter>
 );
-
-describe('App', () => {
+describe('EditRecord', () => {
   snapshotTestHelper(routerWrapped);
   accessibilityTestHelper(routerWrapped);
 });

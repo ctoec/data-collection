@@ -8,7 +8,6 @@ export const SasidField: React.FC = () => {
   return (
     <FormField<Child, TextInputProps, string | null>
       getValue={(data) => data.at('sasid')}
-      defaultValue=""
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={TextInput}
       type="input"
