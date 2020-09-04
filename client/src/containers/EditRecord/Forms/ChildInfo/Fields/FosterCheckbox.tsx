@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormField, CheckboxProps, Checkbox } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 
 export const FosterCheckbox: React.FC = () => (
   <FormField<Child, CheckboxProps, boolean | null>

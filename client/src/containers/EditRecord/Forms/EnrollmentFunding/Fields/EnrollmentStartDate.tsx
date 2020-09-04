@@ -1,28 +1,32 @@
 import React from 'react';
-import { FormField, DateInputProps, DateInput } from '@ctoec/component-library';
-import { Enrollment } from '../../../../../shared/models';
+import {
+  FormField,
+  DateInputProps,
+  DateInput,
+  TObjectDriller,
+} from '@ctoec/component-library';
 import { Moment } from 'moment';
+import { Enrollment } from '../../../../../shared/models';
 import { ChangeEnrollment } from '../../../../../shared/payloads';
-import { EnrollmentFieldProps } from './FieldProps';
 
-export const EnrollmentStartDateField: React.FC<EnrollmentFieldProps> = ({
-  isChangeEnrollment = false,
-}) => {
-  const commonProps = {
-    parseOnChangeEvent: (e: any) => e,
-    inputComponent: DateInput,
-    label: 'Enrollment start date',
-    id: 'start-date',
-  };
-  return isChangeEnrollment ? (
-    <FormField<ChangeEnrollment, DateInputProps, Moment | null>
-      getValue={(data) => data.at('newEnrollment').at('entry')}
-      {...commonProps}
-    />
-  ) : (
-    <FormField<Enrollment, DateInputProps, Moment | null>
-      getValue={(data) => data.at('entry')}
-      {...commonProps}
+type EnrollmentStartDateProps<T> = {
+  accessor: (_: TObjectDriller<T>) => TObjectDriller<Moment>;
+};
+/**
+ *  Component for updating an enrollment's entry
+ */
+export const EnrollmentStartDateField = <
+  T extends Enrollment | ChangeEnrollment
+>({
+  accessor,
+}: EnrollmentStartDateProps<T>) => {
+  return (
+    <FormField<T, DateInputProps, Moment | null>
+      getValue={(data) => accessor(data)}
+      parseOnChangeEvent={(e: any) => e}
+      inputComponent={DateInput}
+      label="Enrollment start date"
+      id="start-date"
     />
   );
 };

@@ -3,7 +3,7 @@ import { BirthCertificateIdField } from './BirthCertificateId';
 import { BirthTownField } from './BirthTown';
 import { BirthStateField } from './BirthState';
 import { FormFieldSet } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 
 /**
  * Component that wraps BirthCertificateId, BirthTown, and BirthState in a fieldset.

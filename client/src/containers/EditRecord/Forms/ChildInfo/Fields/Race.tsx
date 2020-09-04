@@ -7,7 +7,7 @@ import {
   CheckboxProps,
   Checkbox,
 } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 
 /**
  * Component for entering the race of a child in an enrollment.

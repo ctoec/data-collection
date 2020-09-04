@@ -1,21 +1,19 @@
 import React from 'react';
 import { FormField, TextInputProps, TextInput } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 
 /**
- * Component for entering the suffix of a child in an enrollment.
+ * Component for entering the birth state of a child in an enrollment.
  */
-export const SuffixField: React.FC = () => {
+export const BirthStateField: React.FC = () => {
   return (
     <FormField<Child, TextInputProps, string | null>
-      getValue={(data) => data.at('suffix')}
-      defaultValue=""
+      getValue={(data) => data.at('birthState')}
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={TextInput}
       type="input"
-      id="suffix"
-      label="Suffix"
-      optional
+      id="birthState"
+      label="State"
     />
   );
 };

@@ -1,15 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav } from '@ctoec/component-library';
+
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
-import { CareForKidsForm } from './Forms/CareForKids';
-import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
-import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
-import ChildInfo from './ChildInfo';
 import { BackButton } from '../../components/BackButton';
-import { FamilyIncomeForm } from './Forms/FamilyIncome/Form';
+import {
+  FamilyIncomeForm,
+  ChildInfoForm,
+  CareForKidsForm,
+  FamilyInfoForm,
+  EnrollmentFundingForm,
+} from './Forms';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -31,12 +34,16 @@ const EditRecord: React.FC = () => {
     setRefetch((r) => r + 1);
   };
 
+  // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
   const history = useHistory();
+  // and make child tab active by default if no hash
+  // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
       history.replace({ hash: TAB_IDS.CHILD });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -47,8 +54,8 @@ const EditRecord: React.FC = () => {
 
   return rowData ? (
     <div className="grid-container">
-      <BackButton />
       <div className="margin-top-4">
+        <BackButton />
         <h1>
           Edit information for {rowData.firstName} {rowData.lastName}
         </h1>
@@ -58,7 +65,9 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.CHILD,
             text: 'Child Info',
-            content: <ChildInfo child={rowData} refetchChild={refetchChild} />,
+            content: (
+              <ChildInfoForm child={rowData} refetchChild={refetchChild} />
+            ),
           },
           {
             id: TAB_IDS.FAMILY,
@@ -103,7 +112,7 @@ const EditRecord: React.FC = () => {
         ]}
         activeId={activeTab}
         onClick={(tabId) => {
-          history.push({ hash: tabId });
+          history.replace({ hash: tabId });
         }}
       />
     </div>

@@ -13,17 +13,18 @@ import {
   FosterCheckbox,
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPut } from '../../../utils/api';
-import { Child } from '../../../shared/models';
+import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiPut } from '../../../../utils/api';
+import { Child } from '../../../../shared/models';
 // import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
 
-export default ({
-  child,
-  refetchChild,
-}: {
+type ChildInfoFormProps = {
   child: Child;
   refetchChild: () => void;
+};
+export const ChildInfoForm: React.FC<ChildInfoFormProps> = ({
+  child,
+  refetchChild,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [saving, setSaving] = useState(false);

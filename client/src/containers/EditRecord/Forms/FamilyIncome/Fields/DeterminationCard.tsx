@@ -8,8 +8,7 @@ import {
   ExpandCard,
   Pencil,
 } from '@ctoec/component-library';
-import currencyFormatter from '../../../../../utils/currencyFormatter';
-import dateFormatter from '../../../../../utils/dateFormatter';
+import { currencyFormatter } from '../../../../../utils/formatters';
 import { IncomeDetermination } from '../../../../../shared/models';
 
 /**
@@ -63,7 +62,7 @@ export const IncomeDeterminationCard = ({
           <p>Determined on</p>
           <p className="text-bold">
             {determination.determinationDate
-              ? dateFormatter(determination.determinationDate)
+              ? determination.determinationDate.format('MM/DD/YYYY')
               : InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
