@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Card,
   InlineIcon,
@@ -7,9 +7,12 @@ import {
   CardExpansion,
   ExpandCard,
   Pencil,
+  TrashCan,
 } from '@ctoec/component-library';
 import { currencyFormatter } from '../../../../../utils/formatters';
 import { IncomeDetermination } from '../../../../../shared/models';
+import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiDelete } from '../../../../../utils/api';
 
 /**
  * Type to hold the basic properties of an income determination card.
@@ -20,6 +23,7 @@ type IncomeDeterminationCardProps = {
   isNew?: boolean;
   forceClose: boolean;
   expansion: JSX.Element;
+  refetchChild: () => void;
 };
 
 /**
@@ -34,8 +38,22 @@ export const IncomeDeterminationCard = ({
   isNew = false,
   forceClose,
   expansion,
+  refetchChild,
 }: IncomeDeterminationCardProps) => {
-  function deleteDetermination() {}
+  const { accessToken } = useContext(AuthenticationContext);
+
+  function deleteDetermination() {
+    console.log(determination);
+    apiDelete(`families/income-determination/${determination.id}`, {
+      accessToken,
+    })
+      .then(() => {
+        refetchChild();
+      })
+      .catch((err) => {
+        console.error('Unable to delete determination', err);
+      });
+  }
 
   return (
     <Card
