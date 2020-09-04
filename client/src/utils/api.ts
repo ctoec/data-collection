@@ -38,6 +38,15 @@ export function apiPut(path: string, body: any, opts?: ApiOpts) {
 }
 
 /**
+ * Helper function to perform a fetch DELETE request against the backend
+ * @param path
+ * @param opts
+ */
+export function apiDelete(path: string, opts?: ApiOpts) {
+  return api(path, undefined, 'DELETE', opts || {});
+}
+
+/**
  * Internal function to perform a fetch request against the backend,
  * and handle any error responses, defined as responses with status >= 400
  * @param path
@@ -48,7 +57,7 @@ export function apiPut(path: string, body: any, opts?: ApiOpts) {
 async function api(
   path: string,
   body: any,
-  method: 'GET' | 'POST' | 'PUT',
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   opts: ApiOpts
 ) {
   const headers = opts.headers || {};
@@ -92,7 +101,7 @@ async function api(
     const jsonParse =
       opts.jsonParse !== undefined
         ? opts.jsonParse
-        : method === 'PUT'
+        : method === 'PUT' || method === 'DELETE'
         ? false
         : true;
     if (!jsonParse) {

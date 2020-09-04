@@ -35,6 +35,8 @@ export const IncomeDeterminationCard = ({
   forceClose,
   expansion,
 }: IncomeDeterminationCardProps) => {
+  function deleteDetermination() {}
+
   return (
     <Card
       className="margin-bottom-2"
@@ -66,12 +68,23 @@ export const IncomeDeterminationCard = ({
               : InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
-        <ExpandCard>
-          <Button
-            text={<TextWithIcon text="Edit" Icon={Pencil} />}
-            appearance="unstyled"
-          />
-        </ExpandCard>
+        <div className="display-flex align-center flex-space-between">
+          <div className="display-flex align-center margin-right-2">
+            <ExpandCard>
+              <Button
+                text={<TextWithIcon text="Edit" Icon={Pencil} />}
+                appearance="unstyled"
+              />
+            </ExpandCard>
+          </div>
+          <div className="display-flex align-center margin-right-2">
+            <Button
+              text={<TextWithIcon text="Delete" Icon={Pencil} />}
+              appearance="unstyled"
+              onClick={deleteDetermination}
+            />
+          </div>
+        </div>
       </div>
       <CardExpansion>{expansion}</CardExpansion>
     </Card>
