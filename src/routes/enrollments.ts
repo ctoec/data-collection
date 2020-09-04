@@ -1,7 +1,7 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { getManager } from 'typeorm';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { Enrollment } from '../entity';
+import { Enrollment, Funding } from '../entity';
 import {
   NotFoundError,
   ApiError,
@@ -64,6 +64,32 @@ enrollmentsRouter.post(
       throw new BadRequestError(
         'Unable to withdraw enrollment. Make sure request payload has expected format'
       );
+    }
+  })
+);
+
+enrollmentsRouter.delete(
+  '/:enrollmentId',
+  passAsyncError(async (req: Request, res: Response) => {
+    try {
+      const enrollmentId = parseInt(req.params['enrollmentId']);
+      const enrollment = await getManager().findOne(Enrollment, {
+        id: enrollmentId,
+      });
+      if (enrollment.fundings) {
+        for (let i = 0; i < enrollment.fundings.length; i++) {
+          await getManager().delete(Funding, {
+            id: enrollment.fundings[i].id,
+            enrollmentId: enrollmentId,
+          });
+        }
+      }
+      await getManager().delete(Enrollment, { id: enrollmentId });
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.log('Error deleting requested enrollment: ', err);
+      throw new BadRequestError('Enrollment not deleted ' + err);
     }
   })
 );
