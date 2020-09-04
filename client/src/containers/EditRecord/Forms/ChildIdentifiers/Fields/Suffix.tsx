@@ -9,7 +9,6 @@ export const SuffixField: React.FC = () => {
   return (
     <FormField<Child, TextInputProps, string | null>
       getValue={(data) => data.at('suffix')}
-      defaultValue=""
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={TextInput}
       type="input"

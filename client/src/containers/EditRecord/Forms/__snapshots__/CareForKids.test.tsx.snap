@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditRecord CareForKids matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="grid-container margin-top-2"
+  >
+    <h2
+      class="grid-row"
+    >
+      Receiving Care For Kids?
+    </h2>
+    <div>
+      <form
+        autocomplete="off"
+        class="CareForKidsForm"
+        novalidate=""
+      >
+        <fieldset
+          aria-required="true"
+          class="grid-gap grid-row usa-fieldset"
+          id="c4k-radio-group-fieldset"
+          role="radiogroup"
+        >
+          <legend
+            id="fieldset-legend-c4k-radio-group-fieldset"
+          >
+            <span
+              class="usa-sr-only"
+            >
+              receives care for kids
+            </span>
+          </legend>
+          <div
+            class="grid-gap margin-top-3 grid-row flex-align-start"
+          >
+            <span>
+              <div>
+                <div
+                  class="usa-radio"
+                >
+                  <input
+                    class="usa-radio__input"
+                    id="Yes"
+                    name="careforkids"
+                    type="radio"
+                    value="Yes"
+                  />
+                  <label
+                    class="usa-radio__label"
+                    for="Yes"
+                  >
+                    Yes
+                  </label>
+                </div>
+              </div>
+            </span>
+            <span>
+              <div>
+                <div
+                  class="usa-radio"
+                >
+                  <input
+                    checked=""
+                    class="usa-radio__input"
+                    id="No"
+                    name="careforkids"
+                    type="radio"
+                    value="No"
+                  />
+                  <label
+                    class="usa-radio__label"
+                    for="No"
+                  >
+                    No
+                  </label>
+                </div>
+              </div>
+            </span>
+          </div>
+        </fieldset>
+        <div
+          class="grid-row margin-top-2"
+        >
+          <input
+            class="usa-button"
+            type="submit"
+            value="Save"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+</DocumentFragment>
+`;

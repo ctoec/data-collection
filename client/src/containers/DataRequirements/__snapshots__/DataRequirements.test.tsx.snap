@@ -1,0 +1,254 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DataRequirements matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="grid-container margin-top-4"
+  >
+    <button
+      class="usa-button usa-button--unstyled margin-bottom-2 text-bold"
+      type="button"
+    >
+      <span
+        class="oec-text-with-icon"
+      >
+        <svg
+          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
+        >
+          arrowRight.svg
+        </svg>
+        Back
+      </span>
+    </button>
+    <h1>
+      OEC's enrollment data requirements
+    </h1>
+    <div
+      class="margin-top-4"
+    >
+      <h2>
+        Section one
+      </h2>
+      <p
+        class="text-pre-line"
+      />
+      <table
+        class="oec-table"
+        id="data-requirements-table"
+      >
+        <thead>
+          <tr>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-sorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Field name
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Required/ Optional
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Definition
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Reason for collecting
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Format
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th
+              scope="row"
+            >
+              <span
+                class="text-bold"
+              >
+                Favorite color
+              </span>
+            </th>
+            <td>
+               Optional 
+            </td>
+            <td>
+              <p>
+                The color you like the most
+              </p>
+            </td>
+            <td>
+               So we know your favorite color 
+            </td>
+            <td>
+              <div>
+                string
+              </div>
+              <div
+                class="margin-top-1"
+              >
+                Ex: Blue
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div
+      class="margin-top-4"
+    >
+      <h2>
+        Section two
+      </h2>
+      <p
+        class="text-pre-line"
+      />
+      <table
+        class="oec-table"
+        id="data-requirements-table"
+      >
+        <thead>
+          <tr>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-sorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Field name
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Required/ Optional
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Definition
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Reason for collecting
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Format
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th
+              scope="row"
+            >
+              <span
+                class="text-bold"
+              >
+                Lucky number
+              </span>
+            </th>
+            <td>
+               Required 
+            </td>
+            <td>
+              <p>
+                The number you find brings the most luck
+              </p>
+            </td>
+            <td>
+               So we know your lucky number 
+            </td>
+            <td>
+              <div>
+                number
+              </div>
+              <div
+                class="margin-top-1"
+              >
+                Ex: 130
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</DocumentFragment>
+`;

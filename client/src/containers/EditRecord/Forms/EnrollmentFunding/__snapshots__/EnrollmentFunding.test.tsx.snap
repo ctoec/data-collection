@@ -1,0 +1,264 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-justify"
+      >
+        <h2
+          class="header-normal font-heading-lg"
+        >
+          Has Name's age group and/or site changed?
+        </h2>
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Change enrollment
+        </button>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <h2
+    class="margin-top-4 margin-bottom-2 font-heading-md"
+  >
+    Current enrollment
+  </h2>
+  <div
+    class="oec-card oec-card--primary"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-justify"
+      >
+        <div
+          class="flex-1"
+        >
+          <p>
+            Site
+          </p>
+          <p
+            class="text-bold"
+          >
+            Site A
+          </p>
+        </div>
+        <div
+          class="flex-1"
+        >
+          <p>
+            Age group
+          </p>
+          <p
+            class="text-bold"
+          >
+            <span
+              class="oec-inline-icon oec-inline-icon--incomplete"
+            >
+              <span
+                class="usa-sr-only"
+              >
+                (incomplete)
+              </span>
+            </span>
+          </p>
+        </div>
+        <div
+          class="flex-2"
+        >
+          <p>
+            Enrollment dates
+          </p>
+          <p
+            class="text-bold"
+          >
+            09/03/2020 - present
+          </p>
+        </div>
+        <button
+          class="usa-button usa-button--unstyled"
+          type="button"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            Edit
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Start new funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <h2
+    class="margin-top-4 margin-bottom-2 font-heading-md"
+  >
+    Past enrollments
+  </h2>
+  <div
+    class="oec-card oec-card--secondary"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-justify"
+      >
+        <div
+          class="flex-1"
+        >
+          <p>
+            Site
+          </p>
+          <p
+            class="text-bold"
+          >
+            Site B
+          </p>
+        </div>
+        <div
+          class="flex-1"
+        >
+          <p>
+            Age group
+          </p>
+          <p
+            class="text-bold"
+          >
+            <span
+              class="oec-inline-icon oec-inline-icon--incomplete"
+            >
+              <span
+                class="usa-sr-only"
+              >
+                (incomplete)
+              </span>
+            </span>
+          </p>
+        </div>
+        <div
+          class="flex-2"
+        >
+          <p>
+            Enrollment dates
+          </p>
+          <p
+            class="text-bold"
+          >
+            09/03/2019 - 08/01/2020
+          </p>
+        </div>
+        <button
+          class="usa-button usa-button--unstyled"
+          type="button"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            Edit
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card oec-card--secondary oec-card--borderless"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-justify"
+      >
+        <div
+          class="flex-1"
+        >
+          <p>
+            Funding
+          </p>
+          <span
+            class="usa-tag usa-tag--no-transform"
+          >
+            CDC
+          </span>
+        </div>
+        <div
+          class="flex-1"
+        >
+          <p>
+            Space type
+          </p>
+          <p
+            class="text-bold"
+          >
+            Full
+          </p>
+        </div>
+        <div
+          class="flex-2"
+        >
+          <p>
+            Reporting periods
+          </p>
+          <p
+            class="text-bold"
+          >
+            September 2019 - July 2020
+          </p>
+        </div>
+        <button
+          class="usa-button usa-button--unstyled"
+          type="button"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            Edit
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;

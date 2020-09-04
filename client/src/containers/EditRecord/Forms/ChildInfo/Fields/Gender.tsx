@@ -9,7 +9,6 @@ export const GenderField: React.FC = () => {
   return (
     <FormField<Child, SelectProps, Gender>
       getValue={(data) => data.at('gender')}
-      // Gender will always be defined, so the cast will always succeed
       preprocessForDisplay={(data) => data}
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={Select}

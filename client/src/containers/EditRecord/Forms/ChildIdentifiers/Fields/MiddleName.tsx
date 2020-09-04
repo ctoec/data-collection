@@ -8,7 +8,6 @@ export const MiddleNameField: React.FC = () => {
   return (
     <FormField<Child, TextInputProps, string | null>
       getValue={(data) => data.at('middleName')}
-      defaultValue=""
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={TextInput}
       type="input"

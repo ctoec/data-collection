@@ -51,6 +51,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
             Current enrollment
           </h2>
           <EditEnrollmentForm
+            key="edit-current-enrollment"
             isCurrent={true}
             enrollment={currentEnrollment}
             onSuccess={onSuccess}

@@ -19,7 +19,7 @@ const CheckData: React.FC = () => {
   const [reportData, setReportData] = useState<Child[]>([]);
 
   useEffect(() => {
-    if (reportId && accessToken) {
+    if (reportId) {
       apiGet(`enrollment-reports/${reportId}`, { accessToken }).then(
         (_reportData) => {
           if (_reportData) {

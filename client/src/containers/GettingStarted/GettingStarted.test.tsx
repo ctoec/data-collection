@@ -1,16 +1,14 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import App from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { accessibilityTestHelper, snapshotTestHelper } from '../../testHelpers';
+import GettingStarted from './GettingStarted';
+import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 
 const routerWrapped = (
   <BrowserRouter>
-    <App />
+    <GettingStarted />
   </BrowserRouter>
 );
-
-describe('App', () => {
+describe('GettingStarted', () => {
   snapshotTestHelper(routerWrapped);
   accessibilityTestHelper(routerWrapped);
 });
