@@ -96,6 +96,7 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
           </Form>
         </>
       }
+      refetchChild={refetchChild}
     />
   );
 };
