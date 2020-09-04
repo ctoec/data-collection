@@ -13,7 +13,7 @@ import {
 } from '@ctoec/component-library';
 import { Enrollment } from '../../../../../shared/models';
 import { EnrollmentEndDateField, EnrollmentStartDateField } from '../Fields';
-import { apiPut } from '../../../../../utils/api';
+import { apiPut, apiDelete } from '../../../../../utils/api';
 import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
 
 type EditEnrollmentFormProps = {
@@ -63,6 +63,18 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
       .finally(() => setLoading(false));
   };
 
+  function deleteEnrollment() {
+    apiDelete(`enrollments/${enrollment.id}`, {
+      accessToken,
+    })
+      .then(() => {
+        refetchChild();
+      })
+      .catch((err) => {
+        console.error('Unable to delete enrollment', err);
+      });
+  }
+
   return (
     <Card
       key={enrollment.id}
@@ -90,12 +102,23 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
             {enrollment.exit ? enrollment.exit.format('MM/DD/YYYY') : 'present'}
           </p>
         </div>
-        <ExpandCard>
-          <Button
-            text={<TextWithIcon text="Edit" Icon={Pencil} />}
-            appearance="unstyled"
-          />
-        </ExpandCard>
+        <div className="display-flex align-center flex-space-between">
+          <div className="display-flex align-center margin-right-2">
+            <ExpandCard>
+              <Button
+                text={<TextWithIcon text="Edit" Icon={Pencil} />}
+                appearance="unstyled"
+              />
+            </ExpandCard>
+          </div>
+          <div className="display-flex align-center margin-right-2">
+            <Button
+              text={<TextWithIcon text="Delete" Icon={Pencil} />}
+              appearance="unstyled"
+              onClick={deleteEnrollment}
+            />
+          </div>
+        </div>
       </div>
       <CardExpansion>
         {error && <Alert type="error" text={error} />}
