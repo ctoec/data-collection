@@ -40,7 +40,20 @@ export const IncomeDeterminationCard = ({
   expansion,
   refetchChild,
 }: IncomeDeterminationCardProps) => {
-  function deleteDetermination() {}
+  const { accessToken } = useContext(AuthenticationContext);
+
+  function deleteDetermination() {
+    console.log(determination);
+    apiDelete(`families/income-determination/${determination.id}`, {
+      accessToken,
+    })
+      .then(() => {
+        refetchChild();
+      })
+      .catch((err) => {
+        console.error('Unable to delete determination', err);
+      });
+  }
 
   return (
     <Card
