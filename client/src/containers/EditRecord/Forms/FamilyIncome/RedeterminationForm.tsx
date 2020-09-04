@@ -1,12 +1,10 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   Button,
   Form,
-  ExpandCard,
   FormSubmitButton,
-  Card,
-  CardExpansion,
+  Alert,
 } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
@@ -14,6 +12,8 @@ import { IncomeDeterminationFieldSet } from './Fields';
 
 type RedeterminationFormProps = {
   familyId: number;
+  setIsNew: () => void;
+  hideForm: () => void;
   refetchChild: () => void;
 };
 
@@ -24,23 +24,14 @@ type RedeterminationFormProps = {
  */
 export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   familyId,
+  setIsNew,
+  hideForm,
   refetchChild,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
-  const [closeCard, setCloseCard] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  var newDet = { id: 0, numberOfPeople: 0, income: 0 } as IncomeDetermination;
-
-  // Explicitly don't want `closeCard` as a dep, as this
-  // needs to be triggered on render caused by child refetch
-  // to make form re-openable
-  // (not only when closeCard changes)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (closeCard) setCloseCard(false);
-  });
+  const [error, setError] = useState<string>();
 
   // Save function that handles API protocols. Invokes an api.POST
   // call to create a new resource in the database to hold the values
@@ -49,51 +40,39 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   // family object.
   const onFormSubmit = (newDet: IncomeDetermination) => {
     setLoading(true);
-    apiPost(`families/${familyId}/income-determination/`, newDet, {
+    apiPost(`families/${familyId}/income-determination`, newDet, {
       accessToken,
       jsonParse: false,
     })
       .then(() => {
-        setCloseCard(true);
+        setError(undefined);
+        setIsNew();
         refetchChild();
       })
       .catch((err) => {
-        console.log('Unable to edit income determination: ', err);
+        console.log('Unable to create income determination: ', err);
+        setError('Unable to save income redetermination');
       })
       .finally(() => setLoading(false));
   };
 
   return (
-    <Card forceClose={closeCard}>
-      <div className="display-flex flex-justify">
-        <h2 className="header-normal font-heading-lg">Redetermine income?</h2>
-        <ExpandCard>
-          <Button text="Redetermine" appearance="outline" />
-        </ExpandCard>
-      </div>
-      <CardExpansion>
-        <Form<IncomeDetermination>
-          id={`update-family-income-${newDet.id}`}
-          data={newDet}
-          onSubmit={(data) => onFormSubmit(data)}
-          className="usa-form"
-        >
-          <IncomeDeterminationFieldSet
-            type={'redetermine'}
-            determinationId={newDet.id}
-          />
-          <div className="display-flex">
-            <div>
-              <ExpandCard>
-                <Button text="Cancel" appearance="outline" />
-              </ExpandCard>
-              <FormSubmitButton text={loading ? 'Saving...' : 'Save'} />
-            </div>
+    <>
+      {error && <Alert type="error" text={error} />}
+      <Form<IncomeDetermination>
+        id="redetermine-income"
+        data={{} as IncomeDetermination}
+        onSubmit={(data) => onFormSubmit(data)}
+        className="usa-form"
+      >
+        <IncomeDeterminationFieldSet type="redetermine" />
+        <div className="display-flex">
+          <div>
+            <Button text="Cancel" appearance="outline" onClick={hideForm} />
+            <FormSubmitButton text={loading ? 'Saving...' : 'Save'} />
           </div>
-        </Form>
-      </CardExpansion>
-    </Card>
-    //   }
-    // />
+        </div>
+      </Form>
+    </>
   );
 };

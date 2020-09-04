@@ -29,8 +29,8 @@ export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
   determinations,
   refetchChild,
 }) => {
-  const [showNew, setShowNew] = useState(false);
-  const [isNew, setIsNew] = useState(false);
+  const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
+  const [currentIsNew, setCurrentIsNew] = useState(false);
 
   // Tracking variables for easy reference in element creation
   const sortedDeterminations = (determinations || []).sort((a, b) =>
@@ -41,14 +41,16 @@ export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
 
   return (
     <>
-      {showNew && (
+      {showRedeterminationForm && (
         <>
           <h2 className="font-sans-md margin-top-2 margin-bottom-2">
-            New income determination
+            Redetermine family income
           </h2>
           <Card>
             <RedeterminationForm
               familyId={familyId}
+              setIsNew={() => setCurrentIsNew(true)}
+              hideForm={() => setShowRedeterminationForm(false)}
               refetchChild={refetchChild}
             />
           </Card>
@@ -62,13 +64,12 @@ export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
               : 'No income information on record'}
           </h2>
           &nbsp;&nbsp;&nbsp;
-          {!showNew && (
+          {!showRedeterminationForm && (
             <Button
               text="Redetermine income"
               appearance="unstyled"
               onClick={() => {
-                setShowNew(true);
-                setIsNew(true);
+                setShowRedeterminationForm(true);
               }}
             />
           )}
@@ -79,7 +80,7 @@ export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
               determination={currentDetermination}
               familyId={familyId}
               isCurrent={true}
-              isNew={isNew}
+              isNew={currentIsNew}
               refetchChild={refetchChild}
             />
           )}
