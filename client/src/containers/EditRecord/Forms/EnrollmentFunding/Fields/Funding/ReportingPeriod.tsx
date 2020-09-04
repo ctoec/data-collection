@@ -12,6 +12,7 @@ import moment from 'moment';
 import {
   ChangeFunding,
   ChangeEnrollment,
+  Withdraw,
 } from '../../../../../../shared/payloads';
 import { reportingPeriodFormatter } from '../../../../../../utils/formatters';
 
@@ -31,7 +32,7 @@ type ReportingPeriodProps<T> = {
  * this component does not do any funding source checking/filtering
  */
 export const ReportingPeriodField = <
-  T extends Funding | ChangeFunding | ChangeEnrollment
+  T extends Funding | ChangeFunding | Withdraw | ChangeEnrollment
 >({
   reportingPeriods,
   accessor,

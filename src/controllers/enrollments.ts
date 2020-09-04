@@ -1,5 +1,5 @@
 import { getManager } from 'typeorm';
-import { ChangeFunding } from '../../client/src/shared/payloads/ChangeFunding';
+import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 
@@ -69,5 +69,40 @@ export const changeFunding = async (
       });
       await tManager.save(funding);
     }
+  });
+};
+
+export const withdraw = async (id: number, withdrawData: Withdraw) => {
+  const enrollment = await getManager().findOne(Enrollment, id, {
+    relations: ['fundings'],
+  });
+
+  if (!enrollment) throw new NotFoundError();
+
+  return getManager().transaction(async (tManager) => {
+    const currentFunding = (enrollment.fundings || []).find(
+      (f) => !f.lastReportingPeriod
+    );
+    if (currentFunding) {
+      if (!withdrawData.funding?.lastReportingPeriod) {
+        throw new BadRequestError(
+          'Last reporting period for current funding must be provided.'
+        );
+      }
+
+      currentFunding.lastReportingPeriod =
+        withdrawData.funding.lastReportingPeriod;
+      await tManager.save(currentFunding);
+    }
+
+    if (!withdrawData.exitReason || !withdrawData.exitReason) {
+      throw new BadRequestError(
+        'Exit date and exit reason must be provided to withdraw'
+      );
+    }
+
+    enrollment.exit = withdrawData.exitDate;
+    enrollment.exitReason = withdrawData.exitReason;
+    await tManager.save(enrollment);
   });
 };

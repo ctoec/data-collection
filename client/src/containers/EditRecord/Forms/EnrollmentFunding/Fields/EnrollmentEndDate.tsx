@@ -5,7 +5,7 @@ import {
   FormField,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { ChangeEnrollment } from '../../../../../shared/payloads';
+import { ChangeEnrollment, Withdraw } from '../../../../../shared/payloads';
 import { Moment } from 'moment';
 import { Enrollment } from '../../../../../shared/models';
 
@@ -17,14 +17,16 @@ type EnrollmentEndDateProps<T> = {
  *  Component for updating an enrollment's exit
  */
 export const EnrollmentEndDateField = <
-  T extends Enrollment | ChangeEnrollment
+  T extends Enrollment | ChangeEnrollment | Withdraw
 >({
   accessor,
   optional = false,
 }: EnrollmentEndDateProps<T>) => {
   return (
     <FormField<T, DateInputProps, Moment | null>
-      defaultValue={null}
+      // if field is optional, force default value empty (null)
+      // otherwise, use default value today (undefined)
+      defaultValue={optional ? null : undefined}
       getValue={(data) => accessor(data)}
       optional={optional}
       parseOnChangeEvent={(e: any) => e}

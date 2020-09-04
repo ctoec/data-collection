@@ -50,3 +50,20 @@ enrollmentsRouter.post(
     }
   })
 );
+
+enrollmentsRouter.post(
+  '/:enrollmentId/withdraw',
+  passAsyncError(async (req, res) => {
+    const enrollmentId = parseInt(req.params['enrollmentId']);
+    try {
+      await controller.withdraw(enrollmentId, req.body);
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error('Error withdrawing enrollment: ', err);
+      throw new BadRequestError(
+        'Unable to withdraw enrollment. Make sure request payload has expected format'
+      );
+    }
+  })
+);

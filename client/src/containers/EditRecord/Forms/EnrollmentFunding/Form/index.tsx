@@ -13,12 +13,14 @@ import { EditFundingForm } from './EditFundingForm';
 import { ChangeFundingForm } from './ChangeFundingForm';
 
 type EnrollmentFundingFormProps = {
+  reportingPeriods: ReportingPeriod[];
   enrollments: Enrollment[];
   childName: string;
   childId: string;
   refetchChild: () => void;
 };
 export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
+  reportingPeriods,
   enrollments,
   childName,
   childId,
@@ -37,16 +39,6 @@ export const EnrollmentFundingForm: React.FC<EnrollmentFundingFormProps> = ({
   useEffect(() => {
     apiGet('funding-spaces', { accessToken }).then((_fundingSpaces) =>
       setFundingSpaces(_fundingSpaces)
-    );
-  }, [accessToken]);
-
-  // Get reporting periods for new fundings
-  const [reportingPeriods, setReportingPeriods] = useState<ReportingPeriod[]>(
-    []
-  );
-  useEffect(() => {
-    apiGet('reporting-periods', { accessToken }).then((_reportingPeriods) =>
-      setReportingPeriods(_reportingPeriods)
     );
   }, [accessToken]);
 
