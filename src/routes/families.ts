@@ -69,11 +69,13 @@ familyRouter.post(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const famId = parseInt(req.params['familyId']);
-      const rootFam = await getManager().findOne(Family, { id: famId });
+      const family = await getManager().findOne(Family, { id: famId });
+
       const determination = getManager().create(IncomeDetermination, {
         ...req.body,
-        rootFam,
+        family,
       });
+
       await getManager().save(determination);
       res.sendStatus(200);
     } catch (err) {

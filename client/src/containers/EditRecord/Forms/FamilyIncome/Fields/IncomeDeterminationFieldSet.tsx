@@ -15,7 +15,6 @@ import { IncomeDetermination } from '../../../../../shared/models';
  */
 type IncomeDeterminationFieldSetProps = {
   type: 'new' | 'redetermine' | 'edit';
-  determinationId: number;
 };
 
 /**
@@ -26,7 +25,6 @@ type IncomeDeterminationFieldSetProps = {
  */
 export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetProps> = ({
   type,
-  determinationId,
 }) => {
   let elementId, legend, showLegend;
   switch (type) {
@@ -37,7 +35,7 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
       break;
 
     case 'edit':
-      elementId = `family-income-determination-edit-${determinationId}`;
+      elementId = `family-income-determination-edit`;
       legend = 'Edit family income';
       showLegend = true;
       break;
