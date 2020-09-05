@@ -1,44 +1,43 @@
 import React from 'react';
-
 import {
   FormField,
   RadioButtonGroupProps,
   RadioButtonGroup,
   RadioButton,
   RadioOptionRenderProps,
+  TObjectDriller,
 } from '@ctoec/component-library';
-import { Enrollment, Site } from '../../../../../shared/models';
+import { Site, Enrollment } from '../../../../../shared/models';
 import { ChangeEnrollment } from '../../../../../shared/payloads';
-import { EnrollmentFieldProps } from './FieldProps';
 
-export const SiteField: React.FC<EnrollmentFieldProps & { sites: Site[] }> = ({
+type SiteProps<T> = {
+  sites: Site[];
+  accessor: (_: TObjectDriller<T>) => TObjectDriller<Site>;
+};
+
+/**
+ * Component for updating the site of an enrollment
+ */
+export const SiteField = <T extends Enrollment | ChangeEnrollment>({
   sites,
-  isChangeEnrollment = false,
-}) => {
-  const commonProps = {
-    parseOnChangeEvent: (e: React.ChangeEvent<any>) =>
-      sites.find((s) => s.id === parseInt(e.target.value)) || null,
-    inputComponent: RadioButtonGroup,
-    name: 'site',
-    id: 'site-radiogroup',
-    legend: 'Site',
-    options: sites.map((site) => ({
-      render: (props: RadioOptionRenderProps) => (
-        <RadioButton text={`${site.name}`} {...props} />
-      ),
-      value: `${site.id}`,
-    })),
-  };
-
-  return isChangeEnrollment ? (
-    <FormField<ChangeEnrollment, RadioButtonGroupProps, Site | null>
-      getValue={(data) => data.at('newEnrollment').at('site')}
-      {...commonProps}
-    />
-  ) : (
-    <FormField<Enrollment, RadioButtonGroupProps, Site | null>
-      getValue={(data) => data.at('site')}
-      {...commonProps}
+  accessor,
+}: SiteProps<T>) => {
+  return (
+    <FormField<T, RadioButtonGroupProps, number | null>
+      getValue={(data) => accessor(data).at('id')}
+      parseOnChangeEvent={(e: React.ChangeEvent<any>) =>
+        parseInt(e.target.value) || null
+      }
+      inputComponent={RadioButtonGroup}
+      name="site"
+      id="site-radiogroup"
+      legend="Site"
+      options={sites.map((site) => ({
+        render: (props: RadioOptionRenderProps) => (
+          <RadioButton text={`${site.name}`} {...props} />
+        ),
+        value: `${site.id}`,
+      }))}
     />
   );
 };

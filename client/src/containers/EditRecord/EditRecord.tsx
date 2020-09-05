@@ -1,14 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav } from '@ctoec/component-library';
+import { TabNav, Button } from '@ctoec/component-library';
+
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child } from '../../shared/models';
-import { CareForKidsForm } from './Forms/CareForKids';
-import { FamilyInfoForm } from './Forms/FamilyInfo/Form';
-import { EnrollmentFundingForm } from './Forms/EnrollmentFunding/Form';
-import ChildInfo from './ChildInfo';
+import { Child, ReportingPeriod } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
+import {
+  FamilyIncomeForm,
+  ChildInfoForm,
+  CareForKidsForm,
+  FamilyInfoForm,
+  EnrollmentFundingForm,
+} from './Forms';
+import { WithdrawForm } from './Forms/Withdraw/Form';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -30,34 +35,78 @@ const EditRecord: React.FC = () => {
     setRefetch((r) => r + 1);
   };
 
+  // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
   const history = useHistory();
+  // and make child tab active by default if no hash
+  // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
       history.replace({ hash: TAB_IDS.CHILD });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+  const toggleModal = () => {
+    setWithdrawModalOpen((isOpen) => !isOpen);
+  };
+
+  // Get reporting periods (needed to update enrollments with fundings)
+  const [reportingPeriods, setReportingPeriods] = useState<ReportingPeriod[]>(
+    []
+  );
+  useEffect(() => {
+    apiGet('reporting-periods', { accessToken }).then((_reportingPeriods) =>
+      setReportingPeriods(_reportingPeriods || [])
+    );
+  }, [accessToken]);
+
+  // Get child data
   useEffect(() => {
     apiGet(`children/${childId}`, {
       accessToken,
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
+  const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
   return rowData ? (
     <div className="grid-container">
-      <BackButton />
-      <div className="margin-top-4">
-        <h1>
-          Edit information for {rowData.firstName} {rowData.lastName}
-        </h1>
+      <div className="margin-top-4 display-flex flex-justify">
+        <div>
+          <BackButton />
+          <h1>Edit record</h1>
+          <h2>
+            {rowData.firstName} {rowData.lastName}
+          </h2>
+        </div>
+        <div className="display-flex flex-col flex-align-center">
+          {!!activeEnrollment && (
+            <>
+              <Button
+                appearance="unstyled"
+                text="Withdraw"
+                onClick={() => toggleModal()}
+              />
+              <WithdrawForm
+                childName={rowData.firstName}
+                enrollment={activeEnrollment}
+                reportingPeriods={reportingPeriods}
+                isOpen={withdrawModalOpen}
+                toggleOpen={toggleModal}
+              />
+            </>
+          )}
+        </div>
       </div>
       <TabNav
         items={[
           {
             id: TAB_IDS.CHILD,
             text: 'Child Info',
-            content: <ChildInfo child={rowData} refetchChild={refetchChild} />,
+            content: (
+              <ChildInfoForm child={rowData} refetchChild={refetchChild} />
+            ),
           },
           {
             id: TAB_IDS.FAMILY,
@@ -72,13 +121,20 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.INCOME,
             text: 'Family Income',
-            content: <span>This is where the family income form goes</span>,
+            content: (
+              <FamilyIncomeForm
+                familyId={rowData.family.id}
+                determinations={rowData.family.incomeDeterminations || []}
+                refetchChild={refetchChild}
+              />
+            ),
           },
           {
             id: TAB_IDS.ENROLLMENT,
             text: 'Enrollment and funding',
             content: (
               <EnrollmentFundingForm
+                reportingPeriods={reportingPeriods}
                 enrollments={rowData.enrollments || []}
                 childName={rowData.firstName}
                 childId={rowData.id}
@@ -96,13 +152,13 @@ const EditRecord: React.FC = () => {
         ]}
         activeId={activeTab}
         onClick={(tabId) => {
-          history.push({ hash: tabId });
+          history.replace({ hash: tabId });
         }}
       />
     </div>
   ) : (
-      <> </>
-    );
+    <> </>
+  );
 };
 
 export default EditRecord;

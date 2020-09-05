@@ -4,6 +4,6 @@ export interface Funding {
   id: number;
   enrollment: Enrollment;
   fundingSpace: FundingSpace;
-  firstReportingPeriod?: ReportingPeriod;
+  firstReportingPeriod: ReportingPeriod;
   lastReportingPeriod?: ReportingPeriod;
 }

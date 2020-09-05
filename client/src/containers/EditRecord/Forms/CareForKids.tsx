@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Form,
   FormSubmitButton,
@@ -8,6 +8,8 @@ import {
   RadioButton,
 } from '@ctoec/component-library';
 import { Child } from '../../../shared/models';
+import { apiPut } from '../../../utils/api';
+import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 
 type CareForKidsProps = {
   child: Child;
@@ -22,9 +24,17 @@ export const CareForKidsForm: React.FC<CareForKidsProps> = ({
   child,
   refetchChild,
 }) => {
+  const { accessToken } = useContext(AuthenticationContext);
+  const [isSaving, setIsSaving] = useState(false);
+
   const onSubmit = (updatedChild: Child) => {
-    refetchChild();
-    alert('Data saved successfully!');
+    setIsSaving(true);
+    apiPut(`children/${child.id}`, updatedChild, { accessToken })
+      .then(() => refetchChild())
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setIsSaving(false));
   };
 
   return (
@@ -40,7 +50,7 @@ export const CareForKidsForm: React.FC<CareForKidsProps> = ({
         >
           <FormField<Child, RadioButtonGroupProps, boolean>
             getValue={(data) => data.at('recievesC4K')}
-            preprocessForDisplay={(data) => (data === true ? 'yes' : 'no')}
+            preprocessForDisplay={(data) => (data === true ? 'Yes' : 'No')}
             parseOnChangeEvent={(e) => {
               return e.target.value === 'Yes';
             }}
@@ -68,7 +78,7 @@ export const CareForKidsForm: React.FC<CareForKidsProps> = ({
             ]}
           />
           <div className="grid-row margin-top-2">
-            <FormSubmitButton text="Save edits" />
+            <FormSubmitButton text={isSaving ? 'Saving...' : 'Save'} />
           </div>
         </Form>
       </div>

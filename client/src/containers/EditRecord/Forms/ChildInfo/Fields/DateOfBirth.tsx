@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormField, DateInputProps, DateInput } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 import { Moment } from 'moment';
 
 /**

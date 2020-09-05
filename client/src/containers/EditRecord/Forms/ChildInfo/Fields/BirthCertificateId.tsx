@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormField, TextInputProps, TextInput } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 
 /**
  * Component for entering a birth certificate id of a child in an enrollment.
