@@ -99,6 +99,21 @@ workflows:
           filters:
             branches:
               only: base
+  deploy-to-staging:
+    jobs:
+      - hold:
+          type: approval
+      - install:
+          requires: 
+            - hold
+      - build:
+          env: staging
+          requires:
+            - install
+      - deploy:
+          env: staging
+          requires:
+            - build
   deploy-to-qa:
     jobs:
       - hold:
