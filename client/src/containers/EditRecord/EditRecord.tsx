@@ -3,7 +3,12 @@ import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet, apiDelete } from '../../utils/api';
-import { Child, ReportingPeriod } from '../../shared/models';
+import {
+  Child,
+  Funding,
+  Enrollment,
+  ReportingPeriod,
+} from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
   FamilyIncomeForm,
@@ -91,7 +96,7 @@ const EditRecord: React.FC = () => {
         setIsDeleting(false);
       });
   }
-        
+
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
   return rowData ? (
     <div className="grid-container">
@@ -110,7 +115,7 @@ const EditRecord: React.FC = () => {
                 appearance="unstyled"
                 text="Withdraw"
                 onClick={() => toggleModal()}
-                className='margin-right-2'
+                className="margin-right-2"
               />
               <WithdrawForm
                 childName={rowData.firstName}
@@ -119,57 +124,57 @@ const EditRecord: React.FC = () => {
                 isOpen={withdrawModalOpen}
                 toggleOpen={toggleModal}
               />
-              <Button
-                appearance="unstyled"
-                onClick={toggleDeleteModal}
-                text="Delete record"
-                className="margin-right-0"
-              />
-              <Modal
-                isOpen={deleteModalOpen}
-                onRequestClose={toggleDeleteModal}
-                shouldCloseOnEsc={true}
-                shouldCloseOnOverlayClick={true}
-                contentLabel="Delete Modal"
-                // Use style to dynamically trim the bottom to fit the
-                // message, then center in middle of form
-                style={{
-                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-                }}
-              >
-                <div className="grid-container">
-                  <div className="grid-row margin-top-2">
-                    <h2>
-                      Do you want to delete the enrollment for {rowData.firstName}{' '}
-                      {rowData.lastName}?
-                    </h2>
-                  </div>
-                  <div className="grid-row margin-top-2">
-                    <span>
-                      Deleting an enrollment record will permanently remove all of its
-                      data
-                    </span>
-                  </div>
-                  <div className="margin-top-4">
-                    <div className="grid-row flex-first-baseline space-between-4">
-                      <Button
-                        appearance="outline"
-                        onClick={toggleDeleteModal}
-                        text="No, cancel"
-                      />
-                      <Button
-                        appearance={isDeleting ? 'outline' : 'default'}
-                        onClick={deleteRecord}
-                        text={
-                          isDeleting ? 'Deleting record...' : 'Yes, delete record'
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Modal>
             </>
           )}
+          <Button
+            appearance="unstyled"
+            onClick={toggleDeleteModal}
+            text="Delete record"
+            className="margin-right-0"
+          />
+          <Modal
+            isOpen={deleteModalOpen}
+            onRequestClose={toggleDeleteModal}
+            shouldCloseOnEsc={true}
+            shouldCloseOnOverlayClick={true}
+            contentLabel="Delete Modal"
+            // Use style to dynamically trim the bottom to fit the
+            // message, then center in middle of form
+            style={{
+              content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
+            }}
+          >
+            <div className="grid-container">
+              <div className="grid-row margin-top-2">
+                <h2>
+                  Do you want to delete the enrollment for {rowData.firstName}{' '}
+                  {rowData.lastName}?
+                </h2>
+              </div>
+              <div className="grid-row margin-top-2">
+                <span>
+                  Deleting an enrollment record will permanently remove all of
+                  its data
+                </span>
+              </div>
+              <div className="margin-top-4">
+                <div className="grid-row flex-first-baseline space-between-4">
+                  <Button
+                    appearance="outline"
+                    onClick={toggleDeleteModal}
+                    text="No, cancel"
+                  />
+                  <Button
+                    appearance={isDeleting ? 'outline' : 'default'}
+                    onClick={deleteRecord}
+                    text={
+                      isDeleting ? 'Deleting record...' : 'Yes, delete record'
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </Modal>
         </div>
       </div>
       <TabNav

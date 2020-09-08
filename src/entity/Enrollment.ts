@@ -23,7 +23,7 @@ export class Enrollment implements EnrollmentInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Child, { nullable: false })
+  @ManyToOne(() => Child, { nullable: false, onDelete: 'CASCADE' })
   child: Child;
 
   @Column({ type: 'uuid' })
@@ -47,7 +47,9 @@ export class Enrollment implements EnrollmentInterface {
   @Column({ nullable: true })
   exitReason?: string;
 
-  @OneToMany(() => Funding, (funding) => funding.enrollment)
+  @OneToMany(() => Funding, (funding) => funding.enrollment, {
+    onDelete: 'CASCADE',
+  })
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })
