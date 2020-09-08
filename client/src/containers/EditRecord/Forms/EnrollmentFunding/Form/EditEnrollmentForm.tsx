@@ -11,7 +11,7 @@ import {
   FormSubmitButton,
   Alert,
 } from '@ctoec/component-library';
-import { Enrollment } from '../../../../../shared/models';
+import { Enrollment, Funding } from '../../../../../shared/models';
 import { EnrollmentEndDateField, EnrollmentStartDateField } from '../Fields';
 import { apiPut, apiDelete } from '../../../../../utils/api';
 import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -64,6 +64,15 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
   };
 
   function deleteEnrollment() {
+    if (!!enrollment.fundings) {
+      enrollment.fundings.forEach((elt: Funding) =>
+        apiDelete(`/enrollments/${enrollment.id}/fundings/${elt.id}`, {
+          accessToken,
+        }).catch((err) => {
+          console.error('Problem deleting funding dependency: ', err);
+        })
+      );
+    }
     apiDelete(`enrollments/${enrollment.id}`, {
       accessToken,
     })

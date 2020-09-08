@@ -76,15 +76,12 @@ enrollmentsRouter.delete(
       const enrollment = await getManager().findOne(Enrollment, {
         id: enrollmentId,
       });
-      if (enrollment.fundings) {
+      if (!!enrollment.fundings) {
         for (let i = 0; i < enrollment.fundings.length; i++) {
-          await getManager().delete(Funding, {
-            id: enrollment.fundings[i].id,
-            enrollmentId: enrollmentId,
-          });
+          await getManager().remove(Funding, enrollment.fundings[i]);
         }
       }
-      await getManager().delete(Enrollment, { id: enrollmentId });
+      await getManager().remove(Enrollment, enrollment);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
