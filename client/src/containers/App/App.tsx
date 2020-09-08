@@ -13,6 +13,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
+      <a className="usa-skipnav" href="#main-content">Skip to main content</a>
       <Header
         secondaryTitle="Early childhood enrollment data"
         primaryTitle="Office of Early Childhood"
@@ -50,9 +51,11 @@ const App: React.FC = () => {
         userFirstName={user?.firstName}
       />
       <Switch>
-        {routes.map((route, index) => (
-          <MakeRouteWithSubRoutes key={index} {...route} />
-        ))}
+        <main id="main-content">
+          {routes.map((route, index) => (
+            <MakeRouteWithSubRoutes key={index} {...route} />
+          ))}
+        </main>
       </Switch>
     </div>
   );
