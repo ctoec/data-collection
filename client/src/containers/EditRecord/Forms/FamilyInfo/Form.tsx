@@ -52,6 +52,7 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
       >
         <h2 className="grid-row margin-top-4">Address</h2>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <AddressFieldset />
         <div className="grid-row margin-top-4">
           <HomelessnessField />
@@ -61,6 +62,11 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
         <h2 className="grid-row margin-top-4">Homelessness?</h2>
         <HomelessnessField />
 >>>>>>> Incorporate some style fixes
+=======
+        <AddressFieldset />​
+        <h2 className="grid-row margin-top-4">Homelessness?</h2>
+        <HomelessnessField />
+>>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
         <div className="grid-row margin-top-2">
           <FormSubmitButton
             text={saving ? 'Saving...' : 'Save edits'}

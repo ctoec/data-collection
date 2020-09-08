@@ -4,15 +4,21 @@ import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet, apiDelete } from '../../utils/api';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Child } from '../../shared/models';
 =======
+=======
+>>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
 import {
   Child,
   Funding,
   Enrollment,
   ReportingPeriod,
 } from '../../shared/models';
+<<<<<<< HEAD
 >>>>>>> Cascading entity deletions on records, components that ACTUALLY WORK
+=======
+>>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
 import { BackButton } from '../../components/BackButton';
 import {
   FamilyIncomeForm,
@@ -97,11 +103,14 @@ const EditRecord: React.FC = () => {
   }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (!rowData) {
     return <></>;
   }
 =======
 >>>>>>> Cascading entity deletions on records, components that ACTUALLY WORK
+=======
+>>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
   const commonFormProps = {
@@ -136,6 +145,7 @@ const EditRecord: React.FC = () => {
                 isOpen={withdrawModalOpen}
                 toggleOpen={toggleModal}
               />
+<<<<<<< HEAD
 <<<<<<< HEAD
               <Button
                 appearance="unstyled"
@@ -190,6 +200,8 @@ const EditRecord: React.FC = () => {
               </Modal>
 =======
 >>>>>>> Cascading entity deletions on records, components that ACTUALLY WORK
+=======
+>>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
             </>
           )}
           <Button
@@ -253,9 +265,12 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.FAMILY,
 <<<<<<< HEAD
+<<<<<<< HEAD
             text: 'Family Info',
             content: <FamilyInfoForm {...commonFormProps} />,
 =======
+=======
+>>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
             text: 'Family Address',
             content: (
               <FamilyInfoForm
