@@ -18,6 +18,7 @@ import {
   Alert,
   Form,
   FormSubmitButton,
+  TrashCan,
 } from '@ctoec/component-library';
 import { ReportingPeriodField, ContractSpaceField } from '../Fields';
 
@@ -122,7 +123,7 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
           </div>
           <div className="display-flex align-center margin-right-2">
             <Button
-              text={<TextWithIcon text="Delete" Icon={Pencil} />}
+              text={<TextWithIcon text="Delete" Icon={TrashCan} />}
               appearance="unstyled"
               onClick={deleteFunding}
             />

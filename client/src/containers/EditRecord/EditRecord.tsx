@@ -252,8 +252,18 @@ const EditRecord: React.FC = () => {
           },
           {
             id: TAB_IDS.FAMILY,
+<<<<<<< HEAD
             text: 'Family Info',
             content: <FamilyInfoForm {...commonFormProps} />,
+=======
+            text: 'Family Address',
+            content: (
+              <FamilyInfoForm
+                family={rowData.family}
+                refetchChild={refetchChild}
+              />
+            ),
+>>>>>>> Incorporate some style fixes
           },
           {
             id: TAB_IDS.INCOME,

@@ -96,7 +96,7 @@ export const IncomeDeterminationCard = ({
           </div>
           <div className="display-flex align-center margin-right-2">
             <Button
-              text={<TextWithIcon text="Delete" Icon={Pencil} />}
+              text={<TextWithIcon text="Delete" Icon={TrashCan} />}
               appearance="unstyled"
               onClick={deleteDetermination}
             />
