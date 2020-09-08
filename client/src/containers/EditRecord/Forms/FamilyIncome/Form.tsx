@@ -22,11 +22,11 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = ({
 
   if (!child) return <></>;
 
-  const determinations = child.family.incomeDeterminations;
+  const determinations = child.family.incomeDeterminations || [];
   const familyId = child.family.id;
 
   // Tracking variables for easy reference in element creation
-  const sortedDeterminations = (determinations || []).sort((a, b) =>
+  const sortedDeterminations = determinations.sort((a, b) =>
     propertyDateSorter(a, b, (det) => det.determinationDate, true)
   );
   const currentDetermination = sortedDeterminations[0];

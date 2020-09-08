@@ -115,7 +115,7 @@ const EditRecord: React.FC = () => {
                 appearance="unstyled"
                 text="Withdraw"
                 onClick={() => toggleModal()}
-                className='margin-right-2'
+                className="margin-right-2"
               />
               <WithdrawForm
                 childName={rowData.firstName}
@@ -145,14 +145,14 @@ const EditRecord: React.FC = () => {
                 <div className="grid-container">
                   <div className="grid-row margin-top-2">
                     <h2>
-                      Do you want to delete the enrollment for {rowData.firstName}{' '}
-                      {rowData.lastName}?
+                      Do you want to delete the enrollment for{' '}
+                      {rowData.firstName} {rowData.lastName}?
                     </h2>
                   </div>
                   <div className="grid-row margin-top-2">
                     <span>
-                      Deleting an enrollment record will permanently remove all of its
-                      data
+                      Deleting an enrollment record will permanently remove all
+                      of its data
                     </span>
                   </div>
                   <div className="margin-top-4">
@@ -166,7 +166,9 @@ const EditRecord: React.FC = () => {
                         appearance={isDeleting ? 'outline' : 'default'}
                         onClick={deleteRecord}
                         text={
-                          isDeleting ? 'Deleting record...' : 'Yes, delete record'
+                          isDeleting
+                            ? 'Deleting record...'
+                            : 'Yes, delete record'
                         }
                       />
                     </div>

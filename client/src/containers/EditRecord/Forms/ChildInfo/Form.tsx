@@ -91,5 +91,3 @@ export const ChildInfoForm = ({ child, onSuccess }: EditFormProps) => {
     </Form>
   );
 };
-
-export default ChildInfoForm;

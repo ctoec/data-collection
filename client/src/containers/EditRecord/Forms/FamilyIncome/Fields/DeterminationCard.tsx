@@ -9,7 +9,7 @@ import {
   Pencil,
 } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
-import currencyFormatter from '../../../../../utils/formatters/currency';
+import { currencyFormatter } from '../../../../../utils/formatters';
 
 /**
  * Type to hold the basic properties of an income determination card.

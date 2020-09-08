@@ -1,9 +1,6 @@
 import { isNull } from 'util';
 
-export default function currencyFormatter(
-  number: number,
-  excludeDollarSign?: true
-) {
+export function currencyFormatter(number: number, excludeDollarSign?: true) {
   if (isNull(number)) {
     return '';
   }

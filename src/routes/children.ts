@@ -7,7 +7,7 @@ import {
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 import { getManager } from 'typeorm';
-import { Child, Enrollment, Funding } from '../entity';
+import { Child, Enrollment, Funding, Family } from '../entity';
 
 export const childrenRouter = express.Router();
 
