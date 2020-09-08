@@ -155,13 +155,13 @@ const AddChild: React.FC = () => {
   }, [accessToken, childId, refetchChild]);
 
   const onSuccess = () => {
-    setRefetchChild((r) => r + 1);
     const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
     if (indexOfCurrentStep === steps.length - 1) {
       // If we're all done
       console.log('TODO: what do we do after adding a child?');
-      history.push('/check-data/1');
+      history.push('/check-data/1', { alerts: [{ type: 'success', heading: 'Record added', text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.` }] });
     } else {
+      setRefetchChild((r) => r + 1);
       history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
     }
   };
