@@ -21,8 +21,8 @@ export class Funding implements FundingInterface {
   @ManyToOne((type) => FundingSpace, { nullable: false, eager: true })
   fundingSpace: FundingSpace;
 
-  @ManyToOne((type) => ReportingPeriod, { eager: true })
-  firstReportingPeriod?: ReportingPeriod;
+  @ManyToOne((type) => ReportingPeriod, { nullable: false, eager: true })
+  firstReportingPeriod: ReportingPeriod;
 
   @ManyToOne((type) => ReportingPeriod, { eager: true })
   lastReportingPeriod?: ReportingPeriod;

@@ -14,8 +14,7 @@ import { IncomeDetermination } from '../../../../../shared/models';
  * copy of the ID of the determination being edited.
  */
 type IncomeDeterminationFieldSetProps = {
-  type: 'new' | 'redetermine' | 'edit';
-  determinationId: number;
+  type: 'redetermine' | 'edit';
 };
 
 /**
@@ -25,8 +24,7 @@ type IncomeDeterminationFieldSetProps = {
  * allow a user to redetermine income or edit an existing determination.
  */
 export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetProps> = ({
-  type,
-  determinationId,
+  type = 'edit',
 }) => {
   let elementId, legend, showLegend;
   switch (type) {
@@ -37,15 +35,10 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
       break;
 
     case 'edit':
-      elementId = `family-income-determination-edit-${determinationId}`;
+    default:
+      elementId = `family-income-determination-edit`;
       legend = 'Edit family income';
       showLegend = true;
-      break;
-
-    case 'new':
-      elementId = 'family-income-determination';
-      legend = 'Family income determination';
-      showLegend = false;
       break;
   }
 

@@ -1,19 +1,19 @@
 import React from 'react';
 import { FormField, TextInputProps, TextInput } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 /**
- * Component for entering the SASID of a child in an enrollment.
+ * Component for entering the middle name of a child in an enrollment.
  */
-export const SasidField: React.FC = () => {
+export const MiddleNameField: React.FC = () => {
   return (
     <FormField<Child, TextInputProps, string | null>
-      getValue={(data) => data.at('sasid')}
+      getValue={(data) => data.at('middleName')}
       defaultValue=""
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={TextInput}
       type="input"
-      id="sasid"
-      label="SASID"
+      id="middleName"
+      label="Middle name"
       optional
     />
   );

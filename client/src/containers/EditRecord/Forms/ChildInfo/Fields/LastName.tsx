@@ -1,19 +1,20 @@
 import React from 'react';
 import { FormField, TextInputProps, TextInput } from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
+import { Child } from '../../../../../shared/models';
 
 /**
- * Component for entering the birth state of a child in an enrollment.
+ * Component for entering the last name of a child in an enrollment.
  */
-export const BirthStateField: React.FC = () => {
+export const LastNameField: React.FC = () => {
   return (
     <FormField<Child, TextInputProps, string | null>
-      getValue={(data) => data.at('birthState')}
+      getValue={(data) => data.at('lastName')}
+      defaultValue=""
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={TextInput}
       type="input"
-      id="birthState"
-      label="State"
+      id="lastName"
+      label="Last name"
     />
   );
 };

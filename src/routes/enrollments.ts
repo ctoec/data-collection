@@ -7,6 +7,7 @@ import {
   ApiError,
   BadRequestError,
 } from '../middleware/error/errors';
+import * as controller from '../controllers/enrollments';
 
 export const enrollmentsRouter = express.Router();
 
@@ -22,12 +23,47 @@ enrollmentsRouter.put(
       await getManager().save(
         getManager().merge(Enrollment, enrollment, req.body)
       );
-      res.send(200);
+      res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
 
       console.log('Error saving changes to enrollment:', err);
-      throw new BadRequestError('Enrollment not saved.');
+      throw new BadRequestError('Enrollment not saved');
+    }
+  })
+);
+
+enrollmentsRouter.post(
+  '/:enrollmentId/change-funding',
+  passAsyncError(async (req, res) => {
+    const enrollmentId = parseInt(req.params['enrollmentId']);
+    try {
+      await controller.changeFunding(enrollmentId, req.body);
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+
+      console.error('Error changing funding: ', err);
+      throw new BadRequestError(
+        'Unable to change funding. Make sure request payload has expected format'
+      );
+    }
+  })
+);
+
+enrollmentsRouter.post(
+  '/:enrollmentId/withdraw',
+  passAsyncError(async (req, res) => {
+    const enrollmentId = parseInt(req.params['enrollmentId']);
+    try {
+      await controller.withdraw(enrollmentId, req.body);
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error('Error withdrawing enrollment: ', err);
+      throw new BadRequestError(
+        'Unable to withdraw enrollment. Make sure request payload has expected format'
+      );
     }
   })
 );

@@ -88,9 +88,8 @@ childrenRouter.put(
 
 childrenRouter.post(
   '/:childId/change-enrollment',
-  passAsyncError(async (req: Request, res: Response) => {
+  passAsyncError(async (req, res) => {
     const childId = req.params['childId'];
-
     try {
       await controller.changeEnrollment(childId, req.body);
 
