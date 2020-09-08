@@ -3,22 +3,10 @@ import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet, apiDelete } from '../../utils/api';
-<<<<<<< HEAD
-<<<<<<< HEAD
-import { Child } from '../../shared/models';
-=======
-=======
->>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
 import {
   Child,
-  Funding,
-  Enrollment,
   ReportingPeriod,
 } from '../../shared/models';
-<<<<<<< HEAD
->>>>>>> Cascading entity deletions on records, components that ACTUALLY WORK
-=======
->>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
 import { BackButton } from '../../components/BackButton';
 import {
   FamilyIncomeForm,
@@ -102,15 +90,9 @@ const EditRecord: React.FC = () => {
       });
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
   if (!rowData) {
     return <></>;
   }
-=======
->>>>>>> Cascading entity deletions on records, components that ACTUALLY WORK
-=======
->>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
   const commonFormProps = {
@@ -145,63 +127,6 @@ const EditRecord: React.FC = () => {
                 isOpen={withdrawModalOpen}
                 toggleOpen={toggleModal}
               />
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <Button
-                appearance="unstyled"
-                onClick={toggleDeleteModal}
-                text="Delete record"
-                className="margin-right-0"
-              />
-              <Modal
-                isOpen={deleteModalOpen}
-                onRequestClose={toggleDeleteModal}
-                shouldCloseOnEsc={true}
-                shouldCloseOnOverlayClick={true}
-                contentLabel="Delete Modal"
-                // Use style to dynamically trim the bottom to fit the
-                // message, then center in middle of form
-                style={{
-                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-                }}
-              >
-                <div className="grid-container">
-                  <div className="grid-row margin-top-2">
-                    <h2>
-                      Do you want to delete the enrollment for{' '}
-                      {rowData.firstName} {rowData.lastName}?
-                    </h2>
-                  </div>
-                  <div className="grid-row margin-top-2">
-                    <span>
-                      Deleting an enrollment record will permanently remove all
-                      of its data
-                    </span>
-                  </div>
-                  <div className="margin-top-4">
-                    <div className="grid-row flex-first-baseline space-between-4">
-                      <Button
-                        appearance="outline"
-                        onClick={toggleDeleteModal}
-                        text="No, cancel"
-                      />
-                      <Button
-                        appearance={isDeleting ? 'outline' : 'default'}
-                        onClick={deleteRecord}
-                        text={
-                          isDeleting
-                            ? 'Deleting record...'
-                            : 'Yes, delete record'
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Modal>
-=======
->>>>>>> Cascading entity deletions on records, components that ACTUALLY WORK
-=======
->>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
             </>
           )}
           <Button
@@ -264,21 +189,8 @@ const EditRecord: React.FC = () => {
           },
           {
             id: TAB_IDS.FAMILY,
-<<<<<<< HEAD
-<<<<<<< HEAD
-            text: 'Family Info',
-            content: <FamilyInfoForm {...commonFormProps} />,
-=======
-=======
->>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
             text: 'Family Address',
-            content: (
-              <FamilyInfoForm
-                family={rowData.family}
-                refetchChild={refetchChild}
-              />
-            ),
->>>>>>> Incorporate some style fixes
+            content: <FamilyInfoForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.INCOME,
