@@ -44,13 +44,13 @@ childrenRouter.delete(
         child.enrollments.forEach(async (elt: Enrollment) => {
           if (!!elt.fundings) {
             elt.fundings.forEach(async (f: Funding) => {
-              await getManager().delete(Funding, f);
+              await getManager().remove(Funding, f);
             });
           }
-          await getManager().delete(Enrollment, elt);
+          await getManager().remove(Enrollment, elt);
         });
       }
-      await getManager().delete(Child, child);
+      await getManager().remove(Child, child);
       res.sendStatus(200);
     } catch (err) {
       console.error("Error removing child's record: ", err);

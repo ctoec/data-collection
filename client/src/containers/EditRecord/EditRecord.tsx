@@ -28,11 +28,8 @@ const EditRecord: React.FC = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   // Basic trigger functions to operate the delete warning modal
-  function openModal() {
-    setDeleteModalOpen(true);
-  }
-  function closeModal() {
-    setDeleteModalOpen(false);
+  function toggleModal() {
+    setDeleteModalOpen(!deleteModalOpen);
   }
 
   // Counter to trigger re-run of child fetch in
@@ -83,13 +80,13 @@ const EditRecord: React.FC = () => {
         </div>
         <Button
           appearance="unstyled"
-          onClick={openModal}
+          onClick={toggleModal}
           text="Delete record"
           className="margin-right-0"
         />
         <Modal
           isOpen={deleteModalOpen}
-          onRequestClose={closeModal}
+          onRequestClose={toggleModal}
           shouldCloseOnEsc={true}
           shouldCloseOnOverlayClick={true}
           contentLabel="Delete Modal"
@@ -116,7 +113,7 @@ const EditRecord: React.FC = () => {
               <div className="grid-row flex-first-baseline space-between-4">
                 <Button
                   appearance="outline"
-                  onClick={closeModal}
+                  onClick={toggleModal}
                   text="No, cancel"
                 />
                 <Button
