@@ -71,17 +71,9 @@ enrollmentsRouter.post(
 enrollmentsRouter.delete(
   '/:enrollmentId',
   passAsyncError(async (req: Request, res: Response) => {
+    const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      const enrollmentId = parseInt(req.params['enrollmentId']);
-      const enrollment = await getManager().findOne(Enrollment, {
-        id: enrollmentId,
-      });
-      if (!!enrollment.fundings) {
-        for (let i = 0; i < enrollment.fundings.length; i++) {
-          await getManager().remove(Funding, enrollment.fundings[i]);
-        }
-      }
-      await getManager().remove(Enrollment, enrollment);
+      await getManager().delete(Enrollment, { id: enrollmentId });
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;

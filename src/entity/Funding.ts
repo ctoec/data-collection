@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  Column,
+  JoinColumn,
+} from 'typeorm';
 
 import { Funding as FundingInterface } from '../../client/src/shared/models';
 
@@ -12,7 +18,7 @@ export class Funding implements FundingInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne((type) => Enrollment, { nullable: false })
+  @ManyToOne((type) => Enrollment, { nullable: false, onDelete: 'CASCADE' })
   enrollment: Enrollment;
 
   @Column()
