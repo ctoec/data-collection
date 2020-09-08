@@ -188,7 +188,7 @@ const EditRecord: React.FC = () => {
           },
           {
             id: TAB_IDS.FAMILY,
-            text: 'Family Info',
+            text: 'Family Address',
             content: (
               <FamilyInfoForm
                 family={rowData.family}

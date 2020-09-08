@@ -10,6 +10,7 @@ import {
   Form,
   FormSubmitButton,
   Alert,
+  TrashCan,
 } from '@ctoec/component-library';
 import { Enrollment } from '../../../../../shared/models';
 import { EnrollmentEndDateField, EnrollmentStartDateField } from '../Fields';
@@ -113,7 +114,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
           </div>
           <div className="display-flex align-center margin-right-2">
             <Button
-              text={<TextWithIcon text="Delete" Icon={Pencil} />}
+              text={<TextWithIcon text="Delete" Icon={TrashCan} />}
               appearance="unstyled"
               onClick={deleteEnrollment}
             />
