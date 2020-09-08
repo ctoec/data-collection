@@ -13,10 +13,8 @@ import { EditFormProps } from '../types';
  * passed off to the accessible forms (Edit and Redetermine) reached
  * through this page.
  */
-export const FamilyIncomeForm: React.FC<EditFormProps> = ({
-  child,
-  onSuccess,
-}) => {
+export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
+  const { child, onSuccess, setAlerts } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
@@ -41,6 +39,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = ({
           </h2>
           <Card>
             <RedeterminationForm
+              {...props}
               familyId={familyId}
               setIsNew={() => setCurrentIsNew(true)}
               hideForm={() => setShowRedeterminationForm(false)}
@@ -70,6 +69,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = ({
         <div>
           {currentDetermination && (
             <EditDeterminationForm
+              {...props}
               determination={currentDetermination}
               familyId={familyId}
               isCurrent={true}
@@ -89,6 +89,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = ({
             <div>
               {pastDeterminations.map((determination) => (
                 <EditDeterminationForm
+                  {...props}
                   key={determination.id}
                   determination={determination}
                   familyId={familyId}

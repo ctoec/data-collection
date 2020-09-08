@@ -1,16 +1,12 @@
 import React, { useState, useContext } from 'react';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
-import {
-  Button,
-  Form,
-  FormSubmitButton,
-  Alert,
-} from '@ctoec/component-library';
+import { Button, Form, FormSubmitButton } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from './Fields';
+import { EditFormProps } from '../types';
 
-type RedeterminationFormProps = {
+type RedeterminationFormProps = EditFormProps & {
   familyId: number;
   setIsNew: () => void;
   hideForm: () => void;
@@ -27,6 +23,8 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   setIsNew,
   hideForm,
   refetchChild,
+  setAlerts,
+  child,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
@@ -48,17 +46,29 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
         setError(undefined);
         setIsNew();
         refetchChild();
+        setAlerts([
+          {
+            type: 'success',
+            heading: 'Record updated',
+            text: `Your changes to ${child?.firstName} ${child?.lastName}'s record have been saved.`,
+          },
+        ]);
+        hideForm();
       })
       .catch((err) => {
         console.log('Unable to create income determination: ', err);
-        setError('Unable to save income redetermination');
+        setAlerts([
+          {
+            type: 'error',
+            text: error || 'Unable to save income redetermination',
+          },
+        ]);
       })
       .finally(() => setLoading(false));
   };
 
   return (
     <>
-      {error && <Alert type="error" text={error} />}
       <Form<IncomeDetermination>
         id="redetermine-income"
         data={{} as IncomeDetermination}

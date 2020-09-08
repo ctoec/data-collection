@@ -5,14 +5,14 @@ import {
   Form,
   ExpandCard,
   FormSubmitButton,
-  Alert,
 } from '@ctoec/component-library';
 import { IncomeDeterminationCard } from './Fields/DeterminationCard';
 import { IncomeDetermination } from '../../../../shared/models';
 import { apiPut } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from './Fields';
+import { EditFormProps } from '../types';
 
-type EditDeterminationFormProps = {
+type EditDeterminationFormProps = EditFormProps & {
   determination: IncomeDetermination;
   familyId: number;
   isCurrent: boolean;
@@ -31,6 +31,8 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
   isCurrent,
   isNew,
   refetchChild,
+  setAlerts,
+  child,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
@@ -59,12 +61,25 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
     )
       .then(() => {
         setError(undefined);
+        setAlerts([
+          {
+            type: 'success',
+            heading: 'Record updated',
+            text: `Your changes to ${child?.firstName} ${child?.lastName}'s record have been saved.`,
+          },
+        ]);
         setCloseCard(true);
         refetchChild();
       })
       .catch((err) => {
         console.log('Unable to edit income determination: ', err);
         setError('Unable to update income determination');
+        setAlerts([
+          {
+            type: 'error',
+            text: error || 'Unable to update income redetermination',
+          },
+        ]);
       })
       .finally(() => setLoading(false));
   };
@@ -76,25 +91,22 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
       isNew={isNew}
       forceClose={closeCard}
       expansion={
-        <>
-          {error && <Alert type="error" text={error} />}
-          <Form<IncomeDetermination>
-            id={`update-family-income-${determination.id}`}
-            data={determination}
-            onSubmit={(data) => onFormSubmit(data)}
-            className="usa-form"
-          >
-            <IncomeDeterminationFieldSet type="edit" />
-            <div className="display-flex">
-              <div>
-                <ExpandCard>
-                  <Button text="Cancel" appearance="outline" />
-                </ExpandCard>
-                <FormSubmitButton text={loading ? 'Saving...' : 'Save'} />
-              </div>
+        <Form<IncomeDetermination>
+          id={`update-family-income-${determination.id}`}
+          data={determination}
+          onSubmit={(data) => onFormSubmit(data)}
+          className="usa-form"
+        >
+          <IncomeDeterminationFieldSet type="edit" />
+          <div className="display-flex">
+            <div>
+              <ExpandCard>
+                <Button text="Cancel" appearance="outline" />
+              </ExpandCard>
+              <FormSubmitButton text={loading ? 'Saving...' : 'Save'} />
             </div>
-          </Form>
-        </>
+          </div>
+        </Form>
       }
       refetchChild={refetchChild}
     />

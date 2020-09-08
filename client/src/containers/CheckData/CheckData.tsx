@@ -18,6 +18,7 @@ const CheckData: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<Child[]>([]);
 
+
   useEffect(() => {
     if (reportId && accessToken) {
       apiGet(`enrollment-reports/${reportId}`, { accessToken }).then(
@@ -56,8 +57,8 @@ const CheckData: React.FC = () => {
               />
             </PerfectScrollbar>
           ) : (
-            'Loading...'
-          )}
+              'Loading...'
+            )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">

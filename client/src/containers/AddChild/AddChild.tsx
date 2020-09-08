@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
-import { StepList, Button, StepProps } from '@ctoec/component-library';
+import { StepList, Button, StepProps, AlertProps } from '@ctoec/component-library';
 import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
@@ -10,6 +10,7 @@ import { ChildInfoForm, FamilyInfoForm } from '../EditRecord/Forms';
 import { NewEnrollment } from './NewEnrollment';
 import { NewFamilyIncome } from './NewFamilyIncome';
 import { ChildIdentifiersForm } from '../EditRecord/Forms/ChildIdentifiers/Form';
+import { useAlerts } from '../../hooks/useAlerts';
 
 type LocationType = Location & {
   state: {
@@ -183,7 +184,14 @@ const AddChild: React.FC = () => {
       history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
     }
   };
+<<<<<<< HEAD
   const commonFormProps = { child, onSuccess, hideHeader: true };
+=======
+
+  const { alertElements, setAlerts } = useAlerts();
+
+  const commonFormProps = { child, onSuccess, setAlerts };
+>>>>>>> 9acb532... Set up alerts in add child
 
   if (!child) {
     return <>Loading...</>;
@@ -193,6 +201,7 @@ const AddChild: React.FC = () => {
     <div className="grid-container">
       <div className="margin-top-4">
         <BackButton />
+        {alertElements}
         <h1>Add a child record</h1>
       </div>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />

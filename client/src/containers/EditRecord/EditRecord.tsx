@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav, Button } from '@ctoec/component-library';
+import { TabNav, Button, } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiGet, apiDelete } from '../../utils/api';
+import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
@@ -16,6 +16,7 @@ import { WithdrawForm } from './Forms/Withdraw/Form';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { DeleteRecord } from './Forms/DeleteRecord';
 import { ChildIdentifiersForm } from './Forms/ChildIdentifiers/Form';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
@@ -31,7 +32,7 @@ const EditRecord: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { alertElements, setAlerts } = useAlerts();
 
   // Basic trigger functions to operate the delete warning modal
   function toggleDeleteModal() {
@@ -82,13 +83,15 @@ const EditRecord: React.FC = () => {
     child: rowData,
     onSuccess: refetchChild,
     reportingPeriods,
+    setAlerts,
   };
 
   return (
-    <div className="grid-container">
-      <div className="margin-top-4 display-flex flex-justify">
+    <div className="margin-top-4 grid-container">
+      <BackButton />
+      {alertElements}
+      <div className="display-flex flex-justify">
         <div>
-          <BackButton />
           <h1>Edit record</h1>
           <h2>
             {rowData.firstName} {rowData.lastName}
