@@ -1,9 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
-
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiGet } from '../../utils/api';
+import { apiGet, apiDelete } from '../../utils/api';
 import { Child, ReportingPeriod } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
@@ -14,6 +13,7 @@ import {
   EnrollmentFundingForm,
 } from './Forms';
 import { WithdrawForm } from './Forms/Withdraw/Form';
+import Modal from 'react-modal';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -27,6 +27,13 @@ const EditRecord: React.FC = () => {
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Basic trigger functions to operate the delete warning modal
+  function toggleDeleteModal() {
+    setDeleteModalOpen(!deleteModalOpen);
+  }
 
   // Counter to trigger re-run of child fetch in
   // useEffect hook
@@ -69,6 +76,22 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
+  function deleteRecord() {
+    setIsDeleting(true);
+    apiDelete(`children/${childId}`, { accessToken })
+      // TODO: Swap this total hack out for the roster page
+      // once we have that implemented
+      .then(() => history.push('/check-data/1'))
+
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setDeleteModalOpen(false);
+        setIsDeleting(false);
+      });
+  }
+        
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
   return rowData ? (
     <div className="grid-container">
@@ -87,6 +110,7 @@ const EditRecord: React.FC = () => {
                 appearance="unstyled"
                 text="Withdraw"
                 onClick={() => toggleModal()}
+                className='margin-right-2'
               />
               <WithdrawForm
                 childName={rowData.firstName}
@@ -95,6 +119,55 @@ const EditRecord: React.FC = () => {
                 isOpen={withdrawModalOpen}
                 toggleOpen={toggleModal}
               />
+              <Button
+                appearance="unstyled"
+                onClick={toggleDeleteModal}
+                text="Delete record"
+                className="margin-right-0"
+              />
+              <Modal
+                isOpen={deleteModalOpen}
+                onRequestClose={toggleDeleteModal}
+                shouldCloseOnEsc={true}
+                shouldCloseOnOverlayClick={true}
+                contentLabel="Delete Modal"
+                // Use style to dynamically trim the bottom to fit the
+                // message, then center in middle of form
+                style={{
+                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
+                }}
+              >
+                <div className="grid-container">
+                  <div className="grid-row margin-top-2">
+                    <h2>
+                      Do you want to delete the enrollment for {rowData.firstName}{' '}
+                      {rowData.lastName}?
+                    </h2>
+                  </div>
+                  <div className="grid-row margin-top-2">
+                    <span>
+                      Deleting an enrollment record will permanently remove all of its
+                      data
+                    </span>
+                  </div>
+                  <div className="margin-top-4">
+                    <div className="grid-row flex-first-baseline space-between-4">
+                      <Button
+                        appearance="outline"
+                        onClick={toggleDeleteModal}
+                        text="No, cancel"
+                      />
+                      <Button
+                        appearance={isDeleting ? 'outline' : 'default'}
+                        onClick={deleteRecord}
+                        text={
+                          isDeleting ? 'Deleting record...' : 'Yes, delete record'
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+              </Modal>
             </>
           )}
         </div>

@@ -7,7 +7,7 @@ import {
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 import { getManager } from 'typeorm';
-import { Child } from '../entity';
+import { Child, Enrollment, Funding } from '../entity';
 
 export const childrenRouter = express.Router();
 
@@ -25,6 +25,37 @@ childrenRouter.get(
     if (!child) throw new NotFoundError();
 
     res.send(child);
+  })
+);
+
+/**
+ * /children/:childId DELETE
+ */
+childrenRouter.delete(
+  '/:childId',
+  passAsyncError(async (req: Request, res: Response) => {
+    try {
+      const childId = req.params['childId'];
+      const child = await getManager().findOne(Child, { id: childId });
+
+      // First need to delete everything that foreign-key references
+      // the child: Enrollments, and by extension, funding
+      if (!!child.enrollments) {
+        child.enrollments.forEach(async (elt: Enrollment) => {
+          if (!!elt.fundings) {
+            elt.fundings.forEach(async (f: Funding) => {
+              await getManager().remove(Funding, f);
+            });
+          }
+          await getManager().remove(Enrollment, elt);
+        });
+      }
+      await getManager().remove(Child, child);
+      res.sendStatus(200);
+    } catch (err) {
+      console.error("Error removing child's record: ", err);
+      throw new BadRequestError('Record not deleted.' + err);
+    }
   })
 );
 
