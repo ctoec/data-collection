@@ -5,7 +5,11 @@ import {
   FormContext,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { FundingSpace, Funding } from '../../../../../../../shared/models';
+import {
+  FundingSpace,
+  Funding,
+  Enrollment,
+} from '../../../../../../../shared/models';
 import { fundingSpaceFormatter } from '../../../../../../../utils/formatters';
 import {
   ChangeEnrollment,
@@ -18,7 +22,7 @@ type SingleContractSpaceProps<T> = {
 };
 
 export const SingleContractSpaceField = <
-  T extends Funding | ChangeFunding | ChangeEnrollment
+  T extends Funding | ChangeFunding | ChangeEnrollment | Enrollment
 >({
   fundingSpace,
   accessor,

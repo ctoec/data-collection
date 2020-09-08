@@ -3,7 +3,7 @@ import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet, apiDelete } from '../../utils/api';
-import { Child, ReportingPeriod } from '../../shared/models';
+import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
   FamilyIncomeForm,
@@ -14,6 +14,7 @@ import {
 } from './Forms';
 import { WithdrawForm } from './Forms/Withdraw/Form';
 import Modal from 'react-modal';
+import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 
 const TAB_IDS = {
   CHILD: 'child',
@@ -60,14 +61,8 @@ const EditRecord: React.FC = () => {
   };
 
   // Get reporting periods (needed to update enrollments with fundings)
-  const [reportingPeriods, setReportingPeriods] = useState<ReportingPeriod[]>(
-    []
-  );
-  useEffect(() => {
-    apiGet('reporting-periods', { accessToken }).then((_reportingPeriods) =>
-      setReportingPeriods(_reportingPeriods || [])
-    );
-  }, [accessToken]);
+  // TODO: we should probably use context rather than making lots of network requests
+  const { reportingPeriods } = useReportingPeriods();
 
   // Get child data
   useEffect(() => {
@@ -91,9 +86,19 @@ const EditRecord: React.FC = () => {
         setIsDeleting(false);
       });
   }
-        
+
+  if (!rowData) {
+    return <></>;
+  }
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
-  return rowData ? (
+
+  const commonFormProps = {
+    child: rowData,
+    onSuccess: refetchChild,
+    reportingPeriods,
+  };
+
+  return (
     <div className="grid-container">
       <div className="margin-top-4 display-flex flex-justify">
         <div>
@@ -110,7 +115,7 @@ const EditRecord: React.FC = () => {
                 appearance="unstyled"
                 text="Withdraw"
                 onClick={() => toggleModal()}
-                className='margin-right-2'
+                className="margin-right-2"
               />
               <WithdrawForm
                 childName={rowData.firstName}
@@ -140,14 +145,14 @@ const EditRecord: React.FC = () => {
                 <div className="grid-container">
                   <div className="grid-row margin-top-2">
                     <h2>
-                      Do you want to delete the enrollment for {rowData.firstName}{' '}
-                      {rowData.lastName}?
+                      Do you want to delete the enrollment for{' '}
+                      {rowData.firstName} {rowData.lastName}?
                     </h2>
                   </div>
                   <div className="grid-row margin-top-2">
                     <span>
-                      Deleting an enrollment record will permanently remove all of its
-                      data
+                      Deleting an enrollment record will permanently remove all
+                      of its data
                     </span>
                   </div>
                   <div className="margin-top-4">
@@ -161,7 +166,9 @@ const EditRecord: React.FC = () => {
                         appearance={isDeleting ? 'outline' : 'default'}
                         onClick={deleteRecord}
                         text={
-                          isDeleting ? 'Deleting record...' : 'Yes, delete record'
+                          isDeleting
+                            ? 'Deleting record...'
+                            : 'Yes, delete record'
                         }
                       />
                     </div>
@@ -177,50 +184,27 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.CHILD,
             text: 'Child Info',
-            content: (
-              <ChildInfoForm child={rowData} refetchChild={refetchChild} />
-            ),
+            content: <ChildInfoForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.FAMILY,
             text: 'Family Info',
-            content: (
-              <FamilyInfoForm
-                family={rowData.family}
-                refetchChild={refetchChild}
-              />
-            ),
+            content: <FamilyInfoForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.INCOME,
             text: 'Family Income',
-            content: (
-              <FamilyIncomeForm
-                familyId={rowData.family.id}
-                determinations={rowData.family.incomeDeterminations || []}
-                refetchChild={refetchChild}
-              />
-            ),
+            content: <FamilyIncomeForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.ENROLLMENT,
             text: 'Enrollment and funding',
-            content: (
-              <EnrollmentFundingForm
-                reportingPeriods={reportingPeriods}
-                enrollments={rowData.enrollments || []}
-                childName={rowData.firstName}
-                childId={rowData.id}
-                refetchChild={refetchChild}
-              />
-            ),
+            content: <EnrollmentFundingForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.C4K,
             text: 'Care 4 Kids',
-            content: (
-              <CareForKidsForm child={rowData} refetchChild={refetchChild} />
-            ),
+            content: <CareForKidsForm {...commonFormProps} />,
           },
         ]}
         activeId={activeTab}
@@ -229,8 +213,6 @@ const EditRecord: React.FC = () => {
         }}
       />
     </div>
-  ) : (
-    <> </>
   );
 };
 

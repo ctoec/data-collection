@@ -5,7 +5,11 @@ import {
   Select,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { FundingSpace, Funding } from '../../../../../../../shared/models';
+import {
+  FundingSpace,
+  Funding,
+  Enrollment,
+} from '../../../../../../../shared/models';
 import { SingleContractSpaceField } from './SingleContractSpace';
 import {
   ChangeFunding,
@@ -19,7 +23,7 @@ type ContractSpaceProps<T> = {
 };
 
 export const ContractSpaceField = <
-  T extends Funding | ChangeFunding | ChangeEnrollment
+  T extends Funding | ChangeFunding | ChangeEnrollment | Enrollment
 >({
   fundingSpaceOptions,
   accessor,

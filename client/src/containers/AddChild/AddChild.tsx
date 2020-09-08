@@ -1,0 +1,184 @@
+import React, { useState, useEffect, useContext } from 'react';
+import { BackButton } from '../../components/BackButton';
+import { StepList, Button, StepProps } from '@ctoec/component-library';
+import { Child, Organization } from '../../shared/models';
+import { apiGet, apiPost } from '../../utils/api';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
+import { useLocation, useHistory, useParams } from 'react-router-dom';
+import { EditFormProps } from '../EditRecord/Forms/types';
+import { ChildInfoForm, FamilyInfoForm } from '../EditRecord/Forms';
+import { NewEnrollment } from './NewEnrollment';
+import { NewFamilyIncome } from './NewFamilyIncome';
+
+type LocationType = Location & {
+  state: {
+    organization: Organization;
+  };
+};
+
+const AddChild: React.FC = () => {
+  const { accessToken } = useContext(AuthenticationContext);
+  const { childId } = useParams();
+  const location = useLocation() as LocationType;
+  const organization = location.state ? location.state.organization : undefined;
+
+  const activeStep = location.hash.slice(1);
+  const history = useHistory();
+  useEffect(() => {
+    if (!activeStep) {
+      history.replace({ ...location, hash: steps[0].key });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  // https://skylight.invisionapp.com/console/Full-Data-Collection-Tool-ckeaf1bpi00wn01yhh6f147bf/ckeaf1cjw00wp01yh09w41ivy/play#project_console
+  const steps: StepProps<EditFormProps>[] = [
+    {
+      key: 'child-info',
+      name: 'Child identifiers',
+      status: () => 'incomplete',
+      EditComponent: () => (
+        <Button
+          appearance="unstyled"
+          text={
+            <>
+              edit<span className="usa-sr-only"> child info</span>
+            </>
+          }
+          onClick={() => history.replace({ ...location, hash: 'child-info' })}
+        />
+      ),
+      Form: ChildInfoForm,
+    },
+    // TODO: split child info into two forms
+    // {
+    //   key: 'child-demographics',
+    //   name: 'Child demographics',
+    //   status: () => 'incomplete',
+    //   EditComponent: () => <Buttotext="Edit"onClick={() => {}}n>,
+    //   Form: () => ChildDemographics,
+    // },
+    {
+      key: 'family-address',
+      name: 'Family address',
+      status: () => 'incomplete',
+      EditComponent: () => (
+        <Button
+          appearance="unstyled"
+          text={
+            <>
+              edit<span className="usa-sr-only"> family address</span>
+            </>
+          }
+          onClick={() =>
+            history.replace({ ...location, hash: 'family-address' })
+          }
+        />
+      ),
+      Form: FamilyInfoForm,
+    },
+    {
+      key: 'family-income',
+      name: 'Family income determination',
+      status: () => 'incomplete',
+      EditComponent: () => (
+        <Button
+          appearance="unstyled"
+          text={
+            <>
+              edit
+              <span className="usa-sr-only"> family income determination</span>
+            </>
+          }
+          onClick={() =>
+            history.replace({ ...location, hash: 'family-income' })
+          }
+        />
+      ),
+      Form: NewFamilyIncome,
+    },
+    {
+      key: 'enrollment',
+      name: 'Enrollment and funding',
+      status: () => 'incomplete',
+      EditComponent: () => (
+        <Button
+          appearance="unstyled"
+          text={
+            <>
+              edit<span className="usa-sr-only"> enrollment and funding</span>
+            </>
+          }
+          onClick={() => history.replace({ ...location, hash: 'enrollment' })}
+        />
+      ),
+      Form: NewEnrollment,
+    },
+  ];
+
+  const [child, updateChild] = useState<Child>();
+  const [refetchChild, setRefetchChild] = useState<number>(0);
+
+  useEffect(() => {
+    // On initial load, create child
+    if (child || childId || !accessToken) return;
+
+    if (!organization) {
+      throw Error('Cannot create child without organization');
+    }
+    apiPost(
+      'children',
+      { firstName: '', lastName: '', organization },
+      {
+        accessToken,
+      }
+    )
+      .then((res) => {
+        updateChild(res);
+        history.replace({ ...location, pathname: `/create-record/${res.id}` });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [accessToken, childId, organization, history, updateChild]);
+
+  useEffect(() => {
+    if (!childId) return;
+    apiGet(`children/${childId}`, {
+      accessToken,
+    })
+      .then((updatedChild) => {
+        updateChild(updatedChild);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [accessToken, childId, refetchChild]);
+
+  const onSuccess = () => {
+    setRefetchChild((r) => r + 1);
+    const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
+    if (indexOfCurrentStep === steps.length - 1) {
+      // If we're all done
+      console.log('TODO: what do we do after adding a child?');
+      history.push('/check-data/1');
+    } else {
+      history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
+    }
+  };
+  const commonFormProps = { child, onSuccess };
+
+  if (!child) {
+    return <>Loading...</>;
+  }
+
+  return (
+    <div className="grid-container">
+      <div className="margin-top-4">
+        <BackButton />
+        <h1>Add a child record</h1>
+      </div>
+      <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
+    </div>
+  );
+};
+export default AddChild;

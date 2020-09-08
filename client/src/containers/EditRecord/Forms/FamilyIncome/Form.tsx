@@ -1,20 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Card } from '@ctoec/component-library';
 import { propertyDateSorter } from '../../../../utils/dateSorter';
-import { IncomeDetermination } from '../../../../shared/models';
 import { EditDeterminationForm } from './EditDeterminationForm';
 import { RedeterminationForm } from './RedeterminationForm';
-
-/**
- * Generic type to hold the props of the high-level income forms,
- * specifically to allow indexing into the desire determination as
- * well as persisting back to the DB.
- */
-export type IncomeFormProps = {
-  familyId: number;
-  determinations: IncomeDetermination[];
-  refetchChild: () => void;
-};
+import { EditFormProps } from '../types';
 
 /**
  * The main form rendered in the EditRecord TabNav that allows a user
@@ -24,16 +13,20 @@ export type IncomeFormProps = {
  * passed off to the accessible forms (Edit and Redetermine) reached
  * through this page.
  */
-export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
-  familyId,
-  determinations,
-  refetchChild,
+export const FamilyIncomeForm: React.FC<EditFormProps> = ({
+  child,
+  onSuccess,
 }) => {
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
+  if (!child) return <></>;
+
+  const determinations = child.family.incomeDeterminations || [];
+  const familyId = child.family.id;
+
   // Tracking variables for easy reference in element creation
-  const sortedDeterminations = (determinations || []).sort((a, b) =>
+  const sortedDeterminations = determinations.sort((a, b) =>
     propertyDateSorter(a, b, (det) => det.determinationDate, true)
   );
   const currentDetermination = sortedDeterminations[0];
@@ -51,7 +44,7 @@ export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
               familyId={familyId}
               setIsNew={() => setCurrentIsNew(true)}
               hideForm={() => setShowRedeterminationForm(false)}
-              refetchChild={refetchChild}
+              refetchChild={onSuccess}
             />
           </Card>
         </>
@@ -81,7 +74,7 @@ export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
               familyId={familyId}
               isCurrent={true}
               isNew={currentIsNew}
-              refetchChild={refetchChild}
+              refetchChild={onSuccess}
             />
           )}
         </div>
@@ -101,7 +94,7 @@ export const FamilyIncomeForm: React.FC<IncomeFormProps> = ({
                   familyId={familyId}
                   isCurrent={false}
                   isNew={false}
-                  refetchChild={refetchChild}
+                  refetchChild={onSuccess}
                 />
               ))}
             </div>

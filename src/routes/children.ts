@@ -7,9 +7,30 @@ import {
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 import { getManager } from 'typeorm';
-import { Child, Enrollment, Funding } from '../entity';
+import { Child, Enrollment, Funding, Family } from '../entity';
 
 export const childrenRouter = express.Router();
+
+/**
+ * /children POST
+ *
+ * Creates a new child
+ */
+childrenRouter.post(
+  '/',
+  passAsyncError(async (req, res) => {
+    try {
+      const organization = req.body.organization;
+      const family = await getManager().save(getManager().create(Family, { organization }));
+      const child = await getManager().save(getManager().create(Child, { ...req.body, family }));
+      res.send(child);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error('Error creating child: ', err);
+      throw new BadRequestError('Child information not saved.');
+    }
+  })
+);
 
 /**
  * /children/:childId GET

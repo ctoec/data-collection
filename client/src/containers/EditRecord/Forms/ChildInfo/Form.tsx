@@ -13,20 +13,17 @@ import {
   FosterCheckbox,
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
+import { EditFormProps } from '../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPut } from '../../../../utils/api';
 import { Child } from '../../../../shared/models';
+import { apiPut } from '../../../../utils/api';
+import useIsMounted from '../../../../hooks/useIsMounted';
+
 // import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
 
-type ChildInfoFormProps = {
-  child: Child;
-  refetchChild: () => void;
-};
-export const ChildInfoForm: React.FC<ChildInfoFormProps> = ({
-  child,
-  refetchChild,
-}) => {
+export const ChildInfoForm = ({ child, onSuccess }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
+  const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
   // TODO: HOW ARE WE HANDLING ERRORS?
   // const [error, setError] = useState(null);
@@ -34,19 +31,19 @@ export const ChildInfoForm: React.FC<ChildInfoFormProps> = ({
   // Focus should automatically be on first error on page
   // useFocusFirstError([error]);
 
-  const onFormSubmit = (_child: Child) => {
-    setSaving(true);
-    apiPut(`children/${child.id}`, _child, { accessToken })
-      .then(() => refetchChild())
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => setSaving(false));
-  };
-
   if (!child) {
     throw new Error('Child info rendered without child');
   }
+
+  const onFormSubmit = (_child: Child) => {
+    setSaving(true);
+    apiPut(`children/${child.id}`, _child, { accessToken })
+      .then(() => onSuccess())
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => (isMounted() ? setSaving(false) : null));
+  };
 
   return (
     <Form<Child>
