@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@4.0.0
+  sonarcloud: sonarsource/sonarcloud@1.0.2
 
 jobs:
   install:
@@ -9,6 +10,7 @@ jobs:
       - image: circleci/node:12
     steps:
       - checkout
+      - sonarcloud/scan
       - node/install-packages:
           pkg-manager: yarn
           cache-path: node_modules
