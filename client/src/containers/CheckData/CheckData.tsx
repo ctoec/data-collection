@@ -6,7 +6,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
-import { Button, Table, Alert } from '@ctoec/component-library';
+import { Button, Table } from '@ctoec/component-library';
 import { tableColumns } from './TableColumns';
 import { BackButton } from '../../components/BackButton';
 import { useAlerts } from '../../hooks/useAlerts';
