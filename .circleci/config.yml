@@ -75,10 +75,10 @@ jobs:
             sudo pip3 install awsebcli
       - run: 
           name: Initialize Elastic Beanstalk
-          command: eb init ece-fawkes-<< parameters.env >> --region us-east-2 --platform node.js
+          command: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
       - run: 
           name: Deploy to Elastic Beanstalk environment
-          command: eb deploy ece-fawkes-<< parameters.env >>-<< parameters.env >>
+          command: eb deploy ece-fawkes-<< parameters.env >>-env
 
 
 workflows:
@@ -99,6 +99,21 @@ workflows:
           filters:
             branches:
               only: base
+  deploy-to-staging:
+    jobs:
+      - hold:
+          type: approval
+      - install:
+          requires: 
+            - hold
+      - build:
+          env: staging
+          requires:
+            - install
+      - deploy:
+          env: staging
+          requires:
+            - build
   deploy-to-qa:
     jobs:
       - hold:
