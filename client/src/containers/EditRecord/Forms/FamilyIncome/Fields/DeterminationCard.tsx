@@ -10,10 +10,7 @@ import {
   TrashCan,
 } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../../shared/models';
-<<<<<<< HEAD
 import { currencyFormatter } from '../../../../../utils/formatters';
-=======
->>>>>>> 0d1580f3a4e03bf2b455bc3cf7f81382bb9ed440
 import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../../../utils/api';
 
