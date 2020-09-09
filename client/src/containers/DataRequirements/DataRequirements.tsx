@@ -76,6 +76,8 @@ const DataRequirements: React.FC = () => {
     <div className="grid-container margin-top-4">
       <BackButton />
       <h1>OEC's enrollment data requirements</h1>
+      <p className="text-pre-line">Looking for info on how to format contract space types?</p>
+      <p className="text-pre-line">See funding space types.</p>
       {Object.entries(columnMetadataBySection).map(
         ([sectionName, sectionData]) => (
           <div className="margin-top-4">
