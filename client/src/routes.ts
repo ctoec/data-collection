@@ -9,6 +9,7 @@ import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 import AddChild from './containers/AddChild/AddChild';
+import FundingSpaceTypes from './containers/FundingSpace/FundingSpaceTypes';
 
 export type RouteConfig = {
   path: string;
@@ -44,6 +45,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/data-requirements',
     component: DataRequirements,
+    unauthorized: true,
+  },
+  {
+    path: '/funding-space-types',
+    component: FundingSpaceTypes,
     unauthorized: true,
   },
   {
