@@ -18,7 +18,6 @@ const CheckData: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { reportId } = useParams();
   const { alertElements } = useAlerts();
-
   const history = useHistory();
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<Child[]>([]);

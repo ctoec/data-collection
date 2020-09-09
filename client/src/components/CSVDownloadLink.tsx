@@ -3,24 +3,13 @@ import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadAuthorizedStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
 
-/**
- * TODO: Once we have the infrastructure in place to actually
- * submit to OEC, we can swap this out for whatever we use.
- * But until then, this is the easiest way to make the call
- * to download the information aware of what children's records
- * were actually just uploaded.
- */
 type ExportProps = {
-  submittedIds: string;
+  submittedIds: string[];
 };
 
 export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
-  const { accessToken } = useContext(AuthenticationContext);
+  console.log(submittedIds);
 
-  /**
-   * Function that downloads information that the backend puts
-   * together in spreadsheet form.
-   */
   async function downloadTemplate() {
     await downloadAuthorizedStreamToFile(
       `export/csv-upload/${submittedIds}`,
