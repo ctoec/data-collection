@@ -2,7 +2,13 @@ import React from 'react';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadStreamToFile } from '../utils/fileDownload';
 
-export const CSVDownloadLink: React.FC = () => {
+type ExportProps = {
+  submittedIds: string[];
+};
+
+export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
+  console.log(submittedIds);
+
   async function downloadTemplate() {
     await downloadStreamToFile(
       `column-metadata/csv`,

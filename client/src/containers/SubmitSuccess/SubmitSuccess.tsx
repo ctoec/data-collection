@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { useParams } from 'react-router-dom';
 import { MailToLink } from '../../components/MailToLink';
 import {
   Button,
@@ -12,8 +13,19 @@ import LogoWithCheckSrc from '@ctoec/component-library/dist/assets/images/logoWi
 import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
+/**
+ * TODO: Right now, the CheckData page just redirects straight
+ * here when you click the Send to OEC button. Once we have the
+ * infrastructure for what it means to actually send to OEC,
+ * we can alter this, but for now, we need a way to actually
+ * make this page aware of what data was submitted.
+ */
 const SubmitSuccess: React.FC = () => {
   const h1Ref = getH1RefForTitle();
+  const rawIds: any = useParams();
+  const idString: string = rawIds['idArray'];
+  const childIds = idString.split(',');
+
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row text-bold">
@@ -47,7 +59,7 @@ const SubmitSuccess: React.FC = () => {
         <strong>Want a copy of your enrollment data?</strong>
       </div>
       <div className="grid-row margin-top-1 margin-bottom-2">
-        <CSVDownloadLink />
+        <CSVDownloadLink submittedIds={childIds} />
       </div>
       <div className="grid-row marging-top-6">
         <strong>Need to make changes?</strong>
