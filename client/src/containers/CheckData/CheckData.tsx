@@ -9,15 +9,14 @@ import { Child } from '../../shared/models';
 import { Button, Table } from '@ctoec/component-library';
 import { tableColumns } from './TableColumns';
 import { BackButton } from '../../components/BackButton';
-import useAlerts from '../../hooks/useAlerts';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const CheckData: React.FC = () => {
   const { reportId } = useParams();
+  const { alertElements } = useAlerts();
 
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<Child[]>([]);
-
-  const alerts = useAlerts();
 
   useEffect(() => {
     if (reportId && accessToken) {
@@ -40,7 +39,7 @@ const CheckData: React.FC = () => {
       <div className="CheckData__content margin-top-4 grid-container">
         <div className="margin-x-4">
           <BackButton />
-          {alerts}
+          {alertElements}
           <h1>Check data for {pluralize('child', reportData.length, true)}</h1>
           <p>Make sure all of your data was uploaded correctly. </p>
           <p>If everything looks good, submit to OEC.</p>
@@ -57,8 +56,8 @@ const CheckData: React.FC = () => {
               />
             </PerfectScrollbar>
           ) : (
-            'Loading...'
-          )}
+              'Loading...'
+            )}
         </div>
       </div>
       <div className="CheckData__button-container position-fixed bottom-0 width-full">

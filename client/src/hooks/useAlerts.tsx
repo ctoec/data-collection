@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Alert, AlertProps } from '@ctoec/component-library';
 
@@ -11,15 +11,17 @@ type LocationType = Location & {
 // Push array of alerts to history state on page before
 // E.g. history.push('new-path', { alerts: [{ ...alertProps }] });
 // Optional additional alerts can be passed so that this hook handles all alert creation
-export default (additionalAlerts: AlertProps[] = []) => {
+export const useAlerts = (initialAlerts: AlertProps[] = []) => {
   const location = useLocation() as LocationType;
-  const alerts = (location.state ? location.state.alerts : []).concat(
-    additionalAlerts
-  );
+  const previousPageAlerts = location.state?.alerts;
+  const [alerts, setAlerts] = useState([...initialAlerts, ...previousPageAlerts]);
+
   if (alerts.length) {
     window.scrollTo(0, 0);
   }
-  return alerts.map((alertProps, i) => (
+
+  const alertElements = alerts.map((alertProps, i) => (
     <Alert {...alertProps} key={`alerts-${i}`} />
   ));
+  return { alertElements, alerts, setAlerts }
 };
