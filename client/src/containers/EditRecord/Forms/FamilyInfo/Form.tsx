@@ -17,6 +17,7 @@ import useIsMounted from '../../../../hooks/useIsMounted';
 export const FamilyInfoForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
+  hideHeader = false,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -38,11 +39,14 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
 
   return (
     <div className="grid-container margin-top-2">
-      <h1 className="grid-row">Family Address</h1>
-      <div className="grid-row margin-top-2 text-light">
-        Information is required unless otherwise specified.
-      </div>
-
+      {!hideHeader && (
+        <>
+          <h2 className="grid-row">Family Address</h2>
+          <p className="usa-hint">
+            Information is required unless otherwise specified.
+          </p>
+        </>
+      )}
       <Form<Family>
         className="FamilyInfoForm"
         data={family}
@@ -50,9 +54,9 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
         noValidate
         autoComplete="off"
       >
-        <h2 className="grid-row margin-top-4">Address</h2>
-        <AddressFieldset />​
-        <h2 className="grid-row margin-top-4">Homelessness?</h2>
+        <h3 className="grid-row margin-top-4">Address</h3>
+        <AddressFieldset />
+        <h3 className="grid-row margin-top-4">Homelessness?</h3>
         <HomelessnessField />
         <div className="grid-row margin-top-2">
           <FormSubmitButton

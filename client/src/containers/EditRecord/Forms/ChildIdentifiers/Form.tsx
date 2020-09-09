@@ -6,7 +6,7 @@ import {
   LastNameField,
   SuffixField,
   DateOfBirthField,
-  BirthCertificateFormFieldSet
+  BirthCertificateFormFieldSet,
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../types';
@@ -17,7 +17,11 @@ import useIsMounted from '../../../../hooks/useIsMounted';
 
 // import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
 
-export const ChildIdentifiersForm = ({ child, onSuccess }: EditFormProps) => {
+export const ChildIdentifiersForm = ({
+  child,
+  onSuccess,
+  hideHeader = false,
+}: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
@@ -49,8 +53,14 @@ export const ChildIdentifiersForm = ({ child, onSuccess }: EditFormProps) => {
       noValidate
       autoComplete="off"
     >
-      <h2>Child's identifiers</h2>
-      <p className="usa-hint">Information is required unless otherwise specified.</p>
+      {!hideHeader && (
+        <>
+          <h2>Child's identifiers</h2>
+          <p className="usa-hint">
+            Information is required unless otherwise specified.
+          </p>
+        </>
+      )}
       <div className="grid-row grid-gap">
         <div className="mobile-lg:grid-col-12">
           <SasidField />

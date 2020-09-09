@@ -183,7 +183,7 @@ const AddChild: React.FC = () => {
       history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
     }
   };
-  const commonFormProps = { child, onSuccess };
+  const commonFormProps = { child, onSuccess, hideHeader: true };
 
   if (!child) {
     return <>Loading...</>;

@@ -14,7 +14,11 @@ import useIsMounted from '../../../../hooks/useIsMounted';
 
 // import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
 
-export const ChildInfoForm = ({ child, onSuccess }: EditFormProps) => {
+export const ChildInfoForm = ({
+  child,
+  onSuccess,
+  hideHeader = false,
+}: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
@@ -46,8 +50,14 @@ export const ChildInfoForm = ({ child, onSuccess }: EditFormProps) => {
       noValidate
       autoComplete="off"
     >
-      <h2>Child info</h2>
-      <p className="usa-hint">Information is required unless otherwise specified.</p>
+      {!hideHeader && (
+        <>
+          <h2>Child info</h2>
+          <p className="usa-hint">
+            Information is required unless otherwise specified.
+          </p>
+        </>
+      )}
       <RaceField />
       <EthnicityField />
       <GenderField />

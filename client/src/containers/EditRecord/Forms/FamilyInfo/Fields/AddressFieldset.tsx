@@ -19,6 +19,7 @@ export const AddressFieldset: React.FC = () => {
       id="family-address"
       legend="Address"
       horizontal
+      showLegend
       className="display-inline-block"
     >
       <div className="grid-col-12 margin-top-2">
