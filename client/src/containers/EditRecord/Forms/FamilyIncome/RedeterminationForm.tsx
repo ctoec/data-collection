@@ -6,11 +6,12 @@ import { apiPost } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from './Fields';
 import { EditFormProps } from '../types';
 
-type RedeterminationFormProps = EditFormProps & {
+type RedeterminationFormProps = {
   familyId: number;
   setIsNew: () => void;
   hideForm: () => void;
   onSuccess: () => void;
+  setAlerts: EditFormProps['setAlerts'];
 };
 
 /**
