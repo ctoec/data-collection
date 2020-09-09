@@ -51,10 +51,9 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
         autoComplete="off"
       >
         <h2 className="grid-row margin-top-4">Address</h2>
-        <AddressFieldset />
-        <div className="grid-row margin-top-4">
-          <HomelessnessField />
-        </div>
+        <AddressFieldset />​
+        <h2 className="grid-row margin-top-4">Homelessness?</h2>
+        <HomelessnessField />
         <div className="grid-row margin-top-2">
           <FormSubmitButton
             text={saving ? 'Saving...' : 'Save edits'}

@@ -73,9 +73,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
         <Card>
           <>
             <h3>
-              {visibleForm === 'end'
-                ? 'End current funding'
-                : 'Start new funding'}
+              {visibleForm === 'end' ? 'End current funding' : 'Change funding'}
             </h3>
             {error && <Alert type="error" text={error} />}
             <Form<ChangeFunding>
@@ -111,7 +109,9 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
                 onClick={() => setVisibleForm(undefined)}
               />
               <FormSubmitButton
-                text={loading ? 'Changing funding...' : 'Change funding'}
+                text={loading
+                  ? visibleForm === 'end' ? 'Ending funding...' : 'Changing funding...'
+                  : visibleForm === 'end' ? 'End current funding' : 'Change current funding'}
                 disabled={loading}
               />
             </Form>

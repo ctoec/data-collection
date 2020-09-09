@@ -57,21 +57,7 @@ childrenRouter.delete(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const childId = req.params['childId'];
-      const child = await getManager().findOne(Child, { id: childId });
-
-      // First need to delete everything that foreign-key references
-      // the child: Enrollments, and by extension, funding
-      if (!!child.enrollments) {
-        child.enrollments.forEach(async (elt: Enrollment) => {
-          if (!!elt.fundings) {
-            elt.fundings.forEach(async (f: Funding) => {
-              await getManager().remove(Funding, f);
-            });
-          }
-          await getManager().remove(Enrollment, elt);
-        });
-      }
-      await getManager().remove(Child, child);
+      await getManager().delete(Child, { id: childId });
       res.sendStatus(200);
     } catch (err) {
       console.error("Error removing child's record: ", err);
