@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table, Column } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
-import { FundingSpaceType, FUNDING_SPACE_TYPES } from '../../shared/models';
 
 const FundingSpaceTypes: React.FC = () => {
   const columns: Column<FundingSpaceType>[] = [
