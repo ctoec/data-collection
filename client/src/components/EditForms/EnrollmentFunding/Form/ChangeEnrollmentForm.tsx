@@ -133,7 +133,6 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           {!!currentEnrollment && (
             <>
               <h3>Previous enrollment</h3>
-              <h4 className="font-heading-md margin-bottom-0">End date</h4>
               <EnrollmentEndDateField<ChangeEnrollment>
                 accessor={(data) => data.at('oldEnrollment').at('exitDate')}
                 optional={true}

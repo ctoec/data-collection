@@ -22,7 +22,7 @@ export class Site implements SiteInterface {
   @Column()
   titleI: boolean;
 
-  @Column({ type: 'enum', enum: Region })
+  @Column({ type: 'simple-enum', enum: Region })
   region: Region;
 
   @Column({ nullable: true })
