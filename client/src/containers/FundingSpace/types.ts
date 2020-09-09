@@ -1,3 +1,5 @@
+import { FundingSource, FundingTime } from "../../shared/models";
+
 export interface FundingSpaceType {
   displayName: string;
   fundingSources: FundingSource[];

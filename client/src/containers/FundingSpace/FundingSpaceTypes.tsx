@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Column } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
+import { FundingSpaceType, FUNDING_SPACE_TYPES } from './types';
 
 const FundingSpaceTypes: React.FC = () => {
   const columns: Column<FundingSpaceType>[] = [
@@ -9,20 +10,21 @@ const FundingSpaceTypes: React.FC = () => {
       cell: ({ row }) =>
         row ? (
           <th scope="row">
-            <span className="text-bold">{row.displayName}</span>
+            <div className="text-bold">{row.displayName}</div>
+            <div>({row.fundingSources.join(' or ')})</div>
           </th>
         ) : (
           <></>
-        ),
+        )
     },
     {
       name: 'Contract Space',
       cell: ({ row }) =>
-        row ? (<div>
+        row ? (<td>
           {row.contractSpaces.map(space => {
-            return <td> {space.displayName} </td>
+            return <div>{space.displayName}</div>
           })}
-        </div>
+        </td>
         ) : (
           <></>
         )
@@ -30,11 +32,11 @@ const FundingSpaceTypes: React.FC = () => {
     {
       name: 'Accepted formats',
       cell: ({ row }) =>
-        row ? (<div>
+        row ? (<td>
           {row.contractSpaces.map(space => {
-            return <td> {space.formats.join(' or')} </td>
+            return <div>{space.formats.map(x => '"' + x + '"').join(' or ')}</div>
           })}
-        </div>
+        </td>
         ) : (
           <></>
         )

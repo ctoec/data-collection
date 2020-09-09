@@ -5,6 +5,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { Table, Column } from '@ctoec/component-library';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
+import { Link } from 'react-router-dom';
 
 const DataRequirements: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -76,8 +77,9 @@ const DataRequirements: React.FC = () => {
     <div className="grid-container margin-top-4">
       <BackButton />
       <h1>OEC's enrollment data requirements</h1>
-      <p className="text-pre-line">Looking for info on how to format contract space types?</p>
-      <p className="text-pre-line">See funding space types.</p>
+      <p className="text-pre-line">Looking for info on how to format contract space types?
+        <br/>See <Link to="/funding-space-types">funding space types</Link>.
+      </p>
       {Object.entries(columnMetadataBySection).map(
         ([sectionName, sectionData]) => (
           <div className="margin-top-4">
