@@ -20,7 +20,7 @@ import AuthenticationContext from '../../../../../contexts/AuthenticationContext
 type EditEnrollmentFormProps = {
   enrollment: Enrollment;
   isCurrent?: boolean;
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -32,7 +32,7 @@ type EditEnrollmentFormProps = {
 export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
   enrollment,
   isCurrent = false,
-  refetchChild,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
@@ -56,7 +56,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
       .then(() => {
         setError(undefined);
         setCloseCard(true);
-        refetchChild();
+        onSuccess();
       })
       .catch((err) => {
         setError('Unable to edit enrollment');
@@ -69,7 +69,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
       accessToken,
     })
       .then(() => {
-        refetchChild();
+        onSuccess();
       })
       .catch((err) => {
         console.error('Unable to delete enrollment', err);

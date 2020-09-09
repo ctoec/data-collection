@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiGet, apiDelete } from '../../utils/api';
+import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
@@ -16,6 +16,7 @@ import { WithdrawForm } from './Forms/Withdraw/Form';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { DeleteRecord } from './Forms/DeleteRecord';
 import { ChildIdentifiersForm } from './Forms/ChildIdentifiers/Form';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
@@ -31,7 +32,7 @@ const EditRecord: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { alertElements, setAlerts } = useAlerts();
 
   // Basic trigger functions to operate the delete warning modal
   function toggleDeleteModal() {
@@ -41,9 +42,6 @@ const EditRecord: React.FC = () => {
   // Counter to trigger re-run of child fetch in
   // useEffect hook
   const [refetch, setRefetch] = useState<number>(0);
-  const refetchChild = () => {
-    setRefetch((r) => r + 1);
-  };
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -78,17 +76,30 @@ const EditRecord: React.FC = () => {
   }
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
+  const onSuccess = () => {
+    setRefetch((r) => r + 1);
+    setAlerts([
+      {
+        type: 'success',
+        heading: 'Record updated',
+        text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
+      },
+    ]);
+  };
+
   const commonFormProps = {
     child: rowData,
-    onSuccess: refetchChild,
+    onSuccess,
+    setAlerts,
     reportingPeriods,
   };
 
   return (
-    <div className="grid-container">
-      <div className="margin-top-4 display-flex flex-justify">
+    <div className="margin-top-4 grid-container">
+      <BackButton />
+      {alertElements}
+      <div className="display-flex flex-justify">
         <div>
-          <BackButton />
           <h1>Edit record</h1>
           <h2>
             {rowData.firstName} {rowData.lastName}

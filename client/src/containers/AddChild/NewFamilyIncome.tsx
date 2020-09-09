@@ -15,12 +15,12 @@ import useIsMounted from '../../hooks/useIsMounted';
 export const NewFamilyIncome: React.FC<EditFormProps> = ({
   child,
   onSuccess,
+  setAlerts,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
   const familyId = child?.family.id;
 
   // Save function that handles API protocols. Invokes an api.POST
@@ -37,7 +37,12 @@ export const NewFamilyIncome: React.FC<EditFormProps> = ({
       .then(onSuccess)
       .catch((err) => {
         console.log('Unable to create income determination: ', err);
-        setError('Unable to save income redetermination');
+        setAlerts([
+          {
+            type: 'error',
+            text: err || 'Unable to save income redetermination',
+          },
+        ]);
       })
       .finally(() => (isMounted() ? setLoading(false) : null));
   };

@@ -43,7 +43,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
         currentEnrollment={currentEnrollment}
         childId={child.id}
         sites={sites}
-        refetchChild={onSuccess}
+        onSuccess={onSuccess}
       />
       {currentEnrollment && (
         <>
@@ -53,7 +53,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
           <EditEnrollmentForm
             isCurrent={true}
             enrollment={currentEnrollment}
-            refetchChild={onSuccess}
+            onSuccess={onSuccess}
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingForm
@@ -63,14 +63,14 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
               fundingSpaces={fundingSpaces}
               funding={funding}
               enrollment={currentEnrollment}
-              refetchChild={onSuccess}
+              onSuccess={onSuccess}
             />
           ))}
           <ChangeFundingForm
             fundingSpaces={fundingSpaces}
             reportingPeriods={reportingPeriods}
             enrollment={currentEnrollment}
-            refetchChild={onSuccess}
+            onSuccess={onSuccess}
           />
         </>
       )}
@@ -84,7 +84,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
               <EditEnrollmentForm
                 key={enrollment.id}
                 enrollment={enrollment}
-                refetchChild={onSuccess}
+                onSuccess={onSuccess}
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingForm
@@ -93,7 +93,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
                   fundingSpaces={fundingSpaces}
                   funding={funding}
                   enrollment={enrollment}
-                  refetchChild={onSuccess}
+                  onSuccess={onSuccess}
                 />
               ))}
             </>

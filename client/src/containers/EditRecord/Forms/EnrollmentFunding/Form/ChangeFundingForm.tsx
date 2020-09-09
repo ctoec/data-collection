@@ -21,7 +21,7 @@ type ChangeFundingFormProps = {
   fundingSpaces: FundingSpace[];
   reportingPeriods: ReportingPeriod[];
   enrollment: Enrollment;
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -34,7 +34,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
   fundingSpaces,
   reportingPeriods,
   enrollment,
-  refetchChild,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [error, setError] = useState<string>();
@@ -49,7 +49,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
       .then(() => {
         setError(undefined);
         setVisibleForm(undefined);
-        refetchChild();
+        onSuccess();
       })
       .catch((err) => {
         console.log(err);
@@ -109,9 +109,15 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
                 onClick={() => setVisibleForm(undefined)}
               />
               <FormSubmitButton
-                text={loading
-                  ? visibleForm === 'end' ? 'Ending funding...' : 'Changing funding...'
-                  : visibleForm === 'end' ? 'End current funding' : 'Change current funding'}
+                text={
+                  loading
+                    ? visibleForm === 'end'
+                      ? 'Ending funding...'
+                      : 'Changing funding...'
+                    : visibleForm === 'end'
+                    ? 'End current funding'
+                    : 'Change current funding'
+                }
                 disabled={loading}
               />
             </Form>

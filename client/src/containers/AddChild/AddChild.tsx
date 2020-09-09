@@ -10,6 +10,7 @@ import { ChildInfoForm, FamilyInfoForm } from '../EditRecord/Forms';
 import { NewEnrollment } from './NewEnrollment';
 import { NewFamilyIncome } from './NewFamilyIncome';
 import { ChildIdentifiersForm } from '../EditRecord/Forms/ChildIdentifiers/Form';
+import { useAlerts } from '../../hooks/useAlerts';
 
 type LocationType = Location & {
   state: {
@@ -149,7 +150,15 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, childId, organization, history, updateChild, location, child]);
+  }, [
+    accessToken,
+    child,
+    childId,
+    location,
+    organization,
+    history,
+    updateChild,
+  ]);
 
   useEffect(() => {
     if (!childId) return;
@@ -183,7 +192,10 @@ const AddChild: React.FC = () => {
       history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
     }
   };
-  const commonFormProps = { child, onSuccess, hideHeader: true };
+
+  const { alertElements, setAlerts } = useAlerts();
+
+  const commonFormProps = { child, onSuccess, setAlerts };
 
   if (!child) {
     return <>Loading...</>;
@@ -193,6 +205,7 @@ const AddChild: React.FC = () => {
     <div className="grid-container">
       <div className="margin-top-4">
         <BackButton />
+        {alertElements}
         <h1>Add a child record</h1>
       </div>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />

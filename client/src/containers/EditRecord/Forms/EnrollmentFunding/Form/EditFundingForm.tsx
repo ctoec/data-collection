@@ -28,7 +28,7 @@ type EditFundingFormProps = {
   funding: Funding;
   enrollment: Enrollment;
   isCurrent?: boolean;
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -43,7 +43,7 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
   funding,
   enrollment,
   isCurrent,
-  refetchChild,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
@@ -69,7 +69,7 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
       .then(() => {
         setError(undefined);
         setCloseCard(true);
-        refetchChild();
+        onSuccess();
       })
       .catch(() => setError('Unable to edit funding'))
       .finally(() => setLoading(false));
@@ -80,7 +80,7 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
       accessToken,
     })
       .then(() => {
-        refetchChild();
+        onSuccess();
       })
       .catch((err) => {
         console.error('Unable to delete enrollment', err);
