@@ -18,8 +18,6 @@ const CheckData: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<Child[]>([]);
 
-  const alerts = useAlerts();
-
   useEffect(() => {
     if (reportId && accessToken) {
       apiGet(`enrollment-reports/${reportId}`, { accessToken }).then(
