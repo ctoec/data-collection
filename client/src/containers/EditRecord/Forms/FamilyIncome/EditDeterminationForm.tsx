@@ -38,7 +38,6 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
@@ -60,17 +59,15 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
       { accessToken }
     )
       .then(() => {
-        setError(undefined);
         setCloseCard(true);
         onSuccess();
       })
       .catch((err) => {
         console.log('Unable to edit income determination: ', err);
-        setError('Unable to update income determination');
         setAlerts([
           {
             type: 'error',
-            text: error || 'Unable to update income redetermination',
+            text: err || 'Unable to update income redetermination',
           },
         ]);
       })
