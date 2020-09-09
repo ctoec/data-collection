@@ -73,7 +73,7 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/success',
+    path: '/success/:idArray',
     component: SubmitSuccess,
     unauthorized: false,
   },
