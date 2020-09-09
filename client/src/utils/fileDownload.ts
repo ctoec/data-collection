@@ -19,6 +19,23 @@ export async function downloadStreamToFile(
   saveAs(fileBlob, parseFileName(res, defaultFileName));
 }
 
+export async function downloadAuthorizedStreamToFile(
+  route: string,
+  authContext: string,
+  defaultFileName?: string
+) {
+  const res: Response = await apiGet(route, {
+    jsonParse: false,
+    accessToken: authContext,
+  });
+
+  const fileBlob = new Blob([await res.arrayBuffer()], {
+    type: 'application/octet-stream',
+  });
+
+  saveAs(fileBlob, parseFileName(res, defaultFileName));
+}
+
 function parseFileName(res: Response, defaultFileName?: string): string {
   const cdHeader = res.headers.get('Content-Disposition');
 
