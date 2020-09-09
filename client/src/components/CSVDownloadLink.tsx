@@ -32,6 +32,9 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
   return (
     <Button
       appearance="unstyled"
+      //  TODO: Have this actual download uploaded data, not the upload template
+      //  We'll probably need to generate a CSV on the fly, since I don't think we're
+      //  holding uploaded files indefinitely?
       onClick={downloadTemplate}
       className="text-bold margin-bottom-3 display-block"
       external
