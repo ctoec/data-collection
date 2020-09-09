@@ -15,8 +15,10 @@ import {
 import { WithdrawForm } from './Forms/Withdraw/Form';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { DeleteRecord } from './Forms/DeleteRecord';
+import { ChildIdentifiersForm } from './Forms/ChildIdentifiers/Form';
 
 const TAB_IDS = {
+  IDENT: 'identifiers',
   CHILD: 'child',
   FAMILY: 'family',
   INCOME: 'income',
@@ -125,6 +127,11 @@ const EditRecord: React.FC = () => {
       </div>
       <TabNav
         items={[
+          {
+            id: TAB_IDS.CHILD,
+            text: 'Child Identifiers',
+            content: <ChildIdentifiersForm {...commonFormProps} />,
+          },
           {
             id: TAB_IDS.CHILD,
             text: 'Child Info',

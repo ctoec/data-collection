@@ -17,6 +17,7 @@ export const RaceField: React.FC = () => {
     <CheckboxGroup<FormFieldSetProps<Child>>
       useFormFieldSet
       legend="Race"
+      showLegend
       id="race"
       options={[
         raceOptionFactory(

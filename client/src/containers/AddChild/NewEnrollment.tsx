@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Enrollment, Child } from '../../shared/models';
+import { Enrollment } from '../../shared/models';
 import {
   SiteField,
   EnrollmentStartDateField,
