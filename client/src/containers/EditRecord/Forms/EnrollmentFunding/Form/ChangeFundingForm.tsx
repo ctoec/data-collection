@@ -109,7 +109,9 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
                 onClick={() => setVisibleForm(undefined)}
               />
               <FormSubmitButton
-                text={loading ? 'Ending funding...' : 'End current funding'}
+                text={loading
+                  ? visibleForm === 'end' ? 'Ending funding...' : 'Changing funding...'
+                  : visibleForm === 'end' ? 'End current funding' : 'Change current funding'}
                 disabled={loading}
               />
             </Form>
