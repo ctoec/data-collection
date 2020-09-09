@@ -22,7 +22,6 @@ import { Link } from 'react-router-dom';
 const SubmitSuccess: React.FC = () => {
   const rawIds: any = useParams();
   const idString: string = rawIds['idArray'];
-  const childIds = idString.split(',');
 
   return (
     <div className="grid-container margin-top-4">
@@ -57,7 +56,7 @@ const SubmitSuccess: React.FC = () => {
         <strong>Want a copy of your enrollment data?</strong>
       </div>
       <div className="grid-row margin-top-1 margin-bottom-2">
-        <CSVDownloadLink submittedIds={childIds} />
+        <CSVDownloadLink submittedIds={idString} />
       </div>
       <div className="grid-row marging-top-6">
         <strong>Need to make changes?</strong>

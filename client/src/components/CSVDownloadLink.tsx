@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
-import { downloadStreamToFile } from '../utils/fileDownload';
+import { downloadAuthorizedStreamToFile } from '../utils/fileDownload';
+import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
 
 type ExportProps = {
-  submittedIds: string[];
+  submittedIds: string;
 };
 
 export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
-  console.log(submittedIds);
+  const { accessToken } = useContext(AuthenticationContext);
 
   async function downloadTemplate() {
-    await downloadStreamToFile(
-      `column-metadata/csv`,
-      `ECE Data Collection Template.csv`
+    await downloadAuthorizedStreamToFile(
+      `export/csv-upload/${submittedIds}`,
+      accessToken || '',
+      `Uploaded Data.csv`
     );
   }
 
