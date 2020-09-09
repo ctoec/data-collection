@@ -149,7 +149,7 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, childId, organization, history, updateChild]);
+  }, [accessToken, childId, organization, history, updateChild, location, child]);
 
   useEffect(() => {
     if (!childId) return;
