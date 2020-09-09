@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { getManager } from 'typeorm';
 import { Funding } from '../entity';
@@ -27,6 +27,21 @@ fundingsRouter.put(
 
       console.log('Error saving changes to funding: ', err);
       throw new BadRequestError('Funding not saved');
+    }
+  })
+);
+
+fundingsRouter.delete(
+  '/:fundingId',
+  passAsyncError(async (req: Request, res: Response) => {
+    try {
+      const fundingId = parseInt(req.params['fundingId']);
+      await getManager().delete(Funding, { id: fundingId });
+      res.sendStatus(200);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.log('Error deleting requested funding source: ', err);
+      throw new BadRequestError('Funding not deleted');
     }
   })
 );

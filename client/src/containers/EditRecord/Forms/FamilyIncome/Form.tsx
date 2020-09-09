@@ -13,10 +13,8 @@ import { EditFormProps } from '../types';
  * passed off to the accessible forms (Edit and Redetermine) reached
  * through this page.
  */
-export const FamilyIncomeForm: React.FC<EditFormProps> = ({
-  child,
-  onSuccess,
-}) => {
+export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
+  const { child, onSuccess } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
@@ -41,10 +39,11 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = ({
           </h2>
           <Card>
             <RedeterminationForm
+              {...props}
               familyId={familyId}
               setIsNew={() => setCurrentIsNew(true)}
               hideForm={() => setShowRedeterminationForm(false)}
-              refetchChild={onSuccess}
+              onSuccess={onSuccess}
             />
           </Card>
         </>
@@ -70,11 +69,12 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = ({
         <div>
           {currentDetermination && (
             <EditDeterminationForm
+              {...props}
               determination={currentDetermination}
               familyId={familyId}
               isCurrent={true}
               isNew={currentIsNew}
-              refetchChild={onSuccess}
+              onSuccess={onSuccess}
             />
           )}
         </div>
@@ -89,12 +89,13 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = ({
             <div>
               {pastDeterminations.map((determination) => (
                 <EditDeterminationForm
+                  {...props}
                   key={determination.id}
                   determination={determination}
                   familyId={familyId}
                   isCurrent={false}
                   isNew={false}
-                  refetchChild={onSuccess}
+                  onSuccess={onSuccess}
                 />
               ))}
             </div>

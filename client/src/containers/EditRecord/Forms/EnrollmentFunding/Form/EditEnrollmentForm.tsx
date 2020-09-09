@@ -10,16 +10,17 @@ import {
   Form,
   FormSubmitButton,
   Alert,
+  TrashCan,
 } from '@ctoec/component-library';
 import { Enrollment } from '../../../../../shared/models';
 import { EnrollmentEndDateField, EnrollmentStartDateField } from '../Fields';
-import { apiPut } from '../../../../../utils/api';
+import { apiPut, apiDelete } from '../../../../../utils/api';
 import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
 
 type EditEnrollmentFormProps = {
   enrollment: Enrollment;
   isCurrent?: boolean;
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -31,7 +32,7 @@ type EditEnrollmentFormProps = {
 export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
   enrollment,
   isCurrent = false,
-  refetchChild,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
@@ -55,13 +56,25 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
       .then(() => {
         setError(undefined);
         setCloseCard(true);
-        refetchChild();
+        onSuccess();
       })
       .catch((err) => {
         setError('Unable to edit enrollment');
       })
       .finally(() => setLoading(false));
   };
+
+  function deleteEnrollment() {
+    apiDelete(`enrollments/${enrollment.id}`, {
+      accessToken,
+    })
+      .then(() => {
+        onSuccess();
+      })
+      .catch((err) => {
+        console.error('Unable to delete enrollment', err);
+      });
+  }
 
   return (
     <Card
@@ -90,12 +103,23 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
             {enrollment.exit ? enrollment.exit.format('MM/DD/YYYY') : 'present'}
           </p>
         </div>
-        <ExpandCard>
-          <Button
-            text={<TextWithIcon text="Edit" Icon={Pencil} />}
-            appearance="unstyled"
-          />
-        </ExpandCard>
+        <div className="display-flex align-center flex-space-between">
+          <div className="display-flex align-center margin-right-2">
+            <ExpandCard>
+              <Button
+                text={<TextWithIcon text="Edit" Icon={Pencil} />}
+                appearance="unstyled"
+              />
+            </ExpandCard>
+          </div>
+          <div className="display-flex align-center margin-right-2">
+            <Button
+              text={<TextWithIcon text="Delete" Icon={TrashCan} />}
+              appearance="unstyled"
+              onClick={deleteEnrollment}
+            />
+          </div>
+        </div>
       </div>
       <CardExpansion>
         {error && <Alert type="error" text={error} />}

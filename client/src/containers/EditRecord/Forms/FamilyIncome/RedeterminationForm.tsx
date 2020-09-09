@@ -1,20 +1,17 @@
 import React, { useState, useContext } from 'react';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
-import {
-  Button,
-  Form,
-  FormSubmitButton,
-  Alert,
-} from '@ctoec/component-library';
+import { Button, Form, FormSubmitButton } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from './Fields';
+import { EditFormProps } from '../types';
 
 type RedeterminationFormProps = {
   familyId: number;
   setIsNew: () => void;
   hideForm: () => void;
-  refetchChild: () => void;
+  onSuccess: () => void;
+  setAlerts: EditFormProps['setAlerts'];
 };
 
 /**
@@ -26,12 +23,12 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   familyId,
   setIsNew,
   hideForm,
-  refetchChild,
+  onSuccess,
+  setAlerts,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
 
   // Save function that handles API protocols. Invokes an api.POST
   // call to create a new resource in the database to hold the values
@@ -45,20 +42,24 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
       jsonParse: false,
     })
       .then(() => {
-        setError(undefined);
         setIsNew();
-        refetchChild();
+        onSuccess();
+        hideForm();
       })
       .catch((err) => {
         console.log('Unable to create income determination: ', err);
-        setError('Unable to save income redetermination');
+        setAlerts([
+          {
+            type: 'error',
+            text: err || 'Unable to save income redetermination',
+          },
+        ]);
       })
       .finally(() => setLoading(false));
   };
 
   return (
     <>
-      {error && <Alert type="error" text={error} />}
       <Form<IncomeDetermination>
         id="redetermine-income"
         data={{} as IncomeDetermination}

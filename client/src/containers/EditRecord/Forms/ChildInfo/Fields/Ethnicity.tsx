@@ -30,6 +30,7 @@ export const EthnicityField: React.FC = () => {
       id="ethnicity-radiogroup"
       name="ethnicity"
       legend="Ethnicity"
+      showLegend
       hint="As identified by family"
       options={[
         {

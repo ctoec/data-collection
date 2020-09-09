@@ -6,7 +6,7 @@ import {
   ReportingPeriod,
 } from '../../../../../shared/models';
 import AuthenticationContext from '../../../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPut } from '../../../../../utils/api';
+import { apiPut, apiDelete } from '../../../../../utils/api';
 import {
   Card,
   Tag,
@@ -18,6 +18,7 @@ import {
   Alert,
   Form,
   FormSubmitButton,
+  TrashCan,
 } from '@ctoec/component-library';
 import { ReportingPeriodField, ContractSpaceField } from '../Fields';
 
@@ -27,7 +28,7 @@ type EditFundingFormProps = {
   funding: Funding;
   enrollment: Enrollment;
   isCurrent?: boolean;
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -42,7 +43,7 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
   funding,
   enrollment,
   isCurrent,
-  refetchChild,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
@@ -68,11 +69,23 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
       .then(() => {
         setError(undefined);
         setCloseCard(true);
-        refetchChild();
+        onSuccess();
       })
       .catch(() => setError('Unable to edit funding'))
       .finally(() => setLoading(false));
   };
+
+  function deleteFunding() {
+    apiDelete(`/enrollments/${enrollment.id}/fundings/${funding.id}`, {
+      accessToken,
+    })
+      .then(() => {
+        onSuccess();
+      })
+      .catch((err) => {
+        console.error('Unable to delete enrollment', err);
+      });
+  }
 
   return (
     <Card
@@ -99,12 +112,23 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
               : 'present'}
           </p>
         </div>
-        <ExpandCard>
-          <Button
-            text={<TextWithIcon text="Edit" Icon={Pencil} />}
-            appearance="unstyled"
-          />
-        </ExpandCard>
+        <div className="display-flex align-center flex-space-between">
+          <div className="display-flex align-center margin-right-2">
+            <ExpandCard>
+              <Button
+                text={<TextWithIcon text="Edit" Icon={Pencil} />}
+                appearance="unstyled"
+              />
+            </ExpandCard>
+          </div>
+          <div className="display-flex align-center margin-right-2">
+            <Button
+              text={<TextWithIcon text="Delete" Icon={TrashCan} />}
+              appearance="unstyled"
+              onClick={deleteFunding}
+            />
+          </div>
+        </div>
       </div>
       <CardExpansion>
         {error && <Alert type="error" text={error} />}

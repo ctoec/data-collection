@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiGet, apiDelete } from '../../utils/api';
+import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
@@ -13,10 +13,13 @@ import {
   EnrollmentFundingForm,
 } from './Forms';
 import { WithdrawForm } from './Forms/Withdraw/Form';
-import Modal from 'react-modal';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
+import { DeleteRecord } from './Forms/DeleteRecord';
+import { ChildIdentifiersForm } from './Forms/ChildIdentifiers/Form';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const TAB_IDS = {
+  IDENT: 'identifiers',
   CHILD: 'child',
   FAMILY: 'family',
   INCOME: 'income',
@@ -29,7 +32,7 @@ const EditRecord: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { alertElements, setAlerts } = useAlerts();
 
   // Basic trigger functions to operate the delete warning modal
   function toggleDeleteModal() {
@@ -39,9 +42,6 @@ const EditRecord: React.FC = () => {
   // Counter to trigger re-run of child fetch in
   // useEffect hook
   const [refetch, setRefetch] = useState<number>(0);
-  const refetchChild = () => {
-    setRefetch((r) => r + 1);
-  };
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -71,38 +71,35 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
-  function deleteRecord() {
-    setIsDeleting(true);
-    apiDelete(`children/${childId}`, { accessToken })
-      // TODO: Swap this total hack out for the roster page
-      // once we have that implemented
-      .then(() => history.push('/check-data/1'))
-
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        setDeleteModalOpen(false);
-        setIsDeleting(false);
-      });
-  }
-
   if (!rowData) {
     return <></>;
   }
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
+  const onSuccess = () => {
+    setRefetch((r) => r + 1);
+    setAlerts([
+      {
+        type: 'success',
+        heading: 'Record updated',
+        text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
+      },
+    ]);
+  };
+
   const commonFormProps = {
     child: rowData,
-    onSuccess: refetchChild,
+    onSuccess,
+    setAlerts,
     reportingPeriods,
   };
 
   return (
-    <div className="grid-container">
-      <div className="margin-top-4 display-flex flex-justify">
+    <div className="margin-top-4 grid-container">
+      <BackButton />
+      {alertElements}
+      <div className="display-flex flex-justify">
         <div>
-          <BackButton />
           <h1>Edit record</h1>
           <h2>
             {rowData.firstName} {rowData.lastName}
@@ -124,63 +121,28 @@ const EditRecord: React.FC = () => {
                 isOpen={withdrawModalOpen}
                 toggleOpen={toggleModal}
               />
-              <Button
-                appearance="unstyled"
-                onClick={toggleDeleteModal}
-                text="Delete record"
-                className="margin-right-0"
-              />
-              <Modal
-                isOpen={deleteModalOpen}
-                onRequestClose={toggleDeleteModal}
-                shouldCloseOnEsc={true}
-                shouldCloseOnOverlayClick={true}
-                contentLabel="Delete Modal"
-                // Use style to dynamically trim the bottom to fit the
-                // message, then center in middle of form
-                style={{
-                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-                }}
-              >
-                <div className="grid-container">
-                  <div className="grid-row margin-top-2">
-                    <h2>
-                      Do you want to delete the enrollment for{' '}
-                      {rowData.firstName} {rowData.lastName}?
-                    </h2>
-                  </div>
-                  <div className="grid-row margin-top-2">
-                    <span>
-                      Deleting an enrollment record will permanently remove all
-                      of its data
-                    </span>
-                  </div>
-                  <div className="margin-top-4">
-                    <div className="grid-row flex-first-baseline space-between-4">
-                      <Button
-                        appearance="outline"
-                        onClick={toggleDeleteModal}
-                        text="No, cancel"
-                      />
-                      <Button
-                        appearance={isDeleting ? 'outline' : 'default'}
-                        onClick={deleteRecord}
-                        text={
-                          isDeleting
-                            ? 'Deleting record...'
-                            : 'Yes, delete record'
-                        }
-                      />
-                    </div>
-                  </div>
-                </div>
-              </Modal>
             </>
           )}
+          <Button
+            appearance="unstyled"
+            onClick={toggleDeleteModal}
+            text="Delete record"
+            className="margin-right-0"
+          />
+          <DeleteRecord
+            child={rowData}
+            isOpen={deleteModalOpen}
+            toggleOpen={toggleDeleteModal}
+          />
         </div>
       </div>
       <TabNav
         items={[
+          {
+            id: TAB_IDS.CHILD,
+            text: 'Child Identifiers',
+            content: <ChildIdentifiersForm {...commonFormProps} />,
+          },
           {
             id: TAB_IDS.CHILD,
             text: 'Child Info',
@@ -188,7 +150,7 @@ const EditRecord: React.FC = () => {
           },
           {
             id: TAB_IDS.FAMILY,
-            text: 'Family Info',
+            text: 'Family Address',
             content: <FamilyInfoForm {...commonFormProps} />,
           },
           {
