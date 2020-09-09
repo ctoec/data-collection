@@ -12,12 +12,13 @@ import { apiPut } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from './Fields';
 import { EditFormProps } from '../types';
 
-type EditDeterminationFormProps = EditFormProps & {
+type EditDeterminationFormProps = {
   determination: IncomeDetermination;
   familyId: number;
   isCurrent: boolean;
   isNew: boolean;
-  refetchChild: () => void;
+  onSuccess: () => void;
+  setAlerts: EditFormProps['setAlerts'];
 };
 
 /**
@@ -30,9 +31,8 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
   familyId,
   isCurrent,
   isNew,
-  refetchChild,
+  onSuccess,
   setAlerts,
-  child,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
@@ -61,15 +61,8 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
     )
       .then(() => {
         setError(undefined);
-        setAlerts([
-          {
-            type: 'success',
-            heading: 'Record updated',
-            text: `Your changes to ${child?.firstName} ${child?.lastName}'s record have been saved.`,
-          },
-        ]);
         setCloseCard(true);
-        refetchChild();
+        onSuccess();
       })
       .catch((err) => {
         console.log('Unable to edit income determination: ', err);
@@ -108,7 +101,7 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
           </div>
         </Form>
       }
-      refetchChild={refetchChild}
+      onSuccess={onSuccess}
     />
   );
 };

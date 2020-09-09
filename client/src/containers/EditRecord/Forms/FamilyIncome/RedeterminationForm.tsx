@@ -10,7 +10,7 @@ type RedeterminationFormProps = EditFormProps & {
   familyId: number;
   setIsNew: () => void;
   hideForm: () => void;
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -22,14 +22,12 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   familyId,
   setIsNew,
   hideForm,
-  refetchChild,
+  onSuccess,
   setAlerts,
-  child,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
 
   // Save function that handles API protocols. Invokes an api.POST
   // call to create a new resource in the database to hold the values
@@ -43,16 +41,8 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
       jsonParse: false,
     })
       .then(() => {
-        setError(undefined);
         setIsNew();
-        refetchChild();
-        setAlerts([
-          {
-            type: 'success',
-            heading: 'Record updated',
-            text: `Your changes to ${child?.firstName} ${child?.lastName}'s record have been saved.`,
-          },
-        ]);
+        onSuccess();
         hideForm();
       })
       .catch((err) => {
@@ -60,7 +50,7 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
         setAlerts([
           {
             type: 'error',
-            text: error || 'Unable to save income redetermination',
+            text: err || 'Unable to save income redetermination',
           },
         ]);
       })

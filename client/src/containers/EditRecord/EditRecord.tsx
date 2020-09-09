@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav, Button, } from '@ctoec/component-library';
+import { TabNav, Button } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
@@ -42,9 +42,6 @@ const EditRecord: React.FC = () => {
   // Counter to trigger re-run of child fetch in
   // useEffect hook
   const [refetch, setRefetch] = useState<number>(0);
-  const refetchChild = () => {
-    setRefetch((r) => r + 1);
-  };
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -79,11 +76,22 @@ const EditRecord: React.FC = () => {
   }
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
+  const onSuccess = () => {
+    setRefetch((r) => r + 1);
+    setAlerts([
+      {
+        type: 'success',
+        heading: 'Record updated',
+        text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
+      },
+    ]);
+  };
+
   const commonFormProps = {
     child: rowData,
-    onSuccess: refetchChild,
-    reportingPeriods,
+    onSuccess,
     setAlerts,
+    reportingPeriods,
   };
 
   return (

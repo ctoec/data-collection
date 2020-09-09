@@ -14,7 +14,7 @@ import { EditFormProps } from '../types';
  * through this page.
  */
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
-  const { child, onSuccess, setAlerts } = props;
+  const { child, onSuccess } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
@@ -43,7 +43,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
               familyId={familyId}
               setIsNew={() => setCurrentIsNew(true)}
               hideForm={() => setShowRedeterminationForm(false)}
-              refetchChild={onSuccess}
+              onSuccess={onSuccess}
             />
           </Card>
         </>
@@ -74,7 +74,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
               familyId={familyId}
               isCurrent={true}
               isNew={currentIsNew}
-              refetchChild={onSuccess}
+              onSuccess={onSuccess}
             />
           )}
         </div>
@@ -95,7 +95,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
                   familyId={familyId}
                   isCurrent={false}
                   isNew={false}
-                  refetchChild={onSuccess}
+                  onSuccess={onSuccess}
                 />
               ))}
             </div>

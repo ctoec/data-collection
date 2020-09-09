@@ -33,7 +33,7 @@ type ChangeEnrollmentFormProps = {
   reportingPeriods: ReportingPeriod[];
   fundingSpaces: FundingSpace[];
   sites: Site[];
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -48,7 +48,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   reportingPeriods,
   fundingSpaces,
   sites,
-  refetchChild,
+  onSuccess,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
@@ -72,7 +72,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       .then(() => {
         setError(undefined);
         setCloseCard(true);
-        refetchChild();
+        onSuccess();
       })
       .catch((err) => {
         console.log(err);

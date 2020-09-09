@@ -23,7 +23,7 @@ type IncomeDeterminationCardProps = {
   isNew?: boolean;
   forceClose: boolean;
   expansion: JSX.Element;
-  refetchChild: () => void;
+  onSuccess: () => void;
 };
 
 /**
@@ -38,7 +38,7 @@ export const IncomeDeterminationCard = ({
   isNew = false,
   forceClose,
   expansion,
-  refetchChild,
+  onSuccess,
 }: IncomeDeterminationCardProps) => {
   const { accessToken } = useContext(AuthenticationContext);
 
@@ -46,9 +46,7 @@ export const IncomeDeterminationCard = ({
     apiDelete(`families/income-determination/${determination.id}`, {
       accessToken,
     })
-      .then(() => {
-        refetchChild();
-      })
+      .then(onSuccess)
       .catch((err) => {
         console.error('Unable to delete determination', err);
       });

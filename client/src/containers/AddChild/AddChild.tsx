@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
-import { StepList, Button, StepProps, AlertProps } from '@ctoec/component-library';
+import { StepList, Button, StepProps } from '@ctoec/component-library';
 import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
@@ -150,7 +150,15 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, childId, organization, history, updateChild, location, child]);
+  }, [
+    accessToken,
+    child,
+    childId,
+    location,
+    organization,
+    history,
+    updateChild,
+  ]);
 
   useEffect(() => {
     if (!childId) return;
@@ -184,14 +192,10 @@ const AddChild: React.FC = () => {
       history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
     }
   };
-<<<<<<< HEAD
-  const commonFormProps = { child, onSuccess, hideHeader: true };
-=======
 
   const { alertElements, setAlerts } = useAlerts();
 
   const commonFormProps = { child, onSuccess, setAlerts };
->>>>>>> 9acb532... Set up alerts in add child
 
   if (!child) {
     return <>Loading...</>;
