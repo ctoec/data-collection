@@ -4,11 +4,11 @@ import { downloadAuthorizedStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
 
 type ExportProps = {
-  submittedIds: string[];
+  submittedIds: string;
 };
 
 export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
-  console.log(submittedIds);
+  const { accessToken } = useContext(AuthenticationContext);
 
   async function downloadTemplate() {
     await downloadAuthorizedStreamToFile(
