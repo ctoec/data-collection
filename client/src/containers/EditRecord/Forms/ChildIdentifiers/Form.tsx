@@ -1,9 +1,12 @@
 import React, { useContext, useState } from 'react';
 import {
-  RaceField,
-  EthnicityField,
-  GenderField,
-  FosterCheckbox,
+  SasidField,
+  FirstNameField,
+  MiddleNameField,
+  LastNameField,
+  SuffixField,
+  DateOfBirthField,
+  BirthCertificateFormFieldSet
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../types';
@@ -14,7 +17,7 @@ import useIsMounted from '../../../../hooks/useIsMounted';
 
 // import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
 
-export const ChildInfoForm = ({ child, onSuccess }: EditFormProps) => {
+export const ChildIdentifiersForm = ({ child, onSuccess }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
@@ -40,18 +43,35 @@ export const ChildInfoForm = ({ child, onSuccess }: EditFormProps) => {
 
   return (
     <Form<Child>
-      className="ChildInfoForm usa-form"
+      className="ChildIdentifiersForm usa-form"
       data={child}
       onSubmit={onFormSubmit}
       noValidate
       autoComplete="off"
     >
-      <h2>Child info</h2>
+      <h2>Child's identifiers</h2>
       <p className="usa-hint">Information is required unless otherwise specified.</p>
-      <RaceField />
-      <EthnicityField />
-      <GenderField />
-      <FosterCheckbox />
+      <div className="grid-row grid-gap">
+        <div className="mobile-lg:grid-col-12">
+          <SasidField />
+        </div>
+        <div className="mobile-lg:grid-col-9">
+          <FirstNameField />
+        </div>
+        <div className="mobile-lg:grid-col-9">
+          <MiddleNameField />
+        </div>
+        <div className="display-flex flex-row flex-align-end grid-row grid-gap">
+          <div className="mobile-lg:grid-col-9">
+            <LastNameField />
+          </div>
+          <div className="mobile-lg:grid-col-3">
+            <SuffixField />
+          </div>
+        </div>
+      </div>
+      <DateOfBirthField />
+      <BirthCertificateFormFieldSet />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}
