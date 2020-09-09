@@ -11,6 +11,7 @@ import { fundingSpacesRouter } from './fundingSpaces';
 import { reportingPeriodsRouter } from './reportingPeriods';
 import { fundingsRouter } from './fundings';
 import { templateRouter } from './template';
+import { exportRouter } from './export';
 
 export const router = express.Router();
 
@@ -34,3 +35,4 @@ router.use('/enrollments/:enrollmentId/fundings', authenticate, fundingsRouter);
 router.use('/funding-spaces', authenticate, fundingSpacesRouter);
 
 router.use('/reporting-periods', authenticate, reportingPeriodsRouter);
+router.use('/export', authenticate, exportRouter);
