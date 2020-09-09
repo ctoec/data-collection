@@ -1,19 +1,16 @@
-import React, { useContext } from 'react';
-import ReactMarkdown from 'react-markdown';
-import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
+import React from 'react';
 import { Table, Column } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
+import { FundingSpaceType, FUNDING_SPACE_TYPES } from '../../shared/models';
 
 const FundingSpaceTypes: React.FC = () => {
-  const { accessToken } = useContext(AuthenticationContext);
-
-  const columns: Column<any>[] = [
+  const columns: Column<FundingSpaceType>[] = [
     {
       name: 'Funding Type',
       cell: ({ row }) =>
         row ? (
           <th scope="row">
-            <span className="text-bold">{row.formattedName}</span>
+            <span className="text-bold">{row.displayName}</span>
           </th>
         ) : (
           <></>
@@ -22,50 +19,28 @@ const FundingSpaceTypes: React.FC = () => {
     {
       name: 'Contract Space',
       cell: ({ row }) =>
-        row ? (
-          <td>
-            <ReactMarkdown source={row.definition} />
-          </td>
+        row ? (<div>
+          {row.contractSpaces.map(space => {
+            return <td> {space.displayName} </td>
+          })}
+        </div>
         ) : (
           <></>
-        ),
+        )
     },
     {
       name: 'Accepted formats',
-      cell: ({ row }) => (row ? <td> {row.reason} </td> : <></>),
+      cell: ({ row }) =>
+        row ? (<div>
+          {row.contractSpaces.map(space => {
+            return <td> {space.formats.join(' or')} </td>
+          })}
+        </div>
+        ) : (
+          <></>
+        )
     }
   ];
-
-  const rows = [{
-    fundingType: 'Child Day Care (CDC)',
-    contractSpaces: {
-      'Full Time': '"1" or "Full time" or "FT"',
-      'Part Time': '"2" or "Part time" or "PT"',
-      'Split Time': '"3" or "Split time" or "Part time/Full time" "PT/FT"'
-    }
-  },
-  {
-    fundingType: 'School Readiness (CSR or PSR)',
-    contractSpaces: {
-      'Full-day': '"4" or "Full-day" or "FD"',
-      'School-day/School-year': '"5" or "School-day" or "School-day/School-year" or "SD"',
-      'Part-day': '"6" or "Part-Day" or "PD"',
-      'Extended-day': '"7" or "Extended-day" or "Part time/Full time" or "ED"'
-    },
-  },
-  {
-    fundingType: 'Smart Start (SS)',
-    contractSpaces: {
-      'School-day/School-year': '"8" or "School day" or "SD"'
-    },
-  },
-  {
-    fundingType: 'State Head Start (SHS)',
-    contractSpaces: {
-      'Extended-day': '"9" or "Extended day" or "ED"',
-      'Extended-year': '"10" or "Extended-year" or "EY"'
-    },
-  }];
 
 
   return (
@@ -76,8 +51,8 @@ const FundingSpaceTypes: React.FC = () => {
       <div className="margin-top-4">
         <Table
           id="data-requirements-table"
-          data={rows}
-          rowKey={(row) => (row ? row.fundingType : '')}
+          data={FUNDING_SPACE_TYPES}
+          rowKey={(row) => (row ? row.displayName : '')}
           columns={columns}
           defaultSortColumn={0}
         />

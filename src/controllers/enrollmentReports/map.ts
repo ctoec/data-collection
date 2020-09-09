@@ -16,6 +16,7 @@ import {
   FundingSource,
   FundingTime,
   SpecialEducationServicesType,
+  FUNDING_SPACE_TYPES,
 } from '../../../client/src/shared/models';
 import { getManager } from 'typeorm';
 
@@ -241,7 +242,19 @@ const mapFunding = async (
     FundingSource,
     source.fundingType
   );
-  const fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
+
+  let fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
+  if (!fundingTime && fundingSource) {
+    const matchingSpaceType = FUNDING_SPACE_TYPES.find(type => type.fundingSources.includes(fundingSource));
+
+    if (matchingSpaceType) {
+      const matchingTime = matchingSpaceType.contractSpaces.find(space => space.formats.includes(source.spaceType));
+
+      if (matchingTime) {
+        fundingTime = matchingTime.time
+      }
+    }
+  }
 
   // Cannot create funding without FundingSpace, and cannot find FundingSpace
   // without fundingSource AND fundingTime, so if you don't have them
