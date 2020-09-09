@@ -13,8 +13,11 @@ type LocationType = Location & {
 // Optional additional alerts can be passed so that this hook handles all alert creation
 export const useAlerts = (initialAlerts: AlertProps[] = []) => {
   const location = useLocation() as LocationType;
-  const previousPageAlerts = location.state?.alerts;
-  const [alerts, setAlerts] = useState([...initialAlerts, ...previousPageAlerts]);
+  const previousPageAlerts = location.state?.alerts || [];
+  const [alerts, setAlerts] = useState([
+    ...initialAlerts,
+    ...previousPageAlerts,
+  ]);
 
   if (alerts.length) {
     window.scrollTo(0, 0);
@@ -23,5 +26,5 @@ export const useAlerts = (initialAlerts: AlertProps[] = []) => {
   const alertElements = alerts.map((alertProps, i) => (
     <Alert {...alertProps} key={`alerts-${i}`} />
   ));
-  return { alertElements, alerts, setAlerts }
+  return { alertElements, alerts, setAlerts };
 };
