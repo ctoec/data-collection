@@ -1,6 +1,7 @@
 import express from 'express';
 import { Response, Request } from 'express';
 import * as controller from '../controllers/export';
+<<<<<<< HEAD
 import * as childController from '../controllers/children';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 
@@ -28,3 +29,11 @@ exportRouter.get(
   })
   // });
 );
+=======
+
+export const exportRouter = express.Router();
+
+exportRouter.get('/csv-upload', (req: Request, res: Response) => {
+  res.send(controller.streamTemplate(res));
+});
+>>>>>>> Add an export to csv route

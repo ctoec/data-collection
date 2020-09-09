@@ -33,6 +33,7 @@ export function getAllEnrollmentColumns(): ColumnMetadata[] {
   const metadata: EntityMetadata = getConnection().getMetadata(
     FlattenedEnrollment
   );
+
   return metadata.columns
     .map((column) =>
       getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
