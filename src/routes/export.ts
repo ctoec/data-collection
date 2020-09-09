@@ -2,6 +2,7 @@ import express from 'express';
 import { Response, Request } from 'express';
 import * as controller from '../controllers/export';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import * as childController from '../controllers/children';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 
@@ -37,3 +38,25 @@ exportRouter.get('/csv-upload', (req: Request, res: Response) => {
   res.send(controller.streamTemplate(res));
 });
 >>>>>>> Add an export to csv route
+=======
+import { passAsyncError } from '../middleware/error/passAsyncError';
+
+export const exportRouter = express.Router();
+
+exportRouter.get(
+  '/csv-upload/:idString',
+  // (req: Request, res: Response) => {
+  // res.send(controller.streamTemplate(res));
+  passAsyncError(async (req: Request, res: Response) => {
+    try {
+      const idString = req.params['idString'];
+      const uploadedIds = idString.split(',');
+      // const children = await controller.retrieveChildren(uploadedIds);
+      res.send(controller.streamUploadedChildren(res, uploadedIds));
+    } catch (err) {
+      console.error('BADNESS');
+    }
+  })
+  // });
+);
+>>>>>>> Trying to turn Child[] into a 2D string array to stuff in a sheet

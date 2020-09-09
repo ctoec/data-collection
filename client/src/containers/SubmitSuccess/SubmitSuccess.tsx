@@ -26,7 +26,6 @@ const SubmitSuccess: React.FC = () => {
   // Fine because we know what the IDs are
   const rawIds: any = useParams();
   const idString: string = rawIds['idArray'];
-  const childIds = idString.split(',');
 
   return (
     <div className="grid-container margin-top-4">
