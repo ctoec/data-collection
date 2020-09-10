@@ -10,8 +10,6 @@ export const exportRouter = express.Router();
 
 exportRouter.get(
   '/csv-upload/:idString',
-  // (req: Request, res: Response) => {
-  // res.send(controller.streamTemplate(res));
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const idString = req.params['idString'];
