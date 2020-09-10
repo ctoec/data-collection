@@ -1,11 +1,30 @@
-import { getManager } from 'typeorm';
+import { getManager, In } from 'typeorm';
 import idx from 'idx';
 import { Moment } from 'moment';
 import { validate } from 'class-validator';
 import { ExitReason } from '../../client/src/shared/models';
-import { Child, ReportingPeriod, Enrollment, Funding, Family } from '../entity';
+import {
+  Child,
+  ReportingPeriod,
+  Enrollment,
+  Funding,
+  Family,
+  User,
+} from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
+import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
+
+/**
+ * Get all children for organizations the user has access to
+ */
+export const getChildren = async (user: User) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  return await getManager().find(Child, {
+    relations: ['enrollments', 'enrollments.site'],
+    where: { organization: { id: In(readOrgIds) } },
+  });
+};
 
 /**
  * Get child by id, with related family and related

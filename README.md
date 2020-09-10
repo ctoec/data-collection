@@ -39,7 +39,7 @@ A web application to collect information from child care providers in the State 
         Name                            Command               State           Ports                
     --------------------------------------------------------------------------------------------------       
     data-collection_client_1           yarn start                       Up      0.0.0.0:5000->3000/tcp       
-    data-collection_db_1               docker-entrypoint.sh postgres    Up      5432/tcp   
+    data-collection_db_1               /opt/mssql/bin/permissions ...   Up      1433/tcp
     data-collection_server_1           yarn run watch                   Up      0.0.0.0:5001->3000/tcp       
     data-collection_winged-keys-db_1   /opt/mssql/bin/permissions ...   Up      1433/tcp                     
     data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp       

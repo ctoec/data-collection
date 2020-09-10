@@ -7,7 +7,6 @@ export interface User {
   lastName: string;
   middleName?: string;
   suffix?: string;
-  orgPermissions?: Array<OrganizationPermission>;
-  sitePermissions?: Array<SitePermission>;
-  sites?: Array<Site>;
+  sitesIds?: Array<number>;
+  organizationIds?: Array<number>;
 }

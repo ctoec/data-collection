@@ -10,6 +10,7 @@ import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 import AddChild from './containers/AddChild/AddChild';
 import FundingSourceTimes from './containers/FundingSourceTimes/FundingSourceTimes';
+import Roster from './containers/Roster/Roster';
 
 export type RouteConfig = {
   path: string;
@@ -51,6 +52,11 @@ export const routes: RouteConfig[] = [
     path: '/funding-space-types',
     component: FundingSourceTimes,
     unauthorized: true,
+    },
+    {
+    path: '/roster',
+    component: Roster,
+    unauthorized: false,
   },
   {
     path: '/upload',
