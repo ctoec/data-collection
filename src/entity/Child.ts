@@ -18,6 +18,7 @@ import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
+import { Length, MinDate, MaxDate } from "class-validator";
 
 @Entity()
 export class Child implements ChildInterface {
@@ -28,27 +29,35 @@ export class Child implements ChildInterface {
   sasid?: string;
 
   @Column()
+  @Length(1)
   firstName: string;
 
   @Column({ nullable: true })
   middleName?: string;
 
   @Column()
+  @Length(1)
   lastName: string;
 
   @Column({ nullable: true })
   suffix?: string;
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
+  // TODO: what are the actual age parameters?
+  @MinDate(new Date(2010))
+  @MaxDate(new Date())
   birthdate?: Moment;
 
   @Column({ nullable: true })
+  @Length(1)
   birthTown?: string;
 
   @Column({ nullable: true })
+  @Length(2)
   birthState?: string;
 
   @Column({ nullable: true })
+  @Length(1)
   birthCertificateId?: string;
 
   @Column({ nullable: true })

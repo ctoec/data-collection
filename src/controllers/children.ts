@@ -5,6 +5,7 @@ import { Child, ReportingPeriod, Enrollment, Funding } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 import { Moment } from 'moment';
+import { validate } from "class-validator";
 
 /**
  * Get child by id, with related family and related
@@ -41,7 +42,7 @@ export const getChildById = async (id: string) => {
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-  return child;
+  return { ...child, validationErrors: await validate(child) };
 };
 
 const propertyDateSorter = <T>(
@@ -139,7 +140,7 @@ export const changeEnrollment = async (
       // Update current enrollment exitReason
       currentEnrollment.exitReason =
         currentEnrollment.ageGroup !==
-        changeEnrollmentData.newEnrollment.ageGroup
+          changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
 
