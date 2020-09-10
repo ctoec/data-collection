@@ -1,8 +1,10 @@
 import express from 'express';
 import { Response, Request } from 'express';
+import { getManager } from 'typeorm';
 import * as controller from '../controllers/export';
 import * as childController from '../controllers/children';
 import { passAsyncError } from '../middleware/error/passAsyncError';
+import { Child } from '../entity';
 
 export const exportRouter = express.Router();
 

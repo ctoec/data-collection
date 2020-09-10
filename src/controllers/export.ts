@@ -5,15 +5,18 @@ import { FlattenedEnrollment, Child } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
 import { format } from 'path';
+import { momentTransformer } from '../entity/transformers/momentTransformer';
+import Moment from 'moment';
 
 export async function streamUploadedChildren(
   response: Response,
-  childIds: string[]
+  childrenToMap: Child[]
 ) {
-  var childrenToMap: Child[] = [];
-  childIds.forEach(async (id) => {
-    childrenToMap.push(await getManager().findOne(Child, { id: id }));
-  });
+  // var childrenToMap: Child[] = [];
+  // childIds.forEach(async (id) => {
+  //   childrenToMap.push(await getManager().findOne(Child, { id: id }));
+  // });
+  // response.send(generateCSV(childrenToMap));
 
   const csvToExport: WorkBook = generateCSV(childrenToMap);
 
@@ -308,6 +311,9 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
       // Don't do anything in the default case because we've already
       // handled all the fields
       default:
+        // Note: Property names are NOT the same as the object fields
+        // in a child object--that's why we need the big switch statement
+        childString.push(child[c.propertyName] || '');
         break;
     }
   }
@@ -325,11 +331,26 @@ export function generateCSV(childArray: Child[]) {
   const formattedColumnNames: string[] = columnMetadatas.map(
     (c) => c.formattedName
   );
+  // var childStrings: string[][] = [];
+  // childArray.forEach((c) => {
+  // childStrings.push(flattenChild(c, columnMetadatas));
+  // });
   const childStrings = childArray.map((c) => flattenChild(c, columnMetadatas));
+  // return childStrings;
+
   const sheet = utils.aoa_to_sheet([formattedColumnNames]);
+  // const children = utils.aoa_to_sheet(childStrings);
+
+  utils.sheet_add_aoa(sheet, childStrings, { origin: -1 });
+
+  // WORK OFF OF THIS GUY
+  // const children = utils.json_to_sheet(childArray);
+  // const children = utils.json_to_sheet(childArray);
+
   const workbook = utils.book_new();
   utils.book_append_sheet(workbook, sheet);
-  const children = utils.aoa_to_sheet(childStrings);
-  utils.book_append_sheet(workbook, children);
+  // utils.book_append_sheet(workbook, children);
+  // utils.sheet_add_json(sheet, childArray);
+  // utils.book_append_sheet(workbook, children);
   return workbook;
 }

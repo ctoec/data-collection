@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadAuthorizedStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
+import { apiGet } from '../utils/api';
 
 type ExportProps = {
   submittedIds: string;
@@ -10,7 +11,10 @@ type ExportProps = {
 export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
   const { accessToken } = useContext(AuthenticationContext);
 
+  // console.log(submittedIds);
   async function downloadTemplate() {
+    // apiGet(`export/csv-upload/${submittedIds}`,
+    // { accessToken })
     await downloadAuthorizedStreamToFile(
       `export/csv-upload/${submittedIds}`,
       accessToken || '',
