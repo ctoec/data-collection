@@ -1,41 +1,25 @@
 import { write, WorkBook, utils } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-<<<<<<< HEAD
-import { EntityMetadata, getConnection } from 'typeorm';
-=======
 import { EntityMetadata, getConnection, getManager } from 'typeorm';
->>>>>>> Trying to turn Child[] into a 2D string array to stuff in a sheet
 import { FlattenedEnrollment, Child } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
 import { format } from 'path';
+import { momentTransformer } from '../entity/transformers/momentTransformer';
+import Moment from 'moment';
 
-<<<<<<< HEAD
-/**
- * Function to send the created workbook of information back
- * to the router for handing to the client as a buffered
- * stream of information.
- * @param response
- * @param childrenToMap
- */
 export async function streamUploadedChildren(
   response: Response,
   childrenToMap: Child[]
 ) {
-  const csvToExport: WorkBook = generateCSV(childrenToMap);
-=======
-export async function streamUploadedChildren(
-  response: Response,
-  childIds: string[]
-) {
-  var childrenToMap: Child[] = [];
-  childIds.forEach(async (id) => {
-    childrenToMap.push(await getManager().findOne(Child, { id: id }));
-  });
+  // var childrenToMap: Child[] = [];
+  // childIds.forEach(async (id) => {
+  //   childrenToMap.push(await getManager().findOne(Child, { id: id }));
+  // });
+  // response.send(generateCSV(childrenToMap));
 
   const csvToExport: WorkBook = generateCSV(childrenToMap);
 
->>>>>>> Trying to turn Child[] into a 2D string array to stuff in a sheet
   const csvStream = write(csvToExport, {
     bookType: 'csv',
     type: 'buffer',
@@ -68,7 +52,6 @@ export function getAllEnrollmentColumns(): ColumnMetadata[] {
     .filter((templateMeta) => !!templateMeta);
 }
 
-<<<<<<< HEAD
 /**
  * Workhorse function that turns a Child object into an array of string
  * descriptors of specific fields of its data. The strings are
@@ -342,34 +325,32 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
  * @param childArray
  */
 export function generateCSV(childArray: Child[]) {
-=======
-function flattenChild(child: Child, cols: ColumnMetadata[]) {
-  return cols.map((colName) => {
-    child[colName.propertyName];
-  });
-  // Object.keys(child)
-}
-
-function generateCSV(childArray: Child[]): WorkBook {
->>>>>>> Trying to turn Child[] into a 2D string array to stuff in a sheet
   const columnMetadatas: ColumnMetadata[] = getAllEnrollmentColumns();
   const formattedColumnNames: string[] = columnMetadatas.map(
     (c) => c.formattedName
   );
+  // var childStrings: string[][] = [];
+  // childArray.forEach((c) => {
+  // childStrings.push(flattenChild(c, columnMetadatas));
+  // });
   const childStrings = childArray.map((c) => flattenChild(c, columnMetadatas));
+  // return childStrings;
+
   const sheet = utils.aoa_to_sheet([formattedColumnNames]);
-<<<<<<< HEAD
 
   // Adding to the origin at the end appends the data instead of
   // replacing it
   utils.sheet_add_aoa(sheet, childStrings, { origin: -1 });
   const workbook = utils.book_new();
   utils.book_append_sheet(workbook, sheet);
-=======
-  const workbook = utils.book_new();
+
+  // WORK OFF OF THIS GUY
+  // const children = utils.json_to_sheet(childArray);
+  // const children = utils.json_to_sheet(childArray);
+
   utils.book_append_sheet(workbook, sheet);
-  const children = utils.aoa_to_sheet(childStrings);
-  utils.book_append_sheet(workbook, children);
->>>>>>> Trying to turn Child[] into a 2D string array to stuff in a sheet
+  // utils.book_append_sheet(workbook, children);
+  // utils.sheet_add_json(sheet, childArray);
+  // utils.book_append_sheet(workbook, children);
   return workbook;
 }
