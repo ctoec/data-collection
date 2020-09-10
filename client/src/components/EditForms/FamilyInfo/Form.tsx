@@ -49,7 +49,6 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
         noValidate
         autoComplete="off"
       >
-        <h3 className="grid-row margin-top-4">Address</h3>
         <AddressFieldset />
         <h3 className="grid-row margin-top-4">Experiencing homelessness</h3>
         <HomelessnessField />

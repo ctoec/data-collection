@@ -164,7 +164,7 @@ const EditRecord: React.FC = () => {
       <TabNav
         items={[
           {
-            id: TAB_IDS.CHILD,
+            id: TAB_IDS.IDENT,
             text: 'Child Identifiers',
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },

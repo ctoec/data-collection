@@ -75,9 +75,7 @@ export const ChildIdentifiersForm = ({
           </div>
         </div>
       </div>
-      <h3>Date of birth</h3>
       <DateOfBirthField />
-      <h3>Birth certificate</h3>
       <BirthCertificateFormFieldSet />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
