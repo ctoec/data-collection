@@ -54,12 +54,7 @@ export const ChildIdentifiersForm = ({
       autoComplete="off"
     >
       {!hideHeader && (
-        <>
           <h2>Child's identifiers</h2>
-          <p className="usa-hint">
-            Information is required unless otherwise specified.
-          </p>
-        </>
       )}
       <div className="grid-row grid-gap">
         <div className="mobile-lg:grid-col-12">
@@ -80,7 +75,9 @@ export const ChildIdentifiersForm = ({
           </div>
         </div>
       </div>
+      <h3>Date of birth</h3>
       <DateOfBirthField />
+      <h3>Birth certificate</h3>
       <BirthCertificateFormFieldSet />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}

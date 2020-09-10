@@ -10,8 +10,10 @@ import { CSVDownloadLink } from '../../components/CSVDownloadLink';
 import LogoWithCheckSrc from '@ctoec/component-library/dist/assets/images/logoWithCheck.svg';
 
 import { Link } from 'react-router-dom';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const SubmitSuccess: React.FC = () => {
+  const h1Ref = getH1RefForTitle()
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row text-bold">
@@ -28,7 +30,7 @@ const SubmitSuccess: React.FC = () => {
         <img src={LogoWithCheckSrc} alt="" />
       </div>
       <div>
-        <h1>You've submitted your data to OEC!</h1>
+        <h1 ref={h1Ref}>You've submitted your data to OEC!</h1>
         <p className="margin-top-1 text-bold">
           Date submitted: {moment.utc().format('MM/DD/YYYY')}
         </p>

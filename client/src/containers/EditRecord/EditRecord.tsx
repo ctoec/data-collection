@@ -18,6 +18,7 @@ import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
@@ -29,6 +30,7 @@ const TAB_IDS = {
 };
 
 const EditRecord: React.FC = () => {
+  const h1Ref = getH1RefForTitle('Edit record');
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
@@ -100,10 +102,12 @@ const EditRecord: React.FC = () => {
       {alertElements}
       <div className="display-flex flex-justify">
         <div>
-          <h1>Edit record</h1>
-          <h2>
+          <h1 ref={h1Ref} className="margin-top-0">
+            <span className="h2 h2--lighter">
+              Edit record{' '}
+            </span>
             {rowData.firstName} {rowData.lastName}
-          </h2>
+          </h1>
         </div>
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (

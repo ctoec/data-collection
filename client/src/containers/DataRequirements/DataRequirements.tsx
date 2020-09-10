@@ -5,9 +5,11 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { Table, Column } from '@ctoec/component-library';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const DataRequirements: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
+  const h1Ref = getH1RefForTitle();
   const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>([]);
 
   useEffect(() => {
@@ -25,8 +27,8 @@ const DataRequirements: React.FC = () => {
             <span className="text-bold">{row.formattedName}</span>
           </th>
         ) : (
-          <></>
-        ),
+            <></>
+          ),
     },
     {
       name: 'Required/ Optional',
@@ -40,8 +42,8 @@ const DataRequirements: React.FC = () => {
             <ReactMarkdown source={row.definition} />
           </td>
         ) : (
-          <></>
-        ),
+            <></>
+          ),
     },
     {
       name: 'Reason for collecting',
@@ -56,8 +58,8 @@ const DataRequirements: React.FC = () => {
             <div className="margin-top-1">Ex: {row.example}</div>
           </td>
         ) : (
-          <></>
-        ),
+            <></>
+          ),
     },
   ];
 
@@ -75,7 +77,7 @@ const DataRequirements: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
       <BackButton />
-      <h1>OEC's enrollment data requirements</h1>
+      <h1 ref={h1Ref}>OEC's enrollment data requirements</h1>
       {Object.entries(columnMetadataBySection).map(
         ([sectionName, sectionData]) => (
           <div key={sectionName} className="margin-top-4">

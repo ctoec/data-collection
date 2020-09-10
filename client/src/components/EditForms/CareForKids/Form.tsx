@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import {
   Form,
   FormSubmitButton,
+<<<<<<< HEAD
   FormField,
   RadioButtonGroupProps,
   RadioButtonGroup,
@@ -11,6 +12,14 @@ import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EditFormProps } from '../types';
+=======
+} from '@ctoec/component-library';
+import { CareForKidsField } from './CareForKidsField';
+import { EditFormProps } from '../types';
+import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { Child } from '../../../../shared/models';
+import { apiPut } from '../../../../utils/api';
+>>>>>>> 262909d... Align headers
 
 /*
  * Basic functional component designed to allow user to edit
@@ -37,7 +46,11 @@ export const CareForKidsForm: React.FC<EditFormProps> = ({
 
   return (
     <div className="grid-container margin-top-2">
+<<<<<<< HEAD
       <h2 className="grid-row">Receiving Care For Kids?</h2>
+=======
+      <h2 className="grid-row">Care 4 Kids</h2>
+>>>>>>> 262909d... Align headers
       <div>
         <Form<Child>
           className="CareForKidsForm"
@@ -46,6 +59,7 @@ export const CareForKidsForm: React.FC<EditFormProps> = ({
           noValidate
           autoComplete="off"
         >
+<<<<<<< HEAD
           <FormField<Child, RadioButtonGroupProps, boolean>
             getValue={(data) => data.at('recievesC4K')}
             preprocessForDisplay={(data) => (data === true ? 'Yes' : 'No')}
@@ -75,6 +89,9 @@ export const CareForKidsForm: React.FC<EditFormProps> = ({
               },
             ]}
           />
+=======
+          <CareForKidsField />
+>>>>>>> 262909d... Align headers
           <div className="grid-row margin-top-2">
             <FormSubmitButton text={isSaving ? 'Saving...' : 'Save'} />
           </div>

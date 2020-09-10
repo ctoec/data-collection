@@ -3,12 +3,14 @@ import { MailToLink } from '../../components/MailToLink';
 import { Button, Alert } from '@ctoec/component-library';
 import { Link } from 'react-router-dom';
 import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const GettingStarted: React.FC = () => {
+  const h1Ref = getH1RefForTitle();
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row">
-        <h1>Getting started</h1>
+        <h1 ref={h1Ref}>Getting started</h1>
         <p>
           This tool will allow you to upload and submit the most recent
           enrollment data for all state funded childcare spaces at your program.

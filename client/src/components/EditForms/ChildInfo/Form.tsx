@@ -51,16 +51,16 @@ export const ChildInfoForm = ({
       autoComplete="off"
     >
       {!hideHeader && (
-        <>
-          <h2>Child info</h2>
-          <p className="usa-hint">
-            Information is required unless otherwise specified.
-          </p>
-        </>
+
+        <h2>Child info</h2>
       )}
+      <h3>Race</h3>
       <RaceField />
+      <h3>Ethnicity</h3>
       <EthnicityField />
+      <h3>Gender</h3>
       <GenderField />
+      <h3>Foster youth</h3>
       <FosterCheckbox />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}

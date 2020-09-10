@@ -24,11 +24,14 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
 
   return (
     <>
+      <h2 className="font-sans-md margin-top-2 margin-bottom-2">
+        Family income determination
+          </h2>
       {showRedeterminationForm && (
         <>
-          <h2 className="font-sans-md margin-top-2 margin-bottom-2">
+          <h3 className="font-sans-md margin-top-2 margin-bottom-2">
             Redetermine family income
-          </h2>
+          </h3>
           <Card>
             <RedeterminationForm
               {...props}
@@ -42,11 +45,11 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
       )}
       <div className="margin-top-1">
         <div className="display-flex align-center">
-          <h2 className="font-sans-md margin-top-2 margin-bottom-2">
+          <h3 className="font-sans-md margin-top-2 margin-bottom-2">
             {currentDetermination
               ? 'Current income determination'
               : 'No income information on record'}
-          </h2>
+          </h3>
           &nbsp;&nbsp;&nbsp;
           {!showRedeterminationForm && (
             <Button
@@ -74,9 +77,9 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
         {pastDeterminations.length > 0 && (
           <>
             <div className="display-flex align-center">
-              <h2 className="font-sans-md margin-top-2 margin-bottom-2">
+              <h3 className="font-sans-md margin-top-2 margin-bottom-2">
                 Past income determinations
-              </h2>
+              </h3>
             </div>
             <div>
               {pastDeterminations.map((determination) => (

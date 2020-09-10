@@ -22,15 +22,14 @@ export const EthnicityField: React.FC = () => {
         data == undefined // check for both null and undefined
           ? undefined
           : data
-          ? 'yes'
-          : 'no'
+            ? 'yes'
+            : 'no'
       }
       parseOnChangeEvent={(e) => e.target.value === 'yes'}
       inputComponent={RadioButtonGroup}
       id="ethnicity-radiogroup"
       name="ethnicity"
       legend="Ethnicity"
-      showLegend
       hint="As identified by family"
       options={[
         {

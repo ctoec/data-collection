@@ -11,6 +11,7 @@ import { NewEnrollment } from './NewEnrollment';
 import { NewFamilyIncome } from './NewFamilyIncome';
 import { ChildIdentifiersForm } from '../../components/EditForms/ChildIdentifiers/Form';
 import { useAlerts } from '../../hooks/useAlerts';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 type LocationType = Location & {
   state: {
@@ -19,6 +20,7 @@ type LocationType = Location & {
 };
 
 const AddChild: React.FC = () => {
+  const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { childId } = useParams();
   const location = useLocation() as LocationType;
@@ -206,7 +208,11 @@ const AddChild: React.FC = () => {
       <div className="margin-top-4">
         <BackButton />
         {alertElements}
-        <h1>Add a child record</h1>
+        <h1 ref={h1Ref}>Add a child record</h1>
+        {/* TODO: ask Ryan if this is ok placement-- it was not consistent in other forms, and not present in edit flow */}
+        <p className="usa-hint">
+          Information is required unless otherwise specified.
+          </p>
       </div>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
     </div>
