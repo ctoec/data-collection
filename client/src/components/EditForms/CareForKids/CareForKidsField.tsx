@@ -27,7 +27,7 @@ export const CareForKidsField: React.FC = () => {
         {
           render: (props) => (
             <div>
-              <RadioButton text="Yes" {...props} />
+              <RadioButton text="Receiving Care 4 Kids" {...props} />
             </div>
           ),
           value: 'Yes',
@@ -35,7 +35,7 @@ export const CareForKidsField: React.FC = () => {
         {
           render: (props) => (
             <div>
-              <RadioButton text="No" {...props} />
+              <RadioButton text="Not receiving Care 4 Kids" {...props} />
             </div>
           ),
           value: 'No',
