@@ -35,7 +35,7 @@ export class Enrollment implements EnrollmentInterface {
   @Column()
   siteId: number;
 
-  @Column({ type: 'enum', enum: AgeGroup, nullable: true })
+  @Column({ type: 'simple-enum', enum: AgeGroup, nullable: true })
   ageGroup?: AgeGroup;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })

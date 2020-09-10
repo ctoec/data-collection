@@ -13,7 +13,7 @@ export class ReportingPeriod implements ReportingPeriodInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: FundingSource })
+  @Column({ type: 'simple-enum', enum: FundingSource })
   type: FundingSource;
 
   @Column({ type: 'date', transformer: momentTransformer })

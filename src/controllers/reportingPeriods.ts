@@ -7,8 +7,8 @@ import moment from 'moment';
  * and less than 3 years in the future
  */
 export const getReportingPeriods = async () => {
-  const threeYearsAgo = moment().add(-3, 'years');
-  const threeYearsAhead = moment().add(3, 'years');
+  const threeYearsAgo = moment().add(-3, 'years').format('YYYY-MM-DD');
+  const threeYearsAhead = moment().add(3, 'years').format('YYYY-MM-DD');
   return getManager().find(ReportingPeriod, {
     where: {
       period: Raw(
