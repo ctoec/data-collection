@@ -9,7 +9,7 @@ import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 import AddChild from './containers/AddChild/AddChild';
-import FundingSpaceTypes from './containers/FundingSpace/FundingSpaceTypes';
+import FundingSpaceTypes from './containers/FundingSpaceTypes/FundingSpaceTypes';
 
 export type RouteConfig = {
   path: string;
