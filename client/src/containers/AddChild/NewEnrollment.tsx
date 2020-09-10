@@ -14,7 +14,7 @@ import { useSites } from '../../hooks/useSites';
 import { useFundingSpaces } from '../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import useIsMounted from '../../hooks/useIsMounted';
-import { CareForKidsField } from '../EditRecord/Forms/CareForKids/CareForKidsField';
+import { CareForKidsField } from '../../components/EditForms/CareForKids/CareForKidsField';
 
 // This is separate from the other enrollment forms because they're pretty complicated
 // Maybe we should try to reconcile though?
@@ -79,7 +79,6 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
           reportingPeriods={reportingPeriods}
         />
         <h3 className="font-heading-md margin-bottom-0">Care 4 Kids</h3>
-        {/* TODO: does care for kids field need an accessor? */}
         <CareForKidsField />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}

@@ -1,13 +1,12 @@
 import React from 'react';
-import { Child } from '../../../../shared/models';
 import { FormField, RadioButtonGroupProps, RadioButtonGroup, RadioButton } from '@ctoec/component-library';
+import { Child } from '../../../shared/models';
 
 /*
  * Basic functional component designed to allow user to edit
  * the Care For Kids field of a Child object.
  */
-export const CareForKidsField: React.FC = ({
-}) => {
+export const CareForKidsField: React.FC = () => {
 
   return (
     <FormField<Child, RadioButtonGroupProps, boolean>
