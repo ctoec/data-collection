@@ -15,6 +15,7 @@ exportRouter.get(
     try {
       const idString = req.params['idString'];
       const uploadedIds = idString.split(',');
+      // res.send(uploadedIds);
       var childrenToMap: Child[] = [];
       for (let i = 0; i < uploadedIds.length; i++) {
         childrenToMap.push(
@@ -26,6 +27,7 @@ exportRouter.get(
       // });
       // childrenToMap.push(await getManager().findOne(Child, {id: uploadedIds[0]}));
       // res.send(childrenToMap);
+      // const workbook = controller.streamUploadedChildren(res, childrenToMap);
       res.send(controller.streamUploadedChildren(res, childrenToMap));
     } catch (err) {
       console.error('BADNESS');
