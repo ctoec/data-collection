@@ -139,7 +139,7 @@ export const changeEnrollment = async (
       // Update current enrollment exitReason
       currentEnrollment.exitReason =
         currentEnrollment.ageGroup !==
-          changeEnrollmentData.newEnrollment.ageGroup
+        changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
 

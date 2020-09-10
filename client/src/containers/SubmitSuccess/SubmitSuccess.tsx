@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { MailToLink } from '../../components/MailToLink';
 import {
   Button,
@@ -29,7 +30,7 @@ const SubmitSuccess: React.FC = () => {
       <div>
         <h1>You've submitted your data to OEC!</h1>
         <p className="margin-top-1 text-bold">
-          Date submitted: {new Date().toLocaleDateString()}
+          Date submitted: {moment.utc().format('MM/DD/YYYY')}
         </p>
       </div>
       <div className="grid-row">

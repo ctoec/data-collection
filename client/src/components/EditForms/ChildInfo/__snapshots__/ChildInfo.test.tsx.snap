@@ -1,0 +1,269 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditRecord ChildInfo matches snapshot 1`] = `
+<DocumentFragment>
+  <form
+    autocomplete="off"
+    class="ChildInfoForm usa-form"
+    novalidate=""
+  >
+    <h2>
+      Child info
+    </h2>
+    <p
+      class="usa-hint"
+    >
+      Information is required unless otherwise specified.
+    </p>
+    <fieldset
+      class="grid-gap grid-row usa-fieldset"
+      id="race-fieldset"
+      role="presentation"
+    >
+      <legend
+        id="fieldset-legend-race-fieldset"
+      >
+        <span
+          class="usa-label"
+        >
+          Race
+        </span>
+      </legend>
+      <div
+        class="grid-gap margin-top-3 grid-row flex-align-start"
+      >
+        <span>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="americanIndianOrAlaskaNative"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="americanIndianOrAlaskaNative"
+            >
+              American Indian or Alaska Native
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="asian"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="asian"
+            >
+              Asian
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="blackOrAfricanAmerican"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="blackOrAfricanAmerican"
+            >
+              Black or African American
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="nativeHawaiianOrPacificIslander"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="nativeHawaiianOrPacificIslander"
+            >
+              Native Hawaiian or Pacific Islander
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="white"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="white"
+            >
+              White
+            </label>
+          </div>
+        </span>
+      </div>
+    </fieldset>
+    <fieldset
+      aria-describedby="ethnicity-radiogroup-fieldset-hint"
+      aria-required="true"
+      class="grid-gap grid-row usa-fieldset"
+      id="ethnicity-radiogroup-fieldset"
+      role="radiogroup"
+    >
+      <legend
+        id="fieldset-legend-ethnicity-radiogroup-fieldset"
+      >
+        <span
+          class="usa-label"
+        >
+          Ethnicity
+        </span>
+      </legend>
+      <span
+        class="usa-hint text-italic"
+      >
+        As identified by family
+      </span>
+      <div
+        class="grid-gap margin-top-3 grid-row flex-align-start"
+      >
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="no"
+              name="ethnicity"
+              type="radio"
+              value="no"
+            />
+            <label
+              class="usa-radio__label"
+              for="no"
+            >
+              Not Hispanic or Latinx
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="yes"
+              name="ethnicity"
+              type="radio"
+              value="yes"
+            />
+            <label
+              class="usa-radio__label"
+              for="yes"
+            >
+              Hispanic or Latinx
+            </label>
+          </div>
+        </span>
+      </div>
+    </fieldset>
+    <div
+      class="usa-form-group"
+    >
+      <span
+        class="usa-hint text-italic"
+      >
+        As identified by family
+      </span>
+      <div
+        class=""
+      />
+      <label
+        class="usa-label"
+        for="gender-select"
+      >
+        Gender
+      </label>
+      <select
+        aria-required="true"
+        class="usa-select"
+        id="gender-select"
+        name=""
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+        <option
+          value="Female"
+        >
+          Female
+        </option>
+        <option
+          value="Male"
+        >
+          Male
+        </option>
+        <option
+          value="Nonbinary"
+        >
+          Nonbinary
+        </option>
+        <option
+          value="Unknown"
+        >
+          Unknown
+        </option>
+      </select>
+    </div>
+    <p
+      class="usa-label"
+    >
+      Foster family
+    </p>
+    <div
+      class="usa-checkbox margin-top-3"
+    >
+      <input
+        class="usa-checkbox__input"
+        id="foster"
+        type="checkbox"
+        value="foster"
+      />
+      <label
+        class="usa-checkbox__label"
+        for="foster"
+      >
+        Child lives with foster family
+      </label>
+    </div>
+    <input
+      class="usa-button"
+      type="submit"
+      value="Save"
+    />
+  </form>
+</DocumentFragment>
+`;
