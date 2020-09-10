@@ -4,9 +4,7 @@ import { EntityMetadata, getConnection, getManager } from 'typeorm';
 import { FlattenedEnrollment, Child } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
-import { format } from 'path';
-import { momentTransformer } from '../entity/transformers/momentTransformer';
-import Moment from 'moment';
+import { propertyDateSorter } from '../../client/src/utils/dateSorter';
 
 export async function streamUploadedChildren(
   response: Response,
@@ -160,7 +158,10 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
       case 'Gender':
         childString.push(child.gender || '');
         break;
+      // TODO: Update data model to account for this variable
+      // It's not currently a field of a child object
       case 'Dual language learner':
+        // childString.push(child.asian == undefined ? '' : child.asian == true ? 'Yes' : 'No');
         childString.push('');
         break;
       case 'Receiving Special Education Services':
@@ -175,6 +176,7 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
       case 'Special Education Services Type':
         childString.push(child.specialEducationServicesType || '');
         break;
+
       case 'Street address':
         childString.push(child.family.streetAddress || '');
         break;
@@ -186,6 +188,101 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
         break;
       case 'Zipcode':
         childString.push(child.family.zip || '');
+        break;
+      case 'Household size':
+        childString.push(
+          currentDetermination == null
+            ? ''
+            : (currentDetermination.numberOfPeople || '').toString()
+        );
+        break;
+      case 'Annual household income':
+        childString.push(
+          currentDetermination == null
+            ? ''
+            : (currentDetermination.income || '').toString()
+        );
+        break;
+      case 'Determination date':
+        childString.push(
+          currentDetermination == null
+            ? ''
+            : currentDetermination.determinationDate.toDate().toDateString()
+        );
+        break;
+      case 'Provider':
+        childString.push(
+          activeEnrollment == undefined
+            ? ''
+            : activeEnrollment.site.organization.name || ''
+        );
+        childString.push('');
+        break;
+      case 'Site':
+        childString.push(
+          activeEnrollment == undefined ? '' : activeEnrollment.site.name || ''
+        );
+        break;
+      // TODO: Update data model to account for this variable
+      // It's not currently a field of an enrollment object
+      case 'Model':
+        childString.push('');
+        break;
+      case 'Age Group':
+        childString.push(
+          activeEnrollment == undefined ? '' : activeEnrollment.ageGroup || ''
+        );
+        break;
+      case 'Enrollment Start Date':
+        childString.push(
+          activeEnrollment == undefined
+            ? ''
+            : activeEnrollment.entry.toDate().toDateString() || ''
+        );
+        break;
+      case 'Enrollment End Date':
+        childString.push(
+          activeEnrollment == undefined
+            ? ''
+            : activeEnrollment.exit == null
+            ? ''
+            : activeEnrollment.exit.toDate().toDateString()
+        );
+        break;
+      case 'Enrollment Exit Reason':
+        childString.push(
+          activeEnrollment == undefined
+            ? ''
+            : activeEnrollment.exitReason == null
+            ? ''
+            : activeEnrollment.exitReason
+        );
+        break;
+      case 'Funding Type':
+        childString.push(
+          activeFunding == null ? '' : activeFunding.fundingSpace.source
+        );
+        break;
+      case 'Space type':
+        childString.push(
+          activeFunding == null ? '' : activeFunding.fundingSpace.time
+        );
+        break;
+      case 'First funding period':
+        childString.push(
+          activeFunding == null
+            ? ''
+            : activeFunding.firstReportingPeriod.period.toDate().toDateString()
+        );
+        break;
+      case 'Last funding period':
+        childString.push(
+          activeFunding == null
+            ? ''
+            : activeFunding.lastReportingPeriod == null
+            ? ''
+            : activeFunding.lastReportingPeriod.period.toDate().toDateString()
+        );
         break;
       case 'Lives with foster family':
         childString.push(
