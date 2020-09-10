@@ -1,19 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-import {
-  waitFor,
-  waitForElementToBeRemoved,
-  render,
-} from '@testing-library/react';
+import { waitFor } from '@testing-library/react';
 import { Child, FundingSource } from '../../shared/models';
 import CheckData from './CheckData';
 import { accessibilityTestHelper, snapshotTestHelper } from '../../testHelpers';
-
-const routerWrapped = (
-  <BrowserRouter>
-    <CheckData />
-  </BrowserRouter>
-);
 
 // mock react-router-dom useParams
 jest.mock('react-router-dom', () => ({
@@ -42,14 +31,16 @@ const child = {
 } as Child;
 
 describe('CheckData', () => {
-  beforeAll(() => {
-    apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([child])));
-  });
+  beforeAll(() =>
+    apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([child])))
+  );
 
-  const afterGet = () => waitFor(() => expect(apiMock.apiGet).toBeCalled());
-  snapshotTestHelper(routerWrapped, afterGet);
-  accessibilityTestHelper(routerWrapped, afterGet);
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
+  const helperOpts = {
+    wrapInRouter: true,
+    before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
+  };
+  snapshotTestHelper(<CheckData />, helperOpts);
+  accessibilityTestHelper(<CheckData />, helperOpts);
+
+  afterAll(() => jest.clearAllMocks());
 });

@@ -5,6 +5,12 @@ exports[`App matches snapshot 1`] = `
   <div
     class="App"
   >
+    <a
+      class="usa-skipnav"
+      href="#main-content"
+    >
+      Skip to main content
+    </a>
     <div
       class=""
     >
@@ -150,6 +156,9 @@ exports[`App matches snapshot 1`] = `
         </nav>
       </header>
     </div>
+    <main
+      id="main-content"
+    />
   </div>
 </DocumentFragment>
 `;

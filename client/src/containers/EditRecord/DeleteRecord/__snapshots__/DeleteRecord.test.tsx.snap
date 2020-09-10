@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditRecord DeleteRecord matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="grid-container"
+  >
+    <div
+      class="grid-row margin-top-2"
+    >
+      <h2>
+        Do you want to delete the enrollment for First Last?
+      </h2>
+    </div>
+    <div
+      class="grid-row margin-top-2"
+    >
+      <span>
+        Deleting an enrollment record will permanently remove all of its data
+      </span>
+    </div>
+    <div
+      class="margin-top-4"
+    >
+      <div
+        class="grid-row flex-first-baseline space-between-4"
+      >
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          No, cancel
+        </button>
+        <button
+          class="usa-button"
+          type="button"
+        >
+          Yes, delete record
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

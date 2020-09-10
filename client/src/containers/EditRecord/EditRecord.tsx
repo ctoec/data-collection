@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
+import Modal from 'react-modal';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
@@ -11,11 +12,11 @@ import {
   CareForKidsForm,
   FamilyInfoForm,
   EnrollmentFundingForm,
-} from './Forms';
-import { WithdrawForm } from './Forms/Withdraw/Form';
+  ChildIdentifiersForm,
+} from '../../components/EditForms';
+import { WithdrawRecord } from './WithdrawRecord';
+import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
-import { DeleteRecord } from './Forms/DeleteRecord';
-import { ChildIdentifiersForm } from './Forms/ChildIdentifiers/Form';
 import { useAlerts } from '../../hooks/useAlerts';
 
 const TAB_IDS = {
@@ -31,13 +32,17 @@ const EditRecord: React.FC = () => {
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const { alertElements, setAlerts } = useAlerts();
 
-  // Basic trigger functions to operate the delete warning modal
+  // state for modal display
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   function toggleDeleteModal() {
-    setDeleteModalOpen(!deleteModalOpen);
+    setDeleteModalOpen((isOpen) => !isOpen);
   }
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+  const toggleWithdrawModal = () => {
+    setWithdrawModalOpen((isOpen) => !isOpen);
+  };
 
   // Counter to trigger re-run of child fetch in
   // useEffect hook
@@ -54,11 +59,6 @@ const EditRecord: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
-  const toggleModal = () => {
-    setWithdrawModalOpen((isOpen) => !isOpen);
-  };
 
   // Get reporting periods (needed to update enrollments with fundings)
   // TODO: we should probably use context rather than making lots of network requests
@@ -111,16 +111,28 @@ const EditRecord: React.FC = () => {
               <Button
                 appearance="unstyled"
                 text="Withdraw"
-                onClick={() => toggleModal()}
+                onClick={() => toggleWithdrawModal()}
                 className="margin-right-2"
               />
-              <WithdrawForm
-                childName={rowData.firstName}
-                enrollment={activeEnrollment}
-                reportingPeriods={reportingPeriods}
+              <Modal
                 isOpen={withdrawModalOpen}
-                toggleOpen={toggleModal}
-              />
+                onRequestClose={toggleWithdrawModal}
+                shouldCloseOnEsc={true}
+                shouldCloseOnOverlayClick={true}
+                appElement="#main-content"
+                contentLabel="Withdraw record"
+                style={{
+                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
+                }}
+              >
+                <WithdrawRecord
+                  childName={rowData.firstName}
+                  enrollment={activeEnrollment}
+                  reportingPeriods={reportingPeriods}
+                  isOpen={withdrawModalOpen}
+                  toggleOpen={toggleWithdrawModal}
+                />
+              </Modal>
             </>
           )}
           <Button
@@ -129,11 +141,20 @@ const EditRecord: React.FC = () => {
             text="Delete record"
             className="margin-right-0"
           />
-          <DeleteRecord
-            child={rowData}
+          <Modal
             isOpen={deleteModalOpen}
-            toggleOpen={toggleDeleteModal}
-          />
+            onRequestClose={toggleDeleteModal}
+            shouldCloseOnEsc={true}
+            shouldCloseOnOverlayClick={true}
+            contentLabel="Delete record"
+            // Use style to dynamically trim the bottom to fit the
+            // message, then center in middle of form
+            style={{
+              content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
+            }}
+          >
+            <DeleteRecord child={rowData} toggleOpen={toggleDeleteModal} />
+          </Modal>
         </div>
       </div>
       <TabNav

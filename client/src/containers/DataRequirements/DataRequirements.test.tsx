@@ -1,13 +1,6 @@
 import React from 'react';
 import DataRequirements from './DataRequirements';
 import { accessibilityTestHelper, snapshotTestHelper } from '../../testHelpers';
-import { BrowserRouter } from 'react-router-dom';
-
-const routerWrapped = (
-  <BrowserRouter>
-    <DataRequirements />
-  </BrowserRouter>
-);
 
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
@@ -38,15 +31,18 @@ const dataRequirements: ColumnMetadata[] = [
   },
 ];
 describe('DataRequirements', () => {
-  beforeAll(() => {
+  beforeAll(() =>
     apiMock.apiGet.mockReturnValue(
       new Promise((resolve) => resolve(dataRequirements))
-    );
-  });
-  const afterGet = () => waitFor(() => expect(apiMock.apiGet).toBeCalled());
-  snapshotTestHelper(routerWrapped, afterGet);
-  accessibilityTestHelper(routerWrapped, afterGet);
-  afterAll(() => {
-    jest.clearAllMocks();
-  });
+    )
+  );
+
+  const helperOpts = {
+    wrapInRouter: true,
+    before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
+  };
+  snapshotTestHelper(<DataRequirements />, helperOpts);
+  accessibilityTestHelper(<DataRequirements />, helperOpts);
+
+  afterAll(() => jest.clearAllMocks());
 });

@@ -1,0 +1,205 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditForms FamilyIncome matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="margin-top-1"
+  >
+    <div
+      class="display-flex align-center"
+    >
+      <h2
+        class="font-sans-md margin-top-2 margin-bottom-2"
+      >
+        Current income determination
+      </h2>
+         
+      <button
+        class="usa-button usa-button--unstyled"
+        type="button"
+      >
+        Redetermine income
+      </button>
+    </div>
+    <div>
+      <div
+        class="oec-card oec-card--primary margin-bottom-2"
+      >
+        <div
+          class="oec-card-cell"
+        >
+          <div
+            class="display-flex flex-justify"
+          >
+            <div
+              class="flex-1"
+            >
+              <p>
+                Household size
+              </p>
+              <p
+                class="text-bold"
+              >
+                3
+              </p>
+            </div>
+            <div
+              class="flex-1"
+            >
+              <p>
+                Income
+              </p>
+              <p
+                class="text-bold"
+              >
+                $70,000.00
+              </p>
+            </div>
+            <div
+              class="flex-2"
+            >
+              <p>
+                Determined on
+              </p>
+              <p
+                class="text-bold"
+              >
+                06/22/2008
+              </p>
+            </div>
+            <div
+              class="display-flex align-center flex-space-between"
+            >
+              <div
+                class="display-flex align-center margin-right-2"
+              >
+                <button
+                  class="usa-button usa-button--unstyled"
+                  type="button"
+                >
+                  <span
+                    class="oec-text-with-icon"
+                  >
+                    Edit
+                  </span>
+                </button>
+              </div>
+              <div
+                class="display-flex align-center margin-right-2"
+              >
+                <button
+                  class="usa-button usa-button--unstyled"
+                  type="button"
+                >
+                  <span
+                    class="oec-text-with-icon"
+                  >
+                    Delete
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class=""
+        />
+      </div>
+    </div>
+    <div
+      class="display-flex align-center"
+    >
+      <h2
+        class="font-sans-md margin-top-2 margin-bottom-2"
+      >
+        Past income determinations
+      </h2>
+    </div>
+    <div>
+      <div
+        class="oec-card oec-card--secondary margin-bottom-2"
+      >
+        <div
+          class="oec-card-cell"
+        >
+          <div
+            class="display-flex flex-justify"
+          >
+            <div
+              class="flex-1"
+            >
+              <p>
+                Household size
+              </p>
+              <p
+                class="text-bold"
+              >
+                3
+              </p>
+            </div>
+            <div
+              class="flex-1"
+            >
+              <p>
+                Income
+              </p>
+              <p
+                class="text-bold"
+              >
+                $50,000.00
+              </p>
+            </div>
+            <div
+              class="flex-2"
+            >
+              <p>
+                Determined on
+              </p>
+              <p
+                class="text-bold"
+              >
+                06/22/2007
+              </p>
+            </div>
+            <div
+              class="display-flex align-center flex-space-between"
+            >
+              <div
+                class="display-flex align-center margin-right-2"
+              >
+                <button
+                  class="usa-button usa-button--unstyled"
+                  type="button"
+                >
+                  <span
+                    class="oec-text-with-icon"
+                  >
+                    Edit
+                  </span>
+                </button>
+              </div>
+              <div
+                class="display-flex align-center margin-right-2"
+              >
+                <button
+                  class="usa-button usa-button--unstyled"
+                  type="button"
+                >
+                  <span
+                    class="oec-text-with-icon"
+                  >
+                    Delete
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class=""
+        />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

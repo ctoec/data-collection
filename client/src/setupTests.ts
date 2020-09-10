@@ -11,3 +11,7 @@ enableFetchMocks();
 
 // Extend jest expect to assert no axe violations
 expect.extend(toHaveNoViolations);
+
+// Mock date to return a consistent value for snapshot testing
+// NOTE: moment uses Date under the hood as well
+Date.now = () => new Date('2008-06-22').getTime();

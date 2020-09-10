@@ -32,6 +32,11 @@ exports[`CheckData matches snapshot 1`] = `
       <p>
         If everything looks good, submit to OEC.
       </p>
+      <a
+        href="/create-record"
+      >
+        Add a record
+      </a>
       <div
         class="scrollbar-container ps"
       >
