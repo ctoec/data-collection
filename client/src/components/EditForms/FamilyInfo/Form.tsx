@@ -50,7 +50,6 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
         autoComplete="off"
       >
         <AddressFieldset />
-        <h3 className="grid-row margin-top-4">Experiencing homelessness</h3>
         <HomelessnessField />
         <div className="grid-row margin-top-2">
           <FormSubmitButton

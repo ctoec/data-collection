@@ -4,7 +4,7 @@ import { Child } from '../../../../shared/models';
 
 export const FosterCheckbox: React.FC = () => (
   <>
-    <p className="text-bold margin-top-3 margin-bottom-0">Foster family</p>
+    <p className="text-bold margin-top-3 margin-bottom-1">Foster family</p>
     <FormField<Child, CheckboxProps, boolean | null>
       getValue={(data) => data.at('foster')}
       value={'foster'}
