@@ -1,5 +1,10 @@
 import React from 'react';
-import { FormField, RadioButtonGroupProps, RadioButtonGroup, RadioButton } from '@ctoec/component-library';
+import {
+  FormField,
+  RadioButtonGroupProps,
+  RadioButtonGroup,
+  RadioButton,
+} from '@ctoec/component-library';
 import { Child } from '../../../shared/models';
 
 /*
@@ -7,7 +12,6 @@ import { Child } from '../../../shared/models';
  * the Care For Kids field of a Child object.
  */
 export const CareForKidsField: React.FC = () => {
-
   return (
     <FormField<Child, RadioButtonGroupProps, boolean>
       getValue={(data) => data.at('recievesC4K')}

@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const SubmitSuccess: React.FC = () => {
-  const h1Ref = getH1RefForTitle()
+  const h1Ref = getH1RefForTitle();
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row text-bold">

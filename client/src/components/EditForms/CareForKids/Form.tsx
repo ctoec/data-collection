@@ -1,8 +1,5 @@
 import React, { useState, useContext } from 'react';
-import {
-  Form,
-  FormSubmitButton,
-} from '@ctoec/component-library';
+import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { CareForKidsField } from './CareForKidsField';
 import { EditFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -48,6 +45,6 @@ export const CareForKidsForm: React.FC<EditFormProps> = ({
           </div>
         </Form>
       </div>
-    </div >
+    </div>
   );
 };

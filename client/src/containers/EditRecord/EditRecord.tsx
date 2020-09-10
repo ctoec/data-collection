@@ -103,9 +103,7 @@ const EditRecord: React.FC = () => {
       <div className="display-flex flex-justify">
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
-            <span className="h2 h2--lighter">
-              Edit record{' '}
-            </span>
+            <span className="h2 h2--lighter">Edit record </span>
             {rowData.firstName} {rowData.lastName}
           </h1>
         </div>

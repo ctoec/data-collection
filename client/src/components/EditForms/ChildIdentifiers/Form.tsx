@@ -53,9 +53,7 @@ export const ChildIdentifiersForm = ({
       noValidate
       autoComplete="off"
     >
-      {!hideHeader && (
-          <h2>Child's identifiers</h2>
-      )}
+      {!hideHeader && <h2>Child's identifiers</h2>}
       <div className="grid-row grid-gap">
         <div className="mobile-lg:grid-col-12">
           <SasidField />

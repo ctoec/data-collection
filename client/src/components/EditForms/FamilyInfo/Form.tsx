@@ -39,9 +39,7 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
 
   return (
     <div className="grid-container margin-top-2">
-      {!hideHeader && (
-        <h2 className="grid-row">Family Address</h2>
-      )}
+      {!hideHeader && <h2 className="grid-row">Family Address</h2>}
       <Form<Family>
         className="FamilyInfoForm"
         data={family}

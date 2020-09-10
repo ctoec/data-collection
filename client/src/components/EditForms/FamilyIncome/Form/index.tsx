@@ -24,14 +24,10 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
 
   return (
     <>
-      <h2>
-        Family income determination
-          </h2>
+      <h2>Family income determination</h2>
       {showRedeterminationForm && (
         <>
-          <h3>
-            Redetermine family income
-          </h3>
+          <h3>Redetermine family income</h3>
           <Card>
             <RedeterminationForm
               {...props}
@@ -77,9 +73,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
         {pastDeterminations.length > 0 && (
           <>
             <div className="display-flex align-center">
-              <h3>
-                Past income determinations
-              </h3>
+              <h3>Past income determinations</h3>
             </div>
             <div>
               {pastDeterminations.map((determination) => (

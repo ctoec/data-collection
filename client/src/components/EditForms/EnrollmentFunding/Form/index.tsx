@@ -48,9 +48,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       />
       {currentEnrollment && (
         <>
-          <h3>
-            Current enrollment
-          </h3>
+          <h3>Current enrollment</h3>
           <EditEnrollmentForm
             key="edit-current-enrollment"
             isCurrent={true}
@@ -78,9 +76,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       )}
       {!!pastEnrollments.length && (
         <>
-          <h3>
-            Past enrollments
-          </h3>
+          <h3>Past enrollments</h3>
           {pastEnrollments.map((enrollment) => (
             <>
               <EditEnrollmentForm

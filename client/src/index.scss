@@ -3,23 +3,23 @@
 @import './containers/CheckData/CheckData.scss';
 
 p {
-	line-height: 1.6rem;
+  line-height: 1.6rem;
 }
 
 .h2 {
-	font-size: 1.5rem;
-	display: block;
-	margin-block-start: 0.83rem;
-	margin-block-end: 0.83rem;
-	margin-inline-start: 0px;
-	margin-inline-end: 0px;
-	font-weight: bold;
+  font-size: 1.5rem;
+  display: block;
+  margin-block-start: 0.83rem;
+  margin-block-end: 0.83rem;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
 
-	&--lighter {
-		font-weight: normal;
-	}
+  &--lighter {
+    font-weight: normal;
+  }
 }
 
 fieldset legend {
-	font-weight: bold;
+  font-weight: bold;
 }

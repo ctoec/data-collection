@@ -50,10 +50,7 @@ export const ChildInfoForm = ({
       noValidate
       autoComplete="off"
     >
-      {!hideHeader && (
-
-        <h2>Child info</h2>
-      )}
+      {!hideHeader && <h2>Child info</h2>}
       <RaceField />
       <EthnicityField />
       <GenderField />

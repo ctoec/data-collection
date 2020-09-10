@@ -31,7 +31,9 @@ const Home: React.FC = () => {
     <div className="Home">
       <div className="usa-hero">
         <div>
-          <h1 ref={h1Ref} className="margin-bottom-2">Upload your enrollment data</h1>
+          <h1 ref={h1Ref} className="margin-bottom-2">
+            Upload your enrollment data
+          </h1>
           <Button
             className="btn--inverse"
             href="/login"

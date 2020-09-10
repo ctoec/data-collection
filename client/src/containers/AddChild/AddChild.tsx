@@ -212,7 +212,7 @@ const AddChild: React.FC = () => {
         {/* TODO: ask Ryan if this is ok placement-- it was not consistent in other forms, and not present in edit flow */}
         <p className="usa-hint">
           Information is required unless otherwise specified.
-          </p>
+        </p>
       </div>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
     </div>

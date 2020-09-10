@@ -5,7 +5,7 @@ export const getH1RefForTitle = (textAccessor?: TextAccessor | string) => {
   // "on most web pages the <title> and the <h1> heading at the beginning of the content should match, or should at least be very similar"
 
   if (typeof textAccessor === 'string') {
-    document.title = textAccessor
+    document.title = textAccessor;
     return null;
   }
 
@@ -16,6 +16,6 @@ export const getH1RefForTitle = (textAccessor?: TextAccessor | string) => {
     } else {
       document.title = h1Node.textContent || 'ECE Reporter';
     }
-  }
+  };
   return h1Ref;
-}
+};
