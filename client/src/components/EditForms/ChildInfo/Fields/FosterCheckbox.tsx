@@ -12,7 +12,6 @@ export const FosterCheckbox: React.FC = () => (
       inputComponent={Checkbox}
       id="foster"
       text="Child lives with foster family"
-      className="margin-top-1"
     />
   </>
 );

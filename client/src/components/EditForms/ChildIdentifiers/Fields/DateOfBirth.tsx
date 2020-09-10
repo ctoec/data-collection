@@ -14,7 +14,6 @@ export const DateOfBirthField: React.FC = () => {
       inputComponent={DateInput}
       id="dateOfBirth-picker"
       label="Birth date"
-      hideLegend
       className="margin-top-3"
     />
   );
