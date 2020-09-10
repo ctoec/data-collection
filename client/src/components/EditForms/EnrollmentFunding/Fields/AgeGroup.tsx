@@ -27,6 +27,7 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
       name="age-group"
       id="age-group-radiogroup"
       legend="Age group"
+      showLegend
       options={Object.values(AgeGroup).map((ageGroup) => ({
         render: (props: RadioOptionRenderProps) => (
           <RadioButton {...props} text={ageGroup} />

@@ -24,12 +24,12 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
 
   return (
     <>
-      <h2 className="font-sans-md margin-top-2 margin-bottom-2">
+      <h2>
         Family income determination
           </h2>
       {showRedeterminationForm && (
         <>
-          <h3 className="font-sans-md margin-top-2 margin-bottom-2">
+          <h3>
             Redetermine family income
           </h3>
           <Card>
@@ -77,7 +77,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
         {pastDeterminations.length > 0 && (
           <>
             <div className="display-flex align-center">
-              <h3 className="font-sans-md margin-top-2 margin-bottom-2">
+              <h3>
                 Past income determinations
               </h3>
             </div>
