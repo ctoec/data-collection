@@ -3,8 +3,8 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { IncomeDetermination } from '../../shared/models';
 import { apiPost } from '../../utils/api';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { IncomeDeterminationFieldSet } from '../EditRecord/Forms/FamilyIncome/Fields';
-import { EditFormProps } from '../EditRecord/Forms/types';
+import { IncomeDeterminationFieldSet } from '../../components/EditForms/FamilyIncome/Fields';
+import { EditFormProps } from '../../components/EditForms/types';
 import useIsMounted from '../../hooks/useIsMounted';
 
 /**

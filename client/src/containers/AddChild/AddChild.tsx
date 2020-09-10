@@ -5,11 +5,11 @@ import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
-import { EditFormProps } from '../EditRecord/Forms/types';
-import { ChildInfoForm, FamilyInfoForm } from '../EditRecord/Forms';
+import { EditFormProps } from '../../components/EditForms/types';
+import { ChildInfoForm, FamilyInfoForm } from '../../components/EditForms';
 import { NewEnrollment } from './NewEnrollment';
 import { NewFamilyIncome } from './NewFamilyIncome';
-import { ChildIdentifiersForm } from '../EditRecord/Forms/ChildIdentifiers/Form';
+import { ChildIdentifiersForm } from '../../components/EditForms/ChildIdentifiers/Form';
 import { useAlerts } from '../../hooks/useAlerts';
 
 type LocationType = Location & {

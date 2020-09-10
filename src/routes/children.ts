@@ -21,8 +21,12 @@ childrenRouter.post(
   passAsyncError(async (req, res) => {
     try {
       const organization = req.body.organization;
-      const family = await getManager().save(getManager().create(Family, { organization }));
-      const child = await getManager().save(getManager().create(Child, { ...req.body, family }));
+      const family = await getManager().save(
+        getManager().create(Family, { organization })
+      );
+      const child = await getManager().save(
+        getManager().create(Child, { ...req.body, family })
+      );
       res.send(child);
     } catch (err) {
       if (err instanceof ApiError) throw err;

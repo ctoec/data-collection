@@ -34,13 +34,13 @@ export class FundingSpace implements FundingSpaceInterface {
   @ManyToOne(() => Organization, { nullable: false })
   organization: Organization;
 
-  @Column({ type: 'enum', enum: FundingSource })
+  @Column({ type: 'simple-enum', enum: FundingSource })
   source: FundingSource;
 
-  @Column({ type: 'enum', enum: AgeGroup })
+  @Column({ type: 'simple-enum', enum: AgeGroup })
   ageGroup: AgeGroup;
 
-  @Column({ type: 'enum', enum: FundingTime })
+  @Column({ type: 'simple-enum', enum: FundingTime })
   time: FundingTime;
 
   @OneToOne(() => FundingTimeSplit, (split) => split.fundingSpace, {
