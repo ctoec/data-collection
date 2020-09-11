@@ -70,7 +70,7 @@ export const initialize = async () => {
   }
 
   if (!(await getManager().find(FundingSpace)).length) {
-    const fundingSpacesToAdd = [];
+    let fundingSpacesToAdd = [];
     Object.values(AgeGroup).forEach((ageGroup) => {
       for (const source of Object.values(FundingSource)) {
         const match = FUNDING_SOURCE_TIMES.find(fst => fst.fundingSources.includes(source));
@@ -86,7 +86,7 @@ export const initialize = async () => {
             });
           });
 
-          fundingSpacesToAdd.concat(spaces);
+          fundingSpacesToAdd = fundingSpacesToAdd.concat(spaces);
         }
       }
     });
