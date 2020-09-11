@@ -18,9 +18,13 @@ export function FundingDoesNotOverlap(validationOptions?: ValidationOptions): Pr
         validate(validatingFunding, { object: enrollment }) {
           const allFundings = (enrollment as Enrollment).fundings
           const { firstReportingPeriod: validatingFirstPeriod, lastReportingPeriod: validatingLastPeriod } = validatingFunding as Funding
+          if (!validatingFirstPeriod) {
+            return true;
+          }
+          const allExceptThisFunding = allFundings.filter(f => f.id !== validatingFunding.id);
 
           let overlap = false;
-          (allFundings.filter(f => f.id !== validatingFunding.id)).forEach(_funding => {
+          allExceptThisFunding.forEach(_funding => {
             const _firstPeriod = _funding.firstReportingPeriod;
 
             if (_firstPeriod.periodStart.isSame(validatingFirstPeriod.periodStart)) {
