@@ -147,7 +147,6 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       aria-describedby="dateOfBirth-picker-hint"
       class="grid-gap grid-row usa-fieldset"
       id="dateOfBirth-picker"
-      role="presentation"
     >
       <legend
         id="fieldset-legend-dateOfBirth-picker"
@@ -1431,7 +1430,6 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
     <fieldset
       class="grid-gap grid-row usa-fieldset display-inline-block"
       id="birth-certificate-fields"
-      role="presentation"
     >
       <legend
         id="fieldset-legend-birth-certificate-fields"

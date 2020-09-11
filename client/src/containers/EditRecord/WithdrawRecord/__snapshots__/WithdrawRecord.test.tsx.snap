@@ -35,7 +35,6 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
         aria-describedby="end-date-hint"
         class="grid-gap grid-row usa-fieldset"
         id="end-date"
-        role="presentation"
       >
         <legend
           id="fieldset-legend-end-date"
@@ -1319,9 +1318,6 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
       <div
         class="usa-form-group"
       >
-        <div
-          class=""
-        />
         <label
           class="usa-label"
           for="exit-reason"
