@@ -246,14 +246,17 @@ const mapFunding = async (
   );
 
   let fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
+
+  //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
+  //  was supplied instead and look up the corresponding FundingTime
   if (!fundingTime && fundingSource) {
-    const match: FundingSourceTime = FUNDING_SOURCE_TIMES.find(type => type.fundingSources.includes(fundingSource));
+    const matchingSourceTime: FundingSourceTime = FUNDING_SOURCE_TIMES.find(fst => fst.fundingSources.includes(fundingSource));
 
-    if (match) {
-      const matchingContractSpace: FundingTimeInput = match.fundingTimes.find(space => space.formats.includes(source.spaceType));
+    if (matchingSourceTime) {
+      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(fundingTime => fundingTime.formats.includes(source.spaceType));
 
-      if (matchingContractSpace) {
-        fundingTime = matchingContractSpace.value
+      if (matchingTime) {
+        fundingTime = matchingTime.value
       }
     }
   }
