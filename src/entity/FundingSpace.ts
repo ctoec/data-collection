@@ -10,7 +10,7 @@ import {
 import {
   FundingSpace as FundingSpaceInterface,
   FundingSource,
-  FundingTimeInput,
+  FundingTime,
   AgeGroup,
 } from '../../client/src/shared/models';
 
@@ -41,7 +41,7 @@ export class FundingSpace implements FundingSpaceInterface {
   ageGroup: AgeGroup;
 
   @Column({ type: 'simple-enum', enum: FundingTime })
-  time: FundingTimeInput;
+  time: FundingTime;
 
   @OneToOne(() => FundingTimeSplit, (split) => split.fundingSpace, {
     eager: true,
