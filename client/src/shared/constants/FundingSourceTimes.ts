@@ -1,9 +1,9 @@
 import { FundingSource, FundingTime } from "../models";
-import { FundingSpaceType } from "../models/FundingSpaceTypes";
+import { FundingSourceTime } from "../models/FundingSourceTime";
 
 //  This enumerates all of the valid funding source/funding time combinations,
 //  as well as all of the acceptable formats for each associated funding time
-export const FUNDING_SPACE_TYPES: FundingSpaceType[] = [{
+export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [{
   displayName: 'Child Day Care',
   fundingSources: [FundingSource.CDC],
   fundingTimes: [{

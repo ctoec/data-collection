@@ -9,7 +9,7 @@ import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 import AddChild from './containers/AddChild/AddChild';
-import FundingSpaceTypes from './containers/FundingSpaceTypes/FundingSpaceTypes';
+import FundingSourceTimes from './containers/FundingSourceTimes/FundingSourceTimes';
 
 export type RouteConfig = {
   path: string;
@@ -49,7 +49,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/funding-space-types',
-    component: FundingSpaceTypes,
+    component: FundingSourceTimes,
     unauthorized: true,
   },
   {

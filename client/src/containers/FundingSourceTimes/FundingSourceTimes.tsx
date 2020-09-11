@@ -1,11 +1,11 @@
 import React from 'react';
 import { Table, Column } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
-import { FundingSpaceType } from '../../shared/models';
-import { FUNDING_SPACE_TYPES } from '../../shared/constants';
+import { FundingSourceTime } from '../../shared/models';
+import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 
-const FundingSpaceTypes: React.FC = () => {
-  const columns: Column<FundingSpaceType>[] = [
+const FundingSourceTimes: React.FC = () => {
+  const columns: Column<FundingSourceTime>[] = [
     {
       name: 'Funding Type',
       cell: ({ row }) =>
@@ -22,8 +22,8 @@ const FundingSpaceTypes: React.FC = () => {
       name: 'Contract Space',
       cell: ({ row }) =>
         row ? (<td>
-          {row.fundingTimes.map(space => {
-            return <div>{space.displayName}</div>
+          {row.fundingTimes.map(fundingTime => {
+            return <div>{fundingTime.displayName}</div>
           })}
         </td>
         ) : (
@@ -34,8 +34,8 @@ const FundingSpaceTypes: React.FC = () => {
       name: 'Accepted formats',
       cell: ({ row }) =>
         row ? (<td>
-          {row.fundingTimes.map(space => {
-            return <div>{space.formats.map(x => '"' + x + '"').join(' or ')}</div>
+          {row.fundingTimes.map(fundingTime => {
+            return <div>{fundingTime.formats.map(x => '"' + x + '"').join(' or ')}</div>
           })}
         </td>
         ) : (
@@ -53,7 +53,7 @@ const FundingSpaceTypes: React.FC = () => {
       <div className="margin-top-4">
         <Table
           id="data-requirements-table"
-          data={FUNDING_SPACE_TYPES}
+          data={FUNDING_SOURCE_TIMES}
           rowKey={(row) => (row ? row.displayName : '')}
           columns={columns}
           defaultSortColumn={0}
@@ -63,4 +63,4 @@ const FundingSpaceTypes: React.FC = () => {
   );
 };
 
-export default FundingSpaceTypes;
+export default FundingSourceTimes;
