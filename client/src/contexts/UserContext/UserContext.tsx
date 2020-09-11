@@ -32,8 +32,12 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
     if (accessToken) {
       setUserLoading(true);
       apiGet('users/current', { accessToken })
-        .then((data) => setUser(data))
-        .finally(() => setUserLoading(false));
+        .then((data) => {
+          setUser(data);
+        })
+        .finally(() => {
+          setUserLoading(false);
+        });
     }
   }, [accessToken]);
 

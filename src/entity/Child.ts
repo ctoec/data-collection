@@ -69,7 +69,7 @@ export class Child implements ChildInterface {
   @Column({ nullable: true })
   hispanicOrLatinxEthnicity?: boolean;
 
-  @Column({ nullable: true, type: 'enum', enum: Gender })
+  @Column({ nullable: true, type: 'simple-enum', enum: Gender })
   gender?: Gender;
 
   @Column({ nullable: true })
@@ -81,7 +81,11 @@ export class Child implements ChildInterface {
   @Column({ nullable: true })
   recievesSpecialEducationServices?: boolean;
 
-  @Column({ nullable: true, type: 'enum', enum: SpecialEducationServicesType })
+  @Column({
+    nullable: true,
+    type: 'simple-enum',
+    enum: SpecialEducationServicesType,
+  })
   specialEducationServicesType?: SpecialEducationServicesType;
 
   @ManyToOne((type) => Family, { nullable: false })

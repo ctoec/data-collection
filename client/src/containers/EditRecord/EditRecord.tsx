@@ -1,8 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { TabNav, Button } from '@ctoec/component-library';
+import Modal from 'react-modal';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiGet, apiDelete } from '../../utils/api';
+import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import {
@@ -11,12 +12,15 @@ import {
   CareForKidsForm,
   FamilyInfoForm,
   EnrollmentFundingForm,
-} from './Forms';
-import { WithdrawForm } from './Forms/Withdraw/Form';
+  ChildIdentifiersForm,
+} from '../../components/EditForms';
+import { WithdrawRecord } from './WithdrawRecord';
+import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
-import { DeleteRecord } from './Forms/DeleteRecord';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const TAB_IDS = {
+  IDENT: 'identifiers',
   CHILD: 'child',
   FAMILY: 'family',
   INCOME: 'income',
@@ -28,20 +32,21 @@ const EditRecord: React.FC = () => {
   const { childId } = useParams();
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const { alertElements, setAlerts } = useAlerts();
 
-  // Basic trigger functions to operate the delete warning modal
+  // state for modal display
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   function toggleDeleteModal() {
-    setDeleteModalOpen(!deleteModalOpen);
+    setDeleteModalOpen((isOpen) => !isOpen);
   }
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+  const toggleWithdrawModal = () => {
+    setWithdrawModalOpen((isOpen) => !isOpen);
+  };
 
   // Counter to trigger re-run of child fetch in
   // useEffect hook
   const [refetch, setRefetch] = useState<number>(0);
-  const refetchChild = () => {
-    setRefetch((r) => r + 1);
-  };
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -54,11 +59,6 @@ const EditRecord: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
-  const toggleModal = () => {
-    setWithdrawModalOpen((isOpen) => !isOpen);
-  };
 
   // Get reporting periods (needed to update enrollments with fundings)
   // TODO: we should probably use context rather than making lots of network requests
@@ -76,17 +76,30 @@ const EditRecord: React.FC = () => {
   }
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
+  const onSuccess = () => {
+    setRefetch((r) => r + 1);
+    setAlerts([
+      {
+        type: 'success',
+        heading: 'Record updated',
+        text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
+      },
+    ]);
+  };
+
   const commonFormProps = {
     child: rowData,
-    onSuccess: refetchChild,
+    onSuccess,
+    setAlerts,
     reportingPeriods,
   };
 
   return (
-    <div className="grid-container">
-      <div className="margin-top-4 display-flex flex-justify">
+    <div className="margin-top-4 grid-container">
+      <BackButton />
+      {alertElements}
+      <div className="display-flex flex-justify">
         <div>
-          <BackButton />
           <h1>Edit record</h1>
           <h2>
             {rowData.firstName} {rowData.lastName}
@@ -98,16 +111,28 @@ const EditRecord: React.FC = () => {
               <Button
                 appearance="unstyled"
                 text="Withdraw"
-                onClick={() => toggleModal()}
+                onClick={() => toggleWithdrawModal()}
                 className="margin-right-2"
               />
-              <WithdrawForm
-                childName={rowData.firstName}
-                enrollment={activeEnrollment}
-                reportingPeriods={reportingPeriods}
+              <Modal
                 isOpen={withdrawModalOpen}
-                toggleOpen={toggleModal}
-              />
+                onRequestClose={toggleWithdrawModal}
+                shouldCloseOnEsc={true}
+                shouldCloseOnOverlayClick={true}
+                appElement="#main-content"
+                contentLabel="Withdraw record"
+                style={{
+                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
+                }}
+              >
+                <WithdrawRecord
+                  childName={rowData.firstName}
+                  enrollment={activeEnrollment}
+                  reportingPeriods={reportingPeriods}
+                  isOpen={withdrawModalOpen}
+                  toggleOpen={toggleWithdrawModal}
+                />
+              </Modal>
             </>
           )}
           <Button
@@ -116,15 +141,29 @@ const EditRecord: React.FC = () => {
             text="Delete record"
             className="margin-right-0"
           />
-          <DeleteRecord
-            child={rowData}
+          <Modal
             isOpen={deleteModalOpen}
-            toggleOpen={toggleDeleteModal}
-          />
+            onRequestClose={toggleDeleteModal}
+            shouldCloseOnEsc={true}
+            shouldCloseOnOverlayClick={true}
+            contentLabel="Delete record"
+            // Use style to dynamically trim the bottom to fit the
+            // message, then center in middle of form
+            style={{
+              content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
+            }}
+          >
+            <DeleteRecord child={rowData} toggleOpen={toggleDeleteModal} />
+          </Modal>
         </div>
       </div>
       <TabNav
         items={[
+          {
+            id: TAB_IDS.CHILD,
+            text: 'Child Identifiers',
+            content: <ChildIdentifiersForm {...commonFormProps} />,
+          },
           {
             id: TAB_IDS.CHILD,
             text: 'Child Info',

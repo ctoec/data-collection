@@ -5,10 +5,12 @@ import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
-import { EditFormProps } from '../EditRecord/Forms/types';
-import { ChildInfoForm, FamilyInfoForm } from '../EditRecord/Forms';
+import { EditFormProps } from '../../components/EditForms/types';
+import { ChildInfoForm, FamilyInfoForm } from '../../components/EditForms';
 import { NewEnrollment } from './NewEnrollment';
 import { NewFamilyIncome } from './NewFamilyIncome';
+import { ChildIdentifiersForm } from '../../components/EditForms/ChildIdentifiers/Form';
+import { useAlerts } from '../../hooks/useAlerts';
 
 type LocationType = Location & {
   state: {
@@ -33,8 +35,25 @@ const AddChild: React.FC = () => {
   // https://skylight.invisionapp.com/console/Full-Data-Collection-Tool-ckeaf1bpi00wn01yhh6f147bf/ckeaf1cjw00wp01yh09w41ivy/play#project_console
   const steps: StepProps<EditFormProps>[] = [
     {
-      key: 'child-info',
+      key: 'child-ident',
       name: 'Child identifiers',
+      status: () => 'incomplete',
+      EditComponent: () => (
+        <Button
+          appearance="unstyled"
+          text={
+            <>
+              edit<span className="usa-sr-only"> child identifiers</span>
+            </>
+          }
+          onClick={() => history.replace({ ...location, hash: 'child-ident' })}
+        />
+      ),
+      Form: ChildIdentifiersForm,
+    },
+    {
+      key: 'child-info',
+      name: 'Child info',
       status: () => 'incomplete',
       EditComponent: () => (
         <Button
@@ -49,14 +68,6 @@ const AddChild: React.FC = () => {
       ),
       Form: ChildInfoForm,
     },
-    // TODO: split child info into two forms
-    // {
-    //   key: 'child-demographics',
-    //   name: 'Child demographics',
-    //   status: () => 'incomplete',
-    //   EditComponent: () => <Buttotext="Edit"onClick={() => {}}n>,
-    //   Form: () => ChildDemographics,
-    // },
     {
       key: 'family-address',
       name: 'Family address',
@@ -139,7 +150,15 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, childId, organization, history, updateChild]);
+  }, [
+    accessToken,
+    child,
+    childId,
+    location,
+    organization,
+    history,
+    updateChild,
+  ]);
 
   useEffect(() => {
     if (!childId) return;
@@ -155,17 +174,28 @@ const AddChild: React.FC = () => {
   }, [accessToken, childId, refetchChild]);
 
   const onSuccess = () => {
-    setRefetchChild((r) => r + 1);
     const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
     if (indexOfCurrentStep === steps.length - 1) {
       // If we're all done
       console.log('TODO: what do we do after adding a child?');
-      history.push('/check-data/1');
+      history.push('/check-data/1', {
+        alerts: [
+          {
+            type: 'success',
+            heading: 'Record added',
+            text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
+          },
+        ],
+      });
     } else {
+      setRefetchChild((r) => r + 1);
       history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
     }
   };
-  const commonFormProps = { child, onSuccess };
+
+  const { alertElements, setAlerts } = useAlerts();
+
+  const commonFormProps = { child, onSuccess, setAlerts };
 
   if (!child) {
     return <>Loading...</>;
@@ -175,6 +205,7 @@ const AddChild: React.FC = () => {
     <div className="grid-container">
       <div className="margin-top-4">
         <BackButton />
+        {alertElements}
         <h1>Add a child record</h1>
       </div>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />

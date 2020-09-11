@@ -19,69 +19,56 @@ import moment from 'moment';
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
 
-  let user;
-  try {
-    const user = getManager().create(User, {
+  let user = await getManager().findOne(User, 1);
+  if (!user) {
+    const _user = getManager().create(User, {
       id: 1,
       wingedKeysId: '2c0ec653-8829-4aa1-82ba-37c8832bbb88',
       firstName: 'Voldy',
       lastName: 'Mort',
     });
-    await qb.insert().into(User).values([user]).orIgnore().execute();
-  } catch {
-  } finally {
-    user = await getManager().findOne(User, { where: { id: 1 } });
+    user = await getManager().save(_user);
   }
 
-  let organization;
-  const orgName = 'Hogwarts Childcare';
-  try {
+  let organization = await getManager().findOne(Organization, 1);
+  if (!organization) {
     const _organization = getManager().create(Organization, {
+      id: 1,
       name: 'Hogwarts Childcare',
     });
-    await qb
-      .insert()
-      .into(Organization)
-      .values([_organization])
-      .orIgnore()
-      .execute();
-  } catch {
-  } finally {
-    organization = await getManager().findOne(Organization, {
-      where: { name: orgName },
-    });
+    organization = await getManager().save(_organization);
   }
 
-  try {
+  if (!(await getManager().findOne(OrganizationPermission, 1))) {
     const permission = getManager().create(OrganizationPermission, {
       user,
       organization,
     });
-    await qb
-      .insert()
-      .into(OrganizationPermission)
-      .values([permission])
-      .orIgnore()
-      .execute();
-  } catch {}
+    await getManager().save(permission);
+  }
 
-  try {
+  if (!(await getManager().findOne(Site, 1))) {
     const site1 = getManager().create(Site, {
+      id: 1,
       name: 'Gryfinndor Childcare',
       titleI: false,
       region: Region.East,
       organization,
     });
+    await getManager().save(site1);
+  }
+
+  if (!(await getManager().findOne(Site, 2))) {
     const site2 = getManager().create(Site, {
       name: 'Hufflepuff Childcare',
       titleI: false,
       region: Region.East,
       organization,
     });
-    await qb.insert().into(Site).values([site1, site2]).orIgnore().execute();
-  } catch {}
+    await getManager().save(site2);
+  }
 
-  try {
+  if (!(await getManager().find(FundingSpace)).length) {
     const fundingSpacesToAdd = [];
     Object.values(AgeGroup).forEach((ageGroup) => {
       const CDCFullTime = getManager().create(FundingSpace, {
@@ -117,15 +104,10 @@ export const initialize = async () => {
       });
       fundingSpacesToAdd.push(CDCFullTime, CDCPartTime, PSRFull, PSRPart);
     });
-    await qb
-      .insert()
-      .into(FundingSpace)
-      .values(fundingSpacesToAdd)
-      .orIgnore()
-      .execute();
-  } catch {}
+    await getManager().save(fundingSpacesToAdd);
+  }
 
-  try {
+  if (!(await getManager().find(ReportingPeriod)).length) {
     const reportingPeriodsToAdd = [];
     for (let fundingSource of [FundingSource.CDC, FundingSource.PSR]) {
       for (let dates of reportingPeriods) {
@@ -139,11 +121,6 @@ export const initialize = async () => {
         reportingPeriodsToAdd.push(reportingPeriod);
       }
     }
-    await qb
-      .insert()
-      .into(ReportingPeriod)
-      .values(reportingPeriodsToAdd)
-      .orIgnore()
-      .execute();
-  } catch {}
+    await getManager().save(reportingPeriodsToAdd);
+  }
 };

@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GettingStarted matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="grid-container margin-top-4"
+  >
+    <div
+      class="grid-row"
+    >
+      <h1>
+        Getting started
+      </h1>
+      <p>
+        This tool will allow you to upload and submit the most recent enrollment data for all state funded childcare spaces at your program.
+      </p>
+      <p>
+        To get started, download the spreadsheet template that contains all required data for each field. If you have any questions, reach out to 
+        <a
+          href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          oec-data-pilot@skylight.digital
+        </a>
+      </p>
+      <div
+        class="usa-alert usa-alert--info grid-row margin-y-4"
+      >
+        <div
+          class="display-flex flex-fill"
+        >
+          <div
+            class="usa-alert__body grid-col flex-fill"
+          >
+            <h2
+              class="usa-alert__heading"
+            >
+              OEC's enrollment data requirements
+            </h2>
+            <p
+              class="usa-alert__text"
+            >
+              <span>
+                To see all required data fields, definitions, and rationale, see 
+                <a
+                  href="/data-requirements"
+                >
+                  enrollment data requirements.
+                </a>
+              </span>
+            </p>
+          </div>
+          <div
+            class="usa-alert__body flex-auto display-flex flex-align-center"
+          />
+        </div>
+      </div>
+      <div>
+        <h2>
+          Download the data entry template
+        </h2>
+        <p>
+          Use one of these templates to enter your enrollment data for all state-funded children.
+        </p>
+        <button
+          class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+          type="button"
+        >
+          <span
+            class="oec-text-with-icon text-underline"
+          >
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+            >
+              download.svg
+            </svg>
+            Download Excel Template
+          </span>
+        </button>
+        <button
+          class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+          type="button"
+        >
+          <span
+            class="oec-text-with-icon text-underline"
+          >
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+            >
+              download.svg
+            </svg>
+            Download .csv Template
+          </span>
+        </button>
+      </div>
+    </div>
+    <div
+      class="grid-row margin-top-2"
+    >
+      <a
+        class="usa-button"
+        href="/upload"
+      >
+        Go to file upload
+      </a>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -78,7 +78,7 @@ const DataRequirements: React.FC = () => {
       <h1>OEC's enrollment data requirements</h1>
       {Object.entries(columnMetadataBySection).map(
         ([sectionName, sectionData]) => (
-          <div className="margin-top-4">
+          <div key={sectionName} className="margin-top-4">
             <h2>{sectionName}</h2>
             <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
             <Table

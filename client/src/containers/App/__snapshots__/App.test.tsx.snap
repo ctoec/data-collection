@@ -1,10 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`matches snapshot 1`] = `
+exports[`App matches snapshot 1`] = `
 <DocumentFragment>
   <div
     class="App"
   >
+    <a
+      class="usa-skipnav"
+      href="#main-content"
+    >
+      Skip to main content
+    </a>
     <div
       class=""
     >
@@ -52,8 +58,8 @@ exports[`matches snapshot 1`] = `
           </button>
         </div>
         <nav
+          aria-label="Primary navigation"
           class="usa-nav"
-          role="navigation"
         >
           <div
             class="usa-nav__inner"
@@ -78,27 +84,81 @@ exports[`matches snapshot 1`] = `
                 <li
                   class="usa-nav__secondary-item"
                 >
-                  <a
-                    href="/privacy-policy"
+                  <span
+                    class="display-inline-block with-dropdown"
+                    id="Data template"
                   >
-                    Privacy policy
+                    <button
+                      aria-controls="templates-nav"
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                      class="usa-nav__link"
+                    >
+                      Data template
+                    </button>
+                    <div
+                      class="display-none dropdown"
+                    >
+                      <ul
+                        hidden=""
+                        id="templates-nav"
+                      >
+                        <li
+                          class="option"
+                        >
+                          <button
+                            class="usa-button usa-button--unstyled"
+                            type="button"
+                          >
+                            Excel
+                          </button>
+                        </li>
+                        <li
+                          class="option"
+                        >
+                          <button
+                            class="usa-button usa-button--unstyled"
+                            type="button"
+                          >
+                            .csv
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </span>
+                </li>
+                <li
+                  class="usa-nav__secondary-item"
+                >
+                  <a
+                    class="usa-nav__link"
+                    href="/data-requirements"
+                  >
+                    Data requirements
+                  </a>
+                </li>
+                <li
+                  class="usa-nav__secondary-item"
+                >
+                  <a
+                    class="usa-nav__link"
+                    href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
+                  >
+                    Feedback
                   </a>
                 </li>
               </ul>
-              <div
-                class="oec-logged-in-user"
-              >
-                <a
-                  href="/login"
-                >
-                  Sign in
-                </a>
-              </div>
             </div>
           </div>
         </nav>
       </header>
     </div>
+    <main
+      id="main-content"
+    />
   </div>
 </DocumentFragment>
 `;

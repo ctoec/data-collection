@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { Enrollment, Child } from '../../shared/models';
+import { Enrollment } from '../../shared/models';
 import {
   SiteField,
   EnrollmentStartDateField,
   AgeGroupField,
   FundingField,
-} from '../EditRecord/Forms/EnrollmentFunding/Fields';
+} from '../../components/EditForms/EnrollmentFunding/Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { EditFormProps } from '../EditRecord/Forms/types';
+import { EditFormProps } from '../../components/EditForms/types';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost } from '../../utils/api';
 import { useSites } from '../../hooks/useSites';

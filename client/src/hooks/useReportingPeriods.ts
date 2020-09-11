@@ -18,7 +18,7 @@ export function useReportingPeriods(_reportingPeriods?: ReportingPeriod[]) {
         setReportingPeriods(_reportingPeriods || [])
       );
     }
-  }, [accessToken]);
+  }, [accessToken, _reportingPeriods]);
 
   return { reportingPeriods };
 }
