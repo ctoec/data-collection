@@ -18,9 +18,10 @@ import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
-import { Length, MinDate, MaxDate, ValidateNested, IsNotEmpty } from "class-validator";
+import { Length, MinDate, MaxDate, ValidateNested, IsNotEmpty, isNotEmpty } from "class-validator";
 import { ChildRaceIndicated } from './decorators/childRaceValidation';
 import { ChildGenderSpecified } from './decorators/childGenderValidation';
+import moment from 'moment';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -45,9 +46,10 @@ export class Child implements ChildInterface {
   suffix?: string;
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
+  @IsNotEmpty() // do we need this?
   // TODO: what are the actual age parameters?
-  @MinDate(new Date(2010), { message: 'Birth date must be within last 10 years' })
-  @MaxDate(new Date(), { message: 'Birth date must be in the past' })
+  @MinDate(moment().add(-7, 'years').toDate(), { message: 'Birth date must be within last 7 years' })
+  @MaxDate(moment().add(-6, 'weeks').toDate(), { message: 'Child must be older than 6 weeks' })
   birthdate?: Moment;
 
   @Column({ nullable: true })
@@ -55,6 +57,7 @@ export class Child implements ChildInterface {
   birthTown?: string;
 
   @Column({ nullable: true })
+  // TODO: do we account for birth certs from outside the US?
   @Length(2)
   birthState?: string;
 

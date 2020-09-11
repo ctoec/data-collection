@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
 import {
   Enrollment as EnrollmentInterface,
@@ -36,20 +37,25 @@ export class Enrollment implements EnrollmentInterface {
   siteId: number;
 
   @Column({ type: 'simple-enum', enum: AgeGroup, nullable: true })
+  @IsNotEmpty()
   ageGroup?: AgeGroup;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  @IsNotEmpty()
   entry?: Moment;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
   exit?: Moment;
 
   @Column({ nullable: true })
+  @ValidateIf(c => !!c.exit)
+  @IsNotEmpty()
   exitReason?: string;
 
   @OneToMany(() => Funding, (funding) => funding.enrollment, {
     onDelete: 'CASCADE',
   })
+  @ValidateNested({ each: true })
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })

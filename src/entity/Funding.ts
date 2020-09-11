@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   Column,
-  JoinColumn,
 } from 'typeorm';
 
 import { Funding as FundingInterface } from '../../client/src/shared/models';
@@ -12,6 +11,7 @@ import { Enrollment } from './Enrollment';
 import { ReportingPeriod } from './ReportingPeriod';
 import { FundingSpace } from './FundingSpace';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
+import { ValidateNested, IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class Funding implements FundingInterface {
@@ -19,15 +19,18 @@ export class Funding implements FundingInterface {
   id: number;
 
   @ManyToOne((type) => Enrollment, { nullable: false, onDelete: 'CASCADE' })
+  @ValidateNested()
   enrollment: Enrollment;
 
   @Column()
   enrollmentId: number;
 
   @ManyToOne((type) => FundingSpace, { nullable: false, eager: true })
+  @IsNotEmpty()
   fundingSpace: FundingSpace;
 
   @ManyToOne((type) => ReportingPeriod, { nullable: false, eager: true })
+  @IsNotEmpty()
   firstReportingPeriod: ReportingPeriod;
 
   @ManyToOne((type) => ReportingPeriod, { eager: true })

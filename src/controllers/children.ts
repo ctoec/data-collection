@@ -1,11 +1,11 @@
 import { getManager } from 'typeorm';
 import idx from 'idx';
+import { Moment } from 'moment';
+import { validate } from "class-validator";
 import { ExitReason } from '../../client/src/shared/models';
 import { Child, ReportingPeriod, Enrollment, Funding } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
-import { Moment } from 'moment';
-import { validate } from "class-validator";
 
 /**
  * Get child by id, with related family and related
