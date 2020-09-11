@@ -59,7 +59,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   // Array comparison was returning false even when the strings matched
   if (!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
     throw new BadRequestError(
-      'Columns from uploaded template do not match expected values'
+      "The columns in your uploaded file don't match our template. Use the newest template without changing the column order."
     );
   }
 
