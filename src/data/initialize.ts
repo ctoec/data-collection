@@ -15,6 +15,7 @@ import {
 } from '../../client/src/shared/models';
 import { reportingPeriods } from './reportingPeriods';
 import moment from 'moment';
+import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
 
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
@@ -71,38 +72,23 @@ export const initialize = async () => {
   if (!(await getManager().find(FundingSpace)).length) {
     const fundingSpacesToAdd = [];
     Object.values(AgeGroup).forEach((ageGroup) => {
-      const CDCFullTime = getManager().create(FundingSpace, {
-        ageGroup,
-        capacity: 10,
-        source: FundingSource.CDC,
-        time: FundingTime.Full,
-        organization,
-      });
+      for (const source of Object.values(FundingSource)) {
+        const match = FUNDING_SOURCE_TIMES.find(fst => fst.fundingSources.includes(source));
 
-      const CDCPartTime = getManager().create(FundingSpace, {
-        ageGroup,
-        capacity: 10,
-        source: FundingSource.CDC,
-        time: FundingTime.Part,
-        organization,
-      });
+        if (match) {
+          const spaces = match.fundingTimes.map(fundingTime => {
+            return getManager().create(FundingSpace, {
+              ageGroup,
+              capacity: 10,
+              source,
+              time: fundingTime.value,
+              organization,
+            });
+          });
 
-      const PSRFull = getManager().create(FundingSpace, {
-        ageGroup,
-        capacity: 10,
-        source: FundingSource.PSR,
-        time: FundingTime.Full,
-        organization,
-      });
-
-      const PSRPart = getManager().create(FundingSpace, {
-        ageGroup,
-        capacity: 10,
-        source: FundingSource.PSR,
-        time: FundingTime.Part,
-        organization,
-      });
-      fundingSpacesToAdd.push(CDCFullTime, CDCPartTime, PSRFull, PSRPart);
+          fundingSpacesToAdd.concat(spaces);
+        }
+      }
     });
     await getManager().save(fundingSpacesToAdd);
   }
