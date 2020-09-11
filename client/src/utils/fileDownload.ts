@@ -19,6 +19,14 @@ export async function downloadStreamToFile(
   saveAs(fileBlob, parseFileName(res, defaultFileName));
 }
 
+/**
+ * As above, but leverage an Authorization Context to access secure
+ * routes, e.g. to download a CSV file of uploaded data from the
+ * server.
+ * @param route
+ * @param authContext
+ * @param defaultFileName
+ */
 export async function downloadAuthorizedStreamToFile(
   route: string,
   authContext: string,
@@ -36,6 +44,12 @@ export async function downloadAuthorizedStreamToFile(
   saveAs(fileBlob, parseFileName(res, defaultFileName));
 }
 
+/**
+ * Function that handles parsing of a file name to attach to an
+ * information stream to save as a file.
+ * @param res
+ * @param defaultFileName
+ */
 function parseFileName(res: Response, defaultFileName?: string): string {
   const cdHeader = res.headers.get('Content-Disposition');
 

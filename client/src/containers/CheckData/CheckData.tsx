@@ -9,20 +9,12 @@ import { Child } from '../../shared/models';
 import { Button, Table } from '@ctoec/component-library';
 import { tableColumns } from './TableColumns';
 import { BackButton } from '../../components/BackButton';
-<<<<<<< HEAD
 import { useAlerts } from '../../hooks/useAlerts';
 
 const CheckData: React.FC = () => {
   const { reportId } = useParams();
   const { alertElements } = useAlerts();
-
-=======
-import { report, send } from 'process';
-
-const CheckData: React.FC = () => {
-  const { reportId } = useParams();
   const history = useHistory();
->>>>>>> Get idArray to the success page to hand to export
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<Child[]>([]);
 
