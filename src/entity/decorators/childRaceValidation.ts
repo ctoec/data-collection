@@ -17,7 +17,7 @@ function isChildRaceIndicated(child: Child) {
 export function ChildRaceIndicated(validationOptions?: ValidationOptions): PropertyDecorator {
   return function (object: Object, propertyName: string) {
     registerDecorator({
-      name: 'ChildRaceIndicated',
+      name: 'race',
       target: object.constructor,
       propertyName: propertyName,
       options: { message: childRaceNotNullMessage, ...validationOptions },

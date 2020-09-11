@@ -20,6 +20,7 @@ import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
 import { Length, MinDate, MaxDate, ValidateNested, IsNotEmpty } from "class-validator";
 import { ChildRaceIndicated } from './decorators/childRaceValidation';
+import { ChildGenderSpecified } from './decorators/childGenderValidation';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -85,6 +86,7 @@ export class Child implements ChildInterface {
   hispanicOrLatinxEthnicity?: boolean;
 
   @Column({ nullable: true, type: 'simple-enum', enum: Gender })
+  @ChildGenderSpecified()
   gender?: Gender;
 
   @Column({ nullable: true })
