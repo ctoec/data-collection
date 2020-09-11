@@ -9,7 +9,7 @@ import {
   Child,
   Site,
   FundingSource,
-  FundingTimeInput,
+  FundingTime,
   Funding,
   Family,
 } from '../../../shared/models';

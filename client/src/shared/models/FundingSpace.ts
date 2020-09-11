@@ -1,7 +1,7 @@
 import {
   AgeGroup,
   FundingSource,
-  FundingTimeInput,
+  FundingTime,
   FundingTimeSplit,
   Organization,
 } from '.';
@@ -12,6 +12,6 @@ export interface FundingSpace {
   organization: Organization;
   source: FundingSource;
   ageGroup: AgeGroup;
-  time: FundingTimeInput;
+  time: FundingTime;
   timeSplit?: FundingTimeSplit;
 }
