@@ -1,25 +1,22 @@
-import { write, WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
+import { write, WorkBook, utils } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { EntityMetadata, getConnection, getManager } from 'typeorm';
+import { EntityMetadata, getConnection } from 'typeorm';
 import { FlattenedEnrollment, Child } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
-import { propertyDateSorter } from '../../client/src/utils/dateSorter';
 
+/**
+ * Function to send the created workbook of information back
+ * to the router for handing to the client as a buffered
+ * stream of information.
+ * @param response
+ * @param childrenToMap
+ */
 export async function streamUploadedChildren(
   response: Response,
   childrenToMap: Child[]
 ) {
-  // var childrenToMap: Child[] = [];
-  // for (let i = 0; i < uploadedIds.length; i++) {
-  //   childrenToMap.push(
-  //     await getManager().findOne(Child, { id: uploadedIds[i] })
-  //   );
-  // }
-  // response.send(childrenToMap);
-
   const csvToExport: WorkBook = generateCSV(childrenToMap);
-
   const csvStream = write(csvToExport, {
     bookType: 'csv',
     type: 'buffer',
@@ -28,22 +25,14 @@ export async function streamUploadedChildren(
   response.send(csvStream);
 }
 
-// export async function retrieveChildren(childIds: string[]) {
-//     var childrenToMap: Child[] = [];
-//     childIds.forEach(async (id) => {
-//         childrenToMap.push(await getManager().findOne(Child, {id: id}));
-//     });
-//     return childrenToMap;
-// }
-
 /**
- * Retrieve our own custom ColumnMetadata for all columns on the FlattenedEnrollment model.
+ * Retrieve ColumnMetadata information for all columns on the
+ * FlattenedEnrollment model.
  */
 export function getAllEnrollmentColumns(): ColumnMetadata[] {
   const metadata: EntityMetadata = getConnection().getMetadata(
     FlattenedEnrollment
   );
-
   return metadata.columns
     .map((column) =>
       getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
@@ -51,20 +40,41 @@ export function getAllEnrollmentColumns(): ColumnMetadata[] {
     .filter((templateMeta) => !!templateMeta);
 }
 
+/**
+ * Workhorse function that turns a Child object into an array of string
+ * descriptors of specific fields of its data. The strings are
+ * arranged according to the column format specified by the data
+ * templates on the site.
+ *
+ * Note: We need this function to perform reverse mapping of the kind
+ * done by mapFlattenedEnrollment because the property names in the
+ * column meta-data are NOT the same as the object fields on a Child
+ *
+ * TODO: Several fields in the data template are not currently captured
+ * by the data model or the child object. We eventually need to
+ * reconcile these properties to live somewhere. They include:
+ *  - dual language learner
+ *  - model (of an enrollment/site)
+ * @param child
+ * @param cols
+ */
 function flattenChild(child: Child, cols: ColumnMetadata[]) {
+  // Can just use 0th element of each array as the 'active'/'current'
+  // value because controller.getChildById does presorting for us
   const determinations = child.family.incomeDeterminations || [];
-  // const sortedDeterminations = determinations.sort((a, b) =>
-  //   propertyDateSorter(a, b, (det) => det.determinationDate, true)
-  // );
   const currentDetermination =
     determinations.length > 0 ? determinations[0] : null;
-  const activeEnrollment = (child.enrollments || []).find((e) => !e.exit);
+  const workingEnrollment = (child.enrollments || []).find((e) => !e.exit);
+  const activeEnrollment =
+    workingEnrollment == undefined
+      ? child.enrollments == undefined
+        ? undefined
+        : child.enrollments[0]
+      : workingEnrollment;
   const fundings =
-    activeEnrollment == undefined ? [] : activeEnrollment.fundings;
-  // const sortedFundings = fundings.sort((a, b) =>
-  //   propertyDateSorter(a, b, (f) => f.firstReportingPeriod.period, true)
-  // );
-  const activeFunding = fundings.length > 0 ? fundings[0] : null;
+    activeEnrollment == undefined ? undefined : activeEnrollment.fundings || [];
+
+  const activeFunding = fundings.length > 0 ? fundings[0] : undefined;
 
   var childString: string[] = [];
   for (let i = 0; i < cols.length; i++) {
@@ -75,8 +85,14 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
           child.firstName + ' ' + (child.middleName || '') + child.lastName
         );
         break;
+      case 'SASID':
+        childString.push(child.sasid || '');
+        break;
       case 'Date of birth':
         childString.push(child.birthdate.toDate().toLocaleDateString() || '');
+        break;
+      case 'Birth certificate ID #':
+        childString.push(child.birthCertificateId || '');
         break;
       case 'Town of birth':
         childString.push(child.birthTown || '');
@@ -130,10 +146,10 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
             : 'No'
         );
         break;
-      // TODO: Update data model to account for this variable
-      // It's not currently a field of a child object
+      case 'Gender':
+        childString.push(child.gender || '');
+        break;
       case 'Dual language learner':
-        // childString.push(child.asian == undefined ? '' : child.asian == true ? 'Yes' : 'No');
         childString.push('');
         break;
       case 'Receiving Special Education Services':
@@ -144,6 +160,9 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
             ? 'Yes'
             : 'No'
         );
+        break;
+      case 'Special Education Services Type':
+        childString.push(child.specialEducationServicesType || '');
         break;
       case 'Street address':
         childString.push(child.family.streetAddress || '');
@@ -156,6 +175,20 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
         break;
       case 'Zipcode':
         childString.push(child.family.zip || '');
+        break;
+      case 'Lives with foster family':
+        childString.push(
+          child.foster == undefined ? '' : child.foster == true ? 'Yes' : 'No'
+        );
+        break;
+      case 'Experienced homelessness or housing insecurity':
+        childString.push(
+          child.family.homelessness == undefined
+            ? ''
+            : child.family.homelessness == true
+            ? 'Yes'
+            : 'No'
+        );
         break;
       case 'Household size':
         childString.push(
@@ -183,20 +216,15 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
       case 'Provider':
         childString.push(
           activeEnrollment == undefined
-            ? 'undef provider'
-            : activeEnrollment.site.organization.name || 'no prov name'
+            ? ''
+            : activeEnrollment.site.organization.name
         );
-        childString.push('');
         break;
       case 'Site':
         childString.push(
-          activeEnrollment == undefined
-            ? 'undef site'
-            : activeEnrollment.site.name || 'no site name'
+          activeEnrollment == undefined ? '' : activeEnrollment.site.name
         );
         break;
-      // TODO: Update data model to account for this variable
-      // It's not currently a field of an enrollment object
       case 'Model':
         childString.push('');
         break;
@@ -260,20 +288,6 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
                 .toLocaleDateString()
         );
         break;
-      case 'Lives with foster family':
-        childString.push(
-          child.foster == undefined ? '' : child.foster == true ? 'Yes' : 'No'
-        );
-        break;
-      case 'Experienced homelessness or housing insecurity':
-        childString.push(
-          child.family.homelessness == undefined
-            ? ''
-            : child.family.homelessness == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
       case 'Receiving Care 4 Kids?':
         childString.push(
           child.recievesC4K == undefined
@@ -283,46 +297,33 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
             : 'No'
         );
         break;
+      // Don't do anything in the default case because we've already
+      // handled all the fields
       default:
-        // Note: Property names are NOT the same as the object fields
-        // in a child object--that's why we need the big switch statement
-        childString.push(child[c.propertyName] || '');
         break;
     }
   }
 
-  // cols.forEach((c) => {
-  //   childString.push('' + child[c.propertyName]);
-  // })
-  // console.log(childString);
   return childString;
 }
 
+/**
+ * Process an array of retrieved child objects and turn them into
+ * string representations to cascade into a CSV with column headers.
+ * @param childArray
+ */
 export function generateCSV(childArray: Child[]) {
   const columnMetadatas: ColumnMetadata[] = getAllEnrollmentColumns();
   const formattedColumnNames: string[] = columnMetadatas.map(
     (c) => c.formattedName
   );
-  // var childStrings: string[][] = [];
-  // childArray.forEach((c) => {
-  // childStrings.push(flattenChild(c, columnMetadatas));
-  // });
   const childStrings = childArray.map((c) => flattenChild(c, columnMetadatas));
-  // return childStrings;
-
   const sheet = utils.aoa_to_sheet([formattedColumnNames]);
-  // const children = utils.aoa_to_sheet(childStrings);
 
+  // Adding to the origin at the end appends the data instead of
+  // replacing it
   utils.sheet_add_aoa(sheet, childStrings, { origin: -1 });
-
-  // WORK OFF OF THIS GUY
-  // const children = utils.json_to_sheet(childArray);
-  // const children = utils.json_to_sheet(childArray);
-
   const workbook = utils.book_new();
   utils.book_append_sheet(workbook, sheet);
-  // utils.book_append_sheet(workbook, children);
-  // utils.sheet_add_json(sheet, childArray);
-  // utils.book_append_sheet(workbook, children);
   return workbook;
 }

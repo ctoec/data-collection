@@ -9,7 +9,6 @@ import { Child } from '../../shared/models';
 import { Button, Table } from '@ctoec/component-library';
 import { tableColumns } from './TableColumns';
 import { BackButton } from '../../components/BackButton';
-import { report, send } from 'process';
 
 const CheckData: React.FC = () => {
   const { reportId } = useParams();
