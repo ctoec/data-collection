@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadAuthorizedStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
-import { apiGet } from '../utils/api';
 
 /**
  * TODO: Once we have the infrastructure in place to actually
@@ -24,8 +23,6 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
    */
   // console.log(submittedIds);
   async function downloadTemplate() {
-    // apiGet(`export/csv-upload/${submittedIds}`,
-    // { accessToken })
     await downloadAuthorizedStreamToFile(
       `export/csv-upload/${submittedIds}`,
       accessToken || '',
@@ -36,9 +33,6 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
   return (
     <Button
       appearance="unstyled"
-      //  TODO: Have this actual download uploaded data, not the upload template
-      //  We'll probably need to generate a CSV on the fly, since I don't think we're
-      //  holding uploaded files indefinitely?
       onClick={downloadTemplate}
       className="text-bold margin-bottom-3 display-block"
       external
