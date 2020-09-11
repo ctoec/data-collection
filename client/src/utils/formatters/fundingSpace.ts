@@ -1,6 +1,6 @@
 import {
   FundingSpace,
-  FundingTime,
+  FundingTimeInput,
   FundingTimeSplit,
 } from '../../shared/models';
 

@@ -6,7 +6,7 @@ import {
   SpecialEducationServicesType,
   AgeGroup,
   FundingSource,
-  FundingTime,
+  FundingTimeInput,
 } from '../../client/src/shared/models';
 
 import { EnrollmentReport } from './EnrollmentReport';

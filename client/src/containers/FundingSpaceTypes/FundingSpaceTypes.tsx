@@ -22,7 +22,7 @@ const FundingSpaceTypes: React.FC = () => {
       name: 'Contract Space',
       cell: ({ row }) =>
         row ? (<td>
-          {row.contractSpaces.map(space => {
+          {row.fundingTimes.map(space => {
             return <div>{space.displayName}</div>
           })}
         </td>
@@ -34,7 +34,7 @@ const FundingSpaceTypes: React.FC = () => {
       name: 'Accepted formats',
       cell: ({ row }) =>
         row ? (<td>
-          {row.contractSpaces.map(space => {
+          {row.fundingTimes.map(space => {
             return <div>{space.formats.map(x => '"' + x + '"').join(' or ')}</div>
           })}
         </td>

@@ -1,63 +1,65 @@
 import { FundingSource, FundingTime } from "../models";
 import { FundingSpaceType } from "../models/FundingSpaceTypes";
 
+//  This enumerates all of the valid funding source/funding time combinations,
+//  as well as all of the acceptable formats for each associated funding time
 export const FUNDING_SPACE_TYPES: FundingSpaceType[] = [{
   displayName: 'Child Day Care',
   fundingSources: [FundingSource.CDC],
-  contractSpaces: [{
-    time: FundingTime.Full,
+  fundingTimes: [{
+    value: FundingTime.Full,
     displayName: 'Full time',
     formats: ['1', 'Full time', 'FT']
   },
   {
-    time: FundingTime.Part,
+    value: FundingTime.Part,
     displayName: 'Part time',
     formats: ['2', 'Part time', 'PT']
   },
   {
-    time: FundingTime.Split,
+    value: FundingTime.Split,
     displayName: 'Split time',
     formats: ['3', 'Split time', 'Part time/Full time', 'PT/FT']
   }]
 }, {
   displayName: 'School Readiness',
   fundingSources: [FundingSource.PSR, FundingSource.CSR],
-  contractSpaces: [{
-    time: FundingTime.Full,
+  fundingTimes: [{
+    value: FundingTime.Full,
     displayName: 'Full-day',
     formats: ['4', 'Full-day', 'FD']
   },
   {
-    time: FundingTime.School,
+    value: FundingTime.School,
     displayName: 'School-day/School-year',
     formats: ['5', 'School-day', 'School-day/School-year', 'SD']
   },
   {
-    time: FundingTime.Part,
+    value: FundingTime.Part,
     displayName: 'Part-day',
     formats: ['6', 'Part-day', 'PD']
   }, {
-    time: FundingTime.ExtendedDay,
+    value: FundingTime.ExtendedDay,
     displayName: 'Extended-day',
     formats: ['7', 'Extended-day', 'Part time/Full time', 'ED']
   }]
 }, {
   displayName: 'Smart Start',
   fundingSources: [FundingSource.SS],
-  contractSpaces: [{
-    time: FundingTime.School,
+  fundingTimes: [{
+    value: FundingTime.School,
     displayName: 'School-day/School-year',
     formats: ['8', 'School day', 'SD']
   }]
 }, {
   displayName: 'State Head Start',
   fundingSources: [FundingSource.SHS],
-  contractSpaces: [{
-    time: FundingTime.ExtendedDay,
+  fundingTimes: [{
+    value: FundingTime.ExtendedDay,
     displayName: 'Extended-day',
     formats: ['9', 'Extended day', 'ED']
   }, {
-    time: FundingTime.ExtendedYear,
+    value: FundingTime.ExtendedYear,
     displayName: 'Extended-year',
     formats: ['10', 'Extended-year', 'EY']
   }]
