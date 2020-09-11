@@ -18,6 +18,7 @@ import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
+import { FundingDoesNotOverlap } from './decorators/fundingOverlapValidation';
 
 @Entity()
 export class Enrollment implements EnrollmentInterface {
@@ -56,6 +57,7 @@ export class Enrollment implements EnrollmentInterface {
     onDelete: 'CASCADE',
   })
   @ValidateNested({ each: true })
+  @FundingDoesNotOverlap()
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })
