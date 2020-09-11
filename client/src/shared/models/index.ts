@@ -10,6 +10,7 @@ export * from './FlattenedEnrollment';
 export * from './Funding';
 export * from './FundingSource';
 export * from './FundingSpace';
+export * from './FundingSpaceTypes';
 export * from './FundingTime';
 export * from './FundingTimeSplit';
 export * from './Gender';

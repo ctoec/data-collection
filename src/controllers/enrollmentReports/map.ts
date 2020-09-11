@@ -16,8 +16,10 @@ import {
   FundingSource,
   FundingTime,
   SpecialEducationServicesType,
-  FUNDING_SPACE_TYPES,
+  FundingSpaceType,
+  ContractSpace,
 } from '../../../client/src/shared/models';
+import { FUNDING_SPACE_TYPES }  from '../../../client/src/shared/constants';
 import { getManager } from 'typeorm';
 
 /**
@@ -245,13 +247,13 @@ const mapFunding = async (
 
   let fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
   if (!fundingTime && fundingSource) {
-    const matchingSpaceType = FUNDING_SPACE_TYPES.find(type => type.fundingSources.includes(fundingSource));
+    const match: FundingSpaceType = FUNDING_SPACE_TYPES.find(type => type.fundingSources.includes(fundingSource));
 
-    if (matchingSpaceType) {
-      const matchingTime = matchingSpaceType.contractSpaces.find(space => space.formats.includes(source.spaceType));
+    if (match) {
+      const matchingContractSpace: ContractSpace = match.contractSpaces.find(space => space.formats.includes(source.spaceType));
 
-      if (matchingTime) {
-        fundingTime = matchingTime.time
+      if (matchingContractSpace) {
+        fundingTime = matchingContractSpace.time
       }
     }
   }

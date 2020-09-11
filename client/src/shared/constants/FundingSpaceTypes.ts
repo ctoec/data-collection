@@ -1,16 +1,5 @@
-import { FundingSource, FundingTime } from "../../shared/models";
-
-export interface FundingSpaceType {
-  displayName: string;
-  fundingSources: FundingSource[];
-  contractSpaces: ContractSpace[];
-}
-
-export interface ContractSpace {
-  displayName: string;
-  formats: string[];
-  time: FundingTime;
-}
+import { FundingSource, FundingTime } from "../models";
+import { FundingSpaceType } from "../models/FundingSpaceTypes";
 
 export const FUNDING_SPACE_TYPES: FundingSpaceType[] = [{
   displayName: 'Child Day Care',
