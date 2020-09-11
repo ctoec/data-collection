@@ -8,14 +8,14 @@ import { propertyDateSorter } from '../../client/src/utils/dateSorter';
 
 export async function streamUploadedChildren(
   response: Response,
-  uploadedIds: string[]
+  childrenToMap: Child[]
 ) {
-  var childrenToMap: Child[] = [];
-  for (let i = 0; i < uploadedIds.length; i++) {
-    childrenToMap.push(
-      await getManager().findOne(Child, { id: uploadedIds[i] })
-    );
-  }
+  // var childrenToMap: Child[] = [];
+  // for (let i = 0; i < uploadedIds.length; i++) {
+  //   childrenToMap.push(
+  //     await getManager().findOne(Child, { id: uploadedIds[i] })
+  //   );
+  // }
   // response.send(childrenToMap);
 
   const csvToExport: WorkBook = generateCSV(childrenToMap);
@@ -70,22 +70,19 @@ export function getAllEnrollmentColumns(): ColumnMetadata[] {
  * @param cols
  */
 function flattenChild(child: Child, cols: ColumnMetadata[]) {
-  // Can just use 0th element of each array as the 'active'/'current'
-  // value because controller.getChildById does presorting for us
   const determinations = child.family.incomeDeterminations || [];
+  // const sortedDeterminations = determinations.sort((a, b) =>
+  //   propertyDateSorter(a, b, (det) => det.determinationDate, true)
+  // );
   const currentDetermination =
     determinations.length > 0 ? determinations[0] : null;
-  const workingEnrollment = (child.enrollments || []).find((e) => !e.exit);
-  const activeEnrollment =
-    workingEnrollment == undefined
-      ? child.enrollments == undefined
-        ? undefined
-        : child.enrollments[0]
-      : workingEnrollment;
+  const activeEnrollment = (child.enrollments || []).find((e) => !e.exit);
   const fundings =
-    activeEnrollment == undefined ? undefined : activeEnrollment.fundings || [];
-
-  const activeFunding = fundings.length > 0 ? fundings[0] : undefined;
+    activeEnrollment == undefined ? [] : activeEnrollment.fundings;
+  // const sortedFundings = fundings.sort((a, b) =>
+  //   propertyDateSorter(a, b, (f) => f.firstReportingPeriod.period, true)
+  // );
+  const activeFunding = fundings.length > 0 ? fundings[0] : null;
 
   var childString: string[] = [];
   for (let i = 0; i < cols.length; i++) {
@@ -175,117 +172,121 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
             : 'No'
         );
         break;
-      case 'Special Education Services Type':
-        childString.push(child.specialEducationServicesType || '');
+      case 'Street address':
+        childString.push(child.family.streetAddress || '');
         break;
-
-      // case 'Street address':
-      //   childString.push(child.family.streetAddress || '');
-      //   break;
-      // case 'Town':
-      //   childString.push(child.family.town || '');
-      //   break;
-      // case 'State':
-      //   childString.push(child.family.state || '');
-      //   break;
-      // case 'Zipcode':
-      //   childString.push(child.family.zip || '');
-      //   break;
-      // case 'Household size':
-      //   childString.push(
-      //     currentDetermination == null
-      //       ? ''
-      //       : (currentDetermination.numberOfPeople || '').toString()
-      //   );
-      //   break;
-      // case 'Annual household income':
-      //   childString.push(
-      //     currentDetermination == null
-      //       ? ''
-      //       : (currentDetermination.income || '').toString()
-      //   );
-      //   break;
-      // case 'Determination date':
-      //   childString.push(
-      //     currentDetermination == null
-      //       ? ''
-      //       : currentDetermination.determinationDate.toDate().toDateString()
-      //   );
-      //   break;
-      // case 'Provider':
-      //   childString.push(
-      //     activeEnrollment == undefined
-      //       ? ''
-      //       : activeEnrollment.site.organization.name || ''
-      //   );
-      //   childString.push('');
-      //   break;
-      // case 'Site':
-      //   childString.push(
-      //     activeEnrollment == undefined ? '' : activeEnrollment.site.name || ''
-      //   );
-      //   break;
-      // // TODO: Update data model to account for this variable
-      // // It's not currently a field of an enrollment object
-      // case 'Model':
-      //   childString.push('');
-      //   break;
-      // case 'Age Group':
-      //   childString.push(
-      //     activeEnrollment == undefined ? '' : activeEnrollment.ageGroup || ''
-      //   );
-      //   break;
-      // case 'Enrollment Start Date':
-      //   childString.push(
-      //     activeEnrollment == undefined
-      //       ? ''
-      //       : activeEnrollment.entry.toDate().toDateString() || ''
-      //   );
-      //   break;
-      // case 'Enrollment End Date':
-      //   childString.push(
-      //     activeEnrollment == undefined
-      //       ? ''
-      //       : activeEnrollment.exit == null
-      //       ? ''
-      //       : activeEnrollment.exit.toDate().toDateString()
-      //   );
-      //   break;
-      // case 'Enrollment Exit Reason':
-      //   childString.push(
-      //     activeEnrollment == undefined
-      //       ? ''
-      //       : activeEnrollment.exitReason == null
-      //       ? ''
-      //       : activeEnrollment.exitReason
-      //   );
-      //   break;
-      // case 'Funding Type':
-      //   childString.push(
-      //     activeFunding == null ? '' : activeFunding.fundingSpace.source
-      //   );
-      //   break;
-      // case 'Space type':
-      //   childString.push(
-      //     activeFunding == null ? '' : activeFunding.fundingSpace.time
-      //   );
-      //   break;
-      // case 'First funding period':
-      //   childString.push(
-      //     activeFunding == null
-      //       ? ''
-      //       : activeFunding.firstReportingPeriod.period.toDate().toDateString()
-      //   );
-      //   break;
-      // case 'Last funding period':
-      //   childString.push(
-      //     activeFunding == null
-      //       ? ''
-      //       : activeFunding.lastReportingPeriod == null
-      //       ? ''
-      //       : activeFunding.lastReportingPeriod.period.toDate().toDateString()
-      //   );
-      //   break;
+      case 'Town':
+        childString.push(child.family.town || '');
+        break;
+      case 'State':
+        childString.push(child.family.state || '');
+        break;
+      case 'Zipcode':
+        childString.push(child.family.zip || '');
+        break;
+      case 'Household size':
+        childString.push(
+          currentDetermination == null
+            ? ''
+            : (currentDetermination.numberOfPeople || '').toString()
+        );
+        break;
+      case 'Annual household income':
+        childString.push(
+          currentDetermination == null
+            ? ''
+            : (currentDetermination.income || '').toString()
+        );
+        break;
+      case 'Determination date':
+        childString.push(
+          currentDetermination == null
+            ? ''
+            : currentDetermination.determinationDate
+                .toDate()
+                .toLocaleDateString()
+        );
+        break;
+      case 'Provider':
+        childString.push(
+          activeEnrollment == undefined
+            ? 'undef provider'
+            : activeEnrollment.site.organization.name || 'no prov name'
+        );
+        childString.push('');
+        break;
+      case 'Site':
+        childString.push(
+          activeEnrollment == undefined
+            ? 'undef site'
+            : activeEnrollment.site.name || 'no site name'
+        );
+        break;
+      // TODO: Update data model to account for this variable
+      // It's not currently a field of an enrollment object
+      case 'Model':
+        childString.push('');
+        break;
+      case 'Age Group':
+        childString.push(
+          activeEnrollment == undefined ? '' : activeEnrollment.ageGroup || ''
+        );
+        break;
+      case 'Enrollment Start Date':
+        childString.push(
+          activeEnrollment == undefined
+            ? ''
+            : activeEnrollment.entry.toDate().toLocaleDateString() || ''
+        );
+        break;
+      case 'Enrollment End Date':
+        childString.push(
+          activeEnrollment == undefined
+            ? ''
+            : activeEnrollment.exit == null
+            ? ''
+            : activeEnrollment.exit.toDate().toLocaleDateString()
+        );
+        break;
+      case 'Enrollment Exit Reason':
+        childString.push(
+          activeEnrollment == undefined
+            ? ''
+            : activeEnrollment.exitReason == null
+            ? ''
+            : activeEnrollment.exitReason
+        );
+        break;
+      case 'Funding Type':
+        childString.push(
+          activeFunding == null ? '' : activeFunding.fundingSpace.source
+        );
+        break;
+      case 'Space type':
+        childString.push(
+          activeFunding == null ? '' : activeFunding.fundingSpace.time
+        );
+        break;
+      case 'First funding period':
+        childString.push(
+          activeFunding == null
+            ? ''
+            : activeFunding.firstReportingPeriod.period
+                .toDate()
+                .toLocaleDateString()
+        );
+        break;
+      case 'Last funding period':
+        childString.push(
+          activeFunding == null
+            ? ''
+            : activeFunding.lastReportingPeriod == null
+            ? ''
+            : activeFunding.lastReportingPeriod.period
+                .toDate()
+                .toLocaleDateString()
+        );
+        break;
       case 'Lives with foster family':
         childString.push(
           child.foster == undefined ? '' : child.foster == true ? 'Yes' : 'No'
