@@ -1,5 +1,6 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { Enrollment } from "../Enrollment";
+import { Funding } from '../Funding';
 
 // Make sure first reporting period of a funding is after the last reporting period of the previous funding
 
@@ -14,11 +15,39 @@ export function FundingDoesNotOverlap(validationOptions?: ValidationOptions): Pr
       options: { message: fundingPeriodOverlap, ...validationOptions },
       constraints: [{ childRace: fundingPeriodOverlap }],
       validator: {
-        validate(_, { object: enrollment }) {
-          const _funding = enrollment as Enrollment;
-          // return _funding.firstReportins
-          console.log(enrollment)
-          return false;
+        validate(validatingFunding, { object: enrollment }) {
+          const allFundings = (enrollment as Enrollment).fundings
+          const { firstReportingPeriod: validatingFirstPeriod, lastReportingPeriod: validatingLastPeriod } = validatingFunding as Funding
+
+          let overlap = false;
+          (allFundings.filter(f => f.id !== validatingFunding.id)).forEach(_funding => {
+            const _firstPeriod = _funding.firstReportingPeriod;
+
+            if (_firstPeriod.periodStart.isSame(validatingFirstPeriod.periodStart)) {
+              overlap = true;
+            } else if (_firstPeriod.periodStart.isBefore(validatingFirstPeriod.periodStart)) {
+              if (!_funding.lastReportingPeriod) {
+                // If a funding has no last reporting period and starts before this funding, there's an overlap
+                overlap = true;
+              } else {
+                const _lastPeriod = _funding.lastReportingPeriod;
+                if (validatingFirstPeriod.periodStart.isSameOrBefore(_lastPeriod.periodEnd)) {
+                  // if the validated funding starts before this funding's period ends
+                  overlap = true;
+                }
+              }
+            } else {
+              // If this funding period starts after the validating funding period start
+              if (!validatingFirstPeriod.periodEnd) {
+                // The validating period must have an end
+                overlap = true
+              } else if (_firstPeriod.periodStart.isSameOrBefore(validatingLastPeriod.periodEnd)) {
+                // This period's start can't be before the last period's end
+                overlap = true;
+              }
+            }
+          });
+          return !overlap;
         },
       },
     });
