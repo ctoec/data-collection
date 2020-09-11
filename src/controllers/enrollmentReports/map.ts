@@ -156,7 +156,7 @@ const mapChild = (
       source.receivingSpecialEducationServices || false,
     specialEducationServicesType,
     organization,
-    familyId: family.id,
+    family: family,
   });
 
   return getManager().save(child);

@@ -1,4 +1,4 @@
-import express, { Response, Request } from 'express';
+import express from 'express';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import {
   NotFoundError,
@@ -7,7 +7,7 @@ import {
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 import { getManager } from 'typeorm';
-import { Child, Family } from '../entity';
+import { Child } from '../entity';
 
 export const childrenRouter = express.Router();
 
@@ -20,14 +20,8 @@ childrenRouter.post(
   '/',
   passAsyncError(async (req, res) => {
     try {
-      const organization = req.body.organization;
-      const family = await getManager().save(
-        getManager().create(Family, { organization })
-      );
-      const child = await getManager().save(
-        getManager().create(Child, { ...req.body, family })
-      );
-      res.send(child);
+      const child = await controller.createChild(req.body);
+      res.status(201).send({ id: child.id });
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error creating child: ', err);
@@ -44,7 +38,7 @@ childrenRouter.post(
  */
 childrenRouter.get(
   '/:childId',
-  passAsyncError(async (req: Request, res: Response) => {
+  passAsyncError(async (req, res) => {
     const childId = req.params['childId'];
     const child = await controller.getChildById(childId);
     if (!child) throw new NotFoundError();
@@ -58,7 +52,7 @@ childrenRouter.get(
  */
 childrenRouter.delete(
   '/:childId',
-  passAsyncError(async (req: Request, res: Response) => {
+  passAsyncError(async (req, res) => {
     try {
       const childId = req.params['childId'];
       await getManager().delete(Child, { id: childId });

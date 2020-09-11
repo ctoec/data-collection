@@ -21,14 +21,12 @@ type WithdrawProps = {
   childName: string;
   enrollment: Enrollment;
   reportingPeriods: ReportingPeriod[];
-  isOpen: boolean;
   toggleOpen: () => void;
 };
 export const WithdrawRecord: React.FC<WithdrawProps> = ({
   childName,
   enrollment,
   reportingPeriods,
-  isOpen,
   toggleOpen,
 }) => {
   const [isSaving, setIsSaving] = useState(false);
