@@ -253,7 +253,9 @@ const mapFunding = async (
     const matchingSourceTime: FundingSourceTime = FUNDING_SOURCE_TIMES.find(fst => fst.fundingSources.includes(fundingSource));
 
     if (matchingSourceTime) {
-      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(fundingTime => fundingTime.formats.includes(source.spaceType));
+      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(fundingTime => {
+        return fundingTime.formats.includes(source.spaceType.toString());
+      });
 
       if (matchingTime) {
         fundingTime = matchingTime.value
