@@ -18,7 +18,8 @@ import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
-import { Length, MinDate, MaxDate } from "class-validator";
+import { Length, MinDate, MaxDate, ValidateNested, IsNotEmpty } from "class-validator";
+import { ChildRaceIndicated } from './decorators/childRaceValidation';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -29,14 +30,14 @@ export class Child implements ChildInterface {
   sasid?: string;
 
   @Column()
-  @Length(1)
+  @IsNotEmpty({ message: 'First name is required' })
   firstName: string;
 
   @Column({ nullable: true })
   middleName?: string;
 
   @Column()
-  @Length(1)
+  @IsNotEmpty({ message: 'Last name is required' })
   lastName: string;
 
   @Column({ nullable: true })
@@ -44,12 +45,12 @@ export class Child implements ChildInterface {
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   // TODO: what are the actual age parameters?
-  @MinDate(new Date(2010))
-  @MaxDate(new Date())
+  @MinDate(new Date(2010), { message: 'Birth date must be within last 10 years' })
+  @MaxDate(new Date(), { message: 'Birth date must be in the past' })
   birthdate?: Moment;
 
   @Column({ nullable: true })
-  @Length(1)
+  @IsNotEmpty({ message: 'Birth town is required' })
   birthTown?: string;
 
   @Column({ nullable: true })
@@ -57,22 +58,27 @@ export class Child implements ChildInterface {
   birthState?: string;
 
   @Column({ nullable: true })
-  @Length(1)
+  @IsNotEmpty({ message: 'Birth certificate ID is required' })
   birthCertificateId?: string;
 
   @Column({ nullable: true })
+  @ChildRaceIndicated()
   americanIndianOrAlaskaNative?: boolean;
 
   @Column({ nullable: true })
+  @ChildRaceIndicated()
   asian?: boolean;
 
   @Column({ nullable: true })
+  @ChildRaceIndicated()
   blackOrAfricanAmerican?: boolean;
 
   @Column({ nullable: true })
+  @ChildRaceIndicated()
   nativeHawaiianOrPacificIslander?: boolean;
 
   @Column({ nullable: true })
+  @ChildRaceIndicated()
   white?: boolean;
 
   @Column({ nullable: true })
@@ -97,6 +103,7 @@ export class Child implements ChildInterface {
   })
   specialEducationServicesType?: SpecialEducationServicesType;
 
+  @ValidateNested()
   @ManyToOne((type) => Family, { nullable: false })
   family: Family;
 
@@ -106,6 +113,7 @@ export class Child implements ChildInterface {
   @ManyToOne((type) => Organization, { nullable: false })
   organization?: Organization;
 
+  @ValidateNested({ each: true })
   @OneToMany((type) => Enrollment, (enrollment) => enrollment.child)
   enrollments?: Array<Enrollment>;
 
