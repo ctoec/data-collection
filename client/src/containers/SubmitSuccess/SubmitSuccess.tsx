@@ -20,6 +20,8 @@ import { Link } from 'react-router-dom';
  * make this page aware of what data was submitted.
  */
 const SubmitSuccess: React.FC = () => {
+  // Any cast when extracting param suppresses type error
+  // Fine because we know what the IDs are
   const rawIds: any = useParams();
   const idString: string = rawIds['idArray'];
 
