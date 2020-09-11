@@ -23,7 +23,7 @@ const FundingSourceTimes: React.FC = () => {
       cell: ({ row }) =>
         row ? (<td>
           {row.fundingTimes.map(fundingTime => {
-            return <div className="margin-top-2 margin-bottom-2">{fundingTime.displayName}</div>
+            return <div className="margin-top-3 margin-bottom-3">{fundingTime.displayName}</div>
           })}
         </td>
         ) : (
@@ -35,7 +35,7 @@ const FundingSourceTimes: React.FC = () => {
       cell: ({ row }) =>
         row ? (<td>
           {row.fundingTimes.map(fundingTime => {
-            return <div className="margin-top-2 margin-bottom-2">{fundingTime.formats.map(x => '"' + x + '"').join(' or ')}</div>
+            return <div className="margin-top-3 margin-bottom-3">{fundingTime.formats.map(x => '"' + x + '"').join(' or ')}</div>
           })}
         </td>
         ) : (
