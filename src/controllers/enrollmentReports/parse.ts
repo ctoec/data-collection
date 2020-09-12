@@ -63,6 +63,10 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     );
   }
 
+  if (!data.length) {
+    throw new BadRequestError('You uploaded an empty file\nCheck to make sure your file has child data in it.');
+  }
+
   return data.map((rawEnrollment) =>
     parseFlattenedEnrollment(rawEnrollment, BOOLEAN_PROPERTIES, DATE_PROPERTIES)
   );

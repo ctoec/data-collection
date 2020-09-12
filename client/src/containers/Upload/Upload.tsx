@@ -4,6 +4,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { FileInput, TextWithIcon, Alert } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost } from '../../utils/api';
+import { getErrorHeading, getErrorText } from '../../utils/error';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -65,7 +66,7 @@ const Upload: React.FC = () => {
           />
         </Link>
       </div>
-      {error && <Alert text={error} type="error" />}
+      {error && <Alert heading={getErrorHeading(error)} text={getErrorText(error)} type="error" />}
       <div className="grid-row">
         <h1>Upload your enrollment data</h1>
         <p>
