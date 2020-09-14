@@ -28,7 +28,6 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
       <fieldset
         class="grid-gap grid-row usa-fieldset display-inline-block"
         id="family-address"
-        role="presentation"
       >
         <legend
           id="fieldset-legend-family-address"
@@ -93,9 +92,6 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
               <div
                 class="usa-form-group"
               >
-                <div
-                  class=""
-                />
                 <label
                   class="usa-label"
                   for="state"
