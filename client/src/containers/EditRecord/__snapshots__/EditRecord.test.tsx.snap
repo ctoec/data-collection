@@ -262,7 +262,7 @@ exports[`EditRecord matches snapshot 1`] = `
             <span
               class="usa-hint text-italic"
             >
-              For example: 6 22 2008
+              For example: 6 21 2008
             </span>
             <div
               class="grid-gap grid-row flex-align-start"
