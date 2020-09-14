@@ -249,7 +249,6 @@ exports[`EditRecord matches snapshot 1`] = `
             aria-describedby="dateOfBirth-picker-hint"
             class="grid-gap grid-row usa-fieldset"
             id="dateOfBirth-picker"
-            role="presentation"
           >
             <legend
               id="fieldset-legend-dateOfBirth-picker"
@@ -263,7 +262,7 @@ exports[`EditRecord matches snapshot 1`] = `
             <span
               class="usa-hint text-italic"
             >
-              For example: 6 22 2008
+              For example: 6 21 2008
             </span>
             <div
               class="grid-gap grid-row flex-align-start"
@@ -1047,7 +1046,7 @@ exports[`EditRecord matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, June 21, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__today CalendarDay__today_3 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_4"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1059,7 +1058,7 @@ exports[`EditRecord matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Selected. Sunday, June 22, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__today CalendarDay__today_3 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_4 CalendarDay__selected CalendarDay__selected_5"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3 CalendarDay__selected CalendarDay__selected_4"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1533,7 +1532,6 @@ exports[`EditRecord matches snapshot 1`] = `
           <fieldset
             class="grid-gap grid-row usa-fieldset display-inline-block"
             id="birth-certificate-fields"
-            role="presentation"
           >
             <legend
               id="fieldset-legend-birth-certificate-fields"

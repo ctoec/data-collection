@@ -17,10 +17,8 @@ exports[`EditRecord CareForKids matches snapshot 1`] = `
         novalidate=""
       >
         <fieldset
-          aria-required="true"
           class="grid-gap grid-row usa-fieldset"
           id="c4k-radio-group-fieldset"
-          role="radiogroup"
         >
           <legend
             id="fieldset-legend-c4k-radio-group-fieldset"
