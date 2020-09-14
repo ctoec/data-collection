@@ -18,7 +18,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     <fieldset
       class="grid-gap grid-row usa-fieldset"
       id="race-fieldset"
-      role="presentation"
     >
       <legend
         id="fieldset-legend-race-fieldset"
@@ -126,10 +125,8 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     </fieldset>
     <fieldset
       aria-describedby="ethnicity-radiogroup-fieldset-hint"
-      aria-required="true"
       class="grid-gap grid-row usa-fieldset"
       id="ethnicity-radiogroup-fieldset"
-      role="radiogroup"
     >
       <legend
         id="fieldset-legend-ethnicity-radiogroup-fieldset"
@@ -191,20 +188,17 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     <div
       class="usa-form-group"
     >
-      <span
-        class="usa-hint text-italic"
-      >
-        As identified by family
-      </span>
-      <div
-        class=""
-      />
       <label
         class="usa-label"
         for="gender-select"
       >
         Gender
       </label>
+      <span
+        class="usa-hint text-italic"
+      >
+        As identified by family
+      </span>
       <select
         aria-required="true"
         class="usa-select"
