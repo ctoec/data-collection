@@ -17,8 +17,8 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <span
           class="header-normal font-heading-md"
         >
-          Has First's age group and/or site changed?
-        </span>
+          First has no active enrollments
+        </h2>
         <button
           class="usa-button usa-button--outline"
           type="button"
