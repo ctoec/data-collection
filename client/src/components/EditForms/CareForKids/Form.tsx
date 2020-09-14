@@ -1,8 +1,15 @@
-import React, { useState, useContext } from 'react';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { CareForKidsField } from './CareForKidsField';
 import { EditFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
+import React, { useState, useContext, useEffect } from 'react';
+import {
+  Form,
+  FormSubmitButton,
+  FormField,
+  RadioButtonGroupProps,
+  RadioButtonGroup,
+  RadioButton,
+} from '@ctoec/component-library';
 import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 /*
@@ -12,9 +19,15 @@ import { apiPut } from '../../../utils/api';
 export const CareForKidsForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
+  setAlerts,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Clear any previously displayed alerts from other tabs
+  useEffect(() => {
+    setAlerts([]);
+  }, []);
 
   if (!child) return <></>;
 
