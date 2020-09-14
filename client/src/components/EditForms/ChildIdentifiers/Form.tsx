@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SasidField,
   FirstNameField,
@@ -20,6 +20,7 @@ import useIsMounted from '../../../hooks/useIsMounted';
 export const ChildIdentifiersForm = ({
   child,
   onSuccess,
+  setAlerts,
   hideHeader = false,
 }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -30,6 +31,11 @@ export const ChildIdentifiersForm = ({
 
   // Focus should automatically be on first error on page
   // useFocusFirstError([error]);
+
+  // Clear any previously displayed alerts from other tabs
+  useEffect(() => {
+    setAlerts([]);
+  }, []);
 
   if (!child) {
     throw new Error('Child info rendered without child');

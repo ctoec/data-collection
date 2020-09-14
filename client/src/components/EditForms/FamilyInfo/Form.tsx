@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { Family } from '../../../shared/models';
 import { AddressFieldset, HomelessnessField } from './Fields';
@@ -17,11 +17,17 @@ import useIsMounted from '../../../hooks/useIsMounted';
 export const FamilyInfoForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
+  setAlerts,
   hideHeader = false,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
+
+  // Clear any previously displayed alerts from other tabs
+  useEffect(() => {
+    setAlerts([]);
+  }, []);
 
   if (!child) return <></>;
 
