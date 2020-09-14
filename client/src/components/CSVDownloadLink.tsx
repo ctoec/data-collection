@@ -27,7 +27,7 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
       `export/csv-upload/${submittedIds}`,
       accessToken || '',
       `Uploaded Data.csv`
-    ).then((resp) => console.log(resp));
+    ).catch((err) => console.error(err));
   }
 
   return (
