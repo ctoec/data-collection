@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useParams, Link, useHistory } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import pluralize from 'pluralize';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import 'react-perfect-scrollbar/dist/css/styles.css';
@@ -49,11 +49,11 @@ const CheckData: React.FC = () => {
    * It's a hacky workaround right now, but it at least lets us
    * get the component working so we have the functionality.
    */
-  function sendData() {
+  function formatIdString(): string {
     const idArray = reportData.map((child) => {
       return child.id;
     });
-    history.push(`/success/${idArray.join()}`);
+    return `/success/${idArray.join()}`;
   }
 
   const organization =
@@ -89,7 +89,7 @@ const CheckData: React.FC = () => {
         <div className="margin-bottom-0">
           <div className="fixed-buttons">
             <Button text="Back to upload" href="/upload" appearance="outline" />
-            <Button text="Send to OEC" onClick={sendData} />
+            <Button text="Send to OEC" href={formatIdString()} />
           </div>
         </div>
       </div>
