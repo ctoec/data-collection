@@ -2,7 +2,6 @@ import 'jest-canvas-mock';
 import '@testing-library/jest-dom/extend-expect';
 import { enableFetchMocks } from 'jest-fetch-mock';
 import { toHaveNoViolations } from 'jest-axe';
-import * as moment from 'moment';
 
 // adds the 'fetchMock' global variable and rewires 'fetch' global
 // to call 'fetchMock' instead of the real implementation
@@ -14,4 +13,5 @@ enableFetchMocks();
 expect.extend(toHaveNoViolations);
 
 // Mock date to return a consistent value for snapshot testing
-Date.now = () => moment.utc('2008-06-22').milliseconds();
+// NOTE: moment uses Date under the hood as well
+Date.now = () => Date.UTC(2008, 6, 22);
