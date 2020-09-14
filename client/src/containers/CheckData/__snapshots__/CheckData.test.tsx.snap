@@ -201,12 +201,12 @@ exports[`CheckData matches snapshot 1`] = `
         >
           Back to upload
         </a>
-        <a
+        <button
           class="usa-button"
-          href="/success"
+          type="button"
         >
           Send to OEC
-        </a>
+        </button>
       </div>
     </div>
   </div>

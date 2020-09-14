@@ -64,16 +64,16 @@ exports[`SubmitSuccess matches snapshot 1`] = `
     <div
       class="grid-row margin-top-1 margin-bottom-2"
     >
-      <a
+      <button
         class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-        href="/upload_template/ECE Data Collection Template.csv"
+        type="button"
       >
         <span
           class="oec-text-with-icon text-underline"
         >
-          Download .csv
+          Download.csv
         </span>
-      </a>
+      </button>
     </div>
     <div
       class="grid-row marging-top-6"
