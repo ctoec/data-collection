@@ -89,7 +89,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   return (
     <Card forceClose={closeCard}>
       <div className="display-flex flex-justify">
-        <span className="header-normal font-heading-lg">
+        <span className="header-normal font-heading-md">
           Has {childName}'s age group and/or site changed?
         </span>
         <ExpandCard>
@@ -97,7 +97,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
         </ExpandCard>
       </div>
       <CardExpansion>
-        <h3 className="margin-top-2 margin-bottom-2 font-heading-lg">
+        <h3 className="margin-top-2 margin-bottom-2">
           New enrollment
         </h3>
         {error && <Alert type="error" text={error} />}
