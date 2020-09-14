@@ -120,6 +120,7 @@ exports[`EditRecord matches snapshot 1`] = `
             aria-describedby="race-fieldset-hint"
             class="grid-gap grid-row usa-fieldset"
             id="race-fieldset"
+            id="dateOfBirth-picker"
           >
             <legend
               id="fieldset-legend-race-fieldset"
@@ -234,6 +235,8 @@ exports[`EditRecord matches snapshot 1`] = `
             aria-describedby="ethnicity-radiogroup-fieldset-hint"
             class="grid-gap grid-row usa-fieldset"
             id="ethnicity-radiogroup-fieldset"
+            class="grid-gap grid-row usa-fieldset display-inline-block"
+            id="birth-certificate-fields"
           >
             <legend
               id="fieldset-legend-ethnicity-radiogroup-fieldset"
