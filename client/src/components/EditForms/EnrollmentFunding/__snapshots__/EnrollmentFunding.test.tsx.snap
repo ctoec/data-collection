@@ -2,6 +2,9 @@
 
 exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
 <DocumentFragment>
+  <h2>
+    Enrollment and funding
+  </h2>
   <div
     class="oec-card"
   >
@@ -11,11 +14,11 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       <div
         class="display-flex flex-justify"
       >
-        <h2
+        <span
           class="header-normal font-heading-lg"
         >
           Has First's age group and/or site changed?
-        </h2>
+        </span>
         <button
           class="usa-button usa-button--outline"
           type="button"
@@ -28,11 +31,9 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       class=""
     />
   </div>
-  <h2
-    class="margin-top-4 margin-bottom-2 font-heading-md"
-  >
+  <h3>
     Current enrollment
-  </h2>
+  </h3>
   <div
     class="oec-card oec-card--primary"
   >
@@ -147,11 +148,9 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       class=""
     />
   </div>
-  <h2
-    class="margin-top-4 margin-bottom-2 font-heading-md"
-  >
+  <h3>
     Past enrollments
-  </h2>
+  </h3>
   <div
     class="oec-card oec-card--secondary"
   >

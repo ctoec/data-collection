@@ -10,12 +10,8 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     <h2>
       Child info
     </h2>
-    <p
-      class="usa-hint"
-    >
-      Information is required unless otherwise specified.
-    </p>
     <fieldset
+      aria-describedby="race-fieldset-hint"
       class="grid-gap grid-row usa-fieldset"
       id="race-fieldset"
     >
@@ -28,6 +24,11 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           Race
         </span>
       </legend>
+      <span
+        class="usa-hint text-italic"
+      >
+        As identified by family
+      </span>
       <div
         class="grid-gap margin-top-3 grid-row flex-align-start"
       >
@@ -192,7 +193,11 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         class="usa-label"
         for="gender-select"
       >
-        Gender
+        <span
+          class="text-bold"
+        >
+          Gender
+        </span>
       </label>
       <span
         class="usa-hint text-italic"
@@ -233,12 +238,12 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </select>
     </div>
     <p
-      class="usa-label"
+      class="text-bold margin-top-3 margin-bottom-1"
     >
       Foster family
     </p>
     <div
-      class="usa-checkbox margin-top-3"
+      class="usa-checkbox"
     >
       <input
         class="usa-checkbox__input"
