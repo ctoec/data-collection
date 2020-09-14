@@ -23,6 +23,12 @@
     background-color: #fff;
     padding: 1rem;
   }
+
+  //  Override USWDS grid container
+  .grid-container {
+    margin-bottom: 0 !important;
+    padding-left: 4rem !important;
+  }
 }
 
 .header-normal {
