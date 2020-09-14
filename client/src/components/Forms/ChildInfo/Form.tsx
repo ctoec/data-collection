@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   RaceField,
   EthnicityField,
@@ -18,6 +18,7 @@ import { useValidationErrors } from '../../../hooks/useValidationErrors';
 export const ChildInfoForm = ({
   child: inputChild,
   onSuccess,
+  setAlerts,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }: EditFormProps) => {
@@ -25,7 +26,14 @@ export const ChildInfoForm = ({
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
 
+  // Clear any previously displayed alerts from other tabs
+  useEffect(() => {
+    setAlerts([]);
+  }, []);
+
   if (!inputChild) {
+  // Focus should automatically be on first error on page
+  // useFocusFirstError([error]);
     throw new Error('Child info rendered without child');
   }
 
