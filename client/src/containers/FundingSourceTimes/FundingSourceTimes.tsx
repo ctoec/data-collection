@@ -35,7 +35,7 @@ const FundingSourceTimes: React.FC = () => {
       cell: ({ row }) =>
         row ? (<td>
           {row.fundingTimes.map(fundingTime => {
-            return <div className="margin-top-3 margin-bottom-3">{fundingTime.formats.map(x => '"' + x + '"').join(' or ')}</div>
+            return <div className="margin-top-3 margin-bottom-3">{fundingTime.formats.map(format => '"' + format + '"').join(' or ')}</div>
           })}
         </td>
         ) : (
