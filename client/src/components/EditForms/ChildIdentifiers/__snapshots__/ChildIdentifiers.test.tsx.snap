@@ -160,7 +160,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       <span
         class="usa-hint text-italic"
       >
-        For example: 7 22 2008
+        For example: 6 22 2008
       </span>
       <div
         class="grid-gap grid-row flex-align-start"
@@ -184,7 +184,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
               max="12"
               min="1"
               type="number"
-              value="7"
+              value="6"
             />
           </div>
           <div
@@ -374,6 +374,354 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                             <div
                               class="CalendarMonth CalendarMonth_1"
                               data-visible="false"
+                              style="padding: 0px 13px;"
+                            >
+                              <div
+                                class="CalendarMonth_caption CalendarMonth_caption_1"
+                              >
+                                <strong>
+                                  May 2008
+                                </strong>
+                              </div>
+                              <table
+                                class="CalendarMonth_table CalendarMonth_table_1"
+                                role="presentation"
+                              >
+                                <tbody>
+                                  <tr>
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td />
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Thursday, May 1, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      1
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Friday, May 2, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      2
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Saturday, May 3, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      3
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Sunday, May 4, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      4
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Monday, May 5, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      5
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Tuesday, May 6, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      6
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Wednesday, May 7, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      7
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Thursday, May 8, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      8
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Friday, May 9, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      9
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Saturday, May 10, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      10
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Sunday, May 11, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      11
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Monday, May 12, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      12
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Tuesday, May 13, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      13
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Wednesday, May 14, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      14
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Thursday, May 15, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      15
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Friday, May 16, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      16
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Saturday, May 17, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      17
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Sunday, May 18, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      18
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Monday, May 19, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      19
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Tuesday, May 20, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      20
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Wednesday, May 21, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      21
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Thursday, May 22, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      22
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Friday, May 23, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      23
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Saturday, May 24, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      24
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Sunday, May 25, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      25
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Monday, May 26, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      26
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Tuesday, May 27, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      27
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Wednesday, May 28, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      28
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Thursday, May 29, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      29
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Friday, May 30, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      30
+                                    </td>
+                                    <td
+                                      aria-disabled="false"
+                                      aria-label="Saturday, May 31, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                      role="button"
+                                      style="width: 39px; height: 38px;"
+                                      tabindex="-1"
+                                    >
+                                      31
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          <div
+                            class="CalendarMonthGrid_month__horizontal CalendarMonthGrid_month__horizontal_1"
+                          >
+                            <div
+                              class="CalendarMonth CalendarMonth_1"
+                              data-visible="true"
                               style="padding: 0px 13px;"
                             >
                               <div
@@ -596,7 +944,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                                     <td
                                       aria-disabled="false"
                                       aria-label="Saturday, June 21, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__today CalendarDay__today_3 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_4"
                                       role="button"
                                       style="width: 39px; height: 38px;"
                                       tabindex="-1"
@@ -607,8 +955,8 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                                   <tr>
                                     <td
                                       aria-disabled="false"
-                                      aria-label="Sunday, June 22, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                      aria-label="Selected. Sunday, June 22, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3 CalendarDay__selected CalendarDay__selected_4"
                                       role="button"
                                       style="width: 39px; height: 38px;"
                                       tabindex="-1"
@@ -708,11 +1056,11 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                             </div>
                           </div>
                           <div
-                            class="CalendarMonthGrid_month__horizontal CalendarMonthGrid_month__horizontal_1"
+                            class="CalendarMonthGrid_month__horizontal CalendarMonthGrid_month__horizontal_1 CalendarMonthGrid_month__hidden CalendarMonthGrid_month__hidden_2"
                           >
                             <div
                               class="CalendarMonth CalendarMonth_1"
-                              data-visible="true"
+                              data-visible="false"
                               style="padding: 0px 13px;"
                             >
                               <div
@@ -939,7 +1287,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                                     <td
                                       aria-disabled="false"
                                       aria-label="Monday, July 21, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__today CalendarDay__today_3"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                       role="button"
                                       style="width: 39px; height: 38px;"
                                       tabindex="-1"
@@ -948,8 +1296,8 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                                     </td>
                                     <td
                                       aria-disabled="false"
-                                      aria-label="Selected. Tuesday, July 22, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__selected CalendarDay__selected_3"
+                                      aria-label="Tuesday, July 22, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                       role="button"
                                       style="width: 39px; height: 38px;"
                                       tabindex="-1"
@@ -1048,363 +1396,6 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                                     >
                                       31
                                     </td>
-                                    <td />
-                                    <td />
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                          <div
-                            class="CalendarMonthGrid_month__horizontal CalendarMonthGrid_month__horizontal_1 CalendarMonthGrid_month__hidden CalendarMonthGrid_month__hidden_2"
-                          >
-                            <div
-                              class="CalendarMonth CalendarMonth_1"
-                              data-visible="false"
-                              style="padding: 0px 13px;"
-                            >
-                              <div
-                                class="CalendarMonth_caption CalendarMonth_caption_1"
-                              >
-                                <strong>
-                                  August 2008
-                                </strong>
-                              </div>
-                              <table
-                                class="CalendarMonth_table CalendarMonth_table_1"
-                                role="presentation"
-                              >
-                                <tbody>
-                                  <tr>
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Friday, August 1, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      1
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Saturday, August 2, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      2
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Sunday, August 3, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      3
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Monday, August 4, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      4
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Tuesday, August 5, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      5
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Wednesday, August 6, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      6
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Thursday, August 7, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      7
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Friday, August 8, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      8
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Saturday, August 9, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      9
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Sunday, August 10, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      10
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Monday, August 11, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      11
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Tuesday, August 12, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      12
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Wednesday, August 13, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      13
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Thursday, August 14, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      14
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Friday, August 15, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      15
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Saturday, August 16, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      16
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Sunday, August 17, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      17
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Monday, August 18, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      18
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Tuesday, August 19, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      19
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Wednesday, August 20, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      20
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Thursday, August 21, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      21
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Friday, August 22, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      22
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Saturday, August 23, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      23
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Sunday, August 24, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      24
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Monday, August 25, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      25
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Tuesday, August 26, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      26
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Wednesday, August 27, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      27
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Thursday, August 28, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      28
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Friday, August 29, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      29
-                                    </td>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Saturday, August 30, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      30
-                                    </td>
-                                  </tr>
-                                  <tr>
-                                    <td
-                                      aria-disabled="false"
-                                      aria-label="Sunday, August 31, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
-                                      role="button"
-                                      style="width: 39px; height: 38px;"
-                                      tabindex="-1"
-                                    >
-                                      31
-                                    </td>
-                                    <td />
-                                    <td />
-                                    <td />
-                                    <td />
                                     <td />
                                     <td />
                                   </tr>
