@@ -31,7 +31,7 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
 
   const onSubmit = (_enrollment: Enrollment) => {
     setSaving(true);
-    if (!Object.values(_enrollment).reduce((a, b) => a || b)) {
+    if (!Object.values(_enrollment).every((value) => !value)) {
       // If all of the values are null or undefined, don't block
       onSuccess();
       return;

@@ -5,12 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import {
-  IsNotEmpty,
-  isNotEmptyObject,
-  ValidateIf,
-  ValidateNested,
-} from 'class-validator';
+import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
 import {
   Enrollment as EnrollmentInterface,
@@ -23,7 +18,7 @@ import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
-import { FundingDoesNotOverlap } from './decorators/fundingOverlapValidation';
+import { FundingDoesNotOverlap } from './decorators/Enrollment/fundingOverlapValidation';
 
 @Entity()
 export class Enrollment implements EnrollmentInterface {

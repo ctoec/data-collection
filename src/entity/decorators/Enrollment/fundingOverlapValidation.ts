@@ -1,6 +1,6 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Enrollment } from '../Enrollment';
-import { Funding } from '../Funding';
+import { Enrollment } from '../../Enrollment';
+import { Funding } from '../../Funding';
 
 // Make sure first reporting period of a funding is after the last reporting period of the previous funding
 

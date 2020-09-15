@@ -1,5 +1,5 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Child } from '../Child';
+import { Child } from '../../Child';
 
 const childRaceNotNullMessage = 'Child race is required';
 const raceFields = [

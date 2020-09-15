@@ -7,7 +7,7 @@ import { ReportingPeriod } from './ReportingPeriod';
 import { FundingSpace } from './FundingSpace';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { ValidateNested, IsNotEmpty } from 'class-validator';
-import { LastReportingPeriodAfterFirst } from './decorators/lastReportingPeriodValidation';
+import { LastReportingPeriodAfterFirst } from './decorators/Funding/lastReportingPeriodValidation';
 
 @Entity()
 export class Funding implements FundingInterface {

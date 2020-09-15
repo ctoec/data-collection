@@ -1,6 +1,6 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Child } from '../Child';
-import { Gender } from '../../../client/src/shared/models/Gender';
+import { Child } from '../../Child';
+import { Gender } from '../../../../client/src/shared/models/Gender';
 
 const childGenderSpecifiedMessage = 'Child gender must be specified';
 

@@ -25,8 +25,8 @@ import {
   ValidateNested,
   IsNotEmpty,
 } from 'class-validator';
-import { ChildRaceIndicated } from './decorators/childRaceValidation';
-import { ChildGenderSpecified } from './decorators/childGenderValidation';
+import { ChildRaceIndicated } from './decorators/Child/raceValidation';
+import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import moment from 'moment';
 
 @Entity()
@@ -93,23 +93,21 @@ export class Child implements ChildInterface {
   white?: boolean;
 
   @Column({ nullable: true })
-  // No validation bc the only way to set it to false is to select and unselect
+  @IsNotEmpty()
+  // No default value because this is a radio button
   hispanicOrLatinxEthnicity?: boolean;
 
   @Column({ nullable: true, type: 'simple-enum', enum: Gender })
   @ChildGenderSpecified()
   gender?: Gender;
 
-  @Column({ nullable: true })
-  // No validation bc the only way to set it to false is to select and unselect
+  @Column({ default: false })
   foster?: boolean;
 
   @Column({ default: false })
-  // No validation bc the only way to set it to false is to select and unselect
-  recievesC4K?: boolean = false;
+  recievesC4K?: boolean;
 
-  @Column({ nullable: true })
-  // No validation bc the only way to set it to false is to select and unselect
+  @Column({ default: false })
   recievesSpecialEducationServices?: boolean;
 
   @Column({

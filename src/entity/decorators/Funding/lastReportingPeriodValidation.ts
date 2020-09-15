@@ -1,5 +1,5 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Funding } from '../Funding';
+import { Funding } from '../../Funding';
 
 // Make sure last reporting period is after the first
 
