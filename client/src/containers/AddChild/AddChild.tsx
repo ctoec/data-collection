@@ -197,7 +197,7 @@ const AddChild: React.FC = () => {
 
   const { alertElements, setAlerts } = useAlerts();
 
-  const commonFormProps = { child, onSuccess, setAlerts };
+  const commonFormProps = { child, onSuccess, setAlerts, hideHeader: true };
 
   if (!child) {
     return <>Loading...</>;
