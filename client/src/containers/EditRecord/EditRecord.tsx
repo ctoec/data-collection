@@ -10,15 +10,16 @@ import {
   FamilyIncomeForm,
   ChildInfoForm,
   CareForKidsForm,
-  FamilyInfoForm,
+  FamilyAddressForm,
   EnrollmentFundingForm,
   ChildIdentifiersForm,
-} from '../../components/EditForms';
+} from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { distributeValidationErrorsToSubObjects } from '../../utils/getValidationStatus';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
@@ -31,7 +32,7 @@ const TAB_IDS = {
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
-  const { childId } = useParams();
+  const { childId } = useParams() as { childId: string };
   const { accessToken } = useContext(AuthenticationContext);
   const [rowData, setRowData] = useState<Child>();
   const { alertElements, setAlerts } = useAlerts();
@@ -90,7 +91,7 @@ const EditRecord: React.FC = () => {
   };
 
   const commonFormProps = {
-    child: rowData,
+    child: distributeValidationErrorsToSubObjects(rowData),
     onSuccess,
     setAlerts,
     reportingPeriods,
@@ -173,7 +174,7 @@ const EditRecord: React.FC = () => {
           {
             id: TAB_IDS.FAMILY,
             text: 'Family Address',
-            content: <FamilyInfoForm {...commonFormProps} />,
+            content: <FamilyAddressForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.INCOME,

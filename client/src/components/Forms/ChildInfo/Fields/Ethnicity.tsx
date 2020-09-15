@@ -6,6 +6,7 @@ import {
   RadioButton,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
+import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 
 /**
  * Component for entering the enthicity of a child in an enrollment.
@@ -46,6 +47,7 @@ export const EthnicityField: React.FC = () => {
           value: 'yes',
         },
       ]}
+      status={getValidationStatusForField}
     />
   );
 };

@@ -1,8 +1,9 @@
 import { Child, Funding, Site } from '.';
 import { Moment } from 'moment';
 import { AgeGroup } from '../';
+import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 
-export interface Enrollment {
+export interface Enrollment extends ObjectWithValidationErrors {
   id: number;
   child: Child;
   site: Site;

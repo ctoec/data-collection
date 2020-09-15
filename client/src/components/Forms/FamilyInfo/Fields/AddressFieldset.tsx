@@ -8,6 +8,7 @@ import {
   Select,
 } from '@ctoec/component-library';
 import { Family } from '../../../../shared/models';
+import { getValidationStatusForFieldset } from '../../../../utils/getValidationStatus';
 
 // Listing of all possible US states to serve as options
 // in the address selector
@@ -20,6 +21,13 @@ export const AddressFieldset: React.FC = () => {
       legend="Address"
       horizontal
       className="display-inline-block"
+      status={(data) =>
+        getValidationStatusForFieldset(
+          data,
+          ['streetAddress', 'town', 'state', 'zip'],
+          { message: 'Family address is required' }
+        )
+      }
     >
       <div className="grid-col-12 margin-top-2">
         <FormField<Family, TextInputProps, string>

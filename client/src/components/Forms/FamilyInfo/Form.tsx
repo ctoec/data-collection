@@ -6,6 +6,7 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { apiPut } from '../../../utils/api';
 import { EditFormProps } from '../types';
 import useIsMounted from '../../../hooks/useIsMounted';
+import { useValidationErrors } from '../../../hooks/useValidationErrors';
 
 /*
  * Functional component that allows a user to modify the address
@@ -14,20 +15,28 @@ import useIsMounted from '../../../hooks/useIsMounted';
  * with the Child object that the family form doesn't need
  * to know about.
  */
-export const FamilyInfoForm: React.FC<EditFormProps> = ({
+export const FamilyAddressForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
   hideHeader = false,
+  hideErrorsOnFirstLoad = false,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
 
-  if (!child) return <></>;
+  if (!child) {
+    throw new Error('Family info rendered without child');
+  }
+  const { family: inputFamily } = child;
 
-  const { family } = child;
+  const { obj: family, setErrorsHidden } = useValidationErrors<Family>(
+    inputFamily,
+    hideErrorsOnFirstLoad
+  );
 
   const onSubmit = (newState: Family) => {
+    setErrorsHidden(false);
     setSaving(true);
     apiPut(`families/${family.id}`, newState, { accessToken })
       .then(onSuccess)

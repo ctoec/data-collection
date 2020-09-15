@@ -8,6 +8,36 @@ import {
   Checkbox,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
+import { getValidationStatusForFieldset } from '../../../../utils/getValidationStatus';
+
+/**
+ * Helper type of all valid race properties on Child
+ */
+type RaceField = Extract<
+  keyof Child,
+  | 'americanIndianOrAlaskaNative'
+  | 'asian'
+  | 'blackOrAfricanAmerican'
+  | 'nativeHawaiianOrPacificIslander'
+  | 'white'
+>;
+
+const raceOptions: { label: string; field: RaceField }[] = [
+  {
+    label: 'American Indian or Alaska Native',
+    field: 'americanIndianOrAlaskaNative',
+  },
+  { label: 'Asian', field: 'asian' },
+  {
+    label: 'Black or African American',
+    field: 'blackOrAfricanAmerican',
+  },
+  {
+    label: 'Native Hawaiian or Pacific Islander',
+    field: 'nativeHawaiianOrPacificIslander',
+  },
+  { label: 'White', field: 'white' },
+];
 
 /**
  * Component for entering the race of a child in an enrollment.
@@ -20,35 +50,17 @@ export const RaceField: React.FC = () => {
       hint="As identified by family"
       showLegend
       id="race"
-      options={[
-        raceOptionFactory(
-          'American Indian or Alaska Native',
-          'americanIndianOrAlaskaNative'
-        ),
-        raceOptionFactory('Asian', 'asian'),
-        raceOptionFactory(
-          'Black or African American',
-          'blackOrAfricanAmerican'
-        ),
-        raceOptionFactory(
-          'Native Hawaiian or Pacific Islander',
-          'nativeHawaiianOrPacificIslander'
-        ),
-        raceOptionFactory('White', 'white'),
-      ]}
+      options={raceOptions.map((o) => raceOptionFactory(o.label, o.field))}
+      status={(data) =>
+        getValidationStatusForFieldset(
+          data,
+          raceOptions.map((o) => o.field),
+          { message: 'Child race is required' }
+        )
+      }
     />
   );
 };
-
-/**
- * Helper type of all valid race properties on Child
- */
-type RaceField =
-  | 'americanIndianOrAlaskaNative'
-  | 'asian'
-  | 'blackOrAfricanAmerican'
-  | 'nativeHawaiianOrPacificIslander'
-  | 'white';
 
 /**
  *

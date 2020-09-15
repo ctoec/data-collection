@@ -3,25 +3,27 @@ import {
   snapshotTestHelper,
   accessibilityTestHelper,
 } from '../../../testHelpers';
-import { FamilyInfoForm } from './Form';
-import { Family, Child } from '../../../shared/models';
+import { FamilyAddressForm } from './Form';
+import { Child } from '../../../shared/models';
 
 describe('EditRecord', () => {
   describe('FamilyInfo', () => {
     snapshotTestHelper(
-      <FamilyInfoForm
+      <FamilyAddressForm
         child={{} as Child}
         onSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     accessibilityTestHelper(
-      <FamilyInfoForm
+      <FamilyAddressForm
         child={{} as Child}
         onSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
   });
 });

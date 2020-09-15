@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormField, SelectProps, Select } from '@ctoec/component-library';
 import { Child, Gender } from '../../../../shared/models';
+import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 
 /**
  * Component for entering the gender of a child in an enrollment.
@@ -32,6 +33,7 @@ export const GenderField: React.FC = () => {
           text: Gender.Unknown,
         },
       ]}
+      status={getValidationStatusForField}
     />
   );
 };

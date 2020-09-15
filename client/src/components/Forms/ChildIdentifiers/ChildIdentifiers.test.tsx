@@ -20,7 +20,8 @@ describe('EditRecord', () => {
         child={child}
         onSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     accessibilityTestHelper(
@@ -28,7 +29,8 @@ describe('EditRecord', () => {
         child={child}
         onSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
   });
 });

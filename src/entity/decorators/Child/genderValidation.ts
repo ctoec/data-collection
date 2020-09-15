@@ -13,10 +13,10 @@ export function ChildGenderSpecified(
       target: object.constructor,
       propertyName: propertyName,
       options: { message: childGenderSpecifiedMessage, ...validationOptions },
-      constraints: [{ gender: childGenderSpecifiedMessage }],
       validator: {
         validate(_, { object: child }) {
-          return (child as Child).gender !== Gender.NotSpecified;
+          const childGender = (child as Child).gender;
+          return childGender && childGender !== Gender.NotSpecified;
         },
       },
     });

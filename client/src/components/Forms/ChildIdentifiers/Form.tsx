@@ -14,28 +14,30 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
-
-// import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
+import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
 
 export const ChildIdentifiersForm = ({
-  child,
+  child: inputChild,
   onSuccess,
   hideHeader = false,
+  hideErrorsOnFirstLoad,
 }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
-  // TODO: HOW ARE WE HANDLING ERRORS?
-  // const [error, setError] = useState(null);
 
-  // Focus should automatically be on first error on page
-  // useFocusFirstError([error]);
-
-  if (!child) {
+  if (!inputChild) {
     throw new Error('Child info rendered without child');
   }
 
+  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
+    inputChild,
+    hideErrorsOnFirstLoad
+  );
+
   const onFormSubmit = (_child: Child) => {
+    setErrorsHidden(false);
     setSaving(true);
     apiPut(`children/${child.id}`, _child, { accessToken })
       .then(() => onSuccess())

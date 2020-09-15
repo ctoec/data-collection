@@ -96,7 +96,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
         <div className="flex-2">
           <p>Enrollment dates</p>
           <p className="text-bold">
-            {enrollment.entry
+            {enrollment.entry && enrollment.entry.isValid()
               ? enrollment.entry.format('MM/DD/YYYY')
               : InlineIcon({ icon: 'incomplete' })}{' '}
             -{' '}
