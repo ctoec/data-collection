@@ -31,6 +31,7 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
 
   const onSubmit = (_enrollment: Enrollment) => {
     setSaving(true);
+    console.log(_enrollment)
     apiPost(
       `children/${child.id}/change-enrollment`,
       { newEnrollment: _enrollment },
@@ -60,12 +61,10 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
         onSubmit={onSubmit}
       >
         <h2>Enrollment and funding</h2>
-        {/* <h3 className="font-heading-md margin-bottom-0">Site</h3> */}
         <SiteField<Enrollment>
           sites={sites}
           accessor={(data) => data.at('site')}
         />
-        {/* <h3 className="font-heading-md margin-bottom-0">Start date</h3> */}
         <EnrollmentStartDateField<Enrollment>
           accessor={(data) => data.at('entry')}
         />
