@@ -18,7 +18,6 @@ import {
   SpecialEducationServicesType,
 } from '../../../client/src/shared/models';
 import { getManager } from 'typeorm';
-import { validate, ValidationError } from 'class-validator';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -33,11 +32,6 @@ import { validate, ValidationError } from 'class-validator';
  */
 export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
   try {
-    const validationErrors: ValidationError[] = await validate(source);
-    if (validationErrors.length) {
-      throw validationErrors[0];  //  Cuz we can't throw more than one
-    }
-
     const organization = await mapOrganization(source);
     const site = await mapSite(source);
     const family = await mapFamily(source, organization);
