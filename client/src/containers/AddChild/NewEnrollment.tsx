@@ -68,16 +68,13 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
         <EnrollmentStartDateField<Enrollment>
           accessor={(data) => data.at('entry')}
         />
-        <h3 className="font-heading-md margin-bottom-0">Age group</h3>
         <AgeGroupField<Enrollment> accessor={(data) => data.at('ageGroup')} />
-        <h3 className="font-heading-md margin-bottom-0">Funding</h3>
         <FundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
           fundingSpaces={fundingSpaces}
           reportingPeriods={reportingPeriods}
         />
-        <h3 className="font-heading-md margin-bottom-0">Care 4 Kids</h3>
         <CareForKidsField />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}
