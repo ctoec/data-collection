@@ -54,7 +54,6 @@ export const NewFamilyIncome: React.FC<EditFormProps> = ({
       onSubmit={(data) => onFormSubmit(data)}
       className="usa-form"
     >
-      <h2>Family income determination</h2>
       <IncomeDeterminationFieldSet type="redetermine" />
       <div className="display-flex">
         <div>

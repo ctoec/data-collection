@@ -24,9 +24,9 @@ exports[`EditRecord CareForKids matches snapshot 1`] = `
             id="fieldset-legend-c4k-radio-group-fieldset"
           >
             <span
-              class="usa-sr-only"
+              class="usa-label"
             >
-              receives care for kids
+              Care 4 kids
             </span>
           </legend>
           <div

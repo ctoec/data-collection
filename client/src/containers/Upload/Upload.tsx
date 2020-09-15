@@ -68,7 +68,13 @@ const Upload: React.FC = () => {
           />
         </Link>
       </div>
-      {error && <Alert heading={getErrorHeading(error)} text={getErrorText(error)} type="error" />}
+      {error && (
+        <Alert
+          heading={getErrorHeading(error)}
+          text={getErrorText(error)}
+          type="error"
+        />
+      )}
       <div className="grid-row">
         <h1 ref={h1Ref}>Upload your enrollment data</h1>
         <p>
