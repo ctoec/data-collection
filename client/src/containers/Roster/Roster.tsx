@@ -3,20 +3,25 @@ import idx from 'idx';
 import {
   TextWithIcon,
   Accordion,
-  AccordionItemProps,
   Table,
   PlusCircle,
   Button,
-  DownloadArrow,
+  FileDownload,
 } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
 import { apiGet } from '../../utils/api';
 import { tableColumns } from '../CheckData/TableColumns';
 import { Link } from 'react-router-dom';
+import UserContext from '../../contexts/UserContext/UserContext';
 
 const Roster: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
+
+  const { user } = useContext(UserContext);
+  // TODO add heirarchy to pick between organizations
+  const organization = idx(user, (_) => _.organizations[0]);
+
   const [children, setChildren] = useState<Child[]>([]);
   useEffect(() => {
     apiGet('/children', { accessToken }).then((_children) => {
@@ -31,7 +36,7 @@ const Roster: React.FC = () => {
       if (!!!acc[ageGroup]) {
         acc[ageGroup] = [child];
       } else {
-        // not _actually_ possibly undefined; checked in if
+        // acc[ageGroup] is not _actually_ possibly undefined; checked in above if
         acc[ageGroup]?.push(child);
       }
     }
@@ -39,9 +44,7 @@ const Roster: React.FC = () => {
     return acc;
   }, childrenByAgeGroup);
 
-  const accordionItems: AccordionItemProps[] = Object.entries(
-    childrenByAgeGroup
-  )
+  const accordionItems = Object.entries(childrenByAgeGroup)
     .filter((entry) => entry[1] && entry[1].length)
     .map(([ageGroup, ageGroupChildren]) => ({
       id: ageGroup,
@@ -63,8 +66,6 @@ const Roster: React.FC = () => {
       ),
     }));
 
-  // TODO: How do we ID the correct org for this stuff? Can a give user access more than 1 org?
-  const organization = { name: 'Organization name placeholder' };
   const distinctSiteIds: number[] = [];
   children.reduce((total, child) => {
     const siteId = idx(child, (_) => _.enrollments[0].site.id);
@@ -78,15 +79,20 @@ const Roster: React.FC = () => {
       <p className="font-body-xl margin-top-1">
         {children.length} children enrolled at {distinctSiteIds.length} sites
       </p>
-      <div className="display-flex flex-col flex-align center flex-justify-start">
+      <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
         <Link to={{ pathname: '/create-record', state: { organization } }}>
-          {/* <TextWithIcon Icon={PlusCircle} text="Add a record" /> */}
+          <TextWithIcon Icon={PlusCircle} text="Add a record" />
         </Link>
+        {/* TODO hook up this button to download */}
         <Button
           className="margin-left-2"
-          text="foo"
           appearance="unstyled"
-          // text={<><DownloadArrow /> Export current view (PLACEHOLDER)</>}
+          text={
+            <TextWithIcon
+              Icon={FileDownload}
+              text="Export current view (PLACEHOLDER)"
+            />
+          }
         />
       </div>
       <Accordion items={accordionItems} titleHeadingLevel="h2" />

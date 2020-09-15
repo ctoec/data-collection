@@ -43,6 +43,7 @@ const GettingStarted: React.FC = () => {
       </div>
       <div className="grid-row margin-top-2">
         <Button text="Go to file upload" href="/upload" />
+        <Button text="Go to roster" href="/roster" />
       </div>
     </div>
   );

@@ -1168,9 +1168,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#aaaaaaaaaaaaaaaahhhhhhhhhhhh":
+"@ctoec/component-library@https://github.com/ctoec/component-library#accordion":
   version "0.0.31"
-  resolved "https://github.com/ctoec/component-library#bdc96feebd70c81e8d5a0be5b4d38d6b728ffc2d"
+  resolved "https://github.com/ctoec/component-library#96f4a80b95f93a9fb5bf7341fb0f241bd76d3746"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

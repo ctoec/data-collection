@@ -8,8 +8,8 @@ import {
   ReportingPeriod,
   Enrollment,
   Funding,
-  Family,
   User,
+  Family,
 } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
@@ -21,7 +21,7 @@ import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 export const getChildren = async (user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
   return await getManager().find(Child, {
-    relations: ['enrollments', 'enrollments.site'],
+    relations: ['enrollments', 'enrollments.site', 'enrollments.fundings'],
     where: { organization: { id: In(readOrgIds) } },
   });
 };
