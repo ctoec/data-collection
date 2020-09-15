@@ -11,6 +11,7 @@ import { NewEnrollment } from './NewEnrollment';
 import { NewFamilyIncome } from './NewFamilyIncome';
 import { ChildIdentifiersForm } from '../../components/EditForms/ChildIdentifiers/Form';
 import { useAlerts } from '../../hooks/useAlerts';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 type LocationType = Location & {
   state: {
@@ -19,13 +20,62 @@ type LocationType = Location & {
 };
 
 const AddChild: React.FC = () => {
+  const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-  const { childId } = useParams();
+  const history = useHistory();
+  const [child, updateChild] = useState<Child>();
+  const { childId } = useParams() as { childId: string | undefined };
   const location = useLocation() as LocationType;
-  const organization = location.state ? location.state.organization : undefined;
+  const organization = location.state
+    ? location.state.organization
+    : child?.organization;
+  const [refetchChild, setRefetchChild] = useState<number>(0);
+
+  useEffect(() => {
+    // On initial load, create child
+    if (child || childId || !accessToken) return;
+
+    if (!organization) {
+      throw Error('Cannot create child without organization');
+    }
+    apiPost(
+      'children',
+      { firstName: '', lastName: '', organization },
+      {
+        accessToken,
+      }
+    )
+      .then((res) => {
+        updateChild(res);
+        history.replace({ ...location, pathname: `/create-record/${res.id}` });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [
+    accessToken,
+    child,
+    childId,
+    location,
+    organization,
+    history,
+    updateChild,
+  ]);
+
+  useEffect(() => {
+    if (!childId) return;
+    apiGet(`children/${childId}`, {
+      accessToken,
+    })
+      .then((updatedChild) => {
+        updateChild(updatedChild);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [accessToken, childId, refetchChild]);
 
   const activeStep = location.hash.slice(1);
-  const history = useHistory();
   useEffect(() => {
     if (!activeStep) {
       history.replace({ ...location, hash: steps[0].key });
@@ -126,53 +176,6 @@ const AddChild: React.FC = () => {
     },
   ];
 
-  const [child, updateChild] = useState<Child>();
-  const [refetchChild, setRefetchChild] = useState<number>(0);
-
-  useEffect(() => {
-    // On initial load, create child
-    if (child || childId || !accessToken) return;
-
-    if (!organization) {
-      throw Error('Cannot create child without organization');
-    }
-    apiPost(
-      'children',
-      { firstName: '', lastName: '', organization },
-      {
-        accessToken,
-      }
-    )
-      .then((res) => {
-        updateChild(res);
-        history.replace({ ...location, pathname: `/create-record/${res.id}` });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [
-    accessToken,
-    child,
-    childId,
-    location,
-    organization,
-    history,
-    updateChild,
-  ]);
-
-  useEffect(() => {
-    if (!childId) return;
-    apiGet(`children/${childId}`, {
-      accessToken,
-    })
-      .then((updatedChild) => {
-        updateChild(updatedChild);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [accessToken, childId, refetchChild]);
-
   const onSuccess = () => {
     const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
     if (indexOfCurrentStep === steps.length - 1) {
@@ -195,7 +198,7 @@ const AddChild: React.FC = () => {
 
   const { alertElements, setAlerts } = useAlerts();
 
-  const commonFormProps = { child, onSuccess, setAlerts };
+  const commonFormProps = { child, onSuccess, setAlerts, hideHeader: true };
 
   if (!child) {
     return <>Loading...</>;
@@ -206,7 +209,11 @@ const AddChild: React.FC = () => {
       <div className="margin-top-4">
         <BackButton />
         {alertElements}
-        <h1>Add a child record</h1>
+        <h1 ref={h1Ref}>Add a child record</h1>
+        {/* TODO: ask Ryan if this is ok placement-- it was not consistent in other forms, and not present in edit flow */}
+        <p className="usa-hint">
+          Information is required unless otherwise specified.
+        </p>
       </div>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
     </div>

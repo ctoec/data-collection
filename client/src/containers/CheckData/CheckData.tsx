@@ -10,8 +10,10 @@ import { Button, Table } from '@ctoec/component-library';
 import { tableColumns } from './TableColumns';
 import { BackButton } from '../../components/BackButton';
 import { useAlerts } from '../../hooks/useAlerts';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const CheckData: React.FC = () => {
+  const h1Ref = getH1RefForTitle();
   const { reportId } = useParams();
   const { alertElements } = useAlerts();
 
@@ -40,7 +42,9 @@ const CheckData: React.FC = () => {
         <div className="margin-x-4">
           <BackButton />
           {alertElements}
-          <h1>Check data for {pluralize('child', reportData.length, true)}</h1>
+          <h1 ref={h1Ref}>
+            Check data for {pluralize('child', reportData.length, true)}
+          </h1>
           <p>Make sure all of your data was uploaded correctly. </p>
           <p>If everything looks good, submit to OEC.</p>
           <Link to={{ pathname: '/create-record', state: { organization } }}>
@@ -64,7 +68,11 @@ const CheckData: React.FC = () => {
         <div className="margin-bottom-0">
           <div className="fixed-buttons">
             <div className="grid-container">
-              <Button text="Back to upload" href="/upload" appearance="outline" />
+              <Button
+                text="Back to upload"
+                href="/upload"
+                appearance="outline"
+              />
               <Button text="Send to OEC" href="/success" />
             </div>
           </div>

@@ -14,6 +14,7 @@ import { useSites } from '../../hooks/useSites';
 import { useFundingSpaces } from '../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import useIsMounted from '../../hooks/useIsMounted';
+import { CareForKidsField } from '../../components/EditForms/CareForKids/CareForKidsField';
 
 // This is separate from the other enrollment forms because they're pretty complicated
 // Maybe we should try to reconcile though?
@@ -30,6 +31,11 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
 
   const onSubmit = (_enrollment: Enrollment) => {
     setSaving(true);
+    if (!Object.values(_enrollment).every((value) => !value)) {
+      // If all of the values are null or undefined, don't block
+      onSuccess();
+      return;
+    }
     apiPost(
       `children/${child.id}/change-enrollment`,
       { newEnrollment: _enrollment },
@@ -58,16 +64,13 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
         data={enrollment}
         onSubmit={onSubmit}
       >
-        <h3 className="font-heading-md margin-bottom-0">Site</h3>
         <SiteField<Enrollment>
           sites={sites}
           accessor={(data) => data.at('site')}
         />
-        <h3 className="font-heading-md margin-bottom-0">Start date</h3>
         <EnrollmentStartDateField<Enrollment>
           accessor={(data) => data.at('entry')}
         />
-        <h3 className="font-heading-md margin-bottom-0">Age group</h3>
         <AgeGroupField<Enrollment> accessor={(data) => data.at('ageGroup')} />
         <FundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
@@ -75,6 +78,7 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
           fundingSpaces={fundingSpaces}
           reportingPeriods={reportingPeriods}
         />
+        <CareForKidsField />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}
           disabled={saving}

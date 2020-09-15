@@ -89,17 +89,15 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   return (
     <Card forceClose={closeCard}>
       <div className="display-flex flex-justify">
-        <h2 className="header-normal font-heading-lg">
+        <span className="header-normal font-heading-md">
           Has {childName}'s age group and/or site changed?
-        </h2>
+        </span>
         <ExpandCard>
           <Button text="Change enrollment" appearance="outline" />
         </ExpandCard>
       </div>
       <CardExpansion>
-        <h3 className="margin-top-2 margin-bottom-2 font-heading-lg">
-          New enrollment
-        </h3>
+        <h3 className="margin-top-2 margin-bottom-2">New enrollment</h3>
         {error && <Alert type="error" text={error} />}
         <Form<ChangeEnrollment>
           id="change-enrollment-form"
@@ -107,20 +105,16 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           data={{ newEnrollment: {} as Enrollment }}
           onSubmit={onSubmit}
         >
-          <h4 className="font-heading-md margin-bottom-0">Site</h4>
           <SiteField<ChangeEnrollment>
             sites={sites}
             accessor={(data) => data.at('newEnrollment').at('site')}
           />
-          <h4 className="font-heading-md margin-bottom-0">Start date</h4>
           <EnrollmentStartDateField<ChangeEnrollment>
             accessor={(data) => data.at('newEnrollment').at('entry')}
           />
-          <h4 className="font-heading-md margin-bottom-0">Age group</h4>
           <AgeGroupField<ChangeEnrollment>
             accessor={(data) => data.at('newEnrollment').at('ageGroup')}
           />
-
           <FundingField<ChangeEnrollment>
             fundingAccessor={(data) =>
               data.at('newEnrollment').at('fundings').at(0)

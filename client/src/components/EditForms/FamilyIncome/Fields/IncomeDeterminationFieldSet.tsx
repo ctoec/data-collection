@@ -31,7 +31,7 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
     case 'redetermine':
       elementId = 'family-income-redetermination';
       legend = 'Redetermine family income';
-      showLegend = true;
+      showLegend = false;
       break;
 
     case 'edit':
@@ -47,7 +47,6 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
       id={elementId}
       legend={legend}
       showLegend={showLegend}
-      legendStyle="title"
     >
       <div>
         <HouseholdSizeField />

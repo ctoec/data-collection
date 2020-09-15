@@ -5,6 +5,7 @@ import { FileInput, TextWithIcon, Alert } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -21,6 +22,7 @@ const Upload: React.FC = () => {
     import('uswds/dist/js/uswds');
   }, []);
 
+  const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const [error, setError] = useState<string>();
   const [file, setFile] = useState<File>();
@@ -66,9 +68,15 @@ const Upload: React.FC = () => {
           />
         </Link>
       </div>
-      {error && <Alert heading={getErrorHeading(error)} text={getErrorText(error)} type="error" />}
+      {error && (
+        <Alert
+          heading={getErrorHeading(error)}
+          text={getErrorText(error)}
+          type="error"
+        />
+      )}
       <div className="grid-row">
-        <h1>Upload your enrollment data</h1>
+        <h1 ref={h1Ref}>Upload your enrollment data</h1>
         <p>
           After you've entered all state funded enrollment data in the
           spreadsheet template, upload the file here.

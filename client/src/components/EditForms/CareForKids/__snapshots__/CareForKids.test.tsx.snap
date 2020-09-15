@@ -8,7 +8,7 @@ exports[`EditRecord CareForKids matches snapshot 1`] = `
     <h2
       class="grid-row"
     >
-      Receiving Care For Kids?
+      Care 4 Kids
     </h2>
     <div>
       <form
@@ -24,9 +24,9 @@ exports[`EditRecord CareForKids matches snapshot 1`] = `
             id="fieldset-legend-c4k-radio-group-fieldset"
           >
             <span
-              class="usa-sr-only"
+              class="usa-label"
             >
-              receives care for kids
+              Care 4 kids
             </span>
           </legend>
           <div
@@ -48,7 +48,7 @@ exports[`EditRecord CareForKids matches snapshot 1`] = `
                     class="usa-radio__label"
                     for="Yes"
                   >
-                    Yes
+                    Receiving Care 4 Kids
                   </label>
                 </div>
               </div>
@@ -70,7 +70,7 @@ exports[`EditRecord CareForKids matches snapshot 1`] = `
                     class="usa-radio__label"
                     for="No"
                   >
-                    No
+                    Not receiving Care 4 Kids
                   </label>
                 </div>
               </div>

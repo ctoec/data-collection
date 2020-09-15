@@ -10,21 +10,11 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
     >
       Family Address
     </h2>
-    <p
-      class="usa-hint"
-    >
-      Information is required unless otherwise specified.
-    </p>
     <form
       autocomplete="off"
       class="FamilyInfoForm"
       novalidate=""
     >
-      <h3
-        class="grid-row margin-top-4"
-      >
-        Address
-      </h3>
       <fieldset
         class="grid-gap grid-row usa-fieldset display-inline-block"
         id="family-address"
@@ -33,7 +23,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
           id="fieldset-legend-family-address"
         >
           <span
-            class="usa-label"
+            class="usa-sr-only"
           >
             Address
           </span>
@@ -156,30 +146,26 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
           </div>
         </div>
       </fieldset>
-      <h3
-        class="grid-row margin-top-4"
+      <p
+        class="text-bold margin-top-3 margin-bottom-1"
       >
-        Homelessness?
-      </h3>
+        Experiencing homelessness
+      </p>
       <div
-        class="margin-top-2"
+        class="usa-checkbox"
       >
-        <div
-          class="usa-checkbox"
+        <input
+          class="usa-checkbox__input"
+          id="homelessness"
+          type="checkbox"
+          value="homelessness"
+        />
+        <label
+          class="usa-checkbox__label"
+          for="homelessness"
         >
-          <input
-            class="usa-checkbox__input"
-            id="homelessness"
-            type="checkbox"
-            value="homelessness"
-          />
-          <label
-            class="usa-checkbox__label"
-            for="homelessness"
-          >
-            Family has experienced homelessness / housing insecurity within the last year
-          </label>
-        </div>
+          Family has experienced homelessness / housing insecurity within the last year
+        </label>
       </div>
       <div
         class="grid-row margin-top-2"

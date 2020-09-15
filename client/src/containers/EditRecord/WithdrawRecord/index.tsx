@@ -6,7 +6,6 @@ import {
   FormSubmitButton,
   Alert,
 } from '@ctoec/component-library';
-import Modal from 'react-modal';
 import { Enrollment, ReportingPeriod } from '../../../shared/models';
 import { apiPost } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';

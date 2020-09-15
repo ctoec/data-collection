@@ -39,14 +39,7 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
 
   return (
     <div className="grid-container margin-top-2">
-      {!hideHeader && (
-        <>
-          <h2 className="grid-row">Family Address</h2>
-          <p className="usa-hint">
-            Information is required unless otherwise specified.
-          </p>
-        </>
-      )}
+      {!hideHeader && <h2 className="grid-row">Family Address</h2>}
       <Form<Family>
         className="FamilyInfoForm"
         data={family}
@@ -54,9 +47,7 @@ export const FamilyInfoForm: React.FC<EditFormProps> = ({
         noValidate
         autoComplete="off"
       >
-        <h3 className="grid-row margin-top-4">Address</h3>
         <AddressFieldset />
-        <h3 className="grid-row margin-top-4">Homelessness?</h3>
         <HomelessnessField />
         <div className="grid-row margin-top-2">
           <FormSubmitButton

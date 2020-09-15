@@ -53,14 +53,7 @@ export const ChildIdentifiersForm = ({
       noValidate
       autoComplete="off"
     >
-      {!hideHeader && (
-        <>
-          <h2>Child's identifiers</h2>
-          <p className="usa-hint">
-            Information is required unless otherwise specified.
-          </p>
-        </>
-      )}
+      {!hideHeader && <h2>Child's identifiers</h2>}
       <div className="grid-row grid-gap">
         <div className="mobile-lg:grid-col-12">
           <SasidField />

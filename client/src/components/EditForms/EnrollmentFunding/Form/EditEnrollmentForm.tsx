@@ -129,13 +129,11 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
           data={enrollment}
           onSubmit={onSubmit}
         >
-          <h3 className="font-heading-md margin-bottom-0">Start date</h3>
           <EnrollmentStartDateField<Enrollment>
             accessor={(data) => data.at('entry')}
           />
           {enrollment.exit && (
             <>
-              <h3 className="font-heading-md margin-bottom-0">End date</h3>
               <EnrollmentEndDateField<Enrollment>
                 accessor={(data) => data.at('exit')}
               />
