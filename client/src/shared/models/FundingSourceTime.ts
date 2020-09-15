@@ -1,5 +1,4 @@
-import { FundingSource } from ".";
-import { FundingTime } from "./FundingTime";
+import { FundingSource, FundingTime } from ".";
 
 export interface FundingSourceTime {
   displayName: string;

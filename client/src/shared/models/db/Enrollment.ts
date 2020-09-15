@@ -1,5 +1,6 @@
-import { AgeGroup, Child, Funding, Site } from '.';
+import { Child, Funding, Site } from '.';
 import { Moment } from 'moment';
+import { AgeGroup } from '../';
 
 export interface Enrollment {
   id: number;
