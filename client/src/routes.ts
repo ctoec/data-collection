@@ -64,11 +64,6 @@ export const routes: RouteConfig[] = [
     exact: true,
   },
   {
-    path: '/create-record/:childId',
-    component: AddChild,
-    unauthorized: false,
-  },
-  {
     path: '/create-record',
     component: AddChild,
     unauthorized: false,

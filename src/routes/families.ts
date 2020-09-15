@@ -74,13 +74,14 @@ familyRouter.post(
       const famId = parseInt(req.params['familyId']);
       const family = await getManager().findOne(Family, { id: famId });
 
-      const determination = getManager().create(IncomeDetermination, {
-        ...req.body,
-        family,
-      });
+      const determination = await getManager().save(
+        getManager().create(IncomeDetermination, {
+          ...req.body,
+          family,
+        })
+      );
 
-      await getManager().save(determination);
-      res.sendStatus(200);
+      res.status(201).send({ id: determination.id });
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.log('Error creating new income determination: ', err);

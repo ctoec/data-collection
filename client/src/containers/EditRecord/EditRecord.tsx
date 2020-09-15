@@ -131,7 +131,6 @@ const EditRecord: React.FC = () => {
                   childName={rowData.firstName}
                   enrollment={activeEnrollment}
                   reportingPeriods={reportingPeriods}
-                  isOpen={withdrawModalOpen}
                   toggleOpen={toggleWithdrawModal}
                 />
               </Modal>

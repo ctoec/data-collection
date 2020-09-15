@@ -3,7 +3,7 @@ import idx from 'idx';
 import { Moment } from 'moment';
 import { validate } from 'class-validator';
 import { ExitReason } from '../../client/src/shared/models';
-import { Child, ReportingPeriod, Enrollment, Funding } from '../entity';
+import { Child, ReportingPeriod, Enrollment, Funding, Family } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 
@@ -59,6 +59,26 @@ const propertyDateSorter = <T>(
   if (aDate < bDate) return 1;
   if (bDate < aDate) return -1;
   return 0;
+};
+
+/**
+ * Creates a child from a POST request body.
+ * Also, creates a family if one does not exist.
+ * @param _child
+ */
+export const createChild = async (_child) => {
+  // TODO: make family optional on the child
+  // (to enable family lookup when adding new child)
+  // and stop creating it here
+  if (!_child.family) {
+    const organization = _child.organization;
+    const family = await getManager().save(
+      getManager().create(Family, { organization })
+    );
+    _child.family = family;
+  }
+
+  return getManager().save(getManager().create(Child, _child));
 };
 
 /**
