@@ -3,7 +3,7 @@ import { RenderResult, render, cleanup, act } from '@testing-library/react';
 import { axe } from 'jest-axe';
 import { BrowserRouter } from 'react-router-dom';
 
-const _render = async (
+export const renderHelper = async (
   component: React.ReactElement,
   opts: {
     before?: (_: RenderResult) => Promise<void>;
@@ -29,7 +29,7 @@ export const accessibilityTestHelper = (
 ) => {
   it('passes AXE accessibility checks', async () => {
     await act(async () => {
-      const renderResult = await _render(component, opts);
+      const renderResult = await renderHelper(component, opts);
       const results = await axe(renderResult.container);
       expect(results).toHaveNoViolations();
     });
@@ -47,7 +47,7 @@ export const snapshotTestHelper = (
 ) => {
   it('matches snapshot', async () => {
     await act(async () => {
-      const renderResult = await _render(component, opts);
+      const renderResult = await renderHelper(component, opts);
       expect(renderResult.asFragment()).toMatchSnapshot();
     });
 

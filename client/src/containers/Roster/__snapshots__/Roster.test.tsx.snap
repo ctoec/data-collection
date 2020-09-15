@@ -42,7 +42,352 @@ exports[`Roster matches snapshot 1`] = `
     <div
       aria-multiselectable="true"
       class="oec-accordion"
-    />
+    >
+      <h2
+        class="oec-accordion__heading"
+      >
+        <button
+          aria-controls="Infant/toddler"
+          aria-expanded="false"
+          class="oec-accordion__button"
+        >
+          <div
+            class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
+          >
+            <div
+              class="oec-accordion__heading-title"
+            >
+              <p>
+                <span
+                  class="text-bold"
+                >
+                  Infant/toddler
+                </span>
+                 2 children
+              </p>
+            </div>
+            <div
+              class="oec-accordion__heading-expand"
+            >
+              Hide Infant/toddler roster
+            </div>
+          </div>
+        </button>
+      </h2>
+      <div
+        aria-hidden="true"
+        class="oec-accordion__content"
+        id="Infant/toddler"
+      >
+        <table
+          class="oec-table"
+          id="roster-table-Infant/toddler"
+        >
+          <thead>
+            <tr>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <button
+                  aria-label="Sort table by Name in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Name
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Birth Date
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Age group
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Funding type
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Contract space
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Site
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Enrollment date
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <a
+                  href="/edit-record/0000000-0000-0000-0000-0000000000000"
+                >
+                  <button
+                    class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
+                    type="button"
+                  >
+                    First Toddler
+                  </button>
+                </a>
+              </td>
+              <td />
+              <td>
+                Infant/toddler
+              </td>
+              <td>
+                CDC
+              </td>
+              <td />
+              <td />
+              <td />
+            </tr>
+            <tr>
+              <td>
+                <a
+                  href="/edit-record/11111111-0000-0000-0000-0000000000000"
+                >
+                  <button
+                    class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
+                    type="button"
+                  >
+                    Second Toddler
+                  </button>
+                </a>
+              </td>
+              <td />
+              <td>
+                Infant/toddler
+              </td>
+              <td>
+                PSR
+              </td>
+              <td />
+              <td />
+              <td />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2
+        class="oec-accordion__heading"
+      >
+        <button
+          aria-controls="Preschool"
+          aria-expanded="false"
+          class="oec-accordion__button"
+        >
+          <div
+            class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
+          >
+            <div
+              class="oec-accordion__heading-title"
+            >
+              <p>
+                <span
+                  class="text-bold"
+                >
+                  Preschool
+                </span>
+                 1 children
+              </p>
+            </div>
+            <div
+              class="oec-accordion__heading-expand"
+            >
+              Hide Preschool roster
+            </div>
+          </div>
+        </button>
+      </h2>
+      <div
+        aria-hidden="true"
+        class="oec-accordion__content"
+        id="Preschool"
+      >
+        <table
+          class="oec-table"
+          id="roster-table-Preschool"
+        >
+          <thead>
+            <tr>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <button
+                  aria-label="Sort table by Name in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Name
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Birth Date
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Age group
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Funding type
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Contract space
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Site
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+              >
+                <span
+                  class="oec-table__column-title"
+                >
+                  Enrollment date
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <a
+                  href="/edit-record/22222222-0000-0000-0000-0000000000000"
+                >
+                  <button
+                    class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
+                    type="button"
+                  >
+                    First Preschool
+                  </button>
+                </a>
+              </td>
+              <td />
+              <td>
+                Preschool
+              </td>
+              <td>
+                CDC
+              </td>
+              <td />
+              <td />
+              <td />
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;

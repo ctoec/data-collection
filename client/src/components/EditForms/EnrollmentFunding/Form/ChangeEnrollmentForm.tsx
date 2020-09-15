@@ -127,10 +127,6 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           {!!currentEnrollment && (
             <>
               <h3>Previous enrollment</h3>
-              <EnrollmentEndDateField<ChangeEnrollment>
-                accessor={(data) => data.at('oldEnrollment').at('exitDate')}
-                optional={true}
-              />
               {activeFunding && (
                 <ReportingPeriodField<ChangeEnrollment>
                   accessor={(data) =>
