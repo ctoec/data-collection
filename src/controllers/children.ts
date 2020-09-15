@@ -1,10 +1,11 @@
 import { getManager } from 'typeorm';
 import idx from 'idx';
+import { Moment } from 'moment';
+import { validate } from 'class-validator';
 import { ExitReason } from '../../client/src/shared/models';
 import { Child, ReportingPeriod, Enrollment, Funding } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
-import { Moment } from 'moment';
 
 /**
  * Get child by id, with related family and related
@@ -21,6 +22,7 @@ export const getChildById = async (id: string) => {
       'enrollments.site',
       'enrollments.site.organization',
       'enrollments.fundings',
+      'organization',
     ],
   });
 
@@ -41,7 +43,7 @@ export const getChildById = async (id: string) => {
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-  return child;
+  return { ...child, validationErrors: await validate(child) };
 };
 
 const propertyDateSorter = <T>(

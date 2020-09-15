@@ -22,7 +22,8 @@ export const CareForKidsField: React.FC = () => {
       inputComponent={RadioButtonGroup}
       id="c4k-radio-group"
       name="careforkids"
-      legend="receives care for kids"
+      legend="Care 4 kids"
+      showLegend
       options={[
         {
           render: (props) => (

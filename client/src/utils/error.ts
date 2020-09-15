@@ -5,5 +5,7 @@ export function getErrorHeading(error: string): string {
 }
 
 export function getErrorText(error: string): string {
-  return error.includes(ERROR_DELIMITER) ? error.split(ERROR_DELIMITER)[1] : error;
+  return error.includes(ERROR_DELIMITER)
+    ? error.split(ERROR_DELIMITER)[1]
+    : error;
 }
