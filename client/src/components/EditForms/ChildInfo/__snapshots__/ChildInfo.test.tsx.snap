@@ -199,11 +199,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           Gender
         </span>
       </label>
-      <span
-        class="usa-hint text-italic"
-      >
-        As identified by family
-      </span>
       <select
         aria-required="true"
         class="usa-select"

@@ -15,7 +15,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         class="display-flex flex-justify"
       >
         <span
-          class="header-normal font-heading-lg"
+          class="header-normal font-heading-md"
         >
           Has First's age group and/or site changed?
         </span>
