@@ -1,11 +1,17 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Child } from "../Child";
+import { Child } from '../Child';
 
 const childRaceNotNullMessage = 'Child race is required';
-const raceFields = ['americanIndianOrAlaskaNative', 'asian', 'blackOrAfricanAmerican', 'nativeHawaiianOrPacificIslander', 'white'];
+const raceFields = [
+  'americanIndianOrAlaskaNative',
+  'asian',
+  'blackOrAfricanAmerican',
+  'nativeHawaiianOrPacificIslander',
+  'white',
+];
 
 function isChildRaceIndicated(child: Child) {
-  raceFields.forEach(field => {
+  raceFields.forEach((field) => {
     const val = child[field];
     if (val) {
       return true;
@@ -14,7 +20,9 @@ function isChildRaceIndicated(child: Child) {
   return false;
 }
 
-export function ChildRaceIndicated(validationOptions?: ValidationOptions): PropertyDecorator {
+export function ChildRaceIndicated(
+  validationOptions?: ValidationOptions
+): PropertyDecorator {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'race',

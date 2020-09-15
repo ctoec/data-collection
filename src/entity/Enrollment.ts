@@ -5,7 +5,12 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { IsNotEmpty, isNotEmptyObject, ValidateIf, ValidateNested } from 'class-validator';
+import {
+  IsNotEmpty,
+  isNotEmptyObject,
+  ValidateIf,
+  ValidateNested,
+} from 'class-validator';
 
 import {
   Enrollment as EnrollmentInterface,
@@ -49,7 +54,7 @@ export class Enrollment implements EnrollmentInterface {
   exit?: Moment;
 
   @Column({ nullable: true })
-  @ValidateIf(c => !!c.exit)
+  @ValidateIf((c) => !!c.exit)
   @IsNotEmpty()
   exitReason?: string;
 

@@ -1,7 +1,7 @@
 import { getManager } from 'typeorm';
 import idx from 'idx';
 import { Moment } from 'moment';
-import { validate } from "class-validator";
+import { validate } from 'class-validator';
 import { ExitReason } from '../../client/src/shared/models';
 import { Child, ReportingPeriod, Enrollment, Funding } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
@@ -140,7 +140,7 @@ export const changeEnrollment = async (
       // Update current enrollment exitReason
       currentEnrollment.exitReason =
         currentEnrollment.ageGroup !==
-          changeEnrollmentData.newEnrollment.ageGroup
+        changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
 

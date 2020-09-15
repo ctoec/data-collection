@@ -1,12 +1,12 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Child } from "../Child";
-import {
-  Gender,
-} from '../../../client/src/shared/models/Gender';
+import { Child } from '../Child';
+import { Gender } from '../../../client/src/shared/models/Gender';
 
 const childGenderSpecifiedMessage = 'Child gender must be specified';
 
-export function ChildGenderSpecified(validationOptions?: ValidationOptions): PropertyDecorator {
+export function ChildGenderSpecified(
+  validationOptions?: ValidationOptions
+): PropertyDecorator {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'gender',
@@ -16,7 +16,7 @@ export function ChildGenderSpecified(validationOptions?: ValidationOptions): Pro
       constraints: [{ gender: childGenderSpecifiedMessage }],
       validator: {
         validate(_, { object: child }) {
-          return (child as Child).gender !== Gender.NotSpecified
+          return (child as Child).gender !== Gender.NotSpecified;
         },
       },
     });

@@ -18,7 +18,14 @@ import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
-import { Length, MinDate, MaxDate, ValidateNested, IsNotEmpty, isNotEmpty } from "class-validator";
+import {
+  Length,
+  MinDate,
+  MaxDate,
+  ValidateNested,
+  IsNotEmpty,
+  isNotEmpty,
+} from 'class-validator';
 import { ChildRaceIndicated } from './decorators/childRaceValidation';
 import { ChildGenderSpecified } from './decorators/childGenderValidation';
 import moment from 'moment';
@@ -47,7 +54,9 @@ export class Child implements ChildInterface {
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @IsNotEmpty()
-  @MinDate(moment().add(-12, 'years').toDate(), { message: 'Birth date must be within last 12 years' })
+  @MinDate(moment().add(-12, 'years').toDate(), {
+    message: 'Birth date must be within last 12 years',
+  })
   @MaxDate(moment().toDate(), { message: 'Birth date must be in the past' })
   birthdate?: Moment;
 

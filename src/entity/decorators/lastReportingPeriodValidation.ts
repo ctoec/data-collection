@@ -1,11 +1,13 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Funding } from "../Funding";
+import { Funding } from '../Funding';
 
 // Make sure last reporting period is after the first
 
 const lastReportingPeriodInvalid = 'Last reporting period must be after first';
 
-export function LastReportingPeriodAfterFirst(validationOptions?: ValidationOptions): PropertyDecorator {
+export function LastReportingPeriodAfterFirst(
+  validationOptions?: ValidationOptions
+): PropertyDecorator {
   return function (object: Object, propertyName: string) {
     registerDecorator({
       name: 'lastReportingPeriod',
@@ -15,9 +17,14 @@ export function LastReportingPeriodAfterFirst(validationOptions?: ValidationOpti
       constraints: [{ reportingPeriod: lastReportingPeriodInvalid }],
       validator: {
         validate(_, { object: funding }) {
-          const { firstReportingPeriod, lastReportingPeriod } = funding as Funding;
+          const {
+            firstReportingPeriod,
+            lastReportingPeriod,
+          } = funding as Funding;
           if (!firstReportingPeriod || !lastReportingPeriod) return true;
-          return firstReportingPeriod.period.isBefore(lastReportingPeriod.period)
+          return firstReportingPeriod.period.isBefore(
+            lastReportingPeriod.period
+          );
         },
       },
     });

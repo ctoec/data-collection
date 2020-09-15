@@ -1,9 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  Column,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 
 import { Funding as FundingInterface } from '../../client/src/shared/models';
 
