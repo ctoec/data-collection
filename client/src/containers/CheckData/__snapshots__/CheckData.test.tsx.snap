@@ -33,6 +33,7 @@ exports[`CheckData matches snapshot 1`] = `
         If everything looks good, submit to OEC.
       </p>
       <a
+        class="usa-button usa-button--unstyled"
         href="/create-record"
       >
         Add a record

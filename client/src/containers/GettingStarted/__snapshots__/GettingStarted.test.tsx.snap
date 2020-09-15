@@ -17,6 +17,7 @@ exports[`GettingStarted matches snapshot 1`] = `
       <p>
         To get started, download the spreadsheet template that contains all required data for each field. If you have any questions, reach out to 
         <a
+          class="usa-button usa-button--unstyled"
           href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
           rel="noopener noreferrer"
           target="_blank"
@@ -44,6 +45,7 @@ exports[`GettingStarted matches snapshot 1`] = `
               <span>
                 To see all required data fields, definitions, and rationale, see 
                 <a
+                  class="usa-button usa-button--unstyled"
                   href="/data-requirements"
                 >
                   enrollment data requirements.

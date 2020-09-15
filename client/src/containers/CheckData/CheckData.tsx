@@ -47,7 +47,10 @@ const CheckData: React.FC = () => {
           </h1>
           <p>Make sure all of your data was uploaded correctly. </p>
           <p>If everything looks good, submit to OEC.</p>
-          <Link to={{ pathname: '/create-record', state: { organization } }}>
+          <Link
+            className="usa-button usa-button--unstyled"
+            to={{ pathname: '/create-record', state: { organization } }}
+          >
             Add a record
           </Link>
           {reportData.length ? (

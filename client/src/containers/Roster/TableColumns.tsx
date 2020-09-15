@@ -14,6 +14,7 @@ export const tableColumns: Column<Child>[] = [
       return (
         <td>
           <Link
+            className="usa-button usa-button--unstyled"
             to={{
               pathname: `/edit-record/${row.id}`,
             }}

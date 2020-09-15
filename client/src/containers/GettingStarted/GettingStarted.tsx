@@ -26,7 +26,12 @@ const GettingStarted: React.FC = () => {
           text={
             <span>
               To see all required data fields, definitions, and rationale, see{' '}
-              <Link to="/data-requirements">enrollment data requirements.</Link>
+              <Link
+                className="usa-button usa-button--unstyled"
+                to="/data-requirements"
+              >
+                enrollment data requirements.
+              </Link>
             </span>
           }
         />

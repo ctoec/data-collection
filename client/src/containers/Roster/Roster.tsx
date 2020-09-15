@@ -80,7 +80,10 @@ const Roster: React.FC = () => {
         {children.length} children enrolled at {distinctSiteIds.length} sites
       </p>
       <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
-        <Link to={{ pathname: '/create-record', state: { organization } }}>
+        <Link
+          className="usa-button usa-button--unstyled"
+          to={{ pathname: '/create-record', state: { organization } }}
+        >
           <TextWithIcon Icon={PlusCircle} text="Add a record" />
         </Link>
         {/* TODO hook up this button to download */}
