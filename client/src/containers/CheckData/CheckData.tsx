@@ -63,8 +63,10 @@ const CheckData: React.FC = () => {
       <div className="CheckData__button-container position-fixed bottom-0 width-full">
         <div className="margin-bottom-0">
           <div className="fixed-buttons">
-            <Button text="Back to upload" href="/upload" appearance="outline" />
-            <Button text="Send to OEC" href="/success" />
+            <div className="grid-container">
+              <Button text="Back to upload" href="/upload" appearance="outline" />
+              <Button text="Send to OEC" href="/success" />
+            </div>
           </div>
         </div>
       </div>
