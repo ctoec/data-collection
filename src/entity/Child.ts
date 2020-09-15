@@ -46,10 +46,9 @@ export class Child implements ChildInterface {
   suffix?: string;
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
-  @IsNotEmpty() // do we need this?
-  // TODO: what are the actual age parameters?
-  @MinDate(moment().add(-7, 'years').toDate(), { message: 'Birth date must be within last 7 years' })
-  @MaxDate(moment().add(-6, 'weeks').toDate(), { message: 'Child must be older than 6 weeks' })
+  @IsNotEmpty()
+  @MinDate(moment().add(-12, 'years').toDate(), { message: 'Birth date must be within last 12 years' })
+  @MaxDate(moment().toDate(), { message: 'Birth date must be in the past' })
   birthdate?: Moment;
 
   @Column({ nullable: true })
@@ -86,6 +85,7 @@ export class Child implements ChildInterface {
   white?: boolean;
 
   @Column({ nullable: true })
+  // No validation bc the only way to set it to false is to select and unselect
   hispanicOrLatinxEthnicity?: boolean;
 
   @Column({ nullable: true, type: 'simple-enum', enum: Gender })
@@ -93,12 +93,15 @@ export class Child implements ChildInterface {
   gender?: Gender;
 
   @Column({ nullable: true })
+  // No validation bc the only way to set it to false is to select and unselect
   foster?: boolean;
 
   @Column({ default: false })
+  // No validation bc the only way to set it to false is to select and unselect
   recievesC4K?: boolean = false;
 
   @Column({ nullable: true })
+  // No validation bc the only way to set it to false is to select and unselect
   recievesSpecialEducationServices?: boolean;
 
   @Column({

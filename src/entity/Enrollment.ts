@@ -5,7 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
+import { IsNotEmpty, isNotEmptyObject, ValidateIf, ValidateNested } from 'class-validator';
 
 import {
   Enrollment as EnrollmentInterface,
@@ -58,6 +58,7 @@ export class Enrollment implements EnrollmentInterface {
   })
   @ValidateNested({ each: true })
   @FundingDoesNotOverlap()
+  @IsNotEmpty()
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })

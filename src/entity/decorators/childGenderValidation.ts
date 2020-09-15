@@ -13,7 +13,7 @@ export function ChildGenderSpecified(validationOptions?: ValidationOptions): Pro
       target: object.constructor,
       propertyName: propertyName,
       options: { message: childGenderSpecifiedMessage, ...validationOptions },
-      constraints: [{ childRace: childGenderSpecifiedMessage }],
+      constraints: [{ gender: childGenderSpecifiedMessage }],
       validator: {
         validate(_, { object: child }) {
           return (child as Child).gender !== Gender.NotSpecified

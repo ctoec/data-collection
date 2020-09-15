@@ -12,7 +12,7 @@ export function LastReportingPeriodAfterFirst(validationOptions?: ValidationOpti
       target: object.constructor,
       propertyName: propertyName,
       options: { message: lastReportingPeriodInvalid, ...validationOptions },
-      constraints: [{ childRace: lastReportingPeriodInvalid }],
+      constraints: [{ reportingPeriod: lastReportingPeriodInvalid }],
       validator: {
         validate(_, { object: funding }) {
           const { firstReportingPeriod, lastReportingPeriod } = funding as Funding;

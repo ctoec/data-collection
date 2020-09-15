@@ -13,7 +13,7 @@ export function FundingDoesNotOverlap(validationOptions?: ValidationOptions): Pr
       target: object.constructor,
       propertyName: propertyName,
       options: { message: fundingPeriodOverlap, ...validationOptions },
-      constraints: [{ childRace: fundingPeriodOverlap }],
+      constraints: [{ fundingPeriod: fundingPeriodOverlap }],
       validator: {
         validate(validatingFunding, { object: enrollment }) {
           const allFundings = (enrollment as Enrollment).fundings
