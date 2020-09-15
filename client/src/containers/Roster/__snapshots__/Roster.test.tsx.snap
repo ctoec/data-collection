@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Roster matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="grid-container"
+  >
+    <h2
+      class="font-body-xl margin-bottom-0"
+    >
+      Organization
+    </h2>
+    <p
+      class="font-body-xl margin-top-1"
+    >
+      3 children enrolled at 1 sites
+    </p>
+    <div
+      class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"
+    >
+      <a
+        href="/create-record"
+      >
+        <span
+          class="oec-text-with-icon"
+        >
+          Add a record
+        </span>
+      </a>
+      <button
+        class="usa-button usa-button--unstyled margin-left-2"
+        type="button"
+      >
+        <span
+          class="oec-text-with-icon"
+        >
+          Export current view (PLACEHOLDER)
+        </span>
+      </button>
+    </div>
+    <div
+      aria-multiselectable="true"
+      class="oec-accordion"
+    />
+  </div>
+</DocumentFragment>
+`;

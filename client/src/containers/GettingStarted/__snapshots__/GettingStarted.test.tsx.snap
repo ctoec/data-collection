@@ -104,6 +104,12 @@ exports[`GettingStarted matches snapshot 1`] = `
       >
         Go to file upload
       </a>
+      <a
+        class="usa-button"
+        href="/roster"
+      >
+        Go to roster
+      </a>
     </div>
   </div>
 </DocumentFragment>
