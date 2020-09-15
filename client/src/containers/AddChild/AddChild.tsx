@@ -1,17 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
-import { StepList, Button, StepProps } from '@ctoec/component-library';
+import { StepList } from '@ctoec/component-library';
 import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { useLocation, useHistory, useParams } from 'react-router-dom';
-import { EditFormProps } from '../../components/EditForms/types';
-import { ChildInfoForm, FamilyInfoForm } from '../../components/EditForms';
-import { NewEnrollment } from './NewEnrollment';
-import { NewFamilyIncome } from './NewFamilyIncome';
-import { ChildIdentifiersForm } from '../../components/EditForms/ChildIdentifiers/Form';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { listSteps } from './ListSteps';
+import UserContext from '../../contexts/UserContext/UserContext';
 
 type LocationType = Location & {
   state: {
@@ -21,49 +18,67 @@ type LocationType = Location & {
 
 const AddChild: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-  const { accessToken } = useContext(AuthenticationContext);
-  const history = useHistory();
-  const [child, updateChild] = useState<Child>();
-  const { childId } = useParams() as { childId: string | undefined };
-  const location = useLocation() as LocationType;
-  const organization = location.state
-    ? location.state.organization
-    : child?.organization;
-  const [refetchChild, setRefetchChild] = useState<number>(0);
+	const { accessToken } = useContext(AuthenticationContext);
 
+	const location = useLocation() as LocationType;
+  const activeStep = location.hash.slice(1);
+  const history = useHistory();
+  const steps = listSteps(history);
+
+  // On initial load, set url hash to first step hash
   useEffect(() => {
-    // On initial load, create child
-    if (child || childId || !accessToken) return;
+    if (!activeStep) {
+      history.replace({ hash: steps[0].key });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+	
+	const [child, updateChild] = useState<Child>();
+	// TODO how do we choose correct org / site for creating new data
+	const organization = location.state?.organization || child?.organization;
+  const [creating, setCreating] = useState(false);
+  const [refetchChild, setRefetchChild] = useState<number>(0);
+  const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
+
+  // On initial load, create child
+  useEffect(() => {
+    if (child || creating) return;
 
     if (!organization) {
       throw Error('Cannot create child without organization');
     }
-    apiPost(
-      'children',
-      { firstName: '', lastName: '', organization },
-      {
-        accessToken,
-      }
-    )
+    const placeholderChild = {
+      firstName: '',
+      lastName: '',
+      organization,
+    };
+
+    setCreating(true);
+    apiPost('children', placeholderChild, {
+      accessToken,
+    })
       .then((res) => {
         updateChild(res);
-        history.replace({ ...location, pathname: `/create-record/${res.id}` });
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => setCreating(false));
   }, [
     accessToken,
     child,
-    childId,
     location,
     organization,
     history,
     updateChild,
+    creating,
   ]);
 
+  // Fetch fresh child from API whenever refetch is triggered
+  const childId = child?.id;
   useEffect(() => {
     if (!childId) return;
+
     apiGet(`children/${childId}`, {
       accessToken,
     })
@@ -74,107 +89,6 @@ const AddChild: React.FC = () => {
         console.log(err);
       });
   }, [accessToken, childId, refetchChild]);
-
-  const activeStep = location.hash.slice(1);
-  useEffect(() => {
-    if (!activeStep) {
-      history.replace({ ...location, hash: steps[0].key });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // https://skylight.invisionapp.com/console/Full-Data-Collection-Tool-ckeaf1bpi00wn01yhh6f147bf/ckeaf1cjw00wp01yh09w41ivy/play#project_console
-  const steps: StepProps<EditFormProps>[] = [
-    {
-      key: 'child-ident',
-      name: 'Child identifiers',
-      status: () => 'incomplete',
-      EditComponent: () => (
-        <Button
-          appearance="unstyled"
-          text={
-            <>
-              edit<span className="usa-sr-only"> child identifiers</span>
-            </>
-          }
-          onClick={() => history.replace({ ...location, hash: 'child-ident' })}
-        />
-      ),
-      Form: ChildIdentifiersForm,
-    },
-    {
-      key: 'child-info',
-      name: 'Child info',
-      status: () => 'incomplete',
-      EditComponent: () => (
-        <Button
-          appearance="unstyled"
-          text={
-            <>
-              edit<span className="usa-sr-only"> child info</span>
-            </>
-          }
-          onClick={() => history.replace({ ...location, hash: 'child-info' })}
-        />
-      ),
-      Form: ChildInfoForm,
-    },
-    {
-      key: 'family-address',
-      name: 'Family address',
-      status: () => 'incomplete',
-      EditComponent: () => (
-        <Button
-          appearance="unstyled"
-          text={
-            <>
-              edit<span className="usa-sr-only"> family address</span>
-            </>
-          }
-          onClick={() =>
-            history.replace({ ...location, hash: 'family-address' })
-          }
-        />
-      ),
-      Form: FamilyInfoForm,
-    },
-    {
-      key: 'family-income',
-      name: 'Family income determination',
-      status: () => 'incomplete',
-      EditComponent: () => (
-        <Button
-          appearance="unstyled"
-          text={
-            <>
-              edit
-              <span className="usa-sr-only"> family income determination</span>
-            </>
-          }
-          onClick={() =>
-            history.replace({ ...location, hash: 'family-income' })
-          }
-        />
-      ),
-      Form: NewFamilyIncome,
-    },
-    {
-      key: 'enrollment',
-      name: 'Enrollment and funding',
-      status: () => 'incomplete',
-      EditComponent: () => (
-        <Button
-          appearance="unstyled"
-          text={
-            <>
-              edit<span className="usa-sr-only"> enrollment and funding</span>
-            </>
-          }
-          onClick={() => history.replace({ ...location, hash: 'enrollment' })}
-        />
-      ),
-      Form: NewEnrollment,
-    },
-  ];
 
   const onSuccess = () => {
     const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
@@ -191,8 +105,8 @@ const AddChild: React.FC = () => {
         ],
       });
     } else {
-      setRefetchChild((r) => r + 1);
-      history.replace({ ...location, hash: steps[indexOfCurrentStep + 1].key });
+      triggerRefetchChild();
+      history.replace({ hash: steps[indexOfCurrentStep + 1].key });
     }
   };
 

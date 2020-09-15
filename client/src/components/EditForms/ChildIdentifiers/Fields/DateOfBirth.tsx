@@ -10,6 +10,7 @@ export const DateOfBirthField: React.FC = () => {
   return (
     <FormField<Child, DateInputProps, Moment | null>
       getValue={(data) => data.at('birthdate')}
+      defaultValue={null}
       parseOnChangeEvent={(e) => (e as unknown) as Moment}
       inputComponent={DateInput}
       id="dateOfBirth-picker"

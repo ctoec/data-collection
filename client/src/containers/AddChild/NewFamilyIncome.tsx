@@ -6,6 +6,7 @@ import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { IncomeDeterminationFieldSet } from '../../components/EditForms/FamilyIncome/Fields';
 import { EditFormProps } from '../../components/EditForms/types';
 import useIsMounted from '../../hooks/useIsMounted';
+import idx from 'idx';
 
 /**
  * Form component that allows the generation of a new income determination.
@@ -47,11 +48,14 @@ export const NewFamilyIncome: React.FC<EditFormProps> = ({
       .finally(() => (isMounted() ? setLoading(false) : null));
   };
 
+  const determination =
+    idx(child, (_) => _.family.incomeDeterminations[0]) ||
+    ({} as IncomeDetermination);
   return (
     <Form<IncomeDetermination>
       id="redetermine-income"
-      data={{} as IncomeDetermination}
-      onSubmit={(data) => onFormSubmit(data)}
+      data={determination}
+      onSubmit={onFormSubmit}
       className="usa-form"
     >
       <IncomeDeterminationFieldSet type="redetermine" />

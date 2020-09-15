@@ -118,19 +118,16 @@ export class Child implements ChildInterface {
   specialEducationServicesType?: SpecialEducationServicesType;
 
   @ValidateNested()
-  @ManyToOne((type) => Family, { nullable: false })
+  @ManyToOne(() => Family, { nullable: false })
   family: Family;
 
-  @Column()
-  familyId: number;
-
-  @ManyToOne((type) => Organization, { nullable: false })
+  @ManyToOne(() => Organization, { nullable: false })
   organization?: Organization;
 
   @ValidateNested({ each: true })
-  @OneToMany((type) => Enrollment, (enrollment) => enrollment.child)
+  @OneToMany(() => Enrollment, (enrollment) => enrollment.child)
   enrollments?: Array<Enrollment>;
 
-  @Column((type) => UpdateMetaData, { prefix: false })
+  @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData?: UpdateMetaData;
 }
