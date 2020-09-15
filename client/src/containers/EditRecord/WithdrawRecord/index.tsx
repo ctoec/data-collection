@@ -41,9 +41,15 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       jsonParse: false,
     })
       .then(() => {
-        // TODO build roster view that is not just report enrollments but rather
-        // all of the data the user can/should see
-        history.push('/check-data/1');
+        history.push('/roster', {
+          alerts: [
+            {
+              type: 'success',
+              heading: 'Record withdrawn',
+              text: `${childName} has been withdrawn from your program`,
+            },
+          ],
+        });
       })
       .catch((err) => {
         console.log(err);

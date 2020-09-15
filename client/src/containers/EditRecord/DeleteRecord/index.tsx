@@ -19,9 +19,17 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, toggleOpen }) => {
   function deleteRecord() {
     setIsDeleting(true);
     apiDelete(`children/${child.id}`, { accessToken })
-      // TODO: Swap this total hack out for the roster page
-      // once we have that implemented
-      .then(() => history.push('/check-data/1'))
+      .then(() =>
+        history.push('/roster', {
+          alerts: [
+            {
+              type: 'success',
+              heading: 'Record deleted',
+              text: `${child?.firstName} ${child?.lastName}'s record was delete from your roster.`,
+            },
+          ],
+        })
+      )
 
       .catch((err) => {
         console.log(err);
