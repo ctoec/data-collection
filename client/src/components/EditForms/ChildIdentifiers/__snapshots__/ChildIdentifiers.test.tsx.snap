@@ -10,11 +10,6 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
     <h2>
       Child's identifiers
     </h2>
-    <p
-      class="usa-hint"
-    >
-      Information is required unless otherwise specified.
-    </p>
     <div
       class="grid-row grid-gap"
     >
@@ -145,7 +140,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
     </div>
     <fieldset
       aria-describedby="dateOfBirth-picker-hint"
-      class="grid-gap grid-row usa-fieldset"
+      class="grid-gap grid-row usa-fieldset margin-top-3"
       id="dateOfBirth-picker"
     >
       <legend
@@ -1428,14 +1423,14 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      class="grid-gap grid-row usa-fieldset display-inline-block"
+      class="grid-gap grid-row usa-fieldset display-inline-block margin-top-3"
       id="birth-certificate-fields"
     >
       <legend
         id="fieldset-legend-birth-certificate-fields"
       >
         <span
-          class="usa-sr-only"
+          class="usa-label"
         >
           Birth certificate
         </span>

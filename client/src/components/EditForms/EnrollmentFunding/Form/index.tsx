@@ -36,6 +36,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
 
   return (
     <>
+      <h2>Enrollment and funding</h2>
       <ChangeEnrollmentForm
         reportingPeriods={reportingPeriods}
         fundingSpaces={fundingSpaces}
@@ -47,9 +48,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       />
       {currentEnrollment && (
         <>
-          <h2 className="margin-top-4 margin-bottom-2 font-heading-md">
-            Current enrollment
-          </h2>
+          <h3>Current enrollment</h3>
           <EditEnrollmentForm
             key="edit-current-enrollment"
             isCurrent={true}
@@ -77,9 +76,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       )}
       {!!pastEnrollments.length && (
         <>
-          <h2 className="margin-top-4 margin-bottom-2 font-heading-md">
-            Past enrollments
-          </h2>
+          <h3>Past enrollments</h3>
           {pastEnrollments.map((enrollment) => (
             <>
               <EditEnrollmentForm

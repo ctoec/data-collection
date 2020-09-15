@@ -2,17 +2,20 @@
 
 exports[`EditForms FamilyIncome matches snapshot 1`] = `
 <DocumentFragment>
+  <h2>
+    Family income determination
+  </h2>
   <div
     class="margin-top-1"
   >
     <div
       class="display-flex align-center"
     >
-      <h2
+      <h3
         class="font-sans-md margin-top-2 margin-bottom-2"
       >
         Current income determination
-      </h2>
+      </h3>
          
       <button
         class="usa-button usa-button--unstyled"
@@ -109,11 +112,9 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
     <div
       class="display-flex align-center"
     >
-      <h2
-        class="font-sans-md margin-top-2 margin-bottom-2"
-      >
+      <h3>
         Past income determinations
-      </h2>
+      </h3>
     </div>
     <div>
       <div

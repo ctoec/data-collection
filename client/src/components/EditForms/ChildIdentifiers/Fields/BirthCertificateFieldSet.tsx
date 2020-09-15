@@ -13,7 +13,8 @@ export const BirthCertificateFormFieldSet: React.FC = () => {
     <FormFieldSet<Child>
       id="birth-certificate-fields"
       legend="Birth certificate"
-      className="display-inline-block"
+      className="display-inline-block margin-top-3"
+      showLegend
     >
       <div className="mobile-lg:grid-col-12">
         <BirthCertificateIdField />

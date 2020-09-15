@@ -13,8 +13,7 @@ export const GenderField: React.FC = () => {
       parseOnChangeEvent={(e) => e.target.value}
       inputComponent={Select}
       id="gender-select"
-      label="Gender"
-      hint="As identified by family"
+      label={<span className="text-bold">Gender</span>}
       options={[
         {
           value: Gender.Female,

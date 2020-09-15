@@ -9,9 +9,11 @@ import UserContext from '../../contexts/UserContext/UserContext';
 
 import { MailToLink } from '../../components/MailToLink';
 import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const Home: React.FC = () => {
   const { user, loading } = useContext(UserContext);
+  const h1Ref = getH1RefForTitle();
   const history = useHistory();
 
   // To prevent flash of splash page if user is logged in
@@ -29,7 +31,9 @@ const Home: React.FC = () => {
     <div className="Home">
       <div className="usa-hero">
         <div>
-          <h1 className="margin-bottom-2">Upload your enrollment data</h1>
+          <h1 ref={h1Ref} className="margin-bottom-2">
+            Upload your enrollment data
+          </h1>
           <Button
             className="btn--inverse"
             href="/login"
