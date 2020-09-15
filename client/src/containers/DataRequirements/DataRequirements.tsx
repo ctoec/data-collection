@@ -6,9 +6,11 @@ import { Table, Column } from '@ctoec/component-library';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
 import { Link } from 'react-router-dom';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const DataRequirements: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
+  const h1Ref = getH1RefForTitle();
   const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>([]);
 
   useEffect(() => {
@@ -76,7 +78,7 @@ const DataRequirements: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
       <BackButton />
-      <h1>OEC's enrollment data requirements</h1>
+      <h1 ref={h1Ref}>OEC's enrollment data requirements</h1>
       <p className="text-pre-line">Looking for info on how to format contract space types?
         <br/>See <Link to="/funding-space-types">funding space types</Link>.
       </p>

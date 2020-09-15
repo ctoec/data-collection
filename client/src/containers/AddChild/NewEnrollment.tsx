@@ -14,6 +14,7 @@ import { useSites } from '../../hooks/useSites';
 import { useFundingSpaces } from '../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import useIsMounted from '../../hooks/useIsMounted';
+import { CareForKidsField } from '../../components/EditForms/CareForKids/CareForKidsField';
 
 // This is separate from the other enrollment forms because they're pretty complicated
 // Maybe we should try to reconcile though?
@@ -58,23 +59,27 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
         data={enrollment}
         onSubmit={onSubmit}
       >
-        <h3 className="font-heading-md margin-bottom-0">Site</h3>
+        <h2>Enrollment and funding</h2>
+        {/* <h3 className="font-heading-md margin-bottom-0">Site</h3> */}
         <SiteField<Enrollment>
           sites={sites}
           accessor={(data) => data.at('site')}
         />
-        <h3 className="font-heading-md margin-bottom-0">Start date</h3>
+        {/* <h3 className="font-heading-md margin-bottom-0">Start date</h3> */}
         <EnrollmentStartDateField<Enrollment>
           accessor={(data) => data.at('entry')}
         />
         <h3 className="font-heading-md margin-bottom-0">Age group</h3>
         <AgeGroupField<Enrollment> accessor={(data) => data.at('ageGroup')} />
+        <h3 className="font-heading-md margin-bottom-0">Funding</h3>
         <FundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
           fundingSpaces={fundingSpaces}
           reportingPeriods={reportingPeriods}
         />
+        <h3 className="font-heading-md margin-bottom-0">Care 4 Kids</h3>
+        <CareForKidsField />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}
           disabled={saving}
