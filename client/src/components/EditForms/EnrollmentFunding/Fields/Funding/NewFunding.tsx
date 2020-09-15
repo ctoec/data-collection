@@ -76,6 +76,7 @@ export const FundingField = <
       name="funding-source"
       legend="Funding source options"
       showLegend
+      defaultValue={PRIVATE_PAY}
       options={[
         {
           render: (props: RadioOptionRenderProps) => (

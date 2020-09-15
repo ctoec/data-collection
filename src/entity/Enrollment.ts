@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
 import {
   Enrollment as EnrollmentInterface,
@@ -17,6 +18,7 @@ import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
+import { FundingDoesNotOverlap } from './decorators/Enrollment/fundingOverlapValidation';
 
 @Entity()
 export class Enrollment implements EnrollmentInterface {
@@ -36,20 +38,27 @@ export class Enrollment implements EnrollmentInterface {
   siteId: number;
 
   @Column({ type: 'simple-enum', enum: AgeGroup, nullable: true })
+  @IsNotEmpty()
   ageGroup?: AgeGroup;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  @IsNotEmpty()
   entry?: Moment;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
   exit?: Moment;
 
   @Column({ nullable: true })
+  @ValidateIf((c) => !!c.exit)
+  @IsNotEmpty()
   exitReason?: string;
 
   @OneToMany(() => Funding, (funding) => funding.enrollment, {
     onDelete: 'CASCADE',
   })
+  @ValidateNested({ each: true })
+  @FundingDoesNotOverlap()
+  @IsNotEmpty()
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })
