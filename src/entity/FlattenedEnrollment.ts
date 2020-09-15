@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { IsNotEmpty } from 'class-validator';
 
 import {
   FlattenedEnrollment as FlattenedEnrollmentInterface,
@@ -47,6 +48,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   reportId: number;
 
   @Column({ nullable: true })
+  @IsNotEmpty({ message: 'First name is required' })
   @ColumnMetadata({
     formattedName: 'First Name',
     required: REQUIRED,
@@ -73,6 +75,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   middleName?: string;
 
   @Column({ nullable: true })
+  @IsNotEmpty({ message: 'Last name is required' })
   @ColumnMetadata({
     formattedName: 'Last Name',
     required: REQUIRED,
@@ -403,6 +406,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   incomeDeterminationDate?: Moment;
 
   @Column({ nullable: true })
+  @IsNotEmpty({ message: 'Provider is required' })
   @ColumnMetadata({
     formattedName: 'Provider',
     required: REQUIRED,
@@ -415,6 +419,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
   provider?: string;
 
   @Column({ nullable: true })
+  @IsNotEmpty({ message: 'Site is required' })
   @ColumnMetadata({
     formattedName: 'Site',
     required: REQUIRED,

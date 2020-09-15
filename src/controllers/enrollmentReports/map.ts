@@ -18,6 +18,7 @@ import {
   SpecialEducationServicesType,
 } from '../../../client/src/shared/models';
 import { getManager } from 'typeorm';
+import { validate, ValidationError } from 'class-validator';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -32,6 +33,11 @@ import { getManager } from 'typeorm';
  */
 export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
   try {
+    const validationErrors: ValidationError[] = await validate(source);
+    if (validationErrors.length) {
+      throw validationErrors[0];  //  Cuz we can't throw more than one
+    }
+
     const organization = await mapOrganization(source);
     const site = await mapSite(source);
     const family = await mapFamily(source, organization);
@@ -60,7 +66,6 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapOrganization = (source: FlattenedEnrollment) => {
-  if (!source.provider) return Promise.reject('Provider is required');
   return getManager().findOneOrFail(Organization, {
     where: { name: source.provider },
   });
@@ -75,7 +80,6 @@ const mapOrganization = (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapSite = (source: FlattenedEnrollment) => {
-  if (!source.site) return Promise.reject('Site is required');
   return getManager().findOneOrFail(Site, { where: { name: source.site } });
 };
 
@@ -89,12 +93,6 @@ const mapChild = (
   organization: Organization,
   family: Family
 ) => {
-  if (!source.firstName || !source.lastName) {
-    throw new Error(
-      'First name and last name is required'
-    );
-  }
-
   // Gender
   const gender: Gender =
     mapEnum(Gender, source.gender, true) || Gender.NotSpecified;
