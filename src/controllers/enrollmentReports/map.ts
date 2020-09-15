@@ -282,7 +282,7 @@ const mapFunding = async (
     // If no direct match on time and source === CDC, look for a split
     if (!fundingSpace && fundingSource === FundingSource.CDC) {
       fundingSpace = fundingSpaces.find(
-        (space) => space.time === FundingTime.Split
+        (space) => space.time === FundingTime.SplitTime
       );
     }
 

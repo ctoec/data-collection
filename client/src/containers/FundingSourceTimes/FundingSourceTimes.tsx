@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Column } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
-import { FundingSourceTime } from '../../shared/models';
+import { FundingSourceTime, FundingTimeInput } from '../../shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
@@ -26,7 +26,7 @@ const FundingSourceTimes: React.FC = () => {
       cell: ({ row }) =>
         row ? (<td>
           {row.fundingTimes.map(fundingTime => {
-            return <div className="margin-top-3 margin-bottom-3">{fundingTime.displayName}</div>
+            return <div className="margin-top-3 margin-bottom-3">{fundingTime.value}</div>
           })}
         </td>
         ) : (
