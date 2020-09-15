@@ -27,6 +27,7 @@ export const EnrollmentStartDateField = <
       inputComponent={DateInput}
       label="Enrollment start date"
       id="start-date"
+      defaultValue={null}
     />
   );
 };

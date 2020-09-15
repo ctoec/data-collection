@@ -97,9 +97,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
         </ExpandCard>
       </div>
       <CardExpansion>
-        <h3 className="margin-top-2 margin-bottom-2">
-          New enrollment
-        </h3>
+        <h3 className="margin-top-2 margin-bottom-2">New enrollment</h3>
         {error && <Alert type="error" text={error} />}
         <Form<ChangeEnrollment>
           id="change-enrollment-form"

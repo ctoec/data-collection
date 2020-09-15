@@ -22,6 +22,7 @@ export const getChildById = async (id: string) => {
       'enrollments.site',
       'enrollments.site.organization',
       'enrollments.fundings',
+      'organization',
     ],
   });
 

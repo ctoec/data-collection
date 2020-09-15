@@ -31,7 +31,11 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
 
   const onSubmit = (_enrollment: Enrollment) => {
     setSaving(true);
-    console.log(_enrollment)
+    if (!Object.values(_enrollment).reduce((a, b) => a || b)) {
+      // If all of the values are null or undefined, don't block
+      onSuccess();
+      return;
+    }
     apiPost(
       `children/${child.id}/change-enrollment`,
       { newEnrollment: _enrollment },
@@ -60,7 +64,6 @@ export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
         data={enrollment}
         onSubmit={onSubmit}
       >
-        <h2>Enrollment and funding</h2>
         <SiteField<Enrollment>
           sites={sites}
           accessor={(data) => data.at('site')}
