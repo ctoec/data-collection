@@ -90,7 +90,7 @@ const CheckData: React.FC = () => {
         <div className="margin-bottom-0">
           <div className="fixed-buttons">
             <Button text="Back to upload" href="/upload" appearance="outline" />
-            <Button text="Send to OEC" href={formatIdString()} />
+            <Button text="Send to OEC" href={`/success/${reportId}`} />
           </div>
         </div>
       </div>

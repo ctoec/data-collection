@@ -1,10 +1,75 @@
 import { write, WorkBook, utils } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { EntityMetadata, getConnection } from 'typeorm';
-import { FlattenedEnrollment, Child } from '../entity';
+import { EntityMetadata, getConnection, getManager } from 'typeorm';
+import { FlattenedEnrollment, Child, EnrollmentReport } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
-import { isMoment } from 'moment';
+import { isMoment, Moment } from 'moment';
+
+const propertyDateSorter = <T>(
+  a: T,
+  b: T,
+  accessor: (_: T) => Moment | null | undefined
+) => {
+  const aDate = accessor(a);
+  const bDate = accessor(b);
+
+  if (!aDate) return 1;
+  if (!bDate) return -1;
+  if (aDate < bDate) return 1;
+  if (bDate < aDate) return -1;
+  return 0;
+};
+
+export async function getChildrenByReport(report: EnrollmentReport) {
+  const childrenToMap = await getManager().transaction(async (tManager) => {
+    let kids = [];
+    for (let i = 0; i < report.enrollments.length; i++) {
+      let enrollment = report.enrollments[i];
+      const child = await tManager.findOne(
+        Child,
+        {
+          name: enrollment.name,
+          birthdate: enrollment.birthdate,
+          birthCertificateId: enrollment.birthCertificateId,
+        },
+        {
+          relations: [
+            'family',
+            'family.incomeDeterminations',
+            'enrollments',
+            'enrollments.site',
+            'enrollments.site.organization',
+            'enrollments.fundings',
+          ],
+        }
+      );
+
+      // Sort enrollments by exit date
+      if (child) {
+        child.enrollments = child.enrollments.sort(
+          (enrollmentA, enrollmentB) => {
+            if (enrollmentA.fundings) {
+              // Sort fundings by last reporting period
+              enrollmentA.fundings = enrollmentA.fundings.sort(
+                (fundingA, fundingB) =>
+                  propertyDateSorter(
+                    fundingA,
+                    fundingB,
+                    (f) => f.lastReportingPeriod?.period
+                  )
+              );
+            }
+            return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
+          }
+        );
+      }
+      kids.push(child);
+    }
+    return kids;
+  });
+  return childrenToMap;
+}
 
 /**
  * Function to send the created workbook of information back
