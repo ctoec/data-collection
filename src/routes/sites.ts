@@ -1,6 +1,5 @@
 import express, { Response, Request } from 'express';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { parseQueryString } from '../utils/parseQueryString';
 import * as controller from '../controllers/sites';
 
 export const sitesRouter = express.Router();
