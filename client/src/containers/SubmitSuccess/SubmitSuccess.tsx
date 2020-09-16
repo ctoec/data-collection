@@ -22,8 +22,8 @@ import { Link } from 'react-router-dom';
 const SubmitSuccess: React.FC = () => {
   // Any cast when extracting param suppresses type error
   // Fine because we know what the IDs are
-  const rawIds: any = useParams();
-  const idString: string = rawIds['idArray'];
+  const { reportId } = useParams();
+  // const idString: string = rawIds['idArray'];
 
   return (
     <div className="grid-container margin-top-4">
@@ -58,7 +58,7 @@ const SubmitSuccess: React.FC = () => {
         <strong>Want a copy of your enrollment data?</strong>
       </div>
       <div className="grid-row margin-top-1 margin-bottom-2">
-        <CSVDownloadLink submittedIds={idString} />
+        <CSVDownloadLink reportId={reportId} />
       </div>
       <div className="grid-row marging-top-6">
         <strong>Need to make changes?</strong>

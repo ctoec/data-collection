@@ -18,7 +18,6 @@ import {
   SpecialEducationServicesType,
 } from '../../../client/src/shared/models';
 import { getManager } from 'typeorm';
-import { Moment } from 'moment';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -277,24 +276,19 @@ const mapFunding = async (
       // TODO: Cache ReportingPeriods, as they'll be reused a lot
       let firstReportingPeriod: ReportingPeriod,
         lastReportingPeriod: ReportingPeriod;
-      // let firstFundingPeriod: Moment, lastFundingPeriod: Moment;
       if (source.firstFundingPeriod) {
         firstReportingPeriod = await getManager().findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.firstFundingPeriod },
         });
-        // firstFundingPeriod = firstReportingPeriod.period;
       }
       if (source.lastFundingPeriod) {
         lastReportingPeriod = await getManager().findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.lastFundingPeriod },
         });
-        // lastFundingPeriod = lastReportingPeriod.period;
       }
       const funding = getManager().create(Funding, {
         firstReportingPeriod,
         lastReportingPeriod,
-        // firstFundingPeriod,
-        // lastFundingPeriod,
         fundingSpace,
         enrollmentId: enrollment.id,
       });
