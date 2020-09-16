@@ -63,7 +63,6 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapOrganization = (source: FlattenedEnrollment) => {
-  if (!source.provider) return Promise.reject('Provider is required');
   return getManager().findOneOrFail(Organization, {
     where: { name: source.provider },
   });
@@ -78,14 +77,12 @@ const mapOrganization = (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapSite = (source: FlattenedEnrollment) => {
-  if (!source.site) return Promise.reject('Site is required');
   return getManager().findOneOrFail(Site, { where: { name: source.site } });
 };
 
 /**
  * Create Child object from FlattenedEnrollment source.
  * TODO: How do we handle blocking data errors in a single row?
- * TODO: Also accept "Lastname, Firstname Middlename[,] Suffix" ?
  * @param source
  */
 const mapChild = (
@@ -93,36 +90,6 @@ const mapChild = (
   organization: Organization,
   family: Family
 ) => {
-  const SUFFIXES = ['sr', 'jr', 'ii', 'iii'];
-  const normalizedName = source.name
-    ? source.name.trim().replace(/\s+/, ' ')
-    : '';
-  const nameParts = (normalizedName || '').split(' ');
-  if (nameParts.length < 2) {
-    throw new Error(
-      'Name is required, and must include at least first and last name separated by space'
-    );
-  }
-
-  // Name
-  let firstName, middleName, lastName, suffix;
-  firstName = nameParts[0];
-  if (nameParts.length === 2) {
-    lastName = nameParts[1];
-  } else if (nameParts.length === 4) {
-    middleName = nameParts[1];
-    lastName = nameParts[2];
-    suffix = nameParts[3];
-  } else {
-    if (SUFFIXES.includes(nameParts[2].replace('.', '').toLowerCase())) {
-      lastName = nameParts[1];
-      suffix = nameParts[2];
-    } else {
-      middleName = nameParts[1];
-      lastName = nameParts[2];
-    }
-  }
-
   // Gender
   const gender: Gender =
     mapEnum(Gender, source.gender, true) || Gender.NotSpecified;
@@ -138,10 +105,10 @@ const mapChild = (
 
   const child = getManager().create(Child, {
     sasid: source.sasid,
-    firstName,
-    middleName,
-    lastName,
-    suffix,
+    firstName: source.firstName,
+    middleName: source.middleName,
+    lastName: source.lastName,
+    suffix: source.suffix,
     birthdate: source.dateOfBirth,
     birthTown: source.townOfBirth,
     birthState: source.stateOfBirth,

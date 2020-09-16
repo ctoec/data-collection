@@ -48,16 +48,55 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
 
   @Column({ nullable: true })
   @ColumnMetadata({
-    formattedName: 'Name',
+    formattedName: 'First Name',
     required: REQUIRED,
     definition: "Legal name as it appears on the child's birth certificate.",
     reason:
       'Used for linking to a variety of datasets, including SASID-backed data.',
-    format: 'Text; names separated by spaces',
-    example: 'Firstname Lastname',
+    format: 'Text',
+    example: 'Firstname',
     section: SECTIONS.CHILD_INFO,
   })
-  name?: string;
+  firstName?: string;
+
+  @Column({ nullable: true })
+  @ColumnMetadata({
+    formattedName: 'Middle Name',
+    required: OPTIONAL,
+    definition: "Legal name as it appears on the child's birth certificate.",
+    reason:
+      'Used for linking to a variety of datasets, including SASID-backed data.',
+    format: 'Text',
+    example: 'Middlename',
+    section: SECTIONS.CHILD_INFO,
+  })
+  middleName?: string;
+
+  @Column({ nullable: true })
+  @ColumnMetadata({
+    formattedName: 'Last Name',
+    required: REQUIRED,
+    definition: "Legal name as it appears on the child's birth certificate.",
+    reason:
+      'Used for linking to a variety of datasets, including SASID-backed data.',
+    format: 'Text',
+    example: 'Lastname',
+    section: SECTIONS.CHILD_INFO,
+  })
+  lastName?: string;
+
+  @Column({ nullable: true })
+  @ColumnMetadata({
+    formattedName: 'Suffix',
+    required: OPTIONAL,
+    definition: "Legal name as it appears on the child's birth certificate.",
+    reason:
+      'Used for linking to a variety of datasets, including SASID-backed data.',
+    format: 'Text',
+    example: 'Sr',
+    section: SECTIONS.CHILD_INFO,
+  })
+  suffix?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({
