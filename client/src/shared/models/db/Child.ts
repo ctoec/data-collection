@@ -1,8 +1,4 @@
-import {
-  Enrollment,
-  Family,
-  Organization
-} from '.';
+import { Enrollment, Family, Organization } from '.';
 import { Gender, SpecialEducationServicesType } from '../';
 
 import { Moment } from 'moment';

@@ -52,8 +52,8 @@ export const routes: RouteConfig[] = [
     path: '/funding-space-types',
     component: FundingSourceTimes,
     unauthorized: true,
-    },
-    {
+  },
+  {
     path: '/roster',
     component: Roster,
     unauthorized: false,

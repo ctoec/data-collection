@@ -19,40 +19,54 @@ const FundingSourceTimes: React.FC = () => {
           </th>
         ) : (
           <></>
-        )
+        ),
     },
     {
       name: 'Contract Space',
       cell: ({ row }) =>
-        row ? (<td>
-          {row.fundingTimes.map(fundingTime => {
-            return <div className="margin-top-3 margin-bottom-3">{fundingTime.value}</div>
-          })}
-        </td>
+        row ? (
+          <td>
+            {row.fundingTimes.map((fundingTime) => {
+              return (
+                <div className="margin-top-3 margin-bottom-3">
+                  {fundingTime.value}
+                </div>
+              );
+            })}
+          </td>
         ) : (
           <></>
-        )
+        ),
     },
     {
       name: 'Accepted formats',
       cell: ({ row }) =>
-        row ? (<td>
-          {row.fundingTimes.map(fundingTime => {
-            return <div className="margin-top-3 margin-bottom-3">{fundingTime.formats.map(format => '"' + format + '"').join(' or ')}</div>
-          })}
-        </td>
+        row ? (
+          <td>
+            {row.fundingTimes.map((fundingTime) => {
+              return (
+                <div className="margin-top-3 margin-bottom-3">
+                  {fundingTime.formats
+                    .map((format) => '"' + format + '"')
+                    .join(' or ')}
+                </div>
+              );
+            })}
+          </td>
         ) : (
           <></>
-        )
-    }
+        ),
+    },
   ];
-
 
   return (
     <div className="grid-container margin-top-4">
       <BackButton />
       <h1 ref={h1Ref}>Funding space types</h1>
-      <p className="text-pre-line">This guide shows accepted formats for each funding space type when using OEC's data template.</p>
+      <p className="text-pre-line">
+        This guide shows accepted formats for each funding space type when using
+        OEC's data template.
+      </p>
       <div className="margin-top-4">
         <Table
           id="data-requirements-table"
