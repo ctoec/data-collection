@@ -85,7 +85,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
       <div className="display-flex flex-justify">
         <div className="flex-1">
           <p>Site</p>
-          <p className="text-bold">{enrollment.site.name}</p>
+          <p className="text-bold">{enrollment.site.siteName}</p>
         </div>
         <div className="flex-1">
           <p>Age group</p>

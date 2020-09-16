@@ -20,7 +20,7 @@ const child = {
   lastName: 'Last',
   enrollments: [
     {
-      site: { name: 'Site' },
+      site: { siteName: 'Site' },
       fundings: [
         {
           fundingSpace: { source: FundingSource.CDC },

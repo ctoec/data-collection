@@ -32,8 +32,8 @@ export interface FlattenedEnrollment {
   numberOfPeople?: number;
   income?: number;
   determinationDate?: Moment;
-  provider?: string;
-  site?: string;
+  providerName?: string;
+  siteName?: string;
   model?: string;
   ageGroup?: string;
   entry?: Moment;

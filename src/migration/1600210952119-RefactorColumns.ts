@@ -35,6 +35,12 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
       `EXEC sp_rename "FlattenedEnrollment.IncomeDeterminationDate", "DeterminationDate"`
     );
     await queryRunner.query(
+      `EXEC sp_rename "FlattenedEnrollment.Provider", "ProviderName"`
+    );
+    await queryRunner.query(
+      `EXEC sp_rename "FlattenedEnrollment.Site", "SiteName"`
+    );
+    await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.EnrollmentStartDate", "Entry"`
     );
     await queryRunner.query(
@@ -52,7 +58,11 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
     await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.ReceivingCareForKids", "ReceivesC4K"`
     );
-    await queryRunner.query(`ALTER TABLE "Child" ADD "FullName" nvarchar(255)`);
+    await queryRunner.query(`ALTER TABLE "Child" ADD "Name" nvarchar(255)`);
+    await queryRunner.query(`EXEC sp_rename "Site.Name", "SiteName"`);
+    await queryRunner.query(
+      `EXEC sp_rename "Organization.Name", "ProviderName"`
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -87,6 +97,12 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
       `EXEC sp_rename "FlattenedEnrollment.DeterminationDate", "IncomeDeterminationDate"`
     );
     await queryRunner.query(
+      `EXEC sp_rename "FlattenedEnrollment.ProviderName", "Provider"`
+    );
+    await queryRunner.query(
+      `EXEC sp_rename "FlattenedEnrollment.SiteName", "Site"`
+    );
+    await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.Entry", "EnrollmentStartDate"`
     );
     await queryRunner.query(
@@ -104,6 +120,10 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
     await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.ReceivesC4K", "ReceivingCareForKids"`
     );
-    await queryRunner.query(`ALTER TABLE "Child" DROP "FullName"`);
+    await queryRunner.query(`ALTER TABLE "Child" DROP "Name"`);
+    await queryRunner.query(`EXEC sp_rename "Site.SiteName", "Name"`);
+    await queryRunner.query(
+      `EXEC sp_rename "Organization.ProviderName", "Provider"`
+    );
   }
 }
