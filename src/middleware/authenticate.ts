@@ -38,6 +38,9 @@ const addUser = passAsyncError(
     if (req.claims.sub) {
       let user = await getUser(req.claims.sub);
 
+      //  If no user exists in the Fawkes system, BUT Winged Keys knows about the
+      //  corresponding user, assume this is just a new user to our system and create them
+      //  TODO: Remove once an actual user management system is implemented
       if (!user) {
         const res: AxiosResponse<any> = await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
           headers: req.headers,
