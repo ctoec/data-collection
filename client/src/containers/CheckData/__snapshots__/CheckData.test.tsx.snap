@@ -5,213 +5,219 @@ exports[`CheckData matches snapshot 1`] = `
   <div
     class="CheckData__content margin-top-4 grid-container"
   >
-    <div
-      class="margin-x-4"
+    <button
+      class="usa-button usa-button--unstyled margin-bottom-2 text-bold"
+      type="button"
     >
-      <button
-        class="usa-button usa-button--unstyled margin-bottom-2 text-bold"
-        type="button"
+      <span
+        class="oec-text-with-icon"
       >
-        <span
-          class="oec-text-with-icon"
+        <svg
+          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
         >
-          <svg
-            class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
-          >
-            arrowRight.svg
-          </svg>
-          Back
-        </span>
-      </button>
-      <h1>
-        Check data for 1 child
-      </h1>
-      <p>
-        Make sure all of your data was uploaded correctly. 
-      </p>
-      <p>
-        If everything looks good, submit to OEC.
-      </p>
-      <a
-        class="usa-button usa-button--unstyled"
-        href="/create-record"
+          arrowRight.svg
+        </svg>
+        Back
+      </span>
+    </button>
+    <h1>
+      Check data for 1 child
+    </h1>
+    <p>
+      Make sure all of your data was uploaded correctly. 
+    </p>
+    <p>
+      If everything looks good, submit to OEC.
+    </p>
+    <a
+      href="/create-record"
+    >
+      Add a record
+    </a>
+    <div
+      class="scrollbar-container ps"
+    >
+      <table
+        class="oec-table"
+        id="enrollment-report-table"
       >
-        Add a record
-      </a>
-      <div
-        class="scrollbar-container ps"
-      >
-        <table
-          class="oec-table"
-          id="enrollment-report-table"
-        >
-          <thead>
-            <tr>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
+        <thead>
+          <tr>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+              role="columnheader"
+              scope="col"
+            >
+              <button
+                aria-label="Sort table by Name in ascending order"
+                class="oec-table__column-title usa-button--unstyled width-full"
+              >
+                Name
+                <div
+                  class="oec-table__sort-controls"
+                />
+              </button>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Birth Date
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Age group
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Funding type
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Contract space
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Site
+              </span>
+            </th>
+            <th
+              aria-sort="none"
+              class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+              role="columnheader"
+              scope="col"
+            >
+              <span
+                class="oec-table__column-title"
+              >
+                Enrollment date
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th
+              class="font-body-2xs"
+              scope="row"
+            >
+              <a
+                href="/edit-record/00000000-0000-0000-0000-0000000000000"
               >
                 <button
-                  aria-label="Sort table by Name in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
+                  class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
+                  type="button"
                 >
-                  Name
-                  <div
-                    class="oec-table__sort-controls"
-                  />
+                  First Last
                 </button>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Birth Date
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Age group
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Funding type
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Contract space
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Site
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Enrollment date
-                </span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <a
-                  href="/edit-record/00000000-0000-0000-0000-0000000000000"
-                >
-                  <button
-                    class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
-                    type="button"
-                  >
-                    First Last
-                  </button>
-                </a>
-              </td>
-              <td />
-              <td />
-              <td>
-                CDC
-              </td>
-              <td />
-              <td>
-                Site
-              </td>
-              <td />
-            </tr>
-          </tbody>
-        </table>
+              </a>
+            </th>
+            <td
+              class="font-body-2xs"
+            />
+            <td
+              class="font-body-2xs"
+            />
+            <td
+              class="font-body-2xs"
+            >
+              CDC
+            </td>
+            <td
+              class="font-body-2xs"
+            />
+            <td
+              class="font-body-2xs"
+            >
+              Site
+            </td>
+            <td
+              class="font-body-2xs"
+            />
+          </tr>
+        </tbody>
+      </table>
+      <div
+        class="ps__rail-x"
+        style="left: 0px; top: 0px;"
+      >
         <div
-          class="ps__rail-x"
-          style="left: 0px; top: 0px;"
-        >
-          <div
-            class="ps__thumb-x"
-            style="left: 0px; width: 0px;"
-            tabindex="0"
-          />
-        </div>
+          class="ps__thumb-x"
+          style="left: 0px; width: 0px;"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="ps__rail-y"
+        style="top: 0px; left: 0px;"
+      >
         <div
-          class="ps__rail-y"
-          style="top: 0px; left: 0px;"
-        >
-          <div
-            class="ps__thumb-y"
-            style="top: 0px; height: 0px;"
-            tabindex="0"
-          />
-        </div>
+          class="ps__thumb-y"
+          style="top: 0px; height: 0px;"
+          tabindex="0"
+        />
       </div>
     </div>
   </div>
   <div
-    class="CheckData__button-container position-fixed bottom-0 width-full"
+    class="fixed-bottom-bar"
   >
     <div
-      class="margin-bottom-0"
+      class="shadow-box"
     >
       <div
-        class="fixed-buttons"
+        class="grid-container"
       >
-        <div
-          class="grid-container"
+        <a
+          class="usa-button usa-button--outline"
+          href="/upload"
         >
-          <a
-            class="usa-button usa-button--outline"
-            href="/upload"
-          >
-            Back to upload
-          </a>
-          <a
-            class="usa-button"
-            href="/success"
-          >
-            Send to OEC
-          </a>
-        </div>
+          Back to upload
+        </a>
+        <a
+          class="usa-button"
+          href="/success"
+        >
+          Send to OEC
+        </a>
       </div>
     </div>
   </div>

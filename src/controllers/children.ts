@@ -21,7 +21,12 @@ import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 export const getChildren = async (user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
   return await getManager().find(Child, {
-    relations: ['enrollments', 'enrollments.site', 'enrollments.fundings'],
+    relations: [
+      'enrollments',
+      'enrollments.site',
+      'enrollments.site.organization',
+      'enrollments.fundings',
+    ],
     where: { organization: { id: In(readOrgIds) } },
   });
 };

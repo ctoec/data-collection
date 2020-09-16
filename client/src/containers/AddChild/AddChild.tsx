@@ -8,7 +8,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { listSteps } from './ListSteps';
-import UserContext from '../../contexts/UserContext/UserContext';
 
 type LocationType = Location & {
   state: {

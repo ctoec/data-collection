@@ -48,7 +48,7 @@ exports[`Roster matches snapshot 1`] = `
       >
         <button
           aria-controls="Infant/toddler"
-          aria-expanded="false"
+          aria-expanded="true"
           class="oec-accordion__button"
         >
           <div
@@ -75,154 +75,184 @@ exports[`Roster matches snapshot 1`] = `
         </button>
       </h2>
       <div
-        aria-hidden="true"
+        aria-hidden="false"
         class="oec-accordion__content"
         id="Infant/toddler"
       >
         <table
-          class="oec-table"
+          class="oec-table margin-bottom-4"
           id="roster-table-Infant/toddler"
         >
           <thead>
             <tr>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 25%;"
               >
                 <button
-                  aria-label="Sort table by Name in ascending order"
+                  aria-label="Sort table by Name in descending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Name
+                  <div
+                    class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 10%;"
+              >
+                <button
+                  aria-label="Sort table by Birth Date in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Birth Date
                   <div
                     class="oec-table__sort-controls"
                   />
                 </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 10%;"
               >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Birth Date
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Age group
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Funding type in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Funding type
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 10%;"
               >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Contract space in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Contract space
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 25%;"
               >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Site in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Site
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 10%;"
               >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Enrollment date in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Enrollment date
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <th
+                class="font-body-2xs"
+                scope="row"
+              >
                 <a
+                  class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
                   href="/edit-record/0000000-0000-0000-0000-0000000000000"
                 >
-                  <button
-                    class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
-                    type="button"
-                  >
-                    First Toddler
-                  </button>
+                  Toddler, First
                 </a>
-              </td>
-              <td />
-              <td>
-                Infant/toddler
-              </td>
-              <td>
+              </th>
+              <td
+                class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs"
+              >
                 CDC
               </td>
-              <td />
-              <td />
-              <td />
+              <td
+                class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+              >
+                 which is too long
+              </td>
+              <td
+                class="font-body-2xs"
+              />
             </tr>
             <tr>
-              <td>
+              <th
+                class="font-body-2xs"
+                scope="row"
+              >
                 <a
+                  class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
                   href="/edit-record/11111111-0000-0000-0000-0000000000000"
                 >
-                  <button
-                    class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
-                    type="button"
-                  >
-                    Second Toddler
-                  </button>
+                  Toddler, Second
                 </a>
-              </td>
-              <td />
-              <td>
-                Infant/toddler
-              </td>
-              <td>
+              </th>
+              <td
+                class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs"
+              >
                 PSR
               </td>
-              <td />
-              <td />
-              <td />
+              <td
+                class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+              >
+                 which is too long
+              </td>
+              <td
+                class="font-body-2xs"
+              />
             </tr>
           </tbody>
         </table>
@@ -232,7 +262,7 @@ exports[`Roster matches snapshot 1`] = `
       >
         <button
           aria-controls="Preschool"
-          aria-expanded="false"
+          aria-expanded="true"
           class="oec-accordion__button"
         >
           <div
@@ -259,133 +289,179 @@ exports[`Roster matches snapshot 1`] = `
         </button>
       </h2>
       <div
-        aria-hidden="true"
+        aria-hidden="false"
         class="oec-accordion__content"
         id="Preschool"
       >
         <table
-          class="oec-table"
+          class="oec-table margin-bottom-4"
           id="roster-table-Preschool"
         >
           <thead>
             <tr>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 25%;"
               >
                 <button
-                  aria-label="Sort table by Name in ascending order"
+                  aria-label="Sort table by Name in descending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Name
+                  <div
+                    class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 10%;"
+              >
+                <button
+                  aria-label="Sort table by Birth Date in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Birth Date
                   <div
                     class="oec-table__sort-controls"
                   />
                 </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 10%;"
               >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Birth Date
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
-                >
-                  Age group
-                </span>
-              </th>
-              <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-              >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Funding type in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Funding type
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 10%;"
               >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Contract space in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Contract space
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 25%;"
               >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Site in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Site
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
               <th
-                aria-sort="none"
-                class="oec-table__column-header oec-unsorted text-pre text-center font-body-2xs"
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
+                style="width: 10%;"
               >
-                <span
-                  class="oec-table__column-title"
+                <button
+                  aria-label="Sort table by Enrollment date in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
                 >
                   Enrollment date
-                </span>
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>
+              <th
+                class="font-body-2xs"
+                scope="row"
+              >
                 <a
+                  class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
                   href="/edit-record/22222222-0000-0000-0000-0000000000000"
                 >
-                  <button
-                    class="usa-button usa-button--unstyled text-no-wrap font-body-2xs"
-                    type="button"
-                  >
-                    First Preschool
-                  </button>
+                  Preschool, First
                 </a>
-              </td>
-              <td />
-              <td>
-                Preschool
-              </td>
-              <td>
+              </th>
+              <td
+                class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs"
+              >
                 CDC
               </td>
-              <td />
-              <td />
-              <td />
+              <td
+                class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+              >
+                 which is too long
+              </td>
+              <td
+                class="font-body-2xs"
+              />
             </tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+  <div
+    class="fixed-bottom-bar"
+  >
+    <div
+      class="shadow-box"
+    >
+      <div
+        class="grid-container"
+      >
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Back
+        </button>
+        <a
+          class="usa-button"
+          href="/success"
+        >
+          Send to OEC
+        </a>
       </div>
     </div>
   </div>

@@ -11,22 +11,31 @@ import {
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
 import { apiGet } from '../../utils/api';
-import { tableColumns } from '../CheckData/TableColumns';
-import { Link } from 'react-router-dom';
+import { tableColumns } from '../Roster/TableColumns';
+import { Link, useHistory } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
+import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
+
+const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
-  const { accessToken } = useContext(AuthenticationContext);
+  const { goBack } = useHistory();
 
+  const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
   // TODO add heirarchy to pick between organizations
   const organization = idx(user, (_) => _.organizations[0]);
+  const showOrgInTables = idx(user, (_) => _.organizations.length > 1) || false;
 
   const [children, setChildren] = useState<Child[]>([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    apiGet('/children', { accessToken }).then((_children) => {
-      if (_children) setChildren(_children);
-    });
+    setLoading(true);
+    apiGet('/children', { accessToken })
+      .then((_children) => {
+        if (_children) setChildren(_children);
+      })
+      .finally(() => setLoading(false));
   }, [accessToken]);
 
   const childrenByAgeGroup: { [key in AgeGroup]?: Child[] } = {};
@@ -46,7 +55,7 @@ const Roster: React.FC = () => {
 
   const accordionItems = Object.entries(childrenByAgeGroup)
     .filter((entry) => entry[1] && entry[1].length)
-    .map(([ageGroup, ageGroupChildren]) => ({
+    .map(([ageGroup, ageGroupChildren = []]) => ({
       id: ageGroup,
       title: (
         <p>
@@ -58,12 +67,16 @@ const Roster: React.FC = () => {
       collapseText: `Hide ${ageGroup} roster`,
       content: (
         <Table<Child>
+					className="margin-bottom-4"
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
-          data={ageGroupChildren || []}
-          columns={tableColumns}
+          data={ageGroupChildren}
+          columns={tableColumns(showOrgInTables)}
+          defaultSortColumn={0}
+          defaultSortOrder="ascending"
         />
       ),
+      isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
 
   const distinctSiteIds: number[] = [];
@@ -74,32 +87,40 @@ const Roster: React.FC = () => {
   }, distinctSiteIds);
 
   return (
-    <div className="grid-container">
-      <h2 className="font-body-xl margin-bottom-0">{organization?.name}</h2>
-      <p className="font-body-xl margin-top-1">
-        {children.length} children enrolled at {distinctSiteIds.length} sites
-      </p>
-      <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
-        <Link
-          className="usa-button usa-button--unstyled"
-          to={{ pathname: '/create-record', state: { organization } }}
-        >
-          <TextWithIcon Icon={PlusCircle} text="Add a record" />
-        </Link>
-        {/* TODO hook up this button to download */}
-        <Button
-          className="margin-left-2"
-          appearance="unstyled"
-          text={
-            <TextWithIcon
-              Icon={FileDownload}
-              text="Export current view (PLACEHOLDER)"
-            />
-          }
-        />
+    <>
+      <div className="grid-container">
+        <h2 className="font-body-xl margin-bottom-0">{organization?.name}</h2>
+        <p className="font-body-xl margin-top-1">
+          {loading
+            ? 'Loading...'
+            : `${children.length} children enrolled at ${distinctSiteIds.length} sites`}
+        </p>
+        <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
+          <Link
+            className="usa-button usa-button--unstyled"
+            to={{ pathname: '/create-record', state: { organization } }}
+          >
+            <TextWithIcon Icon={PlusCircle} text="Add a record" />
+          </Link>
+          {/* TODO hook up this button to download */}
+          <Button
+            className="margin-left-2"
+            appearance="unstyled"
+            text={
+              <TextWithIcon
+                Icon={FileDownload}
+                text="Export current view (PLACEHOLDER)"
+              />
+            }
+          />
+        </div>
+        <Accordion items={accordionItems} titleHeadingLevel="h2" />
       </div>
-      <Accordion items={accordionItems} titleHeadingLevel="h2" />
-    </div>
+      <FixedBottomBar>
+        <Button text="Back" onClick={goBack} appearance="outline" />
+        <Button text="Send to OEC" href="/success" />
+      </FixedBottomBar>
+    </>
   );
 };
 
