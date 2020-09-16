@@ -28,7 +28,7 @@ export class Child implements ChildInterface {
   sasid?: string;
 
   @Column({ nullable: true })
-  fullName: string;
+  name: string;
 
   @Column()
   firstName: string;

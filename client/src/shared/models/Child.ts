@@ -10,7 +10,7 @@ import { Moment } from 'moment';
 export interface Child {
   id: string;
   sasid?: string;
-  fullName: string;
+  name: string;
   firstName: string;
   middleName?: string;
   lastName: string;

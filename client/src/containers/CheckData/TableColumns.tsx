@@ -59,7 +59,9 @@ export const tableColumns: Column<Child>[] = [
   {
     className: tableColumnClassName,
     name: 'Site',
-    cell: ({ row }) => <td>{idx(row, (_) => _.enrollments[0].site.name)}</td>,
+    cell: ({ row }) => (
+      <td>{idx(row, (_) => _.enrollments[0].site.siteName)}</td>
+    ),
   },
   {
     className: tableColumnClassName,

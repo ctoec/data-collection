@@ -158,7 +158,7 @@ function parseFlattenedEnrollment(
     }
 
     // Parse zip codes
-    if (prop.match(/zipcode/i)) {
+    if (prop.match(/zip/i)) {
       const zipString = value.toString();
       if (zipString.length === 4) {
         rawEnrollment[prop] = `0${zipString}`;

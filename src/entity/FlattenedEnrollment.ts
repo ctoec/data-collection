@@ -373,7 +373,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: "Children's Center of Connecticut",
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  provider?: string;
+  providerName?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -385,7 +385,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: "Children's Center of Connecticut at Hartford",
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  site?: string;
+  siteName?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({

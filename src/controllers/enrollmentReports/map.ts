@@ -18,6 +18,7 @@ import {
   SpecialEducationServicesType,
 } from '../../../client/src/shared/models';
 import { getManager } from 'typeorm';
+import { Moment } from 'moment';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -60,9 +61,9 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapOrganization = (source: FlattenedEnrollment) => {
-  if (!source.provider) return Promise.reject('Provider is required');
+  if (!source.providerName) return Promise.reject('Provider is required');
   return getManager().findOneOrFail(Organization, {
-    where: { name: source.provider },
+    where: { providerName: source.providerName },
   });
 };
 
@@ -75,8 +76,10 @@ const mapOrganization = (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapSite = (source: FlattenedEnrollment) => {
-  if (!source.site) return Promise.reject('Site is required');
-  return getManager().findOneOrFail(Site, { where: { name: source.site } });
+  if (!source.siteName) return Promise.reject('Site is required');
+  return getManager().findOneOrFail(Site, {
+    where: { siteName: source.siteName },
+  });
 };
 
 /**
@@ -135,7 +138,11 @@ const mapChild = (
 
   const child = getManager().create(Child, {
     sasid: source.sasid,
-    fullName: firstName + ' ' + (middleName || '') + ' ' + lastName,
+    name:
+      firstName +
+      ' ' +
+      (middleName == undefined ? '' : middleName + ' ') +
+      lastName,
     firstName,
     middleName,
     lastName,
@@ -270,19 +277,24 @@ const mapFunding = async (
       // TODO: Cache ReportingPeriods, as they'll be reused a lot
       let firstReportingPeriod: ReportingPeriod,
         lastReportingPeriod: ReportingPeriod;
+      // let firstFundingPeriod: Moment, lastFundingPeriod: Moment;
       if (source.firstFundingPeriod) {
         firstReportingPeriod = await getManager().findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.firstFundingPeriod },
         });
+        // firstFundingPeriod = firstReportingPeriod.period;
       }
       if (source.lastFundingPeriod) {
         lastReportingPeriod = await getManager().findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.lastFundingPeriod },
         });
+        // lastFundingPeriod = lastReportingPeriod.period;
       }
       const funding = getManager().create(Funding, {
         firstReportingPeriod,
         lastReportingPeriod,
+        // firstFundingPeriod,
+        // lastFundingPeriod,
         fundingSpace,
         enrollmentId: enrollment.id,
       });

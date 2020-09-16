@@ -18,7 +18,7 @@ export class Organization implements OrganizationInterface {
   id: number;
 
   @Column({ unique: true })
-  name: string;
+  providerName: string;
 
   @OneToMany(() => Site, (site) => site.organization)
   sites?: Array<Site>;

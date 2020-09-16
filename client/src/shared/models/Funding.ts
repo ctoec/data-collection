@@ -1,4 +1,5 @@
 import { Enrollment, FundingSpace, ReportingPeriod } from '.';
+import { Moment } from 'moment';
 
 export interface Funding {
   id: number;

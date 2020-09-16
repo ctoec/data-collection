@@ -2,7 +2,7 @@ import { FundingSpace, Site } from '.';
 
 export interface Organization {
   id: number;
-  name: string;
+  providerName: string;
   sites?: Array<Site>;
   fundingSpaces?: Array<FundingSpace>;
   communityId?: number;

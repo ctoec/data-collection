@@ -2,7 +2,7 @@ import { Enrollment, Organization, Region } from '.';
 
 export interface Site {
   id: number;
-  name: string;
+  siteName: string;
   titleI: boolean;
   region: Region;
   facilityCode?: number;
