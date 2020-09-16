@@ -368,7 +368,7 @@ export class EnrollmentReportRow {
     example: "Children's Center of Connecticut",
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  provider?: string = undefined;
+  providerName?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Site',
@@ -379,7 +379,7 @@ export class EnrollmentReportRow {
     example: "Children's Center of Connecticut at Hartford",
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  site?: string = undefined;
+  siteName?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Model',

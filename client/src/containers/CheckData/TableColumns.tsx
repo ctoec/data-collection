@@ -70,7 +70,7 @@ export const tableColumns: Column<Child>[] = [
     name: 'Site',
     cell: ({ row }) => (
       <td className={tableRowClassName}>
-        {idx(row, (_) => _.enrollments[0].site.name)}
+        {idx(row, (_) => _.enrollments[0].site.siteName)}
       </td>
     ),
   },

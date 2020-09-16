@@ -64,7 +64,7 @@ export const mapRow = async (source: EnrollmentReportRow) => {
  */
 const mapOrganization = (source: EnrollmentReportRow) => {
   return getManager().findOneOrFail(Organization, {
-    where: { name: source.provider },
+    where: { providerName: source.providerName },
   });
 };
 
@@ -77,7 +77,7 @@ const mapOrganization = (source: EnrollmentReportRow) => {
  * @param source
  */
 const mapSite = (source: EnrollmentReportRow) => {
-  return getManager().findOneOrFail(Site, { where: { name: source.site } });
+  return getManager().findOneOrFail(Site, { where: { name: source.siteName } });
 };
 
 /**
@@ -263,19 +263,24 @@ const mapFunding = async (
       // TODO: Cache ReportingPeriods, as they'll be reused a lot
       let firstReportingPeriod: ReportingPeriod,
         lastReportingPeriod: ReportingPeriod;
+      // let firstFundingPeriod: Moment, lastFundingPeriod: Moment;
       if (source.firstFundingPeriod) {
         firstReportingPeriod = await getManager().findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.firstFundingPeriod },
         });
+        // firstFundingPeriod = firstReportingPeriod.period;
       }
       if (source.lastFundingPeriod) {
         lastReportingPeriod = await getManager().findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.lastFundingPeriod },
         });
+        // lastFundingPeriod = lastReportingPeriod.period;
       }
       const funding = getManager().create(Funding, {
         firstReportingPeriod,
         lastReportingPeriod,
+        // firstFundingPeriod,
+        // lastFundingPeriod,
         fundingSpace,
         enrollmentId: enrollment.id,
       });

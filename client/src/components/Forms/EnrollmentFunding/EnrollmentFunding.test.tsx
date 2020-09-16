@@ -16,6 +16,7 @@ import {
 } from '../../../shared/models';
 
 const child = {
+  name: 'First Last',
   firstName: 'First',
   lastName: 'Last',
   id: '00000000-0000-0000-0000-000000000000',
@@ -24,13 +25,13 @@ const child = {
     {
       id: 1,
       child: {} as Child,
-      site: { name: 'Site A' } as Site,
+      site: { siteName: 'Site A' } as Site,
       entry: moment.utc('2020-09-03'),
     },
     {
       id: 2,
       child: {} as Child,
-      site: { name: 'Site B' } as Site,
+      site: { siteName: 'Site B' } as Site,
       entry: moment.utc('2019-09-03'),
       exit: moment.utc('2020-08-01'),
       fundings: [
