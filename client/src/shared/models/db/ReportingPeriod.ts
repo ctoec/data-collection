@@ -1,4 +1,4 @@
-import { FundingSource } from '.';
+import { FundingSource } from '../';
 import { Moment } from 'moment';
 
 export interface ReportingPeriod {

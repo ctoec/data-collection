@@ -15,8 +15,11 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
+  FundingTimeInput,
   SpecialEducationServicesType,
+  FundingSourceTime
 } from '../../../client/src/shared/models';
+import { FUNDING_SOURCE_TIMES }  from '../../../client/src/shared/constants';
 import { getManager } from 'typeorm';
 
 /**
@@ -208,7 +211,24 @@ const mapFunding = async (
     FundingSource,
     source.fundingType
   );
-  const fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
+
+  let fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
+
+  //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
+  //  was supplied instead and look up the corresponding FundingTime
+  if (!fundingTime && fundingSource) {
+    const matchingSourceTime: FundingSourceTime = FUNDING_SOURCE_TIMES.find(fst => fst.fundingSources.includes(fundingSource));
+
+    if (matchingSourceTime) {
+      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(fundingTime => {
+        return fundingTime.formats.includes(source.spaceType.toString());
+      });
+
+      if (matchingTime) {
+        fundingTime = matchingTime.value
+      }
+    }
+  }
 
   // Cannot create funding without FundingSpace, and cannot find FundingSpace
   // without fundingSource AND fundingTime, so if you don't have them
@@ -229,7 +249,7 @@ const mapFunding = async (
     // If no direct match on time and source === CDC, look for a split
     if (!fundingSpace && fundingSource === FundingSource.CDC) {
       fundingSpace = fundingSpaces.find(
-        (space) => space.time === FundingTime.Split
+        (space) => space.time === FundingTime.SplitTime
       );
     }
 

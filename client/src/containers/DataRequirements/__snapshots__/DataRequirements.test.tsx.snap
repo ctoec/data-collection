@@ -23,6 +23,19 @@ exports[`DataRequirements matches snapshot 1`] = `
     <h1>
       OEC's enrollment data requirements
     </h1>
+    <p
+      class="text-pre-line"
+    >
+      Looking for info on how to format contract space types?
+      <br />
+      See 
+      <a
+        href="/funding-space-types"
+      >
+        funding space types
+      </a>
+      .
+    </p>
     <div
       class="margin-top-4"
     >

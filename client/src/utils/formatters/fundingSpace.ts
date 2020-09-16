@@ -6,7 +6,7 @@ import {
 
 export const fundingSpaceFormatter = (fundingSpace: FundingSpace) => {
   const FULL_YEAR_WEEKS = 52;
-  if (fundingSpace.time !== FundingTime.Split) {
+  if (fundingSpace.time !== FundingTime.SplitTime) {
     return `${fundingSpace.time} (${FULL_YEAR_WEEKS} weeks)`;
   }
 
@@ -17,8 +17,8 @@ export const fundingSpaceFormatter = (fundingSpace: FundingSpace) => {
   const fullTimeFirst = fullTimeWeeks > partTimeWeeks;
 
   if (fullTimeFirst) {
-    return `${FundingTime.Full} (${fullTimeWeeks} weeks) / ${FundingTime.Part} (${partTimeWeeks} weeks)`;
+    return `${FundingTime.FullTime} (${fullTimeWeeks} weeks) / ${FundingTime.PartTime} (${partTimeWeeks} weeks)`;
   }
 
-  return `${FundingTime.Part} (${partTimeWeeks} weeks) / ${FundingTime.Full} (${fullTimeWeeks} weeks)`;
+  return `${FundingTime.PartTime} (${partTimeWeeks} weeks) / ${FundingTime.FullTime} (${fullTimeWeeks} weeks)`;
 };

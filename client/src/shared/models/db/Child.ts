@@ -1,10 +1,10 @@
 import {
   Enrollment,
   Family,
-  Gender,
-  Organization,
-  SpecialEducationServicesType,
+  Organization
 } from '.';
+import { Gender, SpecialEducationServicesType } from '../';
+
 import { Moment } from 'moment';
 
 export interface Child {

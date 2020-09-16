@@ -5,6 +5,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { Table, Column } from '@ctoec/component-library';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
+import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const DataRequirements: React.FC = () => {
@@ -78,6 +79,9 @@ const DataRequirements: React.FC = () => {
     <div className="grid-container margin-top-4">
       <BackButton />
       <h1 ref={h1Ref}>OEC's enrollment data requirements</h1>
+      <p className="text-pre-line">Looking for info on how to format contract space types?
+        <br/>See <Link to="/funding-space-types">funding space types</Link>.
+      </p>
       {Object.entries(columnMetadataBySection).map(
         ([sectionName, sectionData]) => (
           <div key={sectionName} className="margin-top-4">

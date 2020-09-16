@@ -1,10 +1,9 @@
 import {
-  AgeGroup,
-  FundingSource,
-  FundingTime,
   FundingTimeSplit,
   Organization,
 } from '.';
+
+import { AgeGroup, FundingSource, FundingTime } from '../';
 
 export interface FundingSpace {
   id: number;
