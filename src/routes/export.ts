@@ -17,7 +17,7 @@ export const exportRouter = express.Router();
  * uploaded.
  */
 exportRouter.get(
-  '/csv-upload-report/:reportId',
+  '/csv-upload/:reportId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params['reportId']) || 0;
