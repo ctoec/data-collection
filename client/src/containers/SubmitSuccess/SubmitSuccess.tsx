@@ -24,7 +24,6 @@ const SubmitSuccess: React.FC = () => {
   // Any cast when extracting param suppresses type error
   // Fine because we know what the IDs are
   const { reportId } = useParams();
-  // const idString: string = rawIds['idArray'];
 
   return (
     <div className="grid-container margin-top-4">

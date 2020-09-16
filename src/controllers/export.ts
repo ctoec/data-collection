@@ -1,10 +1,25 @@
 import { write, WorkBook, utils } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { EntityMetadata, getConnection, getManager } from 'typeorm';
-import { FlattenedEnrollment, Child, EnrollmentReport } from '../entity';
+import {
+  FlattenedEnrollment,
+  Child,
+  EnrollmentReport,
+  Site,
+  Enrollment,
+} from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
 import { isMoment, Moment } from 'moment';
+
+const CHILD_RELATIONS = [
+  'family',
+  'family.incomeDeterminations',
+  'enrollments',
+  'enrollments.site',
+  'enrollments.site.organization',
+  'enrollments.fundings',
+];
 
 const propertyDateSorter = <T>(
   a: T,
@@ -21,12 +36,29 @@ const propertyDateSorter = <T>(
   return 0;
 };
 
+function childSorter(child: Child) {
+  child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
+    if (enrollmentA.fundings) {
+      // Sort fundings by last reporting period
+      enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
+        propertyDateSorter(
+          fundingA,
+          fundingB,
+          (f) => f.lastReportingPeriod?.period
+        )
+      );
+    }
+    return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
+  });
+  return child;
+}
+
 export async function getChildrenByReport(report: EnrollmentReport) {
   const childrenToMap = await getManager().transaction(async (tManager) => {
     let kids = [];
     for (let i = 0; i < report.enrollments.length; i++) {
       let enrollment = report.enrollments[i];
-      const child = await tManager.findOne(
+      var child = await tManager.findOne(
         Child,
         {
           name: enrollment.name,
@@ -34,38 +66,32 @@ export async function getChildrenByReport(report: EnrollmentReport) {
           birthCertificateId: enrollment.birthCertificateId,
         },
         {
-          relations: [
-            'family',
-            'family.incomeDeterminations',
-            'enrollments',
-            'enrollments.site',
-            'enrollments.site.organization',
-            'enrollments.fundings',
-          ],
+          relations: CHILD_RELATIONS,
         }
       );
 
       // Sort enrollments by exit date
       if (child) {
-        child.enrollments = child.enrollments.sort(
-          (enrollmentA, enrollmentB) => {
-            if (enrollmentA.fundings) {
-              // Sort fundings by last reporting period
-              enrollmentA.fundings = enrollmentA.fundings.sort(
-                (fundingA, fundingB) =>
-                  propertyDateSorter(
-                    fundingA,
-                    fundingB,
-                    (f) => f.lastReportingPeriod?.period
-                  )
-              );
-            }
-            return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
-          }
-        );
+        child = childSorter(child);
       }
       kids.push(child);
     }
+    return kids;
+  });
+  return childrenToMap;
+}
+
+export async function getChildrenBySites(sites: Site[]) {
+  const childrenToMap = await getManager().transaction(async (tManager) => {
+    let kids: Child[] = [];
+    sites.forEach(async (site) => {
+      const enrollmentsAtSite = await tManager.find(Enrollment, { site: site });
+      // Keep only one copy of each child
+      const childrenHavingEnrollments = [
+        ...new Set(enrollmentsAtSite.map((enrollment) => enrollment.child)),
+      ];
+      kids = kids.concat(childrenHavingEnrollments);
+    });
     return kids;
   });
   return childrenToMap;

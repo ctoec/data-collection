@@ -79,6 +79,11 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
+    path: '/success/:userId',
+    component: SubmitSuccess,
+    unauthorized: false,
+  },
+  {
     path: '/:unknown',
     component: PageNotFound,
     unauthorized: true,
