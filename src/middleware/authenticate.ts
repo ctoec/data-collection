@@ -3,8 +3,10 @@ import jwks from 'jwks-rsa';
 import { Request, Response, NextFunction } from 'express';
 import { getManager, In } from 'typeorm';
 import { User, Organization, Site } from '../entity';
-import { InvalidSubClaimError } from './error/errors';
 import { passAsyncError } from './error/passAsyncError';
+
+import { default as axios, AxiosResponse } from 'axios';
+import * as https from 'https';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -34,8 +36,27 @@ const decodeClaim = jwt({
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
     if (req.claims.sub) {
-      const user = await getUser(req.claims.sub);
-      if (!user) throw new InvalidSubClaimError();
+      let user = await getUser(req.claims.sub);
+
+      if (!user) {
+        const res: AxiosResponse<any> = await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
+          headers: req.headers,
+          httpsAgent: new https.Agent({  
+            rejectUnauthorized: false
+          })
+        });
+
+        if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
+          const _user = getManager().create(User, {
+            wingedKeysId: req.claims.sub,
+            firstName: res.data.given_name,
+            lastName: res.data.family_name,
+          });
+          
+          user = await getManager().save(_user);
+        }
+      }
+
       req.user = user;
       next();
     }
@@ -94,7 +115,7 @@ const getUser = async (wingedKeysId: string) => {
 };
 
 /**
- * Full authnetication middleware chains together decodeClaim and addUser,
+ * Full authentication middleware chains together decodeClaim and addUser,
  * so that any authenticated route gets the user, looked up via decoded JWT
  * "sub" claim, added to the request
  */
