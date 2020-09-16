@@ -37,6 +37,9 @@ export class Child implements ChildInterface {
   @Column({ nullable: true })
   sasid?: string;
 
+  @Column({ nullable: true })
+  fullName: string;
+
   @Column()
   @IsNotEmpty({ message: 'First name is required' })
   firstName: string;
@@ -105,10 +108,10 @@ export class Child implements ChildInterface {
   foster?: boolean;
 
   @Column({ default: false })
-  recievesC4K?: boolean;
+  receivesC4K?: boolean = false;
 
-  @Column({ default: false })
-  recievesSpecialEducationServices?: boolean;
+  @Column({ nullable: true })
+  receivesSpecialEducationServices?: boolean;
 
   @Column({
     nullable: true,

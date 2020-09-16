@@ -121,7 +121,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/01/2016',
     section: SECTIONS.CHILD_INFO,
   })
-  dateOfBirth?: Moment;
+  birthdate?: Moment;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -147,7 +147,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Hartford',
     section: SECTIONS.CHILD_INFO,
   })
-  townOfBirth?: string;
+  birthTown?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -160,7 +160,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'CT',
     section: SECTIONS.CHILD_INFO,
   })
-  stateOfBirth?: string;
+  birthState?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -271,7 +271,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  receivingSpecialEducationServices?: boolean;
+  receivesSpecialEducationServices?: boolean;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -332,7 +332,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '01234',
     section: SECTIONS.FAMILY_INFO,
   })
-  zipcode?: string;
+  zip?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -345,7 +345,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  livesWithFosterFamily?: boolean;
+  foster?: boolean;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -359,7 +359,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  experiencedHomelessnessOrHousingInsecurity?: boolean;
+  homelessness?: boolean;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -373,7 +373,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '4',
     section: SECTIONS.FAMILY_INCOME,
   })
-  householdSize?: number;
+  numberOfPeople?: number;
 
   @Column({ nullable: true, type: 'decimal', precision: 14, scale: 2 })
   @ColumnMetadata({
@@ -386,7 +386,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '20000',
     section: SECTIONS.FAMILY_INCOME,
   })
-  annualHouseholdIncome?: number;
+  income?: number;
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
@@ -400,7 +400,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: `10/01/${new Date().getFullYear()}`,
     section: SECTIONS.FAMILY_INCOME,
   })
-  incomeDeterminationDate?: Moment;
+  determinationDate?: Moment;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -461,7 +461,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/01/2016',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentStartDate?: Moment;
+  entry?: Moment;
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
@@ -473,7 +473,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '08/30/2017',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentEndDate?: Moment;
+  exit?: Moment;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -485,7 +485,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Aged out',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentExitReason?: string;
+  exitReason?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -498,7 +498,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'SR',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  fundingType?: string;
+  source?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({
@@ -510,7 +510,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Wraparound',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  spaceType?: string;
+  time?: string;
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
@@ -549,5 +549,5 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  receivingCareForKids?: boolean;
+  receivesC4K?: boolean;
 }

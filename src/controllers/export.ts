@@ -4,6 +4,7 @@ import { EntityMetadata, getConnection } from 'typeorm';
 import { FlattenedEnrollment, Child } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
+import { isMoment } from 'moment';
 
 /**
  * Function to send the created workbook of information back
@@ -38,6 +39,18 @@ export function getAllEnrollmentColumns(): ColumnMetadata[] {
       getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
     )
     .filter((templateMeta) => !!templateMeta);
+}
+
+function formatStringPush(value: any) {
+  if (typeof value == 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  if (isMoment(value)) {
+    return value.toDate().toLocaleDateString();
+  }
+  if (typeof value == 'string') {
+    return value || '';
+  }
 }
 
 /**
@@ -79,231 +92,264 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
   var childString: string[] = [];
   for (let i = 0; i < cols.length; i++) {
     const c = cols[i];
-    switch (c.formattedName) {
-      case 'Name':
-        childString.push(
-          child.firstName + ' ' + (child.middleName || '') + child.lastName
-        );
-        break;
-      case 'SASID':
-        childString.push(child.sasid || '');
-        break;
-      case 'Date of birth':
-        childString.push(child.birthdate.toDate().toLocaleDateString() || '');
-        break;
-      case 'Birth certificate ID #':
-        childString.push(child.birthCertificateId || '');
-        break;
-      case 'Town of birth':
-        childString.push(child.birthTown || '');
-        break;
-      case 'State of birth':
-        childString.push(child.birthState || '');
-        break;
-      case 'Race: American Indian or Alaska Native':
-        childString.push(
-          child.americanIndianOrAlaskaNative == undefined
-            ? ''
-            : child.americanIndianOrAlaskaNative == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
-      case 'Race: Asian':
-        childString.push(
-          child.asian == undefined ? '' : child.asian == true ? 'Yes' : 'No'
-        );
-        break;
-      case 'Race: Black or African American':
-        childString.push(
-          child.blackOrAfricanAmerican == undefined
-            ? ''
-            : child.blackOrAfricanAmerican == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
-      case 'Race: Native Hawaiian or Pacific Islander':
-        childString.push(
-          child.nativeHawaiianOrPacificIslander == undefined
-            ? ''
-            : child.nativeHawaiianOrPacificIslander == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
-      case 'Race: White':
-        childString.push(
-          child.white == undefined ? '' : child.white == true ? 'Yes' : 'No'
-        );
-        break;
-      case 'Hispanic or Latinx Ethnicity':
-        childString.push(
-          child.hispanicOrLatinxEthnicity == undefined
-            ? ''
-            : child.hispanicOrLatinxEthnicity == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
-      case 'Gender':
-        childString.push(child.gender || '');
-        break;
-      // TODO: Update data model to account for this variable
-      // It's not currently a field of a child object
-      case 'Dual language learner':
-        childString.push('');
-        break;
-      case 'Receiving Special Education Services':
-        childString.push(
-          child.recievesSpecialEducationServices == undefined
-            ? ''
-            : child.recievesSpecialEducationServices == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
-      case 'Special Education Services Type':
-        childString.push(child.specialEducationServicesType || '');
-        break;
-      case 'Street address':
-        childString.push(child.family.streetAddress || '');
-        break;
-      case 'Town':
-        childString.push(child.family.town || '');
-        break;
-      case 'State':
-        childString.push(child.family.state || '');
-        break;
-      case 'Zipcode':
-        childString.push(child.family.zip || '');
-        break;
-      case 'Lives with foster family':
-        childString.push(
-          child.foster == undefined ? '' : child.foster == true ? 'Yes' : 'No'
-        );
-        break;
-      case 'Experienced homelessness or housing insecurity':
-        childString.push(
-          child.family.homelessness == undefined
-            ? ''
-            : child.family.homelessness == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
-      case 'Household size':
-        childString.push(
-          currentDetermination == null
-            ? ''
-            : (currentDetermination.numberOfPeople || '').toString()
-        );
-        break;
-      case 'Annual household income':
-        childString.push(
-          currentDetermination == null
-            ? ''
-            : (currentDetermination.income || '').toString()
-        );
-        break;
-      case 'Determination date':
-        childString.push(
-          currentDetermination == null
-            ? ''
-            : currentDetermination.determinationDate
-                .toDate()
-                .toLocaleDateString()
-        );
-        break;
-      case 'Provider':
-        childString.push(
-          activeEnrollment == undefined
-            ? ''
-            : activeEnrollment.site.organization.name
-        );
-        break;
-      case 'Site':
-        childString.push(
-          activeEnrollment == undefined ? '' : activeEnrollment.site.name
-        );
-        break;
-      case 'Model':
-        childString.push('');
-        break;
-      case 'Age Group':
-        childString.push(
-          activeEnrollment == undefined ? '' : activeEnrollment.ageGroup || ''
-        );
-        break;
-      case 'Enrollment Start Date':
-        childString.push(
-          activeEnrollment == undefined
-            ? ''
-            : activeEnrollment.entry.toDate().toLocaleDateString() || ''
-        );
-        break;
-      case 'Enrollment End Date':
-        childString.push(
-          activeEnrollment == undefined
-            ? ''
-            : activeEnrollment.exit == null
-            ? ''
-            : activeEnrollment.exit.toDate().toLocaleDateString()
-        );
-        break;
-      case 'Enrollment Exit Reason':
-        childString.push(
-          activeEnrollment == undefined
-            ? ''
-            : activeEnrollment.exitReason == null
-            ? ''
-            : activeEnrollment.exitReason
-        );
-        break;
-      case 'Funding Type':
-        childString.push(
-          activeFunding == null ? '' : activeFunding.fundingSpace.source
-        );
-        break;
-      case 'Space type':
-        childString.push(
-          activeFunding == null ? '' : activeFunding.fundingSpace.time
-        );
-        break;
-      case 'First funding period':
-        childString.push(
-          activeFunding == null
-            ? ''
-            : activeFunding.firstReportingPeriod.period
-                .toDate()
-                .toLocaleDateString()
-        );
-        break;
-      case 'Last funding period':
-        childString.push(
-          activeFunding == null
-            ? ''
-            : activeFunding.lastReportingPeriod == null
-            ? ''
-            : activeFunding.lastReportingPeriod.period
-                .toDate()
-                .toLocaleDateString()
-        );
-        break;
-      case 'Receiving Care 4 Kids?':
-        childString.push(
-          child.recievesC4K == undefined
-            ? ''
-            : child.recievesC4K == true
-            ? 'Yes'
-            : 'No'
-        );
-        break;
-      // Don't do anything in the default case because we've already
-      // handled all the fields
-      default:
-        break;
+    // childString.push(c.propertyName);
+    if (child.hasOwnProperty(c.propertyName)) {
+      childString.push(formatStringPush(child[c.propertyName]));
+    } else if (child.family.hasOwnProperty(c.propertyName)) {
+      childString.push(formatStringPush(child.family[c.propertyName]));
+    } else if (
+      !!currentDetermination &&
+      currentDetermination.hasOwnProperty(c.propertyName)
+    ) {
+      childString.push(formatStringPush(currentDetermination[c.propertyName]));
+    } else if (
+      !!activeEnrollment &&
+      activeEnrollment.hasOwnProperty(c.propertyName)
+    ) {
+      childString.push(formatStringPush(activeEnrollment[c.propertyName]));
+    } else if (
+      !!activeEnrollment &&
+      activeEnrollment.hasOwnProperty(c.propertyName)
+    ) {
+      childString.push(formatStringPush(activeEnrollment[c.propertyName]));
+    } else if (
+      !!activeEnrollment &&
+      activeEnrollment.hasOwnProperty(c.propertyName)
+    ) {
+      childString.push(formatStringPush(activeEnrollment[c.propertyName]));
+    } else if (
+      !!activeFunding &&
+      activeFunding.fundingSpace.hasOwnProperty(c.propertyName)
+    ) {
+      childString.push(
+        formatStringPush(activeFunding.fundingSpace[c.propertyName])
+      );
+    } else {
+      childString.push('Unrecognized property name: ' + c.propertyName);
     }
+    //   switch (c.formattedName) {
+    //     case 'Name':
+    //       childString.push(
+    //         child.firstName + ' ' + (child.middleName || '') + child.lastName
+    //       );
+    //       break;
+    //     case 'SASID':
+    //       childString.push(child.sasid || '');
+    //       break;
+    //     case 'Date of birth':
+    //       childString.push(child.birthdate.toDate().toLocaleDateString() || '');
+    //       break;
+    //     case 'Birth certificate ID #':
+    //       childString.push(child.birthCertificateId || '');
+    //       break;
+    //     case 'Town of birth':
+    //       childString.push(child.birthTown || '');
+    //       break;
+    //     case 'State of birth':
+    //       childString.push(child.birthState || '');
+    //       break;
+    //     case 'Race: American Indian or Alaska Native':
+    //       childString.push(
+    //         child.americanIndianOrAlaskaNative == undefined
+    //           ? ''
+    //           : child.americanIndianOrAlaskaNative == true
+    //           ? 'Yes'
+    //           : 'No'
+    //       );
+    //       break;
+    //     case 'Race: Asian':
+    //       childString.push(
+    //         child.asian == undefined ? '' : child.asian == true ? 'Yes' : 'No'
+    //       );
+    //       break;
+    //     case 'Race: Black or African American':
+    //       childString.push(
+    //         child.blackOrAfricanAmerican == undefined
+    //           ? ''
+    //           : child.blackOrAfricanAmerican == true
+    //           ? 'Yes'
+    //           : 'No'
+    //       );
+    //       break;
+    //     case 'Race: Native Hawaiian or Pacific Islander':
+    //       childString.push(
+    //         child.nativeHawaiianOrPacificIslander == undefined
+    //           ? ''
+    //           : child.nativeHawaiianOrPacificIslander == true
+    //           ? 'Yes'
+    //           : 'No'
+    //       );
+    //       break;
+    //     case 'Race: White':
+    //       childString.push(
+    //         child.white == undefined ? '' : child.white == true ? 'Yes' : 'No'
+    //       );
+    //       break;
+    //     case 'Hispanic or Latinx Ethnicity':
+    //       childString.push(
+    //         child.hispanicOrLatinxEthnicity == undefined
+    //           ? ''
+    //           : child.hispanicOrLatinxEthnicity == true
+    //           ? 'Yes'
+    //           : 'No'
+    //       );
+    //       break;
+    //     case 'Gender':
+    //       childString.push(child.gender || '');
+    //       break;
+    //     case 'Dual language learner':
+    //       childString.push('');
+    //       break;
+    //     case 'Receiving Special Education Services':
+    //       childString.push(
+    //         child.recievesSpecialEducationServices == undefined
+    //           ? ''
+    //           : child.recievesSpecialEducationServices == true
+    //           ? 'Yes'
+    //           : 'No'
+    //       );
+    //       break;
+    //     case 'Special Education Services Type':
+    //       childString.push(child.specialEducationServicesType || '');
+    //       break;
+    //     case 'Street address':
+    //       childString.push(child.family.streetAddress || '');
+    //       break;
+    //     case 'Town':
+    //       childString.push(child.family.town || '');
+    //       break;
+    //     case 'State':
+    //       childString.push(child.family.state || '');
+    //       break;
+    //     case 'Zipcode':
+    //       childString.push(child.family.zip || '');
+    //       break;
+    //     case 'Lives with foster family':
+    //       childString.push(
+    //         child.foster == undefined ? '' : child.foster == true ? 'Yes' : 'No'
+    //       );
+    //       break;
+    //     case 'Experienced homelessness or housing insecurity':
+    //       childString.push(
+    //         child.family.homelessness == undefined
+    //           ? ''
+    //           : child.family.homelessness == true
+    //           ? 'Yes'
+    //           : 'No'
+    //       );
+    //       break;
+    //     case 'Household size':
+    //       childString.push(
+    //         currentDetermination == null
+    //           ? ''
+    //           : (currentDetermination.numberOfPeople || '').toString()
+    //       );
+    //       break;
+    //     case 'Annual household income':
+    //       childString.push(
+    //         currentDetermination == null
+    //           ? ''
+    //           : (currentDetermination.income || '').toString()
+    //       );
+    //       break;
+    //     case 'Determination date':
+    //       childString.push(
+    //         currentDetermination == null
+    //           ? ''
+    //           : currentDetermination.determinationDate
+    //               .toDate()
+    //               .toLocaleDateString()
+    //       );
+    //       break;
+    //     case 'Provider':
+    //       childString.push(
+    //         activeEnrollment == undefined
+    //           ? ''
+    //           : activeEnrollment.site.organization.name
+    //       );
+    //       break;
+    //     case 'Site':
+    //       childString.push(
+    //         activeEnrollment == undefined ? '' : activeEnrollment.site.name
+    //       );
+    //       break;
+    //     case 'Model':
+    //       childString.push('');
+    //       break;
+    //     case 'Age Group':
+    //       childString.push(
+    //         activeEnrollment == undefined ? '' : activeEnrollment.ageGroup || ''
+    //       );
+    //       break;
+    //     case 'Enrollment Start Date':
+    //       childString.push(
+    //         activeEnrollment == undefined
+    //           ? ''
+    //           : activeEnrollment.entry.toDate().toLocaleDateString() || ''
+    //       );
+    //       break;
+    //     case 'Enrollment End Date':
+    //       childString.push(
+    //         activeEnrollment == undefined
+    //           ? ''
+    //           : activeEnrollment.exit == null
+    //           ? ''
+    //           : activeEnrollment.exit.toDate().toLocaleDateString()
+    //       );
+    //       break;
+    //     case 'Enrollment Exit Reason':
+    //       childString.push(
+    //         activeEnrollment == undefined
+    //           ? ''
+    //           : activeEnrollment.exitReason == null
+    //           ? ''
+    //           : activeEnrollment.exitReason
+    //       );
+    //       break;
+    //     case 'Funding Type':
+    //       childString.push(
+    //         activeFunding == null ? '' : activeFunding.fundingSpace.source
+    //       );
+    //       break;
+    //     case 'Space type':
+    //       childString.push(
+    //         activeFunding == null ? '' : activeFunding.fundingSpace.time
+    //       );
+    //       break;
+    //     case 'First funding period':
+    //       childString.push(
+    //         activeFunding == null
+    //           ? ''
+    //           : activeFunding.firstReportingPeriod.period
+    //               .toDate()
+    //               .toLocaleDateString()
+    //       );
+    //       break;
+    //     case 'Last funding period':
+    //       childString.push(
+    //         activeFunding == null
+    //           ? ''
+    //           : activeFunding.lastReportingPeriod == null
+    //           ? ''
+    //           : activeFunding.lastReportingPeriod.period
+    //               .toDate()
+    //               .toLocaleDateString()
+    //       );
+    //       break;
+    //     case 'Receiving Care 4 Kids?':
+    //       childString.push(
+    //         child.recievesC4K == undefined
+    //           ? ''
+    //           : child.recievesC4K == true
+    //           ? 'Yes'
+    //           : 'No'
+    //       );
+    //       break;
+    //     // Don't do anything in the default case because we've already
+    //     // handled all the fields
+    //     default:
+    //       break;
+    //   }
   }
 
   return childString;
