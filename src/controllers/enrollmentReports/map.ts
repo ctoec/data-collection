@@ -109,9 +109,9 @@ const mapChild = (
     middleName: source.middleName,
     lastName: source.lastName,
     suffix: source.suffix,
-    birthdate: source.dateOfBirth,
-    birthTown: source.townOfBirth,
-    birthState: source.stateOfBirth,
+    birthdate: source.birthdate,
+    birthTown: source.birthTown,
+    birthState: source.birthState,
     birthCertificateId: source.birthCertificateId,
     americanIndianOrAlaskaNative: source.americanIndianOrAlaskaNative,
     asian: source.asian,
@@ -120,10 +120,10 @@ const mapChild = (
     white: source.white,
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
-    foster: source.livesWithFosterFamily || false,
-    recievesC4K: source.receivingCareForKids || false,
-    recievesSpecialEducationServices:
-      source.receivingSpecialEducationServices || false,
+    foster: source.foster || false,
+    receivesC4K: source.receivesC4K || false,
+    receivesSpecialEducationServices:
+      source.receivesSpecialEducationServices || false,
     specialEducationServicesType,
     organization,
     family: family,
@@ -143,8 +143,8 @@ const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
-    zip: source.zipcode,
-    homelessness: source.experiencedHomelessnessOrHousingInsecurity,
+    zipcode: source.zipcode,
+    homelessness: source.homelessness,
     organization,
   });
 
@@ -160,9 +160,9 @@ const mapIncomeDetermination = (
   family: Family
 ) => {
   const incomeDetermination = getManager().create(IncomeDetermination, {
-    numberOfPeople: source.householdSize,
-    income: source.annualHouseholdIncome,
-    determinationDate: source.incomeDeterminationDate,
+    numberOfPeople: source.numberOfPeople,
+    income: source.income,
+    determinationDate: source.determinationDate,
     familyId: family.id,
   });
 
@@ -186,9 +186,9 @@ const mapEnrollment = (
     site,
     childId: child.id,
     ageGroup,
-    entry: source.enrollmentStartDate,
-    exit: source.enrollmentEndDate,
-    exitReason: source.enrollmentExitReason,
+    entry: source.entry,
+    exit: source.exit,
+    exitReason: source.exitReason,
   });
 
   return getManager().save(enrollment);
@@ -209,10 +209,10 @@ const mapFunding = async (
 ) => {
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
-    source.fundingType
+    source.source
   );
 
-  let fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
+  let fundingTime: FundingTime = mapEnum(FundingTime, source.time);
 
   //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
   //  was supplied instead and look up the corresponding FundingTime
@@ -224,7 +224,7 @@ const mapFunding = async (
     if (matchingSourceTime) {
       const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(
         (fundingTime) => {
-          return fundingTime.formats.includes(source.spaceType.toString());
+          return fundingTime.formats.includes(source.time.toString());
         }
       );
 
@@ -287,8 +287,8 @@ const mapFunding = async (
   // If we could not find a fundingSpace, we cannot create a funding
   // so NOTHING is returned.
   if (
-    source.fundingType ||
-    source.spaceType ||
+    source.source ||
+    source.time ||
     source.firstFundingPeriod ||
     source.lastFundingPeriod
   ) {

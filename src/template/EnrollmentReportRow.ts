@@ -100,7 +100,7 @@ export class EnrollmentReportRow {
     example: '10/01/2016',
     section: SECTIONS.CHILD_INFO,
   })
-  dateOfBirth?: Moment = moment.invalid();
+  birthdate?: Moment = moment.invalid();
 
   @ColumnMetadata({
     formattedName: 'Birth certificate ID #',
@@ -124,7 +124,7 @@ export class EnrollmentReportRow {
     example: 'Hartford',
     section: SECTIONS.CHILD_INFO,
   })
-  townOfBirth?: string = undefined;
+  birthTown?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'State of birth',
@@ -136,7 +136,7 @@ export class EnrollmentReportRow {
     example: 'CT',
     section: SECTIONS.CHILD_INFO,
   })
-  stateOfBirth?: string = undefined;
+  birthState?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Race: American Indian or Alaska Native',
@@ -238,7 +238,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  receivingSpecialEducationServices?: boolean = false;
+  receivesSpecialEducationServices?: boolean = false;
 
   @ColumnMetadata({
     formattedName: 'Special Education Services Type',
@@ -306,7 +306,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  livesWithFosterFamily?: boolean = false;
+  foster?: boolean = false;
 
   @ColumnMetadata({
     formattedName: 'Experienced homelessness or housing insecurity',
@@ -319,7 +319,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  experiencedHomelessnessOrHousingInsecurity?: boolean = false;
+  homelessness?: boolean = false;
 
   @ColumnMetadata({
     formattedName: 'Household size',
@@ -332,7 +332,7 @@ export class EnrollmentReportRow {
     example: '4',
     section: SECTIONS.FAMILY_INCOME,
   })
-  householdSize?: number = undefined;
+  numberOfPeople?: number = undefined;
 
   @ColumnMetadata({
     formattedName: 'Annual household income',
@@ -344,7 +344,7 @@ export class EnrollmentReportRow {
     example: '20000',
     section: SECTIONS.FAMILY_INCOME,
   })
-  annualHouseholdIncome?: number = undefined;
+  income?: number = undefined;
 
   @ColumnMetadata({
     formattedName: 'Determination date',
@@ -357,7 +357,7 @@ export class EnrollmentReportRow {
     example: `10/01/${new Date().getFullYear()}`,
     section: SECTIONS.FAMILY_INCOME,
   })
-  incomeDeterminationDate?: Moment = moment.invalid();
+  determinationDate?: Moment = moment.invalid();
 
   @ColumnMetadata({
     formattedName: 'Provider',
@@ -413,7 +413,7 @@ export class EnrollmentReportRow {
     example: '10/01/2016',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentStartDate?: Moment = moment.invalid();
+  entry?: Moment = moment.invalid();
 
   @ColumnMetadata({
     formattedName: 'Enrollment End Date',
@@ -424,7 +424,7 @@ export class EnrollmentReportRow {
     example: '08/30/2017',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentEndDate?: Moment = moment.invalid();
+  exit?: Moment = moment.invalid();
 
   @ColumnMetadata({
     formattedName: 'Enrollment Exit Reason',
@@ -435,7 +435,7 @@ export class EnrollmentReportRow {
     example: 'Aged out',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentExitReason?: string = undefined;
+  exitReason?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Funding Type',
@@ -447,7 +447,7 @@ export class EnrollmentReportRow {
     example: 'SR',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  fundingType?: string = undefined;
+  source?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Space type',
@@ -458,7 +458,7 @@ export class EnrollmentReportRow {
     example: 'Wraparound',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  spaceType?: string = undefined;
+  time?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'First funding period',
@@ -494,5 +494,5 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  receivingCareForKids?: boolean = false;
+  receivesC4K?: boolean = false;
 }

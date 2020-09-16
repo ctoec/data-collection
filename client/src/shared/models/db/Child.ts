@@ -23,8 +23,8 @@ export interface Child extends ObjectWithValidationErrors {
   hispanicOrLatinxEthnicity?: boolean;
   gender?: Gender;
   foster?: boolean;
-  recievesC4K?: boolean;
-  recievesSpecialEducationServices?: boolean;
+  receivesC4K?: boolean;
+  receivesSpecialEducationServices?: boolean;
   specialEducationServicesType?: SpecialEducationServicesType;
   family?: Family;
   organization?: Organization;

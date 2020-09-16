@@ -107,7 +107,7 @@ export class Child implements ChildInterface {
   recievesC4K?: boolean;
 
   @Column({ default: false })
-  recievesSpecialEducationServices?: boolean;
+  receivesSpecialEducationServices?: boolean;
 
   @Column({
     nullable: true,
