@@ -11,10 +11,10 @@ import AuthenticationContext from '../contexts/AuthenticationContext/Authenticat
  * were actually just uploaded.
  */
 type ExportProps = {
-  submittedIds: string;
+  reportId: number;
 };
 
-export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
+export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
   const { accessToken } = useContext(AuthenticationContext);
 
   /**
@@ -22,11 +22,14 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ submittedIds }) => {
    * together in spreadsheet form.
    */
   async function downloadTemplate() {
+    console.log(reportId);
     await downloadAuthorizedStreamToFile(
-      `export/csv-upload/${submittedIds}`,
+      `export/csv-upload/${reportId}`,
       accessToken || '',
       `Uploaded Data.csv`
-    ).catch((err) => console.error(err));
+    )
+      .then((resp) => console.log(resp))
+      .catch((err) => console.error(err));
   }
 
   return (
