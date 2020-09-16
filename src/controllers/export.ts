@@ -103,6 +103,22 @@ export async function getChildrenByReport(report: EnrollmentReport) {
   return childrenToMap;
 }
 
+export async function getChildrenBySites(sites: Site[]) {
+  const childrenToMap = await getManager().transaction(async (tManager) => {
+    let kids: Child[] = [];
+    sites.forEach(async (site) => {
+      const enrollmentsAtSite = await tManager.find(Enrollment, { site: site });
+      // Keep only one copy of each child
+      const childrenHavingEnrollments = [
+        ...new Set(enrollmentsAtSite.map((enrollment) => enrollment.child)),
+      ];
+      kids = kids.concat(childrenHavingEnrollments);
+    });
+    return kids;
+  });
+  return childrenToMap;
+}
+
 /**
  * Second way of retrieving Children to export. Given an array
  * of sites a user has access to, finds all Children with enrollments
