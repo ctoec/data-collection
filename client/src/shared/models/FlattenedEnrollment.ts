@@ -4,7 +4,10 @@ import { Moment } from 'moment';
 export interface FlattenedEnrollment {
   id: number;
   report: EnrollmentReport;
-  name?: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  suffix?: string;
   sasid?: string;
   dateOfBirth?: Moment;
   birthCertificateId?: string;
