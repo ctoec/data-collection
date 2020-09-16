@@ -53,7 +53,7 @@ export const CareForKidsForm: React.FC<EditFormProps> = ({
           autoComplete="off"
         >
           <FormField<Child, RadioButtonGroupProps, boolean>
-            getValue={(data) => data.at('recievesC4K')}
+            getValue={(data) => data.at('receivesC4K')}
             preprocessForDisplay={(data) => (data === true ? 'Yes' : 'No')}
             parseOnChangeEvent={(e) => {
               return e.target.value === 'Yes';

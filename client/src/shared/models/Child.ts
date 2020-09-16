@@ -10,6 +10,7 @@ import { Moment } from 'moment';
 export interface Child {
   id: string;
   sasid?: string;
+  fullName: string;
   firstName: string;
   middleName?: string;
   lastName: string;
@@ -26,8 +27,8 @@ export interface Child {
   hispanicOrLatinxEthnicity?: boolean;
   gender?: Gender;
   foster?: boolean;
-  recievesC4K?: boolean;
-  recievesSpecialEducationServices?: boolean;
+  receivesC4K?: boolean;
+  receivesSpecialEducationServices?: boolean;
   specialEducationServicesType?: SpecialEducationServicesType;
   family: Family;
   organization?: Organization;
