@@ -28,7 +28,6 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
    * Function that downloads information that the backend puts
    * together in spreadsheet form.
    */
-  // console.log(submittedIds);
   async function downloadTemplate() {
     await downloadStreamToFile(
       // `export/csv-upload-report/${reportId}`,

@@ -83,7 +83,7 @@ export async function getChildrenByReport(report: EnrollmentReport) {
       var child = await tManager.findOne(
         Child,
         {
-          name: enrollment.name,
+          name: enrollment.firstName + ' ' + (enrollment.middleName + ' ' || '') + enrollment.lastName,
           birthdate: enrollment.birthdate,
           birthCertificateId: enrollment.birthCertificateId,
         },
@@ -365,12 +365,6 @@ export function generateCSV(childArray: Child[]) {
   // replacing it
   utils.sheet_add_aoa(sheet, childStrings, { origin: -1 });
   const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, sheet);
-
-  // WORK OFF OF THIS GUY
-  // const children = utils.json_to_sheet(childArray);
-  // const children = utils.json_to_sheet(childArray);
-
   utils.book_append_sheet(workbook, sheet);
   return workbook;
 }
