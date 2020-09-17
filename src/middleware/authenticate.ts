@@ -2,7 +2,7 @@ import jwt, { UnauthorizedError } from 'express-jwt';
 import jwks from 'jwks-rsa';
 import { Request, Response, NextFunction } from 'express';
 import { getManager, In } from 'typeorm';
-import { User, Organization, Site } from '../entity';
+import { User, Organization, Site, OrganizationPermission } from '../entity';
 import { passAsyncError } from './error/passAsyncError';
 
 import { default as axios, AxiosResponse } from 'axios';
@@ -50,13 +50,25 @@ const addUser = passAsyncError(
         });
 
         if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
-          const _user = getManager().create(User, {
-            wingedKeysId: req.claims.sub,
-            firstName: res.data.given_name,
-            lastName: res.data.family_name,
+          await getManager().transaction(async (manager) => {
+            const _user = manager.create(User, {
+              wingedKeysId: req.claims.sub,
+              firstName: res.data.given_name,
+              lastName: res.data.family_name,
+            });
+            
+            user = await manager.save(_user);
+
+            const permsForAllOrgs: OrganizationPermission[] = await manager.find(OrganizationPermission);
+
+            if (permsForAllOrgs.length) {
+              const orgPermsForUser = manager.create(OrganizationPermission, permsForAllOrgs.map(orgPerm => ({
+                user,
+                organization: orgPerm.organization
+              })));
+              await manager.save(orgPermsForUser);
+            }
           });
-          
-          user = await getManager().save(_user);
         }
       }
 
