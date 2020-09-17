@@ -12,6 +12,12 @@ import { BackButton } from '../../components/BackButton';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
+/**
+ * TODO: Right now, the CheckData page just redirects straight
+ * to success (with no processing done) when you click the Send
+ * to OEC button. Once we have the infrastructure for what it
+ * means to actually send to OEC, we can alter this.
+ */
 const CheckData: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { reportId } = useParams();
@@ -31,28 +37,6 @@ const CheckData: React.FC = () => {
       );
     }
   }, [reportId, accessToken]);
-
-  /**
-   * TODO: Right now, the CheckData page just redirects straight
-   * to success (with no processing done) when you click the Send
-   * to OEC button. Once we have the infrastructure for what it
-   * means to actually send to OEC, we can alter this, but for
-   * now, we need a way to send relevant IDs to the success page
-   * so that if the user downloads them, we know which children
-   * were persisted to the DB (e.g. we need the child IDs because
-   * it's possible that a user could delete a record while looking
-   * at the CheckData page, and then we wouldn't want to send
-   * that child's ID to the success page for exporting to CSV).
-   *
-   * It's a hacky workaround right now, but it at least lets us
-   * get the component working so we have the functionality.
-   */
-  function formatIdString(): string {
-    const idArray = reportData.map((child) => {
-      return child.id;
-    });
-    return `/success/${idArray.join()}`;
-  }
 
   const organization =
     reportData && reportData.length ? reportData[0].organization : null;

@@ -7,14 +7,19 @@ import UserContext from '../contexts/UserContext/UserContext';
 /**
  * TODO: Once we have the infrastructure in place to actually
  * submit to OEC, we can swap this out for whatever we use.
- * But until then, this is the easiest way to make the call
- * to download the information aware of what children's records
- * were actually just uploaded.
+ * But until then, we have two ways of downloading information.
  */
 type ExportProps = {
   reportId: number;
 };
 
+/**
+ * TODO: The ability to fetch all children with enrollments at all
+ * sites the user has access to is implemented. We just use the
+ * enrollment report version of the API call here because it gives
+ * the user a snapshot of the data they updated. Once roster is done,
+ * we can add the export by user sites to that page.
+ */
 export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
@@ -25,10 +30,9 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
    */
   // console.log(submittedIds);
   async function downloadTemplate() {
-    console.log(reportId);
     await downloadStreamToFile(
-      // `export/csv-upload/${reportId}`,
-      `export/csv-upload/${user?.id}`,
+      // `export/csv-upload-report/${reportId}`,
+      `export/csv-upload-user/${user?.id}`,
       `Uploaded Data.csv`,
       accessToken || ''
     ).catch((err) => console.error(err));
