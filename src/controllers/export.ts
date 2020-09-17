@@ -83,7 +83,8 @@ export async function getChildrenByReport(report: EnrollmentReport) {
       var child = await tManager.findOne(
         Child,
         {
-          name: enrollment.firstName + ' ' + (enrollment.middleName + ' ' || '') + enrollment.lastName,
+          firstName: enrollment.firstName,
+          lastName: enrollment.lastName,
           birthdate: enrollment.birthdate,
           birthCertificateId: enrollment.birthCertificateId,
         },
