@@ -1,17 +1,21 @@
 import { write, WorkBook, utils } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { EntityMetadata, getConnection, getManager } from 'typeorm';
+import { EntityMetadata, getConnection, getManager, In } from 'typeorm';
 import {
   FlattenedEnrollment,
   Child,
   EnrollmentReport,
   Site,
   Enrollment,
+  User,
+  Organization,
 } from '../entity';
 import { getColumnMetadata } from '../entity/decorators/columnMetadata';
 import { Response } from 'express';
 import { isMoment, Moment } from 'moment';
 
+// Make sure to load all nested levels of the Child objects
+// we fetch
 const CHILD_RELATIONS = [
   'family',
   'family.incomeDeterminations',
@@ -21,6 +25,10 @@ const CHILD_RELATIONS = [
   'enrollments.fundings',
 ];
 
+/**
+ * Allows sorting of an array of nested property values within
+ * an object (i.e. Enrollments nested within a Child).
+ */
 const propertyDateSorter = <T>(
   a: T,
   b: T,
@@ -36,6 +44,13 @@ const propertyDateSorter = <T>(
   return 0;
 };
 
+/**
+ * Performs sorting of nested enrollments and funding periods
+ * within a Child object. This allows other functions to
+ * know that nested values are already ordered, so that the
+ * 0th element can be checked as the most recent.
+ * @param child
+ */
 function childSorter(child: Child) {
   child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
     if (enrollmentA.fundings) {
@@ -53,6 +68,13 @@ function childSorter(child: Child) {
   return child;
 }
 
+/**
+ * One of two ways to export a CSV of Children objects. Uses a
+ * transaction manager to find all Children who were uploaded
+ * in a particular enrollment report, sorts their properties,
+ * and returns the result.
+ * @param report
+ */
 export async function getChildrenByReport(report: EnrollmentReport) {
   const childrenToMap = await getManager().transaction(async (tManager) => {
     let kids = [];
@@ -81,20 +103,101 @@ export async function getChildrenByReport(report: EnrollmentReport) {
   return childrenToMap;
 }
 
+/**
+ * Second way of retrieving Children to export. Given an array
+ * of sites a user has access to, finds all Children with enrollments
+ * at that site, sorts their properties, and returns the collection
+ * after filtering for unique child identifiers.
+ * @param sites
+ */
 export async function getChildrenBySites(sites: Site[]) {
   const childrenToMap = await getManager().transaction(async (tManager) => {
     let kids: Child[] = [];
-    sites.forEach(async (site) => {
-      const enrollmentsAtSite = await tManager.find(Enrollment, { site: site });
-      // Keep only one copy of each child
-      const childrenHavingEnrollments = [
-        ...new Set(enrollmentsAtSite.map((enrollment) => enrollment.child)),
+    for (let i = 0; i < sites.length; i++) {
+      const enrollmentsAtSite = await tManager.find(Enrollment, {
+        site: sites[i],
+      });
+
+      // Keep only one copy of each child, since there could be
+      // overlap in the enrollments
+      const childIds = [
+        ...new Set(enrollmentsAtSite.map((enrollment) => enrollment.childId)),
       ];
+      const childrenHavingEnrollments = await Promise.all(
+        childIds.map(async (id) => {
+          const child = await tManager.findOne(
+            Child,
+            { id: id },
+            { relations: CHILD_RELATIONS }
+          );
+          return childSorter(child);
+        })
+      );
       kids = kids.concat(childrenHavingEnrollments);
-    });
+    }
     return kids;
   });
   return childrenToMap;
+}
+
+/**
+ * Determines all relevant sites a user with the provided User ID
+ * has access to. Everything is handled in one transaction to minimize
+ * calls to the DB.
+ * @param userId
+ */
+export async function getUserWithSites(userId: number) {
+  const user = await getManager().transaction(async (tManager) => {
+    const user = await tManager.findOne(
+      User,
+      { id: userId },
+      {
+        relations: [
+          'orgPermissions',
+          'sitePermissions',
+          'communityPermissions',
+        ],
+      }
+    );
+
+    // Get all orgs associated with communities user has permissions for
+    const orgsFromCommunities = (user.communityPermissions || []).length
+      ? await tManager.find(Organization, {
+          where: {
+            communityId: In(
+              user.communityPermissions.map((perm) => perm.communityId)
+            ),
+          },
+        })
+      : [];
+
+    // Create list of distinct organization ids the user can access
+    const allOrgIds = Array.from(
+      new Set([
+        ...(user.orgPermissions || []).map((perm) => perm.organizationId),
+        ...orgsFromCommunities.map((org) => org.id),
+      ])
+    );
+
+    // Get all sites associated with all organizations user has permissions for
+    const sitesFromAllOrgs = await tManager.find(Site, {
+      where: { organizationId: In(allOrgIds) },
+    });
+
+    // Create list of distinct site ids the user can access
+    const allSiteIds = Array.from(
+      new Set([
+        ...(user.sitePermissions || []).map((perm) => perm.siteId),
+        ...sitesFromAllOrgs.map((site) => site.id),
+      ])
+    );
+
+    // Add values to the user object
+    user.organizationIds = allOrgIds;
+    user.siteIds = allSiteIds;
+    return user;
+  });
+  return user;
 }
 
 /**
@@ -132,6 +235,12 @@ export function getAllEnrollmentColumns(): ColumnMetadata[] {
     .filter((templateMeta) => !!templateMeta);
 }
 
+/**
+ * Helper function that transforms the various non-String data
+ * of various Child fields into appropriate formats to display
+ * in cells of the CSV to export.
+ * @param value
+ */
 function formatStringPush(value: any) {
   if (typeof value == 'boolean') {
     return value ? 'Yes' : 'No';
@@ -236,7 +345,6 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
       childString.push('Unrecognized property name: ' + c.propertyName);
     }
   }
-
   return childString;
 }
 

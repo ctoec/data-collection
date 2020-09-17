@@ -4,7 +4,8 @@ import { saveAs } from 'file-saver';
 
 /**
  * Download a file stream from the route specified and save it to browser,
- * either with the file name specified or as "download".
+ * either with the file name specified or as "download". Optionally
+ * provide an authentication context to access secure routes.
  */
 export async function downloadStreamToFile(
   route: string,
