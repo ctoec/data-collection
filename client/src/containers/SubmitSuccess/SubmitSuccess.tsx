@@ -25,8 +25,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
  */
 const SubmitSuccess: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-  // Any cast when extracting param suppresses type error
-  // Fine because we know what the IDs are
   const { reportId } = useParams();
 
   return (

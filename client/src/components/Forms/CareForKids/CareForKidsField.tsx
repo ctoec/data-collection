@@ -14,7 +14,7 @@ import { Child } from '../../../shared/models';
 export const CareForKidsField: React.FC = () => {
   return (
     <FormField<Child, RadioButtonGroupProps, boolean>
-      getValue={(data) => data.at('recievesC4K')}
+      getValue={(data) => data.at('receivesC4K')}
       preprocessForDisplay={(data) => (data === true ? 'Yes' : 'No')}
       parseOnChangeEvent={(e) => {
         return e.target.value === 'Yes';

@@ -15,7 +15,6 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
-  FundingTimeInput,
   SpecialEducationServicesType,
   FundingSourceTime,
 } from '../../../client/src/shared/models';
@@ -76,8 +75,10 @@ const mapOrganization = (source: EnrollmentReportRow) => {
  * TODO: What do we want to do if the organization does not exist?
  * @param source
  */
-const mapSite = (source: EnrollmentReportRow) => {
-  return getManager().findOneOrFail(Site, { where: { name: source.siteName } });
+const mapSite = (source: FlattenedEnrollment) => {
+  return getManager().findOneOrFail(Site, {
+    where: { siteName: source.siteName },
+  });
 };
 
 /**
