@@ -1168,9 +1168,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#accorion-fix":
+"@ctoec/component-library@https://github.com/ctoec/component-library#base":
   version "0.0.31"
-  resolved "https://github.com/ctoec/component-library#dc95a3f88f32021939e97d221aea01287063c3a5"
+  resolved "https://github.com/ctoec/component-library#d00023e7cd2866b4034d31e42e46906dfe0355d5"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

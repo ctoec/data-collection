@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Column } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
-import { FundingSourceTime, FundingTimeInput } from '../../shared/models';
+import { FundingSourceTime } from '../../shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
