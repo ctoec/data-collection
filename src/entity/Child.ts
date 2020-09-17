@@ -37,9 +37,6 @@ export class Child implements ChildInterface {
   @Column({ nullable: true })
   sasid?: string;
 
-  @Column({ nullable: true })
-  name: string;
-
   @Column()
   @IsNotEmpty({ message: 'First name is required' })
   firstName: string;

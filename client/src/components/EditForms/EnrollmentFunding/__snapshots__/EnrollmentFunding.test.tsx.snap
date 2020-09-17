@@ -14,8 +14,8 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       <div
         class="display-flex flex-justify"
       >
-        <span
-          class="header-normal font-heading-md"
+        <h2
+          class="header-normal font-heading-lg"
         >
           First has no active enrollments
         </h2>

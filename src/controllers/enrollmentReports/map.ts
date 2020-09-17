@@ -107,11 +107,6 @@ const mapChild = (
 
   const child = getManager().create(Child, {
     sasid: source.sasid,
-    name:
-      source.firstName +
-      ' ' +
-      (source.middleName + ' ' || '') +
-      source.lastName,
     firstName: source.firstName,
     middleName: source.middleName,
     lastName: source.lastName,

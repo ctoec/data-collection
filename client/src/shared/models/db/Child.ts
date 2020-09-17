@@ -1,8 +1,4 @@
-import {
-  Enrollment,
-  Family,
-  Organization
-} from '.';
+import { Enrollment, Family, Organization } from '.';
 import { Gender, SpecialEducationServicesType } from '../';
 
 import { Moment } from 'moment';
@@ -10,7 +6,6 @@ import { Moment } from 'moment';
 export interface Child {
   id: string;
   sasid?: string;
-  name: string;
   firstName: string;
   middleName?: string;
   lastName: string;
