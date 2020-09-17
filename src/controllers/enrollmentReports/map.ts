@@ -196,7 +196,7 @@ const mapEnrollment = (
 };
 
 /**
- * Create Funding object from FlattenedEnrollment source,
+ * Create a Funding object from FlattenedEnrollment source,
  * associated with a FundingSpace for given organization and ageGroup
  * (already parsed from source).
  * @param source
