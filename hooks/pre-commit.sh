@@ -5,7 +5,7 @@
 FILES=$(git diff --cached --name-only --diff-filter=ACMR "*.js" "*.jsx" "*.ts" "*.tsx" "*.json" "*.css" "*.scss" | sed 's| |\\ |g')
 [ -z "$FILES" ] && exit 0
 
-cmd="yarn run prettier $FILES"
+cmd="yarn run prettier $FILES" 
 docker-compose exec -T server $cmd
 
 echo "$FILES" | xargs git add
