@@ -15,9 +15,7 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
-  FundingTimeInput,
   SpecialEducationServicesType,
-  FundingSourceTime
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES }  from '../../../client/src/shared/constants';
 import { getManager } from 'typeorm';
@@ -63,7 +61,6 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapOrganization = (source: FlattenedEnrollment) => {
-  if (!source.providerName) return Promise.reject('Provider is required');
   return getManager().findOneOrFail(Organization, {
     where: { providerName: source.providerName },
   });
@@ -78,7 +75,6 @@ const mapOrganization = (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapSite = (source: FlattenedEnrollment) => {
-  if (!source.siteName) return Promise.reject('Site is required');
   return getManager().findOneOrFail(Site, {
     where: { siteName: source.siteName },
   });

@@ -10,7 +10,7 @@ import {
   User,
   Organization,
 } from '../entity';
-import { getColumnMetadata } from '../entity/decorators/columnMetadata';
+import { getAllEnrollmentColumns } from '../controllers/columnMetadata';
 import { Response } from 'express';
 import { isMoment, Moment } from 'moment';
 
@@ -218,21 +218,6 @@ export async function streamUploadedChildren(
   });
   response.contentType('application/octet-stream');
   response.send(csvStream);
-}
-
-/**
- * Retrieve ColumnMetadata information for all columns on the
- * FlattenedEnrollment model.
- */
-export function getAllEnrollmentColumns(): ColumnMetadata[] {
-  const metadata: EntityMetadata = getConnection().getMetadata(
-    FlattenedEnrollment
-  );
-  return metadata.columns
-    .map((column) =>
-      getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
-    )
-    .filter((templateMeta) => !!templateMeta);
 }
 
 /**
