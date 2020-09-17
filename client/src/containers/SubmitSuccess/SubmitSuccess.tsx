@@ -16,8 +16,12 @@ import { Link } from 'react-router-dom';
  * TODO: Right now, the CheckData page just redirects straight
  * here when you click the Send to OEC button. Once we have the
  * infrastructure for what it means to actually send to OEC,
- * we can alter this, but for now, we need a way to actually
- * make this page aware of what data was submitted.
+ * we can alter this.
+ *
+ * For now, default way of exporting a CSV is to use the
+ * enrollment report ID of the page the user just checked,
+ * since this corresponds to getting a snapshot view of what
+ * the user just did.
  */
 const SubmitSuccess: React.FC = () => {
   const { reportId } = useParams();

@@ -12,7 +12,6 @@ import { Enrollment } from './Enrollment';
 import { ReportingPeriod } from './ReportingPeriod';
 import { FundingSpace } from './FundingSpace';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { Moment } from 'moment';
 
 @Entity()
 export class Funding implements FundingInterface {
