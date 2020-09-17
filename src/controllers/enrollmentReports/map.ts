@@ -17,6 +17,7 @@ import {
   FundingTime,
   SpecialEducationServicesType,
   FundingSourceTime,
+  FundingTimeInput,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
@@ -208,11 +209,7 @@ const mapFunding = async (
   organization: Organization,
   enrollment: Enrollment
 ) => {
-  const fundingSource: FundingSource = mapEnum(
-    FundingSource,
-    source.source
-  );
-
+  const fundingSource: FundingSource = mapEnum(FundingSource, source.source);
   let fundingTime: FundingTime = mapEnum(FundingTime, source.time);
 
   //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
