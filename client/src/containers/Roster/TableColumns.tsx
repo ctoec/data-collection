@@ -77,7 +77,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
         <td
           className={`${tableRowClassName} ellipsis-wrap-text ellipsis-wrap-text--tight`}
         >
-          {idx(row, (_) => _.enrollments[0].site.name)} which is too long
+          {idx(row, (_) => _.enrollments[0].site.name)}
         </td>
       ),
     },

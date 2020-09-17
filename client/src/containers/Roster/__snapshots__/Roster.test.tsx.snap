@@ -204,7 +204,9 @@ exports[`Roster matches snapshot 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-              />
+              >
+                06/01/2019
+              </td>
               <td
                 class="font-body-2xs"
               >
@@ -216,7 +218,7 @@ exports[`Roster matches snapshot 1`] = `
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               >
-                 which is too long
+                Site
               </td>
               <td
                 class="font-body-2xs"
@@ -236,7 +238,9 @@ exports[`Roster matches snapshot 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-              />
+              >
+                11/01/2018
+              </td>
               <td
                 class="font-body-2xs"
               >
@@ -248,7 +252,7 @@ exports[`Roster matches snapshot 1`] = `
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               >
-                 which is too long
+                Site
               </td>
               <td
                 class="font-body-2xs"
@@ -418,7 +422,9 @@ exports[`Roster matches snapshot 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-              />
+              >
+                01/01/2016
+              </td>
               <td
                 class="font-body-2xs"
               >
@@ -430,7 +436,7 @@ exports[`Roster matches snapshot 1`] = `
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               >
-                 which is too long
+                Site
               </td>
               <td
                 class="font-body-2xs"

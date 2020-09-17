@@ -23,6 +23,7 @@ import { waitFor, fireEvent, wait } from '@testing-library/dom';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { render, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import moment from 'moment';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const _child = {
@@ -51,12 +52,13 @@ const children: Child[] = [
     id: '0000000-0000-0000-0000-0000000000000',
     firstName: 'First',
     lastName: 'Toddler',
+    birthdate: moment.utc('2019-06-01', 'YYYY-MM-DD'),
     family: {} as Family,
     enrollments: [
       {
         child: _child,
         id: 1,
-        site: { id: 1 } as Site,
+        site: { id: 1, name: 'Site' } as Site,
         ageGroup: AgeGroup.InfantToddler,
         fundings: [
           {
@@ -72,12 +74,13 @@ const children: Child[] = [
     id: '11111111-0000-0000-0000-0000000000000',
     firstName: 'Second',
     lastName: 'Toddler',
+    birthdate: moment.utc('2018-11-01', 'YYYY-MM-DD'),
     family: {} as Family,
     enrollments: [
       {
         child: _child,
         id: 1,
-        site: { id: 1 } as Site,
+        site: { id: 1, name: 'Site' } as Site,
         ageGroup: AgeGroup.InfantToddler,
         fundings: [
           {
@@ -88,17 +91,18 @@ const children: Child[] = [
         ],
       },
     ],
-  },
+  } as Child,
   {
     id: '22222222-0000-0000-0000-0000000000000',
     firstName: 'First',
     lastName: 'Preschool',
+    birthdate: moment.utc('2016-01-01', 'YYYY-MM-DD'),
     family: {} as Family,
     enrollments: [
       {
         child: _child,
         id: 1,
-        site: { id: 1 } as Site,
+        site: { id: 1, name: 'Site' } as Site,
         ageGroup: AgeGroup.Preschool,
         fundings: [
           {
