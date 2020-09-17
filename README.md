@@ -6,10 +6,6 @@ A web application to collect information from child care providers in the State 
 
 ### Requirements
 1. Bind mount or clone [`winged-keys`](https://github.com/ctoec/winged-keys) into the top-level of this directory.
-1. Install git pre-commit hook from `/hooks` dir
-    ```sh
-       ln -s `pwd`/hooks/pre-commit.sh `pwd`/.git/hooks/pre-commit
-    ```
 1. Install (if you haven't already) [Docker](https://hub.docker.com/search?q=&type=edition&offering=community). Make sure you have [Docker Compose](https://docs.docker.com/compose/install/), which is included in some OS distributions but must be installed separately in others.
 
 ### Running the app
