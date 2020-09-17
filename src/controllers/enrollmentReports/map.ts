@@ -17,7 +17,7 @@ import {
   FundingTime,
   SpecialEducationServicesType,
 } from '../../../client/src/shared/models';
-import { FUNDING_SOURCE_TIMES }  from '../../../client/src/shared/constants';
+import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { getManager } from 'typeorm';
 
 /**
@@ -105,7 +105,11 @@ const mapChild = (
 
   const child = getManager().create(Child, {
     sasid: source.sasid,
-    name: source.firstName + ' ' + (source.middleName + ' ' || '') + source.lastName,
+    name:
+      source.firstName +
+      ' ' +
+      (source.middleName + ' ' || '') +
+      source.lastName,
     firstName: source.firstName,
     middleName: source.middleName,
     lastName: source.lastName,
@@ -196,7 +200,7 @@ const mapEnrollment = (
 };
 
 /**
- * Create Funding object from FlattenedEnrollment source,
+ * Create a Funding object from FlattenedEnrollment source,
  * associated with a FundingSpace for given organization and ageGroup
  * (already parsed from source).
  * @param source
