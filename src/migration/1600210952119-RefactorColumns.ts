@@ -58,7 +58,6 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
     await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.ReceivingCareForKids", "ReceivesC4K"`
     );
-    await queryRunner.query(`ALTER TABLE "Child" ADD "Name" nvarchar(255)`);
     await queryRunner.query(`EXEC sp_rename "Site.Name", "SiteName"`);
     await queryRunner.query(
       `EXEC sp_rename "Organization.Name", "ProviderName"`
@@ -120,7 +119,6 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
     await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.ReceivesC4K", "ReceivingCareForKids"`
     );
-    await queryRunner.query(`ALTER TABLE "Child" DROP "Name"`);
     await queryRunner.query(`EXEC sp_rename "Site.SiteName", "Name"`);
     await queryRunner.query(
       `EXEC sp_rename "Organization.ProviderName", "Provider"`
