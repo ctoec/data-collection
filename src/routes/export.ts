@@ -4,7 +4,7 @@ import * as controller from '../controllers/export';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { getManager } from 'typeorm';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
-import { EnrollmentReport, User } from '../entity';
+import { EnrollmentReport } from '../entity';
 import { getSites } from '../controllers/sites';
 
 export const exportRouter = express.Router();
@@ -17,7 +17,7 @@ export const exportRouter = express.Router();
  * uploaded.
  */
 exportRouter.get(
-  '/csv-upload/:reportId',
+  '/csv-upload-report/:reportId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params['reportId']) || 0;
@@ -42,11 +42,11 @@ exportRouter.get(
  * filtering for duplicates, and compiling a report.
  */
 exportRouter.get(
-  '/csv-upload/:userId',
+  '/csv-upload-user/:userId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const userId = parseInt(req.params['userId']) || 0;
-      const user = await getManager().findOne(User, { id: userId });
+      const user = await controller.getUserWithSites(userId);
       const sites = await getSites(user);
       const childrenToMap = await controller.getChildrenBySites(sites);
       res.send(controller.streamUploadedChildren(res, childrenToMap));
