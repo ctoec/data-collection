@@ -16,6 +16,8 @@ import {
   FundingSource,
   FundingTime,
   SpecialEducationServicesType,
+  FundingSourceTime,
+  FundingTimeInput,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { getManager } from 'typeorm';
@@ -213,7 +215,27 @@ const mapFunding = async (
   enrollment: Enrollment
 ) => {
   const fundingSource: FundingSource = mapEnum(FundingSource, source.source);
-  const fundingTime: FundingTime = mapEnum(FundingTime, source.time);
+  let fundingTime: FundingTime = mapEnum(FundingTime, source.time);
+
+  //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
+  //  was supplied instead and look up the corresponding FundingTime
+  if (!fundingTime && fundingSource) {
+    const matchingSourceTime: FundingSourceTime = FUNDING_SOURCE_TIMES.find(
+      (fst) => fst.fundingSources.includes(fundingSource)
+    );
+
+    if (matchingSourceTime) {
+      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(
+        (fundingTime) => {
+          return fundingTime.formats.includes(source.time.toString());
+        }
+      );
+
+      if (matchingTime) {
+        fundingTime = matchingTime.value;
+      }
+    }
+  }
 
   // Cannot create funding without FundingSpace, and cannot find FundingSpace
   // without fundingSource AND fundingTime, so if you don't have them
