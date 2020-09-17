@@ -59,7 +59,18 @@ export class Child implements ChildInterface {
   @MaxDate(moment().toDate(), { message: 'Birth date must be in the past' })
   birthdate?: Moment;
 
-  @Column({ nullable: true })
+
+
+
+
+
+
+
+
+
+
+  @Column({ nullable: 
+    true                })
   @IsNotEmpty({ message: 'Birth town is required' })
   birthTown?: string;
 
