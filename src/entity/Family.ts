@@ -48,5 +48,5 @@ export class Family implements FamilyInterface {
   organization?: Organization;
 
   @Column((type) => UpdateMetaData, { prefix: false })
-  updateMetaData?: UpdateMetaData;
+  updateMetaData: UpdateMetaData;
 }

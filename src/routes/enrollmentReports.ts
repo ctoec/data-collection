@@ -13,6 +13,7 @@ import {
 } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/enrollmentReports/index';
+import { mapFlattenedEnrollment } from '../controllers/enrollmentReports/index';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -26,14 +27,19 @@ enrollmentReportsRouter.get(
   '/:reportId',
   passAsyncError(async (req, res) => {
     const id = parseInt(req.params['reportId']) || 0;
-    const report = await getManager().findOne(EnrollmentReport, id);
+    const report = await getManager().findOne(EnrollmentReport, id, {
+      relations: [
+        'children',
+        'children.enrollments',
+        'children.enrollments.fundings',
+        'children.enrollments.site',
+        'children.enrollments.site.organization',
+      ],
+    });
 
     if (!report) throw new NotFoundError();
 
-    const enrollments = await Promise.all(
-      report.enrollments.map(controller.mapFlattenedEnrollment)
-    );
-    res.send(enrollments.filter((e) => !!e));
+    res.send(report);
   })
 );
 
@@ -51,11 +57,17 @@ enrollmentReportsRouter.post(
   upload,
   passAsyncError(async (req, res) => {
     try {
-      const enrollments = controller.parseUploadedTemplate(req.file);
+      const flattenedEnrollments = controller.parseUploadedTemplate(req.file);
+      const reportChildren = await Promise.all(
+        flattenedEnrollments.map(mapFlattenedEnrollment)
+      );
+
+      console.log('REPORT CHILDREN', reportChildren);
       const report = await getManager().save(
-        getManager().create(EnrollmentReport, { enrollments })
+        getManager().create(EnrollmentReport, { children: reportChildren })
       );
       res.status(201).json({ id: report.id });
+      // res.sendStatus(201);
     } catch (err) {
       if (err instanceof ApiError) throw err;
 
@@ -79,7 +91,7 @@ enrollmentReportsRouter.get(
     const report = await getManager().findOne(EnrollmentReport, id);
     if (!report) throw new NotFoundError();
 
-    const enrollments = report.enrollments;
+    const children = report.children;
     const stream = format();
 
     const randomString = uuid();
@@ -89,10 +101,11 @@ enrollmentReportsRouter.get(
     fileStream.on('finish', () => res.download(filename));
     stream.pipe(fileStream);
 
-    stream.write(Object.keys(enrollments[0])); // TODO: Use generated headers
-    enrollments.forEach((enrollment) =>
-      stream.write(Object.values(enrollment))
-    );
+    // TODO
+    // stream.write(Object.keys(children[0])); // TODO: Use generated headers
+    // children.forEach((enrollment) =>
+    //   stream.write(Object.values(enrollment))
+    // );
     stream.end();
   })
 );

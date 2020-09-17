@@ -314,7 +314,11 @@ const mapEnum = <T>(
   if (!value) return;
 
   const stripRegex = /[-\/\s]+/;
-  const normalizedValue = value.trim().replace(stripRegex, '').toLowerCase();
+  const normalizedValue = value
+    .toString()
+    .trim()
+    .replace(stripRegex, '')
+    .toLowerCase();
   let ret: T;
   Object.values(referenceEnum).forEach((ref) => {
     const normalizedRef = ref.replace(stripRegex, '').toLowerCase();

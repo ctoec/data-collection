@@ -5,6 +5,6 @@ export interface Funding extends ObjectWithValidationErrors {
   id: number;
   enrollment: Enrollment;
   fundingSpace: FundingSpace;
-  firstReportingPeriod: ReportingPeriod;
+  firstReportingPeriod?: ReportingPeriod;
   lastReportingPeriod?: ReportingPeriod;
 }

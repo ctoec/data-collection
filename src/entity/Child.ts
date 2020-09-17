@@ -31,16 +31,16 @@ export class Child implements ChildInterface {
   @Column({ nullable: true })
   sasid?: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty({ message: 'First name is required' })
-  firstName: string;
+  firstName?: string;
 
   @Column({ nullable: true })
   middleName?: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsNotEmpty({ message: 'Last name is required' })
-  lastName: string;
+  lastName?: string;
 
   @Column({ nullable: true })
   suffix?: string;
@@ -117,8 +117,8 @@ export class Child implements ChildInterface {
   specialEducationServicesType?: SpecialEducationServicesType;
 
   @ValidateNested()
-  @ManyToOne(() => Family, { nullable: false })
-  family: Family;
+  @ManyToOne(() => Family)
+  family?: Family;
 
   @ManyToOne(() => Organization, { nullable: false })
   organization?: Organization;
@@ -128,5 +128,5 @@ export class Child implements ChildInterface {
   enrollments?: Array<Enrollment>;
 
   @Column(() => UpdateMetaData, { prefix: false })
-  updateMetaData?: UpdateMetaData;
+  updateMetaData: UpdateMetaData;
 }

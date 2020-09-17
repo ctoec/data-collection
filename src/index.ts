@@ -2,19 +2,13 @@ import express, { json } from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
 import moment from 'moment';
-import { ConnectionOptions, createConnection } from 'typeorm';
+import { createConnection } from 'typeorm';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';
 import { router as apiRouter } from './routes';
 import { initialize } from './data/initialize';
-// import DB_CONFIG from './ormconfig';
-//		Module '"/home/node/app/src/ormconfig"' has no default export. Did you mean to use 'import { DB_CONFIG } from "/home/node/app/src/ormconfig"' instead?
-// 		(cannot export config as default, as that is incompat with CLI)
-// import * as DB_CONFIG from './ormconfig';
-// 		error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
-const DB_CONFIG = require('./ormconfig');
 
-createConnection((DB_CONFIG as any) as ConnectionOptions)
+createConnection()
   .then(async () => {
     console.log('Successfully established TypeORM DB connection');
 
