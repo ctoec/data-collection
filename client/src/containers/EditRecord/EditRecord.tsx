@@ -91,7 +91,7 @@ const EditRecord: React.FC = () => {
   };
 
   const commonFormProps = {
-    child: distributeValidationErrorsToSubObjects(rowData),
+    child: rowData,
     onSuccess,
     setAlerts,
     reportingPeriods,
