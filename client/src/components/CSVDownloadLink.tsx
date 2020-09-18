@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
-import UserContext from '../contexts/UserContext/UserContext';
 
 /**
  * TODO: Once we have the infrastructure in place to actually
@@ -22,7 +21,6 @@ type ExportProps = {
  */
 export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
   const { accessToken } = useContext(AuthenticationContext);
-  const { user } = useContext(UserContext);
 
   /**
    * Function that downloads information that the backend puts
@@ -30,8 +28,8 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
    */
   async function downloadTemplate() {
     await downloadStreamToFile(
-      // `export/csv-upload-report/${reportId}`,
-      `export/csv-upload-user/${JSON.stringify(user)}`,
+      // `export/enrollment-report/${reportId}`,
+      `export/roster`,
       `Uploaded Data.csv`,
       accessToken || ''
     ).catch((err) => console.error(err));

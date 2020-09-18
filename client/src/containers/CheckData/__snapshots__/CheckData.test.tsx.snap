@@ -195,18 +195,22 @@ exports[`CheckData matches snapshot 1`] = `
       <div
         class="fixed-buttons"
       >
-        <a
-          class="usa-button usa-button--outline"
-          href="/upload"
+        <div
+          class="grid-container"
         >
-          Back to upload
-        </a>
-        <a
-          class="usa-button"
-          href="/success/1"
-        >
-          Send to OEC
-        </a>
+          <a
+            class="usa-button usa-button--outline"
+            href="/upload"
+          >
+            Back to upload
+          </a>
+          <a
+            class="usa-button"
+            href="/success/1"
+          >
+            Send to OEC
+          </a>
+        </div>
       </div>
     </div>
   </div>
