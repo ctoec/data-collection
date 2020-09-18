@@ -130,13 +130,11 @@ async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUse
     
     user = await manager.save(_user);
 
-    const permsForAllOrgs: OrganizationPermission[] = await manager.find(OrganizationPermission);
-    console.log('SWEET HERE IT IS', permsForAllOrgs);
-
-    if (permsForAllOrgs.length) {
-      const orgPermsForUser = manager.create(OrganizationPermission, permsForAllOrgs.map(orgPerm => ({
+    const orgs: Organization[] = await manager.find(Organization);
+    if (orgs.length) {
+      const orgPermsForUser = manager.create(OrganizationPermission, orgs.map(org => ({
         user,
-        organizationId: orgPerm.organizationId
+        organizationId: org.id
       })));
       await manager.save(orgPermsForUser);
     }
