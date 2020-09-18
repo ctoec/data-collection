@@ -36,7 +36,10 @@ const child = {
       fundings: [
         {
           id: 1,
-          fundingSpace: { source: FundingSource.CDC, time: FundingTime.Full },
+          fundingSpace: {
+            source: FundingSource.CDC,
+            time: FundingTime.FullTime,
+          },
           firstReportingPeriod: { period: moment.utc('2019-09-01') },
           lastReportingPeriod: { period: moment.utc('2020-07-01') },
         } as Funding,

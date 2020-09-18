@@ -16,7 +16,6 @@ describe('EditRecord', () => {
         childName="Name"
         enrollment={enrollment}
         reportingPeriods={[]}
-        isOpen={true}
         toggleOpen={jest.fn()}
       />
     );
@@ -26,7 +25,6 @@ describe('EditRecord', () => {
         childName="Name"
         enrollment={enrollment}
         reportingPeriods={[]}
-        isOpen={true}
         toggleOpen={jest.fn()}
       />
     );
