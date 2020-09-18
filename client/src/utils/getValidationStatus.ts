@@ -1,4 +1,4 @@
-import { FormStatusProps, ObjectDriller } from '@ctoec/component-library';
+import { FormStatusProps, TObjectDriller } from '@ctoec/component-library';
 import { ValidationError } from 'class-validator';
 import { ObjectWithValidationErrors } from '../shared/models/ObjectWithValidationErrors';
 
@@ -20,7 +20,7 @@ export type ValidationStatusOptions = {
 export function getValidationStatusForField<
   T extends ObjectWithValidationErrors
 >(
-  objectDriller: ObjectDriller<T>,
+  objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {

@@ -17,7 +17,7 @@ export const DateOfBirthField: React.FC = () => {
       id="dateOfBirth-picker"
       label="Birth date"
       className="margin-top-3"
-    // status={getValidationStatusForField}
+      status={getValidationStatusForField}
     />
   );
 };
