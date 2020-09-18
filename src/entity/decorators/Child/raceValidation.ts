@@ -11,13 +11,7 @@ const raceFields = [
 ];
 
 function isChildRaceIndicated(child: Child) {
-  raceFields.forEach((field) => {
-    const val = child[field];
-    if (val) {
-      return true;
-    }
-  });
-  return false;
+  return !raceFields.every((field) => !child[field]);
 }
 
 export function ChildRaceIndicated(
@@ -29,7 +23,6 @@ export function ChildRaceIndicated(
       target: object.constructor,
       propertyName: propertyName,
       options: { message: childRaceNotNullMessage, ...validationOptions },
-      constraints: [{ childRace: childRaceNotNullMessage }],
       validator: {
         validate(_, { object: child }) {
           return isChildRaceIndicated(child as Child);

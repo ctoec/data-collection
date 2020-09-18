@@ -1,6 +1,7 @@
 import { Enrollment, FundingSpace, ReportingPeriod } from '.';
+import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 
-export interface Funding {
+export interface Funding extends ObjectWithValidationErrors {
   id: number;
   enrollment: Enrollment;
   fundingSpace: FundingSpace;

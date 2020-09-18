@@ -13,7 +13,7 @@ import { useHistory } from 'react-router-dom';
 import {
   EnrollmentEndDateField,
   ReportingPeriodField,
-} from '../../../components/EditForms/EnrollmentFunding/Fields';
+} from '../../../components/Forms/EnrollmentFunding/Fields';
 import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
 

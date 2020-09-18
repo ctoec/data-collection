@@ -1,6 +1,7 @@
 import { Child, IncomeDetermination, Organization } from '.';
+import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 
-export interface Family {
+export interface Family extends ObjectWithValidationErrors {
   id: number;
   streetAddress?: string;
   town?: string;
