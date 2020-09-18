@@ -131,6 +131,7 @@ async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUse
     user = await manager.save(_user);
 
     const permsForAllOrgs: OrganizationPermission[] = await manager.find(OrganizationPermission);
+    console.log('SWEET HERE IT IS', permsForAllOrgs);
 
     if (permsForAllOrgs.length) {
       const orgPermsForUser = manager.create(OrganizationPermission, permsForAllOrgs.map(orgPerm => ({
