@@ -38,27 +38,20 @@ const decodeClaim = jwt({
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
     if (req.claims.sub) {
-      let user = await getUser(req.claims.sub);
+      let fawkesUser = await getUser(req.claims.sub);
 
-      //  If no user exists in the Fawkes system, BUT Winged Keys knows about the
-      //  corresponding user, assume this is just a new user to our system and create them
       //  TODO: Remove once an actual user management system is implemented
-      if (!user) {
-        const res: AxiosResponse<any> = await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
-          headers: req.headers,
-          httpsAgent: new https.Agent({  
-            rejectUnauthorized: false
-          })
-        });
+      if (!fawkesUser) {
+        const res: AxiosResponse<any> = await getUserFromWingedKeys(req.headers);
 
         if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
-          user = await createUserWithFullPermissions(req.claims.sub, res.data);
+          fawkesUser = await createUserWithFullPermissions(req.claims.sub, res.data);
         } else {
           throw new InvalidSubClaimError();
         }
       }
 
-      req.user = user;
+      req.user = fawkesUser;
       next();
     }
   }
@@ -114,6 +107,15 @@ const getUser = async (wingedKeysId: string) => {
   user.siteIds = allSiteIds;
   return user;
 };
+
+async function getUserFromWingedKeys(headers: any) {
+    return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
+      headers,
+      httpsAgent: new https.Agent({  
+        rejectUnauthorized: false
+      })
+    });
+}
 
 async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUser: { given_name: string, family_name: string }): Promise<User> {
   let user: User;
