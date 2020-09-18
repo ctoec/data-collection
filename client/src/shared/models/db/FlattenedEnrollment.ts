@@ -26,7 +26,7 @@ export interface FlattenedEnrollment {
   streetAddress?: string;
   town?: string;
   state?: string;
-  zip?: string;
+  zipcode?: string;
   foster?: boolean;
   homelessness?: boolean;
   numberOfPeople?: number;

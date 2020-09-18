@@ -17,7 +17,7 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
       `EXEC sp_rename "FlattenedEnrollment.ReceivingSpecialEducationServices", "ReceivesSpecialEducationServices"`
     );
     await queryRunner.query(
-      `EXEC sp_rename "FlattenedEnrollment.Zipcode", "Zip"`
+      `EXEC sp_rename "Family.Zip", "Zipcode"`
     );
     await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.LivesWithFosterFamily", "Foster"`
@@ -78,7 +78,7 @@ export class RefactorColumns1600210952119 implements MigrationInterface {
       `EXEC sp_rename "FlattenedEnrollment.ReceivesSpecialEducationServices, "ReceivingSpecialEducationServices"`
     );
     await queryRunner.query(
-      `EXEC sp_rename "FlattenedEnrollment.Zip", "Zipcode"`
+      `EXEC sp_rename "Family.Zipcode", "Zip"`
     );
     await queryRunner.query(
       `EXEC sp_rename "FlattenedEnrollment.Foster", "LivesWithFosterFamily"`

@@ -145,7 +145,7 @@ const mapFamily = (source: FlattenedEnrollment, organization: Organization) => {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
-    zip: source.zip,
+    zipcode: source.zipcode,
     homelessness: source.homelessness,
     organization,
   });

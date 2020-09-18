@@ -332,7 +332,7 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '01234',
     section: SECTIONS.FAMILY_INFO,
   })
-  zip?: string;
+  zipcode?: string;
 
   @Column({ nullable: true })
   @ColumnMetadata({

@@ -28,7 +28,7 @@ export class Family implements FamilyInterface {
   state?: string;
 
   @Column({ nullable: true })
-  zip?: string;
+  zipcode?: string;
 
   @Column({ nullable: true })
   homelessness?: boolean;
