@@ -4,11 +4,11 @@ import moment from 'moment';
 import {
   EnrollmentReportRow,
   SECTIONS,
-  getColumnMetadata,
   DATE_FORMATS,
   REPORTING_PERIOD_FORMATS,
 } from '../../template';
 import { BadRequestError } from '../../middleware/error/errors';
+import { getAllColumnMetadata } from '../../template/getAllColumnMetadata';
 
 /**
  * Parses the uploaded file into:
@@ -19,13 +19,10 @@ import { BadRequestError } from '../../middleware/error/errors';
  */
 export function parseUploadedTemplate(file: Express.Multer.File) {
   /** MODEL PROPERTY CONSTS **/
-  const COLUMNS = getConnection().getMetadata(EnrollmentReportRow).columns;
 
-  const [OBJECT_PROPERTIES, EXPECTED_HEADERS] = COLUMNS
-    // get DataDefinition metadata
-    .map((column) =>
-      getColumnMetadata(new EnrollmentReportRow(), column.propertyName)
-    )
+  const columnMeta = getAllColumnMetadata();
+
+  const [objectProperties, expectedHeaders] = columnMeta
     // remove any columns without data definitions, as these are not present in the template
     .filter((dataDefinition) => !!dataDefinition)
     // create two arrays:
@@ -39,22 +36,14 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
       [[], []]
     );
 
-  const BOOLEAN_PROPERTIES = COLUMNS.filter((column) =>
-    column.type.toString().includes('Boolean')
-  ).map((column) => column.propertyName);
-
-  const DATE_PROPERTIES = COLUMNS.filter(
-    (column) => column.type === 'date'
-  ).map((column) => column.propertyName);
-
   const fileData = readFile(file.path);
   const sheet = Object.values(fileData.Sheets)[0];
 
   updateSheetRange(sheet);
-  const { headers, data } = parseSheet(sheet, OBJECT_PROPERTIES);
+  const { headers, data } = parseSheet(sheet, objectProperties);
 
   // Array comparison was returning false even when the strings matched
-  if (!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
+  if (!expectedHeaders.every((header, idx) => header === headers[idx])) {
     throw new BadRequestError(
       "The columns in your uploaded file don't match our template. Use the newest template without changing the column order."
     );
@@ -66,8 +55,21 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     );
   }
 
+  const booleanProperties: string[] = [];
+  const dateProperties: string[] = [];
+  Object.entries(new EnrollmentReportRow()).forEach(([prop, value]) => {
+    if (typeof value === 'boolean') {
+      booleanProperties.push(prop);
+    }
+    if (moment.isMoment(value)) {
+      dateProperties.push(prop);
+    }
+  });
+
+  console.log('datePrperties', dateProperties);
+
   return data.map((rawRow) =>
-    parseEnrollmentReportRow(rawRow, BOOLEAN_PROPERTIES, DATE_PROPERTIES)
+    parseEnrollmentReportRow(rawRow, booleanProperties, dateProperties)
   );
 }
 

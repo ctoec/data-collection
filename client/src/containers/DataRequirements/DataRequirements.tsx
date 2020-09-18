@@ -14,7 +14,7 @@ const DataRequirements: React.FC = () => {
   const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>([]);
 
   useEffect(() => {
-    apiGet('enrollment-reports/template/column-metadata').then((definitions) =>
+    apiGet('template/column-metadata').then((definitions) =>
       setColumnMetadata(definitions)
     );
   }, [accessToken]);

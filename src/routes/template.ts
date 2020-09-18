@@ -1,6 +1,7 @@
 import express from 'express';
 
 import * as controller from '../controllers/template';
+import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
 
 export const templateRouter = express.Router();
 /**
@@ -10,7 +11,7 @@ export const templateRouter = express.Router();
  * as an array of ColumnMetadata objects
  */
 templateRouter.get('/column-metadata', (req, res) => {
-  res.send(controller.getAllEnrollmentColumns());
+  res.send(getAllColumnMetadata());
 });
 
 /**

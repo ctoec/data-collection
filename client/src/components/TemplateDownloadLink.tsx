@@ -17,7 +17,7 @@ export const TemplateDownloadLink = ({
 
   async function downloadTemplate() {
     await downloadStreamToFile(
-      `enrollment-reports/template/${type}`,
+      `template/${type}`,
       `ECE Data Collection Template.${type}`
     );
   }
