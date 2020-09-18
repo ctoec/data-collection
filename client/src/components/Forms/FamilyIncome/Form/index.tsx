@@ -10,7 +10,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
-  if (!child) return <></>;
+  if (!child || !child.family) return <></>;
 
   const determinations = child.family.incomeDeterminations || [];
   const familyId = child.family.id;
