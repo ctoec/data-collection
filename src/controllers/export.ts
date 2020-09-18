@@ -123,66 +123,6 @@ export async function getChildrenBySites(sites: Site[]) {
 }
 
 /**
- * Determines all relevant sites a user with the provided User ID
- * has access to. Everything is handled in one transaction to minimize
- * calls to the DB.
- * @param userId
- */
-export async function getUserWithSites(userId: number) {
-  const user = await getManager().transaction(async (tManager) => {
-    const user = await tManager.findOne(
-      User,
-      { id: userId },
-      {
-        relations: [
-          'orgPermissions',
-          'sitePermissions',
-          'communityPermissions',
-        ],
-      }
-    );
-
-    // Get all orgs associated with communities user has permissions for
-    const orgsFromCommunities = (user.communityPermissions || []).length
-      ? await tManager.find(Organization, {
-          where: {
-            communityId: In(
-              user.communityPermissions.map((perm) => perm.communityId)
-            ),
-          },
-        })
-      : [];
-
-    // Create list of distinct organization ids the user can access
-    const allOrgIds = Array.from(
-      new Set([
-        ...(user.orgPermissions || []).map((perm) => perm.organizationId),
-        ...orgsFromCommunities.map((org) => org.id),
-      ])
-    );
-
-    // Get all sites associated with all organizations user has permissions for
-    const sitesFromAllOrgs = await tManager.find(Site, {
-      where: { organizationId: In(allOrgIds) },
-    });
-
-    // Create list of distinct site ids the user can access
-    const allSiteIds = Array.from(
-      new Set([
-        ...(user.sitePermissions || []).map((perm) => perm.siteId),
-        ...sitesFromAllOrgs.map((site) => site.id),
-      ])
-    );
-
-    // Add values to the user object
-    user.organizationIds = allOrgIds;
-    user.siteIds = allSiteIds;
-    return user;
-  });
-  return user;
-}
-
-/**
  * Function to send the created workbook of information back
  * to the router for handing to the client as a buffered
  * stream of information.
