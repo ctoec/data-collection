@@ -1,14 +1,15 @@
 import { StepProps, Button } from '@ctoec/component-library';
-import { EditFormProps } from '../../components/EditForms/types';
 import React from 'react';
-import {
-  ChildIdentifiersForm,
-  ChildInfoForm,
-  FamilyInfoForm,
-} from '../../components/EditForms';
+
 import { NewFamilyIncome } from './NewFamilyIncome';
 import { NewEnrollment } from './NewEnrollment';
 import { History } from 'history';
+import { EditFormProps } from '../../components/Forms/types';
+import {
+  ChildIdentifiersForm,
+  ChildInfoForm,
+  FamilyAddressForm,
+} from '../../components/Forms';
 
 export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   history: History
@@ -62,7 +63,7 @@ export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
         onClick={() => history.replace({ hash: 'family-address' })}
       />
     ),
-    Form: FamilyInfoForm,
+    Form: FamilyAddressForm,
   },
   {
     key: 'family-income',

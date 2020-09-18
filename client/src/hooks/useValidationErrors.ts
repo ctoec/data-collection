@@ -1,0 +1,39 @@
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { ObjectWithValidationErrors } from '../shared/models/ObjectWithValidationErrors';
+import { distributeValidationErrorsToSubObjects } from '../utils/getValidationStatus';
+
+export type HideErrors = boolean | ((locationHash: string) => boolean);
+
+export function useValidationErrors<T extends ObjectWithValidationErrors>(
+  inputObject: T,
+  hideErrors?: HideErrors
+) {
+  const { hash } = useLocation();
+  let initialHide = hideErrors;
+  if (hideErrors instanceof Function) {
+    initialHide = hideErrors(hash);
+  }
+  const [errorsHidden, setErrorsHidden] = useState(!!initialHide);
+  const [outputObject, setOutputObject] = useState<T>({
+    ...inputObject,
+    validationErrors: undefined,
+  });
+
+  useEffect(() => {
+    if (!errorsHidden) {
+      setOutputObject(
+        distributeValidationErrorsToSubObjects(inputObject) || inputObject
+      );
+    }
+  }, [errorsHidden]);
+
+  // This only focuses on errors, not warnings
+  // TODO: figure out why this isn't working
+  // useFocusFirstError([errorsHidden])
+
+  return {
+    obj: outputObject,
+    setErrorsHidden,
+  };
+}

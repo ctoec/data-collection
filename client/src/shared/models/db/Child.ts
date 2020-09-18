@@ -2,8 +2,9 @@ import { Enrollment, Family, Organization } from '.';
 import { Gender, SpecialEducationServicesType } from '../';
 
 import { Moment } from 'moment';
+import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 
-export interface Child {
+export interface Child extends ObjectWithValidationErrors {
   id: string;
   sasid?: string;
   firstName: string;

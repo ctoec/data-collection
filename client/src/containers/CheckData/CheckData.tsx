@@ -40,29 +40,29 @@ const CheckData: React.FC = () => {
   return (
     <>
       <div className="CheckData__content margin-top-4 grid-container">
-          <BackButton />
-          {alertElements}
-          <h1 ref={h1Ref}>
-            Check data for {pluralize('child', reportData.length, true)}
-          </h1>
-          <p>Make sure all of your data was uploaded correctly. </p>
-          <p>If everything looks good, submit to OEC.</p>
-          <Link to={{ pathname: '/create-record', state: { organization } }}>
-            Add a record
-          </Link>
-          {reportData.length ? (
-            <PerfectScrollbar>
-              <Table<Child>
-                id="enrollment-report-table"
-                rowKey={(row) => row.id}
-                data={reportData}
-                columns={tableColumns}
-              />
-            </PerfectScrollbar>
-          ) : (
-            'Loading...'
-          )}
-        </div>
+        <BackButton />
+        {alertElements}
+        <h1 ref={h1Ref}>
+          Check data for {pluralize('child', reportData.length, true)}
+        </h1>
+        <p>Make sure all of your data was uploaded correctly. </p>
+        <p>If everything looks good, submit to OEC.</p>
+        <Link to={{ pathname: '/create-record', state: { organization } }}>
+          Add a record
+        </Link>
+        {reportData.length ? (
+          <PerfectScrollbar>
+            <Table<Child>
+              id="enrollment-report-table"
+              rowKey={(row) => row.id}
+              data={reportData}
+              columns={tableColumns}
+            />
+          </PerfectScrollbar>
+        ) : (
+          'Loading...'
+        )}
+      </div>
       <FixedBottomBar>
         <Button text="Back to upload" href="/upload" appearance="outline" />
         <Button text="Send to OEC" href="/success" />

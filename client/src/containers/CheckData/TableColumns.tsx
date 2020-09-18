@@ -33,13 +33,19 @@ export const tableColumns: Column<Child>[] = [
     className: tableColumnClassName,
     name: 'Birth Date',
     cell: ({ row }) => (
-      <td className={tableRowClassName}>{row.birthdate ? row.birthdate.format('MM/DD/YYYY') : ''}</td>
+      <td className={tableRowClassName}>
+        {row.birthdate ? row.birthdate.format('MM/DD/YYYY') : ''}
+      </td>
     ),
   },
   {
     className: tableColumnClassName,
     name: 'Age group',
-    cell: ({ row }) => <td className={tableRowClassName}>{idx(row, (_) => _.enrollments[0].ageGroup)}</td>,
+    cell: ({ row }) => (
+      <td className={tableRowClassName}>
+        {idx(row, (_) => _.enrollments[0].ageGroup)}
+      </td>
+    ),
   },
   {
     className: tableColumnClassName,
@@ -54,19 +60,27 @@ export const tableColumns: Column<Child>[] = [
     className: tableColumnClassName,
     name: 'Contract space',
     cell: ({ row }) => (
-      <td className={tableRowClassName}>{idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.time)}</td>
+      <td className={tableRowClassName}>
+        {idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.time)}
+      </td>
     ),
   },
   {
     className: tableColumnClassName,
     name: 'Site',
-    cell: ({ row }) => <td className={tableRowClassName}>{idx(row, (_) => _.enrollments[0].site.name)}</td>,
+    cell: ({ row }) => (
+      <td className={tableRowClassName}>
+        {idx(row, (_) => _.enrollments[0].site.name)}
+      </td>
+    ),
   },
   {
     className: tableColumnClassName,
     name: 'Enrollment date',
     cell: ({ row }) => (
-      <td className={tableRowClassName}>{idx(row, (_) => _.enrollments[0].entry.format('MM/DD/YYYY'))}</td>
+      <td className={tableRowClassName}>
+        {idx(row, (_) => _.enrollments[0].entry.format('MM/DD/YYYY'))}
+      </td>
     ),
   },
 ];

@@ -1,35 +1,47 @@
 import React, { useContext, useState } from 'react';
-import { Enrollment } from '../../shared/models';
+import { Child, Enrollment } from '../../shared/models';
 import {
   SiteField,
   EnrollmentStartDateField,
   AgeGroupField,
   FundingField,
-} from '../../components/EditForms/EnrollmentFunding/Fields';
+} from '../../components/Forms/EnrollmentFunding/Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { EditFormProps } from '../../components/EditForms/types';
+import { EditFormProps } from '../../components/Forms/types';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost } from '../../utils/api';
 import { useSites } from '../../hooks/useSites';
 import { useFundingSpaces } from '../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import useIsMounted from '../../hooks/useIsMounted';
-import { CareForKidsField } from '../../components/EditForms/CareForKids/CareForKidsField';
+import { CareForKidsField } from '../../components/Forms/CareForKids/CareForKidsField';
+import { useValidationErrors } from '../../hooks/useValidationErrors';
 
 // This is separate from the other enrollment forms because they're pretty complicated
 // Maybe we should try to reconcile though?
-export const NewEnrollment = ({ child, onSuccess }: EditFormProps) => {
+export const NewEnrollment = ({
+  child: inputChild,
+  onSuccess,
+  hideErrorsOnFirstLoad = false,
+}: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
-  const enrollment =
-    (child?.enrollments || []).find((e) => !e.exit) || ({} as Enrollment);
 
-  if (!child) {
+  if (!inputChild) {
     throw new Error('Child info rendered without child');
   }
 
+  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
+    inputChild,
+    hideErrorsOnFirstLoad
+  );
+
+  const enrollment =
+    (child?.enrollments || []).find((e) => !e.exit) || ({} as Enrollment);
+
   const onSubmit = (_enrollment: Enrollment) => {
+    setErrorsHidden(false);
     setSaving(true);
     if (!Object.values(_enrollment).every((value) => !value)) {
       // If all of the values are null or undefined, don't block
