@@ -7,7 +7,6 @@ import { passAsyncError } from './error/passAsyncError';
 
 import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
-import { userInfo } from 'os';
 import { InvalidSubClaimError } from './error/errors';
 
 /**
@@ -108,7 +107,7 @@ const getUser = async (wingedKeysId: string) => {
   return user;
 };
 
-async function getUserFromWingedKeys(headers: any) {
+async function getUserFromWingedKeys(headers: any): Promise<AxiosResponse<any>> {
     return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
       headers,
       httpsAgent: new https.Agent({  
