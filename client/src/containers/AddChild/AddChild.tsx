@@ -77,7 +77,7 @@ const AddChild: React.FC = () => {
   }, [
     accessToken,
     child,
-    location,
+    locationState,
     organization,
     history,
     updateChild,
