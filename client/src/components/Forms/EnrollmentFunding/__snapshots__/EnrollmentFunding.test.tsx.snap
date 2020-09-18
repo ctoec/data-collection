@@ -1713,7 +1713,9 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
           </p>
           <p
             class="text-bold"
-          />
+          >
+            Full time
+          </p>
         </div>
         <div
           class="flex-2"
