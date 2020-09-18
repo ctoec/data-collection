@@ -9,7 +9,7 @@ import { getManager } from 'typeorm';
  */
 export const getReadAccessibileOrgIds = async (user: User) => {
   // get org ids for all permitted sites
-  const siteOrgIds = (await getManager().findByIds(Site, user.siteIds)).map(
+  const siteOrgIds = (await getManager().findByIds(Site, user.siteIds || [])).map(
     (site) => site.organizationId
   );
 
