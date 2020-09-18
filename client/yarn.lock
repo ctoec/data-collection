@@ -1168,7 +1168,7 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#base":
+"@ctoec/component-library@https://github.com/ctoec/component-library#moreccordion":
   version "0.0.31"
   resolved "https://github.com/ctoec/component-library#99f2350d7ec77830852239e8d1d6dde86ab2f0f8"
   dependencies:
@@ -4468,9 +4468,18 @@ domhandler@^3.0, domhandler@^3.0.0:
     domelementtype "^2.0.1"
 
 dompurify@^2.0.12:
+<<<<<<< HEAD
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.1.0.tgz#29ae507c1e50ea8e46929844194670605160df01"
   integrity sha512-wKExRhOwUnfm1icoISSXnlmM1P2l07W2tFQqbU+8oySnvy7tHwj2iHJ1kJQi8EfcTlojsHKESOJwCGVJmNUdPQ==
+=======
+  version "2.0.17"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.0.17.tgz#505ffa126a580603df4007e034bdc9b6b738668e"
+  integrity sha512-nNwwJfW55r8akD8MSFz6k75bzyT2y6JEa1O3JrZFBf+Y5R9JXXU4OsRl0B9hKoPgHTw2b7ER5yJ5Md97MMUJPg==
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.0.16.tgz#9358430b9df8e7d742441f12355f1341e6cfb749"
+  integrity sha512-MMNzUQdlvmbXhD0NVxME4hNI72eOlcz9TzO9L8KfmUcI+h97ISON5XagIUm40+JRwV4fGHYqxRpSy844fT9iow==
+>>>>>>> 269: Add utilization to roster
 
 domready@^1.0.8:
   version "1.0.8"

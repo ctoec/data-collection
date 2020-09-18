@@ -15,6 +15,7 @@ import { Link, useHistory } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
+import { RosterSectionHeader } from './RosterSectionHeader';
 
 const MAX_LENGTH_EXPANDED = 50;
 
@@ -31,7 +32,7 @@ const Roster: React.FC = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    apiGet('/children', { accessToken })
+    apiGet('children', { accessToken })
       .then((_children) => {
         if (_children) setChildren(_children);
       })
@@ -58,10 +59,10 @@ const Roster: React.FC = () => {
     .map(([ageGroup, ageGroupChildren = []]) => ({
       id: ageGroup,
       title: (
-        <p>
-          <span className="text-bold">{ageGroup}</span>{' '}
-          {ageGroupChildren?.length} children
-        </p>
+        <RosterSectionHeader
+          ageGroup={ageGroup as AgeGroup}
+          children={ageGroupChildren}
+        />
       ),
       expandText: `Show ${ageGroup} roster`,
       collapseText: `Hide ${ageGroup} roster`,
@@ -88,7 +89,7 @@ const Roster: React.FC = () => {
 
   return (
     <>
-      <div className="grid-container">
+      <div className="Roster grid-container">
         <h2 className="font-body-xl margin-bottom-0">
           {organization?.providerName}
         </h2>

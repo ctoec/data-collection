@@ -21,6 +21,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-modal": "^3.10.6",
     "@types/react-router-dom": "^5.1.5",
+    "class-validator": "^0.12.2",
     "content-disposition": "^0.5.3",
     "file-saver": "^2.0.2",
     "idx": "^2.5.6",
@@ -43,7 +44,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
+    "test": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
