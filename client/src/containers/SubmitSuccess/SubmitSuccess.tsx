@@ -17,7 +17,7 @@ const SubmitSuccess: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row text-bold">
-        <Link to="/check-data">
+        <Link className="usa-button usa-button--unstyled" to="/check-data">
           <TextWithIcon
             text="Back"
             Icon={Arrow}

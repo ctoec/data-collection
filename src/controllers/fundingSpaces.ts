@@ -1,5 +1,6 @@
 import { User, FundingSpace, Site, Organization } from '../entity';
 import { getManager, In } from 'typeorm';
+import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 
 /**
  * Get all funding spaces a given user has access to,
@@ -9,19 +10,10 @@ import { getManager, In } from 'typeorm';
  * @param user
  */
 export const getFundingSpaces = async (user: User) => {
-  // get org ids for the sites the user can access
-  const siteOrgIds = (
-    await getManager().find(Site, {
-      where: { organization: In(user.siteIds || []) },
-    })
-  ).map((site) => site.organizationId);
-
-  // create list of distinct organizations the user
-  // can access funding spaces for
-  const orgIds = Array.from(new Set([...siteOrgIds, ...user.organizationIds]));
+  const readOrgIds = await getReadAccessibileOrgIds(user);
 
   return getManager().find(FundingSpace, {
-    where: { organization: { id: In(orgIds) } },
+    where: { organization: { id: In(readOrgIds) } },
     relations: ['organization'],
   });
 };

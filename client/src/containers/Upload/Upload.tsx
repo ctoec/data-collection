@@ -59,7 +59,7 @@ const Upload: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
       <div className="margin-bottom-2 text-bold">
-        <Link to="/">
+        <Link className="usa-button usa-button--unstyled" to="/">
           <TextWithIcon
             text="Back"
             Icon={Arrow}

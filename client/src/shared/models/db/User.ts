@@ -1,4 +1,4 @@
-import { OrganizationPermission, Site, SitePermission } from '.';
+import { Site, Organization } from '.';
 
 export interface User {
   id: number;
@@ -7,7 +7,6 @@ export interface User {
   lastName: string;
   middleName?: string;
   suffix?: string;
-  orgPermissions?: Array<OrganizationPermission>;
-  sitePermissions?: Array<SitePermission>;
   sites?: Array<Site>;
+  organizations?: Array<Organization>;
 }

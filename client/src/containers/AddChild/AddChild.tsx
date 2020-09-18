@@ -8,7 +8,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { listSteps } from './ListSteps';
-import UserContext from '../../contexts/UserContext/UserContext';
 
 type LocationType = Location & {
   state: {
@@ -18,9 +17,9 @@ type LocationType = Location & {
 
 const AddChild: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-	const { accessToken } = useContext(AuthenticationContext);
+  const { accessToken } = useContext(AuthenticationContext);
 
-	const location = useLocation() as LocationType;
+  const location = useLocation() as LocationType;
   const activeStep = location.hash.slice(1);
   const history = useHistory();
   const steps = listSteps(history);
@@ -31,11 +30,11 @@ const AddChild: React.FC = () => {
       history.replace({ hash: steps[0].key });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
-	
-	const [child, updateChild] = useState<Child>();
-	// TODO how do we choose correct org / site for creating new data
-	const organization = location.state?.organization || child?.organization;
+  }, []);
+
+  const [child, updateChild] = useState<Child>();
+  // TODO how do we choose correct org / site for creating new data
+  const organization = location.state?.organization || child?.organization;
   const [creating, setCreating] = useState(false);
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
@@ -93,9 +92,7 @@ const AddChild: React.FC = () => {
   const onSuccess = () => {
     const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
     if (indexOfCurrentStep === steps.length - 1) {
-      // If we're all done
-      console.log('TODO: what do we do after adding a child?');
-      history.push('/check-data/1', {
+      history.push('/roster', {
         alerts: [
           {
             type: 'success',

@@ -9,6 +9,7 @@ exports[`SubmitSuccess matches snapshot 1`] = `
       class="grid-row text-bold"
     >
       <a
+        class="usa-button usa-button--unstyled"
         href="/check-data"
       >
         <span
@@ -46,6 +47,7 @@ exports[`SubmitSuccess matches snapshot 1`] = `
         <br />
          
         <a
+          class="usa-button usa-button--unstyled"
           href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
           rel="noopener noreferrer"
           target="_blank"

@@ -167,6 +167,7 @@ exports[`Home matches snapshot 1`] = `
           <p>
             Send us your feedback at 
             <a
+              class="usa-button usa-button--unstyled"
               href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
               rel="noopener noreferrer"
               target="_blank"
