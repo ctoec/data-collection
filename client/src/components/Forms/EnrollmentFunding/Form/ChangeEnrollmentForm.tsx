@@ -24,6 +24,7 @@ import {
   ReportingPeriodField,
   FundingField,
 } from '../Fields';
+import { isNullOrUndefined } from 'util';
 
 type ChangeEnrollmentFormProps = {
   childName: string;
@@ -88,7 +89,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   return (
     <Card forceClose={closeCard}>
       <div className="display-flex flex-justify">
-        {activeFunding == undefined ? (
+        {activeFunding == undefined && currentEnrollment == null ? (
           <h2 className="header-normal font-heading-lg">
             {childName} has no active enrollments
           </h2>

@@ -4,7 +4,7 @@ import * as controller from '../controllers/export';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { getManager } from 'typeorm';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
-import { EnrollmentReport } from '../entity';
+import { EnrollmentReport, User } from '../entity';
 import { getSites } from '../controllers/sites';
 
 export const exportRouter = express.Router();
@@ -35,18 +35,17 @@ exportRouter.get(
 );
 
 /**
- * /csv-upload-user/:userId GET
+ * /csv-upload-user/:user GET
  * Ask the backend to compile a CSV of child objects formatted according
  * to the data template. Children are found by looking up all sites the
  * user has access to, finding all Children with enrollments at these sites,
  * filtering for duplicates, and compiling a report.
  */
 exportRouter.get(
-  '/csv-upload-user/:userId',
+  '/csv-upload-user/:user',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const userId = parseInt(req.params['userId']) || 0;
-      const user = await controller.getUserWithSites(userId);
+      const user: User = JSON.parse(req.params['user']);
       const sites = await getSites(user);
       const childrenToMap = await controller.getChildrenBySites(sites);
       res.send(controller.streamUploadedChildren(res, childrenToMap));

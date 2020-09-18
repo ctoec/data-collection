@@ -6,7 +6,7 @@ export interface Family extends ObjectWithValidationErrors {
   streetAddress?: string;
   town?: string;
   state?: string;
-  zip?: string;
+  zipcode?: string;
   homelessness?: boolean;
   incomeDeterminations?: Array<IncomeDetermination>;
   children?: Array<Child>;

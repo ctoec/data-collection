@@ -1,8 +1,7 @@
 import { write, WorkBook, utils } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { EntityMetadata, getConnection, getManager, In } from 'typeorm';
+import { getManager, In } from 'typeorm';
 import {
-  FlattenedEnrollment,
   Child,
   EnrollmentReport,
   Site,
@@ -12,7 +11,8 @@ import {
 } from '../entity';
 import { getAllEnrollmentColumns } from '../controllers/columnMetadata';
 import { Response } from 'express';
-import { isMoment, Moment } from 'moment';
+import { isMoment } from 'moment';
+import { propertyDateSorter } from '../utils/propertyDateSorter';
 
 // Make sure to load all nested levels of the Child objects
 // we fetch
@@ -24,25 +24,6 @@ const CHILD_RELATIONS = [
   'enrollments.site.organization',
   'enrollments.fundings',
 ];
-
-/**
- * Allows sorting of an array of nested property values within
- * an object (i.e. Enrollments nested within a Child).
- */
-const propertyDateSorter = <T>(
-  a: T,
-  b: T,
-  accessor: (_: T) => Moment | null | undefined
-) => {
-  const aDate = accessor(a);
-  const bDate = accessor(b);
-
-  if (!aDate) return 1;
-  if (!bDate) return -1;
-  if (aDate < bDate) return 1;
-  if (bDate < aDate) return -1;
-  return 0;
-};
 
 /**
  * Performs sorting of nested enrollments and funding periods

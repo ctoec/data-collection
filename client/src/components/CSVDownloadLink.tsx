@@ -31,7 +31,7 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
   async function downloadTemplate() {
     await downloadStreamToFile(
       // `export/csv-upload-report/${reportId}`,
-      `export/csv-upload-user/${user?.id}`,
+      `export/csv-upload-user/${JSON.stringify(user)}`,
       `Uploaded Data.csv`,
       accessToken || ''
     ).catch((err) => console.error(err));

@@ -161,7 +161,7 @@ function parseEnrollmentReportRow(
     }
 
     // Parse zip codes
-    if (prop.match(/zip/i)) {
+    if (prop.match(/zipcode/i)) {
       const zipString = value.toString();
       if (zipString.length === 4) {
         rawEnrollment[prop] = `0${zipString}`;

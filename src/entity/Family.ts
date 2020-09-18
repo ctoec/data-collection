@@ -33,7 +33,7 @@ export class Family implements FamilyInterface {
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  zip?: string;
+  zipcode?: string;
 
   @Column({ default: false })
   homelessness?: boolean;
