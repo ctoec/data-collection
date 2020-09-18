@@ -41,7 +41,7 @@ const addUser = passAsyncError(
 
       //  TODO: Remove once an actual user management system is implemented
       if (!fawkesUser) {
-        const res: AxiosResponse<any> = await getUserFromWingedKeys(req.headers);
+        const res: AxiosResponse<any> = await getUserFromWingedKeys(req.headers.authorization);
 
         if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
           fawkesUser = await createUserWithFullPermissions(req.claims.sub, res.data);
@@ -107,9 +107,11 @@ const getUser = async (wingedKeysId: string) => {
   return user;
 };
 
-async function getUserFromWingedKeys(headers: any): Promise<AxiosResponse<any>> {
+async function getUserFromWingedKeys(bearerToken: string): Promise<AxiosResponse<any>> {
     return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
-      headers,
+      headers: {
+        authorization: bearerToken
+      },
       httpsAgent: new https.Agent({  
         rejectUnauthorized: false
       })
@@ -133,7 +135,7 @@ async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUse
     if (permsForAllOrgs.length) {
       const orgPermsForUser = manager.create(OrganizationPermission, permsForAllOrgs.map(orgPerm => ({
         user,
-        organization: orgPerm.organization
+        organizationId: orgPerm.organizationId
       })));
       await manager.save(orgPermsForUser);
     }
