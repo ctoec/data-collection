@@ -5,6 +5,8 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import moment, { Moment } from 'moment';
+import { Length, ValidateNested, IsNotEmpty } from 'class-validator';
 
 import {
   Child as ChildInterface,
@@ -16,18 +18,10 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { Moment } from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
-import {
-  Length,
-  MinDate,
-  MaxDate,
-  ValidateNested,
-  IsNotEmpty,
-} from 'class-validator';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
-import moment from 'moment';
+import { MomentComparison } from './decorators/momentValidators';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -53,10 +47,15 @@ export class Child implements ChildInterface {
 
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @IsNotEmpty()
-  @MinDate(moment().add(-12, 'years').toDate(), {
+  @MomentComparison({
+    context: (birthdate: Moment) =>
+      birthdate.isSameOrAfter(moment().add(-12, 'years')),
     message: 'Birth date must be within last 12 years',
   })
-  @MaxDate(moment().toDate(), { message: 'Birth date must be in the past' })
+  @MomentComparison({
+    context: (birthdate: Moment) => birthdate.isBefore(moment()),
+    message: 'Birth date must be in the past',
+  })
   birthdate?: Moment;
 
   @Column({ nullable: true })

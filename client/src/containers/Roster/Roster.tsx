@@ -67,7 +67,7 @@ const Roster: React.FC = () => {
       collapseText: `Hide ${ageGroup} roster`,
       content: (
         <Table<Child>
-					className="margin-bottom-4"
+          className="margin-bottom-4"
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
           data={ageGroupChildren}

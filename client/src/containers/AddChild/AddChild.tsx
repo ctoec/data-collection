@@ -4,10 +4,11 @@ import { StepList } from '@ctoec/component-library';
 import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { listSteps } from './ListSteps';
+import { distributeValidationErrorsToSubObjects } from '../../utils/getValidationStatus';
 
 type LocationType = Location & {
   state: {
@@ -18,11 +19,21 @@ type LocationType = Location & {
 const AddChild: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-
-  const location = useLocation() as LocationType;
-  const activeStep = location.hash.slice(1);
+  const { state: locationState, hash } = useLocation() as LocationType;
+  const activeStep = hash.slice(1);
   const history = useHistory();
   const steps = listSteps(history);
+  const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
+  // Keep track of steps that have been visited at least once
+  const [stepsVisited, updateStepsVisited] = useState<
+    { key: string; visited: boolean; active: boolean }[]
+  >(
+    steps.map(({ key }, i) => ({
+      key,
+      visited: i < indexOfCurrentStep,
+      active: key === activeStep,
+    }))
+  );
 
   // On initial load, set url hash to first step hash
   useEffect(() => {
@@ -34,7 +45,7 @@ const AddChild: React.FC = () => {
 
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
-  const organization = location.state?.organization || child?.organization;
+  const organization = locationState?.organization || child?.organization;
   const [creating, setCreating] = useState(false);
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
@@ -66,7 +77,7 @@ const AddChild: React.FC = () => {
   }, [
     accessToken,
     child,
-    location,
+    locationState,
     organization,
     history,
     updateChild,
@@ -90,7 +101,6 @@ const AddChild: React.FC = () => {
   }, [accessToken, childId, refetchChild]);
 
   const onSuccess = () => {
-    const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
     if (indexOfCurrentStep === steps.length - 1) {
       history.push('/roster', {
         alerts: [
@@ -102,14 +112,27 @@ const AddChild: React.FC = () => {
         ],
       });
     } else {
+      updateStepsVisited((oldSteps) => {
+        const newSteps = [...oldSteps];
+        newSteps[indexOfCurrentStep].visited = true;
+        return newSteps;
+      });
       triggerRefetchChild();
       history.replace({ hash: steps[indexOfCurrentStep + 1].key });
     }
   };
 
   const { alertElements, setAlerts } = useAlerts();
-
-  const commonFormProps = { child, onSuccess, setAlerts, hideHeader: true };
+  const commonFormProps = {
+    child: distributeValidationErrorsToSubObjects(child),
+    onSuccess,
+    setAlerts,
+    hideHeader: true,
+    hideErrorsOnFirstLoad: (_hash: string) => {
+      const hashMinusOctothorpe = _hash.replace('#', '');
+      return !stepsVisited.find((s) => s.key === hashMinusOctothorpe)?.visited;
+    },
+  };
 
   if (!child) {
     return <>Loading...</>;
@@ -121,7 +144,6 @@ const AddChild: React.FC = () => {
         <BackButton />
         {alertElements}
         <h1 ref={h1Ref}>Add a child record</h1>
-        {/* TODO: ask Ryan if this is ok placement-- it was not consistent in other forms, and not present in edit flow */}
         <p className="usa-hint">
           Information is required unless otherwise specified.
         </p>

@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { IncomeDetermination } from '../../shared/models';
+import { Child, IncomeDetermination } from '../../shared/models';
 import { apiPost } from '../../utils/api';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { IncomeDeterminationFieldSet } from '../../components/EditForms/FamilyIncome/Fields';
-import { EditFormProps } from '../../components/EditForms/types';
+import { IncomeDeterminationFieldSet } from '../../components/Forms/FamilyIncome/Fields';
+import { EditFormProps } from '../../components/Forms/types';
 import useIsMounted from '../../hooks/useIsMounted';
 import idx from 'idx';
+import { useValidationErrors } from '../../hooks/useValidationErrors';
 
 /**
  * Form component that allows the generation of a new income determination.
@@ -14,14 +15,23 @@ import idx from 'idx';
  * and values default to 0 but are overwritten by user input.
  */
 export const NewFamilyIncome: React.FC<EditFormProps> = ({
-  child,
+  child: inputChild,
   onSuccess,
   setAlerts,
+  hideErrorsOnFirstLoad = false,
 }) => {
   // Set up form state
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [loading, setLoading] = useState(false);
+  if (!inputChild) {
+    throw new Error('New family income rendered without child');
+  }
+  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
+    inputChild,
+    hideErrorsOnFirstLoad
+  );
+
   const familyId = child?.family.id;
 
   // Save function that handles API protocols. Invokes an api.POST
@@ -30,6 +40,7 @@ export const NewFamilyIncome: React.FC<EditFormProps> = ({
   // that the new determination can be associated with the right
   // family object.
   const onFormSubmit = (newDet: IncomeDetermination) => {
+    setErrorsHidden(false);
     setLoading(true);
     apiPost(`families/${familyId}/income-determination`, newDet, {
       accessToken,

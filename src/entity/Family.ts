@@ -12,6 +12,7 @@ import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
 import { Child } from './Child';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
+import { IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class Family implements FamilyInterface {
@@ -19,18 +20,22 @@ export class Family implements FamilyInterface {
   id: number;
 
   @Column({ nullable: true })
+  @IsNotEmpty()
   streetAddress?: string;
 
   @Column({ nullable: true })
+  @IsNotEmpty()
   town?: string;
 
   @Column({ nullable: true })
+  @IsNotEmpty()
   state?: string;
 
   @Column({ nullable: true })
+  @IsNotEmpty()
   zip?: string;
 
-  @Column({ nullable: true })
+  @Column({ default: false })
   homelessness?: boolean;
 
   @OneToMany((type) => IncomeDetermination, (det) => det.family)
