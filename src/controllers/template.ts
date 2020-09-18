@@ -2,7 +2,7 @@ import { write, WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { wrapText } from '../utils/string';
 import { Response } from 'express';
-import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
+import { getAllColumnMetadata } from '../template';
 
 export function streamTemplate(response: Response, bookType: 'csv' | 'xlsx') {
   const template: WorkBook =

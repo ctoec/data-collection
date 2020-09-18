@@ -13,7 +13,7 @@ import {
 } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/enrollmentReports/index';
-import { mapFlattenedEnrollment } from '../controllers/enrollmentReports/index';
+import { mapRow } from '../controllers/enrollmentReports/index';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -57,10 +57,8 @@ enrollmentReportsRouter.post(
   upload,
   passAsyncError(async (req, res) => {
     try {
-      const flattenedEnrollments = controller.parseUploadedTemplate(req.file);
-      const reportChildren = await Promise.all(
-        flattenedEnrollments.map(mapFlattenedEnrollment)
-      );
+      const reportRows = controller.parseUploadedTemplate(req.file);
+      const reportChildren = await Promise.all(reportRows.map(mapRow));
 
       const report = await getManager().save(
         getManager().create(EnrollmentReport, { children: reportChildren })

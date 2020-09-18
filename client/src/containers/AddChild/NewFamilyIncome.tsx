@@ -32,6 +32,9 @@ export const NewFamilyIncome: React.FC<EditFormProps> = ({
     hideErrorsOnFirstLoad
   );
 
+  if (!child.family) {
+    throw new Error('New family income rendered without family');
+  }
   const familyId = child?.family.id;
 
   // Save function that handles API protocols. Invokes an api.POST

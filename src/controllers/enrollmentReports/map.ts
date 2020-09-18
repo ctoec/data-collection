@@ -33,7 +33,7 @@ import { EnrollmentReportRow } from '../../template';
  * TODO: Cache Org/Site, since they are definitely reused a lot in an enrollment report
  * @param source
  */
-export const mapFlattenedEnrollment = async (source: EnrollmentReportRow) => {
+export const mapRow = async (source: EnrollmentReportRow) => {
   try {
     const organization = await mapOrganization(source);
     const site = await mapSite(source);

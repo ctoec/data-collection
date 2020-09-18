@@ -8,7 +8,7 @@ import {
   REPORTING_PERIOD_FORMATS,
 } from '../../template';
 import { BadRequestError } from '../../middleware/error/errors';
-import { getAllColumnMetadata } from '../../template/getAllColumnMetadata';
+import { getAllColumnMetadata } from '../../template';
 
 /**
  * Parses the uploaded file into:
@@ -65,8 +65,6 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
       dateProperties.push(prop);
     }
   });
-
-  console.log('datePrperties', dateProperties);
 
   return data.map((rawRow) =>
     parseEnrollmentReportRow(rawRow, booleanProperties, dateProperties)

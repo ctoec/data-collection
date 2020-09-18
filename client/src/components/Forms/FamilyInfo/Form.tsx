@@ -28,7 +28,7 @@ export const FamilyAddressForm: React.FC<EditFormProps> = ({
   if (!child) {
     throw new Error('Family info rendered without child');
   }
-  const { family: inputFamily } = child;
+  const { family: inputFamily = {} as Family } = child;
 
   const { obj: family, setErrorsHidden } = useValidationErrors<Family>(
     inputFamily,
