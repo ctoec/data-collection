@@ -62,12 +62,10 @@ enrollmentReportsRouter.post(
         flattenedEnrollments.map(mapFlattenedEnrollment)
       );
 
-      console.log('REPORT CHILDREN', reportChildren);
       const report = await getManager().save(
         getManager().create(EnrollmentReport, { children: reportChildren })
       );
       res.status(201).json({ id: report.id });
-      // res.sendStatus(201);
     } catch (err) {
       if (err instanceof ApiError) throw err;
 

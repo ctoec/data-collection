@@ -2,8 +2,7 @@ import { write, WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { wrapText } from '../utils/string';
 import { EntityMetadata, getConnection } from 'typeorm';
-import { FlattenedEnrollment } from '../entity';
-import { getColumnMetadata } from '../entity/decorators/columnMetadata';
+import { getColumnMetadata, EnrollmentReportRow } from '../template';
 import { Response } from 'express';
 
 export function streamTemplate(response: Response, bookType: 'csv' | 'xlsx') {
@@ -23,12 +22,12 @@ export function streamTemplate(response: Response, bookType: 'csv' | 'xlsx') {
  */
 export function getAllEnrollmentColumns(): ColumnMetadata[] {
   const metadata: EntityMetadata = getConnection().getMetadata(
-    FlattenedEnrollment
+    EnrollmentReportRow
   );
 
   return metadata.columns
     .map((column) =>
-      getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
+      getColumnMetadata(new EnrollmentReportRow(), column.propertyName)
     )
     .filter((templateMeta) => !!templateMeta);
 }

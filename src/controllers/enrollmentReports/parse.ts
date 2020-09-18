@@ -1,33 +1,30 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
-import { getConnection, getManager } from 'typeorm';
-import { FlattenedEnrollment, SECTIONS } from '../../entity';
+import { getConnection } from 'typeorm';
+import moment from 'moment';
 import {
+  EnrollmentReportRow,
+  SECTIONS,
   getColumnMetadata,
   DATE_FORMATS,
   REPORTING_PERIOD_FORMATS,
-} from '../../entity/decorators/columnMetadata';
-import moment from 'moment';
+} from '../../template';
 import { BadRequestError } from '../../middleware/error/errors';
 
 /**
  * Parses the uploaded file into:
  * 	- an array of column header strings from the uploaded template
- *  - an array of FlattenedEnrollments
- * Also returns an array containing the expected template headers, in order,
- * to enable checking that uploaded headers are correct (generated here to reduce
- * code duplication, since we're already pulling the FlattenedEnrollment meta).
+ *  - an array of EnrollmentReportRows
+ * Also checks that supplied headers match headers from template.
  * @param file
  */
 export function parseUploadedTemplate(file: Express.Multer.File) {
   /** MODEL PROPERTY CONSTS **/
-  const FLATTENED_ENROLLMENT_COLUMNS = getConnection().getMetadata(
-    FlattenedEnrollment
-  ).columns;
+  const COLUMNS = getConnection().getMetadata(EnrollmentReportRow).columns;
 
-  const [OBJECT_PROPERTIES, EXPECTED_HEADERS] = FLATTENED_ENROLLMENT_COLUMNS
+  const [OBJECT_PROPERTIES, EXPECTED_HEADERS] = COLUMNS
     // get DataDefinition metadata
     .map((column) =>
-      getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
+      getColumnMetadata(new EnrollmentReportRow(), column.propertyName)
     )
     // remove any columns without data definitions, as these are not present in the template
     .filter((dataDefinition) => !!dataDefinition)
@@ -42,18 +39,18 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
       [[], []]
     );
 
-  const BOOLEAN_PROPERTIES = FLATTENED_ENROLLMENT_COLUMNS.filter((column) =>
+  const BOOLEAN_PROPERTIES = COLUMNS.filter((column) =>
     column.type.toString().includes('Boolean')
   ).map((column) => column.propertyName);
 
-  const DATE_PROPERTIES = FLATTENED_ENROLLMENT_COLUMNS.filter(
+  const DATE_PROPERTIES = COLUMNS.filter(
     (column) => column.type === 'date'
   ).map((column) => column.propertyName);
 
   const fileData = readFile(file.path);
   const sheet = Object.values(fileData.Sheets)[0];
 
-  update_sheet_range(sheet);
+  updateSheetRange(sheet);
   const { headers, data } = parseSheet(sheet, OBJECT_PROPERTIES);
 
   // Array comparison was returning false even when the strings matched
@@ -69,8 +66,8 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     );
   }
 
-  return data.map((rawEnrollment) =>
-    parseFlattenedEnrollment(rawEnrollment, BOOLEAN_PROPERTIES, DATE_PROPERTIES)
+  return data.map((rawRow) =>
+    parseEnrollmentReportRow(rawRow, BOOLEAN_PROPERTIES, DATE_PROPERTIES)
   );
 }
 
@@ -82,7 +79,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
  * it incorrectly reports a much larger size than it actually is.
  * @param sheet
  */
-function update_sheet_range(sheet: WorkSheet) {
+function updateSheetRange(sheet: WorkSheet) {
   var range = { s: { r: Infinity, c: Infinity }, e: { r: 0, c: 0 } };
   Object.keys(sheet)
     .filter(function (x) {
@@ -108,7 +105,7 @@ function update_sheet_range(sheet: WorkSheet) {
  * @param objectProperties
  */
 function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
-  const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
+  const parsedSheet = utils.sheet_to_json<EnrollmentReportRow>(sheet, {
     header: objectProperties,
   });
 
@@ -135,11 +132,11 @@ function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
 
 /**
  * Converts a raw object parsed from the uploaded file into
- * a FlattenedEnrollment, with parsed boolean values and
+ * an EnrollmentReportRow, with parsed boolean values and
  * date values (as Moment instances).
  * @param rawEnrollment
  */
-function parseFlattenedEnrollment(
+function parseEnrollmentReportRow(
   rawEnrollment: object,
   booleanProperties: string[],
   dateProperties: string[]
@@ -176,7 +173,7 @@ function parseFlattenedEnrollment(
     }
   });
 
-  return getManager().create(FlattenedEnrollment, rawEnrollment);
+  return rawEnrollment as EnrollmentReportRow;
 }
 
 /**
