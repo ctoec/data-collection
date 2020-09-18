@@ -73,10 +73,12 @@ export const initialize = async () => {
     let fundingSpacesToAdd = [];
     Object.values(AgeGroup).forEach((ageGroup) => {
       for (const source of Object.values(FundingSource)) {
-        const match = FUNDING_SOURCE_TIMES.find(fst => fst.fundingSources.includes(source));
+        const match = FUNDING_SOURCE_TIMES.find((fst) =>
+          fst.fundingSources.includes(source)
+        );
 
         if (match) {
-          const spaces = match.fundingTimes.map(fundingTime => {
+          const spaces = match.fundingTimes.map((fundingTime) => {
             return getManager().create(FundingSpace, {
               ageGroup,
               capacity: 10,

@@ -8,5 +8,7 @@ export const mailToLinkProps = {
 };
 
 export const MailToLink = ({ text }: { text?: string }) => (
-  <a {...mailToLinkProps}>{text || 'oec-data-pilot@skylight.digital'}</a>
+  <a className="usa-button usa-button--unstyled" {...mailToLinkProps}>
+    {text || 'oec-data-pilot@skylight.digital'}
+  </a>
 );

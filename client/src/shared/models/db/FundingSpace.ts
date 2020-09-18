@@ -1,7 +1,4 @@
-import {
-  FundingTimeSplit,
-  Organization,
-} from '.';
+import { FundingTimeSplit, Organization } from '.';
 
 import { AgeGroup, FundingSource, FundingTime } from '../';
 

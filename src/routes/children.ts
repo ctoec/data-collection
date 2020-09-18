@@ -31,6 +31,19 @@ childrenRouter.post(
 );
 
 /**
+ * /children GET
+ *
+ * Returns all children the authed user has access to
+ */
+childrenRouter.get(
+  '/',
+  passAsyncError(async (req, res) => {
+    const children = await controller.getChildren(req.user);
+    res.send(children);
+  })
+);
+
+/**
  * /children/:childId GET
  *
  * Returns the given child, with all nested data desired by the client

@@ -1,10 +1,10 @@
 import React from 'react';
 import EditRecord from './EditRecord';
 import { accessibilityTestHelper, snapshotTestHelper } from '../../testHelpers';
+import { waitFor } from '@testing-library/react';
 
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
-import { waitFor } from '@testing-library/react';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const rowData = {
