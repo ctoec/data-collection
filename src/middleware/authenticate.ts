@@ -8,6 +8,7 @@ import { passAsyncError } from './error/passAsyncError';
 import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
 import { userInfo } from 'os';
+import { InvalidSubClaimError } from './error/errors';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -52,6 +53,8 @@ const addUser = passAsyncError(
 
         if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
           user = await createUserWithFullPermissions(req.claims.sub, res.data);
+        } else {
+          throw new InvalidSubClaimError();
         }
       }
 
