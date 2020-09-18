@@ -153,7 +153,7 @@ function formatStringPush(value: any) {
     return value ? 'Yes' : 'No';
   }
   if (isMoment(value)) {
-    return value.toDate().toLocaleDateString();
+    return value.format('MM/DD/YYYY');
   }
   if (typeof value == 'string') {
     return value || '';
