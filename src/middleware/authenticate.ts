@@ -7,6 +7,7 @@ import { passAsyncError } from './error/passAsyncError';
 
 import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
+import { userInfo } from 'os';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -50,25 +51,7 @@ const addUser = passAsyncError(
         });
 
         if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
-          await getManager().transaction(async (manager) => {
-            const _user = manager.create(User, {
-              wingedKeysId: req.claims.sub,
-              firstName: res.data.given_name,
-              lastName: res.data.family_name,
-            });
-            
-            user = await manager.save(_user);
-
-            const permsForAllOrgs: OrganizationPermission[] = await manager.find(OrganizationPermission);
-
-            if (permsForAllOrgs.length) {
-              const orgPermsForUser = manager.create(OrganizationPermission, permsForAllOrgs.map(orgPerm => ({
-                user,
-                organization: orgPerm.organization
-              })));
-              await manager.save(orgPermsForUser);
-            }
-          });
+          user = await createUserWithFullPermissions(req.claims.sub, res.data);
         }
       }
 
@@ -128,6 +111,32 @@ const getUser = async (wingedKeysId: string) => {
   user.siteIds = allSiteIds;
   return user;
 };
+
+async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUser: { given_name: string, family_name: string }): Promise<User> {
+  let user: User;
+
+  await getManager().transaction(async (manager) => {
+    const _user = manager.create(User, {
+      wingedKeysId,
+      firstName: wingedKeysUser.given_name,
+      lastName: wingedKeysUser.family_name,
+    });
+    
+    user = await manager.save(_user);
+
+    const permsForAllOrgs: OrganizationPermission[] = await manager.find(OrganizationPermission);
+
+    if (permsForAllOrgs.length) {
+      const orgPermsForUser = manager.create(OrganizationPermission, permsForAllOrgs.map(orgPerm => ({
+        user,
+        organization: orgPerm.organization
+      })));
+      await manager.save(orgPermsForUser);
+    }
+  });
+
+  return user;
+}
 
 /**
  * Full authentication middleware chains together decodeClaim and addUser,
