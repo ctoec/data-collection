@@ -11,6 +11,7 @@ import { tableColumns } from './TableColumns';
 import { BackButton } from '../../components/BackButton';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 
 const CheckData: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -39,7 +40,6 @@ const CheckData: React.FC = () => {
   return (
     <>
       <div className="CheckData__content margin-top-4 grid-container">
-        <div className="margin-x-4">
           <BackButton />
           {alertElements}
           <h1 ref={h1Ref}>
@@ -63,21 +63,10 @@ const CheckData: React.FC = () => {
             'Loading...'
           )}
         </div>
-      </div>
-      <div className="CheckData__button-container position-fixed bottom-0 width-full">
-        <div className="margin-bottom-0">
-          <div className="fixed-buttons">
-            <div className="grid-container">
-              <Button
-                text="Back to upload"
-                href="/upload"
-                appearance="outline"
-              />
-              <Button text="Send to OEC" href="/success" />
-            </div>
-          </div>
-        </div>
-      </div>
+      <FixedBottomBar>
+        <Button text="Back to upload" href="/upload" appearance="outline" />
+        <Button text="Send to OEC" href="/success" />
+      </FixedBottomBar>
     </>
   );
 };

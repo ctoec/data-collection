@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { RenderResult, fireEvent, wait } from '@testing-library/react';
 import { EnrollmentFundingForm } from './Form';
 import {
   snapshotTestHelper,
@@ -53,19 +54,29 @@ describe('EditRecord', () => {
       apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([])))
     );
 
+    const waitExpandChangeEnrollment = async (renderResult: RenderResult) => {
+      const changeEnrollmentButton = await renderResult.findByText(
+        'Change enrollment'
+      );
+      fireEvent.click(changeEnrollmentButton);
+      await wait();
+    };
+
     snapshotTestHelper(
       <EnrollmentFundingForm
         child={child}
         onSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { before: waitExpandChangeEnrollment }
     );
     accessibilityTestHelper(
       <EnrollmentFundingForm
         child={child}
         onSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { before: waitExpandChangeEnrollment }
     );
 
     afterAll(() => jest.clearAllMocks());

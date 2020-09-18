@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { authenticate } from '../middleware/authenticate';
-import { router as userRouter } from './user';
+import { usersRouter } from './users';
 import { enrollmentReportsRouter } from './enrollmentReports';
 import { childrenRouter } from './children';
 import { columnMetadataRouter } from './columnMetadata';
@@ -18,7 +18,7 @@ export const router = express.Router();
 router.use('/column-metadata', columnMetadataRouter);
 
 /* AUTHENTICATED ROUTES */
-router.use('/users', authenticate, userRouter);
+router.use('/users', authenticate, usersRouter);
 router.use('/enrollment-reports', authenticate, enrollmentReportsRouter);
 router.use('/children', authenticate, childrenRouter);
 router.use('/families', authenticate, familyRouter);

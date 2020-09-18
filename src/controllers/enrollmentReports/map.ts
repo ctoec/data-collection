@@ -17,9 +17,9 @@ import {
   FundingTime,
   FundingTimeInput,
   SpecialEducationServicesType,
-  FundingSourceTime
+  FundingSourceTime,
 } from '../../../client/src/shared/models';
-import { FUNDING_SOURCE_TIMES }  from '../../../client/src/shared/constants';
+import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { getManager } from 'typeorm';
 
 /**
@@ -217,15 +217,19 @@ const mapFunding = async (
   //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
   //  was supplied instead and look up the corresponding FundingTime
   if (!fundingTime && fundingSource) {
-    const matchingSourceTime: FundingSourceTime = FUNDING_SOURCE_TIMES.find(fst => fst.fundingSources.includes(fundingSource));
+    const matchingSourceTime: FundingSourceTime = FUNDING_SOURCE_TIMES.find(
+      (fst) => fst.fundingSources.includes(fundingSource)
+    );
 
     if (matchingSourceTime) {
-      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(fundingTime => {
-        return fundingTime.formats.includes(source.spaceType.toString());
-      });
+      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(
+        (fundingTime) => {
+          return fundingTime.formats.includes(source.spaceType.toString());
+        }
+      );
 
       if (matchingTime) {
-        fundingTime = matchingTime.value
+        fundingTime = matchingTime.value;
       }
     }
   }

@@ -12,25 +12,6 @@
   }
 }
 
-.CheckData__button-container {
-  .margin-bottom-0 {
-    // USWDS grid container overrides this
-    margin-bottom: 0 !important;
-  }
-  .fixed-buttons {
-    box-shadow: 0 -2px 4px 0px rgba(0, 0, 0, 0.25) !important;
-    clip-path: inset(-1rem 0 0 0);
-    background-color: #fff;
-    padding: 1rem;
-  }
-
-  //  Override USWDS grid container
-  .grid-container {
-    margin-bottom: 0 !important;
-    padding-left: 4rem !important;
-  }
-}
-
 .header-normal {
   font-weight: normal;
   line-height: 2;
