@@ -1170,7 +1170,7 @@
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#moreccordion":
   version "0.0.31"
-  resolved "https://github.com/ctoec/component-library#99f2350d7ec77830852239e8d1d6dde86ab2f0f8"
+  resolved "https://github.com/ctoec/component-library#0049f6d39c1dfe7a699984355548ef35c9b969aa"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
@@ -4476,10 +4476,13 @@ dompurify@^2.0.12:
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.0.17.tgz#505ffa126a580603df4007e034bdc9b6b738668e"
   integrity sha512-nNwwJfW55r8akD8MSFz6k75bzyT2y6JEa1O3JrZFBf+Y5R9JXXU4OsRl0B9hKoPgHTw2b7ER5yJ5Md97MMUJPg==
+<<<<<<< HEAD
   version "2.0.16"
   resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.0.16.tgz#9358430b9df8e7d742441f12355f1341e6cfb749"
   integrity sha512-MMNzUQdlvmbXhD0NVxME4hNI72eOlcz9TzO9L8KfmUcI+h97ISON5XagIUm40+JRwV4fGHYqxRpSy844fT9iow==
 >>>>>>> 269: Add utilization to roster
+=======
+>>>>>>> 346: Fix withdraw moddal by using component lib modal
 
 domready@^1.0.8:
   version "1.0.8"

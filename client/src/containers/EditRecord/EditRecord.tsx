@@ -48,19 +48,9 @@ const EditRecord: React.FC = () => {
   const [rowData, setRowData] = useState<Child>();
   const { alertElements, setAlerts } = useAlerts();
 
-  // state for modal display
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  function toggleDeleteModal() {
-    setDeleteModalOpen((isOpen) => !isOpen);
-  }
-  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
-  const toggleWithdrawModal = () => {
-    setWithdrawModalOpen((isOpen) => !isOpen);
-  };
-
   // Counter to trigger re-run of child fetch in
   // useEffect hook
-  const [refetch, setRefetch] = useState<number>(0);
+  const [refetch, setRefetch] = useState(0);
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -128,52 +118,14 @@ const EditRecord: React.FC = () => {
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
-              <Button
-                appearance="unstyled"
-                text="Withdraw"
-                onClick={() => toggleWithdrawModal()}
-                className="margin-right-2"
+              <WithdrawRecord
+                childName={rowData.firstName}
+                enrollment={activeEnrollment}
+                reportingPeriods={reportingPeriods}
               />
-              <Modal
-                isOpen={withdrawModalOpen}
-                onRequestClose={toggleWithdrawModal}
-                shouldCloseOnEsc={true}
-                shouldCloseOnOverlayClick={true}
-                appElement="#main-content"
-                contentLabel="Withdraw record"
-                style={{
-                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-                }}
-              >
-                <WithdrawRecord
-                  childName={rowData.firstName}
-                  enrollment={activeEnrollment}
-                  reportingPeriods={reportingPeriods}
-                  toggleOpen={toggleWithdrawModal}
-                />
-              </Modal>
             </>
           )}
-          <Button
-            appearance="unstyled"
-            onClick={toggleDeleteModal}
-            text="Delete record"
-            className="margin-right-0"
-          />
-          <Modal
-            isOpen={deleteModalOpen}
-            onRequestClose={toggleDeleteModal}
-            shouldCloseOnEsc={true}
-            shouldCloseOnOverlayClick={true}
-            contentLabel="Delete record"
-            // Use style to dynamically trim the bottom to fit the
-            // message, then center in middle of form
-            style={{
-              content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-            }}
-          >
-            <DeleteRecord child={rowData} toggleOpen={toggleDeleteModal} />
-          </Modal>
+          <DeleteRecord child={rowData} />
         </div>
       </div>
       <TabNav

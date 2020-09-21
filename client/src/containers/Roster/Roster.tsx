@@ -16,10 +16,12 @@ import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
 import { RosterSectionHeader } from './RosterSectionHeader';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
+  const { alertElements } = useAlerts();
   const { goBack } = useHistory();
 
   const { accessToken } = useContext(AuthenticationContext);
@@ -90,9 +92,8 @@ const Roster: React.FC = () => {
   return (
     <>
       <div className="Roster grid-container">
-        <h2 className="font-body-xl margin-bottom-0">
-          {organization?.providerName}
-        </h2>
+        {alertElements}
+        <h2 className="font-body-xl margin-bottom-0">{organization?.providerName}</h2>
         <p className="font-body-xl margin-top-1">
           {loading
             ? 'Loading...'
