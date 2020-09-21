@@ -25,8 +25,8 @@ exportRouter.get(
 
       if (!report) throw new NotFoundError();
 
-      const childrenToMap = await controller.getChildrenByReport(report);
-      res.send(controller.streamUploadedChildren(res, childrenToMap));
+      // const childrenToMap = await controller.getChildrenByReport(report);
+      res.send(controller.streamUploadedChildren(res, report.children));
     } catch (err) {
       console.error('Unable to download exported enrollment data: ', err);
       throw new BadRequestError('Could not create spreadsheet to download');

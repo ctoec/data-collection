@@ -76,7 +76,7 @@ const mapOrganization = (source: EnrollmentReportRow) => {
  * TODO: What do we want to do if the organization does not exist?
  * @param source
  */
-const mapSite = (source: FlattenedEnrollment) => {
+const mapSite = (source: EnrollmentReportRow) => {
   return getManager().findOneOrFail(Site, {
     where: { siteName: source.siteName },
   });

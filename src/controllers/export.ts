@@ -9,7 +9,7 @@ import {
   User,
   Organization,
 } from '../entity';
-import { getAllEnrollmentColumns } from '../controllers/columnMetadata';
+import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
 import { Response } from 'express';
 import { isMoment } from 'moment';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
@@ -56,34 +56,34 @@ function childSorter(child: Child) {
  * and returns the result.
  * @param report
  */
-export async function getChildrenByReport(report: EnrollmentReport) {
-  const childrenToMap = await getManager().transaction(async (tManager) => {
-    let kids = [];
-    for (let i = 0; i < report.enrollments.length; i++) {
-      let enrollment = report.enrollments[i];
-      var child = await tManager.findOne(
-        Child,
-        {
-          firstName: enrollment.firstName,
-          lastName: enrollment.lastName,
-          birthdate: enrollment.birthdate,
-          birthCertificateId: enrollment.birthCertificateId,
-        },
-        {
-          relations: CHILD_RELATIONS,
-        }
-      );
+// export async function getChildrenByReport(report: EnrollmentReport) {
+//   const childrenToMap = await getManager().transaction(async (tManager) => {
+//     let kids = [];
+//     for (let i = 0; i < report.children.length; i++) {
+//       let enrollment = report.enrollments[i];
+//       var child = await tManager.findOne(
+//         Child,
+//         {
+//           firstName: enrollment.firstName,
+//           lastName: enrollment.lastName,
+//           birthdate: enrollment.birthdate,
+//           birthCertificateId: enrollment.birthCertificateId,
+//         },
+//         {
+//           relations: CHILD_RELATIONS,
+//         }
+//       );
 
-      // Sort enrollments by exit date
-      if (child) {
-        child = childSorter(child);
-      }
-      kids.push(child);
-    }
-    return kids;
-  });
-  return childrenToMap;
-}
+//       // Sort enrollments by exit date
+//       if (child) {
+//         child = childSorter(child);
+//       }
+//       kids.push(child);
+//     }
+//     return kids;
+//   });
+//   return childrenToMap;
+// }
 
 /**
  * Second way of retrieving Children to export. Given an array
@@ -261,7 +261,7 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
  * @param childArray
  */
 export function generateCSV(childArray: Child[]) {
-  const columnMetadatas: ColumnMetadata[] = getAllEnrollmentColumns();
+  const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
   const formattedColumnNames: string[] = columnMetadatas.map(
     (c) => c.formattedName
   );
