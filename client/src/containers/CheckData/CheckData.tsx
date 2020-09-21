@@ -25,8 +25,8 @@ const CheckData: React.FC = () => {
     if (reportId) {
       apiGet(`enrollment-reports/${reportId}`, { accessToken }).then(
         (_reportData) => {
-          if (_reportData) {
-            setReportData(_reportData);
+          if (_reportData && _reportData.children) {
+            setReportData(_reportData.children);
           }
         }
       );

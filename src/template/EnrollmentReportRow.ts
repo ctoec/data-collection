@@ -1,7 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-
 import {
-  FlattenedEnrollment as FlattenedEnrollmentInterface,
   Gender,
   SpecialEducationServicesType,
   AgeGroup,
@@ -9,7 +6,6 @@ import {
   FundingTime,
 } from '../../client/src/shared/models';
 
-import { EnrollmentReport } from './EnrollmentReport';
 import {
   ColumnMetadata,
   REQUIRED,
@@ -24,9 +20,8 @@ import {
   UTILIZATION_REPORTING_REASON,
   REPORTING_REASON,
   REPORTING_PERIOD_FORMAT,
-} from './decorators/columnMetadata';
-import { Moment } from 'moment';
-import { momentTransformer } from './transformers/momentTransformer';
+} from './decorators/ColumnMetadata';
+import moment, { Moment } from 'moment';
 
 export const SECTIONS = {
   CHILD_INFO: 'Child information',
@@ -35,18 +30,7 @@ export const SECTIONS = {
   ENROLLMENT_FUNDING: 'Enrollment and funding',
 };
 
-@Entity()
-export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @ManyToOne((type) => EnrollmentReport, { nullable: false })
-  report: EnrollmentReport;
-
-  @Column()
-  reportId: number;
-
-  @Column({ nullable: true })
+export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'First Name',
     required: REQUIRED,
@@ -57,9 +41,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Firstname',
     section: SECTIONS.CHILD_INFO,
   })
-  firstName?: string;
+  firstName?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Middle Name',
     required: OPTIONAL,
@@ -70,9 +53,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Middlename',
     section: SECTIONS.CHILD_INFO,
   })
-  middleName?: string;
+  middleName?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Last Name',
     required: REQUIRED,
@@ -83,9 +65,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Lastname',
     section: SECTIONS.CHILD_INFO,
   })
-  lastName?: string;
+  lastName?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Suffix',
     required: OPTIONAL,
@@ -96,9 +77,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Sr',
     section: SECTIONS.CHILD_INFO,
   })
-  suffix?: string;
+  suffix?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'SASID',
     required: OPTIONAL,
@@ -108,9 +88,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '0123456789',
     section: SECTIONS.CHILD_INFO,
   })
-  sasid?: string;
+  sasid?: string = undefined;
 
-  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Date of birth',
     required: REQUIRED,
@@ -121,9 +100,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/01/2016',
     section: SECTIONS.CHILD_INFO,
   })
-  dateOfBirth?: Moment;
+  dateOfBirth?: Moment = moment.invalid();
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Birth certificate ID #',
     required: REQUIRED_IF_US_BORN,
@@ -134,9 +112,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '2015-00-1234567',
     section: SECTIONS.CHILD_INFO,
   })
-  birthCertificateId?: string;
+  birthCertificateId?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Town of birth',
     required: REQUIRED_IF_US_BORN,
@@ -147,9 +124,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Hartford',
     section: SECTIONS.CHILD_INFO,
   })
-  townOfBirth?: string;
+  townOfBirth?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'State of birth',
     required: REQUIRED_IF_US_BORN,
@@ -160,9 +136,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'CT',
     section: SECTIONS.CHILD_INFO,
   })
-  stateOfBirth?: string;
+  stateOfBirth?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Race: American Indian or Alaska Native',
     required: REQUIRED_AT_LEAST_ONE,
@@ -172,9 +147,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  americanIndianOrAlaskaNative?: boolean;
+  americanIndianOrAlaskaNative?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Race: Asian',
     required: REQUIRED_AT_LEAST_ONE,
@@ -184,9 +158,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  asian?: boolean;
+  asian?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Race: Black or African American',
     required: REQUIRED_AT_LEAST_ONE,
@@ -196,9 +169,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  blackOrAfricanAmerican?: boolean;
+  blackOrAfricanAmerican?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Race: Native Hawaiian or Pacific Islander',
     required: REQUIRED_AT_LEAST_ONE,
@@ -208,9 +180,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  nativeHawaiianOrPacificIslander?: boolean;
+  nativeHawaiianOrPacificIslander?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Race: White',
     required: REQUIRED_AT_LEAST_ONE,
@@ -220,9 +191,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  white?: boolean;
+  white?: boolean = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Hispanic or Latinx Ethnicity',
     required: REQUIRED,
@@ -232,9 +202,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  hispanicOrLatinxEthnicity?: boolean;
+  hispanicOrLatinxEthnicity?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Gender',
     required: REQUIRED,
@@ -245,9 +214,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Nonbinary',
     section: SECTIONS.CHILD_INFO,
   })
-  gender?: string;
+  gender?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Dual language learner',
     required: REQUIRED,
@@ -258,9 +226,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  dualLanguageLearner?: boolean;
+  dualLanguageLearner?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Receiving Special Education Services',
     required: REQUIRED,
@@ -271,9 +238,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  receivingSpecialEducationServices?: boolean;
+  receivingSpecialEducationServices?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Special Education Services Type',
     required: 'Required if child is receiving special education services.',
@@ -284,9 +250,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Non-LEA',
     section: SECTIONS.CHILD_INFO,
   })
-  specialEducationServicesType?: string;
+  specialEducationServicesType?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Street address',
     required: REQUIRED,
@@ -296,9 +261,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '123 Green Street',
     section: SECTIONS.FAMILY_INFO,
   })
-  streetAddress?: string;
+  streetAddress?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Town',
     required: REQUIRED,
@@ -308,9 +272,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Hartford',
     section: SECTIONS.FAMILY_INFO,
   })
-  town?: string;
+  town?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'State',
     required: REQUIRED,
@@ -320,9 +283,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'CT',
     section: SECTIONS.FAMILY_INFO,
   })
-  state?: string;
+  state?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Zipcode',
     required: REQUIRED,
@@ -332,9 +294,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '01234',
     section: SECTIONS.FAMILY_INFO,
   })
-  zipcode?: string;
+  zipcode?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Lives with foster family',
     required: OPTIONAL,
@@ -345,9 +306,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  livesWithFosterFamily?: boolean;
+  livesWithFosterFamily?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Experienced homelessness or housing insecurity',
     required: OPTIONAL,
@@ -359,9 +319,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  experiencedHomelessnessOrHousingInsecurity?: boolean;
+  experiencedHomelessnessOrHousingInsecurity?: boolean = false;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Household size',
     required: REQUIRED_NOT_FOSTER,
@@ -373,9 +332,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '4',
     section: SECTIONS.FAMILY_INCOME,
   })
-  householdSize?: number;
+  householdSize?: number = undefined;
 
-  @Column({ nullable: true, type: 'decimal', precision: 14, scale: 2 })
   @ColumnMetadata({
     formattedName: 'Annual household income',
     required: REQUIRED_NOT_FOSTER,
@@ -386,9 +344,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '20000',
     section: SECTIONS.FAMILY_INCOME,
   })
-  annualHouseholdIncome?: number;
+  annualHouseholdIncome?: number = undefined;
 
-  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Determination date',
     required: REQUIRED_NOT_FOSTER,
@@ -400,9 +357,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: `10/01/${new Date().getFullYear()}`,
     section: SECTIONS.FAMILY_INCOME,
   })
-  incomeDeterminationDate?: Moment;
+  incomeDeterminationDate?: Moment = moment.invalid();
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Provider',
     required: REQUIRED,
@@ -412,9 +368,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: "Children's Center of Connecticut",
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  provider?: string;
+  provider?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Site',
     required: REQUIRED,
@@ -424,9 +379,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: "Children's Center of Connecticut at Hartford",
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  site?: string;
+  site?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Model',
     required: REQUIRED,
@@ -436,9 +390,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Hybrid',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  model?: string;
+  model?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Age Group',
     required: REQUIRED,
@@ -449,9 +402,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'School age',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  ageGroup?: string;
+  ageGroup?: string = undefined;
 
-  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Enrollment Start Date',
     required: REQUIRED,
@@ -461,9 +413,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/01/2016',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentStartDate?: Moment;
+  enrollmentStartDate?: Moment = moment.invalid();
 
-  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Enrollment End Date',
     required: 'Required if exited',
@@ -473,9 +424,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '08/30/2017',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentEndDate?: Moment;
+  enrollmentEndDate?: Moment = moment.invalid();
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Enrollment Exit Reason',
     required: 'Required if exited',
@@ -485,9 +435,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Aged out',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  enrollmentExitReason?: string;
+  enrollmentExitReason?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Funding Type',
     required: REQUIRED,
@@ -498,9 +447,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'SR',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  fundingType?: string;
+  fundingType?: string = undefined;
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Space type',
     required: REQUIRED,
@@ -510,9 +458,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Wraparound',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  spaceType?: string;
+  spaceType?: string = undefined;
 
-  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'First funding period',
     required: REQUIRED,
@@ -523,9 +470,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '10/2016',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  firstFundingPeriod?: Moment;
+  firstFundingPeriod?: Moment = moment.invalid();
 
-  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @ColumnMetadata({
     formattedName: 'Last funding period',
     required: REQUIRED,
@@ -536,9 +482,8 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: '08/2017',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  lastFundingPeriod?: Moment;
+  lastFundingPeriod?: Moment = moment.invalid();
 
-  @Column({ nullable: true })
   @ColumnMetadata({
     formattedName: 'Receiving Care 4 Kids?',
     required: REQUIRED,
@@ -549,5 +494,5 @@ export class FlattenedEnrollment implements FlattenedEnrollmentInterface {
     example: 'Yes',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  receivingCareForKids?: boolean;
+  receivingCareForKids?: boolean = false;
 }

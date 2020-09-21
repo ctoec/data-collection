@@ -40,7 +40,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       <ChangeEnrollmentForm
         reportingPeriods={reportingPeriods}
         fundingSpaces={fundingSpaces}
-        childName={child.firstName}
+        childName={child.firstName || ''}
         currentEnrollment={currentEnrollment}
         childId={child.id}
         sites={sites}

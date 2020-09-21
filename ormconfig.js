@@ -1,6 +1,4 @@
-import { PascalCaseNamingStrategy } from './entity/namingStrategies/pascalCaseNamingStrategy';
-
-export = {
+module.exports = {
   host: process.env.DB_HOST || 'db',
   port: parseInt(process.env.DB_PORT) || 1433,
   username: process.env.DB_USER || 'SA',
@@ -19,5 +17,4 @@ export = {
     migrationsDir: 'src/migration',
     subscribersDir: 'src/subscriber',
   },
-  namingStrategy: new PascalCaseNamingStrategy(),
 };

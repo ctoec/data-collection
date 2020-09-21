@@ -1,6 +1,6 @@
-import { FlattenedEnrollment } from '.';
+import { Child } from '.';
 
 export interface EnrollmentReport {
   id: number;
-  enrollments: Array<FlattenedEnrollment>;
+  children: Array<Child>;
 }
