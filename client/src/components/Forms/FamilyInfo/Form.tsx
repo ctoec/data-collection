@@ -26,16 +26,16 @@ export const FamilyAddressForm: React.FC<EditFormProps> = ({
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
 
-  if (!child) {
-    throw new Error('Family info rendered without child');
-  }
-  const { family: inputFamily = {} as Family } = child;
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
   }, []);
 
-  if (!child) return <></>;
+  if (!child) {
+    throw new Error('Family info rendered without child');
+  }
+
+  const { family: inputFamily = {} as Family } = child;
 
   const { obj: family, setErrorsHidden } = useValidationErrors<Family>(
     inputFamily,

@@ -10,13 +10,14 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
-  if (!child?.family) {
-    throw new Error('Family income rendered without family');
-  }
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
   }, []);
+
+  if (!child?.family) {
+    throw new Error('Family income rendered without family');
+  }
 
   if (!child) return <></>;
 
