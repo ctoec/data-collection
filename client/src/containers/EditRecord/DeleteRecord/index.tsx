@@ -28,7 +28,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
             {
               type: 'success',
               heading: 'Record deleted',
-              text: `${child?.firstName} ${child?.lastName}'s record was deleted from your roster.`,
+              text: `${child.firstName} ${child.lastName}'s record was deleted from your roster.`,
             },
           ],
         });

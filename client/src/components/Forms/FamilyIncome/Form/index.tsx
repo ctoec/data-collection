@@ -24,7 +24,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   if (!child?.family) {
     throw new Error('Family income rendered without family');

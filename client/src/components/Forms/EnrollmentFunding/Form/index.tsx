@@ -40,7 +40,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   // Separate enrollments into current (no end date) and past
   // (with end date). Either may not exist

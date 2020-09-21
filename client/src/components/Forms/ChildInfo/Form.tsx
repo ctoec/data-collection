@@ -42,7 +42,7 @@ export const ChildInfoForm = ({
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   if (!inputChild) {
     // Focus should automatically be on first error on page

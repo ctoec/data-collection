@@ -7,7 +7,6 @@ import {
   Info,
   TextWithIconProps,
 } from '@ctoec/component-library';
-import Modal from 'react-modal';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';

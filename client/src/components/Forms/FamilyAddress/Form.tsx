@@ -34,7 +34,7 @@ export const FamilyAddressForm: React.FC<EditFormProps> = ({
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   if (!child) {
     throw new Error('Family info rendered without child');

@@ -42,18 +42,18 @@ const Roster: React.FC = () => {
   }, [accessToken]);
 
   const childrenByAgeGroup: { [key in AgeGroup]?: Child[] } = {};
-  children.reduce((acc, child) => {
-    const ageGroup = idx(child, (_) => _.enrollments[0].ageGroup) || undefined;
+  children.reduce((_byAgeGroup, _child) => {
+    const ageGroup = idx(_child, (_) => _.enrollments[0].ageGroup) || undefined;
     if (ageGroup) {
-      if (!!!acc[ageGroup]) {
-        acc[ageGroup] = [child];
+      if (!!!_byAgeGroup[ageGroup]) {
+        _byAgeGroup[ageGroup] = [_child];
       } else {
         // acc[ageGroup] is not _actually_ possibly undefined; checked in above if
-        acc[ageGroup]?.push(child);
+        _byAgeGroup[ageGroup]?.push(_child);
       }
     }
 
-    return acc;
+    return _byAgeGroup;
   }, childrenByAgeGroup);
 
   const accordionItems = Object.entries(childrenByAgeGroup)
@@ -93,7 +93,9 @@ const Roster: React.FC = () => {
     <>
       <div className="Roster grid-container">
         {alertElements}
-        <h2 className="font-body-xl margin-bottom-0">{organization?.providerName}</h2>
+        <h2 className="font-body-xl margin-bottom-0">
+          {organization?.providerName}
+        </h2>
         <p className="font-body-xl margin-top-1">
           {loading
             ? 'Loading...'

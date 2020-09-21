@@ -65,14 +65,14 @@ const DataRequirements: React.FC = () => {
   ];
 
   const columnMetadataBySection: { [key: string]: ColumnMetadata[] } = {};
-  columnMetadata.reduce((acc, cur) => {
-    if (acc[cur.section]) {
-      acc[cur.section].push(cur);
+  columnMetadata.reduce((_bySection, _metadata) => {
+    if (_bySection[_metadata.section]) {
+      _bySection[_metadata.section].push(_metadata);
     } else {
-      acc[cur.section] = [cur];
+      _bySection[_metadata.section] = [_metadata];
     }
 
-    return acc;
+    return _bySection;
   }, columnMetadataBySection);
 
   return (

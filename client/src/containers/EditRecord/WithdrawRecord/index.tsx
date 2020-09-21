@@ -85,7 +85,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
           <>
             <div className="grid-row">
               <div className="grid-col">
-                <p>{enrollment.site.name}</p>
+                <p>{enrollment.site.siteName}</p>
                 <p>Age: {enrollment.ageGroup}</p>
                 <p>Enrollment date: {enrollment.entry?.format('MM/DD/YYYY')}</p>
               </div>
