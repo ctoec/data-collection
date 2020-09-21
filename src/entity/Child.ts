@@ -104,7 +104,7 @@ export class Child implements ChildInterface {
   foster?: boolean;
 
   @Column({ default: false })
-  recievesC4K?: boolean;
+  receivesC4K?: boolean = false;
 
   @Column({ default: false })
   receivesSpecialEducationServices?: boolean;
