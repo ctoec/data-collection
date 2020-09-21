@@ -34,7 +34,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
-  CHILD: 'child',
+  DEMO: 'demographics',
   FAMILY: 'family',
   INCOME: 'income',
   ENROLLMENT: 'enrollment',
@@ -69,7 +69,7 @@ const EditRecord: React.FC = () => {
   // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
-      history.replace({ hash: TAB_IDS.CHILD });
+      history.replace({ hash: TAB_IDS.IDENT });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -191,7 +191,7 @@ const EditRecord: React.FC = () => {
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
-            id: TAB_IDS.CHILD,
+            id: TAB_IDS.DEMO,
             text: doesChildInfoFormHaveErrors(rowData) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Child info" />
             ) : (
