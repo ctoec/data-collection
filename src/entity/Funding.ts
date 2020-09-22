@@ -21,18 +21,18 @@ export class Funding implements FundingInterface {
   @Column()
   enrollmentId: number;
 
-  @ManyToOne((type) => FundingSpace, { nullable: false, eager: true })
+  @ManyToOne(() => FundingSpace, { nullable: false, eager: true })
   @IsNotEmpty()
   fundingSpace: FundingSpace;
 
-  @ManyToOne((type) => ReportingPeriod, { nullable: false, eager: true })
+  @ManyToOne(() => ReportingPeriod, { eager: true })
   @IsNotEmpty()
-  firstReportingPeriod: ReportingPeriod;
+  firstReportingPeriod?: ReportingPeriod;
 
-  @ManyToOne((type) => ReportingPeriod, { eager: true })
+  @ManyToOne(() => ReportingPeriod, { eager: true })
   @LastReportingPeriodAfterFirst()
   lastReportingPeriod?: ReportingPeriod;
 
-  @Column((type) => UpdateMetaData, { prefix: false })
-  updateMetaData?: UpdateMetaData;
+  @Column(() => UpdateMetaData, { prefix: false })
+  updateMetaData: UpdateMetaData;
 }

@@ -1,5 +1,5 @@
+import { getManager } from 'typeorm';
 import {
-  FlattenedEnrollment,
   Child,
   Family,
   Site,
@@ -20,7 +20,7 @@ import {
   FundingSourceTime,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
-import { getManager } from 'typeorm';
+import { EnrollmentReportRow } from '../../template';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -33,7 +33,7 @@ import { getManager } from 'typeorm';
  * TODO: Cache Org/Site, since they are definitely reused a lot in an enrollment report
  * @param source
  */
-export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
+export const mapRow = async (source: EnrollmentReportRow) => {
   try {
     const organization = await mapOrganization(source);
     const site = await mapSite(source);
@@ -62,7 +62,7 @@ export const mapFlattenedEnrollment = async (source: FlattenedEnrollment) => {
  * TODO: What do we want to do if the organization does not exist?
  * @param source
  */
-const mapOrganization = (source: FlattenedEnrollment) => {
+const mapOrganization = (source: EnrollmentReportRow) => {
   return getManager().findOneOrFail(Organization, {
     where: { name: source.provider },
   });
@@ -76,7 +76,7 @@ const mapOrganization = (source: FlattenedEnrollment) => {
  * TODO: What do we want to do if the organization does not exist?
  * @param source
  */
-const mapSite = (source: FlattenedEnrollment) => {
+const mapSite = (source: EnrollmentReportRow) => {
   return getManager().findOneOrFail(Site, { where: { name: source.site } });
 };
 
@@ -86,7 +86,7 @@ const mapSite = (source: FlattenedEnrollment) => {
  * @param source
  */
 const mapChild = (
-  source: FlattenedEnrollment,
+  source: EnrollmentReportRow,
   organization: Organization,
   family: Family
 ) => {
@@ -138,7 +138,7 @@ const mapChild = (
  * TODO: Lookup existing families before creating new one
  * @param source
  */
-const mapFamily = (source: FlattenedEnrollment, organization: Organization) => {
+const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
   const family = getManager().create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
@@ -156,7 +156,7 @@ const mapFamily = (source: FlattenedEnrollment, organization: Organization) => {
  * @param source
  */
 const mapIncomeDetermination = (
-  source: FlattenedEnrollment,
+  source: EnrollmentReportRow,
   family: Family
 ) => {
   const incomeDetermination = getManager().create(IncomeDetermination, {
@@ -176,7 +176,7 @@ const mapIncomeDetermination = (
  * @param site
  */
 const mapEnrollment = (
-  source: FlattenedEnrollment,
+  source: EnrollmentReportRow,
   site: Site,
   child: Child
 ) => {
@@ -203,7 +203,7 @@ const mapEnrollment = (
  * @param ageGroup
  */
 const mapFunding = async (
-  source: FlattenedEnrollment,
+  source: EnrollmentReportRow,
   organization: Organization,
   enrollment: Enrollment
 ) => {
@@ -314,7 +314,11 @@ const mapEnum = <T>(
   if (!value) return;
 
   const stripRegex = /[-\/\s]+/;
-  const normalizedValue = value.trim().replace(stripRegex, '').toLowerCase();
+  const normalizedValue = value
+    .toString()
+    .trim()
+    .replace(stripRegex, '')
+    .toLowerCase();
   let ret: T;
   Object.values(referenceEnum).forEach((ref) => {
     const normalizedRef = ref.replace(stripRegex, '').toLowerCase();

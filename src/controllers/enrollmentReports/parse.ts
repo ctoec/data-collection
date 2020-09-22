@@ -1,34 +1,28 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
-import { getConnection, getManager } from 'typeorm';
-import { FlattenedEnrollment, SECTIONS } from '../../entity';
+import { getConnection } from 'typeorm';
+import moment from 'moment';
 import {
-  getColumnMetadata,
+  EnrollmentReportRow,
+  SECTIONS,
   DATE_FORMATS,
   REPORTING_PERIOD_FORMATS,
-} from '../../entity/decorators/columnMetadata';
-import moment from 'moment';
+} from '../../template';
 import { BadRequestError } from '../../middleware/error/errors';
+import { getAllColumnMetadata } from '../../template';
 
 /**
  * Parses the uploaded file into:
  * 	- an array of column header strings from the uploaded template
- *  - an array of FlattenedEnrollments
- * Also returns an array containing the expected template headers, in order,
- * to enable checking that uploaded headers are correct (generated here to reduce
- * code duplication, since we're already pulling the FlattenedEnrollment meta).
+ *  - an array of EnrollmentReportRows
+ * Also checks that supplied headers match headers from template.
  * @param file
  */
 export function parseUploadedTemplate(file: Express.Multer.File) {
   /** MODEL PROPERTY CONSTS **/
-  const FLATTENED_ENROLLMENT_COLUMNS = getConnection().getMetadata(
-    FlattenedEnrollment
-  ).columns;
 
-  const [OBJECT_PROPERTIES, EXPECTED_HEADERS] = FLATTENED_ENROLLMENT_COLUMNS
-    // get DataDefinition metadata
-    .map((column) =>
-      getColumnMetadata(new FlattenedEnrollment(), column.propertyName)
-    )
+  const columnMeta = getAllColumnMetadata();
+
+  const [objectProperties, expectedHeaders] = columnMeta
     // remove any columns without data definitions, as these are not present in the template
     .filter((dataDefinition) => !!dataDefinition)
     // create two arrays:
@@ -42,22 +36,14 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
       [[], []]
     );
 
-  const BOOLEAN_PROPERTIES = FLATTENED_ENROLLMENT_COLUMNS.filter((column) =>
-    column.type.toString().includes('Boolean')
-  ).map((column) => column.propertyName);
-
-  const DATE_PROPERTIES = FLATTENED_ENROLLMENT_COLUMNS.filter(
-    (column) => column.type === 'date'
-  ).map((column) => column.propertyName);
-
   const fileData = readFile(file.path);
   const sheet = Object.values(fileData.Sheets)[0];
 
-  update_sheet_range(sheet);
-  const { headers, data } = parseSheet(sheet, OBJECT_PROPERTIES);
+  updateSheetRange(sheet);
+  const { headers, data } = parseSheet(sheet, objectProperties);
 
   // Array comparison was returning false even when the strings matched
-  if (!EXPECTED_HEADERS.every((header, idx) => header === headers[idx])) {
+  if (!expectedHeaders.every((header, idx) => header === headers[idx])) {
     throw new BadRequestError(
       "The columns in your uploaded file don't match our template. Use the newest template without changing the column order."
     );
@@ -69,8 +55,19 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     );
   }
 
-  return data.map((rawEnrollment) =>
-    parseFlattenedEnrollment(rawEnrollment, BOOLEAN_PROPERTIES, DATE_PROPERTIES)
+  const booleanProperties: string[] = [];
+  const dateProperties: string[] = [];
+  Object.entries(new EnrollmentReportRow()).forEach(([prop, value]) => {
+    if (typeof value === 'boolean') {
+      booleanProperties.push(prop);
+    }
+    if (moment.isMoment(value)) {
+      dateProperties.push(prop);
+    }
+  });
+
+  return data.map((rawRow) =>
+    parseEnrollmentReportRow(rawRow, booleanProperties, dateProperties)
   );
 }
 
@@ -82,7 +79,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
  * it incorrectly reports a much larger size than it actually is.
  * @param sheet
  */
-function update_sheet_range(sheet: WorkSheet) {
+function updateSheetRange(sheet: WorkSheet) {
   var range = { s: { r: Infinity, c: Infinity }, e: { r: 0, c: 0 } };
   Object.keys(sheet)
     .filter(function (x) {
@@ -108,7 +105,7 @@ function update_sheet_range(sheet: WorkSheet) {
  * @param objectProperties
  */
 function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
-  const parsedSheet = utils.sheet_to_json<FlattenedEnrollment>(sheet, {
+  const parsedSheet = utils.sheet_to_json<EnrollmentReportRow>(sheet, {
     header: objectProperties,
   });
 
@@ -135,11 +132,11 @@ function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
 
 /**
  * Converts a raw object parsed from the uploaded file into
- * a FlattenedEnrollment, with parsed boolean values and
+ * an EnrollmentReportRow, with parsed boolean values and
  * date values (as Moment instances).
  * @param rawEnrollment
  */
-function parseFlattenedEnrollment(
+function parseEnrollmentReportRow(
   rawEnrollment: object,
   booleanProperties: string[],
   dateProperties: string[]
@@ -176,7 +173,7 @@ function parseFlattenedEnrollment(
     }
   });
 
-  return getManager().create(FlattenedEnrollment, rawEnrollment);
+  return rawEnrollment as EnrollmentReportRow;
 }
 
 /**
