@@ -3,8 +3,8 @@ import { getManager } from 'typeorm';
 
 export const addDataToUser = async (user: User) => {
   const [sites, organizations] = await Promise.all([
-    getManager().findByIds(Site, user.siteIds),
-    getManager().findByIds(Organization, user.organizationIds),
+    getManager().findByIds(Site, user.siteIds || []),
+    getManager().findByIds(Organization, user.organizationIds || []),
   ]);
 
   user.sites = sites;
