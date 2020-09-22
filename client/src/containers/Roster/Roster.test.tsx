@@ -56,7 +56,7 @@ const children: Child[] = [
       {
         child: _child,
         id: 1,
-        site: { id: 1, name: 'Site' } as Site,
+        site: { id: 1, siteName: 'Site' } as Site,
         ageGroup: AgeGroup.InfantToddler,
         fundings: [
           {
@@ -78,7 +78,7 @@ const children: Child[] = [
       {
         child: _child,
         id: 1,
-        site: { id: 1, name: 'Site' } as Site,
+        site: { id: 1, siteName: 'Site' } as Site,
         ageGroup: AgeGroup.InfantToddler,
         fundings: [
           {
@@ -100,7 +100,7 @@ const children: Child[] = [
       {
         child: _child,
         id: 1,
-        site: { id: 1, name: 'Site' } as Site,
+        site: { id: 1, siteName: 'Site' } as Site,
         ageGroup: AgeGroup.Preschool,
         fundings: [
           {
@@ -115,7 +115,7 @@ const children: Child[] = [
 ];
 
 const user = {
-  organizations: [{ id: 1, name: 'Organization' }],
+  organizations: [{ id: 1, providerName: 'Organization' }],
 } as User;
 
 describe('Roster', () => {
