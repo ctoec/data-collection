@@ -119,7 +119,7 @@ exports[`EditRecord matches snapshot 1`] = `
           <fieldset
             aria-describedby="race-fieldset-hint"
             class="grid-gap grid-row usa-fieldset"
-            id="dateOfBirth-picker"
+            id="race-fieldset"
           >
             <legend
               id="fieldset-legend-race-fieldset"
@@ -231,17 +231,9 @@ exports[`EditRecord matches snapshot 1`] = `
             </div>
           </fieldset>
           <fieldset
-<<<<<<< HEAD
-=======
             aria-describedby="ethnicity-radiogroup-fieldset-hint"
             class="grid-gap grid-row usa-fieldset"
             id="ethnicity-radiogroup-fieldset"
-<<<<<<< HEAD
->>>>>>> Updated snapshots
-            class="grid-gap grid-row usa-fieldset display-inline-block"
-            id="birth-certificate-fields"
-=======
->>>>>>> Updated snapshots
           >
             <legend
               id="fieldset-legend-ethnicity-radiogroup-fieldset"

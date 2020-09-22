@@ -21,8 +21,6 @@ jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { waitFor, fireEvent, wait } from '@testing-library/dom';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { render, act } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import moment from 'moment';
 const apiMock = api as jest.Mocked<typeof api>;
 

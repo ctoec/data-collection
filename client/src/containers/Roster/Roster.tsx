@@ -90,7 +90,9 @@ const Roster: React.FC = () => {
     <>
       <div className="grid-container">
         <h2 className="font-body-xl margin-bottom-0">
-          {organization?.providerName}
+          {organization == null || organization == undefined
+            ? 'No Organization Selected'
+            : organization?.providerName}
         </h2>
         <p className="font-body-xl margin-top-1">
           {loading
