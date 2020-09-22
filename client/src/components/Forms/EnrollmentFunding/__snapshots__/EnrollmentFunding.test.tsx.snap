@@ -14,11 +14,11 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       <div
         class="display-flex flex-justify"
       >
-        <h2
-          class="header-normal font-heading-lg"
+        <div
+          class="display-flex flex-justify text-bold"
         >
           Has First's age group and/or site changed?
-        </h2>
+        </div>
         <button
           class="usa-button usa-button--outline"
           type="button"
