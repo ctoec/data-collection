@@ -54,6 +54,12 @@
     "watch-ts": "tsc -w"
   },
   "devDependencies": {
+    "husky": "^4.3.0",
     "prettier": "^2.0.5"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "./hooks/pre-commit.sh"
+    }
   }
 }
