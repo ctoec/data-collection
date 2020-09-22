@@ -17,7 +17,7 @@ export class Site implements SiteInterface {
   id: number;
 
   @Column({ unique: true })
-  name: string;
+  siteName: string;
 
   @Column()
   titleI: boolean;

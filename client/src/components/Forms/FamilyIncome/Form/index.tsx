@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card } from '@ctoec/component-library';
 import { propertyDateSorter } from '../../../../utils/dateSorter';
 import { EditDeterminationForm } from './EditDeterminationForm';
@@ -6,13 +6,20 @@ import { RedeterminationForm } from './RedeterminationForm';
 import { EditFormProps } from '../../types';
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
-  const { child, onSuccess } = props;
+  const { child, onSuccess, setAlerts } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
+
+  // Clear any previously displayed alerts from other tabs
+  useEffect(() => {
+    setAlerts([]);
+  }, []);
 
   if (!child?.family) {
     throw new Error('Family income rendered without family');
   }
+
+  if (!child) return <></>;
 
   const determinations = child.family.incomeDeterminations || [];
   const familyId = child.family.id;

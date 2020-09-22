@@ -14,11 +14,11 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       <div
         class="display-flex flex-justify"
       >
-        <span
-          class="header-normal font-heading-md"
+        <h2
+          class="header-normal font-heading-lg"
         >
           Has First's age group and/or site changed?
-        </span>
+        </h2>
         <button
           class="usa-button usa-button--outline"
           type="button"
@@ -76,7 +76,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
           <span
             class="usa-hint text-italic"
           >
-            For example: 6 21 2008
+            For example: 6 22 2008
           </span>
           <div
             class="grid-gap grid-row flex-align-start"
@@ -860,7 +860,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
                                         <td
                                           aria-disabled="false"
                                           aria-label="Saturday, June 21, 2008"
-                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__today CalendarDay__today_3 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_4"
+                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
                                           role="button"
                                           style="width: 39px; height: 38px;"
                                           tabindex="-1"
@@ -872,7 +872,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
                                         <td
                                           aria-disabled="false"
                                           aria-label="Sunday, June 22, 2008"
-                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__today CalendarDay__today_3 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_4"
                                           role="button"
                                           style="width: 39px; height: 38px;"
                                           tabindex="-1"

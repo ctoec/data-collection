@@ -15,9 +15,9 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
-  FundingTimeInput,
   SpecialEducationServicesType,
   FundingSourceTime,
+  FundingTimeInput,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
@@ -64,7 +64,7 @@ export const mapRow = async (source: EnrollmentReportRow) => {
  */
 const mapOrganization = (source: EnrollmentReportRow) => {
   return getManager().findOneOrFail(Organization, {
-    where: { name: source.provider },
+    where: { providerName: source.providerName },
   });
 };
 
@@ -77,7 +77,9 @@ const mapOrganization = (source: EnrollmentReportRow) => {
  * @param source
  */
 const mapSite = (source: EnrollmentReportRow) => {
-  return getManager().findOneOrFail(Site, { where: { name: source.site } });
+  return getManager().findOneOrFail(Site, {
+    where: { siteName: source.siteName },
+  });
 };
 
 /**
@@ -109,9 +111,9 @@ const mapChild = (
     middleName: source.middleName,
     lastName: source.lastName,
     suffix: source.suffix,
-    birthdate: source.dateOfBirth,
-    birthTown: source.townOfBirth,
-    birthState: source.stateOfBirth,
+    birthdate: source.birthdate,
+    birthTown: source.birthTown,
+    birthState: source.birthState,
     birthCertificateId: source.birthCertificateId,
     americanIndianOrAlaskaNative: source.americanIndianOrAlaskaNative,
     asian: source.asian,
@@ -120,10 +122,10 @@ const mapChild = (
     white: source.white,
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
-    foster: source.livesWithFosterFamily || false,
-    recievesC4K: source.receivingCareForKids || false,
-    recievesSpecialEducationServices:
-      source.receivingSpecialEducationServices || false,
+    foster: source.foster || false,
+    receivesC4K: source.receivesC4K || false,
+    receivesSpecialEducationServices:
+      source.receivesSpecialEducationServices || false,
     specialEducationServicesType,
     organization,
     family: family,
@@ -143,8 +145,8 @@ const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
-    zip: source.zipcode,
-    homelessness: source.experiencedHomelessnessOrHousingInsecurity,
+    zipcode: source.zipcode,
+    homelessness: source.homelessness,
     organization,
   });
 
@@ -160,9 +162,9 @@ const mapIncomeDetermination = (
   family: Family
 ) => {
   const incomeDetermination = getManager().create(IncomeDetermination, {
-    numberOfPeople: source.householdSize,
-    income: source.annualHouseholdIncome,
-    determinationDate: source.incomeDeterminationDate,
+    numberOfPeople: source.numberOfPeople,
+    income: source.income,
+    determinationDate: source.determinationDate,
     familyId: family.id,
   });
 
@@ -186,16 +188,16 @@ const mapEnrollment = (
     site,
     childId: child.id,
     ageGroup,
-    entry: source.enrollmentStartDate,
-    exit: source.enrollmentEndDate,
-    exitReason: source.enrollmentExitReason,
+    entry: source.entry,
+    exit: source.exit,
+    exitReason: source.exitReason,
   });
 
   return getManager().save(enrollment);
 };
 
 /**
- * Create Funding object from FlattenedEnrollment source,
+ * Create a Funding object from FlattenedEnrollment source,
  * associated with a FundingSpace for given organization and ageGroup
  * (already parsed from source).
  * @param source
@@ -207,12 +209,8 @@ const mapFunding = async (
   organization: Organization,
   enrollment: Enrollment
 ) => {
-  const fundingSource: FundingSource = mapEnum(
-    FundingSource,
-    source.fundingType
-  );
-
-  let fundingTime: FundingTime = mapEnum(FundingTime, source.spaceType);
+  const fundingSource: FundingSource = mapEnum(FundingSource, source.source);
+  let fundingTime: FundingTime = mapEnum(FundingTime, source.time);
 
   //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
   //  was supplied instead and look up the corresponding FundingTime
@@ -224,7 +222,7 @@ const mapFunding = async (
     if (matchingSourceTime) {
       const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(
         (fundingTime) => {
-          return fundingTime.formats.includes(source.spaceType.toString());
+          return fundingTime.formats.includes(source.time.toString());
         }
       );
 
@@ -287,8 +285,8 @@ const mapFunding = async (
   // If we could not find a fundingSpace, we cannot create a funding
   // so NOTHING is returned.
   if (
-    source.fundingType ||
-    source.spaceType ||
+    source.source ||
+    source.time ||
     source.firstFundingPeriod ||
     source.lastFundingPeriod
   ) {

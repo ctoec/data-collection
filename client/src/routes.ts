@@ -80,7 +80,7 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/success',
+    path: '/success/:reportId',
     component: SubmitSuccess,
     unauthorized: false,
   },
