@@ -104,7 +104,7 @@ const Roster: React.FC = () => {
           >
             <TextWithIcon Icon={PlusCircle} text="Add a record" />
           </Link>
-          <CSVDownloadLink reportId={undefined} />
+          <CSVDownloadLink />
         </div>
         <Accordion items={accordionItems} titleHeadingLevel="h2" />
       </div>

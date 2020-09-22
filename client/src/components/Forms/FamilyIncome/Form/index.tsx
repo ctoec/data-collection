@@ -19,8 +19,6 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
     throw new Error('Family income rendered without family');
   }
 
-  if (!child) return <></>;
-
   const determinations = child.family.incomeDeterminations || [];
   const familyId = child.family.id;
 

@@ -294,7 +294,7 @@ export class EnrollmentReportRow {
     example: '01234',
     section: SECTIONS.FAMILY_INFO,
   })
-  zipcode?: string = undefined;
+  zipCode?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Lives with foster family',

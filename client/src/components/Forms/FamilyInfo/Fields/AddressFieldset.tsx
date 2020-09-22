@@ -67,7 +67,7 @@ export const AddressFieldset: React.FC = () => {
       </div>
       <div className="grid-col-6">
         <FormField<Family, TextInputProps, string>
-          getValue={(data) => data.at('zipcode')}
+          getValue={(data) => data.at('zipCode')}
           type="input"
           inputComponent={TextInput}
           id="zip"

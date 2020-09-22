@@ -44,8 +44,8 @@ const CheckData: React.FC = () => {
 
   return (
     <>
-      <div className="CheckData__content margin-top-4 grid-container">
-        <div className="margin-x-4">
+      <div className="CheckData__content margin-4 grid-container">
+        <div>
           <BackButton />
           <h1>Check data for {pluralize('child', reportData.length, true)}</h1>
           <p>Make sure all of your data was uploaded correctly. </p>

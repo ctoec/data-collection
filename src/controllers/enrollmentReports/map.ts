@@ -145,7 +145,7 @@ const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
-    zipcode: source.zipcode,
+    zipCode: source.zipCode,
     homelessness: source.homelessness,
     organization,
   });

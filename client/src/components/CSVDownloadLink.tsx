@@ -49,7 +49,7 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
       external
       text={
         <TextWithIcon
-          text="Download.csv"
+          text="Download CSV File"
           Icon={DownloadArrow}
           iconSide="left"
           className="text-underline"
