@@ -21,11 +21,20 @@ exportRouter.get(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const id = parseInt(req.params['reportId']) || 0;
-      const report = await getManager().findOne(EnrollmentReport, id);
+      const report = await getManager().findOne(EnrollmentReport, id, {
+        relations: [
+          'children',
+          'children.family',
+          'children.family.incomeDeterminations',
+          'children.enrollments',
+          'children.enrollments.site',
+          'children.enrollments.site.organization',
+          'children.enrollments.fundings',
+        ],
+      });
 
       if (!report) throw new NotFoundError();
 
-      // const childrenToMap = await controller.getChildrenByReport(report);
       res.send(controller.streamUploadedChildren(res, report.children));
     } catch (err) {
       console.error('Unable to download exported enrollment data: ', err);

@@ -6,7 +6,6 @@ import {
   Table,
   PlusCircle,
   Button,
-  FileDownload,
 } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
@@ -15,6 +14,7 @@ import { tableColumns } from '../Roster/TableColumns';
 import { Link, useHistory } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
+import { CSVDownloadLink } from '../../components/CSVDownloadLink';
 
 const MAX_LENGTH_EXPANDED = 50;
 
@@ -104,17 +104,7 @@ const Roster: React.FC = () => {
           >
             <TextWithIcon Icon={PlusCircle} text="Add a record" />
           </Link>
-          {/* TODO hook up this button to download */}
-          <Button
-            className="margin-left-2"
-            appearance="unstyled"
-            text={
-              <TextWithIcon
-                Icon={FileDownload}
-                text="Export current view (PLACEHOLDER)"
-              />
-            }
-          />
+          <CSVDownloadLink reportId={undefined} />
         </div>
         <Accordion items={accordionItems} titleHeadingLevel="h2" />
       </div>
