@@ -16,7 +16,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
     {
       className: tableColumnClassName,
       name: 'Name',
-      sort: (row) => row.lastName,
+      sort: (row) => row.lastName || '',
       width: `${longColumnWidthPercent}%`,
       cell: ({ row }) => {
         return (

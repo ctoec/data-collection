@@ -62,5 +62,5 @@ export class Enrollment implements EnrollmentInterface {
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })
-  updateMetaData?: UpdateMetaData;
+  updateMetaData: UpdateMetaData;
 }

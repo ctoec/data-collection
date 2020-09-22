@@ -18,7 +18,7 @@ import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
 
 type WithdrawProps = {
-  childName: string;
+  childName: string | undefined;
   enrollment: Enrollment;
   reportingPeriods: ReportingPeriod[];
   toggleOpen: () => void;
@@ -80,7 +80,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               <p>Contract space: {activeFunding.fundingSpace.time}</p>
               <p>
                 First reporting period:{' '}
-                {activeFunding.firstReportingPeriod.period.format('MMMM YYYY')}
+                {activeFunding.firstReportingPeriod?.period.format('MMMM YYYY')}
               </p>
             </>
           )}

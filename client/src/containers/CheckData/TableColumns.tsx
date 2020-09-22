@@ -10,7 +10,7 @@ export const tableColumns: Column<Child>[] = [
   {
     className: tableColumnClassName,
     name: 'Name',
-    sort: (row) => row.lastName,
+    sort: (row) => row.lastName || '',
     cell: ({ row }) => {
       return (
         <th scope="row" className={tableRowClassName}>

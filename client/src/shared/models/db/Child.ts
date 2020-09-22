@@ -7,9 +7,9 @@ import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 export interface Child extends ObjectWithValidationErrors {
   id: string;
   sasid?: string;
-  firstName: string;
+  firstName?: string;
   middleName?: string;
-  lastName: string;
+  lastName?: string;
   suffix?: string;
   birthdate?: Moment;
   birthTown?: string;
@@ -26,7 +26,7 @@ export interface Child extends ObjectWithValidationErrors {
   recievesC4K?: boolean;
   recievesSpecialEducationServices?: boolean;
   specialEducationServicesType?: SpecialEducationServicesType;
-  family: Family;
+  family?: Family;
   organization?: Organization;
   enrollments?: Array<Enrollment>;
 }

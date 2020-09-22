@@ -17,7 +17,7 @@ export const TemplateDownloadLink = ({
 
   async function downloadTemplate() {
     await downloadStreamToFile(
-      `column-metadata/${type}`,
+      `template/${type}`,
       `ECE Data Collection Template.${type}`
     );
   }

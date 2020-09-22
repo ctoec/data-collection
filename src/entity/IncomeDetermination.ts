@@ -29,5 +29,5 @@ export class IncomeDetermination implements IncomeDeterminationInterface {
   familyId: number;
 
   @Column((type) => UpdateMetaData, { prefix: false })
-  updateMetaData?: UpdateMetaData;
+  updateMetaData: UpdateMetaData;
 }

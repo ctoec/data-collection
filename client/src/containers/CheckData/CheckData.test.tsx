@@ -30,9 +30,13 @@ const child = {
   ],
 } as Child;
 
+const report = {
+  children: [child],
+};
+
 describe('CheckData', () => {
   beforeAll(() =>
-    apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([child])))
+    apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve(report)))
   );
 
   const helperOpts = {

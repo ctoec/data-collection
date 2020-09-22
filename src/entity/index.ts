@@ -3,7 +3,6 @@ export * from './Community';
 export * from './Enrollment';
 export * from './EnrollmentReport';
 export * from './Family';
-export * from './FlattenedEnrollment';
 export * from './Funding';
 export * from './FundingSpace';
 export * from './FundingTimeSplit';
