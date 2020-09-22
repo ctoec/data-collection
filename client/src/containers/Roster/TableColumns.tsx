@@ -71,13 +71,13 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
     {
       className: tableColumnClassName,
       name: 'Site',
-      sort: (row) => idx(row, (_) => _.enrollments[0].site.name) || '',
+      sort: (row) => idx(row, (_) => _.enrollments[0].site.siteName) || '',
       width: `${longColumnWidthPercent}%`,
       cell: ({ row }) => (
         <td
           className={`${tableRowClassName} ellipsis-wrap-text ellipsis-wrap-text--tight`}
         >
-          {idx(row, (_) => _.enrollments[0].site.name)}
+          {idx(row, (_) => _.enrollments[0].site.siteName)}
         </td>
       ),
     },
@@ -99,13 +99,13 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
       className: tableColumnClassName,
       name: 'Organization',
       sort: (row) =>
-        idx(row, (_) => _.enrollments[0].site.organization.name) || '',
+        idx(row, (_) => _.enrollments[0].site.organization.providerName) || '',
       width: `${longColumnWidthPercent}%`,
       cell: ({ row }) => (
         <td
           className={`${tableRowClassName} ellipsis-wrap-text ellipsis-wrap-text--tight`}
         >
-          {idx(row, (_) => _.enrollments[0].site.organization.name)}
+          {idx(row, (_) => _.enrollments[0].site.organization.providerName)}
         </td>
       ),
     });

@@ -89,7 +89,9 @@ const Roster: React.FC = () => {
   return (
     <>
       <div className="grid-container">
-        <h2 className="font-body-xl margin-bottom-0">{organization?.name}</h2>
+        <h2 className="font-body-xl margin-bottom-0">
+          {organization?.providerName}
+        </h2>
         <p className="font-body-xl margin-top-1">
           {loading
             ? 'Loading...'

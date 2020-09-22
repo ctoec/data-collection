@@ -12,7 +12,6 @@ import { BackButton } from '../../components/BackButton';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
-import { report, send } from 'process';
 
 /**
  * TODO: Right now, the CheckData page just redirects straight
@@ -68,23 +67,9 @@ const CheckData: React.FC = () => {
           )}
         </div>
       </div>
-      <div className="CheckData__button-container position-fixed bottom-0 width-full">
-        <div className="margin-bottom-0">
-          <div className="fixed-buttons">
-            <div className="grid-container">
-              <Button
-                text="Back to upload"
-                href="/upload"
-                appearance="outline"
-              />
-              <Button text="Send to OEC" href={`/success/${reportId}`} />
-            </div>
-          </div>
-        </div>
-      </div>
       <FixedBottomBar>
         <Button text="Back to upload" href="/upload" appearance="outline" />
-        <Button text="Send to OEC" href="/success" />
+        <Button text="Send to OEC" href={`/success/${reportId}`} />
       </FixedBottomBar>
     </>
   );
