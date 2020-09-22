@@ -3,11 +3,9 @@
 exports[`CheckData matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="CheckData__content margin-top-4 grid-container"
+    class="CheckData__content margin-4 grid-container"
   >
-    <div
-      class="margin-x-4"
-    >
+    <div>
       <button
         class="usa-button usa-button--unstyled margin-bottom-2 text-bold"
         type="button"
