@@ -7,7 +7,9 @@ exports[`Roster matches snapshot 1`] = `
   >
     <h2
       class="font-body-xl margin-bottom-0"
-    />
+    >
+      Organization
+    </h2>
     <p
       class="font-body-xl margin-top-1"
     >
@@ -215,7 +217,9 @@ exports[`Roster matches snapshot 1`] = `
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-              />
+              >
+                Site
+              </td>
               <td
                 class="font-body-2xs"
               />
@@ -247,7 +251,9 @@ exports[`Roster matches snapshot 1`] = `
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-              />
+              >
+                Site
+              </td>
               <td
                 class="font-body-2xs"
               />
@@ -429,7 +435,9 @@ exports[`Roster matches snapshot 1`] = `
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-              />
+              >
+                Site
+              </td>
               <td
                 class="font-body-2xs"
               />
