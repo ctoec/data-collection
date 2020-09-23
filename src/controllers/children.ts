@@ -14,6 +14,7 @@ import {
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
+import { distributeValidationErrorsToSubObjects } from '../utils/distributeValidationErrorsToSubObjects';
 
 /**
  * Get all children for organizations the user has access to
@@ -67,7 +68,7 @@ export const getChildById = async (id: string) => {
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-  return { ...child, validationErrors: await validate(child, { validationError: { target: false } }) };
+  return distributeValidationErrorsToSubObjects({ ...child, validationErrors: await validate(child, { validationError: { target: false } }) });
 };
 
 const propertyDateSorter = <T>(

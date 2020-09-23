@@ -9,3 +9,4 @@ export * from './FundingTime';
 export * from './Gender';
 export * from './Region';
 export * from './SpecialEducationServicesType';
+export * from './ObjectWithValidationErrors';

@@ -19,7 +19,6 @@ import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { distributeValidationErrorsToSubObjects } from '../../utils/getValidationStatus';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
