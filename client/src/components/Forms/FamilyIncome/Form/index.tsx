@@ -8,7 +8,7 @@ import { getValidationStatusForFields } from '../../../../utils/getValidationSta
 import { Family } from '../../../../shared/models';
 
 const incomeDetFields = ['numberOfPeople', 'income', 'determinationDate'];
-export const doesFamilyIncomeFormHaveErrors = (family?: Family) => family?.incomeDeterminations ? !!getValidationStatusForFields(family.incomeDeterminations, incomeDetFields) : true;
+export const doesFamilyIncomeFormHaveErrors = (family?: Family) => family?.incomeDeterminations?.length ? !!getValidationStatusForFields(family.incomeDeterminations, incomeDetFields) : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
   const { child, onSuccess, setAlerts } = props;

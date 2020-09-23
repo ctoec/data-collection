@@ -7,6 +7,11 @@ import { EditFormProps } from '../../types';
 import { useSites } from '../../../../hooks/useSites';
 import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { Child } from '../../../../shared/models';
+
+const enrollmentFields = ['site', 'ageGroup', 'entry', 'fundings'];
+export const doesEnrollmentFormHaveErrors = (child?: Child) => child?.enrollments?.length ? !!getValidationStatusForFields(child.enrollments, enrollmentFields) : true;
 
 // The fields we use to check to see if this form has errors or missing info
 export const enrollmentFundingFields = {

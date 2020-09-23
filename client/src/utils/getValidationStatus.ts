@@ -67,7 +67,7 @@ export function getValidationStatusForFields<
   if (Array.isArray(data)) {
     const allErrors = data.map((d: T) => getValidationStatusForFields(d, fields, options));
     const anError = allErrors.find(e => !!e);
-    console.log(data, allErrors, anError)
+    // Assumes that the error for one of the objects in the array is the same for all
     return anError || undefined;
   }
   if (!data || !data.validationErrors) return;
