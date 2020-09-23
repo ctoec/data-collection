@@ -1,7 +1,7 @@
 import React from 'react';
 import idx from 'idx';
 import { Link } from 'react-router-dom';
-import { Column } from '@ctoec/component-library';
+import { Column, InlineIcon } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 
 const tableColumnClassName = 'text-pre text-center font-body-2xs';
@@ -27,7 +27,10 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
                 pathname: `/edit-record/${row.id}`,
               }}
             >
-              {row.lastName}, {row.firstName}
+              {row.lastName}, {row.firstName}{' '}
+              {(!!row.validationErrors && row.validationErrors.length == 0) ||
+                row.validationErrors == undefined ||
+                InlineIcon({ icon: 'incomplete' })}
             </Link>
           </th>
         );
