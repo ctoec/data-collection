@@ -25,8 +25,8 @@ export const childInfoFields = [
   'gender',
   'foster',
 ];
-export const doesChildInfoFormHaveErrors = (child?: Child) => child ?
-  !!getValidationStatusForFields(child, childInfoFields) : true;
+export const doesChildInfoFormHaveErrors = (child?: Child) =>
+  child ? !!getValidationStatusForFields(child, childInfoFields) : true;
 
 export const ChildInfoForm = ({
   child: inputChild,

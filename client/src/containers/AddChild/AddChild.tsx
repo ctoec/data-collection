@@ -70,14 +70,7 @@ const AddChild: React.FC = () => {
         console.log(err);
       })
       .finally(triggerRefetchChild);
-  }, [
-    accessToken,
-    child,
-    locationState,
-    organization,
-    history,
-    updateChild,
-  ]);
+  }, [accessToken, child, locationState, organization, history, updateChild]);
 
   // Fetch fresh child from API whenever refetch is triggered
   useEffect(() => {

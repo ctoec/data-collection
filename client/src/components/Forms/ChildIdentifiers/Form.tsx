@@ -29,8 +29,8 @@ const childIdentifiersFields = [
   'birthState',
   'birthCertificateId',
 ];
-export const doesChildIdFormHaveErrors = (child?: Child) => child ?
-  !!getValidationStatusForFields(child, childIdentifiersFields) : true;
+export const doesChildIdFormHaveErrors = (child?: Child) =>
+  child ? !!getValidationStatusForFields(child, childIdentifiersFields) : true;
 
 export const ChildIdentifiersForm = ({
   child: inputChild,
