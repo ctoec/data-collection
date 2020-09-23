@@ -67,7 +67,7 @@ export const getChildById = async (id: string) => {
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-  return { ...child, validationErrors: await validate(child) };
+  return { ...child, validationErrors: await validate(child, { validationError: { target: false } }) };
 };
 
 const propertyDateSorter = <T>(
@@ -185,7 +185,7 @@ export const changeEnrollment = async (
       // Update current enrollment exitReason
       currentEnrollment.exitReason =
         currentEnrollment.ageGroup !==
-        changeEnrollmentData.newEnrollment.ageGroup
+          changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
 

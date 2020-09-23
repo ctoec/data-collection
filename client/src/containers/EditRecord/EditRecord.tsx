@@ -97,6 +97,8 @@ const EditRecord: React.FC = () => {
     reportingPeriods,
   };
 
+  console.log(rowData)
+
   return (
     <div className="margin-top-4 grid-container">
       <BackButton />
