@@ -13,7 +13,17 @@ import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 
-// import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
+// The fields we use to check to see if this form has errors or missing info
+export const childInfoFields = [
+  'americanIndianOrAlaskaNative',
+  'asian',
+  'blackOrAfricanAmerican',
+  'nativeHawaiianOrPacificIslander',
+  'white',
+  'hispanicOrLatinxEthnicity',
+  'gender',
+  'foster'
+]
 
 export const ChildInfoForm = ({
   child: inputChild,

@@ -95,14 +95,14 @@ export function distributeValidationErrorsToSubObjects<
   if (!parentObject || !parentObject.validationErrors) return parentObject;
   const copiedParent = JSON.parse(JSON.stringify(parentObject));
 
-  copiedParent.validationErrors
-    .filter((v: ValidationError) => v.children && v.children.length)
-    .forEach((v: ValidationError) => {
-      let childObject = copiedParent[v.property];
-      childObject.validationErrors = [...v.children];
-      distributeValidationErrorsToSubObjects(childObject);
-      copiedParent[v.property] = childObject;
-    });
+  // copiedParent.validationErrors
+  //   .filter((v: ValidationError) => v.children && v.children.length)
+  //   .forEach((v: ValidationError) => {
+  //     let childObject = copiedParent[v.property];
+  //     childObject.validationErrors = [...v.children];
+  //     distributeValidationErrorsToSubObjects(childObject);
+  //     copiedParent[v.property] = childObject;
+  //   });
 
   return copiedParent;
 }

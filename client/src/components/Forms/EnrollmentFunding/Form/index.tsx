@@ -8,6 +8,11 @@ import { useSites } from '../../../../hooks/useSites';
 import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
 
+// The fields we use to check to see if this form has errors or missing info
+export const enrollmentFundingFields = {
+  enrollments: []
+}
+
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
