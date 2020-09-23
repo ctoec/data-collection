@@ -21,9 +21,7 @@ export function useValidationErrors<T extends ObjectWithValidationErrors>(
 
   useEffect(() => {
     if (!errorsHidden) {
-      setOutputObject(
-        inputObject
-      );
+      setOutputObject(inputObject);
     }
   }, [errorsHidden]);
 

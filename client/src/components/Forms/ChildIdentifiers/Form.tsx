@@ -18,8 +18,19 @@ import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
 // The fields we use to check to see if this form has errors or missing info
-const childIdentifiersFields = ['sasid', 'firstName', 'middleName', 'lastName', 'suffix', 'birthdate', 'birthTown', 'birthState', 'birthCertificateId']
-export const doesChildIdFormHaveErrors = (child: Child) => !!getValidationStatusForFields(child, childIdentifiersFields)
+const childIdentifiersFields = [
+  'sasid',
+  'firstName',
+  'middleName',
+  'lastName',
+  'suffix',
+  'birthdate',
+  'birthTown',
+  'birthState',
+  'birthCertificateId',
+];
+export const doesChildIdFormHaveErrors = (child: Child) =>
+  !!getValidationStatusForFields(child, childIdentifiersFields);
 
 export const ChildIdentifiersForm = ({
   child: inputChild,

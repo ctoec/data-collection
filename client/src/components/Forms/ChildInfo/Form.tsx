@@ -23,9 +23,10 @@ export const childInfoFields = [
   'white',
   'hispanicOrLatinxEthnicity',
   'gender',
-  'foster'
-]
-export const doesChildInfoFormHaveErrors = (child: Child) => !!getValidationStatusForFields(child, childInfoFields)
+  'foster',
+];
+export const doesChildInfoFormHaveErrors = (child: Child) =>
+  !!getValidationStatusForFields(child, childInfoFields);
 
 export const ChildInfoForm = ({
   child: inputChild,

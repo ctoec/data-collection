@@ -1,6 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav, Button, TextWithIcon, Info, TextWithIconProps } from '@ctoec/component-library';
+import {
+  TabNav,
+  Button,
+  TextWithIcon,
+  Info,
+  TextWithIconProps,
+} from '@ctoec/component-library';
 import Modal from 'react-modal';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
@@ -14,7 +20,8 @@ import {
   EnrollmentFundingForm,
   ChildIdentifiersForm,
   doesChildIdFormHaveErrors,
-  doesChildInfoFormHaveErrors, doesFamilyAddressFormHaveErrors
+  doesChildInfoFormHaveErrors,
+  doesFamilyAddressFormHaveErrors,
 } from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
@@ -102,9 +109,9 @@ const EditRecord: React.FC = () => {
     Icon: Info,
     iconSide: 'right',
     className: 'svg-gold-20v',
-  }
+  };
 
-  console.log(rowData)
+  console.log(rowData);
 
   return (
     <div className="margin-top-4 grid-container">
@@ -172,17 +179,35 @@ const EditRecord: React.FC = () => {
         items={[
           {
             id: TAB_IDS.IDENT,
-            text: doesChildIdFormHaveErrors(rowData) ? <TextWithIcon {...commonTextWithIconProps} text='Child identifiers' /> : 'Child identifiers',
+            text: doesChildIdFormHaveErrors(rowData) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Child identifiers"
+              />
+            ) : (
+              'Child identifiers'
+            ),
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.CHILD,
-            text: doesChildInfoFormHaveErrors(rowData) ? <TextWithIcon {...commonTextWithIconProps} text='Child info' /> : 'Child info',
+            text: doesChildInfoFormHaveErrors(rowData) ? (
+              <TextWithIcon {...commonTextWithIconProps} text="Child info" />
+            ) : (
+              'Child info'
+            ),
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.FAMILY,
-            text: doesFamilyAddressFormHaveErrors(rowData.family) ? <TextWithIcon {...commonTextWithIconProps} text='Family address' /> : 'Family address',
+            text: doesFamilyAddressFormHaveErrors(rowData.family) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Family address"
+              />
+            ) : (
+              'Family address'
+            ),
             content: <FamilyAddressForm {...commonFormProps} />,
           },
           {

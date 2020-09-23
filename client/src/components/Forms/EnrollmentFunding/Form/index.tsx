@@ -10,8 +10,8 @@ import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
 
 // The fields we use to check to see if this form has errors or missing info
 export const enrollmentFundingFields = {
-  enrollments: []
-}
+  enrollments: [],
+};
 
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
