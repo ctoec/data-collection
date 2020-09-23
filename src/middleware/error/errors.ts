@@ -37,3 +37,14 @@ export class BadRequestError extends ApiError {
     this.status = 400;
   }
 }
+
+/**
+ * Custom error class for 500 Internal Server
+ */
+export class InternalServerError extends ApiError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InternalServerError';
+    this.status - 500;
+  }
+}

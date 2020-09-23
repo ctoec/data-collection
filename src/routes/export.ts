@@ -3,7 +3,11 @@ import { Response, Request } from 'express';
 import * as controller from '../controllers/export';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { getManager } from 'typeorm';
-import { BadRequestError, NotFoundError } from '../middleware/error/errors';
+import {
+  BadRequestError,
+  NotFoundError,
+  InternalServerError,
+} from '../middleware/error/errors';
 import { EnrollmentReport, User } from '../entity';
 import { getSites } from '../controllers/sites';
 
@@ -38,7 +42,9 @@ exportRouter.get(
       res.send(controller.streamUploadedChildren(res, report.children));
     } catch (err) {
       console.error('Unable to download exported enrollment data: ', err);
-      throw new BadRequestError('Could not create spreadsheet to download');
+      throw new InternalServerError(
+        'Could not create spreadsheet to download: ' + err
+      );
     }
   })
 );
@@ -60,7 +66,7 @@ exportRouter.get(
       res.send(controller.streamUploadedChildren(res, childrenToMap));
     } catch (err) {
       console.error('Unable to generate CSV by user ID', err);
-      throw new BadRequestError('Could not export roster for user: ' + err);
+      throw new InternalServerError('Could not export roster for user: ' + err);
     }
   })
 );
