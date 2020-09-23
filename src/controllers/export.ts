@@ -50,42 +50,6 @@ function childSorter(child: Child) {
 }
 
 /**
- * One of two ways to export a CSV of Children objects. Uses a
- * transaction manager to find all Children who were uploaded
- * in a particular enrollment report, sorts their properties,
- * and returns the result.
- * @param report
- */
-// export async function getChildrenByReport(report: EnrollmentReport) {
-//   const childrenToMap = await getManager().transaction(async (tManager) => {
-//     let kids = [];
-//     for (let i = 0; i < report.children.length; i++) {
-//       let enrollment = report.enrollments[i];
-//       var child = await tManager.findOne(
-//         Child,
-//         {
-//           firstName: enrollment.firstName,
-//           lastName: enrollment.lastName,
-//           birthdate: enrollment.birthdate,
-//           birthCertificateId: enrollment.birthCertificateId,
-//         },
-//         {
-//           relations: CHILD_RELATIONS,
-//         }
-//       );
-
-//       // Sort enrollments by exit date
-//       if (child) {
-//         child = childSorter(child);
-//       }
-//       kids.push(child);
-//     }
-//     return kids;
-//   });
-//   return childrenToMap;
-// }
-
-/**
  * Second way of retrieving Children to export. Given an array
  * of sites a user has access to, finds all Children with enrollments
  * at that site, sorts their properties, and returns the collection
