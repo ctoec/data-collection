@@ -22,6 +22,7 @@ import {
   doesChildIdFormHaveErrors,
   doesChildInfoFormHaveErrors,
   doesFamilyAddressFormHaveErrors,
+  doesFamilyIncomeFormHaveErrors
 } from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
@@ -185,8 +186,8 @@ const EditRecord: React.FC = () => {
                 text="Child identifiers"
               />
             ) : (
-              'Child identifiers'
-            ),
+                'Child identifiers'
+              ),
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
@@ -194,8 +195,8 @@ const EditRecord: React.FC = () => {
             text: doesChildInfoFormHaveErrors(rowData) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Child info" />
             ) : (
-              'Child info'
-            ),
+                'Child info'
+              ),
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
@@ -206,13 +207,20 @@ const EditRecord: React.FC = () => {
                 text="Family address"
               />
             ) : (
-              'Family address'
-            ),
+                'Family address'
+              ),
             content: <FamilyAddressForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.INCOME,
-            text: 'Family Income',
+            text: doesFamilyIncomeFormHaveErrors(rowData.family) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Family income"
+              />
+            ) : (
+                'Family income'
+              ),
             content: <FamilyIncomeForm {...commonFormProps} />,
           },
           {

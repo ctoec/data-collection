@@ -60,10 +60,16 @@ export function getValidationStatusForField<
 export function getValidationStatusForFields<
   T extends ObjectWithValidationErrors
 >(
-  data: T,
+  data: T | T[],
   fields: string[],
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
+  if (Array.isArray(data)) {
+    const allErrors = data.map((d: T) => getValidationStatusForFields(d, fields, options));
+    const anError = allErrors.find(e => !!e);
+    console.log(data, allErrors, anError)
+    return anError || undefined;
+  }
   if (!data || !data.validationErrors) return;
   const validationErrors = data.validationErrors.filter((v) =>
     fields.includes(v.property)
