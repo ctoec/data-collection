@@ -24,7 +24,7 @@ export const AddressFieldset: React.FC = () => {
       status={(data) =>
         getValidationStatusForFields(
           data,
-          ['streetAddress', 'town', 'state', 'zip'],
+          ['streetAddress', 'town', 'state', 'zipCode'],
           { message: 'Family address is required' }
         )
       }

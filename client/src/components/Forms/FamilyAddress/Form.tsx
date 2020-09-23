@@ -7,6 +7,10 @@ import { apiPut } from '../../../utils/api';
 import { EditFormProps } from '../types';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+
+const familyAddressFields = ['streetAddress', 'town', 'state', 'zipCode'];
+export const doesFamilyAddressFormHaveErrors = (family?: Family) => family ? !!getValidationStatusForFields(family, familyAddressFields) : true;
 
 /*
  * Functional component that allows a user to modify the address
@@ -57,7 +61,7 @@ export const FamilyAddressForm: React.FC<EditFormProps> = ({
     <div className="grid-container margin-top-2">
       {!hideHeader && <h2 className="grid-row">Family Address</h2>}
       <Form<Family>
-        className="FamilyInfoForm"
+        className="FamilyAddressForm"
         data={family}
         onSubmit={onSubmit}
         noValidate

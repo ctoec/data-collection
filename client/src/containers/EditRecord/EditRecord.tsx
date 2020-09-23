@@ -14,7 +14,7 @@ import {
   EnrollmentFundingForm,
   ChildIdentifiersForm,
   doesChildIdFormHaveErrors,
-  doesChildInfoFormHaveErrors
+  doesChildInfoFormHaveErrors, doesFamilyAddressFormHaveErrors
 } from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
@@ -177,12 +177,12 @@ const EditRecord: React.FC = () => {
           },
           {
             id: TAB_IDS.CHILD,
-            text: doesChildInfoFormHaveErrors(rowData) ? <TextWithIcon {...commonTextWithIconProps} text='Child info' /> : 'Child Child info',
+            text: doesChildInfoFormHaveErrors(rowData) ? <TextWithIcon {...commonTextWithIconProps} text='Child info' /> : 'Child info',
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.FAMILY,
-            text: 'Family Address',
+            text: doesFamilyAddressFormHaveErrors(rowData.family) ? <TextWithIcon {...commonTextWithIconProps} text='Family address' /> : 'Family address',
             content: <FamilyAddressForm {...commonFormProps} />,
           },
           {
