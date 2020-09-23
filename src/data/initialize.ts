@@ -1,14 +1,17 @@
 import { getManager } from 'typeorm';
 import {
+  User,
   Organization,
   Site,
   FundingSpace,
-  ReportingPeriod
+  ReportingPeriod,
+  OrganizationPermission,
 } from '../entity';
 import {
   Region,
   AgeGroup,
-  FundingSource
+  FundingSource,
+  FundingTime,
 } from '../../client/src/shared/models';
 import { reportingPeriods } from './reportingPeriods';
 import moment from 'moment';
@@ -17,6 +20,17 @@ import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
 
+  let user = await getManager().findOne(User, 1);
+  if (!user) {
+    const _user = getManager().create(User, {
+      id: 1,
+      wingedKeysId: '2c0ec653-8829-4aa1-82ba-37c8832bbb88',
+      firstName: 'Voldy',
+      lastName: 'Mort',
+    });
+    user = await getManager().save(_user);
+  }
+
   let organization = await getManager().findOne(Organization, 1);
   if (!organization) {
     const _organization = getManager().create(Organization, {
@@ -24,6 +38,14 @@ export const initialize = async () => {
       providerName: 'Hogwarts Childcare',
     });
     organization = await getManager().save(_organization);
+  }
+
+  if (!(await getManager().findOne(OrganizationPermission, 1))) {
+    const permission = getManager().create(OrganizationPermission, {
+      user,
+      organization,
+    });
+    await getManager().save(permission);
   }
 
   if (!(await getManager().findOne(Site, 1))) {

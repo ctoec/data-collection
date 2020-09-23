@@ -2,12 +2,9 @@ import jwt, { UnauthorizedError } from 'express-jwt';
 import jwks from 'jwks-rsa';
 import { Request, Response, NextFunction } from 'express';
 import { getManager, In } from 'typeorm';
-import { User, Organization, Site, OrganizationPermission } from '../entity';
-import { passAsyncError } from './error/passAsyncError';
-
-import { default as axios, AxiosResponse } from 'axios';
-import * as https from 'https';
+import { User, Organization, Site } from '../entity';
 import { InvalidSubClaimError } from './error/errors';
+import { passAsyncError } from './error/passAsyncError';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -37,20 +34,9 @@ const decodeClaim = jwt({
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
     if (req.claims.sub) {
-      let fawkesUser = await getUser(req.claims.sub);
-
-      //  TODO: Remove once an actual user management system is implemented
-      if (!fawkesUser) {
-        const res: AxiosResponse<any> = await getUserFromWingedKeys(req.headers.authorization);
-
-        if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
-          fawkesUser = await createUserWithFullPermissions(req.claims.sub, res.data);
-        } else {
-          throw new InvalidSubClaimError();
-        }
-      }
-
-      req.user = fawkesUser;
+      const user = await getUser(req.claims.sub);
+      if (!user) throw new InvalidSubClaimError();
+      req.user = user;
       next();
     }
   }
@@ -107,44 +93,8 @@ const getUser = async (wingedKeysId: string) => {
   return user;
 };
 
-async function getUserFromWingedKeys(bearerToken: string): Promise<AxiosResponse<any>> {
-    return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
-      headers: {
-        authorization: bearerToken
-      },
-      httpsAgent: new https.Agent({  
-        rejectUnauthorized: false
-      })
-    });
-}
-
-async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUser: { given_name: string, family_name: string }): Promise<User> {
-  let user: User;
-
-  await getManager().transaction(async (manager) => {
-    const _user = manager.create(User, {
-      wingedKeysId,
-      firstName: wingedKeysUser.given_name,
-      lastName: wingedKeysUser.family_name,
-    });
-    
-    user = await manager.save(_user);
-
-    const orgs: Organization[] = await manager.find(Organization);
-    if (orgs.length) {
-      const orgPermsForUser = manager.create(OrganizationPermission, orgs.map(org => ({
-        user,
-        organizationId: org.id
-      })));
-      await manager.save(orgPermsForUser);
-    }
-  });
-
-  return user;
-}
-
 /**
- * Full authentication middleware chains together decodeClaim and addUser,
+ * Full authnetication middleware chains together decodeClaim and addUser,
  * so that any authenticated route gets the user, looked up via decoded JWT
  * "sub" claim, added to the request
  */
