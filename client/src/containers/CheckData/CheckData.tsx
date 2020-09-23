@@ -13,11 +13,16 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 
+/**
+ * TODO: Right now, the CheckData page just redirects straight
+ * to success (with no processing done) when you click the Send
+ * to OEC button. Once we have the infrastructure for what it
+ * means to actually send to OEC, we can alter this.
+ */
 const CheckData: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { reportId } = useParams();
   const { alertElements } = useAlerts();
-
   const { accessToken } = useContext(AuthenticationContext);
   const [reportData, setReportData] = useState<Child[]>([]);
 
@@ -39,33 +44,32 @@ const CheckData: React.FC = () => {
 
   return (
     <>
-      <div className="CheckData__content margin-top-4 grid-container">
-        <BackButton />
-        {alertElements}
-        <h1 ref={h1Ref}>
-          Check data for {pluralize('child', reportData.length, true)}
-        </h1>
-        <p>Make sure all of your data was uploaded correctly. </p>
-        <p>If everything looks good, submit to OEC.</p>
-        <Link to={{ pathname: '/create-record', state: { organization } }}>
-          Add a record
-        </Link>
-        {reportData.length ? (
-          <PerfectScrollbar>
-            <Table<Child>
-              id="enrollment-report-table"
-              rowKey={(row) => row.id}
-              data={reportData}
-              columns={tableColumns}
-            />
-          </PerfectScrollbar>
-        ) : (
-          'Loading...'
-        )}
+      <div className="CheckData__content margin-4 grid-container">
+        <div>
+          <BackButton />
+          <h1>Check data for {pluralize('child', reportData.length, true)}</h1>
+          <p>Make sure all of your data was uploaded correctly. </p>
+          <p>If everything looks good, submit to OEC.</p>
+          <Link to={{ pathname: '/create-record', state: { organization } }}>
+            Add a record
+          </Link>
+          {reportData.length ? (
+            <PerfectScrollbar>
+              <Table<Child>
+                id="enrollment-report-table"
+                rowKey={(row) => row.id}
+                data={reportData}
+                columns={tableColumns}
+              />
+            </PerfectScrollbar>
+          ) : (
+            'Loading...'
+          )}
+        </div>
       </div>
       <FixedBottomBar>
         <Button text="Back to upload" href="/upload" appearance="outline" />
-        <Button text="Send to OEC" href="/success" />
+        <Button text="Send to OEC" href={`/success/${reportId}`} />
       </FixedBottomBar>
     </>
   );

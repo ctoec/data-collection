@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { MailToLink } from '../../components/MailToLink';
 import {
@@ -12,8 +13,21 @@ import LogoWithCheckSrc from '@ctoec/component-library/dist/assets/images/logoWi
 import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
+/**
+ * TODO: Right now, the CheckData page just redirects straight
+ * here when you click the Send to OEC button. Once we have the
+ * infrastructure for what it means to actually send to OEC,
+ * we can alter this.
+ *
+ * For now, default way of exporting a CSV is to use the
+ * enrollment report ID of the page the user just checked,
+ * since this corresponds to getting a snapshot view of what
+ * the user just did.
+ */
 const SubmitSuccess: React.FC = () => {
   const h1Ref = getH1RefForTitle();
+  const { reportId } = useParams();
+
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row text-bold">
@@ -47,7 +61,7 @@ const SubmitSuccess: React.FC = () => {
         <strong>Want a copy of your enrollment data?</strong>
       </div>
       <div className="grid-row margin-top-1 margin-bottom-2">
-        <CSVDownloadLink />
+        <CSVDownloadLink reportId={reportId} />
       </div>
       <div className="grid-row marging-top-6">
         <strong>Need to make changes?</strong>

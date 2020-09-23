@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { Family } from '../../../shared/models';
 import { AddressFieldset, HomelessnessField } from './Fields';
@@ -18,6 +18,7 @@ import { useValidationErrors } from '../../../hooks/useValidationErrors';
 export const FamilyAddressForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
+  setAlerts,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }) => {
@@ -25,9 +26,15 @@ export const FamilyAddressForm: React.FC<EditFormProps> = ({
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
 
+  // Clear any previously displayed alerts from other tabs
+  useEffect(() => {
+    setAlerts([]);
+  }, []);
+
   if (!child) {
     throw new Error('Family info rendered without child');
   }
+
   const { family: inputFamily = {} as Family } = child;
 
   const { obj: family, setErrorsHidden } = useValidationErrors<Family>(

@@ -7,7 +7,7 @@ import { WithdrawRecord } from '.';
 import { Enrollment } from '../../../shared/models';
 
 const enrollment = {
-  site: { name: 'Name' },
+  site: { siteName: 'Name' },
 } as Enrollment;
 describe('EditRecord', () => {
   describe('WithdrawRecord', () => {

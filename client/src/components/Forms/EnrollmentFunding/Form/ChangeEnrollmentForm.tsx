@@ -88,9 +88,15 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   return (
     <Card forceClose={closeCard}>
       <div className="display-flex flex-justify">
-        <span className="header-normal font-heading-md">
-          Has {childName}'s age group and/or site changed?
-        </span>
+        {activeFunding == undefined && currentEnrollment == null ? (
+          <div className="usa-prose-body">
+            {childName} has no active enrollments
+          </div>
+        ) : (
+          <div className="usa-prose-body">
+            Has {childName}'s age group and/or site changed?
+          </div>
+        )}
         <ExpandCard>
           <Button text="Change enrollment" appearance="outline" />
         </ExpandCard>

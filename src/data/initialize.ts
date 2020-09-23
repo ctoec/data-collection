@@ -21,7 +21,7 @@ export const initialize = async () => {
   if (!organization) {
     const _organization = getManager().create(Organization, {
       id: 1,
-      name: 'Hogwarts Childcare',
+      providerName: 'Hogwarts Childcare',
     });
     organization = await getManager().save(_organization);
   }
@@ -29,7 +29,7 @@ export const initialize = async () => {
   if (!(await getManager().findOne(Site, 1))) {
     const site1 = getManager().create(Site, {
       id: 1,
-      name: 'Gryfinndor Childcare',
+      siteName: 'Gryfinndor Childcare',
       titleI: false,
       region: Region.East,
       organization,
@@ -39,7 +39,7 @@ export const initialize = async () => {
 
   if (!(await getManager().findOne(Site, 2))) {
     const site2 = getManager().create(Site, {
-      name: 'Hufflepuff Childcare',
+      siteName: 'Hufflepuff Childcare',
       titleI: false,
       region: Region.East,
       organization,

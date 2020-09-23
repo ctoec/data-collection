@@ -29,13 +29,13 @@ exports[`Roster matches snapshot 1`] = `
         </span>
       </a>
       <button
-        class="usa-button usa-button--unstyled margin-left-2"
+        class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
         type="button"
       >
         <span
-          class="oec-text-with-icon"
+          class="oec-text-with-icon text-underline"
         >
-          Export current view (PLACEHOLDER)
+          Download CSV File
         </span>
       </button>
     </div>

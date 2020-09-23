@@ -1,16 +1,27 @@
 import { apiGet } from './api';
 import { ContentDisposition, parse } from 'content-disposition';
 import { saveAs } from 'file-saver';
+import { access } from 'fs';
 
 /**
  * Download a file stream from the route specified and save it to browser,
- * either with the file name specified or as "download".
+ * either with the file name specified or as "download". Optionally
+ * provide an authentication context to access secure routes.
  */
 export async function downloadStreamToFile(
   route: string,
-  defaultFileName?: string
+  defaultFileName?: string,
+  accessToken?: string
 ) {
-  const res: Response = await apiGet(route, { jsonParse: false });
+  let res: Response;
+  if (!!accessToken && accessToken != '') {
+    res = await apiGet(route, {
+      jsonParse: false,
+      accessToken: accessToken,
+    });
+  } else {
+    res = await apiGet(route, { jsonParse: false });
+  }
 
   const fileBlob = new Blob([await res.arrayBuffer()], {
     type: 'application/octet-stream',
@@ -19,6 +30,12 @@ export async function downloadStreamToFile(
   saveAs(fileBlob, parseFileName(res, defaultFileName));
 }
 
+/**
+ * Function that handles parsing of a file name to attach to an
+ * information stream to save as a file.
+ * @param res
+ * @param defaultFileName
+ */
 function parseFileName(res: Response, defaultFileName?: string): string {
   const cdHeader = res.headers.get('Content-Disposition');
 

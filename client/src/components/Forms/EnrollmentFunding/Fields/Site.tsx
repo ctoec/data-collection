@@ -35,7 +35,7 @@ export const SiteField = <T extends Enrollment | ChangeEnrollment>({
       showLegend
       options={sites.map((site) => ({
         render: (props: RadioOptionRenderProps) => (
-          <RadioButton text={`${site.name}`} {...props} />
+          <RadioButton text={`${site.siteName}`} {...props} />
         ),
         value: `${site.id}`,
       }))}
