@@ -11,7 +11,11 @@ import { getValidationStatusForFields } from '../../../../utils/getValidationSta
 import { Child } from '../../../../shared/models';
 
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'fundings'];
-export const doesEnrollmentFormHaveErrors = (child?: Child) => child?.enrollments?.length ? !!getValidationStatusForFields(child.enrollments, enrollmentFields) : true;
+// TODO: check this after debugging enrollment-- can't save partially filled out form
+export const doesEnrollmentFormHaveErrors = (child?: Child) =>
+  child?.enrollments?.length
+    ? !!getValidationStatusForFields(child.enrollments, enrollmentFields)
+    : true;
 
 // The fields we use to check to see if this form has errors or missing info
 export const enrollmentFundingFields = {

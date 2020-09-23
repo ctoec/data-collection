@@ -65,8 +65,10 @@ export function getValidationStatusForFields<
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   if (Array.isArray(data)) {
-    const allErrors = data.map((d: T) => getValidationStatusForFields(d, fields, options));
-    const anError = allErrors.find(e => !!e);
+    const allErrors = data.map((d: T) =>
+      getValidationStatusForFields(d, fields, options)
+    );
+    const anError = allErrors.find((e) => !!e);
     // Assumes that the error for one of the objects in the array is the same for all
     return anError || undefined;
   }
