@@ -1,0 +1,15 @@
+@import '~@ctoec/component-library/dist/assets/styles/index.scss';
+
+.oec-tab-nav--tab {
+  &:not(&__active) {
+    .svg-gold-20v {
+      svg {
+        @extend .oec-inline-icon--incomplete;
+      }
+    }
+  }
+
+  svg, path {
+    fill: currentColor;
+  }
+}

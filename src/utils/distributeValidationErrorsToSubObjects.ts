@@ -17,7 +17,6 @@ export function distributeValidationErrorsToSubObjects<
 
   if (!parentObject?.validationErrors) return parentObject;
   const copiedParent = JSON.parse(JSON.stringify(parentObject));
-  console.log(copiedParent, copiedParent.validationErrors)
 
 
   copiedParent.validationErrors

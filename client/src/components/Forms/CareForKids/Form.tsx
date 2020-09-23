@@ -5,18 +5,14 @@ import React, { useState, useContext, useEffect } from 'react';
 import {
   Form,
   FormSubmitButton,
-  FormField,
-  RadioButtonGroupProps,
-  RadioButtonGroup,
-  RadioButton,
 } from '@ctoec/component-library';
 import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
-import { getValidationStatusForFieldset } from '../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
 // The fields we use to check to see if this form has errors or missing info
 const c4kFormFields = ['receivesC4K']
-export const doesC4kFormHaveErrors = (child: Child) => !!getValidationStatusForFieldset(child, c4kFormFields);
+export const doesC4kFormHaveErrors = (child: Child) => !!getValidationStatusForFields(child, c4kFormFields);
 /*
  * Basic functional component designed to allow user to edit
  * the Care For Kids field of a Child object.

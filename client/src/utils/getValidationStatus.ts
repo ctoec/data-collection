@@ -57,7 +57,7 @@ export function getValidationStatusForField<
  * @param fields
  * @param options
  */
-export function getValidationStatusForFieldset<
+export function getValidationStatusForFields<
   T extends ObjectWithValidationErrors
 >(
   data: T,

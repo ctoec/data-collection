@@ -12,6 +12,7 @@ import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
 // The fields we use to check to see if this form has errors or missing info
 export const childInfoFields = [
@@ -24,6 +25,7 @@ export const childInfoFields = [
   'gender',
   'foster'
 ]
+export const doesChildInfoFormHaveErrors = (child: Child) => !!getValidationStatusForFields(child, childInfoFields)
 
 export const ChildInfoForm = ({
   child: inputChild,

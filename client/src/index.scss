@@ -1,10 +1,15 @@
+@import './components';
 @import './containers/App/App.scss';
 @import './containers/Home/Home.scss';
 @import './containers/CheckData/CheckData.scss';
-@import './components';
+@import './containers/EditRecord/EditRecord.scss';
 
 p {
   line-height: 1.6rem;
+}
+
+fieldset legend {
+  font-weight: bold;
 }
 
 .h2 {
@@ -19,8 +24,4 @@ p {
   &--lighter {
     font-weight: normal;
   }
-}
-
-fieldset legend {
-  font-weight: bold;
 }

@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav, Button } from '@ctoec/component-library';
+import { TabNav, Button, TextWithIcon, Info, TextWithIconProps } from '@ctoec/component-library';
 import Modal from 'react-modal';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
@@ -13,6 +13,8 @@ import {
   FamilyAddressForm,
   EnrollmentFundingForm,
   ChildIdentifiersForm,
+  doesChildIdFormHaveErrors,
+  doesChildInfoFormHaveErrors
 } from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
@@ -96,6 +98,12 @@ const EditRecord: React.FC = () => {
     reportingPeriods,
   };
 
+  const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
+    Icon: Info,
+    iconSide: 'right',
+    className: 'svg-gold-20v',
+  }
+
   console.log(rowData)
 
   return (
@@ -164,12 +172,12 @@ const EditRecord: React.FC = () => {
         items={[
           {
             id: TAB_IDS.IDENT,
-            text: 'Child Identifiers',
+            text: doesChildIdFormHaveErrors(rowData) ? <TextWithIcon {...commonTextWithIconProps} text='Child identifiers' /> : 'Child identifiers',
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.CHILD,
-            text: 'Child Info',
+            text: doesChildInfoFormHaveErrors(rowData) ? <TextWithIcon {...commonTextWithIconProps} text='Child info' /> : 'Child Child info',
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
