@@ -15,7 +15,22 @@ import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
-import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
+import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+
+// The fields we use to check to see if this form has errors or missing info
+const childIdentifiersFields = [
+  'sasid',
+  'firstName',
+  'middleName',
+  'lastName',
+  'suffix',
+  'birthdate',
+  'birthTown',
+  'birthState',
+  'birthCertificateId',
+];
+export const doesChildIdFormHaveErrors = (child?: Child) =>
+  child ? !!getValidationStatusForFields(child, childIdentifiersFields) : true;
 
 export const ChildIdentifiersForm = ({
   child: inputChild,
@@ -31,7 +46,7 @@ export const ChildIdentifiersForm = ({
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   if (!inputChild) {
     throw new Error('Child info rendered without child');

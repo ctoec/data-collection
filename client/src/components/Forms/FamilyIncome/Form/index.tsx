@@ -4,6 +4,17 @@ import { propertyDateSorter } from '../../../../utils/dateSorter';
 import { EditDeterminationForm } from './EditDeterminationForm';
 import { RedeterminationForm } from './RedeterminationForm';
 import { EditFormProps } from '../../types';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { Family } from '../../../../shared/models';
+
+const incomeDetFields = ['numberOfPeople', 'income', 'determinationDate'];
+export const doesFamilyIncomeFormHaveErrors = (family?: Family) =>
+  family?.incomeDeterminations?.length
+    ? !!getValidationStatusForFields(
+        family.incomeDeterminations,
+        incomeDetFields
+      )
+    : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
   const { child, onSuccess, setAlerts } = props;
@@ -13,7 +24,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   if (!child?.family) {
     throw new Error('Family income rendered without family');

@@ -1,7 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav, Button } from '@ctoec/component-library';
-import Modal from 'react-modal';
+import {
+  TabNav,
+  Button,
+  TextWithIcon,
+  Info,
+  TextWithIconProps,
+} from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
@@ -13,17 +18,22 @@ import {
   FamilyAddressForm,
   EnrollmentFundingForm,
   ChildIdentifiersForm,
+  doesChildIdFormHaveErrors,
+  doesChildInfoFormHaveErrors,
+  doesFamilyAddressFormHaveErrors,
+  doesFamilyIncomeFormHaveErrors,
+  doesEnrollmentFormHaveErrors,
+  doesC4kFormHaveErrors,
 } from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { distributeValidationErrorsToSubObjects } from '../../utils/getValidationStatus';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
-  CHILD: 'child',
+  DEMO: 'demographics',
   FAMILY: 'family',
   INCOME: 'income',
   ENROLLMENT: 'enrollment',
@@ -37,19 +47,9 @@ const EditRecord: React.FC = () => {
   const [rowData, setRowData] = useState<Child>();
   const { alertElements, setAlerts } = useAlerts();
 
-  // state for modal display
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  function toggleDeleteModal() {
-    setDeleteModalOpen((isOpen) => !isOpen);
-  }
-  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
-  const toggleWithdrawModal = () => {
-    setWithdrawModalOpen((isOpen) => !isOpen);
-  };
-
   // Counter to trigger re-run of child fetch in
   // useEffect hook
-  const [refetch, setRefetch] = useState<number>(0);
+  const [refetch, setRefetch] = useState(0);
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -58,7 +58,7 @@ const EditRecord: React.FC = () => {
   // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
-      history.replace({ hash: TAB_IDS.CHILD });
+      history.replace({ hash: TAB_IDS.IDENT });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -97,6 +97,12 @@ const EditRecord: React.FC = () => {
     reportingPeriods,
   };
 
+  const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
+    Icon: Info,
+    iconSide: 'right',
+    className: 'svg-gold-20v',
+  };
+
   return (
     <div className="margin-top-4 grid-container">
       <BackButton />
@@ -111,84 +117,79 @@ const EditRecord: React.FC = () => {
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
-              <Button
-                appearance="unstyled"
-                text="Withdraw"
-                onClick={() => toggleWithdrawModal()}
-                className="margin-right-2"
+              <WithdrawRecord
+                childName={rowData.firstName}
+                enrollment={activeEnrollment}
+                reportingPeriods={reportingPeriods}
               />
-              <Modal
-                isOpen={withdrawModalOpen}
-                onRequestClose={toggleWithdrawModal}
-                shouldCloseOnEsc={true}
-                shouldCloseOnOverlayClick={true}
-                appElement="#main-content"
-                contentLabel="Withdraw record"
-                style={{
-                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-                }}
-              >
-                <WithdrawRecord
-                  childName={rowData.firstName}
-                  enrollment={activeEnrollment}
-                  reportingPeriods={reportingPeriods}
-                  toggleOpen={toggleWithdrawModal}
-                />
-              </Modal>
             </>
           )}
-          <Button
-            appearance="unstyled"
-            onClick={toggleDeleteModal}
-            text="Delete record"
-            className="margin-right-0"
-          />
-          <Modal
-            isOpen={deleteModalOpen}
-            onRequestClose={toggleDeleteModal}
-            shouldCloseOnEsc={true}
-            shouldCloseOnOverlayClick={true}
-            contentLabel="Delete record"
-            // Use style to dynamically trim the bottom to fit the
-            // message, then center in middle of form
-            style={{
-              content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-            }}
-          >
-            <DeleteRecord child={rowData} toggleOpen={toggleDeleteModal} />
-          </Modal>
+          <DeleteRecord child={rowData} />
         </div>
       </div>
       <TabNav
         items={[
           {
             id: TAB_IDS.IDENT,
-            text: 'Child Identifiers',
+            text: doesChildIdFormHaveErrors(rowData) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Child identifiers"
+              />
+            ) : (
+              'Child identifiers'
+            ),
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
-            id: TAB_IDS.CHILD,
-            text: 'Child Info',
+            id: TAB_IDS.DEMO,
+            text: doesChildInfoFormHaveErrors(rowData) ? (
+              <TextWithIcon {...commonTextWithIconProps} text="Child info" />
+            ) : (
+              'Child info'
+            ),
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.FAMILY,
-            text: 'Family Address',
+            text: doesFamilyAddressFormHaveErrors(rowData.family) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Family address"
+              />
+            ) : (
+              'Family address'
+            ),
             content: <FamilyAddressForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.INCOME,
-            text: 'Family Income',
+            text: doesFamilyIncomeFormHaveErrors(rowData.family) ? (
+              <TextWithIcon {...commonTextWithIconProps} text="Family income" />
+            ) : (
+              'Family income'
+            ),
             content: <FamilyIncomeForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.ENROLLMENT,
-            text: 'Enrollment and funding',
+            text: doesEnrollmentFormHaveErrors(rowData) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Enrollment and funding"
+              />
+            ) : (
+              'Enrollment and funding'
+            ),
             content: <EnrollmentFundingForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.C4K,
-            text: 'Care 4 Kids',
+            text: doesC4kFormHaveErrors(rowData) ? (
+              <TextWithIcon {...commonTextWithIconProps} text="Care 4 Kids" />
+            ) : (
+              'Care 4 Kids'
+            ),
             content: <CareForKidsForm {...commonFormProps} />,
           },
         ]}

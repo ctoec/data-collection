@@ -15,10 +15,13 @@ import { Link, useHistory } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
+import { RosterSectionHeader } from './RosterSectionHeader';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
+  const { alertElements } = useAlerts();
   const { goBack } = useHistory();
 
   const { accessToken } = useContext(AuthenticationContext);
@@ -31,7 +34,7 @@ const Roster: React.FC = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
-    apiGet('/children', { accessToken })
+    apiGet('children', { accessToken })
       .then((_children) => {
         if (_children) setChildren(_children);
       })
@@ -39,18 +42,18 @@ const Roster: React.FC = () => {
   }, [accessToken]);
 
   const childrenByAgeGroup: { [key in AgeGroup]?: Child[] } = {};
-  children.reduce((acc, child) => {
-    const ageGroup = idx(child, (_) => _.enrollments[0].ageGroup) || undefined;
+  children.reduce((_byAgeGroup, _child) => {
+    const ageGroup = idx(_child, (_) => _.enrollments[0].ageGroup) || undefined;
     if (ageGroup) {
-      if (!!!acc[ageGroup]) {
-        acc[ageGroup] = [child];
+      if (!!!_byAgeGroup[ageGroup]) {
+        _byAgeGroup[ageGroup] = [_child];
       } else {
         // acc[ageGroup] is not _actually_ possibly undefined; checked in above if
-        acc[ageGroup]?.push(child);
+        _byAgeGroup[ageGroup]?.push(_child);
       }
     }
 
-    return acc;
+    return _byAgeGroup;
   }, childrenByAgeGroup);
 
   const accordionItems = Object.entries(childrenByAgeGroup)
@@ -58,10 +61,10 @@ const Roster: React.FC = () => {
     .map(([ageGroup, ageGroupChildren = []]) => ({
       id: ageGroup,
       title: (
-        <p>
-          <span className="text-bold">{ageGroup}</span>{' '}
-          {ageGroupChildren?.length} children
-        </p>
+        <RosterSectionHeader
+          ageGroup={ageGroup as AgeGroup}
+          children={ageGroupChildren}
+        />
       ),
       expandText: `Show ${ageGroup} roster`,
       collapseText: `Hide ${ageGroup} roster`,
@@ -88,7 +91,8 @@ const Roster: React.FC = () => {
 
   return (
     <>
-      <div className="grid-container">
+      <div className="Roster grid-container">
+        {alertElements}
         <h2 className="font-body-xl margin-bottom-0">
           {organization?.providerName}
         </h2>

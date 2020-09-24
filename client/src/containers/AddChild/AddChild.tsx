@@ -4,11 +4,10 @@ import { StepList } from '@ctoec/component-library';
 import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { listSteps } from './ListSteps';
-import { distributeValidationErrorsToSubObjects } from '../../utils/getValidationStatus';
 
 type LocationType = Location & {
   state: {
@@ -20,6 +19,7 @@ const AddChild: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { state: locationState, hash } = useLocation() as LocationType;
+  const { childId } = useParams() as { childId: string };
   const activeStep = hash.slice(1);
   const history = useHistory();
   const steps = listSteps(history);
@@ -46,46 +46,33 @@ const AddChild: React.FC = () => {
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
-  const [creating, setCreating] = useState(false);
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
 
   // On initial load, create child
   useEffect(() => {
-    if (child || creating) return;
+    if (child || childId || !organization) return;
 
-    if (!organization) {
-      throw Error('Cannot create child without organization');
-    }
     const placeholderChild = {
       firstName: '',
       lastName: '',
       organization,
     };
 
-    setCreating(true);
     apiPost('children', placeholderChild, {
       accessToken,
     })
       .then((res) => {
         updateChild(res);
+        history.replace({ pathname: `/create-record/${res.id}` });
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => setCreating(false));
-  }, [
-    accessToken,
-    child,
-    locationState,
-    organization,
-    history,
-    updateChild,
-    creating,
-  ]);
+      .finally(triggerRefetchChild);
+  }, [accessToken, child, locationState, organization, history, updateChild]);
 
   // Fetch fresh child from API whenever refetch is triggered
-  const childId = child?.id;
   useEffect(() => {
     if (!childId) return;
 
@@ -124,7 +111,7 @@ const AddChild: React.FC = () => {
 
   const { alertElements, setAlerts } = useAlerts();
   const commonFormProps = {
-    child: distributeValidationErrorsToSubObjects(child),
+    child,
     onSuccess,
     setAlerts,
     hideHeader: true,

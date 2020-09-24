@@ -57,13 +57,21 @@ export function getValidationStatusForField<
  * @param fields
  * @param options
  */
-export function getValidationStatusForFieldset<
+export function getValidationStatusForFields<
   T extends ObjectWithValidationErrors
 >(
-  data: T,
+  data: T | T[],
   fields: string[],
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
+  if (Array.isArray(data)) {
+    const allErrors = data.map((d: T) =>
+      getValidationStatusForFields(d, fields, options)
+    );
+    const anError = allErrors.find((e) => !!e);
+    // Assumes that the error for one of the objects in the array is the same for all
+    return anError || undefined;
+  }
   if (!data || !data.validationErrors) return;
   const validationErrors = data.validationErrors.filter((v) =>
     fields.includes(v.property)
@@ -81,28 +89,4 @@ export function getValidationStatusForFieldset<
     message,
     ...options,
   };
-}
-
-/**
- * Given a parent object with validation errors that include child object
- * validations, adds validationErrors property to each child object
- * that has its own errors.
- * @param parentObject
- */
-export function distributeValidationErrorsToSubObjects<
-  T extends ObjectWithValidationErrors
->(parentObject?: T): T | undefined {
-  if (!parentObject || !parentObject.validationErrors) return parentObject;
-  const copiedParent = JSON.parse(JSON.stringify(parentObject));
-
-  copiedParent.validationErrors
-    .filter((v: ValidationError) => v.children && v.children.length)
-    .forEach((v: ValidationError) => {
-      let childObject = copiedParent[v.property];
-      childObject.validationErrors = [...v.children];
-      distributeValidationErrorsToSubObjects(childObject);
-      copiedParent[v.property] = childObject;
-    });
-
-  return copiedParent;
 }

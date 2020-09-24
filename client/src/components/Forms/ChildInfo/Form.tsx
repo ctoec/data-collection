@@ -12,8 +12,21 @@ import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
-// import { useFocusFirstError } from '../../../hooks/useFocusFirstError';
+// The fields we use to check to see if this form has errors or missing info
+export const childInfoFields = [
+  'americanIndianOrAlaskaNative',
+  'asian',
+  'blackOrAfricanAmerican',
+  'nativeHawaiianOrPacificIslander',
+  'white',
+  'hispanicOrLatinxEthnicity',
+  'gender',
+  'foster',
+];
+export const doesChildInfoFormHaveErrors = (child?: Child) =>
+  child ? !!getValidationStatusForFields(child, childInfoFields) : true;
 
 export const ChildInfoForm = ({
   child: inputChild,
@@ -29,7 +42,7 @@ export const ChildInfoForm = ({
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   if (!inputChild) {
     // Focus should automatically be on first error on page

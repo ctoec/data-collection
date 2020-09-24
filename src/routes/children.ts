@@ -8,6 +8,7 @@ import {
 import * as controller from '../controllers/children';
 import { getManager } from 'typeorm';
 import { Child } from '../entity';
+import { validate } from 'class-validator';
 
 export const childrenRouter = express.Router();
 
@@ -39,7 +40,14 @@ childrenRouter.get(
   '/',
   passAsyncError(async (req, res) => {
     const children = await controller.getChildren(req.user);
-    res.send(children);
+
+    // Augment children with any validation errors in their nested objects
+    const childrenWithErrors: Child[] = await Promise.all(
+      children.map(async (child) => {
+        return { ...child, validationErrors: await validate(child) };
+      })
+    );
+    res.send(childrenWithErrors);
   })
 );
 
