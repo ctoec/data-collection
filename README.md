@@ -14,8 +14,8 @@ A web application to collect information from child care providers in the State 
 
     - Via the containers:
     ```sh
-    docker-compose run --rm --entry-point "yarn install --frozen-lockfile" client
-    docker-compose run --rm --entry-point "yarn install --frozen-lockfile" server
+    docker-compose run -T --rm --entrypoint "yarn install --frozen-lockfile --network-concurrency 1" client
+    docker-compose run -T --rm --entrypoint "yarn install --frozen-lockfile" server
     ```
     **NOTE**: This `docker-compose run` command is only necessary on initial set up, since the containers cannot start without installed dependencies. To execute yarn commands once the containers have started, you can use `docker-compose exec`.
 
