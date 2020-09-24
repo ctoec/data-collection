@@ -6,7 +6,12 @@ import {
   OneToMany,
 } from 'typeorm';
 import moment, { Moment } from 'moment';
-import { Length, ValidateNested, IsNotEmpty, ValidationError } from 'class-validator';
+import {
+  Length,
+  ValidateNested,
+  IsNotEmpty,
+  ValidationError,
+} from 'class-validator';
 
 import {
   Child as ChildInterface,
@@ -130,6 +135,5 @@ export class Child implements ChildInterface {
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
 
-  // Had to add this to make typescript happy, even though this implements an interface that extends ObjectWithValidationErrors ???
   validationErrors: ValidationError[];
 }
