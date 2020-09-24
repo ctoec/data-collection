@@ -18,8 +18,7 @@ type LocationType = Location & {
 const AddChild: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-  const location = useLocation() as LocationType;
-  const { state: locationState, hash } = location;
+  const { state: locationState, hash } = useLocation() as LocationType;
   const { childId } = useParams() as { childId: string };
   const activeStep = hash.slice(1);
   const history = useHistory();
