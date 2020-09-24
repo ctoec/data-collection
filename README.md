@@ -23,7 +23,7 @@ A web application to collect information from child care providers in the State 
     - Via a local yarn installation, yarn requires an updated version of node
     ```sh
     yarn install --frozen-lockfile
-    cd client && yarn install --frozen-lockfile # npm install may need to be run in the client directory for this to work
+    cd client && yarn install --frozen-lockfile
     ```
 1. Start application:
     ```sh
