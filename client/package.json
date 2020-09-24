@@ -19,8 +19,8 @@
     "@types/query-string": "^6.3.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "@types/react-modal": "^3.10.6",
     "@types/react-router-dom": "^5.1.5",
+    "class-validator": "^0.12.2",
     "content-disposition": "^0.5.3",
     "file-saver": "^2.0.2",
     "idx": "^2.5.6",
@@ -32,7 +32,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-markdown": "^4.3.1",
-    "react-modal": "^3.11.2",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
@@ -43,7 +42,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
+    "test": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

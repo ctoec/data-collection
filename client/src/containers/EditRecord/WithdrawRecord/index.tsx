@@ -5,6 +5,7 @@ import {
   Button,
   FormSubmitButton,
   Alert,
+  Modal,
 } from '@ctoec/component-library';
 import { Enrollment, ReportingPeriod } from '../../../shared/models';
 import { apiPost } from '../../../utils/api';
@@ -21,14 +22,15 @@ type WithdrawProps = {
   childName: string | undefined;
   enrollment: Enrollment;
   reportingPeriods: ReportingPeriod[];
-  toggleOpen: () => void;
 };
 export const WithdrawRecord: React.FC<WithdrawProps> = ({
   childName,
   enrollment,
   reportingPeriods,
-  toggleOpen,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleIsOpen = () => setIsOpen((o) => !o);
+
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string>();
   const { accessToken } = useContext(AuthenticationContext);
@@ -41,6 +43,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       jsonParse: false,
     })
       .then(() => {
+        toggleIsOpen();
         history.push('/roster', {
           alerts: [
             {
@@ -62,51 +65,79 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
     (f) => !f.lastReportingPeriod
   );
   return (
-    <div className="grid-container">
-      {!!error && <Alert type="error" text={error} />}
-      <h1>Withdraw {childName}</h1>
-      <div className="grid-row">
-        <div className="grid-col">
-          <p>{enrollment.site.siteName}</p>
-          <p>Age: {enrollment.ageGroup}</p>
-          <p>Enrollment date: {enrollment.entry?.format('MM/DD/YYYY')}</p>
-        </div>
-        <div className="grid-col">
-          {activeFunding && (
-            <>
-              <p>
-                <Tag text={activeFunding.fundingSpace.source} />
-              </p>
-              <p>Contract space: {activeFunding.fundingSpace.time}</p>
-              <p>
-                First reporting period:{' '}
-                {activeFunding.firstReportingPeriod?.period.format('MMMM YYYY')}
-              </p>
-            </>
-          )}
-        </div>
-      </div>
-      <Form<Withdraw>
-        onSubmit={onSubmit}
-        data={{} as Withdraw}
-        className="usa-form"
-      >
-        <EnrollmentEndDateField<Withdraw>
-          accessor={(data) => data.at('exitDate')}
-        />
-        <ExitReasonField />
-        {!!activeFunding && (
-          <ReportingPeriodField<Withdraw>
-            reportingPeriods={reportingPeriods.filter(
-              (rp) => rp.type === activeFunding.fundingSpace.source
-            )}
-            isLast={true}
-            accessor={(data) => data.at('funding').at('lastReportingPeriod')}
-          />
-        )}
-        <Button appearance="outline" text="Cancel" onClick={toggleOpen} />
-        <FormSubmitButton text={isSaving ? 'Withdrawing...' : 'Withdraw'} />
-      </Form>
-    </div>
+    <>
+      <Button
+        appearance="unstyled"
+        text="Withdraw"
+        onClick={() => toggleIsOpen()}
+        className="margin-right-2"
+      />
+      <Modal
+        isOpen={isOpen}
+        toggleOpen={toggleIsOpen}
+        header={
+          <>
+            {!!error && <Alert text={error} type="error" />}
+            <h2 className="margin-bottom-0">Withdraw {childName}</h2>
+          </>
+        }
+        content={
+          <>
+            <div className="grid-row">
+              <div className="grid-col">
+                <p>{enrollment.site.siteName}</p>
+                <p>Age: {enrollment.ageGroup}</p>
+                <p>Enrollment date: {enrollment.entry?.format('MM/DD/YYYY')}</p>
+              </div>
+              <div className="grid-col">
+                {activeFunding && (
+                  <>
+                    <p>
+                      <Tag text={activeFunding.fundingSpace.source} />
+                    </p>
+                    <p>Contract space: {activeFunding.fundingSpace.time}</p>
+                    <p>
+                      First reporting period:{' '}
+                      {activeFunding.firstReportingPeriod?.period.format(
+                        'MMMM YYYY'
+                      )}
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+            <Form<Withdraw>
+              onSubmit={onSubmit}
+              data={{} as Withdraw}
+              className="usa-form"
+            >
+              <EnrollmentEndDateField<Withdraw>
+                accessor={(data) => data.at('exitDate')}
+              />
+              <ExitReasonField />
+              {!!activeFunding && (
+                <ReportingPeriodField<Withdraw>
+                  reportingPeriods={reportingPeriods.filter(
+                    (rp) => rp.type === activeFunding.fundingSpace.source
+                  )}
+                  isLast={true}
+                  accessor={(data) =>
+                    data.at('funding').at('lastReportingPeriod')
+                  }
+                />
+              )}
+              <Button
+                appearance="outline"
+                text="Cancel"
+                onClick={toggleIsOpen}
+              />
+              <FormSubmitButton
+                text={isSaving ? 'Withdrawing...' : 'Withdraw'}
+              />
+            </Form>
+          </>
+        }
+      />
+    </>
   );
 };

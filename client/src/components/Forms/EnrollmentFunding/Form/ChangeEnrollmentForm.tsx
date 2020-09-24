@@ -88,7 +88,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   return (
     <Card forceClose={closeCard}>
       <div className="display-flex flex-justify">
-        {activeFunding == undefined && currentEnrollment == null ? (
+        {!currentEnrollment ? (
           <div className="usa-prose-body">
             {childName} has no active enrollments
           </div>

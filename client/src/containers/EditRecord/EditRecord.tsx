@@ -7,7 +7,6 @@ import {
   Info,
   TextWithIconProps,
 } from '@ctoec/component-library';
-import Modal from 'react-modal';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
@@ -34,7 +33,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
-  CHILD: 'child',
+  DEMO: 'demographics',
   FAMILY: 'family',
   INCOME: 'income',
   ENROLLMENT: 'enrollment',
@@ -48,19 +47,9 @@ const EditRecord: React.FC = () => {
   const [rowData, setRowData] = useState<Child>();
   const { alertElements, setAlerts } = useAlerts();
 
-  // state for modal display
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  function toggleDeleteModal() {
-    setDeleteModalOpen((isOpen) => !isOpen);
-  }
-  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
-  const toggleWithdrawModal = () => {
-    setWithdrawModalOpen((isOpen) => !isOpen);
-  };
-
   // Counter to trigger re-run of child fetch in
   // useEffect hook
-  const [refetch, setRefetch] = useState<number>(0);
+  const [refetch, setRefetch] = useState(0);
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -69,7 +58,7 @@ const EditRecord: React.FC = () => {
   // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
-      history.replace({ hash: TAB_IDS.CHILD });
+      history.replace({ hash: TAB_IDS.IDENT });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -128,52 +117,14 @@ const EditRecord: React.FC = () => {
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
-              <Button
-                appearance="unstyled"
-                text="Withdraw"
-                onClick={() => toggleWithdrawModal()}
-                className="margin-right-2"
+              <WithdrawRecord
+                childName={rowData.firstName}
+                enrollment={activeEnrollment}
+                reportingPeriods={reportingPeriods}
               />
-              <Modal
-                isOpen={withdrawModalOpen}
-                onRequestClose={toggleWithdrawModal}
-                shouldCloseOnEsc={true}
-                shouldCloseOnOverlayClick={true}
-                appElement="#main-content"
-                contentLabel="Withdraw record"
-                style={{
-                  content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-                }}
-              >
-                <WithdrawRecord
-                  childName={rowData.firstName}
-                  enrollment={activeEnrollment}
-                  reportingPeriods={reportingPeriods}
-                  toggleOpen={toggleWithdrawModal}
-                />
-              </Modal>
             </>
           )}
-          <Button
-            appearance="unstyled"
-            onClick={toggleDeleteModal}
-            text="Delete record"
-            className="margin-right-0"
-          />
-          <Modal
-            isOpen={deleteModalOpen}
-            onRequestClose={toggleDeleteModal}
-            shouldCloseOnEsc={true}
-            shouldCloseOnOverlayClick={true}
-            contentLabel="Delete record"
-            // Use style to dynamically trim the bottom to fit the
-            // message, then center in middle of form
-            style={{
-              content: { bottom: 'auto', transform: 'translate(0%, 100%)' },
-            }}
-          >
-            <DeleteRecord child={rowData} toggleOpen={toggleDeleteModal} />
-          </Modal>
+          <DeleteRecord child={rowData} />
         </div>
       </div>
       <TabNav
@@ -191,7 +142,7 @@ const EditRecord: React.FC = () => {
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
-            id: TAB_IDS.CHILD,
+            id: TAB_IDS.DEMO,
             text: doesChildInfoFormHaveErrors(rowData) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Child info" />
             ) : (
