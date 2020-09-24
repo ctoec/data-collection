@@ -29,9 +29,9 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     // - OBJECT_PROPERTIES contains the property names for FlattenedEnrollments parsed from template data
     // - EXPECTED_HEADERS contains the formatted names used in the template as headers
     .reduce(
-      (acc, cur) => [
-        [...acc[0], cur.propertyName],
-        [...acc[1], cur.formattedName],
+      (_propsAndHeaders, _metadata) => [
+        [..._propsAndHeaders[0], _metadata.propertyName],
+        [..._propsAndHeaders[1], _metadata.formattedName],
       ],
       [[], []]
     );

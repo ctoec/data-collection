@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import cx from 'classnames';
 import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
 import { Button, TextWithIcon } from '@ctoec/component-library';
@@ -14,7 +14,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 const Home: React.FC = () => {
   const { user, loading } = useContext(UserContext);
   const h1Ref = getH1RefForTitle();
-  const history = useHistory();
 
   // To prevent flash of splash page if user is logged in
   if (loading) {
@@ -23,8 +22,7 @@ const Home: React.FC = () => {
 
   // If the user is logged in, don't show the splash page
   if (user) {
-    history.push('/getting-started');
-    return <></>;
+    return <Redirect to="/getting-started" />;
   }
 
   return (

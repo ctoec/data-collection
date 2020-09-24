@@ -28,7 +28,6 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
   const [userLoading, setUserLoading] = useState(loading);
 
   useEffect(() => {
-    setUserLoading(false);
     if (accessToken) {
       setUserLoading(true);
       apiGet('users/current', { accessToken })
@@ -38,8 +37,10 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
         .finally(() => {
           setUserLoading(false);
         });
+    } else {
+      setUserLoading(loading);
     }
-  }, [accessToken]);
+  }, [accessToken, loading]);
 
   return <Provider value={{ loading: userLoading, user }}>{children}</Provider>;
 };

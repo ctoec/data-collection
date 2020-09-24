@@ -3,14 +3,16 @@ import { useHistory } from 'react-router-dom';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
-import { Button } from '@ctoec/component-library';
+import { Button, Modal } from '@ctoec/component-library';
 
 type DeleteProps = {
   child: Child;
-  toggleOpen: () => void;
 };
 
-export const DeleteRecord: React.FC<DeleteProps> = ({ child, toggleOpen }) => {
+export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleIsOpen = () => setIsOpen((o) => !o);
+
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
 
@@ -19,50 +21,70 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, toggleOpen }) => {
   function deleteRecord() {
     setIsDeleting(true);
     apiDelete(`children/${child.id}`, { accessToken })
-      .then(() =>
+      .then(() => {
+        toggleIsOpen();
         history.push('/roster', {
           alerts: [
             {
               type: 'success',
               heading: 'Record deleted',
-              text: `${child?.firstName} ${child?.lastName}'s record was delete from your roster.`,
+              text: `${child.firstName} ${child.lastName}'s record was deleted from your roster.`,
             },
           ],
-        })
-      )
-
+        });
+      })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
-        toggleOpen();
         setIsDeleting(false);
       });
   }
 
   return (
-    <div className="grid-container">
-      <div className="grid-row margin-top-2">
-        <h2>
-          Do you want to delete the enrollment for {child.firstName}{' '}
-          {child.lastName}?
-        </h2>
-      </div>
-      <div className="grid-row margin-top-2">
-        <span>
-          Deleting an enrollment record will permanently remove all of its data
-        </span>
-      </div>
-      <div className="margin-top-4">
-        <div className="grid-row flex-first-baseline space-between-4">
-          <Button appearance="outline" onClick={toggleOpen} text="No, cancel" />
-          <Button
-            appearance={isDeleting ? 'outline' : 'default'}
-            onClick={deleteRecord}
-            text={isDeleting ? 'Deleting record...' : 'Yes, delete record'}
-          />
-        </div>
-      </div>
-    </div>
+    <>
+      <Button
+        appearance="unstyled"
+        onClick={toggleIsOpen}
+        text="Delete record"
+        className="margin-right-0"
+      />
+      <Modal
+        isOpen={isOpen}
+        toggleOpen={toggleIsOpen}
+        header={
+          <h2>
+            Do you want to delete the enrollment for{' '}
+            {`${child.firstName} ${child.lastName}`}
+          </h2>
+        }
+        content={
+          <>
+            <div className="grid-row">
+              <span>
+                Deleting an enrollment record will permanently remove all of its
+                data
+              </span>
+            </div>
+            <div className="margin-top-4">
+              <div className="grid-row flex-first-baseline space-between-4">
+                <Button
+                  appearance="outline"
+                  onClick={toggleIsOpen}
+                  text="No, cancel"
+                />
+                <Button
+                  appearance={isDeleting ? 'outline' : 'default'}
+                  onClick={deleteRecord}
+                  text={
+                    isDeleting ? 'Deleting record...' : 'Yes, delete record'
+                  }
+                />
+              </div>
+            </div>
+          </>
+        }
+      />
+    </>
   );
 };

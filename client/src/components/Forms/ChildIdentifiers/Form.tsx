@@ -46,7 +46,7 @@ export const ChildIdentifiersForm = ({
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, []);
+  }, [setAlerts]);
 
   if (!inputChild) {
     throw new Error('Child info rendered without child');

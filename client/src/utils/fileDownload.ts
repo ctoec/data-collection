@@ -1,7 +1,6 @@
 import { apiGet } from './api';
 import { ContentDisposition, parse } from 'content-disposition';
 import { saveAs } from 'file-saver';
-import { access } from 'fs';
 
 /**
  * Download a file stream from the route specified and save it to browser,
@@ -14,14 +13,10 @@ export async function downloadStreamToFile(
   accessToken?: string
 ) {
   let res: Response;
-  if (!!accessToken && accessToken != '') {
-    res = await apiGet(route, {
-      jsonParse: false,
-      accessToken: accessToken,
-    });
-  } else {
-    res = await apiGet(route, { jsonParse: false });
-  }
+  res = await apiGet(route, {
+    jsonParse: false,
+    accessToken: accessToken,
+  });
 
   const fileBlob = new Blob([await res.arrayBuffer()], {
     type: 'application/octet-stream',

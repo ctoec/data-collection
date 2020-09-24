@@ -1,10 +1,13 @@
 import React from 'react';
+import { waitFor } from '@testing-library/dom';
+import moment from 'moment';
 import {
   snapshotTestHelper,
   accessibilityTestHelper,
   renderHelper,
 } from '../../testHelpers';
 import Roster from './Roster';
+import UserContext from '../../contexts/UserContext/UserContext';
 import {
   Family,
   Child,
@@ -19,9 +22,6 @@ import {
 
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
-import { waitFor, fireEvent, wait } from '@testing-library/dom';
-import UserContext from '../../contexts/UserContext/UserContext';
-import moment from 'moment';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const _child = {
@@ -31,18 +31,24 @@ const _child = {
 } as Child;
 
 const INFANT_TODDLER_CDC = {
+  id: 1,
   source: FundingSource.CDC,
   ageGroup: AgeGroup.InfantToddler,
+  capacity: 3,
 } as FundingSpace;
 
 const INFANT_TODDLER_PSR = {
+  id: 2,
   source: FundingSource.PSR,
   ageGroup: AgeGroup.InfantToddler,
+  capacity: 5,
 };
 
 const PRESCHOOL_CDC = {
+  id: 3,
   source: FundingSource.CDC,
   ageGroup: AgeGroup.Preschool,
+  capacity: 10,
 };
 
 const children: Child[] = [
@@ -140,24 +146,26 @@ describe('Roster', () => {
     helperOpts
   );
 
-  it('correctly separates children by agegroup', async () => {
+  it('correctly separates children by ageGroup', async () => {
     const renderResult = await renderHelper(<Roster />, helperOpts);
 
     // Assert there are two roster sections
-    const accordionHeaders = await renderResult.findAllByText(/\d+ children$/);
+    const accordionHeaders = await renderResult.findAllByText(
+      /\d+ child(ren)?$/
+    );
     expect(accordionHeaders).toHaveLength(2);
 
     // Assert first section (infant/toddler) has 2 items in table,
     const infantToddlerHeader = accordionHeaders.find((header) =>
       header.innerHTML.includes(AgeGroup.InfantToddler)
     );
-    expect(infantToddlerHeader).toContainHTML('2');
+    expect(infantToddlerHeader).toContainHTML('2 children');
 
     // and second (preschool) has 1
     const preschoolHeader = accordionHeaders.find((header) =>
       header.innerHTML.includes(AgeGroup.Preschool)
     );
-    expect(preschoolHeader).toContainHTML('1');
+    expect(preschoolHeader).toContainHTML('1 child');
   });
 
   afterAll(() => jest.clearAllMocks());
