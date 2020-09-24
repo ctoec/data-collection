@@ -18,7 +18,8 @@ type LocationType = Location & {
 const AddChild: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-  const { state: locationState, hash } = useLocation() as LocationType;
+  const location = useLocation() as LocationType;
+  const { state: locationState, hash } = location;
   const { childId } = useParams() as { childId: string };
   const activeStep = hash.slice(1);
   const history = useHistory();
@@ -40,8 +41,7 @@ const AddChild: React.FC = () => {
     if (!activeStep) {
       history.replace({ hash: steps[0].key });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activeStep, history]);
 
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
@@ -68,9 +68,8 @@ const AddChild: React.FC = () => {
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(triggerRefetchChild);
-  }, [accessToken, child, locationState, organization, history, updateChild]);
+      });
+  }, [accessToken, child, location, organization, history, updateChild]);
 
   // Fetch fresh child from API whenever refetch is triggered
   useEffect(() => {
