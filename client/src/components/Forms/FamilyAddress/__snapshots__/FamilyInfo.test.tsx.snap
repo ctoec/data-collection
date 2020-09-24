@@ -12,7 +12,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
     </h2>
     <form
       autocomplete="off"
-      class="FamilyInfoForm"
+      class="FamilyAddressForm"
       novalidate=""
     >
       <fieldset

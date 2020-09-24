@@ -1,6 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav, Button } from '@ctoec/component-library';
+import {
+  TabNav,
+  Button,
+  TextWithIcon,
+  Info,
+  TextWithIconProps,
+} from '@ctoec/component-library';
 import Modal from 'react-modal';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
@@ -13,13 +19,18 @@ import {
   FamilyAddressForm,
   EnrollmentFundingForm,
   ChildIdentifiersForm,
+  doesChildIdFormHaveErrors,
+  doesChildInfoFormHaveErrors,
+  doesFamilyAddressFormHaveErrors,
+  doesFamilyIncomeFormHaveErrors,
+  doesEnrollmentFormHaveErrors,
+  doesC4kFormHaveErrors,
 } from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { distributeValidationErrorsToSubObjects } from '../../utils/getValidationStatus';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
@@ -97,6 +108,12 @@ const EditRecord: React.FC = () => {
     reportingPeriods,
   };
 
+  const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
+    Icon: Info,
+    iconSide: 'right',
+    className: 'svg-gold-20v',
+  };
+
   return (
     <div className="margin-top-4 grid-container">
       <BackButton />
@@ -163,32 +180,65 @@ const EditRecord: React.FC = () => {
         items={[
           {
             id: TAB_IDS.IDENT,
-            text: 'Child Identifiers',
+            text: doesChildIdFormHaveErrors(rowData) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Child identifiers"
+              />
+            ) : (
+              'Child identifiers'
+            ),
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.CHILD,
-            text: 'Child Info',
+            text: doesChildInfoFormHaveErrors(rowData) ? (
+              <TextWithIcon {...commonTextWithIconProps} text="Child info" />
+            ) : (
+              'Child info'
+            ),
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.FAMILY,
-            text: 'Family Address',
+            text: doesFamilyAddressFormHaveErrors(rowData.family) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Family address"
+              />
+            ) : (
+              'Family address'
+            ),
             content: <FamilyAddressForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.INCOME,
-            text: 'Family Income',
+            text: doesFamilyIncomeFormHaveErrors(rowData.family) ? (
+              <TextWithIcon {...commonTextWithIconProps} text="Family income" />
+            ) : (
+              'Family income'
+            ),
             content: <FamilyIncomeForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.ENROLLMENT,
-            text: 'Enrollment and funding',
+            text: doesEnrollmentFormHaveErrors(rowData) ? (
+              <TextWithIcon
+                {...commonTextWithIconProps}
+                text="Enrollment and funding"
+              />
+            ) : (
+              'Enrollment and funding'
+            ),
             content: <EnrollmentFundingForm {...commonFormProps} />,
           },
           {
             id: TAB_IDS.C4K,
-            text: 'Care 4 Kids',
+            text: doesC4kFormHaveErrors(rowData) ? (
+              <TextWithIcon {...commonTextWithIconProps} text="Care 4 Kids" />
+            ) : (
+              'Care 4 Kids'
+            ),
             content: <CareForKidsForm {...commonFormProps} />,
           },
         ]}

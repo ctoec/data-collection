@@ -8,7 +8,7 @@ import {
   Checkbox,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
-import { getValidationStatusForFieldset } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 /**
  * Helper type of all valid race properties on Child
@@ -52,7 +52,7 @@ export const RaceField: React.FC = () => {
       id="race"
       options={raceOptions.map((o) => raceOptionFactory(o.label, o.field))}
       status={(data) =>
-        getValidationStatusForFieldset(
+        getValidationStatusForFields(
           data,
           raceOptions.map((o) => o.field),
           { message: 'Child race is required' }

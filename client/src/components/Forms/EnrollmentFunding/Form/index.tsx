@@ -7,6 +7,20 @@ import { EditFormProps } from '../../types';
 import { useSites } from '../../../../hooks/useSites';
 import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { Child } from '../../../../shared/models';
+
+const enrollmentFields = ['site', 'ageGroup', 'entry', 'fundings'];
+// TODO: check this after debugging enrollment-- can't save partially filled out form
+export const doesEnrollmentFormHaveErrors = (child?: Child) =>
+  child?.enrollments?.length
+    ? !!getValidationStatusForFields(child.enrollments, enrollmentFields)
+    : true;
+
+// The fields we use to check to see if this form has errors or missing info
+export const enrollmentFundingFields = {
+  enrollments: [],
+};
 
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,

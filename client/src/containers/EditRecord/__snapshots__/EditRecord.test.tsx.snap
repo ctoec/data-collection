@@ -59,7 +59,7 @@ exports[`EditRecord matches snapshot 1`] = `
                 class="oec-tab-nav--tab"
                 type="button"
               >
-                Child Identifiers
+                Child identifiers
               </button>
             </li>
             <li>
@@ -67,7 +67,7 @@ exports[`EditRecord matches snapshot 1`] = `
                 class="oec-tab-nav--tab oec-tab-nav--tab__active"
                 type="button"
               >
-                Child Info
+                Child info
               </button>
             </li>
             <li>
@@ -75,7 +75,7 @@ exports[`EditRecord matches snapshot 1`] = `
                 class="oec-tab-nav--tab"
                 type="button"
               >
-                Family Address
+                Family address
               </button>
             </li>
             <li>
@@ -83,7 +83,11 @@ exports[`EditRecord matches snapshot 1`] = `
                 class="oec-tab-nav--tab"
                 type="button"
               >
-                Family Income
+                <span
+                  class="oec-text-with-icon svg-gold-20v"
+                >
+                  Family income
+                </span>
               </button>
             </li>
             <li>
@@ -91,7 +95,11 @@ exports[`EditRecord matches snapshot 1`] = `
                 class="oec-tab-nav--tab"
                 type="button"
               >
-                Enrollment and funding
+                <span
+                  class="oec-text-with-icon svg-gold-20v"
+                >
+                  Enrollment and funding
+                </span>
               </button>
             </li>
             <li>

@@ -8,6 +8,11 @@ import { EditFormProps } from '../../components/Forms/types';
 import {
   ChildIdentifiersForm,
   ChildInfoForm,
+  doesChildIdFormHaveErrors,
+  doesChildInfoFormHaveErrors,
+  doesEnrollmentFormHaveErrors,
+  doesFamilyAddressFormHaveErrors,
+  doesFamilyIncomeFormHaveErrors,
   FamilyAddressForm,
 } from '../../components/Forms';
 
@@ -17,7 +22,8 @@ export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   {
     key: 'child-ident',
     name: 'Child identifiers',
-    status: () => 'incomplete',
+    status: ({ child }) =>
+      doesChildIdFormHaveErrors(child) ? 'incomplete' : 'complete',
     EditComponent: () => (
       <Button
         appearance="unstyled"
@@ -34,7 +40,8 @@ export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   {
     key: 'child-info',
     name: 'Child info',
-    status: () => 'incomplete',
+    status: ({ child }) =>
+      doesChildInfoFormHaveErrors(child) ? 'incomplete' : 'complete',
     EditComponent: () => (
       <Button
         appearance="unstyled"
@@ -51,7 +58,10 @@ export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   {
     key: 'family-address',
     name: 'Family address',
-    status: () => 'incomplete',
+    status: ({ child }) =>
+      doesFamilyAddressFormHaveErrors(child?.family)
+        ? 'incomplete'
+        : 'complete',
     EditComponent: () => (
       <Button
         appearance="unstyled"
@@ -68,7 +78,8 @@ export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   {
     key: 'family-income',
     name: 'Family income determination',
-    status: () => 'incomplete',
+    status: ({ child }) =>
+      doesFamilyIncomeFormHaveErrors(child?.family) ? 'incomplete' : 'complete',
     EditComponent: () => (
       <Button
         appearance="unstyled"
@@ -86,7 +97,8 @@ export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   {
     key: 'enrollment',
     name: 'Enrollment and funding',
-    status: () => 'incomplete',
+    status: ({ child }) =>
+      doesEnrollmentFormHaveErrors(child) ? 'incomplete' : 'complete',
     EditComponent: () => (
       <Button
         appearance="unstyled"
