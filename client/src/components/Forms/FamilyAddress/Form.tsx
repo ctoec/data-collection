@@ -23,18 +23,12 @@ export const doesFamilyAddressFormHaveErrors = (family?: Family) =>
 export const FamilyAddressForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
-  setAlerts,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
-
-  // Clear any previously displayed alerts from other tabs
-  useEffect(() => {
-    setAlerts([]);
-  }, [setAlerts]);
 
   if (!child) {
     throw new Error('Family info rendered without child');

@@ -11,20 +11,15 @@ const incomeDetFields = ['numberOfPeople', 'income', 'determinationDate'];
 export const doesFamilyIncomeFormHaveErrors = (family?: Family) =>
   family?.incomeDeterminations?.length
     ? !!getValidationStatusForFields(
-        family.incomeDeterminations,
-        incomeDetFields
-      )
+      family.incomeDeterminations,
+      incomeDetFields
+    )
     : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
-  const { child, onSuccess, setAlerts } = props;
+  const { child, onSuccess } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
-
-  // Clear any previously displayed alerts from other tabs
-  useEffect(() => {
-    setAlerts([]);
-  }, [setAlerts]);
 
   if (!child?.family) {
     throw new Error('Family income rendered without family');

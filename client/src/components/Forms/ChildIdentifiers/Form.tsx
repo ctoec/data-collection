@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   SasidField,
   FirstNameField,
@@ -35,7 +35,6 @@ export const doesChildIdFormHaveErrors = (child?: Child) =>
 export const ChildIdentifiersForm = ({
   child: inputChild,
   onSuccess,
-  setAlerts,
   hideHeader = false,
   hideErrorsOnFirstLoad,
 }: EditFormProps) => {
@@ -43,11 +42,14 @@ export const ChildIdentifiersForm = ({
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
 
+<<<<<<< HEAD
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
   }, [setAlerts]);
 
+=======
+>>>>>>> 95336b7... Add missing child info alert to roster
   if (!inputChild) {
     throw new Error('Child info rendered without child');
   }

@@ -5,11 +5,11 @@ exports[`Roster matches snapshot 1`] = `
   <div
     class="Roster grid-container"
   >
-    <h2
-      class="font-body-xl margin-bottom-0"
+    <h1
+      class="margin-bottom-0"
     >
       Organization
-    </h2>
+    </h1>
     <p
       class="font-body-xl margin-top-1"
     >
