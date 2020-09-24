@@ -12,7 +12,7 @@ import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
 import { Child } from './Child';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 
 @Entity()
 export class Family implements FamilyInterface {
@@ -39,6 +39,7 @@ export class Family implements FamilyInterface {
   homelessness?: boolean;
 
   @OneToMany((type) => IncomeDetermination, (det) => det.family)
+  @ValidateNested({ each: true })
   incomeDeterminations?: Array<IncomeDetermination>;
 
   @OneToMany((type) => Child, (child) => child.family)

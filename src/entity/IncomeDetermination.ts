@@ -7,6 +7,7 @@ import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import moment from 'moment';
 import { momentTransformer } from './transformers/momentTransformer';
+import { IsNotEmpty } from 'class-validator';
 
 @Entity()
 export class IncomeDetermination implements IncomeDeterminationInterface {
@@ -14,12 +15,15 @@ export class IncomeDetermination implements IncomeDeterminationInterface {
   id: number;
 
   @Column({ nullable: true })
+  @IsNotEmpty()
   numberOfPeople?: number;
 
   @Column({ nullable: true, type: 'decimal', precision: 14, scale: 2 })
+  @IsNotEmpty()
   income?: number;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  @IsNotEmpty()
   determinationDate?: Moment;
 
   @ManyToOne((type) => Family, { nullable: false })

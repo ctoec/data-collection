@@ -4,7 +4,7 @@ import { BirthTownField } from './BirthTown';
 import { BirthStateField } from './BirthState';
 import { FormFieldSet } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
-import { getValidationStatusForFieldset } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 /**
  * Component that wraps BirthCertificateId, BirthTown, and BirthState in a fieldset.
@@ -17,7 +17,7 @@ export const BirthCertificateFormFieldSet: React.FC = () => {
       className="display-inline-block margin-top-3"
       showLegend
       status={(data) =>
-        getValidationStatusForFieldset(
+        getValidationStatusForFields(
           data,
           ['birthCertificateId', 'birthTown', 'birthState'],
           { message: 'Birth certificate details are required' }
