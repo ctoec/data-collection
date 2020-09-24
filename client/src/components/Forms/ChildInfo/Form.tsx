@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   RaceField,
   EthnicityField,
@@ -31,18 +31,12 @@ export const doesChildInfoFormHaveErrors = (child?: Child) =>
 export const ChildInfoForm = ({
   child: inputChild,
   onSuccess,
-  setAlerts,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
-
-  // Clear any previously displayed alerts from other tabs
-  useEffect(() => {
-    setAlerts([]);
-  }, [setAlerts]);
 
   if (!inputChild) {
     // Focus should automatically be on first error on page

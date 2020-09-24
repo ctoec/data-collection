@@ -15,7 +15,6 @@ import {
   FamilyIncomeForm,
   ChildInfoForm,
   CareForKidsForm,
-  FamilyAddressForm,
   EnrollmentFundingForm,
   ChildIdentifiersForm,
   doesChildIdFormHaveErrors,
@@ -24,6 +23,7 @@ import {
   doesFamilyIncomeFormHaveErrors,
   doesEnrollmentFormHaveErrors,
   doesC4kFormHaveErrors,
+  FamilyAddressForm,
 } from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
@@ -53,6 +53,10 @@ const EditRecord: React.FC = () => {
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
+  // Clear any previously displayed alerts from other tabs
+  useEffect(() => {
+    setAlerts([]);
+  }, [activeTab]);
   const history = useHistory();
   // and make child tab active by default if no hash
   // (but only on first render)
