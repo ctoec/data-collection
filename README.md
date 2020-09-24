@@ -20,10 +20,10 @@ A web application to collect information from child care providers in the State 
     **NOTE**: This `docker-compose run` command is only necessary on initial set up, since the containers cannot start without installed dependencies. To execute yarn commands once the containers have started, you can use `docker-compose exec`.
 
 
-    - Via a local yarn installation
+    - Via a local yarn installation, yarn requires an updated version of node
     ```sh
     yarn install --frozen-lockfile
-    cd client && yarn install --frozen-lockfile
+    cd client && yarn install --frozen-lockfile # npm install may need to be run in the client directory for this to work
     ```
 1. Start application:
     ```sh
@@ -34,7 +34,7 @@ A web application to collect information from child care providers in the State 
     docker-compose ps
         Name                            Command               State           Ports                
     --------------------------------------------------------------------------------------------------       
-    data-collection_client_1           yarn start                       Up      0.0.0.0:5000->3000/tcp       
+    data-collection_client_1           yarn start                       Up             
     data-collection_db_1               /opt/mssql/bin/permissions ...   Up      1433/tcp
     data-collection_server_1           yarn run watch                   Up      0.0.0.0:5001->3000/tcp       
     data-collection_winged-keys-db_1   /opt/mssql/bin/permissions ...   Up      1433/tcp                     
