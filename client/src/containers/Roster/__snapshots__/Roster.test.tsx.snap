@@ -199,7 +199,7 @@ exports[`Roster matches snapshot 1`] = `
                   class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
                   href="/edit-record/0000000-0000-0000-0000-0000000000000"
                 >
-                  Toddler, First
+                  Toddler, First 
                 </a>
               </th>
               <td
@@ -233,7 +233,7 @@ exports[`Roster matches snapshot 1`] = `
                   class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
                   href="/edit-record/11111111-0000-0000-0000-0000000000000"
                 >
-                  Toddler, Second
+                  Toddler, Second 
                 </a>
               </th>
               <td
@@ -417,7 +417,7 @@ exports[`Roster matches snapshot 1`] = `
                   class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
                   href="/edit-record/22222222-0000-0000-0000-0000000000000"
                 >
-                  Preschool, First
+                  Preschool, First 
                 </a>
               </th>
               <td
