@@ -3,7 +3,7 @@
 exports[`Roster matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="Roster grid-container"
+    class="grid-container"
   >
     <h1
       class="margin-bottom-0"
