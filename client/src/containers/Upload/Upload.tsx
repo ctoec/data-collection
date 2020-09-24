@@ -84,11 +84,7 @@ const Upload: React.FC = () => {
       </div>
       <div className="grid-row">
         <form className="usa-form">
-          <FileInput
-            id="report"
-            label="Upload enrollment data"
-            onChange={fileUpload}
-          />
+          <FileInput id="report" label="Choose a file" onChange={fileUpload} />
         </form>
       </div>
     </div>
