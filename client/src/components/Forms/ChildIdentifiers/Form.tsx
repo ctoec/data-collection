@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   SasidField,
   FirstNameField,
@@ -35,18 +35,12 @@ export const doesChildIdFormHaveErrors = (child?: Child) =>
 export const ChildIdentifiersForm = ({
   child: inputChild,
   onSuccess,
-  setAlerts,
   hideHeader = false,
   hideErrorsOnFirstLoad,
 }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
-
-  // Clear any previously displayed alerts from other tabs
-  useEffect(() => {
-    setAlerts([]);
-  }, [setAlerts]);
 
   if (!inputChild) {
     throw new Error('Child info rendered without child');

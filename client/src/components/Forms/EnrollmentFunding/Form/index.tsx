@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ChangeEnrollmentForm } from './ChangeEnrollmentForm';
 import { EditEnrollmentForm } from './EditEnrollmentForm';
 import { EditFundingForm } from './EditFundingForm';
@@ -25,7 +25,6 @@ export const enrollmentFundingFields = {
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
   onSuccess,
-  setAlerts,
   reportingPeriods: inputReportingPeriods,
 }) => {
   // Get site options for new enrollments
@@ -36,11 +35,6 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
 
   // Get reporting periods (needed to update enrollments with fundings)
   const { reportingPeriods } = useReportingPeriods(inputReportingPeriods);
-
-  // Clear any previously displayed alerts from other tabs
-  useEffect(() => {
-    setAlerts([]);
-  }, [setAlerts]);
 
   // Separate enrollments into current (no end date) and past
   // (with end date). Either may not exist
