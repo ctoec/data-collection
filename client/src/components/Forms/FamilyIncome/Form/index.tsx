@@ -11,9 +11,9 @@ const incomeDetFields = ['numberOfPeople', 'income', 'determinationDate'];
 export const doesFamilyIncomeFormHaveErrors = (family?: Family) =>
   family?.incomeDeterminations?.length
     ? !!getValidationStatusForFields(
-      family.incomeDeterminations,
-      incomeDetFields
-    )
+        family.incomeDeterminations,
+        incomeDetFields
+      )
     : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {

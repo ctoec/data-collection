@@ -102,9 +102,11 @@ const AddChild: React.FC = () => {
     })
       .then((updatedChild) => {
         updateChild(updatedChild);
-        if (!updatedChild) return;
+        if (!updatedChild || !steps || !indexOfCurrentStep) return;
         // todo: make step list less opinionated
-        const currentStepStatus = steps[indexOfCurrentStep].status({ child: updatedChild } as EditFormProps)
+        const currentStepStatus = steps[indexOfCurrentStep].status({
+          child: updatedChild,
+        } as EditFormProps);
         if (currentStepStatus === 'complete') {
           moveToNextStep();
         }
@@ -114,7 +116,8 @@ const AddChild: React.FC = () => {
       });
   }, [accessToken, childId, refetchChild]);
 
-  useFocusFirstError([child?.validationErrors?.length]);
+  // After child is updated, programmatically focus on the first input with an error
+  useFocusFirstError([child]);
 
   const { alertElements, setAlerts } = useAlerts();
   const commonFormProps = {
