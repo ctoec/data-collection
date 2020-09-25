@@ -52,6 +52,7 @@ const AddChild: React.FC = () => {
 
   // On initial load, create child
   useEffect(() => {
+    console.log(child, organization)
     if (child || childId || !organization) return;
 
     const placeholderChild = {
