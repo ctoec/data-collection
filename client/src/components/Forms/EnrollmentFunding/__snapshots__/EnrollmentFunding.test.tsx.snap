@@ -1441,14 +1441,14 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
                 <input
                   checked=""
                   class="usa-radio__input"
-                  id="unfunded"
+                  id="Unfunded"
                   name="funding-source"
                   type="radio"
-                  value="unfunded"
+                  value="Unfunded"
                 />
                 <label
                   class="usa-radio__label"
-                  for="unfunded"
+                  for="Unfunded"
                 >
                   Unfunded
                 </label>
