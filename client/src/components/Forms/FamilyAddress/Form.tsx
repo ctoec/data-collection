@@ -22,7 +22,7 @@ export const doesFamilyAddressFormHaveErrors = (family?: Family) =>
  */
 export const FamilyAddressForm: React.FC<EditFormProps> = ({
   child,
-  onSuccess,
+  afterDataSave: onSuccess,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }) => {

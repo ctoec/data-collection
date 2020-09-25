@@ -30,7 +30,7 @@ export const doesChildInfoFormHaveErrors = (child?: Child) =>
 
 export const ChildInfoForm = ({
   child: inputChild,
-  onSuccess,
+  afterDataSave: onSuccess,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }: EditFormProps) => {

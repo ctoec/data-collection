@@ -17,7 +17,7 @@ export const doesFamilyIncomeFormHaveErrors = (family?: Family) =>
     : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
-  const { child, onSuccess } = props;
+  const { child, afterDataSave: onSuccess } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 

@@ -24,7 +24,7 @@ export const enrollmentFundingFields = {
 
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
-  onSuccess,
+  afterDataSave: onSuccess,
   reportingPeriods: inputReportingPeriods,
 }) => {
   // Get site options for new enrollments

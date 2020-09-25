@@ -70,22 +70,7 @@ const AddChild: React.FC = () => {
       });
   }, [accessToken, child, locationState, organization, history, updateChild]);
 
-  // Fetch fresh child from API whenever refetch is triggered
-  useEffect(() => {
-    if (!childId) return;
-
-    apiGet(`children/${childId}`, {
-      accessToken,
-    })
-      .then((updatedChild) => {
-        updateChild(updatedChild);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [accessToken, childId, refetchChild]);
-
-  const onSuccess = () => {
+  const moveToNextStep = () => {
     if (indexOfCurrentStep === steps.length - 1) {
       history.push('/roster', {
         alerts: [
@@ -102,15 +87,33 @@ const AddChild: React.FC = () => {
         newSteps[indexOfCurrentStep].visited = true;
         return newSteps;
       });
-      triggerRefetchChild();
       history.replace({ hash: steps[indexOfCurrentStep + 1].key });
     }
   };
 
+  // Fetch fresh child from API whenever refetch is triggered
+  useEffect(() => {
+    if (!childId) return;
+
+    apiGet(`children/${childId}`, {
+      accessToken,
+    })
+      .then((updatedChild) => {
+        updateChild(updatedChild);
+        // if (current form displayed does not have validation errors) {
+        //   moveToNextStep()
+        // }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [accessToken, childId, refetchChild]);
+
+
   const { alertElements, setAlerts } = useAlerts();
   const commonFormProps = {
     child,
-    onSuccess,
+    afterDataSave: triggerRefetchChild,
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: (_hash: string) => {

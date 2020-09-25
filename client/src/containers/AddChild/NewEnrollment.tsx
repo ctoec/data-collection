@@ -21,7 +21,7 @@ import { useValidationErrors } from '../../hooks/useValidationErrors';
 // Maybe we should try to reconcile though?
 export const NewEnrollment = ({
   child: inputChild,
-  onSuccess,
+  afterDataSave: onSuccess,
   hideErrorsOnFirstLoad = false,
 }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
