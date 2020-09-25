@@ -21,7 +21,7 @@ import {
   ChangeEnrollment,
 } from '../../../../../shared/payloads';
 
-const UNFUNDED = 'unfunded';
+const UNFUNDED = 'Unfunded';
 
 type FundingFieldProps<T> = {
   fundingSpaces: FundingSpace[];
@@ -80,7 +80,7 @@ export const FundingField = <
       options={[
         {
           render: (props: RadioOptionRenderProps) => (
-            <RadioButton {...props} text="Unfunded" />
+            <RadioButton {...props} text={UNFUNDED} />
           ),
           value: UNFUNDED,
         },
