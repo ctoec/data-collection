@@ -21,7 +21,7 @@ import {
   ChangeEnrollment,
 } from '../../../../../shared/payloads';
 
-const PRIVATE_PAY = 'private-pay';
+const UNFUNDED = 'Unfunded';
 
 type FundingFieldProps<T> = {
   fundingSpaces: FundingSpace[];
@@ -76,13 +76,13 @@ export const FundingField = <
       name="funding-source"
       legend="Funding source options"
       showLegend
-      defaultValue={PRIVATE_PAY}
+      defaultValue={UNFUNDED}
       options={[
         {
           render: (props: RadioOptionRenderProps) => (
-            <RadioButton {...props} text="Private pay" />
+            <RadioButton {...props} text={UNFUNDED} />
           ),
-          value: PRIVATE_PAY,
+          value: UNFUNDED,
         },
         ...fundingSourceOptions.map((fundingSource) => ({
           render: (props: RadioOptionRenderProps) => (

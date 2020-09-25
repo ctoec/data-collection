@@ -5,7 +5,7 @@ export class InitialMigration1600383973776 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "reporting_period" ("id" int NOT NULL IDENTITY(1,1), "type" nvarchar(255) CHECK( type IN ('CDC','CSR','PSR','SHS','SS') ) NOT NULL, "period" date NOT NULL, "periodStart" date NOT NULL, "periodEnd" date NOT NULL, "dueAt" date NOT NULL, CONSTRAINT "UQ_Type_Period" UNIQUE ("type", "period"), CONSTRAINT "PK_273d2b68dc1854618ec53e144d0" PRIMARY KEY ("id"))`
+      `CREATE TABLE "reporting_period" ("id" int NOT NULL IDENTITY(1,1), "type" nvarchar(255) CHECK( type IN ('CDC - Child Day Care','CSR - Competitive School Readiness','PSR - Priority School Readiness','SHS - State Head Start','SS - Smart Start') ) NOT NULL, "period" date NOT NULL, "periodStart" date NOT NULL, "periodEnd" date NOT NULL, "dueAt" date NOT NULL, CONSTRAINT "UQ_Type_Period" UNIQUE ("type", "period"), CONSTRAINT "PK_273d2b68dc1854618ec53e144d0" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "site" ("id" int NOT NULL IDENTITY(1,1), "siteName" nvarchar(255) NOT NULL, "titleI" bit NOT NULL, "region" nvarchar(255) CHECK( region IN ('East','NorthCentral','NorthWest','SouthCentral','SouthWest') ) NOT NULL, "facilityCode" int, "licenseNumber" int, "naeycId" int, "registryId" int, "organizationId" int NOT NULL, CONSTRAINT "UQ_9669a09fcc0eb6d2794a658f647" UNIQUE ("siteName"), CONSTRAINT "PK_635c0eeabda8862d5b0237b42b4" PRIMARY KEY ("id"))`
@@ -23,7 +23,7 @@ export class InitialMigration1600383973776 implements MigrationInterface {
       `CREATE UNIQUE INDEX "REL_4c23c29a718e7ffda0223e5aeb" ON "funding_time_split" ("fundingSpaceId") WHERE "fundingSpaceId" IS NOT NULL`
     );
     await queryRunner.query(
-      `CREATE TABLE "funding_space" ("id" int NOT NULL IDENTITY(1,1), "capacity" int NOT NULL, "source" nvarchar(255) CHECK( source IN ('CDC','CSR','PSR','SHS','SS') ) NOT NULL, "ageGroup" nvarchar(255) CHECK( ageGroup IN ('Infant/toddler','Preschool','School aged') ) NOT NULL, "time" nvarchar(255) CHECK( time IN ('Full time','Part time','Split time','Full-day','Part-day','Extended-day','Extended-year','School-day/School-year') ) NOT NULL, "organizationId" int NOT NULL, CONSTRAINT "UQ_Source_AgeGroup_Time_Organization" UNIQUE ("source", "ageGroup", "time", "organizationId"), CONSTRAINT "PK_0f92a2c9df81f7cecc05d28c99d" PRIMARY KEY ("id"))`
+      `CREATE TABLE "funding_space" ("id" int NOT NULL IDENTITY(1,1), "capacity" int NOT NULL, "source" nvarchar(255) CHECK( source IN ('CDC - Child Day Care','CSR - Competitive School Readiness','PSR - Priority School Readiness','SHS - State Head Start','SS - Smart Start') ) NOT NULL, "ageGroup" nvarchar(255) CHECK( ageGroup IN ('Infant/toddler','Preschool','School aged') ) NOT NULL, "time" nvarchar(255) CHECK( time IN ('Full time','Part time','Split time','Full-day','Part-day','Extended-day','Extended-year','School-day/School-year') ) NOT NULL, "organizationId" int NOT NULL, CONSTRAINT "UQ_Source_AgeGroup_Time_Organization" UNIQUE ("source", "ageGroup", "time", "organizationId"), CONSTRAINT "PK_0f92a2c9df81f7cecc05d28c99d" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "organization_permission" ("id" int NOT NULL IDENTITY(1,1), "organizationId" int NOT NULL, "userId" int NOT NULL, CONSTRAINT "UQ_USER_ORGANIZATION" UNIQUE ("userId", "organizationId"), CONSTRAINT "PK_ff6561c44fcca6c8e16fe459157" PRIMARY KEY ("id"))`
