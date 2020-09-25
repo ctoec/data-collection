@@ -2,7 +2,7 @@ import React from 'react';
 import { FormField, DateInput, DateInputProps } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../shared/models';
 import { Moment } from 'moment';
-import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
 
 /**
  * Component that holds a date picker calendar object that
@@ -19,7 +19,7 @@ export const DeterminationDateField: React.FC = () => {
       inputComponent={DateInput}
       id="determination-date-"
       label="Determination date"
-      status={getValidationStatusForField}
+      status={getValidationStatusForFieldInFieldset}
     />
   );
 };
