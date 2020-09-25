@@ -6,6 +6,7 @@ import {
   DeterminationDateField,
 } from '.';
 import { IncomeDetermination } from '../../../../shared/models';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 /**
  * Simple prop holder to identify the kind of operation the
@@ -42,11 +43,19 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
       break;
   }
 
+  // TODO: STATUS
   return (
     <FormFieldSet<IncomeDetermination>
       id={elementId}
       legend={legend}
       showLegend={showLegend}
+      status={(data) =>
+        getValidationStatusForFields(
+          data,
+          ['numberOfPeople', 'income', 'determinationDate'],
+          { message: 'Income determination is required' }
+        )
+      }
     >
       <div>
         <HouseholdSizeField />

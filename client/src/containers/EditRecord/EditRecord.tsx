@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import {
   TabNav,
-  Button,
   TextWithIcon,
   Info,
   TextWithIconProps,
@@ -30,6 +29,7 @@ import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
@@ -78,12 +78,16 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
+  // TODO: revisit whether we need this depending on whether errors in edit block save or are warnings
+  useFocusFirstError([rowData]);
+
   if (!rowData) {
     return <></>;
   }
+
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
-  const onSuccess = () => {
+  const afterDataSave = () => {
     setRefetch((r) => r + 1);
     setAlerts([
       {
@@ -96,7 +100,7 @@ const EditRecord: React.FC = () => {
 
   const commonFormProps = {
     child: rowData,
-    onSuccess,
+    afterDataSave,
     setAlerts,
     reportingPeriods,
   };

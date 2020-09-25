@@ -30,7 +30,7 @@ export const doesChildInfoFormHaveErrors = (child?: Child) =>
 
 export const ChildInfoForm = ({
   child: inputChild,
-  onSuccess,
+  afterDataSave,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }: EditFormProps) => {
@@ -39,8 +39,6 @@ export const ChildInfoForm = ({
   const [saving, setSaving] = useState(false);
 
   if (!inputChild) {
-    // Focus should automatically be on first error on page
-    // useFocusFirstError([error]);
     throw new Error('Child info rendered without child');
   }
 
@@ -53,7 +51,7 @@ export const ChildInfoForm = ({
     setErrorsHidden(false);
     setSaving(true);
     apiPut(`children/${child.id}`, _child, { accessToken })
-      .then(() => onSuccess())
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })

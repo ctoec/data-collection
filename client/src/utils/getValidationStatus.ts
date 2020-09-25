@@ -2,6 +2,22 @@ import { FormStatusProps, TObjectDriller } from '@ctoec/component-library';
 import { ValidationError } from 'class-validator';
 import { ObjectWithValidationErrors } from '../shared/models/ObjectWithValidationErrors';
 
+/**
+ * Wrapper function around getValidationStatusForField that passes in option
+ * { message: undefined } to ovverride default behavior of showing error message
+ * so that fieldset only shows one message for the whole set.
+ */
+export function getValidationStatusForFieldInFieldset<
+  T extends ObjectWithValidationErrors
+>(
+  objectDriller: TObjectDriller<NonNullable<T>>,
+  path: string
+): FormStatusProps | undefined {
+  return getValidationStatusForField(objectDriller, path, {
+    message: undefined,
+  });
+}
+
 export type ValidationStatusOptions = {
   type?: FormStatusProps['type'];
   id?: string;
@@ -40,7 +56,7 @@ export function getValidationStatusForField<
   if (!validationError) return;
   const { constraints } = validationError;
   return {
-    type: 'warning',
+    type: 'error',
     id: `status-${field}`,
     message: constraints ? Object.values(constraints).join(', ') : undefined,
     ...options,
@@ -86,7 +102,7 @@ export function getValidationStatusForFields<
     .join(', ');
 
   return {
-    type: 'warning',
+    type: 'error',
     id: `status-${fields.join('-')}`,
     message,
     ...options,

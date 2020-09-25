@@ -8,6 +8,8 @@ import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { listSteps } from './ListSteps';
+import { EditFormProps } from '../../components/Forms/types';
+import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 
 type LocationType = Location & {
   state: {
@@ -70,22 +72,7 @@ const AddChild: React.FC = () => {
       });
   }, [accessToken, child, locationState, organization, history, updateChild]);
 
-  // Fetch fresh child from API whenever refetch is triggered
-  useEffect(() => {
-    if (!childId) return;
-
-    apiGet(`children/${childId}`, {
-      accessToken,
-    })
-      .then((updatedChild) => {
-        updateChild(updatedChild);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [accessToken, childId, refetchChild]);
-
-  const onSuccess = () => {
+  const moveToNextStep = () => {
     if (indexOfCurrentStep === steps.length - 1) {
       history.push('/roster', {
         alerts: [
@@ -102,15 +89,41 @@ const AddChild: React.FC = () => {
         newSteps[indexOfCurrentStep].visited = true;
         return newSteps;
       });
-      triggerRefetchChild();
       history.replace({ hash: steps[indexOfCurrentStep + 1].key });
     }
   };
 
+  // Fetch fresh child from API whenever refetch is triggered
+  useEffect(() => {
+    if (!childId) return;
+
+    apiGet(`children/${childId}`, {
+      accessToken,
+    })
+      .then((updatedChild) => {
+        updateChild(updatedChild);
+        if (!updatedChild || !steps || !indexOfCurrentStep) return;
+        // todo: make step list less opinionated
+        const currentStepStatus = steps[indexOfCurrentStep].status({
+          child: updatedChild,
+        } as EditFormProps);
+        if (currentStepStatus === 'complete') {
+          moveToNextStep();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [accessToken, childId, refetchChild]);
+
+  // After child is updated, programmatically focus on the first input with an error
+  useFocusFirstError([child]);
+
   const { alertElements, setAlerts } = useAlerts();
+
   const commonFormProps = {
     child,
-    onSuccess,
+    afterDataSave: triggerRefetchChild,
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: (_hash: string) => {

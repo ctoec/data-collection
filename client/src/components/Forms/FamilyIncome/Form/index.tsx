@@ -11,13 +11,13 @@ const incomeDetFields = ['numberOfPeople', 'income', 'determinationDate'];
 export const doesFamilyIncomeFormHaveErrors = (family?: Family) =>
   family?.incomeDeterminations?.length
     ? !!getValidationStatusForFields(
-      family.incomeDeterminations,
-      incomeDetFields
-    )
+        family.incomeDeterminations,
+        incomeDetFields
+      )
     : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
-  const { child, onSuccess } = props;
+  const { child, afterDataSave: afterDataSave } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
@@ -47,7 +47,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
               familyId={familyId}
               setIsNew={() => setCurrentIsNew(true)}
               hideForm={() => setShowRedeterminationForm(false)}
-              onSuccess={onSuccess}
+              afterDataSave={afterDataSave}
             />
           </Card>
         </>
@@ -78,7 +78,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
               familyId={familyId}
               isCurrent={true}
               isNew={currentIsNew}
-              onSuccess={onSuccess}
+              afterDataSave={afterDataSave}
             />
           )}
         </div>
@@ -97,7 +97,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
                   familyId={familyId}
                   isCurrent={false}
                   isNew={false}
-                  onSuccess={onSuccess}
+                  afterDataSave={afterDataSave}
                 />
               ))}
             </div>

@@ -16,12 +16,13 @@ import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import useIsMounted from '../../hooks/useIsMounted';
 import { CareForKidsField } from '../../components/Forms/CareForKids/CareForKidsField';
 import { useValidationErrors } from '../../hooks/useValidationErrors';
+import { getCurrentEnrollment } from '../../utils/models';
 
 // This is separate from the other enrollment forms because they're pretty complicated
 // Maybe we should try to reconcile though?
 export const NewEnrollment = ({
   child: inputChild,
-  onSuccess,
+  afterDataSave,
   hideErrorsOnFirstLoad = false,
 }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -37,17 +38,11 @@ export const NewEnrollment = ({
     hideErrorsOnFirstLoad
   );
 
-  const enrollment =
-    (child?.enrollments || []).find((e) => !e.exit) || ({} as Enrollment);
+  const enrollment = getCurrentEnrollment(child) || ({} as Enrollment);
 
   const onSubmit = (_enrollment: Enrollment) => {
     setErrorsHidden(false);
     setSaving(true);
-    if (!Object.values(_enrollment).every((value) => !value)) {
-      // If all of the values are null or undefined, don't block
-      onSuccess();
-      return;
-    }
     apiPost(
       `children/${child.id}/change-enrollment`,
       { newEnrollment: _enrollment },
@@ -56,7 +51,7 @@ export const NewEnrollment = ({
         jsonParse: false,
       }
     )
-      .then(onSuccess)
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })
