@@ -27,7 +27,7 @@ export const CareForKidsForm: React.FC<EditFormProps> = ({
   const onSubmit = (updatedChild: Child) => {
     setIsSaving(true);
     apiPut(`children/${child.id}`, updatedChild, { accessToken })
-      .then(() => afterDataSave())
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })

@@ -51,7 +51,7 @@ export const ChildInfoForm = ({
     setErrorsHidden(false);
     setSaving(true);
     apiPut(`children/${child.id}`, _child, { accessToken })
-      .then(() => afterDataSave())
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })
