@@ -21,7 +21,7 @@ import { useValidationErrors } from '../../hooks/useValidationErrors';
 // Maybe we should try to reconcile though?
 export const NewEnrollment = ({
   child: inputChild,
-  afterDataSave: onSuccess,
+  afterDataSave,
   hideErrorsOnFirstLoad = false,
 }: EditFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -45,7 +45,7 @@ export const NewEnrollment = ({
     setSaving(true);
     if (!Object.values(_enrollment).every((value) => !value)) {
       // If all of the values are null or undefined, don't block
-      onSuccess();
+      afterDataSave();
       return;
     }
     apiPost(
@@ -56,7 +56,7 @@ export const NewEnrollment = ({
         jsonParse: false,
       }
     )
-      .then(onSuccess)
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })

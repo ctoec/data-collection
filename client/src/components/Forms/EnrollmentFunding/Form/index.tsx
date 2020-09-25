@@ -24,7 +24,7 @@ export const enrollmentFundingFields = {
 
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
-  afterDataSave: onSuccess,
+  afterDataSave,
   reportingPeriods: inputReportingPeriods,
 }) => {
   // Get site options for new enrollments
@@ -58,7 +58,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
         currentEnrollment={currentEnrollment}
         childId={child.id}
         sites={sites}
-        onSuccess={onSuccess}
+        afterDataSave={afterDataSave}
       />
       {currentEnrollment && (
         <>
@@ -67,7 +67,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
             key="edit-current-enrollment"
             isCurrent={true}
             enrollment={currentEnrollment}
-            onSuccess={onSuccess}
+            afterDataSave={afterDataSave}
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingForm
@@ -77,14 +77,14 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
               fundingSpaces={fundingSpaces}
               funding={funding}
               enrollment={currentEnrollment}
-              onSuccess={onSuccess}
+              afterDataSave={afterDataSave}
             />
           ))}
           <ChangeFundingForm
             fundingSpaces={fundingSpaces}
             reportingPeriods={reportingPeriods}
             enrollment={currentEnrollment}
-            onSuccess={onSuccess}
+            afterDataSave={afterDataSave}
           />
         </>
       )}
@@ -96,7 +96,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
               <EditEnrollmentForm
                 key={enrollment.id}
                 enrollment={enrollment}
-                onSuccess={onSuccess}
+                afterDataSave={afterDataSave}
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingForm
@@ -105,7 +105,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
                   fundingSpaces={fundingSpaces}
                   funding={funding}
                   enrollment={enrollment}
-                  onSuccess={onSuccess}
+                  afterDataSave={afterDataSave}
                 />
               ))}
             </>

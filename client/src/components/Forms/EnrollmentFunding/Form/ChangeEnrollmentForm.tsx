@@ -32,7 +32,7 @@ type ChangeEnrollmentFormProps = {
   reportingPeriods: ReportingPeriod[];
   fundingSpaces: FundingSpace[];
   sites: Site[];
-  onSuccess: () => void;
+  afterDataSave: () => void;
 };
 
 /**
@@ -47,7 +47,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   reportingPeriods,
   fundingSpaces,
   sites,
-  onSuccess,
+  afterDataSave,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
@@ -71,7 +71,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       .then(() => {
         setError(undefined);
         setCloseCard(true);
-        onSuccess();
+        afterDataSave();
       })
       .catch((err) => {
         console.log(err);
@@ -93,10 +93,10 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
             {childName} has no active enrollments
           </div>
         ) : (
-          <div className="usa-prose-body">
-            Has {childName}'s age group and/or site changed?
-          </div>
-        )}
+            <div className="usa-prose-body">
+              Has {childName}'s age group and/or site changed?
+            </div>
+          )}
         <ExpandCard>
           <Button text="Change enrollment" appearance="outline" />
         </ExpandCard>

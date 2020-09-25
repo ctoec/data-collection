@@ -83,7 +83,7 @@ const EditRecord: React.FC = () => {
   }
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
-  const onSuccess = () => {
+  const afterDataSave = () => {
     setRefetch((r) => r + 1);
     setAlerts([
       {
@@ -96,7 +96,7 @@ const EditRecord: React.FC = () => {
 
   const commonFormProps = {
     child: rowData,
-    onSuccess,
+    afterDataSave,
     setAlerts,
     reportingPeriods,
   };
@@ -141,8 +141,8 @@ const EditRecord: React.FC = () => {
                 text="Child identifiers"
               />
             ) : (
-              'Child identifiers'
-            ),
+                'Child identifiers'
+              ),
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
@@ -150,8 +150,8 @@ const EditRecord: React.FC = () => {
             text: doesChildInfoFormHaveErrors(rowData) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Child info" />
             ) : (
-              'Child info'
-            ),
+                'Child info'
+              ),
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
@@ -162,8 +162,8 @@ const EditRecord: React.FC = () => {
                 text="Family address"
               />
             ) : (
-              'Family address'
-            ),
+                'Family address'
+              ),
             content: <FamilyAddressForm {...commonFormProps} />,
           },
           {
@@ -171,8 +171,8 @@ const EditRecord: React.FC = () => {
             text: doesFamilyIncomeFormHaveErrors(rowData.family) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Family income" />
             ) : (
-              'Family income'
-            ),
+                'Family income'
+              ),
             content: <FamilyIncomeForm {...commonFormProps} />,
           },
           {
@@ -183,8 +183,8 @@ const EditRecord: React.FC = () => {
                 text="Enrollment and funding"
               />
             ) : (
-              'Enrollment and funding'
-            ),
+                'Enrollment and funding'
+              ),
             content: <EnrollmentFundingForm {...commonFormProps} />,
           },
           {
@@ -192,8 +192,8 @@ const EditRecord: React.FC = () => {
             text: doesC4kFormHaveErrors(rowData) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Care 4 Kids" />
             ) : (
-              'Care 4 Kids'
-            ),
+                'Care 4 Kids'
+              ),
             content: <CareForKidsForm {...commonFormProps} />,
           },
         ]}
