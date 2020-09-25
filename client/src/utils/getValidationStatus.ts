@@ -65,12 +65,13 @@ export function getValidationStatusForFields<
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   if (Array.isArray(data)) {
-    // If you want to check an array of enrollments or income dets or children, for example
+    // If you want to check an array of enrollments or income dets or children
     const allErrors = data.map((d: T) =>
       getValidationStatusForFields(d, fields, options)
     );
     const anError = allErrors.find((e) => !!e);
-    // Assumes that the error for one of the objects in the array is the same for all
+    // To determine if any of the array items has an error
+    // Useful in getting overall status for enrollment forms
     return anError || undefined;
   }
   if (!data || !data.validationErrors) return;
