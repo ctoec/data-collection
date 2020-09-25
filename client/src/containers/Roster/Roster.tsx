@@ -6,6 +6,7 @@ import {
   Table,
   PlusCircle,
   Button,
+  AlertProps,
 } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
@@ -17,13 +18,14 @@ import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
 import { RosterSectionHeader } from './RosterSectionHeader';
 import { useAlerts } from '../../hooks/useAlerts';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import pluralize from 'pluralize';
 
 const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
-  const { alertElements } = useAlerts();
   const { goBack } = useHistory();
-
+  const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
   // TODO add heirarchy to pick between organizations
@@ -40,6 +42,26 @@ const Roster: React.FC = () => {
       })
       .finally(() => setLoading(false));
   }, [accessToken]);
+
+  const numberOfChildrenWithErrors = children.filter(
+    (c) => c.validationErrors && c.validationErrors.length > 0
+  ).length;
+  const childrenWithErrorsAlert: AlertProps = {
+    text: `You'll need to add required info for ${pluralize(
+      'record',
+      numberOfChildrenWithErrors,
+      true
+    )} before submitting your data to OEC.`,
+    heading: 'Update roster before submitting',
+    type: 'warning',
+  };
+  const { alertElements, setAlerts, alerts } = useAlerts();
+
+  useEffect(() => {
+    if (numberOfChildrenWithErrors) {
+      setAlerts([...alerts, childrenWithErrorsAlert]);
+    }
+  }, [numberOfChildrenWithErrors]);
 
   const childrenByAgeGroup: { [key in AgeGroup]?: Child[] } = {};
   children.reduce((_byAgeGroup, _child) => {
@@ -91,11 +113,10 @@ const Roster: React.FC = () => {
 
   return (
     <>
-      <div className="Roster grid-container">
-        {alertElements}
-        <h2 className="font-body-xl margin-bottom-0">
+      <div className="grid-container">
+        <h1 className="margin-bottom-0" ref={h1Ref}>
           {organization?.providerName}
-        </h2>
+        </h1>
         <p className="font-body-xl margin-top-1">
           {loading
             ? 'Loading...'
@@ -110,6 +131,8 @@ const Roster: React.FC = () => {
           </Link>
           <CSVDownloadLink />
         </div>
+        {alertElements}
+        {/* TODO: revise accordion to have less stuff in the heading-- needs to be usable for quick navigation */}
         <Accordion items={accordionItems} titleHeadingLevel="h2" />
       </div>
       <FixedBottomBar>
