@@ -25,7 +25,7 @@ const AddChild: React.FC = () => {
   const activeStep = hash.slice(1);
   const history = useHistory();
   const steps = listSteps(history);
-  const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
+  const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep) || 0;
   // Keep track of steps that have been visited at least once
   const [stepsVisited, updateStepsVisited] = useState<
     { key: string; visited: boolean; active: boolean }[]
@@ -52,7 +52,6 @@ const AddChild: React.FC = () => {
 
   // On initial load, create child
   useEffect(() => {
-    console.log(child, organization)
     if (child || childId || !organization) return;
 
     const placeholderChild = {
@@ -103,7 +102,7 @@ const AddChild: React.FC = () => {
     })
       .then((updatedChild) => {
         updateChild(updatedChild);
-        if (!updatedChild || !steps || !indexOfCurrentStep) return;
+        if (!updatedChild) return;
         // todo: make step list less opinionated
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
@@ -118,7 +117,7 @@ const AddChild: React.FC = () => {
   }, [accessToken, childId, refetchChild]);
 
   // After child is updated, programmatically focus on the first input with an error
-  useFocusFirstError([child]);
+  useFocusFirstError([refetchChild, child]);
 
   const { alertElements, setAlerts } = useAlerts();
 

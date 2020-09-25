@@ -23,7 +23,7 @@ export function useValidationErrors<T extends ObjectWithValidationErrors>(
     if (!errorsHidden) {
       setOutputObject(inputObject);
     }
-  }, [errorsHidden]);
+  }, [errorsHidden, inputObject]);
 
   return {
     obj: outputObject,
