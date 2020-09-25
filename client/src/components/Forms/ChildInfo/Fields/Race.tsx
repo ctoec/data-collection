@@ -8,7 +8,7 @@ import {
   Checkbox,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
-import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForField, getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 /**
  * Helper type of all valid race properties on Child

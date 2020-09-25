@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormField, TextInputProps, TextInput } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
+import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 
 /**
  * Component for entering a birth certificate id of a child in an enrollment.
@@ -14,6 +15,7 @@ export const BirthCertificateIdField: React.FC = () => {
       type="input"
       id="birthCertificateId"
       label="Birth certificate ID #"
+      status={getValidationStatusForField}
     />
   );
 };

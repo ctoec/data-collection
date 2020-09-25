@@ -8,7 +8,7 @@ import {
   Select,
 } from '@ctoec/component-library';
 import { Family } from '../../../../shared/models';
-import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForField, getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 // Listing of all possible US states to serve as options
 // in the address selector
@@ -37,6 +37,7 @@ export const AddressFieldset: React.FC = () => {
           id="street-address"
           label="Street address"
           parseOnChangeEvent={(e) => e.target.value}
+          status={getValidationStatusForField}
         />
       </div>
       <div className="grid-row grid-gap">
@@ -48,6 +49,7 @@ export const AddressFieldset: React.FC = () => {
             id="town"
             label="Town"
             parseOnChangeEvent={(e) => e.target.value}
+            status={getValidationStatusForField}
           />
         </div>
         <div className="grid-col-4 display-inline-block">
@@ -62,6 +64,7 @@ export const AddressFieldset: React.FC = () => {
               value: state,
             }))}
             name="state"
+            status={getValidationStatusForField}
           />
         </div>
       </div>
@@ -73,6 +76,7 @@ export const AddressFieldset: React.FC = () => {
           id="zip"
           label="Zip code"
           parseOnChangeEvent={(e) => e.target.value}
+          status={getValidationStatusForField}
         />
       </div>
     </FormFieldSet>
