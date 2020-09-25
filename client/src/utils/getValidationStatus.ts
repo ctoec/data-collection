@@ -11,9 +11,11 @@ export function getValidationStatusForFieldInFieldset<
   T extends ObjectWithValidationErrors
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
-  path: string,
+  path: string
 ): FormStatusProps | undefined {
-  return getValidationStatusForField(objectDriller, path, { message: undefined })
+  return getValidationStatusForField(objectDriller, path, {
+    message: undefined,
+  });
 }
 
 export type ValidationStatusOptions = {

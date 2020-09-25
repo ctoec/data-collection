@@ -93,10 +93,10 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
             {childName} has no active enrollments
           </div>
         ) : (
-            <div className="usa-prose-body">
-              Has {childName}'s age group and/or site changed?
-            </div>
-          )}
+          <div className="usa-prose-body">
+            Has {childName}'s age group and/or site changed?
+          </div>
+        )}
         <ExpandCard>
           <Button text="Change enrollment" appearance="outline" />
         </ExpandCard>

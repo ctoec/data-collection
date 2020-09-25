@@ -8,7 +8,10 @@ import {
   Select,
 } from '@ctoec/component-library';
 import { Family } from '../../../../shared/models';
-import { getValidationStatusForFieldInFieldset, getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import {
+  getValidationStatusForFieldInFieldset,
+  getValidationStatusForFields,
+} from '../../../../utils/getValidationStatus';
 
 // Listing of all possible US states to serve as options
 // in the address selector

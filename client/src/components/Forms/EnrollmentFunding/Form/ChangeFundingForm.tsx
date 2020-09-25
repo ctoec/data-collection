@@ -115,8 +115,8 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
                       ? 'Ending funding...'
                       : 'Changing funding...'
                     : visibleForm === 'end'
-                      ? 'End current funding'
-                      : 'Change current funding'
+                    ? 'End current funding'
+                    : 'Change current funding'
                 }
                 disabled={loading}
               />

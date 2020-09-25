@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
 import {
   TabNav,
-  Button,
   TextWithIcon,
   Info,
   TextWithIconProps,
@@ -30,6 +29,7 @@ import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 
 const TAB_IDS = {
   IDENT: 'identifiers',
@@ -78,9 +78,13 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
+  // TODO: revisit whether we need this depending on whether errors in edit block save or are warnings
+  useFocusFirstError([rowData]);
+
   if (!rowData) {
     return <></>;
   }
+
   const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
 
   const afterDataSave = () => {
@@ -141,8 +145,8 @@ const EditRecord: React.FC = () => {
                 text="Child identifiers"
               />
             ) : (
-                'Child identifiers'
-              ),
+              'Child identifiers'
+            ),
             content: <ChildIdentifiersForm {...commonFormProps} />,
           },
           {
@@ -150,8 +154,8 @@ const EditRecord: React.FC = () => {
             text: doesChildInfoFormHaveErrors(rowData) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Child info" />
             ) : (
-                'Child info'
-              ),
+              'Child info'
+            ),
             content: <ChildInfoForm {...commonFormProps} />,
           },
           {
@@ -162,8 +166,8 @@ const EditRecord: React.FC = () => {
                 text="Family address"
               />
             ) : (
-                'Family address'
-              ),
+              'Family address'
+            ),
             content: <FamilyAddressForm {...commonFormProps} />,
           },
           {
@@ -171,8 +175,8 @@ const EditRecord: React.FC = () => {
             text: doesFamilyIncomeFormHaveErrors(rowData.family) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Family income" />
             ) : (
-                'Family income'
-              ),
+              'Family income'
+            ),
             content: <FamilyIncomeForm {...commonFormProps} />,
           },
           {
@@ -183,8 +187,8 @@ const EditRecord: React.FC = () => {
                 text="Enrollment and funding"
               />
             ) : (
-                'Enrollment and funding'
-              ),
+              'Enrollment and funding'
+            ),
             content: <EnrollmentFundingForm {...commonFormProps} />,
           },
           {
@@ -192,8 +196,8 @@ const EditRecord: React.FC = () => {
             text: doesC4kFormHaveErrors(rowData) ? (
               <TextWithIcon {...commonTextWithIconProps} text="Care 4 Kids" />
             ) : (
-                'Care 4 Kids'
-              ),
+              'Care 4 Kids'
+            ),
             content: <CareForKidsForm {...commonFormProps} />,
           },
         ]}
