@@ -8,6 +8,8 @@ import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { listSteps } from './ListSteps';
+import { EditFormProps } from '../../components/Forms/types';
+import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 
 type LocationType = Location & {
   state: {
@@ -100,15 +102,19 @@ const AddChild: React.FC = () => {
     })
       .then((updatedChild) => {
         updateChild(updatedChild);
-        // if (current form displayed does not have validation errors) {
-        //   moveToNextStep()
-        // }
+        if (!updatedChild) return;
+        // todo: make step list less opinionated
+        const currentStepStatus = steps[indexOfCurrentStep].status({ child: updatedChild } as EditFormProps)
+        if (currentStepStatus === 'complete') {
+          moveToNextStep();
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   }, [accessToken, childId, refetchChild]);
 
+  useFocusFirstError([child?.validationErrors?.length]);
 
   const { alertElements, setAlerts } = useAlerts();
   const commonFormProps = {

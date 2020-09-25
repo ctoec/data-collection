@@ -34,7 +34,7 @@ export const doesChildIdFormHaveErrors = (child?: Child) =>
 
 export const ChildIdentifiersForm = ({
   child: inputChild,
-  afterDataSave: onSuccess,
+  afterDataSave,
   hideHeader = false,
   hideErrorsOnFirstLoad,
 }: EditFormProps) => {
@@ -55,7 +55,7 @@ export const ChildIdentifiersForm = ({
     setErrorsHidden(false);
     setSaving(true);
     apiPut(`children/${child.id}`, _child, { accessToken })
-      .then(() => onSuccess())
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })

@@ -40,7 +40,7 @@ export function getValidationStatusForField<
   if (!validationError) return;
   const { constraints } = validationError;
   return {
-    type: 'warning',
+    type: 'error',
     id: `status-${field}`,
     message: constraints ? Object.values(constraints).join(', ') : undefined,
     ...options,
@@ -86,7 +86,7 @@ export function getValidationStatusForFields<
     .join(', ');
 
   return {
-    type: 'warning',
+    type: 'error',
     id: `status-${fields.join('-')}`,
     message,
     ...options,
