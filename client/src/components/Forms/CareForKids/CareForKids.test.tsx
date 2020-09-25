@@ -18,14 +18,14 @@ describe('EditRecord', () => {
     snapshotTestHelper(
       <CareForKidsForm
         child={child}
-        onSuccess={jest.fn()}
+        afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />
     );
     accessibilityTestHelper(
       <CareForKidsForm
         child={child}
-        onSuccess={jest.fn()}
+        afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />
     );

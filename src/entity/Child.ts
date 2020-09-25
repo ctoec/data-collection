@@ -6,7 +6,12 @@ import {
   OneToMany,
 } from 'typeorm';
 import moment, { Moment } from 'moment';
-import { Length, ValidateNested, IsNotEmpty } from 'class-validator';
+import {
+  Length,
+  ValidateNested,
+  IsNotEmpty,
+  ValidationError,
+} from 'class-validator';
 
 import {
   Child as ChildInterface,
@@ -129,4 +134,6 @@ export class Child implements ChildInterface {
 
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
+
+  validationErrors: ValidationError[];
 }

@@ -69,7 +69,7 @@ describe('EditRecord', () => {
     snapshotTestHelper(
       <EnrollmentFundingForm
         child={child}
-        onSuccess={jest.fn()}
+        afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,
       { before: waitExpandChangeEnrollment }
@@ -77,7 +77,7 @@ describe('EditRecord', () => {
     accessibilityTestHelper(
       <EnrollmentFundingForm
         child={child}
-        onSuccess={jest.fn()}
+        afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,
       { before: waitExpandChangeEnrollment }

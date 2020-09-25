@@ -2,6 +2,22 @@ import { FormStatusProps, TObjectDriller } from '@ctoec/component-library';
 import { ValidationError } from 'class-validator';
 import { ObjectWithValidationErrors } from '../shared/models/ObjectWithValidationErrors';
 
+/**
+ * Wrapper function around getValidationStatusForField that passes in option
+ * { message: undefined } to ovverride default behavior of showing error message
+ * so that fieldset only shows one message for the whole set.
+ */
+export function getValidationStatusForFieldInFieldset<
+  T extends ObjectWithValidationErrors
+>(
+  objectDriller: TObjectDriller<NonNullable<T>>,
+  path: string
+): FormStatusProps | undefined {
+  return getValidationStatusForField(objectDriller, path, {
+    message: undefined,
+  });
+}
+
 export type ValidationStatusOptions = {
   type?: FormStatusProps['type'];
   id?: string;
@@ -40,7 +56,7 @@ export function getValidationStatusForField<
   if (!validationError) return;
   const { constraints } = validationError;
   return {
-    type: 'warning',
+    type: 'error',
     id: `status-${field}`,
     message: constraints ? Object.values(constraints).join(', ') : undefined,
     ...options,
@@ -49,8 +65,8 @@ export function getValidationStatusForField<
 
 /**
  * The fieldset passes the data to the validation function.  This takes
- * an object with validation errors and an array of non-nested properties
- * that fall within that fieldset to check for errors.
+ * an object with validation errors or an array of objects with validation errors
+ * and an array of non-nested properties to check for errors on that object(s).
  * This func takes any of the form status props as options that will override
  * the default type, id, and message.
  * @param data
@@ -65,11 +81,13 @@ export function getValidationStatusForFields<
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   if (Array.isArray(data)) {
+    // If you want to check an array of enrollments or income dets or children
     const allErrors = data.map((d: T) =>
       getValidationStatusForFields(d, fields, options)
     );
     const anError = allErrors.find((e) => !!e);
-    // Assumes that the error for one of the objects in the array is the same for all
+    // To determine if any of the array items has an error
+    // Useful in getting overall status for enrollment forms
     return anError || undefined;
   }
   if (!data || !data.validationErrors) return;
@@ -84,7 +102,7 @@ export function getValidationStatusForFields<
     .join(', ');
 
   return {
-    type: 'warning',
+    type: 'error',
     id: `status-${fields.join('-')}`,
     message,
     ...options,

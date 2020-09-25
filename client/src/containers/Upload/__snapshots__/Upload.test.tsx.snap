@@ -43,7 +43,7 @@ exports[`Upload matches snapshot 1`] = `
         <label
           for="report"
         >
-          Upload enrollment data
+          Choose a file
         </label>
         <input
           class="usa-file-input"

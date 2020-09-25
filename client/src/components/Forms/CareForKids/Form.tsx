@@ -17,7 +17,7 @@ export const doesC4kFormHaveErrors = (child: Child) =>
  */
 export const CareForKidsForm: React.FC<EditFormProps> = ({
   child,
-  onSuccess,
+  afterDataSave,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [isSaving, setIsSaving] = useState(false);
@@ -27,7 +27,7 @@ export const CareForKidsForm: React.FC<EditFormProps> = ({
   const onSubmit = (updatedChild: Child) => {
     setIsSaving(true);
     apiPut(`children/${child.id}`, updatedChild, { accessToken })
-      .then(() => onSuccess())
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })

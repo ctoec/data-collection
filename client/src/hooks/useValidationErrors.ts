@@ -25,10 +25,6 @@ export function useValidationErrors<T extends ObjectWithValidationErrors>(
     }
   }, [errorsHidden]);
 
-  // This only focuses on errors, not warnings
-  // TODO: figure out why this isn't working
-  // useFocusFirstError([errorsHidden])
-
   return {
     obj: outputObject,
     setErrorsHidden,
