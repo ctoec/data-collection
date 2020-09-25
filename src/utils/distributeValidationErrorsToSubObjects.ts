@@ -9,9 +9,10 @@ import { ObjectWithValidationErrors } from '../../client/src/shared/models'
  */
 export function distributeValidationErrorsToSubObjects<
   T extends ObjectWithValidationErrors
->(parentObject?: T): T | undefined {
-  if (!parentObject?.validationErrors) return parentObject;
+>(parentObject: T, validationErrors: ValidationError[]): T {
+  if (!parentObject || !validationErrors.length) return parentObject;
   const copiedParent = JSON.parse(JSON.stringify(parentObject));
+  copiedParent.validationErrors = validationErrors;
 
   copiedParent.validationErrors
     .filter((v: ValidationError) => v.children?.length)
@@ -22,11 +23,10 @@ export function distributeValidationErrorsToSubObjects<
         childObject = childObject.map((childObjectItem, i) => {
           const childError = parentValidationError.children.find(e => e.property === `${i}`)
           childObjectItem.validationErrors = childError.children;
-          return distributeValidationErrorsToSubObjects(childObjectItem);
+          return distributeValidationErrorsToSubObjects(childObjectItem, childError.children);
         })
       } else {
-        childObject.validationErrors = [...parentValidationError.children];
-        childObject = distributeValidationErrorsToSubObjects(childObject);
+        childObject = distributeValidationErrorsToSubObjects(childObject, parentValidationError.children);
       }
       copiedParent[parentValidationError.property] = childObject;
     });

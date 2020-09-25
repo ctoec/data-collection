@@ -68,7 +68,8 @@ export const getChildById = async (id: string) => {
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-  return distributeValidationErrorsToSubObjects({ ...child, validationErrors: await validate(child, { validationError: { target: false } }) });
+  const validationErrors = await validate(child, { validationError: { target: false } });
+  return distributeValidationErrorsToSubObjects(child, validationErrors);
 };
 
 const propertyDateSorter = <T>(

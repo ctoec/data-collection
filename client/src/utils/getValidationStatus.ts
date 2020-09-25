@@ -49,8 +49,8 @@ export function getValidationStatusForField<
 
 /**
  * The fieldset passes the data to the validation function.  This takes
- * an object with validation errors and an array of non-nested properties
- * that fall within that fieldset to check for errors.
+ * an object with validation errors or an array of objects with validation errors
+ * and an array of non-nested properties to check for errors on that object(s).
  * This func takes any of the form status props as options that will override
  * the default type, id, and message.
  * @param data
@@ -65,11 +65,13 @@ export function getValidationStatusForFields<
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   if (Array.isArray(data)) {
+    // If you want to check an array of enrollments or income dets or children
     const allErrors = data.map((d: T) =>
       getValidationStatusForFields(d, fields, options)
     );
     const anError = allErrors.find((e) => !!e);
-    // Assumes that the error for one of the objects in the array is the same for all
+    // To determine if any of the array items has an error
+    // Useful in getting overall status for enrollment forms
     return anError || undefined;
   }
   if (!data || !data.validationErrors) return;
