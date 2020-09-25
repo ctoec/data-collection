@@ -37,13 +37,8 @@ const Upload: React.FC = () => {
           history.push(`check-data/${value.id}`);
         })
         .catch((err) => {
-          if (err === 'jwt expired') {
-            console.log({ err })
-            history.push('/', { alerts: [{ type: 'error', text: 'Please log in' }] });
-          } else {
-            setError(err);
-            setFile(undefined);
-          }
+          setError(err);
+          setFile(undefined);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -117,7 +117,7 @@ const AddChild: React.FC = () => {
   }, [accessToken, childId, refetchChild]);
 
   // After child is updated, programmatically focus on the first input with an error
-  useFocusFirstError([refetchChild, child]);
+  useFocusFirstError([child]);
 
   const { alertElements, setAlerts } = useAlerts();
 

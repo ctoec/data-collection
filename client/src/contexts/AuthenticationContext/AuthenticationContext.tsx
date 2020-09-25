@@ -219,8 +219,9 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = ({
           id_token_hint: idToken || savedIdToken,
           post_logout_redirect_uri: getCurrentHost(),
         } as StringMap;
-        const logoutUrl = `${configuration.endSessionEndpoint
-          }?${new BasicQueryStringUtils().stringify(endSessionQueryParams)}`;
+        const logoutUrl = `${
+          configuration.endSessionEndpoint
+        }?${new BasicQueryStringUtils().stringify(endSessionQueryParams)}`;
         window.location.href = logoutUrl;
       } else {
         setLoading(false);
