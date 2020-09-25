@@ -39,8 +39,6 @@ export const ChildInfoForm = ({
   const [saving, setSaving] = useState(false);
 
   if (!inputChild) {
-    // Focus should automatically be on first error on page
-    // useFocusFirstError([error]);
     throw new Error('Child info rendered without child');
   }
 

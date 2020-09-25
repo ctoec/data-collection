@@ -120,6 +120,7 @@ const AddChild: React.FC = () => {
   useFocusFirstError([child]);
 
   const { alertElements, setAlerts } = useAlerts();
+
   const commonFormProps = {
     child,
     afterDataSave: triggerRefetchChild,
