@@ -40,8 +40,7 @@ const AddChild: React.FC = () => {
     if (!activeStep) {
       history.replace({ hash: steps[0].key });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activeStep, history]);
 
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
@@ -68,8 +67,7 @@ const AddChild: React.FC = () => {
       })
       .catch((err) => {
         console.log(err);
-      })
-      .finally(triggerRefetchChild);
+      });
   }, [accessToken, child, locationState, organization, history, updateChild]);
 
   // Fetch fresh child from API whenever refetch is triggered
