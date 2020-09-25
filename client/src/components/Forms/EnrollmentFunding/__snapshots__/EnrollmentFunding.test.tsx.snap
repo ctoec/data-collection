@@ -1441,16 +1441,16 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
                 <input
                   checked=""
                   class="usa-radio__input"
-                  id="private-pay"
+                  id="Unfunded"
                   name="funding-source"
                   type="radio"
-                  value="private-pay"
+                  value="Unfunded"
                 />
                 <label
                   class="usa-radio__label"
-                  for="private-pay"
+                  for="Unfunded"
                 >
-                  Private pay
+                  Unfunded
                 </label>
               </div>
             </span>
@@ -1702,7 +1702,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
           <span
             class="usa-tag usa-tag--no-transform"
           >
-            CDC
+            CDC - Child Day Care
           </span>
         </div>
         <div

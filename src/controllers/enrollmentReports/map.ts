@@ -21,6 +21,7 @@ import {
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
+import { type } from 'os';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -307,7 +308,8 @@ const mapEnum = <T>(
     | typeof FundingTime
     | typeof SpecialEducationServicesType,
   value: string | undefined,
-  firstLetterComparison: boolean = false
+  firstLetterComparison: boolean = false,
+  isFundingSource: boolean = false
 ) => {
   if (!value) return;
 
@@ -317,9 +319,19 @@ const mapEnum = <T>(
     .trim()
     .replace(stripRegex, '')
     .toLowerCase();
+
   let ret: T;
+
   Object.values(referenceEnum).forEach((ref) => {
-    const normalizedRef = ref.replace(stripRegex, '').toLowerCase();
+    let normalizedRef: string;
+
+    // Leverage the hyphen in Funding Source descriptors
+    if (isFundingSource) {
+      normalizedRef = ref.split(' - ')[0].trim().toLowerCase();
+    } else {
+      normalizedRef = ref.replace(stripRegex, '').toLowerCase();
+    }
+
     if (firstLetterComparison) {
       if (normalizedRef[0] === normalizedValue[0]) {
         ret = ref;
