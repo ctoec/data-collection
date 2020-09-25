@@ -32,7 +32,7 @@ type ChangeEnrollmentFormProps = {
   reportingPeriods: ReportingPeriod[];
   fundingSpaces: FundingSpace[];
   sites: Site[];
-  onSuccess: () => void;
+  afterDataSave: () => void;
 };
 
 /**
@@ -47,7 +47,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   reportingPeriods,
   fundingSpaces,
   sites,
-  onSuccess,
+  afterDataSave,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
@@ -71,7 +71,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       .then(() => {
         setError(undefined);
         setCloseCard(true);
-        onSuccess();
+        afterDataSave();
       })
       .catch((err) => {
         console.log(err);

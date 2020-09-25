@@ -21,7 +21,7 @@ type ChangeFundingFormProps = {
   fundingSpaces: FundingSpace[];
   reportingPeriods: ReportingPeriod[];
   enrollment: Enrollment;
-  onSuccess: () => void;
+  afterDataSave: () => void;
 };
 
 /**
@@ -34,7 +34,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
   fundingSpaces,
   reportingPeriods,
   enrollment,
-  onSuccess,
+  afterDataSave,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [error, setError] = useState<string>();
@@ -49,7 +49,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
       .then(() => {
         setError(undefined);
         setVisibleForm(undefined);
-        onSuccess();
+        afterDataSave();
       })
       .catch((err) => {
         console.log(err);

@@ -17,7 +17,7 @@ type EditDeterminationFormProps = {
   familyId: number;
   isCurrent: boolean;
   isNew: boolean;
-  onSuccess: () => void;
+  afterDataSave: () => void;
   setAlerts: EditFormProps['setAlerts'];
 };
 
@@ -31,7 +31,7 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
   familyId,
   isCurrent,
   isNew,
-  onSuccess,
+  afterDataSave,
   setAlerts,
 }) => {
   // Set up form state
@@ -60,7 +60,7 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
     )
       .then(() => {
         setCloseCard(true);
-        onSuccess();
+        afterDataSave();
       })
       .catch((err) => {
         console.log('Unable to edit income determination: ', err);
@@ -98,7 +98,7 @@ export const EditDeterminationForm: React.FC<EditDeterminationFormProps> = ({
           </div>
         </Form>
       }
-      onSuccess={onSuccess}
+      afterDataSave={afterDataSave}
     />
   );
 };

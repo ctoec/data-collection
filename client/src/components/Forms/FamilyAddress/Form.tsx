@@ -22,7 +22,7 @@ export const doesFamilyAddressFormHaveErrors = (family?: Family) =>
  */
 export const FamilyAddressForm: React.FC<EditFormProps> = ({
   child,
-  onSuccess,
+  afterDataSave,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
 }) => {
@@ -45,7 +45,7 @@ export const FamilyAddressForm: React.FC<EditFormProps> = ({
     setErrorsHidden(false);
     setSaving(true);
     apiPut(`families/${family.id}`, newState, { accessToken })
-      .then(onSuccess)
+      .then(afterDataSave)
       .catch((err) => {
         console.log(err);
       })

@@ -18,7 +18,7 @@ describe('EditRecord', () => {
     snapshotTestHelper(
       <ChildInfoForm
         child={child}
-        onSuccess={jest.fn()}
+        afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,
       { wrapInRouter: true }
@@ -27,7 +27,7 @@ describe('EditRecord', () => {
     accessibilityTestHelper(
       <ChildInfoForm
         child={child}
-        onSuccess={jest.fn()}
+        afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,
       { wrapInRouter: true }

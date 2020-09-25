@@ -5,7 +5,7 @@ import { HideErrors } from '../../hooks/useValidationErrors';
 
 export type EditFormProps = {
   child: Child | undefined;
-  onSuccess: () => void;
+  afterDataSave: () => void;
   setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
   reportingPeriods?: ReportingPeriod[];
   hideHeader?: boolean;
