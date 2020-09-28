@@ -10,7 +10,7 @@ import { Site as SiteInterface, Region } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
 import { Organization } from './Organization';
-import { enumTransformer } from './transformers/enumTransformer';
+import { enumTransformer } from './transformers';
 
 @Entity()
 export class Site implements SiteInterface {
@@ -23,10 +23,7 @@ export class Site implements SiteInterface {
   @Column()
   titleI: boolean;
 
-  @Column({
-    type: 'int',
-    transformer: enumTransformer(Region),
-  })
+  @Column({ type: 'varchar', length: 20, transformer: enumTransformer(Region) })
   region: Region;
 
   @Column({ nullable: true })

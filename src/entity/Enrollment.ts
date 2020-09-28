@@ -39,7 +39,6 @@ export class Enrollment implements EnrollmentInterface {
 
   @Column({
     nullable: true,
-    type: 'int',
     transformer: enumTransformer(AgeGroup),
   })
   @IsNotEmpty()

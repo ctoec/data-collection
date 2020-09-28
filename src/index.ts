@@ -1,5 +1,4 @@
 import express, { json } from 'express';
-
 import path from 'path';
 import httpProxy from 'http-proxy';
 import moment from 'moment';

@@ -11,6 +11,7 @@ import {
   ValidateNested,
   IsNotEmpty,
   ValidationError,
+  isEnum,
 } from 'class-validator';
 
 import {
@@ -102,8 +103,9 @@ export class Child implements ChildInterface {
   hispanicOrLatinxEthnicity?: boolean;
 
   @Column({
+    type: 'varchar',
+    length: 20,
     nullable: true,
-    type: 'int',
     transformer: enumTransformer(Gender),
   })
   @ChildGenderSpecified()
@@ -119,8 +121,9 @@ export class Child implements ChildInterface {
   receivesSpecialEducationServices?: boolean;
 
   @Column({
+    type: 'varchar',
+    length: 20,
     nullable: true,
-    type: 'int',
     transformer: enumTransformer(SpecialEducationServicesType),
   })
   specialEducationServicesType?: SpecialEducationServicesType;
