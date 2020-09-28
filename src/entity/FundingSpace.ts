@@ -16,6 +16,7 @@ import {
 
 import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';
+import { simpleEnumTransformer } from './transformers/simpleEnumTransformer';
 
 @Entity()
 @Unique('UQ_Source_AgeGroup_Time_Organization', [
@@ -34,13 +35,25 @@ export class FundingSpace implements FundingSpaceInterface {
   @ManyToOne(() => Organization, { nullable: false })
   organization: Organization;
 
-  @Column({ type: 'simple-enum', enum: FundingSource })
+  @Column({
+    type: 'simple-enum',
+    enum: Object.keys(FundingSource),
+    transformer: simpleEnumTransformer(FundingSource),
+  })
   source: FundingSource;
 
-  @Column({ type: 'simple-enum', enum: AgeGroup })
+  @Column({
+    type: 'simple-enum',
+    enum: Object.keys(AgeGroup),
+    transformer: simpleEnumTransformer(AgeGroup),
+  })
   ageGroup: AgeGroup;
 
-  @Column({ type: 'simple-enum', enum: FundingTime })
+  @Column({
+    type: 'simple-enum',
+    enum: Object.keys(FundingTime),
+    transformer: simpleEnumTransformer(FundingTime),
+  })
   time: FundingTime;
 
   @OneToOne(() => FundingTimeSplit, (split) => split.fundingSpace, {

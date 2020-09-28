@@ -1,6 +1,6 @@
 import { ManyToOne, UpdateDateColumn } from 'typeorm';
 import { User } from '../User';
-import { momentTransformer } from '../transformers/momentTransformer';
+import { momentTransformer } from '../transformers';
 
 export class UpdateMetaData {
   @UpdateDateColumn({ transformer: momentTransformer })

@@ -23,11 +23,10 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { momentTransformer } from './transformers/momentTransformer';
+import { momentTransformer, simpleEnumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
-import { simpleEnumTransformer } from './transformers/simpleEnumTransformer';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -102,7 +101,12 @@ export class Child implements ChildInterface {
   // No default value because this is a radio button
   hispanicOrLatinxEthnicity?: boolean;
 
-  @Column({ nullable: true, type: 'simple-enum', enum: Gender })
+  @Column({
+    nullable: true,
+    type: 'simple-enum',
+    enum: Object.keys(Gender),
+    transformer: simpleEnumTransformer(Gender),
+  })
   @ChildGenderSpecified()
   gender?: Gender;
 
