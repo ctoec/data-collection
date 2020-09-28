@@ -25,7 +25,7 @@ const AddChild: React.FC = () => {
   const activeStep = hash.slice(1);
   const history = useHistory();
   const steps = listSteps(history);
-  const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
+  const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep) || 0;
   // Keep track of steps that have been visited at least once
   const [stepsVisited, updateStepsVisited] = useState<
     { key: string; visited: boolean; active: boolean }[]
@@ -102,8 +102,6 @@ const AddChild: React.FC = () => {
     })
       .then((updatedChild) => {
         updateChild(updatedChild);
-        if (!updatedChild || !steps || !indexOfCurrentStep) return;
-        // todo: make step list less opinionated
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as EditFormProps);
