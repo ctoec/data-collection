@@ -102,8 +102,6 @@ const AddChild: React.FC = () => {
     })
       .then((updatedChild) => {
         updateChild(updatedChild);
-        if (!updatedChild) return;
-        // todo: make step list less opinionated
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as EditFormProps);

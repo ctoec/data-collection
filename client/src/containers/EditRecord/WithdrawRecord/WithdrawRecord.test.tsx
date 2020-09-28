@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  renderHelper,
-} from '../../../testHelpers';
+import { renderHelper } from '../../../testHelpers';
 import { WithdrawRecord } from '.';
 import { Enrollment } from '../../../shared/models';
 import { RenderResult, fireEvent, cleanup } from '@testing-library/react';
