@@ -1,14 +1,9 @@
 import { getManager } from 'typeorm';
-import {
-  Organization,
-  Site,
-  FundingSpace,
-  ReportingPeriod
-} from '../entity';
+import { Organization, Site, FundingSpace, ReportingPeriod } from '../entity';
 import {
   Region,
   AgeGroup,
-  FundingSource
+  FundingSource,
 } from '../../client/src/shared/models';
 import { reportingPeriods } from './reportingPeriods';
 import moment from 'moment';
@@ -75,7 +70,12 @@ export const initialize = async () => {
 
   if (!(await getManager().find(ReportingPeriod)).length) {
     const reportingPeriodsToAdd = [];
-    for (let fundingSource of [FundingSource.CDC, FundingSource.PSR]) {
+    for (let fundingSource of [
+      FundingSource.CDC,
+      FundingSource.PSR,
+      FundingSource.SHS,
+      FundingSource.SS,
+    ]) {
       for (let dates of reportingPeriods) {
         const reportingPeriod = getManager().create(ReportingPeriod, {
           type: fundingSource,
