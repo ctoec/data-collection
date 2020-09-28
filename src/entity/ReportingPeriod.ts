@@ -6,7 +6,6 @@ import {
 } from '../../client/src/shared/models';
 import { Moment } from 'moment';
 import { momentTransformer, enumTransformer } from './transformers';
-import { IsEnum } from 'class-validator';
 
 @Entity()
 @Unique('UQ_Type_Period', ['type', 'period'])

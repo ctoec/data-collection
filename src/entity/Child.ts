@@ -11,7 +11,6 @@ import {
   ValidateNested,
   IsNotEmpty,
   ValidationError,
-  isEnum,
 } from 'class-validator';
 
 import {

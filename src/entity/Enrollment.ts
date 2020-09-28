@@ -38,6 +38,8 @@ export class Enrollment implements EnrollmentInterface {
   siteId: number;
 
   @Column({
+    type: 'varchar',
+    length: 20,
     nullable: true,
     transformer: enumTransformer(AgeGroup),
   })

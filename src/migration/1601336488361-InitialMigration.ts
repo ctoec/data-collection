@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class InitialMigration1601332366734 implements MigrationInterface {
-  name = 'InitialMigration1601332366734';
+export class InitialMigration1601336488361 implements MigrationInterface {
+  name = 'InitialMigration1601336488361';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "reporting_period" ("id" int NOT NULL IDENTITY(1,1), "type" int NOT NULL, "period" date NOT NULL, "periodStart" date NOT NULL, "periodEnd" date NOT NULL, "dueAt" date NOT NULL, CONSTRAINT "UQ_Type_Period" UNIQUE ("type", "period"), CONSTRAINT "PK_273d2b68dc1854618ec53e144d0" PRIMARY KEY ("id"))`
+      `CREATE TABLE "reporting_period" ("id" int NOT NULL IDENTITY(1,1), "type" varchar(20) NOT NULL, "period" date NOT NULL, "periodStart" date NOT NULL, "periodEnd" date NOT NULL, "dueAt" date NOT NULL, CONSTRAINT "UQ_Type_Period" UNIQUE ("type", "period"), CONSTRAINT "PK_273d2b68dc1854618ec53e144d0" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "site" ("id" int NOT NULL IDENTITY(1,1), "siteName" nvarchar(255) NOT NULL, "titleI" bit NOT NULL, "region" int NOT NULL, "facilityCode" int, "licenseNumber" int, "naeycId" int, "registryId" int, "organizationId" int NOT NULL, CONSTRAINT "UQ_4ca3fbc46d2dbf393ff4ebddbbd" UNIQUE ("siteName"), CONSTRAINT "PK_635c0eeabda8862d5b0237b42b4" PRIMARY KEY ("id"))`
+      `CREATE TABLE "site" ("id" int NOT NULL IDENTITY(1,1), "siteName" nvarchar(255) NOT NULL, "titleI" bit NOT NULL, "region" varchar(20) NOT NULL, "facilityCode" int, "licenseNumber" int, "naeycId" int, "registryId" int, "organizationId" int NOT NULL, CONSTRAINT "UQ_4ca3fbc46d2dbf393ff4ebddbbd" UNIQUE ("siteName"), CONSTRAINT "PK_635c0eeabda8862d5b0237b42b4" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "community" ("id" int NOT NULL IDENTITY(1,1), "name" nvarchar(255) NOT NULL, CONSTRAINT "PK_cae794115a383328e8923de4193" PRIMARY KEY ("id"))`
@@ -23,7 +23,7 @@ export class InitialMigration1601332366734 implements MigrationInterface {
       `CREATE UNIQUE INDEX "REL_4c23c29a718e7ffda0223e5aeb" ON "funding_time_split" ("fundingSpaceId") WHERE "fundingSpaceId" IS NOT NULL`
     );
     await queryRunner.query(
-      `CREATE TABLE "funding_space" ("id" int NOT NULL IDENTITY(1,1), "capacity" int NOT NULL, "source" int NOT NULL, "ageGroup" int NOT NULL, "time" int NOT NULL, "organizationId" int NOT NULL, CONSTRAINT "UQ_Source_AgeGroup_Time_Organization" UNIQUE ("source", "ageGroup", "time", "organizationId"), CONSTRAINT "PK_0f92a2c9df81f7cecc05d28c99d" PRIMARY KEY ("id"))`
+      `CREATE TABLE "funding_space" ("id" int NOT NULL IDENTITY(1,1), "capacity" int NOT NULL, "source" varchar(20) NOT NULL, "ageGroup" varchar(20) NOT NULL, "time" varchar(20) NOT NULL, "organizationId" int NOT NULL, CONSTRAINT "UQ_Source_AgeGroup_Time_Organization" UNIQUE ("source", "ageGroup", "time", "organizationId"), CONSTRAINT "PK_0f92a2c9df81f7cecc05d28c99d" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "organization_permission" ("id" int NOT NULL IDENTITY(1,1), "organizationId" int NOT NULL, "userId" int NOT NULL, CONSTRAINT "UQ_USER_ORGANIZATION" UNIQUE ("userId", "organizationId"), CONSTRAINT "PK_ff6561c44fcca6c8e16fe459157" PRIMARY KEY ("id"))`
@@ -41,7 +41,7 @@ export class InitialMigration1601332366734 implements MigrationInterface {
       `CREATE TABLE "funding" ("id" int NOT NULL IDENTITY(1,1), "enrollmentId" int NOT NULL, "fundingSpaceId" int NOT NULL, "firstReportingPeriodId" int, "lastReportingPeriodId" int, "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_3208742513b8eeff356f9f43605" DEFAULT getdate(), CONSTRAINT "PK_096afc0d11a08deb52da61f039e" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "enrollment" ("id" int NOT NULL IDENTITY(1,1), "childId" uniqueidentifier NOT NULL, "siteId" int NOT NULL, "ageGroup" int, "entry" date, "exit" date, "exitReason" nvarchar(255), "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_3a787207f5857d5ebc444c2169c" DEFAULT getdate(), CONSTRAINT "PK_7e200c699fa93865cdcdd025885" PRIMARY KEY ("id"))`
+      `CREATE TABLE "enrollment" ("id" int NOT NULL IDENTITY(1,1), "childId" uniqueidentifier NOT NULL, "siteId" int NOT NULL, "ageGroup" varchar(20), "entry" date, "exit" date, "exitReason" nvarchar(255), "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_3a787207f5857d5ebc444c2169c" DEFAULT getdate(), CONSTRAINT "PK_7e200c699fa93865cdcdd025885" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "income_determination" ("id" int NOT NULL IDENTITY(1,1), "numberOfPeople" int, "income" decimal(14,2), "determinationDate" date, "familyId" int NOT NULL, "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_7a4beca2590fed0cdbbaee0b592" DEFAULT getdate(), CONSTRAINT "PK_bab8509559a5caf486bf1bdd99b" PRIMARY KEY ("id"))`
@@ -50,7 +50,7 @@ export class InitialMigration1601332366734 implements MigrationInterface {
       `CREATE TABLE "family" ("id" int NOT NULL IDENTITY(1,1), "streetAddress" nvarchar(255), "town" nvarchar(255), "state" nvarchar(255), "zipCode" nvarchar(255), "homelessness" bit NOT NULL CONSTRAINT "DF_ff0d12e7344b70e7bf34b24f6f3" DEFAULT 0, "organizationId" int NOT NULL, "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_110ca99bec3c4f1d0dbda99be4d" DEFAULT getdate(), CONSTRAINT "PK_ba386a5a59c3de8593cda4e5626" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "child" ("id" uniqueidentifier NOT NULL CONSTRAINT "DF_4609b9b323ca37c6bc435ec4b6b" DEFAULT NEWSEQUENTIALID(), "sasid" nvarchar(255), "firstName" nvarchar(255), "middleName" nvarchar(255), "lastName" nvarchar(255), "suffix" nvarchar(255), "birthdate" date, "birthTown" nvarchar(255), "birthState" nvarchar(255), "birthCertificateId" nvarchar(255), "americanIndianOrAlaskaNative" bit, "asian" bit, "blackOrAfricanAmerican" bit, "nativeHawaiianOrPacificIslander" bit, "white" bit, "hispanicOrLatinxEthnicity" bit, "gender" int, "foster" bit NOT NULL CONSTRAINT "DF_4f4d36a381d8a984f1e0006f6e9" DEFAULT 0, "receivesC4K" bit NOT NULL CONSTRAINT "DF_cbdcc7e29761e5c4d143f90d571" DEFAULT 0, "receivesSpecialEducationServices" bit NOT NULL CONSTRAINT "DF_820b6edac45ec4ca39ee34fe0cf" DEFAULT 0, "specialEducationServicesType" int, "familyId" int, "organizationId" int NOT NULL, "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_584ad2a7bdda2e07087016f7b1b" DEFAULT getdate(), CONSTRAINT "PK_4609b9b323ca37c6bc435ec4b6b" PRIMARY KEY ("id"))`
+      `CREATE TABLE "child" ("id" uniqueidentifier NOT NULL CONSTRAINT "DF_4609b9b323ca37c6bc435ec4b6b" DEFAULT NEWSEQUENTIALID(), "sasid" nvarchar(255), "firstName" nvarchar(255), "middleName" nvarchar(255), "lastName" nvarchar(255), "suffix" nvarchar(255), "birthdate" date, "birthTown" nvarchar(255), "birthState" nvarchar(255), "birthCertificateId" nvarchar(255), "americanIndianOrAlaskaNative" bit, "asian" bit, "blackOrAfricanAmerican" bit, "nativeHawaiianOrPacificIslander" bit, "white" bit, "hispanicOrLatinxEthnicity" bit, "gender" varchar(20), "foster" bit NOT NULL CONSTRAINT "DF_4f4d36a381d8a984f1e0006f6e9" DEFAULT 0, "receivesC4K" bit NOT NULL CONSTRAINT "DF_cbdcc7e29761e5c4d143f90d571" DEFAULT 0, "receivesSpecialEducationServices" bit NOT NULL CONSTRAINT "DF_820b6edac45ec4ca39ee34fe0cf" DEFAULT 0, "specialEducationServicesType" varchar(20), "familyId" int, "organizationId" int NOT NULL, "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_584ad2a7bdda2e07087016f7b1b" DEFAULT getdate(), CONSTRAINT "PK_4609b9b323ca37c6bc435ec4b6b" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "enrollment_report" ("id" int NOT NULL IDENTITY(1,1), "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_6057df381574fbd8e3cb6e39583" DEFAULT getdate(), CONSTRAINT "PK_2e40a5e41f8b10526d0d9bfff6d" PRIMARY KEY ("id"))`
