@@ -81,7 +81,6 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
             <h2 className="margin-bottom-0">Withdraw {childName}</h2>
           </>
         }
-        appElementId="root"
         content={
           <>
             <div className="grid-row">

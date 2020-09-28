@@ -58,7 +58,6 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
             {`${child.firstName} ${child.lastName}`}
           </h2>
         }
-        appElementId="root"
         content={
           <>
             <div className="grid-row">

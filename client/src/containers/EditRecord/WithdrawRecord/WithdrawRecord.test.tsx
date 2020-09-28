@@ -1,8 +1,12 @@
 import React from 'react';
-import { renderHelper } from '../../../testHelpers';
+import {
+  snapshotTestHelper,
+  accessibilityTestHelper,
+  renderHelper,
+} from '../../../testHelpers';
 import { WithdrawRecord } from '.';
 import { Enrollment } from '../../../shared/models';
-import { RenderResult, fireEvent, cleanup } from '@testing-library/react';
+import { RenderResult, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
 import { axe } from 'jest-axe';
 
@@ -42,7 +46,6 @@ describe('EditRecord', () => {
       const modal = screen.getByRole('dialog');
       const results = await axe(modal);
       expect(results).toHaveNoViolations();
-      cleanup();
     });
   });
 });

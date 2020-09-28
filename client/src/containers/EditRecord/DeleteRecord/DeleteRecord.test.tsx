@@ -2,7 +2,14 @@ import React from 'react';
 import { screen } from '@testing-library/dom';
 import { DeleteRecord } from '.';
 import { Child } from '../../../shared/models';
-import { RenderResult, fireEvent, cleanup } from '@testing-library/react';
+import {
+  RenderResult,
+  fireEvent,
+  wait,
+  render,
+  act,
+  waitFor,
+} from '@testing-library/react';
 import { renderHelper } from '../../../testHelpers';
 import { axe } from 'jest-axe';
 
@@ -36,7 +43,6 @@ describe('EditRecord', () => {
       const modal = screen.getByRole('dialog');
       const results = await axe(modal);
       expect(results).toHaveNoViolations();
-      cleanup();
     });
   });
 });
