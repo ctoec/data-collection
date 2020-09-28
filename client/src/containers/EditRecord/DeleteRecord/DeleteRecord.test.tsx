@@ -5,10 +5,7 @@ import { Child } from '../../../shared/models';
 import {
   RenderResult,
   fireEvent,
-  wait,
-  render,
-  act,
-  waitFor,
+  cleanup
 } from '@testing-library/react';
 import { renderHelper } from '../../../testHelpers';
 import { axe } from 'jest-axe';
@@ -43,6 +40,7 @@ describe('EditRecord', () => {
       const modal = screen.getByRole('dialog');
       const results = await axe(modal);
       expect(results).toHaveNoViolations();
+      cleanup();
     });
   });
 });
