@@ -27,6 +27,7 @@ import { momentTransformer } from './transformers/momentTransformer';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
+import { simpleEnumTransformer } from './transformers/simpleEnumTransformer';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -117,7 +118,8 @@ export class Child implements ChildInterface {
   @Column({
     nullable: true,
     type: 'simple-enum',
-    enum: SpecialEducationServicesType,
+    enum: Object.keys(SpecialEducationServicesType),
+    transformer: simpleEnumTransformer(SpecialEducationServicesType),
   })
   specialEducationServicesType?: SpecialEducationServicesType;
 
