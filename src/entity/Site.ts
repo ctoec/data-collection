@@ -10,7 +10,7 @@ import { Site as SiteInterface, Region } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
 import { Organization } from './Organization';
-import { simpleEnumTransformer } from './transformers/simpleEnumTransformer';
+import { enumTransformer } from './transformers/enumTransformer';
 
 @Entity()
 export class Site implements SiteInterface {
@@ -24,9 +24,8 @@ export class Site implements SiteInterface {
   titleI: boolean;
 
   @Column({
-    type: 'simple-enum',
-    enum: Object.keys(Region),
-    transformer: simpleEnumTransformer(Region),
+    type: 'int',
+    transformer: enumTransformer(Region),
   })
   region: Region;
 

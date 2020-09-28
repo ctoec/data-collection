@@ -16,7 +16,7 @@ import {
 
 import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';
-import { simpleEnumTransformer } from './transformers/simpleEnumTransformer';
+import { enumTransformer } from './transformers/enumTransformer';
 
 @Entity()
 @Unique('UQ_Source_AgeGroup_Time_Organization', [
@@ -36,23 +36,20 @@ export class FundingSpace implements FundingSpaceInterface {
   organization: Organization;
 
   @Column({
-    type: 'simple-enum',
-    enum: Object.keys(FundingSource),
-    transformer: simpleEnumTransformer(FundingSource),
+    type: 'int',
+    transformer: enumTransformer(FundingSource),
   })
   source: FundingSource;
 
   @Column({
-    type: 'simple-enum',
-    enum: Object.keys(AgeGroup),
-    transformer: simpleEnumTransformer(AgeGroup),
+    type: 'int',
+    transformer: enumTransformer(AgeGroup),
   })
   ageGroup: AgeGroup;
 
   @Column({
-    type: 'simple-enum',
-    enum: Object.keys(FundingTime),
-    transformer: simpleEnumTransformer(FundingTime),
+    type: 'int',
+    transformer: enumTransformer(FundingTime),
   })
   time: FundingTime;
 

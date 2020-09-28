@@ -17,7 +17,7 @@ import { Funding } from './Funding';
 import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
-import { momentTransformer, simpleEnumTransformer } from './transformers';
+import { momentTransformer, enumTransformer } from './transformers';
 import { FundingDoesNotOverlap } from './decorators/Enrollment/fundingOverlapValidation';
 
 @Entity()
@@ -39,9 +39,8 @@ export class Enrollment implements EnrollmentInterface {
 
   @Column({
     nullable: true,
-    type: 'simple-enum',
-    enum: Object.keys(AgeGroup),
-    transformer: simpleEnumTransformer(AgeGroup),
+    type: 'int',
+    transformer: enumTransformer(AgeGroup),
   })
   @IsNotEmpty()
   ageGroup?: AgeGroup;

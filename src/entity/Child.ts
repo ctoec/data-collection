@@ -23,7 +23,7 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { momentTransformer, simpleEnumTransformer } from './transformers';
+import { momentTransformer, enumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
@@ -103,9 +103,8 @@ export class Child implements ChildInterface {
 
   @Column({
     nullable: true,
-    type: 'simple-enum',
-    enum: Object.keys(Gender),
-    transformer: simpleEnumTransformer(Gender),
+    type: 'int',
+    transformer: enumTransformer(Gender),
   })
   @ChildGenderSpecified()
   gender?: Gender;
@@ -121,9 +120,8 @@ export class Child implements ChildInterface {
 
   @Column({
     nullable: true,
-    type: 'simple-enum',
-    enum: Object.keys(SpecialEducationServicesType),
-    transformer: simpleEnumTransformer(SpecialEducationServicesType),
+    type: 'int',
+    transformer: enumTransformer(SpecialEducationServicesType),
   })
   specialEducationServicesType?: SpecialEducationServicesType;
 

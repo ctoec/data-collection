@@ -1,2 +1,2 @@
 export * from './momentTransformer';
-export * from './simpleEnumTransformer';
+export * from './enumTransformer';
