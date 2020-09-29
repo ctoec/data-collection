@@ -7,7 +7,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { listSteps } from './ListSteps';
+import { listSteps } from './listSteps';
 import { EditFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 

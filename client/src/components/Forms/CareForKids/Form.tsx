@@ -9,8 +9,8 @@ import { getValidationStatusForFields } from '../../../utils/getValidationStatus
 
 // The fields we use to check to see if this form has errors or missing info
 const c4kFormFields = ['receivesC4K'];
-export const doesC4kFormHaveErrors = (child: Child) =>
-  !!getValidationStatusForFields(child, c4kFormFields);
+export const doesC4kFormHaveErrors = (child?: Child) => child ?
+  !!getValidationStatusForFields(child, c4kFormFields) : true;
 /*
  * Basic functional component designed to allow user to edit
  * the Care For Kids field of a Child object.
