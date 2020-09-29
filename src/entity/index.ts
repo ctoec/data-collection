@@ -1,5 +1,5 @@
 export * from './Child';
-export * from './Community';
+export * from './Organization';
 export * from './Enrollment';
 export * from './EnrollmentReport';
 export * from './Family';

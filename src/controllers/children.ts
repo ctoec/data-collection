@@ -13,19 +13,19 @@ import {
 } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
-import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
+import { getReadAccessibleProviderIds } from '../utils/getReadAccessibleProviderIds';
 import { distributeValidationErrorsToSubObjects } from '../utils/distributeValidationErrorsToSubObjects';
 
 /**
  * Get all children for organizations the user has access to
  */
 export const getChildren = async (user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const readOrgIds = await getReadAccessibleProviderIds(user);
   return await getManager().find(Child, {
     relations: [
       'enrollments',
       'enrollments.site',
-      'enrollments.site.organization',
+      'enrollments.site.provider',
       'enrollments.fundings',
     ],
     where: { provider: { id: In(readOrgIds) } },
@@ -45,9 +45,9 @@ export const getChildById = async (id: string) => {
       'family.incomeDeterminations',
       'enrollments',
       'enrollments.site',
-      'enrollments.site.organization',
+      'enrollments.site.provider',
       'enrollments.fundings',
-      'organization',
+      'provider',
     ],
   });
 
@@ -99,9 +99,9 @@ export const createChild = async (_child) => {
   // (to enable family lookup when adding new child)
   // and stop creating it here
   if (!_child.family) {
-    const organization = _child.organization;
+    const provider = _child.provider;
     const family = await getManager().save(
-      getManager().create(Family, { provider: organization })
+      getManager().create(Family, { provider })
     );
     _child.family = family;
   }

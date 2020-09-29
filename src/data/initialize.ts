@@ -12,13 +12,13 @@ import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
 
-  let organization = await getManager().findOne(Provider, 1);
-  if (!organization) {
-    const _organization = getManager().create(Provider, {
+  let provider = await getManager().findOne(Provider, 1);
+  if (!provider) {
+    const _provider = getManager().create(Provider, {
       id: 1,
       providerName: 'Hogwarts Childcare',
     });
-    organization = await getManager().save(_organization);
+    provider = await getManager().save(_provider);
   }
 
   if (!(await getManager().findOne(Site, 1))) {
@@ -27,7 +27,7 @@ export const initialize = async () => {
       siteName: 'Gryfinndor Childcare',
       titleI: false,
       region: Region.East,
-      provider: organization,
+      provider,
     });
     await getManager().save(site1);
   }
@@ -37,7 +37,7 @@ export const initialize = async () => {
       siteName: 'Hufflepuff Childcare',
       titleI: false,
       region: Region.East,
-      provider: organization,
+      provider,
     });
     await getManager().save(site2);
   }
@@ -57,7 +57,7 @@ export const initialize = async () => {
               capacity: 10,
               source,
               time: fundingTime.value,
-              provider: organization,
+              provider,
             });
           });
 

@@ -1,6 +1,6 @@
 import { Provider } from '.';
 
-export interface Community {
+export interface Organization {
   id: number;
   name: string;
   providers?: Array<Provider>;

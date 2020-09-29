@@ -6,11 +6,10 @@ import {
   Column,
 } from 'typeorm';
 
-import { ProviderPermission as ProviderPermissionInterface } from '../../client/src/shared/models';
 import { User } from './User';
 import { Provider } from './Provider';
 import { Site } from './Site';
-import { Community } from './Community';
+import { Organization } from './Organization';
 
 abstract class Permission {
   @PrimaryGeneratedColumn()
@@ -22,9 +21,7 @@ abstract class Permission {
 
 @Entity()
 @Unique('UQ_USER_PROVIDER', ['user', 'provider'])
-export class ProviderPermission
-  extends Permission
-  implements ProviderPermission {
+export class ProviderPermission extends Permission {
   @ManyToOne(() => Provider)
   provider: Provider;
 
@@ -43,11 +40,11 @@ export class SitePermission extends Permission {
 }
 
 @Entity()
-@Unique('UQ_USER_COMMUNITY', ['user', 'community'])
-export class CommunityPermission extends Permission {
-  @ManyToOne(() => Community)
-  community: Community;
+@Unique('UQ_USER_ORGANIZATION', ['user', 'organization'])
+export class OrganizationPermission extends Permission {
+  @ManyToOne(() => Organization)
+  organization: Organization;
 
   @Column()
-  communityId: number;
+  organizationId: number;
 }

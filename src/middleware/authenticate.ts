@@ -73,46 +73,54 @@ const addUser = passAsyncError(
  */
 const getUser = async (wingedKeysId: string) => {
   const user = await getManager().findOne(User, {
-    where: { wingedKeysId },
-    relations: ['orgPermissions', 'sitePermissions', 'communityPermissions'],
+    where: { wingedKeysId: wingedKeysId },
+    relations: [
+      'organizationPermissions',
+      'providerPermissions',
+      'sitePermissions',
+    ],
   });
 
   if (!user) return;
 
-  // Get all orgs associated with communities user has permissions for
-  const orgsFromCommunities = (user.communityPermissions || []).length
+  // Get all providers user has permissions for via organization permissions
+  const providersFromOrganizations = user.organizationPermissions?.length
     ? await getManager().find(Provider, {
         where: {
-          communityId: In(
-            user.communityPermissions.map((perm) => perm.communityId)
+          organizationId: In(
+            user.organizationPermissions.map((perm) => perm.organizationId)
           ),
         },
       })
     : [];
 
-  // Create list of distinct organization ids the user can access
-  const allOrgIds = Array.from(
+  // Create list of distinct provider ids the user can access, via organization
+  // permission and
+  const allProviderIds = Array.from(
     new Set([
+      ...providersFromOrganizations.map((provider) => provider.id),
       ...(user.providerPermissions || []).map((perm) => perm.providerId),
-      ...orgsFromCommunities.map((org) => org.id),
     ])
   );
 
-  // Get all sites associated with all organizations user has permissions for
-  const sitesFromAllOrgs = await getManager().find(Site, {
-    where: { providerId: In(allOrgIds) },
+  // Get all sites associated with all providers user has permissions for
+  const sitesFromAllProviders = await getManager().find(Site, {
+    where: { providerId: In(allProviderIds) },
   });
 
   // Create list of distinct site ids the user can access
   const allSiteIds = Array.from(
     new Set([
       ...(user.sitePermissions || []).map((perm) => perm.siteId),
-      ...sitesFromAllOrgs.map((site) => site.id),
+      ...sitesFromAllProviders.map((site) => site.id),
     ])
   );
 
   // Add values to the user object
-  user.providerIds = allOrgIds;
+  user.organizationIds = (user.organizationPermissions || []).map(
+    (perm) => perm.organizationId
+  );
+  user.providerIds = allProviderIds;
   user.siteIds = allSiteIds;
   return user;
 };

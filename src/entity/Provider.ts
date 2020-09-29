@@ -10,7 +10,7 @@ import { Provider as ProviderInterface } from '../../client/src/shared/models';
 
 import { FundingSpace } from './FundingSpace';
 import { Site } from './Site';
-import { Community } from './Community';
+import { Organization } from './Organization';
 
 @Entity()
 export class Provider implements ProviderInterface {
@@ -26,9 +26,9 @@ export class Provider implements ProviderInterface {
   @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.provider)
   fundingSpaces?: Array<FundingSpace>;
 
-  @ManyToOne(() => Community, { nullable: true })
-  community?: Community;
+  @ManyToOne(() => Organization, { nullable: true })
+  organization?: Organization;
 
   @Column({ nullable: true })
-  communityId?: number;
+  organizationId?: number;
 }
