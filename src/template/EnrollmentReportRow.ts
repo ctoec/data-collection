@@ -320,7 +320,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  homelessness?: boolean = undefined;
+  homelessness?: boolean = null;
 
   @ColumnMetadata({
     formattedName: 'Household size',

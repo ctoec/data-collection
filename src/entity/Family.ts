@@ -35,7 +35,7 @@ export class Family implements FamilyInterface {
   @IsNotEmpty()
   zipCode?: string;
 
-  @Column({ nullable: true, default: undefined })
+  @Column({ nullable: true, default: null })
   homelessness?: boolean;
 
   @OneToMany(() => IncomeDetermination, (det) => det.family)

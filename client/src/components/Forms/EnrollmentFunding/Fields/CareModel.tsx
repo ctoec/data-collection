@@ -26,7 +26,7 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
       inputComponent={RadioButtonGroup}
       name="age-group"
       id="age-group-radiogroup"
-      legend="Age group"
+      legend="Care model"
       showLegend
       options={Object.values(CareModel).map((model) => ({
         render: (props: RadioOptionRenderProps) => (

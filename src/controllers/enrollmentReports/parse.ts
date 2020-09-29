@@ -58,7 +58,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   const booleanProperties: string[] = [];
   const dateProperties: string[] = [];
   Object.entries(new EnrollmentReportRow()).forEach(([prop, value]) => {
-    if (typeof value === 'boolean') {
+    if (typeof value == 'boolean') {
       booleanProperties.push(prop);
     }
     if (moment.isMoment(value)) {
@@ -197,6 +197,7 @@ function excelDateToDate(excelDate: number) {
  * @param value
  */
 function getBoolean(value: string): boolean {
-  if (['', 'N', 'NO', undefined].includes(value?.toUpperCase())) return false;
+  if (['N', 'NO'].includes(value?.toUpperCase())) return false;
+  else if (['', undefined, null].includes(value?.toUpperCase())) return null;
   return true;
 }
