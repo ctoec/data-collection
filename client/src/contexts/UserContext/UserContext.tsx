@@ -3,13 +3,23 @@ import AuthenticationContext from '../AuthenticationContext/AuthenticationContex
 import { User } from '../../shared/models';
 import { apiGet } from '../../utils/api';
 
+type UserType =
+  | 'multi-org'
+  | 'org'
+  | 'multi-provider'
+  | 'provider'
+  | 'multi-site'
+  | 'site';
+
 export type UserContextType = {
   user: User | null;
+  type: UserType | null;
   loading: boolean;
 };
 
 const UserContext = React.createContext<UserContextType>({
   user: null,
+  type: null,
   loading: true,
 });
 
@@ -42,7 +52,21 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
     }
   }, [accessToken, loading]);
 
-  return <Provider value={{ loading: userLoading, user }}>{children}</Provider>;
+  let userType: UserType | null = null;
+  if (user) {
+    if (user.organizations)
+      userType = user.organizations.length > 1 ? 'multi-org' : 'org';
+    else if (user.providers)
+      userType = user.providers.length > 1 ? 'multi-provider' : 'provider';
+    else if (user.sites)
+      userType = user.sites.length > 1 ? 'multi-site' : 'site';
+  }
+
+  return (
+    <Provider value={{ loading: userLoading, user, type: userType }}>
+      {children}
+    </Provider>
+  );
 };
 
 export { UserProvider };
