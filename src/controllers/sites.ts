@@ -7,6 +7,6 @@ import { getManager } from 'typeorm';
  */
 export const getSites = async (user: User) => {
   return await getManager().findByIds(Site, user.siteIds || [], {
-    relations: ['organization'],
+    relations: ['provider'],
   });
 };

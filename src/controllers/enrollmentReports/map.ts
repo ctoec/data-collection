@@ -36,13 +36,13 @@ import { type } from 'os';
  */
 export const mapRow = async (source: EnrollmentReportRow) => {
   try {
-    const organization = await mapOrganization(source);
+    const provider = await mapProvider(source);
     const site = await mapSite(source);
-    const family = await mapFamily(source, organization);
-    const child = await mapChild(source, organization, family);
+    const family = await mapFamily(source, provider);
+    const child = await mapChild(source, provider, family);
     const incomeDetermination = await mapIncomeDetermination(source, family);
     const enrollment = await mapEnrollment(source, site, child);
-    const funding = await mapFunding(source, organization, enrollment);
+    const funding = await mapFunding(source, provider, enrollment);
 
     family.incomeDeterminations = [incomeDetermination];
     child.family = family;
@@ -57,13 +57,13 @@ export const mapRow = async (source: EnrollmentReportRow) => {
 };
 
 /**
- * Get organization from our system that matches FlattenedEnrollment
+ * Get provider from our system that matches FlattenedEnrollment
  * source provider name.
  * TODO: How do we want to implement fuzzy matching here?
- * TODO: What do we want to do if the organization does not exist?
+ * TODO: What do we want to do if the provider does not exist?
  * @param source
  */
-const mapOrganization = (source: EnrollmentReportRow) => {
+const mapProvider = (source: EnrollmentReportRow) => {
   return getManager().findOneOrFail(Provider, {
     where: { providerName: source.providerName },
   });
@@ -74,7 +74,7 @@ const mapOrganization = (source: EnrollmentReportRow) => {
  * site name.
  * TODO: Confirm that site belongs to org from same row
  * TODO: How do we want to implement fuzzy matching here?
- * TODO: What do we want to do if the organization does not exist?
+ * TODO: What do we want to do if the provider does not exist?
  * @param source
  */
 const mapSite = (source: EnrollmentReportRow) => {
@@ -90,7 +90,7 @@ const mapSite = (source: EnrollmentReportRow) => {
  */
 const mapChild = (
   source: EnrollmentReportRow,
-  organization: Provider,
+  provider: Provider,
   family: Family
 ) => {
   // Gender
@@ -128,8 +128,8 @@ const mapChild = (
     receivesSpecialEducationServices:
       source.receivesSpecialEducationServices || false,
     specialEducationServicesType,
-    provider: organization,
-    family: family,
+    provider,
+    family,
   });
 
   return getManager().save(child);
@@ -141,14 +141,14 @@ const mapChild = (
  * TODO: Lookup existing families before creating new one
  * @param source
  */
-const mapFamily = (source: EnrollmentReportRow, organization: Provider) => {
+const mapFamily = (source: EnrollmentReportRow, provider: Provider) => {
   const family = getManager().create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zipCode: source.zipCode,
     homelessness: source.homelessness,
-    provider: organization,
+    provider,
   });
 
   return getManager().save(family);
@@ -202,12 +202,12 @@ const mapEnrollment = (
  * associated with a FundingSpace for given organization and ageGroup
  * (already parsed from source).
  * @param source
- * @param organization
+ * @param provider
  * @param ageGroup
  */
 const mapFunding = async (
   source: EnrollmentReportRow,
-  organization: Provider,
+  provider: Provider,
   enrollment: Enrollment
 ) => {
   const fundingSource: FundingSource = mapEnum(FundingSource, source.source);
@@ -244,7 +244,7 @@ const mapFunding = async (
       where: {
         source: fundingSource,
         ageGroup: enrollment.ageGroup,
-        provider: organization,
+        provider,
       },
     });
     fundingSpace = fundingSpaces.find((space) => space.time === fundingTime);

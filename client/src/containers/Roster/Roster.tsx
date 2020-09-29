@@ -28,9 +28,11 @@ const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
-  // TODO add heirarchy to pick between organizations
-  const organization = idx(user, (_) => _.organizations[0]);
-  const showOrgInTables = idx(user, (_) => _.organizations.length > 1) || false;
+
+  // TODO add heirarchy to pick between entities
+  const provider = idx(user, (_) => _.providers[0]);
+  const showProviderInTables =
+    idx(user, (_) => _.providers.length > 1) || false;
 
   const [children, setChildren] = useState<Child[]>([]);
   const [loading, setLoading] = useState(false);
@@ -96,7 +98,7 @@ const Roster: React.FC = () => {
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
           data={ageGroupChildren}
-          columns={tableColumns(showOrgInTables)}
+          columns={tableColumns(showProviderInTables)}
           defaultSortColumn={0}
           defaultSortOrder="ascending"
         />
@@ -115,7 +117,7 @@ const Roster: React.FC = () => {
     <>
       <div className="grid-container">
         <h1 className="margin-bottom-0" ref={h1Ref}>
-          {organization?.providerName}
+          {provider?.providerName}
         </h1>
         <p className="font-body-xl margin-top-1">
           {loading
@@ -125,7 +127,10 @@ const Roster: React.FC = () => {
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <Link
             className="usa-button usa-button--unstyled"
-            to={{ pathname: '/create-record', state: { organization } }}
+            to={{
+              pathname: '/create-record',
+              state: { organization: provider },
+            }}
           >
             <TextWithIcon Icon={PlusCircle} text="Add a record" />
           </Link>

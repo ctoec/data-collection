@@ -153,16 +153,16 @@ async function createUserWithFullPermissions(
 
     user = await manager.save(_user);
 
-    const orgs: Provider[] = await manager.find(Provider);
-    if (orgs.length) {
-      const orgPermsForUser = manager.create(
+    const providers: Provider[] = await manager.find(Provider);
+    if (providers.length) {
+      const providerPermsForUser = manager.create(
         ProviderPermission,
-        orgs.map((org) => ({
+        providers.map((provider) => ({
           user,
-          organizationId: org.id,
+          providerId: provider.id,
         }))
       );
-      await manager.save(orgPermsForUser);
+      await manager.save(providerPermsForUser);
     }
   });
 

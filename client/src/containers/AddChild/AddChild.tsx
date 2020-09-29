@@ -46,18 +46,18 @@ const AddChild: React.FC = () => {
 
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
-  const organization = locationState?.provider || child?.provider;
+  const provider = locationState?.provider || child?.provider;
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
 
   // On initial load, create child
   useEffect(() => {
-    if (child || childId || !organization) return;
+    if (child || childId || !provider) return;
 
     const placeholderChild = {
       firstName: '',
       lastName: '',
-      organization,
+      provider,
     };
 
     apiPost('children', placeholderChild, {
@@ -70,7 +70,7 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, child, locationState, organization, history, updateChild]);
+  }, [accessToken, child, locationState, provider, history, updateChild]);
 
   const moveToNextStep = () => {
     if (indexOfCurrentStep === steps.length - 1) {

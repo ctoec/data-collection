@@ -32,7 +32,7 @@ exportRouter.get(
           'children.family.incomeDeterminations',
           'children.enrollments',
           'children.enrollments.site',
-          'children.enrollments.site.organization',
+          'children.enrollments.site.provider',
           'children.enrollments.fundings',
         ],
       });

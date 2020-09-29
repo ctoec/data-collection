@@ -33,7 +33,7 @@ enrollmentReportsRouter.get(
         'children.enrollments',
         'children.enrollments.fundings',
         'children.enrollments.site',
-        'children.enrollments.site.organization',
+        'children.enrollments.site.provider',
       ],
     });
 

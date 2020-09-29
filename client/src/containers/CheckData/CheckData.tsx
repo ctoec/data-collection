@@ -42,7 +42,7 @@ const CheckData: React.FC = () => {
 
   // copied from roster-- TODO add heirarchy to pick between organizations
   const { user } = useContext(UserContext);
-  const organization = idx(user, (_) => _.providers[0]);
+  const provider = idx(user, (_) => _.providers[0]);
 
   return (
     <>
@@ -55,7 +55,7 @@ const CheckData: React.FC = () => {
           </h1>
           <p>Make sure all of your data was uploaded correctly. </p>
           <p>If everything looks good, submit to OEC.</p>
-          <Link to={{ pathname: '/create-record', state: { organization } }}>
+          <Link to={{ pathname: '/create-record', state: { provider } }}>
             Add a record
           </Link>
           {reportData.length ? (

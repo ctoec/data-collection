@@ -100,7 +100,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
   if (includeOrg)
     columns.splice(4, 0, {
       className: tableColumnClassName,
-      name: 'Organization',
+      name: 'Provider',
       sort: (row) =>
         idx(row, (_) => _.enrollments[0].site.provider.providerName) || '',
       width: `${longColumnWidthPercent}%`,
