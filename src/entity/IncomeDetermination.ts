@@ -5,8 +5,7 @@ import { IncomeDetermination as IncomeDeterminationInterface } from '../../clien
 import { Family } from './Family';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
-import moment from 'moment';
-import { momentTransformer } from './transformers/momentTransformer';
+import { momentTransformer } from './transformers';
 import { IsNotEmpty } from 'class-validator';
 
 @Entity()

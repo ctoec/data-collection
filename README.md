@@ -48,23 +48,8 @@ This mono-repo consists of three main parts:
 1. Client, located in `client` dir. The frontend is a React SPA, created with create-react-app.
 1. Shared resources, located in `client/src/shared` dir. The shared resources live in the `client/src` directory to play nice with create-react-app. They are included in each project via relative file path imports, and are included in the built resources for both client and server.
 
-### ORM / Migrations
-We use [typeorm](https://typeorm.io/) to manage database migration creation and execution.
-Migrations are automatically applied by app on startup, defined via variables in `src/ormconfig.ts`.
-
-To generate a migration from schema changes:
-```
-docker-compose exec server yarn typeorm migration:generate -n [MIGRATION_NAME]
-```
-
-NOTE: There is currently [a bug](https://github.com/typeorm/typeorm/issues/4897)
- in the SQL Server driver that causes any column with type "simple-enum"
-(a meta-type where a varchar column with CHECK constraint approximates an enum)
-to be dropped and recreated in every migration. For now, the easiest workaround
-is to just manually delete these changes from your migration. If you're not sure
-which changes are from this bug and which are from your migration, create a
-should-be no-op migration (with no entity schema changes), and use this as
-reference for what is kruft to be deleted.
+### Database
+The application has a SQL Server backend. We use [typeORM](https://typeorm.io/) to manage database migrations. [Read more about our specific use of typeORM here](src/entity/README.md)
 
 ## Deploy
 
