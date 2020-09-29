@@ -5,15 +5,15 @@ import { EditDeterminationForm } from './EditDeterminationForm';
 import { RedeterminationForm } from './RedeterminationForm';
 import { EditFormProps } from '../../types';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
-import { Family } from '../../../../shared/models';
+import { Child, Family } from '../../../../shared/models';
 
 const incomeDetFields = ['numberOfPeople', 'income', 'determinationDate'];
-export const doesFamilyIncomeFormHaveErrors = (family?: Family) =>
-  family?.incomeDeterminations?.length
+export const doesFamilyIncomeFormHaveErrors = (child?: Child) =>
+  child?.family?.incomeDeterminations?.length
     ? !!getValidationStatusForFields(
-        family.incomeDeterminations,
-        incomeDetFields
-      )
+      child.family.incomeDeterminations,
+      incomeDetFields
+    )
     : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {

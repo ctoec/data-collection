@@ -13,7 +13,8 @@ import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
-import { tabItems, TAB_IDS } from './tabItems';
+import { tabItems } from './tabItems';
+import { TAB_IDS } from '../../components/Forms/commonFormStepInfo';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');

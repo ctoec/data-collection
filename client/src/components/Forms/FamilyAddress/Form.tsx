@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { Family } from '../../../shared/models';
+import { Child, Family } from '../../../shared/models';
 import { AddressFieldset, HomelessnessField } from './Fields';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut } from '../../../utils/api';
@@ -10,8 +10,8 @@ import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
 const familyAddressFields = ['streetAddress', 'town', 'state', 'zipCode'];
-export const doesFamilyAddressFormHaveErrors = (family?: Family) =>
-  family ? !!getValidationStatusForFields(family, familyAddressFields) : true;
+export const doesFamilyAddressFormHaveErrors = (child?: Child) =>
+  child?.family ? !!getValidationStatusForFields(child.family, familyAddressFields) : true;
 
 /*
  * Functional component that allows a user to modify the address
