@@ -10,6 +10,7 @@ import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 import {
   Enrollment as EnrollmentInterface,
   AgeGroup,
+  CareModel,
 } from '../../client/src/shared/models';
 
 import { Child } from './Child';
@@ -36,6 +37,15 @@ export class Enrollment implements EnrollmentInterface {
 
   @Column()
   siteId: number;
+
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(CareModel),
+  })
+  @IsNotEmpty()
+  model?: CareModel;
 
   @Column({ type: 'simple-enum', enum: AgeGroup, nullable: true })
   @IsNotEmpty()

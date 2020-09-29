@@ -18,10 +18,10 @@ import {
   SpecialEducationServicesType,
   FundingSourceTime,
   FundingTimeInput,
+  CareModel,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
-import { type } from 'os';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -184,10 +184,12 @@ const mapEnrollment = (
   child: Child
 ) => {
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
+  const model: CareModel = mapEnum(CareModel, source.model);
 
   const enrollment = getManager().create(Enrollment, {
     site,
     childId: child.id,
+    model,
     ageGroup,
     entry: source.entry,
     exit: source.exit,
@@ -303,6 +305,7 @@ const mapFunding = async (
 const mapEnum = <T>(
   referenceEnum:
     | typeof Gender
+    | typeof CareModel
     | typeof AgeGroup
     | typeof FundingSource
     | typeof FundingTime

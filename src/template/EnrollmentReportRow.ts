@@ -4,6 +4,7 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
+  CareModel,
 } from '../../client/src/shared/models';
 
 import {
@@ -319,7 +320,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  homelessness?: boolean = false;
+  homelessness?: boolean = undefined;
 
   @ColumnMetadata({
     formattedName: 'Household size',
@@ -386,7 +387,7 @@ export class EnrollmentReportRow {
     required: REQUIRED,
     definition: 'The type of services received by the child.',
     reason: 'Used to identify children receiving in-person or virtual services',
-    format: 'In-person, Virtual, Hybrid',
+    format: Object.values(CareModel).join(', '),
     example: 'Hybrid',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })

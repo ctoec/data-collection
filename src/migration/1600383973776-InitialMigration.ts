@@ -41,7 +41,7 @@ export class InitialMigration1600383973776 implements MigrationInterface {
       `CREATE TABLE "funding" ("id" int NOT NULL IDENTITY(1,1), "enrollmentId" int NOT NULL, "fundingSpaceId" int NOT NULL, "firstReportingPeriodId" int, "lastReportingPeriodId" int, "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_3208742513b8eeff356f9f43605" DEFAULT getdate(), CONSTRAINT "PK_096afc0d11a08deb52da61f039e" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "enrollment" ("id" int NOT NULL IDENTITY(1,1), "childId" uniqueidentifier NOT NULL, "siteId" int NOT NULL, "ageGroup" nvarchar(255) CHECK( ageGroup IN ('Infant/toddler','Preschool','School aged') ), "entry" date, "exit" date, "exitReason" nvarchar(255), "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_3a787207f5857d5ebc444c2169c" DEFAULT getdate(), CONSTRAINT "PK_7e200c699fa93865cdcdd025885" PRIMARY KEY ("id"))`
+      `CREATE TABLE "enrollment" ("id" int NOT NULL IDENTITY(1,1), "childId" uniqueidentifier NOT NULL, "siteId" int NOT NULL, "model" varchar(255), "ageGroup" nvarchar(255) CHECK( ageGroup IN ('Infant/toddler','Preschool','School aged') ), "entry" date, "exit" date, "exitReason" nvarchar(255), "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_3a787207f5857d5ebc444c2169c" DEFAULT getdate(), CONSTRAINT "PK_7e200c699fa93865cdcdd025885" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "income_determination" ("id" int NOT NULL IDENTITY(1,1), "numberOfPeople" int, "income" decimal(14,2), "determinationDate" date, "familyId" int NOT NULL, "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_7a4beca2590fed0cdbbaee0b592" DEFAULT getdate(), CONSTRAINT "PK_bab8509559a5caf486bf1bdd99b" PRIMARY KEY ("id"))`
@@ -54,9 +54,6 @@ export class InitialMigration1600383973776 implements MigrationInterface {
     );
     await queryRunner.query(
       `CREATE TABLE "enrollment_report" ("id" int NOT NULL IDENTITY(1,1), "authorId" int, "updatedAt" datetime2 NOT NULL CONSTRAINT "DF_6057df381574fbd8e3cb6e39583" DEFAULT getdate(), CONSTRAINT "PK_2e40a5e41f8b10526d0d9bfff6d" PRIMARY KEY ("id"))`
-    );
-    await queryRunner.query(
-      `CREATE TABLE "flattened_enrollment" ("id" int NOT NULL IDENTITY(1,1), "reportId" int NOT NULL, "firstName" nvarchar(255), "middleName" nvarchar(255), "lastName" nvarchar(255), "suffix" nvarchar(255), "sasid" nvarchar(255), "birthdate" date, "birthCertificateId" nvarchar(255), "birthTown" nvarchar(255), "birthState" nvarchar(255), "americanIndianOrAlaskaNative" bit, "asian" bit, "blackOrAfricanAmerican" bit, "nativeHawaiianOrPacificIslander" bit, "white" bit, "hispanicOrLatinxEthnicity" bit, "gender" nvarchar(255), "dualLanguageLearner" bit, "receivingSpecialEducationServices" bit, "specialEducationServicesType" nvarchar(255), "streetAddress" nvarchar(255), "town" nvarchar(255), "state" nvarchar(255), "zipCode" nvarchar(255), "foster" bit, "homelessness" bit, "numberOfPeople" int, "income" decimal(14,2), "determinationDate" date, "providerName" nvarchar(255), "siteName" nvarchar(255), "model" nvarchar(255), "ageGroup" nvarchar(255), "entry" date, "exit" date, "exitReason" nvarchar(255), "source" nvarchar(255), "time" nvarchar(255), "firstFundingPeriod" date, "lastFundingPeriod" date, "receivesC4K" bit, CONSTRAINT "PK_ec816f97751eaf598f110e72340" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "enrollment_report_children_child" ("enrollmentReportId" int NOT NULL, "childId" uniqueidentifier NOT NULL, CONSTRAINT "PK_5c9d2b4ffd81eae6d121d58caf3" PRIMARY KEY ("enrollmentReportId", "childId"))`
@@ -146,9 +143,6 @@ export class InitialMigration1600383973776 implements MigrationInterface {
       `ALTER TABLE "enrollment_report" ADD CONSTRAINT "FK_74c8d06c2abb69d01383536368b" FOREIGN KEY ("authorId") REFERENCES "user"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
     );
     await queryRunner.query(
-      `ALTER TABLE "flattened_enrollment" ADD CONSTRAINT "FK_5697f722fce34f3025c4b5e0a18" FOREIGN KEY ("reportId") REFERENCES "enrollment_report"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`
-    );
-    await queryRunner.query(
       `ALTER TABLE "enrollment_report_children_child" ADD CONSTRAINT "FK_b035b2da5f18805e351b38e1d8e" FOREIGN KEY ("enrollmentReportId") REFERENCES "enrollment_report"("id") ON DELETE CASCADE ON UPDATE NO ACTION`
     );
     await queryRunner.query(
@@ -162,9 +156,6 @@ export class InitialMigration1600383973776 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "enrollment_report_children_child" DROP CONSTRAINT "FK_b035b2da5f18805e351b38e1d8e"`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "flattened_enrollment" DROP CONSTRAINT "FK_5697f722fce34f3025c4b5e0a18"`
     );
     await queryRunner.query(
       `ALTER TABLE "enrollment_report" DROP CONSTRAINT "FK_74c8d06c2abb69d01383536368b"`
@@ -251,7 +242,6 @@ export class InitialMigration1600383973776 implements MigrationInterface {
       `DROP INDEX "IDX_b035b2da5f18805e351b38e1d8" ON "enrollment_report_children_child"`
     );
     await queryRunner.query(`DROP TABLE "enrollment_report_children_child"`);
-    await queryRunner.query(`DROP TABLE "flattened_enrollment"`);
     await queryRunner.query(`DROP TABLE "enrollment_report"`);
     await queryRunner.query(`DROP TABLE "child"`);
     await queryRunner.query(`DROP TABLE "family"`);
