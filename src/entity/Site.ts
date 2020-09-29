@@ -9,7 +9,7 @@ import {
 import { Site as SiteInterface, Region } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
-import { Organization } from './Organization';
+import { Provider } from './Provider';
 import { enumTransformer } from './transformers';
 
 @Entity()
@@ -38,11 +38,11 @@ export class Site implements SiteInterface {
   @Column({ nullable: true })
   registryId?: number;
 
-  @ManyToOne(() => Organization, { nullable: false })
-  organization: Organization;
+  @ManyToOne(() => Provider, { nullable: false })
+  provider: Provider;
 
   @Column()
-  organizationId: number;
+  providerId: number;
 
   @OneToMany(() => Enrollment, (enrollment) => enrollment.site)
   enrollments?: Array<Enrollment>;

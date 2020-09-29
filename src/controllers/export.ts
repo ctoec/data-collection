@@ -7,7 +7,7 @@ import {
   Site,
   Enrollment,
   User,
-  Organization,
+  Provider,
 } from '../entity';
 import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
 import { Response } from 'express';
@@ -185,11 +185,11 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
     ) {
       childString.push(formatStringPush(activeEnrollment.site[c.propertyName]));
     } else if (
-      !!activeEnrollment.site.organization &&
-      activeEnrollment.site.organization.hasOwnProperty(c.propertyName)
+      !!activeEnrollment.site.provider &&
+      activeEnrollment.site.provider.hasOwnProperty(c.propertyName)
     ) {
       childString.push(
-        formatStringPush(activeEnrollment.site.organization[c.propertyName])
+        formatStringPush(activeEnrollment.site.provider[c.propertyName])
       );
     } else if (
       !!activeFunding &&

@@ -8,7 +8,7 @@ import {
 
 import { Family as FamilyInterface } from '../../client/src/shared/models';
 
-import { Organization } from './Organization';
+import { Provider } from './Provider';
 import { IncomeDetermination } from './IncomeDetermination';
 import { Child } from './Child';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
@@ -45,8 +45,8 @@ export class Family implements FamilyInterface {
   @OneToMany(() => Child, (child) => child.family)
   children?: Array<Child>;
 
-  @ManyToOne(() => Organization, { nullable: false })
-  organization?: Organization;
+  @ManyToOne(() => Provider, { nullable: false })
+  provider?: Provider;
 
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;

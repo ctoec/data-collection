@@ -1,4 +1,4 @@
-import { User, FundingSpace, Site, Organization } from '../entity';
+import { User, FundingSpace, Site, Provider } from '../entity';
 import { getManager, In } from 'typeorm';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 
@@ -13,7 +13,7 @@ export const getFundingSpaces = async (user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
 
   return getManager().find(FundingSpace, {
-    where: { organization: { id: In(readOrgIds) } },
+    where: { provider: { id: In(readOrgIds) } },
     relations: ['organization'],
   });
 };

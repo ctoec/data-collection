@@ -143,7 +143,7 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
               (fs) =>
                 fs.ageGroup === enrollment.ageGroup &&
                 fs.source === funding.fundingSpace.source &&
-                fs.organization.id === enrollment.site.organization.id
+                fs.provider.id === enrollment.site.provider.id
             )}
             accessor={(data) => data.at('fundingSpace')}
           />

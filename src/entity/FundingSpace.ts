@@ -14,7 +14,7 @@ import {
   AgeGroup,
 } from '../../client/src/shared/models';
 
-import { Organization } from './Organization';
+import { Provider } from './Provider';
 import { FundingTimeSplit } from './FundingTimeSplit';
 import { enumTransformer } from './transformers';
 
@@ -23,7 +23,7 @@ import { enumTransformer } from './transformers';
   'source',
   'ageGroup',
   'time',
-  'organization',
+  'provider',
 ])
 export class FundingSpace implements FundingSpaceInterface {
   @PrimaryGeneratedColumn()
@@ -32,8 +32,8 @@ export class FundingSpace implements FundingSpaceInterface {
   @Column()
   capacity: number;
 
-  @ManyToOne(() => Organization, { nullable: false })
-  organization: Organization;
+  @ManyToOne(() => Provider, { nullable: false })
+  provider: Provider;
 
   @Column({
     type: 'varchar',

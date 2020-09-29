@@ -28,7 +28,7 @@ export const getChildren = async (user: User) => {
       'enrollments.site.organization',
       'enrollments.fundings',
     ],
-    where: { organization: { id: In(readOrgIds) } },
+    where: { provider: { id: In(readOrgIds) } },
   });
 };
 
@@ -68,7 +68,9 @@ export const getChildById = async (id: string) => {
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-  const validationErrors = await validate(child, { validationError: { target: false } });
+  const validationErrors = await validate(child, {
+    validationError: { target: false },
+  });
   return distributeValidationErrorsToSubObjects(child, validationErrors);
 };
 
@@ -99,7 +101,7 @@ export const createChild = async (_child) => {
   if (!_child.family) {
     const organization = _child.organization;
     const family = await getManager().save(
-      getManager().create(Family, { organization })
+      getManager().create(Family, { provider: organization })
     );
     _child.family = family;
   }
@@ -187,7 +189,7 @@ export const changeEnrollment = async (
       // Update current enrollment exitReason
       currentEnrollment.exitReason =
         currentEnrollment.ageGroup !==
-          changeEnrollmentData.newEnrollment.ageGroup
+        changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
 

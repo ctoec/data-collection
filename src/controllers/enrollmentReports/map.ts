@@ -6,7 +6,7 @@ import {
   Enrollment,
   IncomeDetermination,
   Funding,
-  Organization,
+  Provider,
   FundingSpace,
   ReportingPeriod,
 } from '../../entity';
@@ -64,7 +64,7 @@ export const mapRow = async (source: EnrollmentReportRow) => {
  * @param source
  */
 const mapOrganization = (source: EnrollmentReportRow) => {
-  return getManager().findOneOrFail(Organization, {
+  return getManager().findOneOrFail(Provider, {
     where: { providerName: source.providerName },
   });
 };
@@ -90,7 +90,7 @@ const mapSite = (source: EnrollmentReportRow) => {
  */
 const mapChild = (
   source: EnrollmentReportRow,
-  organization: Organization,
+  organization: Provider,
   family: Family
 ) => {
   // Gender
@@ -128,7 +128,7 @@ const mapChild = (
     receivesSpecialEducationServices:
       source.receivesSpecialEducationServices || false,
     specialEducationServicesType,
-    organization,
+    provider: organization,
     family: family,
   });
 
@@ -141,14 +141,14 @@ const mapChild = (
  * TODO: Lookup existing families before creating new one
  * @param source
  */
-const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
+const mapFamily = (source: EnrollmentReportRow, organization: Provider) => {
   const family = getManager().create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zipCode: source.zipCode,
     homelessness: source.homelessness,
-    organization,
+    provider: organization,
   });
 
   return getManager().save(family);
@@ -207,7 +207,7 @@ const mapEnrollment = (
  */
 const mapFunding = async (
   source: EnrollmentReportRow,
-  organization: Organization,
+  organization: Provider,
   enrollment: Enrollment
 ) => {
   const fundingSource: FundingSource = mapEnum(FundingSource, source.source);
@@ -244,7 +244,7 @@ const mapFunding = async (
       where: {
         source: fundingSource,
         ageGroup: enrollment.ageGroup,
-        organization,
+        provider: organization,
       },
     });
     fundingSpace = fundingSpaces.find((space) => space.time === fundingTime);

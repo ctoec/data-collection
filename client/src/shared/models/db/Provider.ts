@@ -1,6 +1,6 @@
 import { FundingSpace, Site } from '.';
 
-export interface Organization {
+export interface Provider {
   id: number;
   providerName: string;
   sites?: Array<Site>;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
 import { StepList } from '@ctoec/component-library';
-import { Child, Organization } from '../../shared/models';
+import { Child, Provider } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
@@ -13,7 +13,7 @@ import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 
 type LocationType = Location & {
   state: {
-    organization: Organization;
+    provider: Provider;
   };
 };
 
@@ -46,7 +46,7 @@ const AddChild: React.FC = () => {
 
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
-  const organization = locationState?.organization || child?.organization;
+  const organization = locationState?.provider || child?.provider;
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
 

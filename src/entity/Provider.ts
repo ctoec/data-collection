@@ -6,24 +6,24 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { Organization as OrganizationInterface } from '../../client/src/shared/models';
+import { Provider as ProviderInterface } from '../../client/src/shared/models';
 
 import { FundingSpace } from './FundingSpace';
 import { Site } from './Site';
 import { Community } from './Community';
 
 @Entity()
-export class Organization implements OrganizationInterface {
+export class Provider implements ProviderInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ unique: true })
   providerName: string;
 
-  @OneToMany(() => Site, (site) => site.organization)
+  @OneToMany(() => Site, (site) => site.provider)
   sites?: Array<Site>;
 
-  @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.organization)
+  @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.provider)
   fundingSpaces?: Array<FundingSpace>;
 
   @ManyToOne(() => Community, { nullable: true })

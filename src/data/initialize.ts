@@ -1,5 +1,5 @@
 import { getManager } from 'typeorm';
-import { Organization, Site, FundingSpace, ReportingPeriod } from '../entity';
+import { Provider, Site, FundingSpace, ReportingPeriod } from '../entity';
 import {
   Region,
   AgeGroup,
@@ -12,9 +12,9 @@ import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
 
-  let organization = await getManager().findOne(Organization, 1);
+  let organization = await getManager().findOne(Provider, 1);
   if (!organization) {
-    const _organization = getManager().create(Organization, {
+    const _organization = getManager().create(Provider, {
       id: 1,
       providerName: 'Hogwarts Childcare',
     });
@@ -27,7 +27,7 @@ export const initialize = async () => {
       siteName: 'Gryfinndor Childcare',
       titleI: false,
       region: Region.East,
-      organization,
+      provider: organization,
     });
     await getManager().save(site1);
   }
@@ -37,7 +37,7 @@ export const initialize = async () => {
       siteName: 'Hufflepuff Childcare',
       titleI: false,
       region: Region.East,
-      organization,
+      provider: organization,
     });
     await getManager().save(site2);
   }
@@ -57,7 +57,7 @@ export const initialize = async () => {
               capacity: 10,
               source,
               time: fundingTime.value,
-              organization,
+              provider: organization,
             });
           });
 

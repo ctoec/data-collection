@@ -1,7 +1,7 @@
-import { Organization } from '.';
+import { Provider } from '.';
 
 export interface Community {
   id: number;
   name: string;
-  organizations?: Array<Organization>;
+  providers?: Array<Provider>;
 }

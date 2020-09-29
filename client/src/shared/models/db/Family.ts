@@ -1,4 +1,4 @@
-import { Child, IncomeDetermination, Organization } from '.';
+import { Child, IncomeDetermination, Provider } from '.';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 
 export interface Family extends ObjectWithValidationErrors {
@@ -10,5 +10,5 @@ export interface Family extends ObjectWithValidationErrors {
   homelessness?: boolean;
   incomeDeterminations?: Array<IncomeDetermination>;
   children?: Array<Child>;
-  organization?: Organization;
+  provider?: Provider;
 }

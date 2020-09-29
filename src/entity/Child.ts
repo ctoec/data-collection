@@ -21,7 +21,7 @@ import {
 
 import { Enrollment } from './Enrollment';
 import { Family } from './Family';
-import { Organization } from './Organization';
+import { Provider } from './Provider';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { momentTransformer, enumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
@@ -131,8 +131,8 @@ export class Child implements ChildInterface {
   @ManyToOne(() => Family)
   family?: Family;
 
-  @ManyToOne(() => Organization, { nullable: false })
-  organization?: Organization;
+  @ManyToOne(() => Provider, { nullable: false })
+  provider?: Provider;
 
   @ValidateNested({ each: true })
   @OneToMany(() => Enrollment, (enrollment) => enrollment.child)

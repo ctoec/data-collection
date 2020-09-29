@@ -1,4 +1,4 @@
-import { Enrollment, Organization } from '.';
+import { Enrollment, Provider } from '.';
 import { Region } from '../';
 
 export interface Site {
@@ -10,6 +10,6 @@ export interface Site {
   licenseNumber?: number;
   naeycId?: number;
   registryId?: number;
-  organization: Organization;
+  provider: Provider;
   enrollments?: Array<Enrollment>;
 }

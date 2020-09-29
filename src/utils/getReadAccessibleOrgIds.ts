@@ -9,10 +9,10 @@ import { getManager } from 'typeorm';
  */
 export const getReadAccessibileOrgIds = async (user: User) => {
   // get org ids for all permitted sites
-  const siteOrgIds = (await getManager().findByIds(Site, user.siteIds || [])).map(
-    (site) => site.organizationId
-  );
+  const siteOrgIds = (
+    await getManager().findByIds(Site, user.siteIds || [])
+  ).map((site) => site.providerId);
 
   // combine and deduplicate site org Ids + org Ids
-  return Array.from(new Set([...siteOrgIds, ...user.organizationIds]));
+  return Array.from(new Set([...siteOrgIds, ...user.providerIds]));
 };

@@ -1,4 +1,4 @@
-import { Site, Organization } from '.';
+import { Site, Provider } from '.';
 
 export interface User {
   id: number;
@@ -8,5 +8,5 @@ export interface User {
   middleName?: string;
   suffix?: string;
   sites?: Array<Site>;
-  organizations?: Array<Organization>;
+  providers?: Array<Provider>;
 }

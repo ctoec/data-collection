@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
-import { Organization } from './Organization';
+import { Provider } from './Provider';
 import { Community as CommunityInterface } from '../../client/src/shared/models';
 
 @Entity()
@@ -11,6 +11,6 @@ export class Community implements CommunityInterface {
   @Column()
   name: string;
 
-  @OneToMany((type) => Organization, (organization) => organization.community)
-  organizations?: Array<Organization>;
+  @OneToMany((type) => Provider, (organization) => organization.community)
+  organizations?: Array<Provider>;
 }

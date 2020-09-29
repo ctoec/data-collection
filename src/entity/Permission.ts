@@ -6,8 +6,9 @@ import {
   Column,
 } from 'typeorm';
 
+import { ProviderPermission as ProviderPermissionInterface } from '../../client/src/shared/models';
 import { User } from './User';
-import { Organization } from './Organization';
+import { Provider } from './Provider';
 import { Site } from './Site';
 import { Community } from './Community';
 
@@ -20,13 +21,15 @@ abstract class Permission {
 }
 
 @Entity()
-@Unique('UQ_USER_ORGANIZATION', ['user', 'organization'])
-export class OrganizationPermission extends Permission {
-  @ManyToOne(() => Organization)
-  organization: Organization;
+@Unique('UQ_USER_PROVIDER', ['user', 'provider'])
+export class ProviderPermission
+  extends Permission
+  implements ProviderPermission {
+  @ManyToOne(() => Provider)
+  provider: Provider;
 
   @Column()
-  organizationId: number;
+  providerId: number;
 }
 
 @Entity()

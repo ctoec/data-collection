@@ -2,7 +2,7 @@ import jwt, { UnauthorizedError } from 'express-jwt';
 import jwks from 'jwks-rsa';
 import { Request, Response, NextFunction } from 'express';
 import { getManager, In } from 'typeorm';
-import { User, Organization, Site, OrganizationPermission } from '../entity';
+import { User, Provider, Site, ProviderPermission } from '../entity';
 import { passAsyncError } from './error/passAsyncError';
 
 import { default as axios, AxiosResponse } from 'axios';
@@ -41,10 +41,20 @@ const addUser = passAsyncError(
 
       //  TODO: Remove once an actual user management system is implemented
       if (!fawkesUser) {
-        const res: AxiosResponse<any> = await getUserFromWingedKeys(req.headers.authorization);
+        const res: AxiosResponse<any> = await getUserFromWingedKeys(
+          req.headers.authorization
+        );
 
-        if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
-          fawkesUser = await createUserWithFullPermissions(req.claims.sub, res.data);
+        if (
+          res &&
+          res.data &&
+          res.data.sub &&
+          res.data.sub === req.claims.sub
+        ) {
+          fawkesUser = await createUserWithFullPermissions(
+            req.claims.sub,
+            res.data
+          );
         } else {
           throw new InvalidSubClaimError();
         }
@@ -71,7 +81,7 @@ const getUser = async (wingedKeysId: string) => {
 
   // Get all orgs associated with communities user has permissions for
   const orgsFromCommunities = (user.communityPermissions || []).length
-    ? await getManager().find(Organization, {
+    ? await getManager().find(Provider, {
         where: {
           communityId: In(
             user.communityPermissions.map((perm) => perm.communityId)
@@ -83,14 +93,14 @@ const getUser = async (wingedKeysId: string) => {
   // Create list of distinct organization ids the user can access
   const allOrgIds = Array.from(
     new Set([
-      ...(user.orgPermissions || []).map((perm) => perm.organizationId),
+      ...(user.providerPermissions || []).map((perm) => perm.providerId),
       ...orgsFromCommunities.map((org) => org.id),
     ])
   );
 
   // Get all sites associated with all organizations user has permissions for
   const sitesFromAllOrgs = await getManager().find(Site, {
-    where: { organizationId: In(allOrgIds) },
+    where: { providerId: In(allOrgIds) },
   });
 
   // Create list of distinct site ids the user can access
@@ -102,23 +112,28 @@ const getUser = async (wingedKeysId: string) => {
   );
 
   // Add values to the user object
-  user.organizationIds = allOrgIds;
+  user.providerIds = allOrgIds;
   user.siteIds = allSiteIds;
   return user;
 };
 
-async function getUserFromWingedKeys(bearerToken: string): Promise<AxiosResponse<any>> {
-    return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
-      headers: {
-        authorization: bearerToken
-      },
-      httpsAgent: new https.Agent({  
-        rejectUnauthorized: false
-      })
-    });
+async function getUserFromWingedKeys(
+  bearerToken: string
+): Promise<AxiosResponse<any>> {
+  return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
+    headers: {
+      authorization: bearerToken,
+    },
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false,
+    }),
+  });
 }
 
-async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUser: { given_name: string, family_name: string }): Promise<User> {
+async function createUserWithFullPermissions(
+  wingedKeysId: string,
+  wingedKeysUser: { given_name: string; family_name: string }
+): Promise<User> {
   let user: User;
 
   await getManager().transaction(async (manager) => {
@@ -127,15 +142,18 @@ async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUse
       firstName: wingedKeysUser.given_name,
       lastName: wingedKeysUser.family_name,
     });
-    
+
     user = await manager.save(_user);
 
-    const orgs: Organization[] = await manager.find(Organization);
+    const orgs: Provider[] = await manager.find(Provider);
     if (orgs.length) {
-      const orgPermsForUser = manager.create(OrganizationPermission, orgs.map(org => ({
-        user,
-        organizationId: org.id
-      })));
+      const orgPermsForUser = manager.create(
+        ProviderPermission,
+        orgs.map((org) => ({
+          user,
+          organizationId: org.id,
+        }))
+      );
       await manager.save(orgPermsForUser);
     }
   });

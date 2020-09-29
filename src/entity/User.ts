@@ -3,12 +3,12 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { User as UserInterface } from '../../client/src/shared/models';
 
 import {
-  OrganizationPermission,
+  ProviderPermission,
   SitePermission,
   CommunityPermission,
 } from './Permission';
 import { Site } from './Site';
-import { Organization } from './Organization';
+import { Provider } from './Provider';
 
 @Entity()
 export class User implements UserInterface {
@@ -30,8 +30,8 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   suffix?: string;
 
-  @OneToMany((type) => OrganizationPermission, (perm) => perm.user)
-  orgPermissions?: Array<OrganizationPermission>;
+  @OneToMany((type) => ProviderPermission, (perm) => perm.user)
+  providerPermissions?: Array<ProviderPermission>;
 
   @OneToMany((type) => SitePermission, (perm) => perm.user)
   sitePermissions?: Array<SitePermission>;
@@ -46,6 +46,6 @@ export class User implements UserInterface {
 
   // [virtual property] all organizations the user has read/write access to
   // via org and community perms
-  organizationIds?: Array<number>;
-  organizations?: Array<Organization>;
+  providerIds?: Array<number>;
+  provider?: Array<Provider>;
 }
