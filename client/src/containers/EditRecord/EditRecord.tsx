@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import {
-  TabNav,
-} from '@ctoec/component-library';
+import { TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';

@@ -1,22 +1,22 @@
 import React, { useContext, useState } from 'react';
-import { Child, Enrollment } from '../../shared/models';
+import { Child, Enrollment } from '../../../../shared/models';
 import {
   SiteField,
   EnrollmentStartDateField,
   AgeGroupField,
   FundingField,
-} from '../../components/Forms/EnrollmentFunding/Fields';
+} from '../Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { EditFormProps } from '../../components/Forms/types';
-import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPost } from '../../utils/api';
-import { useSites } from '../../hooks/useSites';
-import { useFundingSpaces } from '../../hooks/useFundingSpaces';
-import { useReportingPeriods } from '../../hooks/useReportingPeriods';
-import useIsMounted from '../../hooks/useIsMounted';
-import { CareForKidsField } from '../../components/Forms/CareForKids/CareForKidsField';
-import { useValidationErrors } from '../../hooks/useValidationErrors';
-import { getCurrentEnrollment } from '../../utils/models';
+import { EditFormProps } from '../../types';
+import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiPost } from '../../../../utils/api';
+import { useSites } from '../../../../hooks/useSites';
+import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
+import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
+import useIsMounted from '../../../../hooks/useIsMounted';
+import { CareForKidsField } from '../../CareForKids/CareForKidsField';
+import { useValidationErrors } from '../../../../hooks/useValidationErrors';
+import { getCurrentEnrollment } from '../../../../utils/models';
 
 // This is separate from the other enrollment forms because they're pretty complicated
 // Maybe we should try to reconcile though?

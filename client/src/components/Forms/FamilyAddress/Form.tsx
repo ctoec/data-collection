@@ -11,7 +11,9 @@ import { getValidationStatusForFields } from '../../../utils/getValidationStatus
 
 const familyAddressFields = ['streetAddress', 'town', 'state', 'zipCode'];
 export const doesFamilyAddressFormHaveErrors = (child?: Child) =>
-  child?.family ? !!getValidationStatusForFields(child.family, familyAddressFields) : true;
+  child?.family
+    ? !!getValidationStatusForFields(child.family, familyAddressFields)
+    : true;
 
 /*
  * Functional component that allows a user to modify the address

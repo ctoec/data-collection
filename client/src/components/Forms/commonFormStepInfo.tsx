@@ -18,16 +18,16 @@ export const TAB_IDS = {
 };
 
 export type FormStepInfo = {
-  key: string,
-  name: string,
-  status: (child?: Child) => boolean,
-}
+  key: string;
+  name: string;
+  status: (child?: Child) => boolean;
+};
 
 export const commonFormStepInfo: FormStepInfo[] = [
   {
     key: TAB_IDS.IDENT,
     name: 'Child identifiers',
-    status: doesChildIdFormHaveErrors
+    status: doesChildIdFormHaveErrors,
   },
   {
     key: TAB_IDS.DEMO,
@@ -41,7 +41,7 @@ export const commonFormStepInfo: FormStepInfo[] = [
   },
   {
     key: TAB_IDS.INCOME,
-    name: 'Family income determination',
+    name: 'Family income',
     status: doesFamilyIncomeFormHaveErrors,
   },
   {

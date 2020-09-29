@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react';
-import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { Child, IncomeDetermination } from '../../shared/models';
-import { apiPost } from '../../utils/api';
+import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { Child, IncomeDetermination } from '../../../../shared/models';
+import { apiPost } from '../../../../utils/api';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { IncomeDeterminationFieldSet } from '../../components/Forms/FamilyIncome/Fields';
-import { EditFormProps } from '../../components/Forms/types';
-import useIsMounted from '../../hooks/useIsMounted';
+import { IncomeDeterminationFieldSet } from '../Fields';
+import { EditFormProps } from '../../types';
+import useIsMounted from '../../../../hooks/useIsMounted';
 import idx from 'idx';
-import { useValidationErrors } from '../../hooks/useValidationErrors';
+import { useValidationErrors } from '../../../../hooks/useValidationErrors';
 
 /**
  * Form component that allows the generation of a new income determination.
