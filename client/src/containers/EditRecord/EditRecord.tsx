@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { TabNav } from '@ctoec/component-library';
+import { AlertProps, TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
@@ -12,7 +12,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { tabItems } from './tabItems';
-import { TAB_IDS } from '../../components/Forms/commonFormStepInfo';
+import { commonFormStepInfo, TAB_IDS } from '../../components/Forms/commonFormStepInfo';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -63,13 +63,24 @@ const EditRecord: React.FC = () => {
 
   const afterDataSave = () => {
     setRefetch((r) => r + 1);
-    setAlerts([
+    const newAlerts: AlertProps[] = [
       {
         type: 'success',
         heading: 'Record updated',
         text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
       },
-    ]);
+    ]
+    const formStepInfo = commonFormStepInfo.find(s => s.key === activeTab);
+    const incomplete = formStepInfo?.status(rowData);
+    const formName = formStepInfo?.name.toLowerCase();
+    if (incomplete) {
+      newAlerts.push({
+        type: 'error',
+        heading: 'This record has missing or incorrect info',
+        text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
+      })
+    }
+    setAlerts(newAlerts);
   };
 
   const commonFormProps = {
