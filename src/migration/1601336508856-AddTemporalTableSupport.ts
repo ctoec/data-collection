@@ -5,9 +5,9 @@ import {
   turnSystemVersioningOnForTableQuery,
 } from './queries/addTemporalTableSupport';
 
-export class AddTemporalTableSupport1600390382813
+export class AddTemporalTableSupport1601336508856
   implements MigrationInterface {
-  name = 'AddTemporalTableSupport1600390382813';
+  name = 'AddTemporalTableSupport1601336508856';
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(addHistorySchemaQuery());
 

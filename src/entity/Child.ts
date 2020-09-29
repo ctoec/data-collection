@@ -23,7 +23,7 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { momentTransformer } from './transformers/momentTransformer';
+import { momentTransformer, enumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
@@ -101,7 +101,12 @@ export class Child implements ChildInterface {
   // No default value because this is a radio button
   hispanicOrLatinxEthnicity?: boolean;
 
-  @Column({ nullable: true, type: 'simple-enum', enum: Gender })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(Gender),
+  })
   @ChildGenderSpecified()
   gender?: Gender;
 
@@ -115,9 +120,10 @@ export class Child implements ChildInterface {
   receivesSpecialEducationServices?: boolean;
 
   @Column({
+    type: 'varchar',
+    length: 20,
     nullable: true,
-    type: 'simple-enum',
-    enum: SpecialEducationServicesType,
+    transformer: enumTransformer(SpecialEducationServicesType),
   })
   specialEducationServicesType?: SpecialEducationServicesType;
 

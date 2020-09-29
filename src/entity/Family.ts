@@ -38,16 +38,16 @@ export class Family implements FamilyInterface {
   @Column({ default: false })
   homelessness?: boolean;
 
-  @OneToMany((type) => IncomeDetermination, (det) => det.family)
+  @OneToMany(() => IncomeDetermination, (det) => det.family)
   @ValidateNested({ each: true })
   incomeDeterminations?: Array<IncomeDetermination>;
 
-  @OneToMany((type) => Child, (child) => child.family)
+  @OneToMany(() => Child, (child) => child.family)
   children?: Array<Child>;
 
-  @ManyToOne((type) => Organization, { nullable: false })
+  @ManyToOne(() => Organization, { nullable: false })
   organization?: Organization;
 
-  @Column((type) => UpdateMetaData, { prefix: false })
+  @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
 }

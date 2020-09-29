@@ -5,7 +5,7 @@ import {
   FundingSource,
 } from '../../client/src/shared/models';
 import { Moment } from 'moment';
-import { momentTransformer } from './transformers/momentTransformer';
+import { momentTransformer, enumTransformer } from './transformers';
 
 @Entity()
 @Unique('UQ_Type_Period', ['type', 'period'])
@@ -13,7 +13,11 @@ export class ReportingPeriod implements ReportingPeriodInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'simple-enum', enum: FundingSource })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    transformer: enumTransformer(FundingSource),
+  })
   type: FundingSource;
 
   @Column({ type: 'date', transformer: momentTransformer })
