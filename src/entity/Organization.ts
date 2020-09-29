@@ -6,11 +6,15 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-import { Organization as OrganizationInterface } from '../../client/src/shared/models';
+import {
+  Organization as OrganizationInterface,
+  ChildUniqueIdType,
+} from '../../client/src/shared/models';
 
 import { FundingSpace } from './FundingSpace';
 import { Site } from './Site';
 import { Community } from './Community';
+import { enumTransformer } from './transformers';
 
 @Entity()
 export class Organization implements OrganizationInterface {
@@ -20,15 +24,34 @@ export class Organization implements OrganizationInterface {
   @Column({ unique: true })
   providerName: string;
 
+  @ManyToOne(
+    () => Organization,
+    (organization) => organization.childOrganizations
+  )
+  parentOrganization?: Organization;
+
+  @OneToMany(
+    () => Organization,
+    (organization) => organization.parentOrganization
+  )
+  childOrganizations?: Organization[];
+
   @OneToMany(() => Site, (site) => site.organization)
-  sites?: Array<Site>;
+  sites?: Site[];
 
   @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.organization)
-  fundingSpaces?: Array<FundingSpace>;
+  fundingSpaces?: FundingSpace[];
 
   @ManyToOne(() => Community, { nullable: true })
   community?: Community;
 
+  @Column({
+    type: 'varchar',
+    length: 10,
+    transformer: enumTransformer(ChildUniqueIdType),
+  })
+  childUniqueIdType?: ChildUniqueIdType;
+
   @Column({ nullable: true })
-  communityId?: number;
+  c4kProviderId?: string;
 }

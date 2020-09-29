@@ -1,9 +1,12 @@
-import { FundingSpace, Site } from '.';
+import { ChildUniqueIdType, FundingSpace, Site } from '..';
 
 export interface Organization {
   id: number;
   providerName: string;
-  sites?: Array<Site>;
-  fundingSpaces?: Array<FundingSpace>;
-  communityId?: number;
+  parentOrganization?: Organization;
+  childOrganizations?: Organization[];
+  sites?: Site[];
+  fundingSpaces?: FundingSpace[];
+  childUniqueIdType?: ChildUniqueIdType;
+  c4kProviderId?: string;
 }
