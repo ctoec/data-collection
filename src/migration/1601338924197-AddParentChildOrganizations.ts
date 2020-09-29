@@ -9,9 +9,6 @@ export class AddParentChildOrganizations1601338924197
       `ALTER TABLE "organization" ADD "childUniqueIdType" varchar(10)`
     );
     await queryRunner.query(
-      `ALTER TABLE "organization" ADD "c4kProviderId" nvarchar(255)`
-    );
-    await queryRunner.query(
       `ALTER TABLE "organization" ADD "parentOrganizationId" int`
     );
     await queryRunner.query(
@@ -25,9 +22,6 @@ export class AddParentChildOrganizations1601338924197
     );
     await queryRunner.query(
       `ALTER TABLE "organization" DROP COLUMN "parentOrganizationId"`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "organization" DROP COLUMN "c4kProviderId"`
     );
     await queryRunner.query(
       `ALTER TABLE "organization" DROP COLUMN "childUniqueIdType"`

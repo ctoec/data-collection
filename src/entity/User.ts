@@ -1,12 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 
 import { User as UserInterface } from '../../client/src/shared/models';
 
-import {
-  OrganizationPermission,
-  SitePermission,
-  CommunityPermission,
-} from './Permission';
+import { OrganizationPermission, SitePermission } from './Permission';
 import { Site } from './Site';
 import { Organization } from './Organization';
 
@@ -30,22 +32,23 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   suffix?: string;
 
-  @OneToMany((type) => OrganizationPermission, (perm) => perm.user)
-  orgPermissions?: Array<OrganizationPermission>;
+  @OneToOne(() => OrganizationPermission, (perm) => perm.user)
+  orgPermission?: OrganizationPermission;
 
-  @OneToMany((type) => SitePermission, (perm) => perm.user)
-  sitePermissions?: Array<SitePermission>;
+  @OneToMany(() => SitePermission, (perm) => perm.user)
+  sitePermissions?: SitePermission[];
 
-  @OneToMany(() => CommunityPermission, (perm) => perm.user)
-  communityPermissions?: Array<CommunityPermission>;
+  // [virtual property] the highest-level organization this user belongs to
+  topLevelOrganizationId?: number;
+  topLevelOrganization?: Organization;
 
   // [virtual property] all sites the user has read/write access to
   // via site, org and community perms
-  siteIds?: Array<number>;
-  sites?: Array<Site>;
+  siteIds?: number[];
+  sites?: Site[];
 
   // [virtual property] all organizations the user has read/write access to
   // via org and community perms
-  organizationIds?: Array<number>;
-  organizations?: Array<Organization>;
+  organizationIds?: number[];
+  organizations?: Organization[];
 }

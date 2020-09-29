@@ -7,6 +7,7 @@ export interface User {
   lastName: string;
   middleName?: string;
   suffix?: string;
-  sites?: Array<Site>;
-  organizations?: Array<Organization>;
+  topLevelOrganization?: Organization;
+  sites?: Site[];
+  organizations?: Organization[];
 }

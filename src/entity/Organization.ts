@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  Unique,
 } from 'typeorm';
 
 import {
@@ -13,15 +14,18 @@ import {
 
 import { FundingSpace } from './FundingSpace';
 import { Site } from './Site';
-import { Community } from './Community';
 import { enumTransformer } from './transformers';
 
 @Entity()
+@Unique('UQ_providerName_parentOrganizationId', [
+  'providerName',
+  'parentOrganization',
+])
 export class Organization implements OrganizationInterface {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   providerName: string;
 
   @ManyToOne(
@@ -42,16 +46,10 @@ export class Organization implements OrganizationInterface {
   @OneToMany(() => FundingSpace, (fundingSpace) => fundingSpace.organization)
   fundingSpaces?: FundingSpace[];
 
-  @ManyToOne(() => Community, { nullable: true })
-  community?: Community;
-
   @Column({
     type: 'varchar',
     length: 10,
     transformer: enumTransformer(ChildUniqueIdType),
   })
-  childUniqueIdType?: ChildUniqueIdType;
-
-  @Column({ nullable: true })
-  c4kProviderId?: string;
+  childUniqueIdType: ChildUniqueIdType;
 }

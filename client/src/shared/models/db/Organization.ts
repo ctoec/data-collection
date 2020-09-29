@@ -7,6 +7,5 @@ export interface Organization {
   childOrganizations?: Organization[];
   sites?: Site[];
   fundingSpaces?: FundingSpace[];
-  childUniqueIdType?: ChildUniqueIdType;
-  c4kProviderId?: string;
+  childUniqueIdType: ChildUniqueIdType;
 }
