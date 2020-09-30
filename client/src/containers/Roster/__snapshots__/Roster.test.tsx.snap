@@ -487,12 +487,12 @@ exports[`Roster matches snapshot 1`] = `
       <div
         class="grid-container"
       >
-        <button
+        <a
           class="usa-button usa-button--outline"
-          type="button"
+          href="/getting-started"
         >
-          Back
-        </button>
+          Back to getting started
+        </a>
         <a
           class="usa-button"
           href="/success"
