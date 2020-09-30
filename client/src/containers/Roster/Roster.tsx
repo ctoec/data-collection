@@ -12,7 +12,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { Child, AgeGroup } from '../../shared/models';
 import { apiGet } from '../../utils/api';
 import { tableColumns } from '../Roster/TableColumns';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
@@ -24,7 +24,6 @@ import pluralize from 'pluralize';
 const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
-  const { goBack } = useHistory();
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
@@ -117,6 +116,7 @@ const Roster: React.FC = () => {
         <h1 className="margin-bottom-0" ref={h1Ref}>
           {organization?.providerName}
         </h1>
+        {alertElements}
         <p className="font-body-xl margin-top-1">
           {loading
             ? 'Loading...'
@@ -131,12 +131,15 @@ const Roster: React.FC = () => {
           </Link>
           <CSVDownloadLink />
         </div>
-        {alertElements}
         {/* TODO: revise accordion to have less stuff in the heading-- needs to be usable for quick navigation */}
         <Accordion items={accordionItems} titleHeadingLevel="h2" />
       </div>
       <FixedBottomBar>
-        <Button text="Back" onClick={goBack} appearance="outline" />
+        <Button
+          text="Back to getting started"
+          href="/getting-started"
+          appearance="outline"
+        />
         <Button text="Send to OEC" href="/success" />
       </FixedBottomBar>
     </>
