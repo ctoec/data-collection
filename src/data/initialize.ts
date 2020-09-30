@@ -12,6 +12,8 @@ import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
 
+  console.log('OH HEY COOL', process.env.NODE_ENV);
+
   let organization = await getManager().findOne(Organization, 1);
   if (!organization) {
     const _organization = getManager().create(Organization, {
