@@ -6,6 +6,7 @@ import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/im
 import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { handleJWTError } from '../../utils/handleJWTError';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -36,10 +37,12 @@ const Upload: React.FC = () => {
         .then((value) => {
           history.push(`check-data/${value.id}`);
         })
-        .catch((err) => {
-          setError(err);
-          setFile(undefined);
-        });
+        .catch(
+          handleJWTError(history, (err) => {
+            setError(err);
+            setFile(undefined);
+          })
+        );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file]);
