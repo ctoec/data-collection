@@ -1,5 +1,7 @@
+import React from 'react';
 import { FormStatusProps, TObjectDriller } from '@ctoec/component-library';
 import { ValidationError } from 'class-validator';
+import { ReactNode } from 'react';
 import { ObjectWithValidationErrors } from '../shared/models/ObjectWithValidationErrors';
 
 /**
@@ -25,6 +27,15 @@ export type ValidationStatusOptions = {
   message?: string;
 };
 
+export function drillReactNodeForText(inputNode: ReactNode | string): string {
+  if (typeof inputNode === 'string') {
+    return inputNode;
+  } else if (React.isValidElement(inputNode)) {
+    return drillReactNodeForText(inputNode.props.children);
+  }
+  return '';
+}
+
 /**
  * The form field passes object driller and path to the validation function,
  * so this func can be used on its own to return a status if there is an error.
@@ -40,7 +51,7 @@ export function getValidationStatusForField<
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
-  fieldProps: any & { label: string },
+  fieldProps: any & { label: string | ReactNode },
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   const splitPath = path.split('.');
@@ -57,10 +68,13 @@ export function getValidationStatusForField<
     (v: ValidationError) => v.property === field
   );
   if (!validationError) return;
+
   return {
     type: 'error',
     id: `status-${field}`,
-    message: `${fieldProps?.label} is required for OEC reporting.`,
+    message: `${drillReactNodeForText(
+      fieldProps.label
+    )} is required for OEC reporting.`,
     ...options,
   };
 }
