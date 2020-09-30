@@ -49,10 +49,10 @@ const CheckData: React.FC = () => {
       <div className="CheckData__content margin-4 grid-container">
         <div>
           <BackButton />
-          {alertElements}
           <h1 ref={h1Ref}>
             Check data for {pluralize('child', reportData.length, true)}
           </h1>
+          {alertElements}
           <p>Make sure all of your data was uploaded correctly. </p>
           <p>If everything looks good, submit to OEC.</p>
           <Link to={{ pathname: '/create-record', state: { organization } }}>
