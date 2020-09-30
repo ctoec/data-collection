@@ -6,15 +6,15 @@ export function useFocusFirstError(deps: DependencyList | undefined = []) {
   useEffect(() => {
     setTimeout(() => {
       const input = document.querySelector(
-        '.usa-input--error, .oec-date-input--error input'
+        '.usa-input--error, .oec-date-input--error input, .usa-fieldset--error input'
       );
       setFirstElWithError(input || undefined);
     });
-  });
+  }, deps);
 
   return useEffect(() => {
     if (firstElWithError) {
       (firstElWithError as HTMLElement).focus();
     }
-  }, [...deps, firstElWithError]);
+  }, [firstElWithError]);
 }

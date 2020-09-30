@@ -12,10 +12,7 @@ import {
   ChildIdentifiersForm,
   FamilyAddressForm,
 } from '../../components/Forms';
-import {
-  formSections,
-  SECTION_KEYS,
-} from '../../components/Forms/formSections';
+import { SECTION_KEYS, formSections } from '../../components/Forms/formSections';
 import { EditFormProps } from '../../components/Forms/types';
 
 const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {

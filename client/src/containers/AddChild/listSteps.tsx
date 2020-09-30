@@ -1,7 +1,5 @@
 import { StepProps, Button } from '@ctoec/component-library';
 import React from 'react';
-import { NewFamilyIncome } from '../../components/Forms/FamilyIncome/NewFamilyIncome/NewFamilyIncome';
-import { NewEnrollment } from '../../components/Forms/EnrollmentFunding/NewEnrollmentForm/NewEnrollment';
 import { History } from 'history';
 import { EditFormProps } from '../../components/Forms/types';
 import {
@@ -9,8 +7,12 @@ import {
   ChildInfoForm,
   FamilyAddressForm,
 } from '../../components/Forms';
-import { formSections, SECTION_KEYS } from '../../components/Forms/formSections';
-
+import { NewEnrollment } from '../../components/Forms/EnrollmentFunding/NewEnrollmentForm/NewEnrollment';
+import { NewFamilyIncome } from '../../components/Forms/FamilyIncome/NewFamilyIncome/NewFamilyIncome';
+import {
+  SECTION_KEYS,
+  formSections,
+} from '../../components/Forms/formSections';
 
 export const newForms = [
   { key: SECTION_KEYS.IDENT, form: ChildIdentifiersForm },

@@ -12,7 +12,10 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { tabItems } from './tabItems';
-import { SECTION_KEYS, formSections } from '../../components/Forms/formSections';
+import {
+  SECTION_KEYS,
+  formSections,
+} from '../../components/Forms/formSections';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -30,7 +33,8 @@ const EditRecord: React.FC = () => {
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, [activeTab, setAlerts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTab]);
   const history = useHistory();
   // and make child tab active by default if no hash
   // (but only on first render)
@@ -52,7 +56,6 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
-  // TODO: revisit whether we need this depending on whether errors in edit block save or are warnings
   useFocusFirstError([rowData]);
 
   if (!rowData) {
@@ -69,8 +72,8 @@ const EditRecord: React.FC = () => {
         heading: 'Record updated',
         text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
       },
-    ]
-    const formStepInfo = formSections.find(s => s.key === activeTab);
+    ];
+    const formStepInfo = formSections.find((s) => s.key === activeTab);
     const incomplete = formStepInfo?.status(rowData);
     const formName = formStepInfo?.name.toLowerCase();
     if (incomplete) {
@@ -78,7 +81,7 @@ const EditRecord: React.FC = () => {
         type: 'error',
         heading: 'This record has missing or incorrect info',
         text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
-      })
+      });
     }
     setAlerts(newAlerts);
   };

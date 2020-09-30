@@ -70,7 +70,15 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, child, locationState, organization, history, updateChild, childId]);
+  }, [
+    accessToken,
+    child,
+    locationState,
+    organization,
+    history,
+    updateChild,
+    childId,
+  ]);
 
   // Fetch fresh child from API whenever refetch is triggered
   useEffect(() => {
@@ -112,7 +120,11 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, childId, refetchChild, indexOfCurrentStep, steps, child, history]);
+  }, [
+    accessToken,
+    childId,
+    refetchChild
+  ]);
 
   // After child is updated, programmatically focus on the first input with an error
   useFocusFirstError([child]);
