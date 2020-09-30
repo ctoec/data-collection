@@ -30,7 +30,7 @@ const App: React.FC = () => {
           {
             type: 'primary',
             text: 'Batch upload',
-            path: '/success', //  TODO: Actually route to batch upload when it's available
+            path: '/upload',
           },
           {
             id: 'templates-nav',
@@ -62,11 +62,6 @@ const App: React.FC = () => {
         ]}
         userFirstName={user?.firstName}
       />
-      <div className="usa-nav__secondary usa-nav__secondary--extended">
-        <ul className="usa-nav__secondary-links">
-          <NavLink type="secondary" text="Log out" path="" />
-        </ul>
-      </div>
       <main id="main-content">
         <Switch>
           {routes.map((route, index) => (
