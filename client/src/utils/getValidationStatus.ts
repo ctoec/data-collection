@@ -11,9 +11,10 @@ export function getValidationStatusForFieldInFieldset<
   T extends ObjectWithValidationErrors
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
-  path: string
+  path: string,
+  fieldProps: any & { label: string }
 ): FormStatusProps | undefined {
-  return getValidationStatusForField(objectDriller, path, {
+  return getValidationStatusForField(objectDriller, path, fieldProps, {
     message: undefined,
   });
 }
@@ -31,6 +32,7 @@ export type ValidationStatusOptions = {
  * the default type, id, and message.
  * @param objectDriller
  * @param path
+ * @param fieldProps
  * @param options
  */
 export function getValidationStatusForField<
@@ -55,11 +57,10 @@ export function getValidationStatusForField<
     (v: ValidationError) => v.property === field
   );
   if (!validationError) return;
-  const { constraints } = validationError;
   return {
     type: 'error',
     id: `status-${field}`,
-    message: `${fieldProps.label} is required for OEC reporting.`,
+    message: `${fieldProps?.label} is required for OEC reporting.`,
     ...options,
   };
 }
