@@ -114,7 +114,6 @@ const EditRecord: React.FC = () => {
   return (
     <div className="margin-top-4 grid-container">
       <BackButton />
-      {alertElements}
       <div className="display-flex flex-justify">
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
@@ -122,6 +121,7 @@ const EditRecord: React.FC = () => {
             {rowData.firstName} {rowData.lastName}
           </h1>
         </div>
+        {alertElements}
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
