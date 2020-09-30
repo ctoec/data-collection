@@ -55,7 +55,7 @@ export const RaceField: React.FC = () => {
         getValidationStatusForFields(
           data,
           raceOptions.map((o) => o.field),
-          { message: 'Child race is required' }
+          { message: 'Race is required for OEC reporting.' }
         )
       }
     />

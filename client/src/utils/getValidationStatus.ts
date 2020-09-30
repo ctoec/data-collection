@@ -38,6 +38,7 @@ export function getValidationStatusForField<
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
+  fieldProps: any & { label: string },
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   const splitPath = path.split('.');
@@ -58,7 +59,7 @@ export function getValidationStatusForField<
   return {
     type: 'error',
     id: `status-${field}`,
-    message: constraints ? Object.values(constraints).join(', ') : undefined,
+    message: `${fieldProps.label} is required for OEC reporting.`,
     ...options,
   };
 }
@@ -95,11 +96,7 @@ export function getValidationStatusForFields<
     fields.includes(v.property)
   );
   if (!validationErrors.length) return;
-  const message = validationErrors
-    .map((v: ValidationError) =>
-      v.constraints ? Object.values(v.constraints).join(', ') : ''
-    )
-    .join(', ');
+  const message = 'This information is required for OEC reporting.';
 
   return {
     type: 'error',
