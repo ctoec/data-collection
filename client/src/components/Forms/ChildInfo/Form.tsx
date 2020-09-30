@@ -1,10 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-  RaceField,
-  EthnicityField,
-  GenderField,
-  FosterCheckbox,
-} from './Fields';
+import { RaceField, EthnicityField, GenderField, Foster } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -70,7 +65,7 @@ export const ChildInfoForm = ({
       <RaceField />
       <EthnicityField />
       <GenderField />
-      <FosterCheckbox />
+      <Foster />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

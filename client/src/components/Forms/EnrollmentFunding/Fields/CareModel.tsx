@@ -14,7 +14,7 @@ type CareModelProps<T> = {
   accessor: (_: TObjectDriller<T>) => TObjectDriller<CareModel>;
 };
 /**
- * Component for updating an enrollment's age group.
+ * Component for updating an enrollment's care model.
  */
 export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
   accessor,
@@ -24,8 +24,8 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
       getValue={(data) => accessor(data)}
       parseOnChangeEvent={(e) => e.target.value as CareModel}
       inputComponent={RadioButtonGroup}
-      name="age-group"
-      id="age-group-radiogroup"
+      name="care-model"
+      id="care-model-radiogroup"
       legend="Care model"
       showLegend
       options={Object.values(CareModel).map((model) => ({

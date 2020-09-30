@@ -1,8 +1,6 @@
 import React from 'react';
 import {
   FormField,
-  CheckboxProps,
-  Checkbox,
   RadioButtonGroupProps,
   RadioButtonGroup,
   RadioButton,
@@ -12,24 +10,22 @@ import { Family } from '../../../../shared/models';
 export const HomelessnessField: React.FC = () => {
   return (
     <>
-      <p className="text-bold margin-top-3 margin-bottom-1">
-        Homelessness status
-      </p>
       <FormField<Family, RadioButtonGroupProps, boolean | null>
         id="homelessness-button-group"
         getValue={(data) => data.at('homelessness')}
         preprocessForDisplay={(data) => {
           if (data == true) return 'Yes';
           else if (data == false) return 'No';
-          else return 'null';
+          else return 'Unknown';
         }}
         parseOnChangeEvent={(e) => {
-          if (e.target.value != 'null') return e.target.value == 'Yes';
+          if (e.target.value != 'Unknown') return e.target.value == 'Yes';
           else return null;
         }}
         inputComponent={RadioButtonGroup}
         name="homelessness"
-        legend=""
+        legend="Homelessness status"
+        showLegend
         options={[
           {
             render: (props) => (
@@ -59,7 +55,7 @@ export const HomelessnessField: React.FC = () => {
                 <RadioButton text="Unknown/Not collected" {...props} />
               </div>
             ),
-            value: 'null',
+            value: 'Unknown',
           },
         ]}
       />

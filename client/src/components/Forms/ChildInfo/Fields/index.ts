@@ -1,4 +1,4 @@
 export * from './Ethnicity';
-export * from './FosterCheckbox';
+export * from './Foster';
 export * from './Gender';
 export * from './Race';
