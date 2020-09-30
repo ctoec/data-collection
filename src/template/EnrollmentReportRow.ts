@@ -307,7 +307,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.FAMILY_INFO,
   })
-  foster?: boolean = false;
+  foster?: boolean = null;
 
   @ColumnMetadata({
     formattedName: 'Experienced homelessness or housing insecurity',

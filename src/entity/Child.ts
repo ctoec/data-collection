@@ -110,7 +110,7 @@ export class Child implements ChildInterface {
   @ChildGenderSpecified()
   gender?: Gender;
 
-  @Column({ default: false })
+  @Column({ nullable: true, default: null })
   foster?: boolean;
 
   @Column({ default: false })

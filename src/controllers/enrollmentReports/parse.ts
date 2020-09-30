@@ -58,7 +58,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   const booleanProperties: string[] = [];
   const dateProperties: string[] = [];
   Object.entries(new EnrollmentReportRow()).forEach(([prop, value]) => {
-    if (typeof value == 'boolean') {
+    if (typeof value === 'boolean') {
       booleanProperties.push(prop);
     }
     if (moment.isMoment(value)) {
