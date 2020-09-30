@@ -12,11 +12,13 @@ createConnection()
   .then(async () => {
     console.log('Successfully established TypeORM DB connection');
 
-    // Staging != 'development', and we don't currently have a way of distinguishing
-    // env in deployed app BUT we don't have prod env so just always init seed data!
-    // if (isDevelopment()) {
-    await initialize();
-    // }
+    if (
+      process.env.NODE_ENV !== 'devsecure' &&
+      process.env.NODE_ENV !== 'prod'
+    ) {
+      console.log('Seeding application data...');
+      await initialize();
+    }
 
     // Instantiate the application server
     const app = express();
