@@ -9,23 +9,21 @@ import {
   ChildInfoForm,
   FamilyAddressForm,
 } from '../../components/Forms';
-import {
-  commonFormStepInfo,
-  TAB_IDS,
-} from '../../components/Forms/commonFormStepInfo';
+import { formSections, SECTION_KEYS } from '../../components/Forms/formSections';
+
 
 export const newForms = [
-  { key: TAB_IDS.IDENT, form: ChildIdentifiersForm },
-  { key: TAB_IDS.DEMO, form: ChildInfoForm },
-  { key: TAB_IDS.FAMILY, form: FamilyAddressForm },
-  { key: TAB_IDS.INCOME, form: NewFamilyIncome },
-  { key: TAB_IDS.ENROLLMENT, form: NewEnrollment },
+  { key: SECTION_KEYS.IDENT, form: ChildIdentifiersForm },
+  { key: SECTION_KEYS.DEMO, form: ChildInfoForm },
+  { key: SECTION_KEYS.FAMILY, form: FamilyAddressForm },
+  { key: SECTION_KEYS.INCOME, form: NewFamilyIncome },
+  { key: SECTION_KEYS.ENROLLMENT, form: NewEnrollment },
 ];
 
 export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   history: History
 ) =>
-  commonFormStepInfo.map(({ key, name, status }) => {
+  formSections.map(({ key, name, status }) => {
     const Form = newForms.find((s) => s.key === key)?.form || (() => <></>);
     return {
       key,

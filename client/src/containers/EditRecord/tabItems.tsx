@@ -13,9 +13,9 @@ import {
   FamilyAddressForm,
 } from '../../components/Forms';
 import {
-  commonFormStepInfo,
-  TAB_IDS,
-} from '../../components/Forms/commonFormStepInfo';
+  formSections,
+  SECTION_KEYS,
+} from '../../components/Forms/formSections';
 import { EditFormProps } from '../../components/Forms/types';
 
 const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
@@ -25,16 +25,16 @@ const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
 };
 
 export const editForms = [
-  { key: TAB_IDS.IDENT, form: ChildIdentifiersForm },
-  { key: TAB_IDS.DEMO, form: ChildInfoForm },
-  { key: TAB_IDS.FAMILY, form: FamilyAddressForm },
-  { key: TAB_IDS.INCOME, form: FamilyIncomeForm },
-  { key: TAB_IDS.ENROLLMENT, form: EnrollmentFundingForm },
-  { key: TAB_IDS.C4K, form: CareForKidsForm },
+  { key: SECTION_KEYS.IDENT, form: ChildIdentifiersForm },
+  { key: SECTION_KEYS.DEMO, form: ChildInfoForm },
+  { key: SECTION_KEYS.FAMILY, form: FamilyAddressForm },
+  { key: SECTION_KEYS.INCOME, form: FamilyIncomeForm },
+  { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm },
+  { key: SECTION_KEYS.C4K, form: CareForKidsForm },
 ];
 
 export const tabItems = (commonFormProps: EditFormProps) =>
-  commonFormStepInfo.map(({ key, name, status }) => {
+  formSections.map(({ key, name, status }) => {
     const EditForm =
       editForms.find((e) => e.key === key)?.form || (() => <></>);
     return {
@@ -42,8 +42,8 @@ export const tabItems = (commonFormProps: EditFormProps) =>
       text: status(commonFormProps.child) ? (
         <TextWithIcon {...commonTextWithIconProps} text={name} />
       ) : (
-        name
-      ),
+          name
+        ),
       content: <EditForm {...commonFormProps} />,
     };
   });

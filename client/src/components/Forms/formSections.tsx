@@ -8,7 +8,7 @@ import {
 import { Child } from '../../shared/models';
 import { doesC4kFormHaveErrors } from './CareForKids/Form';
 
-export const TAB_IDS = {
+export const SECTION_KEYS = {
   IDENT: 'identifiers',
   DEMO: 'demographics',
   FAMILY: 'family',
@@ -17,41 +17,41 @@ export const TAB_IDS = {
   C4K: 'c4k',
 };
 
-export type FormStepInfo = {
+export type FormSectionInfo = {
   key: string;
   name: string;
   status: (child?: Child) => boolean;
 };
 
-export const commonFormStepInfo: FormStepInfo[] = [
+export const formSections: FormSectionInfo[] = [
   {
-    key: TAB_IDS.IDENT,
+    key: SECTION_KEYS.IDENT,
     name: 'Child identifiers',
     status: doesChildIdFormHaveErrors,
   },
   {
-    key: TAB_IDS.DEMO,
+    key: SECTION_KEYS.DEMO,
     name: 'Child info',
     status: doesChildInfoFormHaveErrors,
   },
   {
-    key: TAB_IDS.FAMILY,
+    key: SECTION_KEYS.FAMILY,
     name: 'Family address',
     status: doesFamilyAddressFormHaveErrors,
   },
   {
-    key: TAB_IDS.INCOME,
+    key: SECTION_KEYS.INCOME,
     name: 'Family income',
     status: doesFamilyIncomeFormHaveErrors,
   },
   {
-    key: TAB_IDS.ENROLLMENT,
+    key: SECTION_KEYS.ENROLLMENT,
     name: 'Enrollment and funding',
     status: doesEnrollmentFormHaveErrors,
   },
   {
     // This is going away anyway
-    key: TAB_IDS.C4K,
+    key: SECTION_KEYS.C4K,
     name: 'Care 4 Kids',
     status: doesC4kFormHaveErrors,
   },

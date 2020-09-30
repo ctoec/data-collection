@@ -12,7 +12,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { tabItems } from './tabItems';
-import { commonFormStepInfo, TAB_IDS } from '../../components/Forms/commonFormStepInfo';
+import { formSections, SECTION_KEYS } from '../../components/Forms/formSections';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -36,7 +36,7 @@ const EditRecord: React.FC = () => {
   // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
-      history.replace({ hash: TAB_IDS.IDENT });
+      history.replace({ hash: SECTION_KEYS.IDENT });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,7 +70,7 @@ const EditRecord: React.FC = () => {
         text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
       },
     ]
-    const formStepInfo = commonFormStepInfo.find(s => s.key === activeTab);
+    const formStepInfo = formSections.find(s => s.key === activeTab);
     const incomplete = formStepInfo?.status(rowData);
     const formName = formStepInfo?.name.toLowerCase();
     if (incomplete) {
