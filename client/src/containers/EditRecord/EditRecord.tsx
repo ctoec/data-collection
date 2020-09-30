@@ -12,7 +12,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { tabItems } from './tabItems';
-import { formSections, SECTION_KEYS } from '../../components/Forms/formSections';
+import { SECTION_KEYS, formSections } from '../../components/Forms/formSections';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -30,7 +30,7 @@ const EditRecord: React.FC = () => {
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
-  }, [activeTab]);
+  }, [activeTab, setAlerts]);
   const history = useHistory();
   // and make child tab active by default if no hash
   // (but only on first render)

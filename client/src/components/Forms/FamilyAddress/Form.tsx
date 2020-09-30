@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { Child, Family } from '../../../shared/models';
 import { AddressFieldset, HomelessnessField } from './Fields';

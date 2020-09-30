@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button, Card } from '@ctoec/component-library';
 import { propertyDateSorter } from '../../../../utils/dateSorter';
 import { EditDeterminationForm } from './EditDeterminationForm';
 import { RedeterminationForm } from './RedeterminationForm';
 import { EditFormProps } from '../../types';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
-import { Child, Family } from '../../../../shared/models';
+import { Child } from '../../../../shared/models';
 
 const incomeDetFields = ['numberOfPeople', 'income', 'determinationDate'];
 export const doesFamilyIncomeFormHaveErrors = (child?: Child) =>
   child?.family?.incomeDeterminations?.length
     ? !!getValidationStatusForFields(
-        child.family.incomeDeterminations,
-        incomeDetFields
-      )
+      child.family.incomeDeterminations,
+      incomeDetFields
+    )
     : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
-  const { child, afterDataSave: afterDataSave } = props;
+  const { child, afterDataSave } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
