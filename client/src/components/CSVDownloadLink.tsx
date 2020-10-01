@@ -22,12 +22,12 @@ type ExportProps = {
 export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
   const { accessToken } = useContext(AuthenticationContext);
 
-  const downloadTemplate = async () => {
+  const downloadRoster = async () => {
     await downloadStreamToFile(
       reportId !== undefined
         ? `export/enrollment-report/${reportId}`
         : `export/roster`,
-      `Uploaded Data.csv`,
+      'Roster.csv',
       accessToken || ''
     ).catch((err) => console.error(err));
   };
@@ -35,12 +35,12 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
   return (
     <Button
       appearance="unstyled"
-      onClick={downloadTemplate}
-      className="text-bold margin-bottom-3 display-block"
+      onClick={downloadRoster}
+      className="margin-bottom-3 display-block"
       external
       text={
         <TextWithIcon
-          text="Download CSV File"
+          text="Export roster"
           Icon={DownloadArrow}
           iconSide="left"
           className="text-underline"
