@@ -113,8 +113,8 @@ export class Child implements ChildInterface {
   @Column({ nullable: true, default: null })
   foster?: boolean;
 
-  @Column({ default: false })
-  receivesC4K?: boolean = false;
+  @Column({ nullable: true, default: null })
+  receivesC4K?: boolean;
 
   @Column({ default: false })
   receivesSpecialEducationServices?: boolean;

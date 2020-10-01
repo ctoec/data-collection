@@ -13,17 +13,21 @@ import { Child } from '../../../shared/models';
  */
 export const CareForKidsField: React.FC = () => {
   return (
-    <FormField<Child, RadioButtonGroupProps, boolean>
+    <FormField<Child, RadioButtonGroupProps, boolean | null>
       getValue={(data) => data.at('receivesC4K')}
-      preprocessForDisplay={(data) => (data === true ? 'Yes' : 'No')}
+      preprocessForDisplay={(data) => {
+        if (data == true) return 'Yes';
+        else if (data == false) return 'No';
+        else return 'Unknown';
+      }}
       parseOnChangeEvent={(e) => {
-        return e.target.value === 'Yes';
+        if (e.target.value != 'Unknown') return e.target.value == 'Yes';
+        else return null;
       }}
       inputComponent={RadioButtonGroup}
       id="c4k-radio-group"
       name="careforkids"
       legend="Care 4 kids"
-      showLegend
       options={[
         {
           render: (props) => (
@@ -40,6 +44,14 @@ export const CareForKidsField: React.FC = () => {
             </div>
           ),
           value: 'No',
+        },
+        {
+          render: (props) => (
+            <div>
+              <RadioButton text="Unknown/Not collected" {...props} />
+            </div>
+          ),
+          value: 'Unknown',
         },
       ]}
     />

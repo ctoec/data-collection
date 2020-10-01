@@ -197,7 +197,7 @@ function excelDateToDate(excelDate: number) {
  * @param value
  */
 function getBoolean(value: string): boolean {
-  if (['N', 'NO'].includes(value?.toUpperCase())) return false;
-  else if (['', undefined, null].includes(value?.toUpperCase())) return null;
-  return true;
+  if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
+  else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
+  return null;
 }

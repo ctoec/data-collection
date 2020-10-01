@@ -10,7 +10,6 @@ import { getValidationStatusForField } from '../../../../utils/getValidationStat
 
 export const Foster: React.FC = () => (
   <>
-    <p className="text-bold margin-top-3 margin-bottom-1">Foster family</p>
     <FormField<Child, RadioButtonGroupProps, boolean | null>
       id="foster-button-group"
       getValue={(data) => data.at('foster')}

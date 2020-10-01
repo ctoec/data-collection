@@ -123,8 +123,8 @@ const mapChild = (
     white: source.white,
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
-    foster: source.foster || false,
-    receivesC4K: source.receivesC4K || false,
+    foster: source.foster,
+    receivesC4K: source.receivesC4K,
     receivesSpecialEducationServices:
       source.receivesSpecialEducationServices || false,
     specialEducationServicesType,
