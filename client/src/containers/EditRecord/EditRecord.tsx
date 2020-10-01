@@ -103,7 +103,6 @@ const EditRecord: React.FC = () => {
             {rowData.firstName} {rowData.lastName}
           </h1>
         </div>
-        {alertElements}
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
@@ -117,6 +116,7 @@ const EditRecord: React.FC = () => {
           <DeleteRecord child={rowData} />
         </div>
       </div>
+      {alertElements}
       <TabNav
         items={tabItems(commonFormProps)}
         activeId={activeTab}

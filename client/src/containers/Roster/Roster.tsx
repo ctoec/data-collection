@@ -82,11 +82,14 @@ const Roster: React.FC = () => {
     .map(([ageGroup, ageGroupChildren = []]) => ({
       id: ageGroup,
       title: (
-        <RosterSectionHeader
-          ageGroup={ageGroup as AgeGroup}
-          children={ageGroupChildren}
-        />
+        <>
+          {ageGroup}{' '}
+          <span className="text-normal">
+            {pluralize('children', ageGroupChildren.length, true)}{' '}
+          </span>
+        </>
       ),
+      headerContent: <RosterSectionHeader children={ageGroupChildren} />,
       expandText: `Show ${ageGroup} roster`,
       collapseText: `Hide ${ageGroup} roster`,
       content: (
@@ -112,7 +115,7 @@ const Roster: React.FC = () => {
 
   return (
     <>
-      <div className="grid-container">
+      <div className="Roster grid-container">
         <h1 className="margin-bottom-0" ref={h1Ref}>
           {organization?.providerName}
         </h1>
@@ -131,7 +134,6 @@ const Roster: React.FC = () => {
           </Link>
           <CSVDownloadLink />
         </div>
-        {/* TODO: revise accordion to have less stuff in the heading-- needs to be usable for quick navigation */}
         <Accordion items={accordionItems} titleHeadingLevel="h2" />
       </div>
       <FixedBottomBar>

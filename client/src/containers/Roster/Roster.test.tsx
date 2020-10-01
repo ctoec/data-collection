@@ -150,9 +150,9 @@ describe('Roster', () => {
     const renderResult = await renderHelper(<Roster />, helperOpts);
 
     // Assert there are two roster sections
-    const accordionHeaders = await renderResult.findAllByText(
-      /\d+ child(ren)?$/
-    );
+    const accordionHeaders = (
+      await renderResult.findAllByText(/\d+ child(ren)?$/)
+    ).map((innerSpanElement) => innerSpanElement.parentElement as HTMLElement);
     expect(accordionHeaders).toHaveLength(2);
 
     // Assert first section (infant/toddler) has 2 items in table,

@@ -120,11 +120,7 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [
-    accessToken,
-    childId,
-    refetchChild
-  ]);
+  }, [accessToken, childId, refetchChild]);
 
   // After child is updated, programmatically focus on the first input with an error
   useFocusFirstError([child]);

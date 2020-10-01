@@ -3,7 +3,7 @@
 exports[`Roster matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="grid-container"
+    class="Roster grid-container"
   >
     <h1
       class="margin-bottom-0"
@@ -58,33 +58,27 @@ exports[`Roster matches snapshot 1`] = `
               <h2
                 class="oec-accordion__heading-title"
               >
-                <div>
-                  <p
-                    class="margin-top-0 margin-bottom-1"
-                  >
-                    <span
-                      class="text-bold"
-                    >
-                      Infant/toddler 
-                    </span>
-                    2 children
-                  </p>
-                  <div
-                    class="display-flex"
-                  >
-                    <div
-                      class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
-                    >
-                      CDC - Child Day Care  — 1/3
-                    </div>
-                    <div
-                      class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
-                    >
-                      PSR - Priority School Readiness  — 1/5
-                    </div>
-                  </div>
-                </div>
+                Infant/toddler 
+                <span
+                  class="text-normal"
+                >
+                  2 children 
+                </span>
               </h2>
+              <div
+                class="display-flex"
+              >
+                <div
+                  class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                >
+                  CDC - Child Day Care  — 1/3
+                </div>
+                <div
+                  class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                >
+                  PSR - Priority School Readiness  — 1/5
+                </div>
+              </div>
             </div>
             <div
               class="oec-accordion__heading-expand"
@@ -296,28 +290,22 @@ exports[`Roster matches snapshot 1`] = `
               <h2
                 class="oec-accordion__heading-title"
               >
-                <div>
-                  <p
-                    class="margin-top-0 margin-bottom-1"
-                  >
-                    <span
-                      class="text-bold"
-                    >
-                      Preschool 
-                    </span>
-                    1 child
-                  </p>
-                  <div
-                    class="display-flex"
-                  >
-                    <div
-                      class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
-                    >
-                      CDC - Child Day Care  — 1/10
-                    </div>
-                  </div>
-                </div>
+                Preschool 
+                <span
+                  class="text-normal"
+                >
+                  1 child 
+                </span>
               </h2>
+              <div
+                class="display-flex"
+              >
+                <div
+                  class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                >
+                  CDC - Child Day Care  — 1/10
+                </div>
+              </div>
             </div>
             <div
               class="oec-accordion__heading-expand"
