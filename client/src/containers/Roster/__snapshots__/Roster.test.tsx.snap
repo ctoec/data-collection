@@ -43,7 +43,7 @@ exports[`Roster matches snapshot 1`] = `
       aria-multiselectable="true"
       class="oec-accordion"
     >
-      <h2
+      <div
         class="oec-accordion__heading"
       >
         <button
@@ -54,35 +54,37 @@ exports[`Roster matches snapshot 1`] = `
           <div
             class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
           >
-            <div
-              class="oec-accordion__heading-title"
-            >
-              <div>
-                <p
-                  class="margin-top-0 margin-bottom-1"
-                >
-                  <span
-                    class="text-bold"
+            <div>
+              <h2
+                class="oec-accordion__heading-title"
+              >
+                <div>
+                  <p
+                    class="margin-top-0 margin-bottom-1"
                   >
-                    Infant/toddler 
-                  </span>
-                  2 children
-                </p>
-                <div
-                  class="display-flex"
-                >
+                    <span
+                      class="text-bold"
+                    >
+                      Infant/toddler 
+                    </span>
+                    2 children
+                  </p>
                   <div
-                    class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                    class="display-flex"
                   >
-                    CDC - Child Day Care  — 1/3
-                  </div>
-                  <div
-                    class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
-                  >
-                    PSR - Priority School Readiness  — 1/5
+                    <div
+                      class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                    >
+                      CDC - Child Day Care  — 1/3
+                    </div>
+                    <div
+                      class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                    >
+                      PSR - Priority School Readiness  — 1/5
+                    </div>
                   </div>
                 </div>
-              </div>
+              </h2>
             </div>
             <div
               class="oec-accordion__heading-expand"
@@ -91,7 +93,7 @@ exports[`Roster matches snapshot 1`] = `
             </div>
           </div>
         </button>
-      </h2>
+      </div>
       <div
         aria-hidden="false"
         class="oec-accordion__content"
@@ -279,7 +281,7 @@ exports[`Roster matches snapshot 1`] = `
           </tbody>
         </table>
       </div>
-      <h2
+      <div
         class="oec-accordion__heading"
       >
         <button
@@ -290,30 +292,32 @@ exports[`Roster matches snapshot 1`] = `
           <div
             class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
           >
-            <div
-              class="oec-accordion__heading-title"
-            >
-              <div>
-                <p
-                  class="margin-top-0 margin-bottom-1"
-                >
-                  <span
-                    class="text-bold"
+            <div>
+              <h2
+                class="oec-accordion__heading-title"
+              >
+                <div>
+                  <p
+                    class="margin-top-0 margin-bottom-1"
                   >
-                    Preschool 
-                  </span>
-                  1 child
-                </p>
-                <div
-                  class="display-flex"
-                >
+                    <span
+                      class="text-bold"
+                    >
+                      Preschool 
+                    </span>
+                    1 child
+                  </p>
                   <div
-                    class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                    class="display-flex"
                   >
-                    CDC - Child Day Care  — 1/10
+                    <div
+                      class="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+                    >
+                      CDC - Child Day Care  — 1/10
+                    </div>
                   </div>
                 </div>
-              </div>
+              </h2>
             </div>
             <div
               class="oec-accordion__heading-expand"
@@ -322,7 +326,7 @@ exports[`Roster matches snapshot 1`] = `
             </div>
           </div>
         </button>
-      </h2>
+      </div>
       <div
         aria-hidden="false"
         class="oec-accordion__content"
