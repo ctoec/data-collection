@@ -120,7 +120,7 @@ const Roster: React.FC = () => {
             : `${children.length} children enrolled at ${distinctSiteIds.length} sites`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
-          <AddRecordButton providers={organizations} />
+          <AddRecordButton orgs={organizations} />
           <span className="margin-right-1"></span>
           <CSVDownloadLink />
         </div>
