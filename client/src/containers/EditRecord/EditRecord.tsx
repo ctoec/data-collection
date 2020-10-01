@@ -1,44 +1,21 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import {
-  TabNav,
-  TextWithIcon,
-  Info,
-  TextWithIconProps,
-} from '@ctoec/component-library';
+import { AlertProps, TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
-import {
-  FamilyIncomeForm,
-  ChildInfoForm,
-  CareForKidsForm,
-  EnrollmentFundingForm,
-  ChildIdentifiersForm,
-  doesChildIdFormHaveErrors,
-  doesChildInfoFormHaveErrors,
-  doesFamilyAddressFormHaveErrors,
-  doesFamilyIncomeFormHaveErrors,
-  doesEnrollmentFormHaveErrors,
-  doesC4kFormHaveErrors,
-  FamilyAddressForm,
-} from '../../components/Forms';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
 import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
-
-const TAB_IDS = {
-  IDENT: 'identifiers',
-  DEMO: 'demographics',
-  FAMILY: 'family',
-  INCOME: 'income',
-  ENROLLMENT: 'enrollment',
-  C4K: 'c4k',
-};
+import { tabItems } from './tabItems';
+import {
+  SECTION_KEYS,
+  formSections,
+} from '../../components/Forms/formSections';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -56,13 +33,14 @@ const EditRecord: React.FC = () => {
   // Clear any previously displayed alerts from other tabs
   useEffect(() => {
     setAlerts([]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
   const history = useHistory();
   // and make child tab active by default if no hash
   // (but only on first render)
   useEffect(() => {
     if (!activeTab) {
-      history.replace({ hash: TAB_IDS.IDENT });
+      history.replace({ hash: SECTION_KEYS.IDENT });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -78,7 +56,6 @@ const EditRecord: React.FC = () => {
     }).then((_rowData) => setRowData(_rowData));
   }, [accessToken, childId, refetch]);
 
-  // TODO: revisit whether we need this depending on whether errors in edit block save or are warnings
   useFocusFirstError([rowData]);
 
   if (!rowData) {
@@ -89,13 +66,24 @@ const EditRecord: React.FC = () => {
 
   const afterDataSave = () => {
     setRefetch((r) => r + 1);
-    setAlerts([
+    const newAlerts: AlertProps[] = [
       {
         type: 'success',
         heading: 'Record updated',
         text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
       },
-    ]);
+    ];
+    const formStepInfo = formSections.find((s) => s.key === activeTab);
+    const incomplete = formStepInfo?.status(rowData);
+    const formName = formStepInfo?.name.toLowerCase();
+    if (incomplete) {
+      newAlerts.push({
+        type: 'error',
+        heading: 'This record has missing or incorrect info',
+        text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
+      });
+    }
+    setAlerts(newAlerts);
   };
 
   const commonFormProps = {
@@ -105,16 +93,10 @@ const EditRecord: React.FC = () => {
     reportingPeriods,
   };
 
-  const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
-    Icon: Info,
-    iconSide: 'right',
-    className: 'svg-gold-20v',
-  };
-
   return (
-    <div className="margin-top-4 grid-container">
-      <BackButton />
+    <div className="grid-container">
       {alertElements}
+      <BackButton />
       <div className="display-flex flex-justify">
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
@@ -136,71 +118,7 @@ const EditRecord: React.FC = () => {
         </div>
       </div>
       <TabNav
-        items={[
-          {
-            id: TAB_IDS.IDENT,
-            text: doesChildIdFormHaveErrors(rowData) ? (
-              <TextWithIcon
-                {...commonTextWithIconProps}
-                text="Child identifiers"
-              />
-            ) : (
-              'Child identifiers'
-            ),
-            content: <ChildIdentifiersForm {...commonFormProps} />,
-          },
-          {
-            id: TAB_IDS.DEMO,
-            text: doesChildInfoFormHaveErrors(rowData) ? (
-              <TextWithIcon {...commonTextWithIconProps} text="Child info" />
-            ) : (
-              'Child info'
-            ),
-            content: <ChildInfoForm {...commonFormProps} />,
-          },
-          {
-            id: TAB_IDS.FAMILY,
-            text: doesFamilyAddressFormHaveErrors(rowData.family) ? (
-              <TextWithIcon
-                {...commonTextWithIconProps}
-                text="Family address"
-              />
-            ) : (
-              'Family address'
-            ),
-            content: <FamilyAddressForm {...commonFormProps} />,
-          },
-          {
-            id: TAB_IDS.INCOME,
-            text: doesFamilyIncomeFormHaveErrors(rowData.family) ? (
-              <TextWithIcon {...commonTextWithIconProps} text="Family income" />
-            ) : (
-              'Family income'
-            ),
-            content: <FamilyIncomeForm {...commonFormProps} />,
-          },
-          {
-            id: TAB_IDS.ENROLLMENT,
-            text: doesEnrollmentFormHaveErrors(rowData) ? (
-              <TextWithIcon
-                {...commonTextWithIconProps}
-                text="Enrollment and funding"
-              />
-            ) : (
-              'Enrollment and funding'
-            ),
-            content: <EnrollmentFundingForm {...commonFormProps} />,
-          },
-          {
-            id: TAB_IDS.C4K,
-            text: doesC4kFormHaveErrors(rowData) ? (
-              <TextWithIcon {...commonTextWithIconProps} text="Care 4 Kids" />
-            ) : (
-              'Care 4 Kids'
-            ),
-            content: <CareForKidsForm {...commonFormProps} />,
-          },
-        ]}
+        items={tabItems(commonFormProps)}
         activeId={activeTab}
         onClick={(tabId) => {
           history.replace({ hash: tabId });

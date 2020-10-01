@@ -7,9 +7,9 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { listSteps } from './ListSteps';
 import { EditFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
+import { listSteps } from './listSteps';
 
 type LocationType = Location & {
   state: {
@@ -42,7 +42,7 @@ const AddChild: React.FC = () => {
     if (!activeStep) {
       history.replace({ hash: steps[0].key });
     }
-  }, [activeStep, history]);
+  }, [activeStep, history, steps]);
 
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
@@ -70,32 +70,40 @@ const AddChild: React.FC = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [accessToken, child, locationState, organization, history, updateChild]);
-
-  const moveToNextStep = () => {
-    if (indexOfCurrentStep === steps.length - 1) {
-      history.push('/roster', {
-        alerts: [
-          {
-            type: 'success',
-            heading: 'Record added',
-            text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
-          },
-        ],
-      });
-    } else {
-      updateStepsVisited((oldSteps) => {
-        const newSteps = [...oldSteps];
-        newSteps[indexOfCurrentStep].visited = true;
-        return newSteps;
-      });
-      history.replace({ hash: steps[indexOfCurrentStep + 1].key });
-    }
-  };
+  }, [
+    accessToken,
+    child,
+    locationState,
+    organization,
+    history,
+    updateChild,
+    childId,
+  ]);
 
   // Fetch fresh child from API whenever refetch is triggered
   useEffect(() => {
     if (!childId) return;
+
+    const moveToNextStep = () => {
+      if (indexOfCurrentStep === steps.length - 1) {
+        history.push('/roster', {
+          alerts: [
+            {
+              type: 'success',
+              heading: 'Record added',
+              text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
+            },
+          ],
+        });
+      } else {
+        updateStepsVisited((oldSteps) => {
+          const newSteps = [...oldSteps];
+          newSteps[indexOfCurrentStep].visited = true;
+          return newSteps;
+        });
+        history.replace({ hash: steps[indexOfCurrentStep + 1].key });
+      }
+    };
 
     apiGet(`children/${childId}`, {
       accessToken,
@@ -136,14 +144,12 @@ const AddChild: React.FC = () => {
 
   return (
     <div className="grid-container">
-      <div className="margin-top-4">
-        <BackButton />
-        {alertElements}
-        <h1 ref={h1Ref}>Add a child record</h1>
-        <p className="usa-hint">
-          Information is required unless otherwise specified.
-        </p>
-      </div>
+      {alertElements}
+      <BackButton />
+      <h1 ref={h1Ref}>Add a child record</h1>
+      <p className="usa-hint">
+        Information is required unless otherwise specified.
+      </p>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
     </div>
   );

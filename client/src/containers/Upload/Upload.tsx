@@ -1,11 +1,14 @@
 import React, { useState, useContext, useEffect } from 'react';
+import cx from 'classnames';
 import { Link, useHistory } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { FileInput, TextWithIcon, Alert } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
-import { apiPost } from '../../utils/api';
+import { apiPost, apiGet } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { handleJWTError } from '../../utils/handleJWTError';
+import { CheckReplaceData } from './CheckReplaceData';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -24,25 +27,58 @@ const Upload: React.FC = () => {
 
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
+
+  const [userRosterCount, setUserRosterCount] = useState(undefined);
+  const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
+  useEffect(() => {
+    apiGet('children?count=true', { accessToken }).then((res) =>
+      setUserRosterCount(res.count)
+    );
+  }, [accessToken]);
+
   const [error, setError] = useState<string>();
   const [file, setFile] = useState<File>();
   const history = useHistory();
 
+  const [queryStringForUpload, setQueryStringForUpload] = useState('');
+  const [postUpload, setPostUpload] = useState(false);
+
   useEffect(() => {
-    if (file) {
+    // If the file exists and the upload should be posted,
+    // then trigger the API request
+    if (file && postUpload) {
       const formData = new FormData();
       formData.set('file', file);
-      apiPost('enrollment-reports', formData, { accessToken, rawBody: true })
-        .then((value) => {
-          history.push(`check-data/${value.id}`);
+      apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
+        accessToken,
+        rawBody: true,
+      })
+        .then((res) => {
+          history.push(`/roster`);
         })
-        .catch((err) => {
-          setError(err);
-          setFile(undefined);
-        });
+        .catch(
+          handleJWTError(history, (err) => {
+            setError(err);
+            setFile(undefined);
+          })
+        );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file]);
+  }, [postUpload]);
+
+  useEffect(() => {
+    // wait until we know if the user already has a roster or not
+    // before allowing them to submit data
+    if (userRosterCount === undefined) return;
+
+    // If they have selected a file, then decide if the upload
+    // should occur or we should display the check replace data modal
+    if (file) {
+      if (userRosterCount === 0) setPostUpload(true);
+      else setCheckReplaceDataOpen(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [file, userRosterCount]);
 
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -54,10 +90,21 @@ const Upload: React.FC = () => {
       return setError('No file selected for upload');
     }
     setFile(file);
+
+    // set target.files = null to ensure change event is properly triggered
+    // even if file with same name is re-uploaded
+    e.target.files = null;
   };
 
   return (
     <div className="grid-container margin-top-4">
+      <CheckReplaceData
+        isOpen={checkReplaceDataOpen}
+        clearFile={() => setFile(undefined)}
+        toggleIsOpen={() => setCheckReplaceDataOpen((o) => !o)}
+        setPostUpload={setPostUpload}
+        setQueryString={setQueryStringForUpload}
+      />
       <div className="margin-bottom-2 text-bold">
         <Link className="usa-button usa-button--unstyled" to="/">
           <TextWithIcon
@@ -83,7 +130,9 @@ const Upload: React.FC = () => {
         </p>
       </div>
       <div className="grid-row">
-        <form className="usa-form">
+        <form
+          className={cx('usa-form', { 'display-none': checkReplaceDataOpen })}
+        >
           <FileInput id="report" label="Choose a file" onChange={fileUpload} />
         </form>
       </div>

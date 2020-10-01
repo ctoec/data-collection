@@ -121,7 +121,10 @@ const children: Child[] = [
 ];
 
 const user = {
-  organizations: [{ id: 1, providerName: 'Organization' }],
+  organizations: [
+    { id: 1, providerName: 'Organization' },
+    { id: 2, providerName: 'Org 2' },
+  ],
 } as User;
 
 describe('Roster', () => {
@@ -150,9 +153,9 @@ describe('Roster', () => {
     const renderResult = await renderHelper(<Roster />, helperOpts);
 
     // Assert there are two roster sections
-    const accordionHeaders = await renderResult.findAllByText(
-      /\d+ child(ren)?$/
-    );
+    const accordionHeaders = (
+      await renderResult.findAllByText(/\d+ child(ren)?$/)
+    ).map((innerSpanElement) => innerSpanElement.parentElement as HTMLElement);
     expect(accordionHeaders).toHaveLength(2);
 
     // Assert first section (infant/toddler) has 2 items in table,
