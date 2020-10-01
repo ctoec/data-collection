@@ -12,7 +12,10 @@ import {
   ChildIdentifiersForm,
   FamilyAddressForm,
 } from '../../components/Forms';
-import { SECTION_KEYS, formSections } from '../../components/Forms/formSections';
+import {
+  SECTION_KEYS,
+  formSections,
+} from '../../components/Forms/formSections';
 import { EditFormProps } from '../../components/Forms/types';
 
 const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
@@ -39,8 +42,8 @@ export const tabItems = (commonFormProps: EditFormProps) =>
       text: status(commonFormProps.child) ? (
         <TextWithIcon {...commonTextWithIconProps} text={name} />
       ) : (
-          name
-        ),
+        name
+      ),
       content: <EditForm {...commonFormProps} />,
     };
   });
