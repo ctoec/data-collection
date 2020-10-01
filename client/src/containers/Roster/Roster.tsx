@@ -123,7 +123,7 @@ const Roster: React.FC = () => {
         <p className="font-body-xl margin-top-1">
           {loading
             ? 'Loading...'
-            : `${children.length} children enrolled at ${distinctSiteIds.length} sites`}
+            : `${children.length} children enrolled at ${user?.sites?.length} sites`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <Link
