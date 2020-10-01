@@ -145,13 +145,11 @@ const AddChild: React.FC = () => {
   return (
     <div className="grid-container">
       {alertElements}
-      <div className="margin-top-4">
-        <BackButton />
-        <h1 ref={h1Ref}>Add a child record</h1>
-        <p className="usa-hint">
-          Information is required unless otherwise specified.
+      <BackButton />
+      <h1 ref={h1Ref}>Add a child record</h1>
+      <p className="usa-hint">
+        Information is required unless otherwise specified.
         </p>
-      </div>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
     </div>
   );

@@ -115,7 +115,7 @@ const Roster: React.FC = () => {
 
   return (
     <>
-      <div className="Roster grid-container">
+      <div className="Roster margin-top-2 grid-container">
         {alertElements}
         <h1 className="margin-bottom-0" ref={h1Ref}>
           {organization?.providerName}

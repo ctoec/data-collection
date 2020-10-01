@@ -94,7 +94,7 @@ const EditRecord: React.FC = () => {
   };
 
   return (
-    <div className="margin-top-4 grid-container">
+    <div className="grid-container">
       {alertElements}
       <BackButton />
       <div className="display-flex flex-justify">
