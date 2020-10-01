@@ -6,7 +6,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     class="grid-container margin-top-4"
   >
     <button
-      class="usa-button usa-button--unstyled margin-bottom-2 text-bold"
+      class="usa-button usa-button--unstyled margin-2 text-bold"
       type="button"
     >
       <span

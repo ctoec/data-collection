@@ -149,7 +149,7 @@ const AddChild: React.FC = () => {
       <h1 ref={h1Ref}>Add a child record</h1>
       <p className="usa-hint">
         Information is required unless otherwise specified.
-        </p>
+      </p>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
     </div>
   );
