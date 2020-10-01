@@ -1,5 +1,7 @@
+import React from 'react';
 import { FormStatusProps, TObjectDriller } from '@ctoec/component-library';
 import { ValidationError } from 'class-validator';
+import { ReactNode } from 'react';
 import { ObjectWithValidationErrors } from '../shared/models/ObjectWithValidationErrors';
 
 /**
@@ -11,9 +13,10 @@ export function getValidationStatusForFieldInFieldset<
   T extends ObjectWithValidationErrors
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
-  path: string
+  path: string,
+  fieldProps: any & { label: string }
 ): FormStatusProps | undefined {
-  return getValidationStatusForField(objectDriller, path, {
+  return getValidationStatusForField(objectDriller, path, fieldProps, {
     message: undefined,
   });
 }
@@ -24,6 +27,15 @@ export type ValidationStatusOptions = {
   message?: string;
 };
 
+export function drillReactNodeForText(inputNode: ReactNode | string): string {
+  if (typeof inputNode === 'string') {
+    return inputNode;
+  } else if (React.isValidElement(inputNode)) {
+    return drillReactNodeForText(inputNode.props.children);
+  }
+  return '';
+}
+
 /**
  * The form field passes object driller and path to the validation function,
  * so this func can be used on its own to return a status if there is an error.
@@ -31,6 +43,7 @@ export type ValidationStatusOptions = {
  * the default type, id, and message.
  * @param objectDriller
  * @param path
+ * @param fieldProps
  * @param options
  */
 export function getValidationStatusForField<
@@ -38,6 +51,7 @@ export function getValidationStatusForField<
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
+  fieldProps: any & { label: string | ReactNode },
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   const splitPath = path.split('.');
@@ -54,11 +68,13 @@ export function getValidationStatusForField<
     (v: ValidationError) => v.property === field
   );
   if (!validationError) return;
-  const { constraints } = validationError;
+
   return {
     type: 'error',
     id: `status-${field}`,
-    message: constraints ? Object.values(constraints).join(', ') : undefined,
+    message: `${drillReactNodeForText(
+      fieldProps.label
+    )} is required for OEC reporting.`,
     ...options,
   };
 }
@@ -95,11 +111,7 @@ export function getValidationStatusForFields<
     fields.includes(v.property)
   );
   if (!validationErrors.length) return;
-  const message = validationErrors
-    .map((v: ValidationError) =>
-      v.constraints ? Object.values(v.constraints).join(', ') : ''
-    )
-    .join(', ');
+  const message = 'This information is required for OEC reporting.';
 
   return {
     type: 'error',

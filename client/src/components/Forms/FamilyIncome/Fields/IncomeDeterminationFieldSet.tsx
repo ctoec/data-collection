@@ -53,7 +53,7 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
         getValidationStatusForFields(
           data,
           ['numberOfPeople', 'income', 'determinationDate'],
-          { message: 'Income determination is required' }
+          { message: 'Income determination is required for OEC reporting.' }
         )
       }
     >

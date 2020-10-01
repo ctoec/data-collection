@@ -20,7 +20,7 @@ export const BirthCertificateFormFieldSet: React.FC = () => {
         getValidationStatusForFields(
           data,
           ['birthCertificateId', 'birthTown', 'birthState'],
-          { message: 'Birth certificate details are required' }
+          { message: 'Birth certificate is required for OEC reporting.' }
         )
       }
     >
