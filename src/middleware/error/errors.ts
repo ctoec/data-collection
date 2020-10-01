@@ -45,6 +45,6 @@ export class InternalServerError extends ApiError {
   constructor(message: string) {
     super(message);
     this.name = 'InternalServerError';
-    this.status - 500;
+    this.status = 500;
   }
 }

@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import qs from 'query-string';
 import {
   Modal,
   CheckboxGroup,
@@ -28,7 +29,7 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
   useEffect(() => {
     setQueryString(
       siteIdsToReplace.length
-        ? `?overwriteSites=${siteIdsToReplace.join(',')}`
+        ? `?${qs.stringify({ overwriteSites: siteIdsToReplace })}`
         : ''
     );
   }, [siteIdsToReplace]);
