@@ -1,4 +1,4 @@
-import { getManager, EntityManager } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import {
   Child,
   Family,
@@ -23,24 +23,37 @@ import {
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
-import { BadRequestError } from '../../middleware/error/errors';
+import { BadRequestError, ApiError } from '../../middleware/error/errors';
 
 export const mapAndSaveRows = async (
+  transaction: EntityManager,
   rows: EnrollmentReportRow[],
   user: User
 ) => {
   const [organizations, sites] = await Promise.all([
-    getManager().findByIds(Organization, user.organizationIds),
-    getManager().findByIds(Site, user.siteIds),
+    transaction.findByIds(Organization, user.organizationIds),
+    transaction.findByIds(Site, user.siteIds),
   ]);
 
-  return getManager().transaction(
-    async (tManager) =>
-      await Promise.all(
-        rows.map((row) => mapAndSaveRow(tManager, row, organizations, sites))
-      )
-  );
+  const children = [];
+  for (let i = 0; i < rows.length; i++) {
+    try {
+      const child = await mapAndSaveRow(
+        transaction,
+        rows[i],
+        organizations,
+        sites
+      );
+      children.push(child);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.log('Unable to parse row, dropping: ', JSON.stringify(rows[i]));
+    }
+  }
+
+  return children;
 };
+
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
  * from source FlattenedEnrollment.
@@ -53,38 +66,39 @@ const mapAndSaveRow = async (
   userOrganizations: Organization[],
   userSites: Site[]
 ) => {
-  try {
-    const organization = lookUpOrganization(source, userOrganizations);
-    if (!organization) {
-      throw new BadRequestError('Invalid provider name');
-    }
-
-    const site = lookUpSite(source, organization.id, userSites);
-    const family = await mapFamily(transaction, source, organization);
-    const child = await mapChild(transaction, source, organization, family);
-    const incomeDetermination = await mapIncomeDetermination(
-      transaction,
-      source,
-      family
+  const organization = lookUpOrganization(source, userOrganizations);
+  if (!organization) {
+    const orgNames = userOrganizations.map((org) => `"${org.providerName}"`);
+    const orgNamesForError = `${orgNames
+      .slice(0, -1)
+      .join(', ')}, or ${orgNames.slice(-1)}`;
+    throw new BadRequestError(
+      `You entered invalid provider names\nCheck that your spreadsheet provider column only contains ${orgNamesForError} before uploading again.`
     );
-    const enrollment = await mapEnrollment(transaction, source, site, child);
-    const funding = await mapFunding(
-      transaction,
-      source,
-      organization,
-      enrollment
-    );
-
-    family.incomeDeterminations = [incomeDetermination];
-    child.family = family;
-    enrollment.fundings = [funding];
-    child.enrollments = [enrollment];
-
-    return child;
-  } catch (err) {
-    console.error('Unable to map row: ', err);
-    return;
   }
+
+  const site = lookUpSite(source, organization.id, userSites);
+  const family = await mapFamily(transaction, source, organization);
+  const child = await mapChild(transaction, source, organization, family);
+  const incomeDetermination = await mapIncomeDetermination(
+    transaction,
+    source,
+    family
+  );
+  const enrollment = await mapEnrollment(transaction, source, site, child);
+  const funding = await mapFunding(
+    transaction,
+    source,
+    organization,
+    enrollment
+  );
+
+  family.incomeDeterminations = [incomeDetermination];
+  child.family = family;
+  enrollment.fundings = [funding];
+  child.enrollments = [enrollment];
+
+  return child;
 };
 
 /**
@@ -102,7 +116,11 @@ const lookUpOrganization = (
   if (organizations.length === 1) return organizations[0];
 
   if (!source.providerName)
-    throw new BadRequestError('Provider name is required');
+    throw new BadRequestError(`
+			You uploaded a file with missing information\n
+			Provider name is required for every record in your upload.
+			Make sure this column is not empty. 
+		`);
 
   return organizations.find(
     (organization) =>
