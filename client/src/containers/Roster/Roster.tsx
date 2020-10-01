@@ -46,11 +46,16 @@ const Roster: React.FC = () => {
     (c) => c.validationErrors && c.validationErrors.length > 0
   ).length;
   const childrenWithErrorsAlert: AlertProps = {
-    text: `You'll need to add required info for ${pluralize(
-      'record',
-      numberOfChildrenWithErrors,
-      true
-    )} before submitting your data to OEC.`,
+    text: (
+      <span>
+        `You'll need to add required info for{' '}
+        {pluralize('record', numberOfChildrenWithErrors, true)} before
+        submitting your data to OEC. Update with{' '}
+        <Link className="usa-button usa-button--unstyled" to="/batch-edit">
+          batch editing.
+        </Link>
+      </span>
+    ),
     heading: 'Update roster before submitting',
     type: 'warning',
   };
