@@ -116,10 +116,10 @@ const Roster: React.FC = () => {
   return (
     <>
       <div className="Roster grid-container">
+        {alertElements}
         <h1 className="margin-bottom-0" ref={h1Ref}>
           {organization?.providerName}
         </h1>
-        {alertElements}
         <p className="font-body-xl margin-top-1">
           {loading
             ? 'Loading...'

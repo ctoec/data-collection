@@ -144,10 +144,10 @@ const AddChild: React.FC = () => {
 
   return (
     <div className="grid-container">
+      {alertElements}
       <div className="margin-top-4">
         <BackButton />
         <h1 ref={h1Ref}>Add a child record</h1>
-        {alertElements}
         <p className="usa-hint">
           Information is required unless otherwise specified.
         </p>
