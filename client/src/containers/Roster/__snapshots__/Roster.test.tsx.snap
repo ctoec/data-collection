@@ -38,9 +38,6 @@ exports[`Roster matches snapshot 1`] = `
           </span>
         </button>
       </div>
-      <span
-        class="margin-right-1"
-      />
       <button
         class="usa-button usa-button--unstyled margin-bottom-3 display-block"
         type="button"

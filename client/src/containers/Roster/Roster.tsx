@@ -121,7 +121,6 @@ const Roster: React.FC = () => {
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <AddRecordButton orgs={organizations} />
-          <span className="margin-right-1"></span>
           <CSVDownloadLink />
         </div>
         <Accordion items={accordionItems} titleHeadingLevel="h2" />
