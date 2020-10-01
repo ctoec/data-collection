@@ -293,14 +293,14 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             >
               <input
                 class="usa-radio__input"
-                id="Yes"
+                id="foster-yes"
                 name="foster"
                 type="radio"
-                value="Yes"
+                value="foster-yes"
               />
               <label
                 class="usa-radio__label"
-                for="Yes"
+                for="foster-yes"
               >
                 Yes
               </label>
@@ -314,14 +314,14 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             >
               <input
                 class="usa-radio__input"
-                id="No"
+                id="foster-no"
                 name="foster"
                 type="radio"
-                value="No"
+                value="foster-no"
               />
               <label
                 class="usa-radio__label"
-                for="No"
+                for="foster-no"
               >
                 No
               </label>
@@ -336,14 +336,14 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               <input
                 checked=""
                 class="usa-radio__input"
-                id="Unknown"
+                id="foster-unknown"
                 name="foster"
                 type="radio"
-                value="Unknown"
+                value="foster-unknown"
               />
               <label
                 class="usa-radio__label"
-                for="Unknown"
+                for="foster-unknown"
               >
                 Unknown/Not collected
               </label>
