@@ -1345,6 +1345,100 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         </fieldset>
         <fieldset
           class="grid-gap grid-row usa-fieldset"
+          id="care-model-radiogroup-fieldset"
+        >
+          <legend
+            id="fieldset-legend-care-model-radiogroup-fieldset"
+          >
+            <span
+              class="usa-label"
+            >
+              Care model
+            </span>
+          </legend>
+          <div
+            class="grid-gap margin-top-3 grid-row flex-align-start"
+          >
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="In-person"
+                  name="care-model"
+                  type="radio"
+                  value="In-person"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="In-person"
+                >
+                  In-person
+                </label>
+              </div>
+            </span>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="Hybrid"
+                  name="care-model"
+                  type="radio"
+                  value="Hybrid"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Hybrid"
+                >
+                  Hybrid
+                </label>
+              </div>
+            </span>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="Virtual"
+                  name="care-model"
+                  type="radio"
+                  value="Virtual"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Virtual"
+                >
+                  Virtual
+                </label>
+              </div>
+            </span>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="Unknown"
+                  name="care-model"
+                  type="radio"
+                  value="Unknown"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Unknown"
+                >
+                  Unknown
+                </label>
+              </div>
+            </span>
+          </div>
+        </fieldset>
+        <fieldset
+          class="grid-gap grid-row usa-fieldset"
           id="age-group-radiogroup-fieldset"
         >
           <legend

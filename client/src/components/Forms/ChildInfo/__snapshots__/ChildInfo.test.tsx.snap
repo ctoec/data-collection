@@ -122,6 +122,24 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             </label>
           </div>
         </span>
+        <span>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="raceNotDisclosed"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="raceNotDisclosed"
+            >
+              Race Not Disclosed
+            </label>
+          </div>
+        </span>
       </div>
     </fieldset>
     <fieldset
@@ -152,14 +170,33 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="no"
+              id="Yes"
               name="ethnicity"
               type="radio"
-              value="no"
+              value="Yes"
             />
             <label
               class="usa-radio__label"
-              for="no"
+              for="Yes"
+            >
+              Hispanic or Latinx
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="No"
+              name="ethnicity"
+              type="radio"
+              value="No"
+            />
+            <label
+              class="usa-radio__label"
+              for="No"
             >
               Not Hispanic or Latinx
             </label>
@@ -170,17 +207,18 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
+              checked=""
               class="usa-radio__input"
-              id="yes"
+              id="Unknown"
               name="ethnicity"
               type="radio"
-              value="yes"
+              value="Unknown"
             />
             <label
               class="usa-radio__label"
-              for="yes"
+              for="Unknown"
             >
-              Hispanic or Latinx
+              Unknown/Not Collected
             </label>
           </div>
         </span>
@@ -232,27 +270,88 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         </option>
       </select>
     </div>
-    <p
-      class="text-bold margin-top-3 margin-bottom-1"
+    <fieldset
+      class="grid-gap grid-row usa-fieldset"
+      id="foster-button-group-fieldset"
     >
-      Foster family
-    </p>
-    <div
-      class="usa-checkbox"
-    >
-      <input
-        class="usa-checkbox__input"
-        id="foster"
-        type="checkbox"
-        value="foster"
-      />
-      <label
-        class="usa-checkbox__label"
-        for="foster"
+      <legend
+        id="fieldset-legend-foster-button-group-fieldset"
       >
-        Child lives with foster family
-      </label>
-    </div>
+        <span
+          class="usa-label"
+        >
+          Child lives with foster family
+        </span>
+      </legend>
+      <div
+        class="grid-gap margin-top-3 grid-row flex-align-start"
+      >
+        <span>
+          <div>
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="Yes"
+                name="foster"
+                type="radio"
+                value="Yes"
+              />
+              <label
+                class="usa-radio__label"
+                for="Yes"
+              >
+                Yes
+              </label>
+            </div>
+          </div>
+        </span>
+        <span>
+          <div>
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="No"
+                name="foster"
+                type="radio"
+                value="No"
+              />
+              <label
+                class="usa-radio__label"
+                for="No"
+              >
+                No
+              </label>
+            </div>
+          </div>
+        </span>
+        <span>
+          <div>
+            <div
+              class="usa-radio"
+            >
+              <input
+                checked=""
+                class="usa-radio__input"
+                id="Unknown"
+                name="foster"
+                type="radio"
+                value="Unknown"
+              />
+              <label
+                class="usa-radio__label"
+                for="Unknown"
+              >
+                Unknown/Not collected
+              </label>
+            </div>
+          </div>
+        </span>
+      </div>
+    </fieldset>
     <input
       class="usa-button"
       type="submit"
