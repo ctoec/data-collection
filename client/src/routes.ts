@@ -4,7 +4,6 @@ import Login from './containers/Login/Login';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
 import GettingStarted from './containers/GettingStarted/GettingStarted';
-import CheckData from './containers/CheckData/CheckData';
 import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
@@ -64,12 +63,6 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/check-data/:reportId',
-    component: CheckData,
-    unauthorized: false,
-    exact: true,
-  },
-  {
     path: '/create-record/:childId?',
     component: AddChild,
     unauthorized: false,
@@ -80,7 +73,7 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/success/:reportId',
+    path: '/success',
     component: SubmitSuccess,
     unauthorized: false,
   },

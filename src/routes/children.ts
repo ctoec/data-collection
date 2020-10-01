@@ -34,12 +34,19 @@ childrenRouter.post(
 /**
  * /children GET
  *
- * Returns all children the authed user has access to
+ * Returns all children the authed user has access to,
+ * or the count of all children, if qs param `count=true` is passed
  */
 childrenRouter.get(
   '/',
   passAsyncError(async (req, res) => {
     const children = await controller.getChildren(req.user);
+
+    const count = req.query['count'];
+    if (count && count === 'true') {
+      res.send({ count: children.length });
+      return;
+    }
 
     // Augment children with any validation errors in their nested objects
     const childrenWithErrors: Child[] = await Promise.all(

@@ -1,10 +1,8 @@
 import React from 'react';
-import { Child, AgeGroup, FundingSpace } from '../../shared/models';
+import { Child, FundingSpace } from '../../shared/models';
 import { getCurrentFunding } from '../../utils/models';
-import pluralize from 'pluralize';
 
 type RosterSectionHeaderProps = {
-  ageGroup: AgeGroup;
   children: Child[];
 };
 
@@ -14,7 +12,6 @@ type RosterSectionHeaderProps = {
  * for the given age group.
  */
 export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
-  ageGroup,
   children,
 }) => {
   const fundingSpaceCounts: {
@@ -36,25 +33,18 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
   }, fundingSpaceCounts);
 
   return (
-    <div>
-      <p className="margin-top-0 margin-bottom-1">
-        <span className="text-bold">{ageGroup} </span>
-        {pluralize('child', children.length, true)}
-      </p>
-
-      <div className="display-flex">
-        {fundingSpaceCounts.map(({ fundingSpace, count }) => {
-          return (
-            <div
-              key={fundingSpace.id}
-              className="margin-top-2 margin-right-2 font-body-sm text-base-darker"
-            >
-              {fundingSpace.source} {fundingSpace.time} — {count}/
-              {fundingSpace.capacity}
-            </div>
-          );
-        })}
-      </div>
+    <div className="display-flex">
+      {fundingSpaceCounts.map(({ fundingSpace, count }) => {
+        return (
+          <div
+            key={fundingSpace.id}
+            className="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+          >
+            {fundingSpace.source} {fundingSpace.time} — {count}/
+            {fundingSpace.capacity}
+          </div>
+        );
+      })}
     </div>
   );
 };
