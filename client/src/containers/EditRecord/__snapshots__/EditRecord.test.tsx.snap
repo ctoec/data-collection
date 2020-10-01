@@ -3,10 +3,10 @@
 exports[`EditRecord matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="margin-top-4 grid-container"
+    class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-bottom-2 text-bold"
+      class="usa-button usa-button--unstyled margin-2 text-bold"
       type="button"
     >
       <span
