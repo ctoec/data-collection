@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Switch } from 'react-router-dom';
-import { Header } from '@ctoec/component-library';
+import { Header, NavLink } from '@ctoec/component-library';
 
 import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';
@@ -17,11 +17,21 @@ const App: React.FC = () => {
         Skip to main content
       </a>
       <Header
-        secondaryTitle="Early childhood enrollment data"
-        primaryTitle="Office of Early Childhood"
+        primaryTitle="ECE Reporter"
         loginPath="/login"
         logoutPath="/logout"
+        showPrimaryNavItems={!!user?.firstName}
         navItems={[
+          {
+            type: 'primary',
+            text: 'Roster',
+            path: '/roster',
+          },
+          {
+            type: 'primary',
+            text: 'Batch upload',
+            path: '/upload',
+          },
           {
             id: 'templates-nav',
             text: 'Data template',
