@@ -84,6 +84,21 @@ const mapSite = (source: EnrollmentReportRow) => {
 };
 
 /**
+ * Determine if an enrollment report row has no indication of the
+ * respective child's race (in which case, assume not disclosed).
+ * @param source
+ */
+const raceIndicated = (source: EnrollmentReportRow) => {
+  return (
+    !!source.americanIndianOrAlaskaNative ||
+    !!source.asian ||
+    !!source.blackOrAfricanAmerican ||
+    !!source.nativeHawaiianOrPacificIslander ||
+    !!source.white
+  );
+};
+
+/**
  * Create Child object from FlattenedEnrollment source.
  * TODO: How do we handle blocking data errors in a single row?
  * @param source
@@ -121,6 +136,7 @@ const mapChild = (
     blackOrAfricanAmerican: source.blackOrAfricanAmerican,
     nativeHawaiianOrPacificIslander: source.nativeHawaiianOrPacificIslander,
     white: source.white,
+    raceNotDisclosed: !raceIndicated(source),
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
     foster: source.foster,

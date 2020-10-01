@@ -192,7 +192,18 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  white?: boolean = undefined;
+  white?: boolean = false;
+
+  @ColumnMetadata({
+    formattedName: 'Race Not Disclosed',
+    required: REQUIRED_AT_LEAST_ONE,
+    definition: "The child's race, as identified by the family.",
+    reason: DEMOGRAPHIC_REPORTING_REASON,
+    format: BOOLEAN_FORMAT,
+    example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
+  })
+  raceNotDisclosed?: boolean = true;
 
   @ColumnMetadata({
     formattedName: 'Hispanic or Latinx Ethnicity',

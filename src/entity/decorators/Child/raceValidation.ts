@@ -8,6 +8,7 @@ const raceFields = [
   'blackOrAfricanAmerican',
   'nativeHawaiianOrPacificIslander',
   'white',
+  'raceNotDisclosed',
 ];
 
 function isChildRaceIndicated(child: Child) {

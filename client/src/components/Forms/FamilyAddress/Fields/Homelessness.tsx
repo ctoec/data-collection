@@ -14,12 +14,12 @@ export const HomelessnessField: React.FC = () => {
         id="homelessness-button-group"
         getValue={(data) => data.at('homelessness')}
         preprocessForDisplay={(data) => {
-          if (data == true) return 'Yes';
-          else if (data == false) return 'No';
+          if (data === true) return 'Yes';
+          else if (data === false) return 'No';
           else return 'Unknown';
         }}
         parseOnChangeEvent={(e) => {
-          if (e.target.value != 'Unknown') return e.target.value == 'Yes';
+          if (e.target.value !== 'Unknown') return e.target.value === 'Yes';
           else return null;
         }}
         inputComponent={RadioButtonGroup}
