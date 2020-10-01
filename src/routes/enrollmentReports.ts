@@ -81,8 +81,9 @@ enrollmentReportsRouter.post(
     // Ingest upload by parsing, mapping, and saving uploaded data
     try {
       const reportRows = controller.parseUploadedTemplate(req.file);
-      const reportChildren = await Promise.all(
-        reportRows.map(controller.mapRow)
+      const reportChildren = await controller.mapAndSaveRows(
+        reportRows,
+        req.user
       );
 
       const report = await getManager().save(
