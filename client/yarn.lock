@@ -1166,9 +1166,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#base":
+"@ctoec/component-library@https://github.com/ctoec/component-library#button-dropdown-changes":
   version "0.0.31"
-  resolved "https://github.com/ctoec/component-library#8c77cb1ade2417810851c7aa63d74ea41ba44480"
+  resolved "https://github.com/ctoec/component-library#5c5cf2c28e5a91dc79d6db2e8fca1943de798edd"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

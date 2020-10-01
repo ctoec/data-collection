@@ -18,16 +18,29 @@ exports[`Roster matches snapshot 1`] = `
     <div
       class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"
     >
-      <a
-        class="usa-button usa-button--unstyled"
-        href="/create-record"
+      <div
+        class="oec-drop-button"
+        id="select-organization"
       >
-        <span
-          class="oec-text-with-icon"
+        <button
+          class="usa-button"
+          type="button"
         >
-          Add a record
-        </span>
-      </a>
+          <span>
+            <span
+              class="oec-text-with-icon"
+            >
+              Add a record
+            </span>
+            <span>
+               
+            </span>
+          </span>
+        </button>
+      </div>
+      <span
+        class="margin-right-1"
+      />
       <button
         class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
         type="button"
@@ -104,7 +117,7 @@ exports[`Roster matches snapshot 1`] = `
                 class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 25%;"
+                style="width: 20%;"
               >
                 <button
                   aria-label="Sort table by Name in descending order"
@@ -172,7 +185,24 @@ exports[`Roster matches snapshot 1`] = `
                 class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 25%;"
+                style="width: 20%;"
+              >
+                <button
+                  aria-label="Sort table by Organization in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Organization
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 20%;"
               >
                 <button
                   aria-label="Sort table by Site in ascending order"
@@ -231,6 +261,9 @@ exports[`Roster matches snapshot 1`] = `
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+              />
+              <td
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               >
                 Site
               </td>
@@ -262,6 +295,9 @@ exports[`Roster matches snapshot 1`] = `
               </td>
               <td
                 class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
@@ -331,7 +367,7 @@ exports[`Roster matches snapshot 1`] = `
                 class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 25%;"
+                style="width: 20%;"
               >
                 <button
                   aria-label="Sort table by Name in descending order"
@@ -399,7 +435,24 @@ exports[`Roster matches snapshot 1`] = `
                 class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 25%;"
+                style="width: 20%;"
+              >
+                <button
+                  aria-label="Sort table by Organization in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Organization
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 20%;"
               >
                 <button
                   aria-label="Sort table by Site in ascending order"
@@ -455,6 +508,9 @@ exports[`Roster matches snapshot 1`] = `
               </td>
               <td
                 class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"

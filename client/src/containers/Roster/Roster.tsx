@@ -1,18 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import idx from 'idx';
-import {
-  TextWithIcon,
-  Accordion,
-  Table,
-  PlusCircle,
-  Button,
-  AlertProps,
-} from '@ctoec/component-library';
+import { Accordion, Table, Button, AlertProps } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
 import { apiGet } from '../../utils/api';
 import { tableColumns } from '../Roster/TableColumns';
-import { Link } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { CSVDownloadLink } from '../../components/CSVDownloadLink';
@@ -20,6 +12,7 @@ import { RosterSectionHeader } from './RosterSectionHeader';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
+import { AddRecordButton } from '../../components/AddRecordButton';
 
 const MAX_LENGTH_EXPANDED = 50;
 
@@ -27,8 +20,9 @@ const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
-  // TODO add heirarchy to pick between organizations
-  const organization = idx(user, (_) => _.organizations[0]);
+  const organizations = user?.organizations;
+  // TODO: let user select between orgs
+  const organization = organizations ? organizations[0] : undefined;
   const showOrgInTables = idx(user, (_) => _.organizations.length > 1) || false;
 
   const [children, setChildren] = useState<Child[]>([]);
@@ -126,12 +120,8 @@ const Roster: React.FC = () => {
             : `${children.length} children enrolled at ${distinctSiteIds.length} sites`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
-          <Link
-            className="usa-button usa-button--unstyled"
-            to={{ pathname: '/create-record', state: { organization } }}
-          >
-            <TextWithIcon Icon={PlusCircle} text="Add a record" />
-          </Link>
+          <AddRecordButton providers={organizations} />
+          <span className="margin-right-1"></span>
           <CSVDownloadLink />
         </div>
         <Accordion items={accordionItems} titleHeadingLevel="h2" />
