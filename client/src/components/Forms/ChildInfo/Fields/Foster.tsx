@@ -14,12 +14,12 @@ export const Foster: React.FC = () => (
       id="foster-button-group"
       getValue={(data) => data.at('foster')}
       preprocessForDisplay={(data) => {
-        if (data === true) return 'Yes';
-        else if (data === false) return 'No';
-        else return 'Unknown';
+        if (data === true) return 'foster-yes';
+        else if (data === false) return 'foster-no';
+        else return 'foster-unknown';
       }}
       parseOnChangeEvent={(e) => {
-        if (e.target.value !== 'Unknown') return e.target.value === 'Yes';
+        if (e.target.value !== 'foster-unknown') return e.target.value === 'foster-yes';
         else return null;
       }}
       inputComponent={RadioButtonGroup}
@@ -33,7 +33,7 @@ export const Foster: React.FC = () => (
               <RadioButton text="Yes" {...props} />
             </div>
           ),
-          value: 'Yes',
+          value: 'foster-yes',
         },
         {
           render: (props) => (
@@ -41,7 +41,7 @@ export const Foster: React.FC = () => (
               <RadioButton text="No" {...props} />
             </div>
           ),
-          value: 'No',
+          value: 'foster-no',
         },
         {
           render: (props) => (
@@ -49,7 +49,7 @@ export const Foster: React.FC = () => (
               <RadioButton text="Unknown/Not collected" {...props} />
             </div>
           ),
-          value: 'Unknown',
+          value: 'foster-unknown',
         },
       ]}
       status={getValidationStatusForField}
