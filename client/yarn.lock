@@ -1166,9 +1166,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#multi-alert-spacing":
+"@ctoec/component-library@https://github.com/ctoec/component-library#base":
   version "0.0.31"
-  resolved "https://github.com/ctoec/component-library#edd4d2875ee84655d1417ed66d085a447f94dbbf"
+  resolved "https://github.com/ctoec/component-library#8c77cb1ade2417810851c7aa63d74ea41ba44480"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
@@ -1183,7 +1183,7 @@
     react-modal "^3.11.2"
     react-router-dom "^5.2.0"
     typescript "^3.9.0"
-    uswds "^2.7.1"
+    uswds "^2.9.0"
 
 "@date-io/core@1.x", "@date-io/core@^1.3.13":
   version "1.3.13"
@@ -12167,7 +12167,7 @@ use@^3.1.0:
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
   integrity sha512-cwESVXlO3url9YWlFW/TA9cshCEhtu7IKJ/p5soJ/gGpj7vbvFrAY/eIioQ6Dw23KjZhYgiIo8HOs1nQ2vr/oQ==
 
-uswds@^2.7.1, uswds@^2.8.0:
+uswds@^2.8.0, uswds@^2.9.0:
   version "2.9.0"
   resolved "https://registry.yarnpkg.com/uswds/-/uswds-2.9.0.tgz#002089d74582960099b0ee836f89f043cdf6d0bc"
   integrity sha512-5IMVgMCUUlgWVFrB7Wf1qTvv5L3oDDlSsAgvJ02+/sV2uh4JzO9YPm3493RTaMuHTc+feRCuYyEIloXsEQY0Pg==
