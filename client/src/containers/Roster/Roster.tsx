@@ -13,6 +13,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
+import { Link } from 'react-router-dom';
 
 const MAX_LENGTH_EXPANDED = 50;
 
