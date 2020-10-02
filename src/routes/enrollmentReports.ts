@@ -10,10 +10,11 @@ import {
   NotFoundError,
   BadRequestError,
   ApiError,
+  InternalServerError,
 } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/enrollmentReports/index';
-import { mapRow } from '../controllers/enrollmentReports/index';
+import { parseQueryString } from '../utils/parseQueryString';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -47,18 +48,42 @@ enrollmentReportsRouter.get(
  * /enrollment-reports POST
  *
  * Ingests an uploaded file, leveraging multer middleware to
- * save it to /tmp/uploads. Then, parses the saved file into
- * an array of FlattenedEnrollments, saves them to the DB as
- * an EnrollmentReport, and returns the report.
+ * save it to /tmp/uploads. Then:
+ * 	- cleans up existing data for the user as necessary
+ * 		(either deleting all child data, or child data associated with the
+ * 		sites specified by overwriteSites query string params)
+ *  - parses the saved file into an array of EnrollmentReportRows
+ *  - maps EnrollmentReportRows to child records, which are persisted to the DB
+ * 	- record which child records were updated by this enrollment report
+ * 		and saves that to the DB as an EnrollmentReport
+ * 	- returns new EnrollmentReport on success
  */
 const upload = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
   '/',
   upload,
   passAsyncError(async (req, res) => {
+    // Prepare for ingestion by removing any existing data
+    try {
+      const siteIdsToReplace = parseQueryString(req, 'overwriteSites', {
+        post: parseInt,
+        forceArray: true,
+      }) as number[];
+      controller.removeExistingEnrollmentDataForUser(
+        req.user,
+        siteIdsToReplace
+      );
+    } catch (err) {
+      console.error('Unable to delete existing data for user:', err);
+      throw new InternalServerError('Unable to remove existing roster data');
+    }
+
+    // Ingest upload by parsing, mapping, and saving uploaded data
     try {
       const reportRows = controller.parseUploadedTemplate(req.file);
-      const reportChildren = await Promise.all(reportRows.map(mapRow));
+      const reportChildren = await Promise.all(
+        reportRows.map(controller.mapRow)
+      );
 
       const report = await getManager().save(
         getManager().create(EnrollmentReport, { children: reportChildren })
@@ -76,7 +101,7 @@ enrollmentReportsRouter.post(
 );
 
 /**
- * /enrollment-reports/:reportId GET
+ * /enrollment-reports/download/:reportId GET
  *
  * Returns the given EnrollmentReport as a CSV
  */

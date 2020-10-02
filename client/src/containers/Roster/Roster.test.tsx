@@ -121,7 +121,10 @@ const children: Child[] = [
 ];
 
 const user = {
-  organizations: [{ id: 1, providerName: 'Organization' }],
+  organizations: [
+    { id: 1, providerName: 'Organization' },
+    { id: 2, providerName: 'Org 2' },
+  ],
 } as User;
 
 describe('Roster', () => {
