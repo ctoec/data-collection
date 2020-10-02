@@ -106,7 +106,7 @@ const Roster: React.FC = () => {
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
-
+  console.log(children);
   return (
     <>
       <div className="Roster grid-container">
@@ -123,16 +123,24 @@ const Roster: React.FC = () => {
           <AddRecordButton orgs={organizations} />
           <CSVDownloadLink />
         </div>
-        {!children ? (
+
+        {!!children ? (
           <Alert
             heading="No records in your roster"
             type="info"
             text="Get started by adding records to your roster"
+            actionItem={
+              <Button
+                text="Add a record"
+                href="/create-record"
+                appearance="default"
+              />
+            }
           />
         ) : (
           <Accordion items={accordionItems} titleHeadingLevel="h2" />
         )}
-        <Alert
+        {/* <Alert
           heading="No records in your roster"
           type="info"
           text="Get started by adding records to your roster"
@@ -143,7 +151,7 @@ const Roster: React.FC = () => {
               appearance="default"
             />
           }
-        />
+        /> */}
       </div>
       <FixedBottomBar>
         <Button
