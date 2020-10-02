@@ -1,5 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { RaceField, EthnicityField, GenderField } from './Fields';
+import {
+  RaceField,
+  EthnicityField,
+  GenderField,
+  DisabilityServices,
+  DualLanguageLearner,
+  Foster,
+} from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -19,6 +26,8 @@ export const childInfoFields = [
   'raceNotDisclosed',
   'hispanicOrLatinxEthnicity',
   'gender',
+  'receivingDisabilityServices',
+  'dualLanguageLearner',
   'foster',
 ];
 export const doesChildInfoFormHaveErrors = (child?: Child) =>
@@ -66,6 +75,12 @@ export const ChildInfoForm = ({
       <RaceField />
       <EthnicityField />
       <GenderField />
+
+      {!hideHeader && <h2>Special circumstances</h2>}
+      <DisabilityServices />
+      <DualLanguageLearner />
+      <Foster />
+
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

@@ -483,16 +483,4 @@ export class EnrollmentReportRow {
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
   lastFundingPeriod?: Moment = moment.invalid();
-
-  @ColumnMetadata({
-    formattedName: 'Receiving Care 4 Kids?',
-    required: REQUIRED,
-    definition: "Whether the child's family is receiving a Care 4 Kids subsidy",
-    reason:
-      'Used to identify overlaps between state funded spaces and Care 4 Kids subsidies',
-    format: BOOLEAN_FORMAT,
-    example: 'Yes',
-    section: SECTIONS.ENROLLMENT_FUNDING,
-  })
-  receivesC4K?: boolean = false;
 }

@@ -6,8 +6,6 @@ import {
   doesFamilyIncomeFormHaveErrors,
 } from '.';
 import { Child } from '../../shared/models';
-import { doesC4kFormHaveErrors } from './CareForKids/Form';
-import { doesSpecialCircumstancesFormHaveErrors } from './SpecialCircumstances/Form';
 
 export const SECTION_KEYS = {
   IDENT: 'identifiers',
@@ -50,16 +48,5 @@ export const formSections: FormSectionInfo[] = [
     key: SECTION_KEYS.ENROLLMENT,
     name: 'Enrollment and funding',
     status: doesEnrollmentFormHaveErrors,
-  },
-  {
-    // This is going away anyway
-    key: SECTION_KEYS.C4K,
-    name: 'Care 4 Kids',
-    status: doesC4kFormHaveErrors,
-  },
-  {
-    key: SECTION_KEYS.SPECIAL,
-    name: 'Special Circumstances',
-    status: doesSpecialCircumstancesFormHaveErrors,
   },
 ];

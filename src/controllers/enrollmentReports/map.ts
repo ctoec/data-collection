@@ -135,7 +135,6 @@ const mapChild = (
     gender,
     dualLanguageLearner: source.dualLanguageLearner,
     foster: source.foster,
-    receivesC4K: source.receivesC4K,
     receivesDisabilityServices: source.receivesDisabilityServices,
     organization,
     family: family,

@@ -14,7 +14,6 @@ import { useSites } from '../../../../hooks/useSites';
 import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
 import useIsMounted from '../../../../hooks/useIsMounted';
-import { CareForKidsField } from '../../CareForKids/CareForKidsField';
 import { useValidationErrors } from '../../../../hooks/useValidationErrors';
 import { getCurrentEnrollment } from '../../../../utils/models';
 
@@ -85,7 +84,6 @@ export const NewEnrollment = ({
           fundingSpaces={fundingSpaces}
           reportingPeriods={reportingPeriods}
         />
-        <CareForKidsField />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}
           disabled={saving}

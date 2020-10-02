@@ -119,9 +119,6 @@ export class Child implements ChildInterface {
   foster?: boolean;
 
   @Column({ nullable: true, default: null })
-  receivesC4K?: boolean;
-
-  @Column({ nullable: true, default: null })
   receivesDisabilityServices?: boolean;
 
   @ValidateNested()
