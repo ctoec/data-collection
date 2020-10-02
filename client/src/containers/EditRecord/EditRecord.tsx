@@ -94,7 +94,8 @@ const EditRecord: React.FC = () => {
   };
 
   return (
-    <div className="margin-top-4 grid-container">
+    <div className="grid-container">
+      {alertElements}
       <BackButton />
       <div className="display-flex flex-justify">
         <div>
@@ -116,7 +117,6 @@ const EditRecord: React.FC = () => {
           <DeleteRecord child={rowData} />
         </div>
       </div>
-      {alertElements}
       <TabNav
         items={tabItems(commonFormProps)}
         activeId={activeTab}
