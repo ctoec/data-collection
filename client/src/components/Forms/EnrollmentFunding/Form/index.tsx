@@ -8,7 +8,7 @@ import { useSites } from '../../../../hooks/useSites';
 import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
 import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
-import { Child } from '../../../../shared/models';
+import { Child, Enrollment } from '../../../../shared/models';
 
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'fundings'];
 // TODO: check this after debugging enrollment-- can't save partially filled out form
@@ -27,27 +27,29 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   afterDataSave,
   reportingPeriods: inputReportingPeriods,
 }) => {
-  // Get site options for new enrollments
-  const { sites } = useSites();
+  if (!child) {
+    return <></>;
+  }
 
-  // Get fundingSpaces for new fundings
-  const { fundingSpaces } = useFundingSpaces();
+  const enrollments: Enrollment[] = child.enrollments || [];
+  const currentEnrollment: Enrollment | undefined = enrollments.find(
+    (e) => !e.exit
+  );
+  const pastEnrollments: Enrollment[] = currentEnrollment
+    ? enrollments.filter((e) => e.id !== currentEnrollment.id)
+    : enrollments;
+
+  // Get site options for new enrollments, specific to the org the child currently belongs to
+  const { sites } = useSites(child.organization?.id);
+
+  // Get fundingSpaces for new fundings, specific to the org the child currently belongs to
+  const { fundingSpaces } = useFundingSpaces(child.organization?.id);
 
   // Get reporting periods (needed to update enrollments with fundings)
   const { reportingPeriods } = useReportingPeriods(inputReportingPeriods);
 
   // Separate enrollments into current (no end date) and past
   // (with end date). Either may not exist
-  if (!child) {
-    return <></>;
-  }
-
-  const enrollments = child.enrollments || [];
-  const currentEnrollment = enrollments.find((e) => !e.exit);
-  const pastEnrollments = currentEnrollment
-    ? enrollments.filter((e) => e.id !== currentEnrollment.id)
-    : enrollments;
-
   return (
     <>
       <h2>Enrollment and funding</h2>

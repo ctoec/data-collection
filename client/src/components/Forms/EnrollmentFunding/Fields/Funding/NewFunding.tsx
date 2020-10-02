@@ -58,8 +58,6 @@ export const FundingField = <
   useEffect(() => {
     const _fundingSpaceOptions = fundingSpaces.filter(
       (fs) => fs.ageGroup === enrollment?.ageGroup
-      // TODO: Figure out how / where to constrict options (for sites as well) based on org
-      // && fs.organization.id === enrollment?.site?.organization.id
     );
     setFundingSpaceOptions(_fundingSpaceOptions);
 

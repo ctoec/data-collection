@@ -1,12 +1,24 @@
 import { User, Site } from '../entity';
-import { getManager } from 'typeorm';
+import { FindConditions, getManager, In } from 'typeorm';
 
 /**
  * Return all sites the user has access to
  * @param user
  */
-export const getSites = async (user: User) => {
-  return await getManager().findByIds(Site, user.siteIds || [], {
+export async function getSites(
+  user: User,
+  organizationId?: number
+): Promise<Site[]> {
+  let where: FindConditions<Site> = {
+    id: In(user.siteIds || []),
+  };
+
+  if (!!organizationId) {
+    where.organizationId = organizationId;
+  }
+
+  return getManager().find(Site, {
+    where,
     relations: ['organization'],
   });
-};
+}
