@@ -30,7 +30,7 @@ exports[`App matches snapshot 1`] = `
             id="extended-logo"
           >
             <a
-              aria-label="Office of Early Childhood home"
+              aria-label="ECE Reporter home"
               href="/"
             >
               <div
@@ -38,14 +38,9 @@ exports[`App matches snapshot 1`] = `
               >
                 <div>
                   <div
-                    class="primary-title"
+                    class="primary-title primary-title--only"
                   >
-                    Office of Early Childhood
-                  </div>
-                  <div
-                    class="secondary-title"
-                  >
-                    Early childhood enrollment data
+                    ECE Reporter
                   </div>
                 </div>
               </div>
@@ -72,9 +67,6 @@ exports[`App matches snapshot 1`] = `
                 src="close.svg"
               />
             </button>
-            <ul
-              class="usa-nav__primary usa-accordion"
-            />
             <div
               class="usa-nav__secondary usa-nav__secondary--extended"
             >

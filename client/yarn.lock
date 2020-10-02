@@ -1168,7 +1168,7 @@
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#base":
   version "0.0.31"
-  resolved "https://github.com/ctoec/component-library#8c77cb1ade2417810851c7aa63d74ea41ba44480"
+  resolved "https://github.com/ctoec/component-library#54b70b81f44bc10abdda391941662864f78c5dc1"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
