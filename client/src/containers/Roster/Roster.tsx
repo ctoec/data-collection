@@ -1,6 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import idx from 'idx';
-import { Accordion, Table, Button, AlertProps } from '@ctoec/component-library';
+import {
+  Accordion,
+  Table,
+  Button,
+  AlertProps,
+  Alert,
+} from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
 import { apiGet } from '../../utils/api';
@@ -13,6 +19,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
+import { Link } from 'react-router-dom';
 
 const MAX_LENGTH_EXPANDED = 50;
 
@@ -100,13 +107,6 @@ const Roster: React.FC = () => {
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
 
-  const distinctSiteIds: number[] = [];
-  children.reduce((total, child) => {
-    const siteId = idx(child, (_) => _.enrollments[0].site.id);
-    if (siteId && !total.includes(siteId)) total.push(siteId);
-    return total;
-  }, distinctSiteIds);
-
   return (
     <>
       <div className="Roster grid-container">
@@ -123,7 +123,27 @@ const Roster: React.FC = () => {
           <AddRecordButton orgs={organizations} />
           <CSVDownloadLink />
         </div>
-        <Accordion items={accordionItems} titleHeadingLevel="h2" />
+        {!children ? (
+          <Alert
+            heading="No records in your roster"
+            type="info"
+            text="Get started by adding records to your roster"
+          />
+        ) : (
+          <Accordion items={accordionItems} titleHeadingLevel="h2" />
+        )}
+        <Alert
+          heading="No records in your roster"
+          type="info"
+          text="Get started by adding records to your roster"
+          actionItem={
+            <Button
+              text="Add a record"
+              href="/create-record"
+              appearance="default"
+            />
+          }
+        />
       </div>
       <FixedBottomBar>
         <Button
