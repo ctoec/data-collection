@@ -13,6 +13,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
+import { Link } from 'react-router-dom';
 
 const MAX_LENGTH_EXPANDED = 50;
 
@@ -40,11 +41,16 @@ const Roster: React.FC = () => {
     (c) => c.validationErrors && c.validationErrors.length > 0
   ).length;
   const childrenWithErrorsAlert: AlertProps = {
-    text: `You'll need to add required info for ${pluralize(
-      'record',
-      numberOfChildrenWithErrors,
-      true
-    )} before submitting your data to OEC.`,
+    text: (
+      <span>
+        `You'll need to add required info for{' '}
+        {pluralize('record', numberOfChildrenWithErrors, true)} before
+        submitting your data to OEC. Update with{' '}
+        <Link className="usa-button usa-button--unstyled" to="/batch-edit">
+          batch editing.
+        </Link>
+      </span>
+    ),
     heading: 'Update roster before submitting',
     type: 'warning',
   };

@@ -51,6 +51,9 @@ This mono-repo consists of three main parts:
 ### Database
 The application has a SQL Server backend. We use [typeORM](https://typeorm.io/) to manage database migrations. [Read more about our specific use of typeORM here](src/entity/README.md)
 
+### Testing
+Testing on the front end is run through react-scripts and jest to compare rendered pages to stored snapshots. Running `docker-compose exec client yarn run test` will run all test and only pass if all rendered pages match the expected snapshots. Adding a `-u` flag to the end of the command will update all snapshots to be the results of the current code.
+
 ## Deploy
 
 Deployments can either be triggered directly through the corresponding CircleCI workflow for the branch you're working with, or directly from the CLI.  Additionally, we also don't utilize Docker in any of our deployment environments, but rather Linux/Node for the sake of simplicity.
