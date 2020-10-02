@@ -27,6 +27,10 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   afterDataSave,
   reportingPeriods: inputReportingPeriods,
 }) => {
+  const { sites } = useSites(child?.organization?.id);
+  const { fundingSpaces } = useFundingSpaces(child?.organization?.id);
+  const { reportingPeriods } = useReportingPeriods(inputReportingPeriods);
+
   if (!child) {
     return <></>;
   }
@@ -38,15 +42,6 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   const pastEnrollments: Enrollment[] = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
-
-  // Get site options for new enrollments, specific to the org the child currently belongs to
-  const { sites } = useSites(child.organization?.id);
-
-  // Get fundingSpaces for new fundings, specific to the org the child currently belongs to
-  const { fundingSpaces } = useFundingSpaces(child.organization?.id);
-
-  // Get reporting periods (needed to update enrollments with fundings)
-  const { reportingPeriods } = useReportingPeriods(inputReportingPeriods);
 
   // Separate enrollments into current (no end date) and past
   // (with end date). Either may not exist
