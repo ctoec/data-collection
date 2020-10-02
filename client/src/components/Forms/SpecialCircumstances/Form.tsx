@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { RaceField, EthnicityField, GenderField } from './Fields';
+import { DualLanguageLearner, Foster, DisabilityServices } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -10,21 +10,17 @@ import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
 // The fields we use to check to see if this form has errors or missing info
-export const childInfoFields = [
-  'americanIndianOrAlaskaNative',
-  'asian',
-  'blackOrAfricanAmerican',
-  'nativeHawaiianOrPacificIslander',
-  'white',
-  'raceNotDisclosed',
-  'hispanicOrLatinxEthnicity',
-  'gender',
+export const specialCircumstancesFields = [
+  'receivesDisabilityServices',
+  'dualLanguageLearner',
   'foster',
 ];
-export const doesChildInfoFormHaveErrors = (child?: Child) =>
-  child ? !!getValidationStatusForFields(child, childInfoFields) : true;
+export const doesSpecialCircumstancesFormHaveErrors = (child?: Child) =>
+  child
+    ? !!getValidationStatusForFields(child, specialCircumstancesFields)
+    : true;
 
-export const ChildInfoForm = ({
+export const SpecialCircumstancesForm = ({
   child: inputChild,
   afterDataSave,
   hideHeader = false,
@@ -35,7 +31,7 @@ export const ChildInfoForm = ({
   const [saving, setSaving] = useState(false);
 
   if (!inputChild) {
-    throw new Error('Child info rendered without child');
+    throw new Error('Special circumstances rendered without child');
   }
 
   const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
@@ -56,16 +52,16 @@ export const ChildInfoForm = ({
 
   return (
     <Form<Child>
-      className="ChildInfoForm usa-form"
+      className="SpecialCircumstancesForm usa-form"
       data={child}
       onSubmit={onFormSubmit}
       noValidate
       autoComplete="off"
     >
-      {!hideHeader && <h2>Child info</h2>}
-      <RaceField />
-      <EthnicityField />
-      <GenderField />
+      {!hideHeader && <h2>Special circumstances</h2>}
+      <DisabilityServices />
+      <DualLanguageLearner />
+      <Foster />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

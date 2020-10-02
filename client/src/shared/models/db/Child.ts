@@ -23,10 +23,10 @@ export interface Child extends ObjectWithValidationErrors {
   raceNotDisclosed?: boolean;
   hispanicOrLatinxEthnicity?: boolean;
   gender?: Gender;
+  dualLanguageLearner?: boolean;
   foster?: boolean;
   receivesC4K?: boolean;
-  receivesSpecialEducationServices?: boolean;
-  specialEducationServicesType?: SpecialEducationServicesType;
+  receivesDisabilityServices?: boolean;
   family?: Family;
   organization?: Organization;
   enrollments?: Array<Enrollment>;

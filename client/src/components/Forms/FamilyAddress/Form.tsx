@@ -9,7 +9,13 @@ import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
-const familyAddressFields = ['streetAddress', 'town', 'state', 'zipCode'];
+const familyAddressFields = [
+  'streetAddress',
+  'town',
+  'state',
+  'zipCode',
+  'homelessness',
+];
 export const doesFamilyAddressFormHaveErrors = (child?: Child) =>
   child?.family
     ? !!getValidationStatusForFields(child.family, familyAddressFields)

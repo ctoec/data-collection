@@ -112,12 +112,6 @@ const mapChild = (
   const gender: Gender =
     mapEnum(Gender, source.gender, true) || Gender.NotSpecified;
 
-  // Special education services type
-  const specialEducationServicesType: SpecialEducationServicesType = mapEnum(
-    SpecialEducationServicesType,
-    source.specialEducationServicesType
-  );
-
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
@@ -139,11 +133,10 @@ const mapChild = (
     raceNotDisclosed: !raceIndicated(source),
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
+    dualLanguageLearner: source.dualLanguageLearner,
     foster: source.foster,
     receivesC4K: source.receivesC4K,
-    receivesSpecialEducationServices:
-      source.receivesSpecialEducationServices || false,
-    specialEducationServicesType,
+    receivesDisabilityServices: source.receivesDisabilityServices,
     organization,
     family: family,
   });

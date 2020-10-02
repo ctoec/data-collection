@@ -241,28 +241,16 @@ export class EnrollmentReportRow {
   dualLanguageLearner?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Receiving Special Education Services',
+    formattedName: 'Receiving Disability Services',
     required: REQUIRED,
     definition:
-      'Children receiving services with an IEP or an IFSP are receiving special education services.',
+      'Children receiving services for Autism, emotional disturbance, intellectual disability, learning disability, speech-language impairment, and other disabilities.',
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  receivesSpecialEducationServices?: boolean = false;
-
-  @ColumnMetadata({
-    formattedName: 'Special Education Services Type',
-    required: 'Required if child is receiving special education services.',
-    definition:
-      'Whether a child receives special education services from a Local Education Agency (LEA) or another provider.',
-    reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: Object.values(SpecialEducationServicesType).join(', '),
-    example: 'Non-LEA',
-    section: SECTIONS.CHILD_INFO,
-  })
-  specialEducationServicesType?: string = undefined;
+  receivesDisabilityServices?: boolean = false;
 
   @ColumnMetadata({
     formattedName: 'Street address',

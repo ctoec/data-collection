@@ -113,21 +113,16 @@ export class Child implements ChildInterface {
   gender?: Gender;
 
   @Column({ nullable: true, default: null })
+  dualLanguageLearner?: boolean;
+
+  @Column({ nullable: true, default: null })
   foster?: boolean;
 
   @Column({ nullable: true, default: null })
   receivesC4K?: boolean;
 
-  @Column({ default: false })
-  receivesSpecialEducationServices?: boolean;
-
-  @Column({
-    type: 'varchar',
-    length: 20,
-    nullable: true,
-    transformer: enumTransformer(SpecialEducationServicesType),
-  })
-  specialEducationServicesType?: SpecialEducationServicesType;
+  @Column({ nullable: true, default: null })
+  receivesDisabilityServices?: boolean;
 
   @ValidateNested()
   @ManyToOne(() => Family)

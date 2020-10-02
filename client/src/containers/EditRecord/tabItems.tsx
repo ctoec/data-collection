@@ -11,6 +11,7 @@ import {
   EnrollmentFundingForm,
   ChildIdentifiersForm,
   FamilyAddressForm,
+  SpecialCircumstancesForm,
 } from '../../components/Forms';
 import {
   SECTION_KEYS,
@@ -31,6 +32,7 @@ export const editForms = [
   { key: SECTION_KEYS.INCOME, form: FamilyIncomeForm },
   { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm },
   { key: SECTION_KEYS.C4K, form: CareForKidsForm },
+  { key: SECTION_KEYS.SPECIAL, form: SpecialCircumstancesForm },
 ];
 
 export const tabItems = (commonFormProps: EditFormProps) =>

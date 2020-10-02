@@ -110,6 +110,14 @@ exports[`EditRecord matches snapshot 1`] = `
                 Care 4 Kids
               </button>
             </li>
+            <li>
+              <button
+                class="oec-tab-nav--tab"
+                type="button"
+              >
+                Special Circumstances
+              </button>
+            </li>
           </ul>
         </nav>
       </div>
