@@ -16,6 +16,9 @@ export const getFundingSpaces = async (
   const readOrgIds: number[] = await getReadAccessibileOrgIds(user);
 
   if (!!organizationId && !readOrgIds.includes(organizationId)) {
+    console.warn(
+      'User attempted to retrieve funding spaces for an org they dont have access to'
+    );
     return null;
   }
 
