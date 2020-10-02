@@ -1166,9 +1166,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#base":
+"@ctoec/component-library@https://github.com/ctoec/component-library#fieldset-spacing":
   version "0.0.31"
-  resolved "https://github.com/ctoec/component-library#54b70b81f44bc10abdda391941662864f78c5dc1"
+  resolved "https://github.com/ctoec/component-library#66acacb331f789b70c614a167b9f313e47e0659f"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
@@ -1948,7 +1948,15 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.9.0":
+"@types/react@*":
+  version "16.9.51"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.51.tgz#f8aa51ffa9996f1387f63686696d9b59713d2b60"
+  integrity sha512-lQa12IyO+DMlnSZ3+AGHRUiUcpK47aakMMoBG8f7HGxJT8Yfe+WE128HIXaHOHVPReAW0oDS3KAI0JI2DDe1PQ==
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^3.0.2"
+
+"@types/react@^16.9.0":
   version "16.9.49"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.49.tgz#09db021cf8089aba0cdb12a49f8021a69cce4872"
   integrity sha512-DtLFjSj0OYAdVLBbyjhuV9CdGVHCkHn2R+xr3XkBvK2rS1Y1tkc14XSGjYgm5Fjjr90AxH9tiSzc1pCFMGO06g==
@@ -7472,10 +7480,10 @@ jspdf-autotable@3.5.9:
   resolved "https://registry.yarnpkg.com/jspdf-autotable/-/jspdf-autotable-3.5.9.tgz#8a625ef2aead44271da95e9f649843c401536925"
   integrity sha512-ZRfiI5P7leJuWmvC0jGVXu227m68C2Jfz1dkDckshmDYDeVFCGxwIBYdCUXJ8Eb2CyFQC2ok82fEWO+xRDovDQ==
 
-jspdf@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/jspdf/-/jspdf-2.0.0.tgz#cade1cb458cdb75487197284ba942f952d7f4116"
-  integrity sha512-4qDyU2T6jp0IcTun1mXO1azrZhoQnY2fbaegwBETa6faN7gXKTLRVHYT7cZ4rUNwoqDpz+XydW/sWJ7YT+An+A==
+jspdf@2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/jspdf/-/jspdf-2.1.0.tgz#2322f8644bc41845b3abe20db4c3ca0adeadb84c"
+  integrity sha512-NQygqZEKhSw+nExySJxB72Ge/027YEyIM450Vh/hgay/H9cgZNnkXXOQPRspe9EuCW4sq92zg8hpAXyyBdnaIQ==
   dependencies:
     atob "^2.1.2"
     btoa "^1.2.1"
@@ -7893,9 +7901,9 @@ matches-selector@^1.0.0:
   integrity sha512-c4vLwYWyl+Ji+U43eU/G5FwxWd4ZH0ePUsFs5y0uwD9HUEFBXUQ1zUUan+78IpRD+y4pUfG0nAzNM292K7ItvA==
 
 material-table@^1.68.0:
-  version "1.69.0"
-  resolved "https://registry.yarnpkg.com/material-table/-/material-table-1.69.0.tgz#9761821c532e750051e512f2ecf714112a1f07ac"
-  integrity sha512-Pkm/c5ldXwc+/d245dbRH0zSY+00pJ6aWaDD4rBvDBwVGzZfAa+0Ktan13kM+ZujtsAOcDJYFhNx91CMp8Z++Q==
+  version "1.69.1"
+  resolved "https://registry.yarnpkg.com/material-table/-/material-table-1.69.1.tgz#8d1c8b23207f18bd3328cae1b5775ede284682e6"
+  integrity sha512-7MA8kMtr8ToPE6gNUbOGIb4g+RGOLWK8s9gXZYNwFtg6fGAjWEJ+iqBrMmdq7fkMmTRcyOd7/sC/5OPPY8CNGg==
   dependencies:
     "@date-io/date-fns" "^1.1.0"
     "@material-ui/pickers" "^3.2.2"
@@ -7904,7 +7912,7 @@ material-table@^1.68.0:
     debounce "^1.2.0"
     fast-deep-equal "2.0.1"
     filefy "0.1.10"
-    jspdf "2.0.0"
+    jspdf "2.1.0"
     jspdf-autotable "3.5.9"
     prop-types "^15.6.2"
     react-beautiful-dnd "^13.0.0"
