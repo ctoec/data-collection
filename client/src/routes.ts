@@ -10,6 +10,7 @@ import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
 import AddChild from './containers/AddChild/AddChild';
 import FundingSourceTimes from './containers/FundingSourceTimes/FundingSourceTimes';
 import Roster from './containers/Roster/Roster';
+import BatchEdit from './containers/BatchEdit/BatchEdit';
 
 export type RouteConfig = {
   path: string;
@@ -75,6 +76,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/success',
     component: SubmitSuccess,
+    unauthorized: false,
+  },
+  {
+    path: '/batch-edit/',
+    component: BatchEdit,
     unauthorized: false,
   },
   {
