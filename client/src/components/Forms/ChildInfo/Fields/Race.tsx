@@ -44,16 +44,6 @@ const raceOptions: { label: string; field: RaceField }[] = [
   },
 ];
 
-const raceIndicated = (record: any) => {
-  return (
-    !!record.at('americanIndianOrAlaskaNative') ||
-    !!record.at('asian') ||
-    !!record.at('blackOrAfricanAmerican') ||
-    !!record.at('nativeHawaiianOrPacificIslander') ||
-    !!record.at('white')
-  );
-};
-
 /**
  * Component for entering the race of a child in an enrollment.
  */

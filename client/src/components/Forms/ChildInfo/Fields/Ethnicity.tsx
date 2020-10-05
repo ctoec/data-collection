@@ -7,6 +7,7 @@ import {
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
 import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
+import { UNKNOWN } from '../../../../shared/constants';
 
 /**
  * Component for entering the enthicity of a child in an enrollment.
@@ -47,9 +48,7 @@ export const EthnicityField: React.FC = () => {
           value: 'No',
         },
         {
-          render: (props) => (
-            <RadioButton text="Unknown/Not Collected" {...props} />
-          ),
+          render: (props) => <RadioButton text={UNKNOWN} {...props} />,
           value: 'Unknown',
         },
       ]}

@@ -384,7 +384,8 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'Model',
     required: REQUIRED,
-    definition: 'The type of services received by the child.',
+    definition:
+      'The type of services received by the child. In-Person: In-school learning for all students on a full-time basis.\nHybrid: A combination of both in-person and remote learning support resulting in a limited student population on school premises at any given time.\nDistance: Learning opportunities in which students and educators are not physically present in a classroom environment.',
     reason: 'Used to identify children receiving in-person or virtual services',
     format: Object.values(CareModel).join(', '),
     example: 'Hybrid',
