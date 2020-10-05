@@ -1,8 +1,15 @@
 import React from 'react';
 import BatchEdit from './BatchEdit';
 import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
-import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
-import { Child, Family } from '../../shared/models';
+import DataCacheContext, {
+  ReadOnlyDataCache,
+} from '../../contexts/DataCacheContext/DataCacheContext';
+import {
+  Child,
+  Family,
+  FundingSpace,
+  ReportingPeriod,
+} from '../../shared/models';
 import moment from 'moment';
 import { ValidationError } from 'class-validator';
 
@@ -21,7 +28,14 @@ describe('BatchEdit', () => {
   snapshotTestHelper(
     <DataCacheContext.Provider
       value={{
-        children: { records: [], loading: false, addOrUpdateRecord: jest.fn() },
+        children: {
+          records: [],
+          loading: false,
+          addOrUpdateRecord: jest.fn(),
+          refetch: jest.fn(),
+        },
+        reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
+        fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
       }}
     >
       <BatchEdit />
@@ -37,7 +51,10 @@ describe('BatchEdit', () => {
           records: children,
           loading: false,
           addOrUpdateRecord: jest.fn(),
+          refetch: jest.fn(),
         },
+        reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
+        fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
       }}
     >
       <BatchEdit />
@@ -49,7 +66,14 @@ describe('BatchEdit', () => {
   accessibilityTestHelper(
     <DataCacheContext.Provider
       value={{
-        children: { records: [], loading: false, addOrUpdateRecord: jest.fn() },
+        children: {
+          records: [],
+          loading: false,
+          addOrUpdateRecord: jest.fn(),
+          refetch: jest.fn(),
+        },
+        reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
+        fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
       }}
     >
       <BatchEdit />

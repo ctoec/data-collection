@@ -1,60 +1,54 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { Child } from '../../shared/models';
-import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
-import { apiGet } from '../../utils/api';
+import React, { createContext } from 'react';
+import { Child, FundingSpace, ReportingPeriod } from '../../shared/models';
+import { useReadWriteCache } from './useReadWriteCache';
+import { useReadOnlyCache } from './useReadOnlyCache';
 
-type ReadOnlyDataCache<T> = {
+export type ReadOnlyDataCache<T> = {
   records: T[];
   loading: boolean;
+  refetch: () => void;
 };
-type ReadWriteDataCache<T> = ReadOnlyDataCache<T> & {
+
+export type ReadWriteDataCache<T> = ReadOnlyDataCache<T> & {
   addOrUpdateRecord: (record: T) => void;
 };
 
 export type DataCacheContextType = {
   children: ReadWriteDataCache<Child>;
+  fundingSpaces: ReadOnlyDataCache<FundingSpace>;
+  reportingPeriods: ReadOnlyDataCache<ReportingPeriod>;
 };
 
 const DataCacheContext = createContext<DataCacheContextType>({
-  children: { records: [], addOrUpdateRecord: (_) => {}, loading: true },
+  children: {
+    records: [],
+    addOrUpdateRecord: (_) => {},
+    loading: true,
+    refetch: () => {},
+  },
+  fundingSpaces: { records: [], loading: true, refetch: () => {} },
+  reportingPeriods: { records: [], loading: true, refetch: () => {} },
 });
 
 const { Provider, Consumer } = DataCacheContext;
 
 const DataCacheProvider: React.FC = ({ children: childNodes }) => {
-  // CHILD CACHE
-  const [children, setChildren] = useState<Child[]>([]);
-  const [childrenLoading, setChildrenLoading] = useState(false);
-  const [haveFetchedChildren, setHaveFetchedChildren] = useState(false);
-  const addOrUpdateChild = (_record: Child) => {
-    setChildren((existingRecords) => [
-      ...existingRecords.filter((r) => r.id !== _record.id),
-      _record,
-    ]);
-  };
-  const childCache = {
-    records: children,
-    loading: childrenLoading,
-    addOrUpdateRecord: addOrUpdateChild,
-  };
-  // END CHILD CACHE
-
-  const { accessToken } = useContext(AuthenticationContext);
-  useEffect(() => {
-    if (!haveFetchedChildren) {
-      setChildrenLoading(true);
-      apiGet('children', { accessToken })
-        .then((_children) => {
-          if (_children) setChildren(_children);
-        })
-        .finally(() => {
-          setChildrenLoading(false);
-          setHaveFetchedChildren(true);
-        });
-    }
-  }, [accessToken]);
-
-  return <Provider value={{ children: childCache }}>{childNodes}</Provider>;
+  const childCache = useReadWriteCache<Child>('/children');
+  const reportingPeriodCache = useReadOnlyCache<ReportingPeriod>(
+    '/reporting-periods'
+  );
+  const fundingSpaceCache = useReadOnlyCache<FundingSpace>('/funding-spaces');
+  return (
+    <Provider
+      value={{
+        children: childCache,
+        reportingPeriods: reportingPeriodCache,
+        fundingSpaces: fundingSpaceCache,
+      }}
+    >
+      {childNodes}
+    </Provider>
+  );
 };
 
 export { DataCacheProvider };
