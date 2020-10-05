@@ -7,7 +7,6 @@ import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
-import { useReportingPeriods } from '../../hooks/useReportingPeriods';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
@@ -44,10 +43,6 @@ const EditRecord: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Get reporting periods (needed to update enrollments with fundings)
-  // TODO: we should probably use context rather than making lots of network requests
-  const { reportingPeriods } = useReportingPeriods();
 
   // Get child data
   useEffect(() => {
@@ -90,7 +85,6 @@ const EditRecord: React.FC = () => {
     child: rowData,
     afterDataSave,
     setAlerts,
-    reportingPeriods,
   };
 
   return (
@@ -110,7 +104,6 @@ const EditRecord: React.FC = () => {
               <WithdrawRecord
                 childName={rowData.firstName}
                 enrollment={activeEnrollment}
-                reportingPeriods={reportingPeriods}
               />
             </>
           )}

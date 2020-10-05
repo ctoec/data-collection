@@ -23,7 +23,7 @@ export const useReadOnlyCache = <T extends { id: any }>(apiPath: string) => {
           setHaveFetched(true);
         });
     }
-  }, [accessToken, haveFetched]);
+  }, [accessToken, apiPath, haveFetched]);
 
   return {
     records,

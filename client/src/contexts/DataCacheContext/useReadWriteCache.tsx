@@ -30,7 +30,7 @@ export const useReadWriteCache = <T extends { id: any }>(apiPath: string) => {
           setHaveFetched(true);
         });
     }
-  }, [accessToken, haveFetched]);
+  }, [apiPath, accessToken, haveFetched]);
 
   return {
     records,

@@ -7,7 +7,7 @@ import {
   Alert,
   Modal,
 } from '@ctoec/component-library';
-import { Enrollment, ReportingPeriod } from '../../../shared/models';
+import { Enrollment } from '../../../shared/models';
 import { apiPost } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { useHistory } from 'react-router-dom';
@@ -21,12 +21,10 @@ import { Withdraw } from '../../../shared/payloads';
 type WithdrawProps = {
   childName: string | undefined;
   enrollment: Enrollment;
-  reportingPeriods: ReportingPeriod[];
 };
 export const WithdrawRecord: React.FC<WithdrawProps> = ({
   childName,
   enrollment,
-  reportingPeriods,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
@@ -117,9 +115,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               <ExitReasonField />
               {!!activeFunding && (
                 <ReportingPeriodField<Withdraw>
-                  reportingPeriods={reportingPeriods.filter(
-                    (rp) => rp.type === activeFunding.fundingSpace.source
-                  )}
+                  fundingSource={activeFunding.fundingSpace.source}
                   isLast={true}
                   accessor={(data) =>
                     data.at('funding').at('lastReportingPeriod')

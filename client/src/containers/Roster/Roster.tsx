@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import idx from 'idx';
 import { Accordion, Table, Button, AlertProps } from '@ctoec/component-library';
-import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
-import { apiGet } from '../../utils/api';
 import { tableColumns } from '../Roster/TableColumns';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
@@ -20,7 +18,6 @@ const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-  const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
   const organizations = user?.organizations;
   const organization = organizations ? organizations[0] : undefined;

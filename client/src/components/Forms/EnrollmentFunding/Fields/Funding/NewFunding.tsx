@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
-  FundingSpace,
   FundingSource,
-  ReportingPeriod,
   Funding,
   Enrollment,
 } from '../../../../../shared/models';
@@ -20,12 +18,11 @@ import {
   ChangeFunding,
   ChangeEnrollment,
 } from '../../../../../shared/payloads';
+import DataCacheContext from '../../../../../contexts/DataCacheContext/DataCacheContext';
 
 const UNFUNDED = 'Unfunded';
 
 type FundingFieldProps<T> = {
-  fundingSpaces: FundingSpace[];
-  reportingPeriods: ReportingPeriod[];
   fundingAccessor: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
 };
@@ -34,20 +31,16 @@ type FundingFieldProps<T> = {
  * Component for creating a new funding, either for an existing enrollment
  * or as part of creating a new enrollment.
  */
-export const FundingField = <
+export const NewFundingField = <
   T extends ChangeFunding | ChangeEnrollment | Enrollment
 >({
-  fundingSpaces,
-  reportingPeriods,
   fundingAccessor,
   getEnrollment,
 }: FundingFieldProps<T>) => {
+  const { fundingSpaces } = useContext(DataCacheContext);
   const { dataDriller } = useGenericContext<T>(FormContext);
   const enrollment = getEnrollment(dataDriller);
 
-  const [fundingSpaceOptions, setFundingSpaceOptions] = useState<
-    FundingSpace[]
-  >([]);
   const [fundingSourceOptions, setFundingSourceOptions] = useState<
     FundingSource[]
   >([]);
@@ -56,15 +49,15 @@ export const FundingField = <
   // from the funding spaces associated with the given site and agegroup
   // for the enrollment.
   useEffect(() => {
-    const _fundingSpaceOptions = fundingSpaces.filter(
-      (fs) => fs.ageGroup === enrollment?.ageGroup
-      // TODO: Figure out how / where to constrict options (for sites as well) based on org
-      // && fs.organization.id === enrollment?.site?.organization.id
-    );
-    setFundingSpaceOptions(_fundingSpaceOptions);
-
     const _fundingSourceOptions = new Set(
-      _fundingSpaceOptions.map((fs) => fs.source)
+      fundingSpaces.records
+        .filter(
+          (fs) => fs.ageGroup === enrollment.ageGroup
+          // site is set via enrollment.siteId, so site is undefined
+          // need to find a different way to pass in org id
+          // && fs.organization.id === enrollment.site.organization.id
+        )
+        .map((fs) => fs.source)
     );
 
     setFundingSourceOptions(Array.from(_fundingSourceOptions));
@@ -92,15 +85,14 @@ export const FundingField = <
           expansion: (
             <>
               <ContractSpaceField<T>
-                fundingSpaceOptions={fundingSpaceOptions.filter(
-                  (fs) => fs.source === fundingSource
-                )}
+                ageGroup={enrollment.ageGroup}
+                fundingSource={fundingSource}
+                // see comment on line 56
+                organizationId={enrollment.site?.organization?.id}
                 accessor={(data) => fundingAccessor(data).at('fundingSpace')}
               />
               <ReportingPeriodField<T>
-                reportingPeriods={reportingPeriods.filter(
-                  (rp) => rp.type === fundingSource
-                )}
+                fundingSource={fundingSource}
                 accessor={(data) =>
                   fundingAccessor(data).at('firstReportingPeriod')
                 }

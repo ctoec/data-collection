@@ -1,9 +1,5 @@
 import React, { useContext, useState } from 'react';
-import {
-  Enrollment,
-  FundingSpace,
-  ReportingPeriod,
-} from '../../../../shared/models';
+import { Enrollment } from '../../../../shared/models';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { ChangeFunding } from '../../../../shared/payloads/ChangeFunding';
 import { apiPost } from '../../../../utils/api';
@@ -14,12 +10,9 @@ import {
   FormSubmitButton,
   Alert,
 } from '@ctoec/component-library';
-import { ReportingPeriodField } from '../Fields/Funding/ReportingPeriod';
-import { FundingField } from '../Fields/Funding/NewFunding';
+import { ReportingPeriodField, NewFundingField } from '../Fields';
 
 type ChangeFundingFormProps = {
-  fundingSpaces: FundingSpace[];
-  reportingPeriods: ReportingPeriod[];
   enrollment: Enrollment;
   afterDataSave: () => void;
 };
@@ -31,8 +24,6 @@ type ChangeFundingFormProps = {
  * funding, based on user's chosen action (start new funding vs end current funding)
  */
 export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
-  fundingSpaces,
-  reportingPeriods,
   enrollment,
   afterDataSave,
 }) => {
@@ -83,11 +74,9 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
               onSubmit={onSubmit}
             >
               {visibleForm === 'start' && (
-                <FundingField<ChangeFunding>
+                <NewFundingField<ChangeFunding>
                   fundingAccessor={(data) => data.at('newFunding')}
                   getEnrollment={() => enrollment}
-                  reportingPeriods={reportingPeriods}
-                  fundingSpaces={fundingSpaces}
                 />
               )}
               {!!activeFunding && (
@@ -95,9 +84,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
                   accessor={(data) =>
                     data.at('oldFunding').at('lastReportingPeriod')
                   }
-                  reportingPeriods={reportingPeriods.filter(
-                    (rp) => rp.type === activeFunding.fundingSpace.source
-                  )}
+                  fundingSource={activeFunding.fundingSpace.source}
                   isLast={true}
                   label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
                   optional={visibleForm === 'start'}
