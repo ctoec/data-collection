@@ -163,67 +163,61 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
           class="grid-gap margin-top-3 grid-row flex-align-start"
         >
           <span>
-            <div>
-              <div
-                class="usa-radio"
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="Yes"
+                name="homelessness"
+                type="radio"
+                value="Yes"
+              />
+              <label
+                class="usa-radio__label"
+                for="Yes"
               >
-                <input
-                  class="usa-radio__input"
-                  id="Yes"
-                  name="homelessness"
-                  type="radio"
-                  value="Yes"
-                />
-                <label
-                  class="usa-radio__label"
-                  for="Yes"
-                >
-                  Child is currently experiencing homelessness
-                </label>
-              </div>
+                Child is currently experiencing homelessness
+              </label>
             </div>
           </span>
           <span>
-            <div>
-              <div
-                class="usa-radio"
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="No"
+                name="homelessness"
+                type="radio"
+                value="No"
+              />
+              <label
+                class="usa-radio__label"
+                for="No"
               >
-                <input
-                  class="usa-radio__input"
-                  id="No"
-                  name="homelessness"
-                  type="radio"
-                  value="No"
-                />
-                <label
-                  class="usa-radio__label"
-                  for="No"
-                >
-                  Child is not currently experiencing homelessness
-                </label>
-              </div>
+                Child is not currently experiencing homelessness
+              </label>
             </div>
           </span>
           <span>
-            <div>
-              <div
-                class="usa-radio"
+            <div
+              class="usa-radio"
+            >
+              <input
+                checked=""
+                class="usa-radio__input"
+                id="Unknown"
+                name="homelessness"
+                type="radio"
+                value="Unknown"
+              />
+              <label
+                class="usa-radio__label"
+                for="Unknown"
               >
-                <input
-                  checked=""
-                  class="usa-radio__input"
-                  id="Unknown"
-                  name="homelessness"
-                  type="radio"
-                  value="Unknown"
-                />
-                <label
-                  class="usa-radio__label"
-                  for="Unknown"
-                >
-                  Unknown/Not collected
-                </label>
-              </div>
+                Unknown/not collected
+              </label>
             </div>
           </span>
         </div>

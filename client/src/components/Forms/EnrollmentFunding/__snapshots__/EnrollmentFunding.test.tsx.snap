@@ -1403,16 +1403,16 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
               >
                 <input
                   class="usa-radio__input"
-                  id="Virtual"
+                  id="Distance"
                   name="care-model"
                   type="radio"
-                  value="Virtual"
+                  value="Distance"
                 />
                 <label
                   class="usa-radio__label"
-                  for="Virtual"
+                  for="Distance"
                 >
-                  Virtual
+                  Distance
                 </label>
               </div>
             </span>

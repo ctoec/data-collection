@@ -218,7 +218,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-radio__label"
               for="Unknown"
             >
-              Unknown/Not Collected
+              Unknown/not collected
             </label>
           </div>
         </span>
@@ -270,9 +270,9 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         </option>
       </select>
     </div>
-    <h2>
+    <h3>
       Special circumstances
-    </h2>
+    </h3>
     <fieldset
       class="grid-gap grid-row usa-fieldset"
       id="disability-button-group-fieldset"
@@ -290,67 +290,61 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         class="grid-gap margin-top-3 grid-row flex-align-start"
       >
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="disability-yes"
+              name="disability"
+              type="radio"
+              value="disability-yes"
+            />
+            <label
+              class="usa-radio__label"
+              for="disability-yes"
             >
-              <input
-                class="usa-radio__input"
-                id="disability-yes"
-                name="disability"
-                type="radio"
-                value="disability-yes"
-              />
-              <label
-                class="usa-radio__label"
-                for="disability-yes"
-              >
-                Receives disability services
-              </label>
-            </div>
+              Receives disability services
+            </label>
           </div>
         </span>
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="disability-no"
+              name="disability"
+              type="radio"
+              value="disability-no"
+            />
+            <label
+              class="usa-radio__label"
+              for="disability-no"
             >
-              <input
-                class="usa-radio__input"
-                id="disability-no"
-                name="disability"
-                type="radio"
-                value="disability-no"
-              />
-              <label
-                class="usa-radio__label"
-                for="disability-no"
-              >
-                Does not receive disability services
-              </label>
-            </div>
+              Does not receive disability services
+            </label>
           </div>
         </span>
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              checked=""
+              class="usa-radio__input"
+              id="disability-unknown"
+              name="disability"
+              type="radio"
+              value="disability-unknown"
+            />
+            <label
+              class="usa-radio__label"
+              for="disability-unknown"
             >
-              <input
-                checked=""
-                class="usa-radio__input"
-                id="disability-unknown"
-                name="disability"
-                type="radio"
-                value="disability-unknown"
-              />
-              <label
-                class="usa-radio__label"
-                for="disability-unknown"
-              >
-                Unknown/Not collected
-              </label>
-            </div>
+              Unknown/not collected
+            </label>
           </div>
         </span>
       </div>
@@ -430,7 +424,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
                 class="usa-radio__label"
                 for="dual-unknown"
               >
-                Unknown/Not collected
+                Unknown/not collected
               </label>
             </div>
           </div>
@@ -454,67 +448,61 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         class="grid-gap margin-top-3 grid-row flex-align-start"
       >
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="foster-yes"
+              name="foster"
+              type="radio"
+              value="foster-yes"
+            />
+            <label
+              class="usa-radio__label"
+              for="foster-yes"
             >
-              <input
-                class="usa-radio__input"
-                id="foster-yes"
-                name="foster"
-                type="radio"
-                value="foster-yes"
-              />
-              <label
-                class="usa-radio__label"
-                for="foster-yes"
-              >
-                Yes
-              </label>
-            </div>
+              Yes
+            </label>
           </div>
         </span>
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="foster-no"
+              name="foster"
+              type="radio"
+              value="foster-no"
+            />
+            <label
+              class="usa-radio__label"
+              for="foster-no"
             >
-              <input
-                class="usa-radio__input"
-                id="foster-no"
-                name="foster"
-                type="radio"
-                value="foster-no"
-              />
-              <label
-                class="usa-radio__label"
-                for="foster-no"
-              >
-                No
-              </label>
-            </div>
+              No
+            </label>
           </div>
         </span>
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              checked=""
+              class="usa-radio__input"
+              id="foster-unknown"
+              name="foster"
+              type="radio"
+              value="foster-unknown"
+            />
+            <label
+              class="usa-radio__label"
+              for="foster-unknown"
             >
-              <input
-                checked=""
-                class="usa-radio__input"
-                id="foster-unknown"
-                name="foster"
-                type="radio"
-                value="foster-unknown"
-              />
-              <label
-                class="usa-radio__label"
-                for="foster-unknown"
-              >
-                Unknown/Not collected
-              </label>
-            </div>
+              Unknown/not collected
+            </label>
           </div>
         </span>
       </div>
