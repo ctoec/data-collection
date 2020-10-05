@@ -43,7 +43,7 @@ export const AddressFieldset: React.FC = () => {
           status={getValidationStatusForFieldInFieldset}
         />
       </div>
-      <div className="grid-row grid-gap">
+      <div className="grid-row grid-gap display-flex flex-row flex-align-end">
         <div className="grid-col-8 display-inline-block flex-align-self-end">
           <FormField<Family, TextInputProps, string>
             getValue={(data) => data.at('town')}

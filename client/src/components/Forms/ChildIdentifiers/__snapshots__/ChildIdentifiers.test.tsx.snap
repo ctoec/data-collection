@@ -1454,7 +1454,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
           </div>
         </div>
         <div
-          class="grid-row grid-gap"
+          class="display-flex flex-row flex-align-end grid-row grid-gap"
         >
           <div
             class="mobile-lg:grid-col-8 display-inline-block flex-align-self-end"

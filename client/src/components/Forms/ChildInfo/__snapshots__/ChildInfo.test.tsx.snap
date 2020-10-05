@@ -266,7 +266,10 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         </option>
       </select>
     </div>
-    <h3>
+    <br />
+    <h3
+      class="margin-bottom-0"
+    >
       Special circumstances
     </h3>
     <fieldset

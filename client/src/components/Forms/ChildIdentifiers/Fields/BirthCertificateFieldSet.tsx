@@ -28,8 +28,7 @@ export const BirthCertificateFormFieldSet: React.FC = () => {
       <div className="mobile-lg:grid-col-12">
         <BirthCertificateIdField />
       </div>
-      <div className="grid-row grid-gap">
-
+      <div className="display-flex flex-row flex-align-end grid-row grid-gap">
         <div className="mobile-lg:grid-col-8 display-inline-block flex-align-self-end">
           <BirthTownField />
         </div>
