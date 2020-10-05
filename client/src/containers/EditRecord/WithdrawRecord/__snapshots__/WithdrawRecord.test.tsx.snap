@@ -58,11 +58,11 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
         />
       </div>
       <form
-        class="usa-form"
+        class="usa-form usa-form"
       >
         <fieldset
           aria-describedby="end-date-hint"
-          class="grid-gap grid-row usa-fieldset"
+          class="usa-fieldset"
           id="end-date"
         >
           <legend
@@ -79,14 +79,12 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
           >
             For example: 6 21 2008
           </span>
-          <div
-            class="grid-gap grid-row flex-align-start"
-          >
+          <div>
             <div
               class="flex-row flex-align-end usa-memorable-date"
             >
               <div
-                class="oec-date-input__input margin-right-1 usa-form-group"
+                class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
               >
                 <label
                   class="usa-label"
@@ -106,7 +104,7 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
                 />
               </div>
               <div
-                class="oec-date-input__input margin-right-1 usa-form-group"
+                class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
               >
                 <label
                   class="usa-label"
@@ -126,7 +124,7 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
                 />
               </div>
               <div
-                class="oec-date-input__input margin-right-1 usa-form-group"
+                class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
               >
                 <label
                   class="usa-label"
