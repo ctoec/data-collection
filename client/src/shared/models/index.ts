@@ -1,6 +1,9 @@
+import { CareModel } from './CareModel';
+
 export * from './db';
 
 export * from './AgeGroup';
+export * from './CareModel';
 export * from './ColumnMetadata';
 export * from './ExitReason';
 export * from './FundingSource';

@@ -7,7 +7,6 @@ import React from 'react';
 import {
   FamilyIncomeForm,
   ChildInfoForm,
-  CareForKidsForm,
   EnrollmentFundingForm,
   ChildIdentifiersForm,
   FamilyAddressForm,
@@ -30,7 +29,6 @@ export const editForms = [
   { key: SECTION_KEYS.FAMILY, form: FamilyAddressForm },
   { key: SECTION_KEYS.INCOME, form: FamilyIncomeForm },
   { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm },
-  { key: SECTION_KEYS.C4K, form: CareForKidsForm },
 ];
 
 export const tabItems = (commonFormProps: EditFormProps) =>

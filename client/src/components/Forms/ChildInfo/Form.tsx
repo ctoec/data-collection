@@ -3,7 +3,9 @@ import {
   RaceField,
   EthnicityField,
   GenderField,
-  FosterCheckbox,
+  DisabilityServices,
+  DualLanguageLearner,
+  Foster,
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../types';
@@ -21,8 +23,11 @@ export const childInfoFields = [
   'blackOrAfricanAmerican',
   'nativeHawaiianOrPacificIslander',
   'white',
+  'raceNotDisclosed',
   'hispanicOrLatinxEthnicity',
   'gender',
+  'receivingDisabilityServices',
+  'dualLanguageLearner',
   'foster',
 ];
 export const doesChildInfoFormHaveErrors = (child?: Child) =>
@@ -70,7 +75,12 @@ export const ChildInfoForm = ({
       <RaceField />
       <EthnicityField />
       <GenderField />
-      <FosterCheckbox />
+
+      <h3>Special circumstances</h3>
+      <DisabilityServices />
+      <DualLanguageLearner />
+      <Foster />
+
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

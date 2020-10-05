@@ -23,6 +23,7 @@ import {
   EnrollmentStartDateField,
   ReportingPeriodField,
   FundingField,
+  CareModelField,
 } from '../Fields';
 
 type ChangeEnrollmentFormProps = {
@@ -116,6 +117,9 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           />
           <EnrollmentStartDateField<ChangeEnrollment>
             accessor={(data) => data.at('newEnrollment').at('entry')}
+          />
+          <CareModelField<ChangeEnrollment>
+            accessor={(data) => data.at('newEnrollment').at('model')}
           />
           <AgeGroupField<ChangeEnrollment>
             accessor={(data) => data.at('newEnrollment').at('ageGroup')}

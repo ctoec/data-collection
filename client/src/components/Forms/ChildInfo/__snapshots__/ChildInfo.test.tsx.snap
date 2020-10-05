@@ -122,6 +122,24 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             </label>
           </div>
         </span>
+        <span>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="raceNotDisclosed"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="raceNotDisclosed"
+            >
+              Race Not Disclosed
+            </label>
+          </div>
+        </span>
       </div>
     </fieldset>
     <fieldset
@@ -152,14 +170,33 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="no"
+              id="Yes"
               name="ethnicity"
               type="radio"
-              value="no"
+              value="Yes"
             />
             <label
               class="usa-radio__label"
-              for="no"
+              for="Yes"
+            >
+              Hispanic or Latinx
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="No"
+              name="ethnicity"
+              type="radio"
+              value="No"
+            />
+            <label
+              class="usa-radio__label"
+              for="No"
             >
               Not Hispanic or Latinx
             </label>
@@ -170,17 +207,18 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
+              checked=""
               class="usa-radio__input"
-              id="yes"
+              id="Unknown"
               name="ethnicity"
               type="radio"
-              value="yes"
+              value="Unknown"
             />
             <label
               class="usa-radio__label"
-              for="yes"
+              for="Unknown"
             >
-              Hispanic or Latinx
+              Unknown/not collected
             </label>
           </div>
         </span>
@@ -232,27 +270,243 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         </option>
       </select>
     </div>
-    <p
-      class="text-bold margin-top-3 margin-bottom-1"
+    <h3>
+      Special circumstances
+    </h3>
+    <fieldset
+      class="grid-gap grid-row usa-fieldset"
+      id="disability-button-group-fieldset"
     >
-      Foster family
-    </p>
-    <div
-      class="usa-checkbox"
-    >
-      <input
-        class="usa-checkbox__input"
-        id="foster"
-        type="checkbox"
-        value="foster"
-      />
-      <label
-        class="usa-checkbox__label"
-        for="foster"
+      <legend
+        id="fieldset-legend-disability-button-group-fieldset"
       >
-        Child lives with foster family
-      </label>
-    </div>
+        <span
+          class="usa-label"
+        >
+          Receiving disability services
+        </span>
+      </legend>
+      <div
+        class="grid-gap margin-top-3 grid-row flex-align-start"
+      >
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="disability-yes"
+              name="disability"
+              type="radio"
+              value="disability-yes"
+            />
+            <label
+              class="usa-radio__label"
+              for="disability-yes"
+            >
+              Receives disability services
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="disability-no"
+              name="disability"
+              type="radio"
+              value="disability-no"
+            />
+            <label
+              class="usa-radio__label"
+              for="disability-no"
+            >
+              Does not receive disability services
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              checked=""
+              class="usa-radio__input"
+              id="disability-unknown"
+              name="disability"
+              type="radio"
+              value="disability-unknown"
+            />
+            <label
+              class="usa-radio__label"
+              for="disability-unknown"
+            >
+              Unknown/not collected
+            </label>
+          </div>
+        </span>
+      </div>
+    </fieldset>
+    <fieldset
+      class="grid-gap grid-row usa-fieldset"
+      id="duallanguage-button-group-fieldset"
+    >
+      <legend
+        id="fieldset-legend-duallanguage-button-group-fieldset"
+      >
+        <span
+          class="usa-label"
+        >
+          Dual Language Learner
+        </span>
+      </legend>
+      <div
+        class="grid-gap margin-top-3 grid-row flex-align-start"
+      >
+        <span>
+          <div>
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="dual-yes"
+                name="dualLanguageLearner"
+                type="radio"
+                value="dual-yes"
+              />
+              <label
+                class="usa-radio__label"
+                for="dual-yes"
+              >
+                Is a dual language learner
+              </label>
+            </div>
+          </div>
+        </span>
+        <span>
+          <div>
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="dual-no"
+                name="dualLanguageLearner"
+                type="radio"
+                value="dual-no"
+              />
+              <label
+                class="usa-radio__label"
+                for="dual-no"
+              >
+                Is not a dual language learner
+              </label>
+            </div>
+          </div>
+        </span>
+        <span>
+          <div>
+            <div
+              class="usa-radio"
+            >
+              <input
+                checked=""
+                class="usa-radio__input"
+                id="dual-unknown"
+                name="dualLanguageLearner"
+                type="radio"
+                value="dual-unknown"
+              />
+              <label
+                class="usa-radio__label"
+                for="dual-unknown"
+              >
+                Unknown/not collected
+              </label>
+            </div>
+          </div>
+        </span>
+      </div>
+    </fieldset>
+    <fieldset
+      class="grid-gap grid-row usa-fieldset"
+      id="foster-button-group-fieldset"
+    >
+      <legend
+        id="fieldset-legend-foster-button-group-fieldset"
+      >
+        <span
+          class="usa-label"
+        >
+          Child lives with foster family
+        </span>
+      </legend>
+      <div
+        class="grid-gap margin-top-3 grid-row flex-align-start"
+      >
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="foster-yes"
+              name="foster"
+              type="radio"
+              value="foster-yes"
+            />
+            <label
+              class="usa-radio__label"
+              for="foster-yes"
+            >
+              Yes
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="foster-no"
+              name="foster"
+              type="radio"
+              value="foster-no"
+            />
+            <label
+              class="usa-radio__label"
+              for="foster-no"
+            >
+              No
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              checked=""
+              class="usa-radio__input"
+              id="foster-unknown"
+              name="foster"
+              type="radio"
+              value="foster-unknown"
+            />
+            <label
+              class="usa-radio__label"
+              for="foster-unknown"
+            >
+              Unknown/not collected
+            </label>
+          </div>
+        </span>
+      </div>
+    </fieldset>
     <input
       class="usa-button"
       type="submit"

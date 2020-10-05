@@ -28,7 +28,7 @@ export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [
     fundingTimes: [
       {
         value: FundingTime.FullDay,
-        formats: ['4', FundingTime.FullDay, 'FD'],
+        formats: ['4', FundingTime.FullDay, 'Full-day/Full-year', 'FD'],
       },
       {
         value: FundingTime.School,
@@ -36,11 +36,11 @@ export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [
       },
       {
         value: FundingTime.PartDay,
-        formats: ['6', FundingTime.PartDay, 'PD'],
+        formats: ['6', FundingTime.PartDay, 'Part-day/Part-year', 'PD'],
       },
       {
         value: FundingTime.ExtendedDay,
-        formats: ['7', FundingTime.ExtendedDay, 'Part time/Full time', 'ED'],
+        formats: ['7', FundingTime.ExtendedDay, 'Wraparound', 'ED'],
       },
     ],
   },

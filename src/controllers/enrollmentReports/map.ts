@@ -18,10 +18,10 @@ import {
   SpecialEducationServicesType,
   FundingSourceTime,
   FundingTimeInput,
+  CareModel,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
-import { type } from 'os';
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -84,6 +84,21 @@ const mapSite = (source: EnrollmentReportRow) => {
 };
 
 /**
+ * Determine if an enrollment report row has no indication of the
+ * respective child's race (in which case, assume not disclosed).
+ * @param source
+ */
+const raceIndicated = (source: EnrollmentReportRow) => {
+  return (
+    !!source.americanIndianOrAlaskaNative ||
+    !!source.asian ||
+    !!source.blackOrAfricanAmerican ||
+    !!source.nativeHawaiianOrPacificIslander ||
+    !!source.white
+  );
+};
+
+/**
  * Create Child object from FlattenedEnrollment source.
  * TODO: How do we handle blocking data errors in a single row?
  * @param source
@@ -96,12 +111,6 @@ const mapChild = (
   // Gender
   const gender: Gender =
     mapEnum(Gender, source.gender, true) || Gender.NotSpecified;
-
-  // Special education services type
-  const specialEducationServicesType: SpecialEducationServicesType = mapEnum(
-    SpecialEducationServicesType,
-    source.specialEducationServicesType
-  );
 
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
@@ -121,13 +130,12 @@ const mapChild = (
     blackOrAfricanAmerican: source.blackOrAfricanAmerican,
     nativeHawaiianOrPacificIslander: source.nativeHawaiianOrPacificIslander,
     white: source.white,
+    raceNotDisclosed: !raceIndicated(source),
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
-    foster: source.foster || false,
-    receivesC4K: source.receivesC4K || false,
-    receivesSpecialEducationServices:
-      source.receivesSpecialEducationServices || false,
-    specialEducationServicesType,
+    dualLanguageLearner: source.dualLanguageLearner,
+    foster: source.foster,
+    receivesDisabilityServices: source.receivesDisabilityServices,
     organization,
     family: family,
   });
@@ -184,10 +192,12 @@ const mapEnrollment = (
   child: Child
 ) => {
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
+  const model: CareModel = mapEnum(CareModel, source.model);
 
   const enrollment = getManager().create(Enrollment, {
     site,
     childId: child.id,
+    model,
     ageGroup,
     entry: source.entry,
     exit: source.exit,
@@ -303,6 +313,7 @@ const mapFunding = async (
 const mapEnum = <T>(
   referenceEnum:
     | typeof Gender
+    | typeof CareModel
     | typeof AgeGroup
     | typeof FundingSource
     | typeof FundingTime
