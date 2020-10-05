@@ -4,41 +4,88 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
 <DocumentFragment>
   <form
     autocomplete="off"
-    class="ChildIdentifiersForm usa-form"
+    class="usa-form ChildIdentifiersForm usa-form"
     novalidate=""
   >
     <h2>
       Child's identifiers
     </h2>
     <div
-      class="grid-row grid-gap"
+      class="mobile-lg:grid-col-12"
     >
       <div
-        class="mobile-lg:grid-col-12"
+        class=" usa-form-group"
       >
-        <div
-          class=" usa-form-group"
+        <label
+          class="usa-label"
+          for="sasid"
         >
-          <label
-            class="usa-label"
-            for="sasid"
+          SASID 
+          <span
+            class="usa-hint"
           >
-            SASID 
-            <span
-              class="usa-hint"
-            >
-               (optional)
-            </span>
-          </label>
-          <input
-            aria-required="false"
-            class="usa-input"
-            id="sasid"
-            type="text"
-            value=""
-          />
-        </div>
+             (optional)
+          </span>
+        </label>
+        <input
+          aria-required="false"
+          class="usa-input"
+          id="sasid"
+          type="text"
+          value=""
+        />
       </div>
+    </div>
+    <div
+      class="mobile-lg:grid-col-9"
+    >
+      <div
+        class=" usa-form-group"
+      >
+        <label
+          class="usa-label"
+          for="firstName"
+        >
+          First name 
+        </label>
+        <input
+          aria-required="true"
+          class="usa-input"
+          id="firstName"
+          type="text"
+          value="First"
+        />
+      </div>
+    </div>
+    <div
+      class="mobile-lg:grid-col-9"
+    >
+      <div
+        class=" usa-form-group"
+      >
+        <label
+          class="usa-label"
+          for="middleName"
+        >
+          Middle name 
+          <span
+            class="usa-hint"
+          >
+             (optional)
+          </span>
+        </label>
+        <input
+          aria-required="false"
+          class="usa-input"
+          id="middleName"
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="display-flex flex-row flex-align-end grid-row grid-gap"
+    >
       <div
         class="mobile-lg:grid-col-9"
       >
@@ -47,30 +94,30 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
         >
           <label
             class="usa-label"
-            for="firstName"
+            for="lastName"
           >
-            First name 
+            Last name 
           </label>
           <input
             aria-required="true"
             class="usa-input"
-            id="firstName"
+            id="lastName"
             type="text"
-            value="First"
+            value="Last"
           />
         </div>
       </div>
       <div
-        class="mobile-lg:grid-col-9"
+        class="mobile-lg:grid-col-3"
       >
         <div
           class=" usa-form-group"
         >
           <label
             class="usa-label"
-            for="middleName"
+            for="suffix"
           >
-            Middle name 
+            Suffix 
             <span
               class="usa-hint"
             >
@@ -80,67 +127,16 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
           <input
             aria-required="false"
             class="usa-input"
-            id="middleName"
+            id="suffix"
             type="text"
             value=""
           />
-        </div>
-      </div>
-      <div
-        class="display-flex flex-row flex-align-end grid-row grid-gap"
-      >
-        <div
-          class="mobile-lg:grid-col-9"
-        >
-          <div
-            class=" usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="lastName"
-            >
-              Last name 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input"
-              id="lastName"
-              type="text"
-              value="Last"
-            />
-          </div>
-        </div>
-        <div
-          class="mobile-lg:grid-col-3"
-        >
-          <div
-            class=" usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="suffix"
-            >
-              Suffix 
-              <span
-                class="usa-hint"
-              >
-                 (optional)
-              </span>
-            </label>
-            <input
-              aria-required="false"
-              class="usa-input"
-              id="suffix"
-              type="text"
-              value=""
-            />
-          </div>
         </div>
       </div>
     </div>
     <fieldset
       aria-describedby="dateOfBirth-picker-hint"
-      class="grid-gap grid-row usa-fieldset margin-top-3"
+      class="usa-fieldset"
       id="dateOfBirth-picker"
     >
       <legend
@@ -157,14 +153,12 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       >
         For example: 6 21 2008
       </span>
-      <div
-        class="grid-gap grid-row flex-align-start"
-      >
+      <div>
         <div
           class="flex-row flex-align-end usa-memorable-date"
         >
           <div
-            class="oec-date-input__input margin-right-1 usa-form-group"
+            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
           >
             <label
               class="usa-label"
@@ -183,7 +177,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
             />
           </div>
           <div
-            class="oec-date-input__input margin-right-1 usa-form-group"
+            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
           >
             <label
               class="usa-label"
@@ -202,7 +196,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
             />
           </div>
           <div
-            class="oec-date-input__input margin-right-1 usa-form-group"
+            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
           >
             <label
               class="usa-label"
@@ -1423,7 +1417,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      class="grid-gap grid-row usa-fieldset display-inline-block margin-top-3"
+      class="usa-fieldset display-inline-block"
       id="birth-certificate-fields"
     >
       <legend
@@ -1436,7 +1430,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
         </span>
       </legend>
       <div
-        class="grid-gap grid-row flex-align-start"
+        class="grid-col grid-gap"
       >
         <div
           class="mobile-lg:grid-col-12"
@@ -1460,45 +1454,49 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
           </div>
         </div>
         <div
-          class="mobile-lg:grid-col-8 display-inline-block"
+          class="grid-row grid-gap"
         >
           <div
-            class=" usa-form-group"
+            class="mobile-lg:grid-col-8 display-inline-block flex-align-self-end"
           >
-            <label
-              class="usa-label"
-              for="birthTown"
+            <div
+              class=" usa-form-group"
             >
-              Town 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input"
-              id="birthTown"
-              type="text"
-              value=""
-            />
+              <label
+                class="usa-label"
+                for="birthTown"
+              >
+                Town 
+              </label>
+              <input
+                aria-required="true"
+                class="usa-input"
+                id="birthTown"
+                type="text"
+                value=""
+              />
+            </div>
           </div>
-        </div>
-        <div
-          class="mobile-lg:grid-col-4 display-inline-block"
-        >
           <div
-            class=" usa-form-group"
+            class="mobile-lg:grid-col-4 display-inline-block flex-align-self-end"
           >
-            <label
-              class="usa-label"
-              for="birthState"
+            <div
+              class=" usa-form-group"
             >
-              State 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input"
-              id="birthState"
-              type="text"
-              value=""
-            />
+              <label
+                class="usa-label"
+                for="birthState"
+              >
+                State 
+              </label>
+              <input
+                aria-required="true"
+                class="usa-input"
+                id="birthState"
+                type="text"
+                value=""
+              />
+            </div>
           </div>
         </div>
       </div>
