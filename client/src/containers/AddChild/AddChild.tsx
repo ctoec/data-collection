@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
-import { StepList } from '@ctoec/component-library';
+import { Button, StepList } from '@ctoec/component-library';
 import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
@@ -36,6 +36,7 @@ const AddChild: React.FC = () => {
       active: key === activeStep,
     }))
   );
+  const [completed, setCompleted] = useState<boolean>(false);
 
   // On initial load, set url hash to first step hash
   useEffect(() => {
@@ -58,6 +59,7 @@ const AddChild: React.FC = () => {
       firstName: '',
       lastName: '',
       organization,
+      raceNotDisclosed: false,
     };
 
     apiPost('children', placeholderChild, {
@@ -86,16 +88,10 @@ const AddChild: React.FC = () => {
 
     const moveToNextStep = () => {
       if (indexOfCurrentStep === steps.length - 1) {
-        history.push('/roster', {
-          alerts: [
-            {
-              type: 'success',
-              heading: 'Record added',
-              text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
-            },
-          ],
-        });
+        setCompleted(true);
       } else {
+        // In case a user goes back to edit a previous section
+        setCompleted(false);
         updateStepsVisited((oldSteps) => {
           const newSteps = [...oldSteps];
           newSteps[indexOfCurrentStep].visited = true;
@@ -121,6 +117,18 @@ const AddChild: React.FC = () => {
         console.log(err);
       });
   }, [accessToken, childId, refetchChild]);
+
+  const finishRecord = () => {
+    history.push('/roster', {
+      alerts: [
+        {
+          type: 'success',
+          heading: 'Record added',
+          text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
+        },
+      ],
+    });
+  };
 
   // After child is updated, programmatically focus on the first input with an error
   useFocusFirstError([child]);
@@ -151,6 +159,13 @@ const AddChild: React.FC = () => {
         Information is required unless otherwise specified.
       </p>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
+      <div className="margin-top-2">
+        <Button
+          text="Save record"
+          disabled={!completed}
+          onClick={finishRecord}
+        />
+      </div>
     </div>
   );
 };

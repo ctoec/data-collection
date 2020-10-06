@@ -25,6 +25,14 @@ const Roster: React.FC = () => {
 
   const { children } = useContext(DataCacheContext);
 
+  // TODO: When we add or delete records, the number of records enrolled /
+  // number of kids shown doesn't update until you refresh the page (the new
+  // record isn't shown and the old record still is); triggers a cache
+  // refresh to reflect the change
+  useEffect(() => {
+    children.refetch();
+  }, []);
+
   const numberOfChildrenWithErrors = children.records.filter(
     (c) => c.validationErrors && c.validationErrors.length > 0
   ).length;
