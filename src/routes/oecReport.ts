@@ -8,7 +8,7 @@ oecReportRouter.put(
   '/:organizationId',
   passAsyncError(async (req: Request, res: Response) => {
     const organizationId: number = Number(req.params['organizationId']);
-    await controller.createOecReport(organizationId);
+    await controller.createOecReport(req.user, organizationId);
 
     res.sendStatus(200);
   })

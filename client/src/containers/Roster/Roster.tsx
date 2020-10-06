@@ -117,7 +117,7 @@ const Roster: React.FC = () => {
   }, distinctSiteIds);
 
   async function submitToOEC() {
-    await apiPut(`oec-report/${organization?.id}`);
+    await apiPut(`oec-report/${organization?.id}`, undefined, { accessToken });
     history.push('/success');
   }
 
