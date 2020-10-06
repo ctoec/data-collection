@@ -12,11 +12,17 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
           cache-path: node_modules
+      - run: 
+          name: Audit server-side dependencies
+          command: yarn audit
       - node/install-packages:
           pkg-manager: yarn
           app-dir: ./client
           cache-path: node_modules
           override-ci-command: yarn install --frozen-lockfile --network-concurrency 1
+      - run: 
+          name: Audit React dependencies
+          command: cd client && yarn audit
       # Save workspace for subsequent jobs
       - persist_to_workspace:
           root: .
