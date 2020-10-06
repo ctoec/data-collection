@@ -44,6 +44,8 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentForm
         childName={child.firstName || ''}
+        //Child already existed, so must have an organization
+        orgId={child.organization?.id || 0}
         currentEnrollment={currentEnrollment}
         childId={child.id}
         sites={sites}
@@ -69,6 +71,8 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
           ))}
           <ChangeFundingForm
             enrollment={currentEnrollment}
+            //Child already existed, so must have an organization
+            orgId={child.organization?.id || 0}
             afterDataSave={afterDataSave}
           />
         </>

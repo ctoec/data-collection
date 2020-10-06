@@ -14,6 +14,7 @@ import { ReportingPeriodField, NewFundingField } from '../Fields';
 
 type ChangeFundingFormProps = {
   enrollment: Enrollment;
+  orgId: number;
   afterDataSave: () => void;
 };
 
@@ -25,6 +26,7 @@ type ChangeFundingFormProps = {
  */
 export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
   enrollment,
+  orgId,
   afterDataSave,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
@@ -77,6 +79,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
                 <NewFundingField<ChangeFunding>
                   fundingAccessor={(data) => data.at('newFunding')}
                   getEnrollment={() => enrollment}
+                  orgId={orgId}
                 />
               )}
               {!!activeFunding && (
