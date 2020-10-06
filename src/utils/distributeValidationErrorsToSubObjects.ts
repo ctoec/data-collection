@@ -1,5 +1,5 @@
-import { ValidationError } from "class-validator";
-import { ObjectWithValidationErrors } from '../../client/src/shared/models'
+import { ValidationError } from 'class-validator';
+import { ObjectWithValidationErrors } from '../../client/src/shared/models';
 
 /**
  * Given a parent object with validation errors that include child object
@@ -11,25 +11,32 @@ export function distributeValidationErrorsToSubObjects<
   T extends ObjectWithValidationErrors
 >(parentObject: T, validationErrors: ValidationError[]): T {
   if (!parentObject || !validationErrors.length) return parentObject;
-  const copiedParent = JSON.parse(JSON.stringify(parentObject));
-  copiedParent.validationErrors = validationErrors;
+  parentObject.validationErrors = validationErrors;
 
-  copiedParent.validationErrors
+  parentObject.validationErrors
     .filter((v: ValidationError) => v.children?.length)
     .forEach((parentValidationError: ValidationError) => {
-      let childObject = copiedParent[parentValidationError.property];
+      let childObject = parentObject[parentValidationError.property];
       if (Array.isArray(childObject)) {
         // i.e. income determinations or enrollments
         childObject = childObject.map((childObjectItem, i) => {
-          const childError = parentValidationError.children.find(e => e.property === `${i}`)
+          const childError = parentValidationError.children.find(
+            (e) => e.property === `${i}`
+          );
+          if (!childError) return childObjectItem;
           childObjectItem.validationErrors = childError.children;
-          return distributeValidationErrorsToSubObjects(childObjectItem, childError.children);
-        })
+          return distributeValidationErrorsToSubObjects(
+            childObjectItem,
+            childError.children
+          );
+        });
       } else {
-        childObject = distributeValidationErrorsToSubObjects(childObject, parentValidationError.children);
+        childObject = distributeValidationErrorsToSubObjects(
+          childObject,
+          parentValidationError.children
+        );
       }
-      copiedParent[parentValidationError.property] = childObject;
     });
 
-  return copiedParent;
+  return parentObject;
 }
