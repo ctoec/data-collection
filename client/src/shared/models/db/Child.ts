@@ -1,5 +1,5 @@
 import { Enrollment, Family, Organization } from '.';
-import { Gender, SpecialEducationServicesType } from '../';
+import { Gender } from '../';
 
 import { Moment } from 'moment';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
@@ -20,12 +20,12 @@ export interface Child extends ObjectWithValidationErrors {
   blackOrAfricanAmerican?: boolean;
   nativeHawaiianOrPacificIslander?: boolean;
   white?: boolean;
+  raceNotDisclosed?: boolean;
   hispanicOrLatinxEthnicity?: boolean;
   gender?: Gender;
+  dualLanguageLearner?: boolean;
   foster?: boolean;
-  receivesC4K?: boolean;
-  receivesSpecialEducationServices?: boolean;
-  specialEducationServicesType?: SpecialEducationServicesType;
+  receivesDisabilityServices?: boolean;
   family?: Family;
   organization?: Organization;
   enrollments?: Array<Enrollment>;

@@ -76,29 +76,31 @@ export class Child implements ChildInterface {
   @IsNotEmpty({ message: 'Birth certificate ID is required' })
   birthCertificateId?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: false })
   @ChildRaceIndicated()
   americanIndianOrAlaskaNative?: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: false })
   @ChildRaceIndicated()
   asian?: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: false })
   @ChildRaceIndicated()
   blackOrAfricanAmerican?: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: false })
   @ChildRaceIndicated()
   nativeHawaiianOrPacificIslander?: boolean;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: false })
   @ChildRaceIndicated()
   white?: boolean;
 
-  @Column({ nullable: true })
-  @IsNotEmpty()
-  // No default value because this is a radio button
+  @Column({ nullable: true, default: true })
+  @ChildRaceIndicated()
+  raceNotDisclosed?: boolean;
+
+  @Column({ nullable: true, default: null })
   hispanicOrLatinxEthnicity?: boolean;
 
   @Column({
@@ -110,22 +112,14 @@ export class Child implements ChildInterface {
   @ChildGenderSpecified()
   gender?: Gender;
 
-  @Column({ default: false })
+  @Column({ nullable: true, default: null })
+  dualLanguageLearner?: boolean;
+
+  @Column({ nullable: true, default: null })
   foster?: boolean;
 
-  @Column({ default: false })
-  receivesC4K?: boolean = false;
-
-  @Column({ default: false })
-  receivesSpecialEducationServices?: boolean;
-
-  @Column({
-    type: 'varchar',
-    length: 20,
-    nullable: true,
-    transformer: enumTransformer(SpecialEducationServicesType),
-  })
-  specialEducationServicesType?: SpecialEducationServicesType;
+  @Column({ nullable: true, default: null })
+  receivesDisabilityServices?: boolean;
 
   @ValidateNested()
   @ManyToOne(() => Family)

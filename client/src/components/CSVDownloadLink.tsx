@@ -7,6 +7,10 @@ import AuthenticationContext from '../contexts/AuthenticationContext/Authenticat
  * TODO: Once we have the infrastructure in place to actually
  * submit to OEC, we can swap this out for whatever we use.
  * But until then, we have two ways of downloading information.
+ *
+ * Note: Leaving props in because the restriction for downloading
+ * only the roster data is just for point in time launch; will
+ * eventually add the uploaded sheet export back in.
  */
 type ExportProps = {
   reportId?: number;
@@ -24,9 +28,7 @@ export const CSVDownloadLink: React.FC<ExportProps> = ({ reportId }) => {
 
   const downloadRoster = async () => {
     await downloadStreamToFile(
-      reportId !== undefined
-        ? `export/enrollment-report/${reportId}`
-        : `export/roster`,
+      `export/roster`,
       'Roster.csv',
       accessToken || ''
     ).catch((err) => console.error(err));
