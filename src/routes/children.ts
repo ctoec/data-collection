@@ -67,8 +67,10 @@ childrenRouter.get(
 childrenRouter.get(
   '/:childId',
   passAsyncError(async (req, res) => {
-    const childId = req.params['childId'];
-    const child = await controller.getChildById(childId);
+    const child = await controller.getChildById(
+      req.params['childId'],
+      req.user
+    );
     if (!child) throw new NotFoundError();
 
     res.send(child);
@@ -81,14 +83,8 @@ childrenRouter.get(
 childrenRouter.delete(
   '/:childId',
   passAsyncError(async (req, res) => {
-    try {
-      const childId = req.params['childId'];
-      await getManager().delete(Child, { id: childId });
-      res.sendStatus(200);
-    } catch (err) {
-      console.error("Error removing child's record: ", err);
-      throw new BadRequestError('Record not deleted.' + err);
-    }
+    await controller.deleteChild(req.params['childId'], req.user);
+    res.sendStatus(200);
   })
 );
 
@@ -99,11 +95,7 @@ childrenRouter.put(
   '/:childId',
   passAsyncError(async (req, res) => {
     try {
-      const id = req.params['childId'];
-      const child = await getManager().findOne(Child, id);
-      if (!child) throw new NotFoundError();
-
-      await getManager().save(getManager().merge(Child, child, req.body));
+      await controller.updateChild(req.params['childId'], req.user, req.body);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -122,9 +114,12 @@ childrenRouter.put(
 childrenRouter.post(
   '/:childId/change-enrollment',
   passAsyncError(async (req, res) => {
-    const childId = req.params['childId'];
     try {
-      await controller.changeEnrollment(childId, req.body);
+      await controller.changeEnrollment(
+        req.params['childId'],
+        req.body,
+        req.user
+      );
 
       res.sendStatus(200);
     } catch (err) {

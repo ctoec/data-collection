@@ -37,13 +37,50 @@ export const getChildren = async (user: User) => {
   });
 };
 
+export const updateChild = async (
+  id: string,
+  user: User,
+  update: Partial<Child>
+) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const child = await getManager().findOne(Child, id, {
+    where: { organization: { id: In(readOrgIds) } },
+  });
+
+  if (!child) {
+    console.warn(
+      'Child either does not exist, or user does not have permission to modify'
+    );
+    throw new NotFoundError();
+  }
+
+  await getManager().save(getManager().merge(Child, child, update));
+};
+
+export const deleteChild = async (id: string, user: User) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const child = await getManager().findOne(Child, id, {
+    where: { organization: { id: In(readOrgIds) } },
+  });
+
+  if (!child) {
+    console.warn(
+      'Child either does not exist, or user does not have permission to modify'
+    );
+    throw new NotFoundError();
+  }
+
+  await getManager().delete(Child, { id });
+};
+
 /**
  * Get child by id, with related family and related
  * family income determinations, and enrollments and
  * related fundings
  * @param id
  */
-export const getChildById = async (id: string) => {
+export const getChildById = async (id: string, user: User): Promise<Child> => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
   const child = await getManager().findOne(Child, id, {
     relations: [
       'family',
@@ -54,6 +91,7 @@ export const getChildById = async (id: string) => {
       'enrollments.fundings',
       'organization',
     ],
+    where: { organization: { id: In(readOrgIds) } },
   });
 
   // Sort enrollments by exit date
@@ -128,9 +166,10 @@ export const createChild = async (_child) => {
  */
 export const changeEnrollment = async (
   id: string,
-  changeEnrollmentData: ChangeEnrollment
+  changeEnrollmentData: ChangeEnrollment,
+  user: User
 ) => {
-  const child = await getChildById(id);
+  const child = await getChildById(id, user);
 
   if (!child) throw new NotFoundError();
 
