@@ -12,24 +12,24 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
     </h2>
     <form
       autocomplete="off"
-      class="FamilyAddressForm"
+      class="usa-form FamilyAddressForm"
       novalidate=""
     >
       <fieldset
-        class="grid-gap grid-row usa-fieldset display-inline-block"
+        class="usa-fieldset display-inline-block"
         id="family-address"
       >
         <legend
           id="fieldset-legend-family-address"
         >
           <span
-            class="usa-sr-only"
+            class="usa-label"
           >
             Address
           </span>
         </legend>
         <div
-          class="grid-gap grid-col"
+          class="grid-col"
         >
           <div
             class="grid-col-12 margin-top-2"
@@ -53,10 +53,10 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
             </div>
           </div>
           <div
-            class="grid-row grid-gap"
+            class="grid-row grid-gap display-flex flex-row flex-align-end"
           >
             <div
-              class="grid-col-8 display-inline-block"
+              class="grid-col-8 display-inline-block flex-align-self-end"
             >
               <div
                 class=" usa-form-group"
@@ -77,7 +77,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
               </div>
             </div>
             <div
-              class="grid-col-4 display-inline-block"
+              class="grid-col-4 display-inline-block flex-align-self-end"
             >
               <div
                 class="usa-form-group"
@@ -147,7 +147,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
         </div>
       </fieldset>
       <fieldset
-        class="grid-gap grid-row usa-fieldset"
+        class="usa-fieldset"
         id="homelessness-button-group-fieldset"
       >
         <legend
@@ -159,9 +159,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
             Homelessness status
           </span>
         </legend>
-        <div
-          class="grid-gap margin-top-3 grid-row flex-align-start"
-        >
+        <div>
           <span>
             <div
               class="usa-radio"

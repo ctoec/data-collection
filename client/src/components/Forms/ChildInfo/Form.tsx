@@ -76,7 +76,8 @@ export const ChildInfoForm = ({
       <EthnicityField />
       <GenderField />
 
-      <h3>Special circumstances</h3>
+      <br />
+      <h3 className="margin-bottom-0">Special circumstances</h3>
       <DisabilityServices />
       <DualLanguageLearner />
       <Foster />

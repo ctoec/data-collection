@@ -4,7 +4,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
 <DocumentFragment>
   <form
     autocomplete="off"
-    class="ChildInfoForm usa-form"
+    class="usa-form ChildInfoForm usa-form"
     novalidate=""
   >
     <h2>
@@ -12,7 +12,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     </h2>
     <fieldset
       aria-describedby="race-fieldset-hint"
-      class="grid-gap grid-row usa-fieldset"
+      class="usa-fieldset"
       id="race-fieldset"
     >
       <legend
@@ -29,9 +29,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       >
         As identified by family
       </span>
-      <div
-        class="grid-gap margin-top-3 grid-row flex-align-start"
-      >
+      <div>
         <span>
           <div
             class="usa-checkbox"
@@ -144,7 +142,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     </fieldset>
     <fieldset
       aria-describedby="ethnicity-radiogroup-fieldset-hint"
-      class="grid-gap grid-row usa-fieldset"
+      class="usa-fieldset"
       id="ethnicity-radiogroup-fieldset"
     >
       <legend
@@ -161,9 +159,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       >
         As identified by family
       </span>
-      <div
-        class="grid-gap margin-top-3 grid-row flex-align-start"
-      >
+      <div>
         <span>
           <div
             class="usa-radio"
@@ -270,11 +266,14 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         </option>
       </select>
     </div>
-    <h3>
+    <br />
+    <h3
+      class="margin-bottom-0"
+    >
       Special circumstances
     </h3>
     <fieldset
-      class="grid-gap grid-row usa-fieldset"
+      class="usa-fieldset"
       id="disability-button-group-fieldset"
     >
       <legend
@@ -286,9 +285,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           Receiving disability services
         </span>
       </legend>
-      <div
-        class="grid-gap margin-top-3 grid-row flex-align-start"
-      >
+      <div>
         <span>
           <div
             class="usa-radio"
@@ -350,7 +347,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      class="grid-gap grid-row usa-fieldset"
+      class="usa-fieldset"
       id="duallanguage-button-group-fieldset"
     >
       <legend
@@ -362,9 +359,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           Dual Language Learner
         </span>
       </legend>
-      <div
-        class="grid-gap margin-top-3 grid-row flex-align-start"
-      >
+      <div>
         <span>
           <div>
             <div
@@ -432,7 +427,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      class="grid-gap grid-row usa-fieldset"
+      class="usa-fieldset"
       id="foster-button-group-fieldset"
     >
       <legend
@@ -444,9 +439,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           Child lives with foster family
         </span>
       </legend>
-      <div
-        class="grid-gap margin-top-3 grid-row flex-align-start"
-      >
+      <div>
         <span>
           <div
             class="usa-radio"

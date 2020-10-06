@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Switch } from 'react-router-dom';
-import { Header, NavLink } from '@ctoec/component-library';
+import { Header } from '@ctoec/component-library';
 
 import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';

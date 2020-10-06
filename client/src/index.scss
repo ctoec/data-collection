@@ -8,8 +8,9 @@ p {
   line-height: 1.6rem;
 }
 
-fieldset legend {
-  font-weight: bold;
+legend .usa-label {
+  // Overrides USWDS default
+  font-weight: bold !important;
 }
 
 .h2 {
