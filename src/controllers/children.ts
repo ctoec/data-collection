@@ -2,7 +2,10 @@ import { getManager, In } from 'typeorm';
 import idx from 'idx';
 import { Moment } from 'moment';
 import { validate } from 'class-validator';
-import { ExitReason } from '../../client/src/shared/models';
+import {
+  ExitReason,
+  Enrollment as EnrollmentInterface,
+} from '../../client/src/shared/models';
 import {
   Child,
   ReportingPeriod,
@@ -10,6 +13,8 @@ import {
   Funding,
   User,
   Family,
+  Site,
+  FundingSpace,
 } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
@@ -68,7 +73,9 @@ export const getChildById = async (id: string) => {
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
   }
-  const validationErrors = await validate(child, { validationError: { target: false } });
+  const validationErrors = await validate(child, {
+    validationError: { target: false },
+  });
   return distributeValidationErrorsToSubObjects(child, validationErrors);
 };
 
@@ -187,7 +194,7 @@ export const changeEnrollment = async (
       // Update current enrollment exitReason
       currentEnrollment.exitReason =
         currentEnrollment.ageGroup !==
-          changeEnrollmentData.newEnrollment.ageGroup
+        changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
 
@@ -200,29 +207,63 @@ export const changeEnrollment = async (
       await tManager.save(currentEnrollment);
     }
 
-    // Create new enrollment
-    const enrollment = tManager.create(Enrollment, {
-      ageGroup: changeEnrollmentData.newEnrollment.ageGroup,
-      site: changeEnrollmentData.newEnrollment.site,
-      entry: changeEnrollmentData.newEnrollment.entry,
+    await createNewEnrollment(
+      changeEnrollmentData.newEnrollment,
       child,
-    });
-    await tManager.save(enrollment);
-
-    // Create new funding, if exists
-    if (changeEnrollmentData.newEnrollment.fundings) {
-      const funding = tManager.create(Funding, {
-        enrollment,
-        fundingSpace: idx(
-          changeEnrollmentData,
-          (_) => _.newEnrollment.fundings[0].fundingSpace
-        ),
-        firstReportingPeriod: idx(
-          changeEnrollmentData,
-          (_) => _.newEnrollment.fundings[0].firstReportingPeriod
-        ),
-      });
-      await tManager.save(funding);
-    }
+      tManager
+    );
   });
 };
+
+async function createNewEnrollment(
+  newEnrollment: EnrollmentInterface,
+  child: Child,
+  tManager
+): Promise<void> {
+  if (newEnrollment.site) {
+    const matchingSite = await tManager.findOne(Site, newEnrollment.site.id);
+
+    if (!matchingSite || matchingSite.organizationId !== child.organizationId) {
+      console.error(
+        'User either provided an unknown site or a site this childs org does not have permission for'
+      );
+      throw new Error('Invalid site supplied for enrollment');
+    }
+  }
+
+  const enrollment = tManager.create(Enrollment, {
+    ageGroup: newEnrollment.ageGroup,
+    site: newEnrollment.site,
+    entry: newEnrollment.entry,
+    child,
+  });
+  await tManager.save(enrollment);
+
+  // Create new funding, if exists
+  if (newEnrollment.fundings && newEnrollment.fundings.length) {
+    const matchingFundingSpace: FundingSpace = await tManager.findOne(
+      FundingSpace,
+      newEnrollment.fundings[0].fundingSpace.id
+    );
+
+    if (
+      !matchingFundingSpace ||
+      matchingFundingSpace.organizationId !== child.organizationId
+    ) {
+      console.error(
+        'User either provided an unknown funding space or a funding space this childs org does not have permission for'
+      );
+      throw new Error('Invalid funding space supplied for enrollment');
+    }
+
+    const funding = tManager.create(Funding, {
+      enrollment,
+      fundingSpace: idx(newEnrollment, (_) => _.fundings[0].fundingSpace),
+      firstReportingPeriod: idx(
+        newEnrollment,
+        (_) => _.fundings[0].firstReportingPeriod
+      ),
+    });
+    await tManager.save(funding);
+  }
+}
