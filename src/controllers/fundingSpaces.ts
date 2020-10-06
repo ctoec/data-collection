@@ -15,16 +15,18 @@ export const getFundingSpaces = async (
 ): Promise<FundingSpace[]> => {
   const readOrgIds: number[] = await getReadAccessibileOrgIds(user);
 
-  if (!!organizationId && !readOrgIds.includes(organizationId)) {
+  if (organizationId && !readOrgIds.includes(organizationId)) {
     console.warn(
       'User attempted to retrieve funding spaces for an org they dont have access to'
     );
-    return null;
+    return [];
   }
+
+  let orgIds: number[] = organizationId ? [organizationId] : readOrgIds;
 
   return getManager().find(FundingSpace, {
     where: {
-      organization: { id: organizationId },
+      organization: { id: In(orgIds) },
     },
     relations: ['organization'],
   });
