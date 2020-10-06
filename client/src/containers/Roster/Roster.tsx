@@ -13,7 +13,8 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { apiPut } from '../../utils/api';
 
 const MAX_LENGTH_EXPANDED = 50;
 
@@ -28,6 +29,8 @@ const Roster: React.FC = () => {
 
   const [children, setChildren] = useState<Child[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const history = useHistory();
   useEffect(() => {
     setLoading(true);
     apiGet('children', { accessToken })
@@ -113,6 +116,11 @@ const Roster: React.FC = () => {
     return total;
   }, distinctSiteIds);
 
+  async function submitToOEC() {
+    await apiPut(`oec-report/${organization?.id}`);
+    history.push('/success');
+  }
+
   return (
     <>
       <div className="Roster grid-container">
@@ -137,7 +145,7 @@ const Roster: React.FC = () => {
           href="/getting-started"
           appearance="outline"
         />
-        <Button text="Send to OEC" href="/success" />
+        <Button text="Send to OEC" onClick={submitToOEC} />
       </FixedBottomBar>
     </>
   );

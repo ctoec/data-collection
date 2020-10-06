@@ -7,6 +7,7 @@ export * from './Funding';
 export * from './FundingSpace';
 export * from './FundingTimeSplit';
 export * from './IncomeDetermination';
+export * from './OECReport';
 export * from './Organization';
 export * from './Permission';
 export * from './ReportingPeriod';
