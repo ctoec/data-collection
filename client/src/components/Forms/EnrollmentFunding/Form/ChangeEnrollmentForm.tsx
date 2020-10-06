@@ -10,19 +10,14 @@ import {
   Alert,
 } from '@ctoec/component-library';
 import { ChangeEnrollment } from '../../../../shared/payloads';
-import {
-  Enrollment,
-  Site,
-  ReportingPeriod,
-  FundingSpace,
-} from '../../../../shared/models';
+import { Enrollment, Site } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import {
   SiteField,
   AgeGroupField,
   EnrollmentStartDateField,
   ReportingPeriodField,
-  FundingField,
+  NewFundingField,
   CareModelField,
 } from '../Fields';
 
@@ -30,8 +25,6 @@ type ChangeEnrollmentFormProps = {
   childName: string;
   childId: string;
   currentEnrollment?: Enrollment;
-  reportingPeriods: ReportingPeriod[];
-  fundingSpaces: FundingSpace[];
   sites: Site[];
   afterDataSave: () => void;
 };
@@ -45,8 +38,6 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   childName,
   childId,
   currentEnrollment,
-  reportingPeriods,
-  fundingSpaces,
   sites,
   afterDataSave,
 }) => {
@@ -88,7 +79,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   );
   return (
     <Card forceClose={closeCard}>
-      <div className="display-flex flex-justify">
+      <div className="display-flex flex-justify flex-row flex-align-center">
         {!currentEnrollment ? (
           <div className="usa-prose-body">
             {childName} has no active enrollments
@@ -124,13 +115,11 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           <AgeGroupField<ChangeEnrollment>
             accessor={(data) => data.at('newEnrollment').at('ageGroup')}
           />
-          <FundingField<ChangeEnrollment>
+          <NewFundingField<ChangeEnrollment>
             fundingAccessor={(data) =>
               data.at('newEnrollment').at('fundings').at(0)
             }
             getEnrollment={(data) => data.at('newEnrollment').value}
-            fundingSpaces={fundingSpaces}
-            reportingPeriods={reportingPeriods}
           />
 
           {!!currentEnrollment && (
@@ -144,9 +133,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
                       .at('funding')
                       .at('lastReportingPeriod')
                   }
-                  reportingPeriods={reportingPeriods.filter(
-                    (rp) => rp.type === activeFunding.fundingSpace?.source
-                  )}
+                  fundingSource={activeFunding.fundingSpace?.source}
                   isLast={true}
                   optional={true}
                   label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}

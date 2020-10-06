@@ -4,15 +4,13 @@ import {
   SiteField,
   EnrollmentStartDateField,
   AgeGroupField,
-  FundingField,
+  NewFundingField,
 } from '../Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost } from '../../../../utils/api';
 import { useSites } from '../../../../hooks/useSites';
-import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
-import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
 import useIsMounted from '../../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../../hooks/useValidationErrors';
 import { getCurrentEnrollment } from '../../../../utils/models';
@@ -59,8 +57,6 @@ export const NewEnrollment = ({
 
   // TODO: should these all be in some shared context rather than in hooks?
   const { sites } = useSites();
-  const { fundingSpaces } = useFundingSpaces();
-  const { reportingPeriods } = useReportingPeriods();
 
   return (
     <>
@@ -78,11 +74,9 @@ export const NewEnrollment = ({
           accessor={(data) => data.at('entry')}
         />
         <AgeGroupField<Enrollment> accessor={(data) => data.at('ageGroup')} />
-        <FundingField<Enrollment>
+        <NewFundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
-          fundingSpaces={fundingSpaces}
-          reportingPeriods={reportingPeriods}
         />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}

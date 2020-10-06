@@ -22,6 +22,7 @@ import {
 
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
+import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const _child = {
@@ -120,7 +121,11 @@ const children: Child[] = [
   },
 ];
 
-const user = {
+const oneOrgUser = {
+  organizations: [{ id: 1, providerName: 'Organization' }],
+} as User;
+
+const multiOrgUser = {
   organizations: [
     { id: 1, providerName: 'Organization' },
     { id: 2, providerName: 'Org 2' },
@@ -128,29 +133,77 @@ const user = {
 } as User;
 
 describe('Roster', () => {
-  beforeAll(() =>
-    apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve(children)))
-  );
-
   const helperOpts = {
     wrapInRouter: true,
-    before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
   };
   snapshotTestHelper(
-    <UserContext.Provider value={{ user, loading: false }}>
-      <Roster />
+    <UserContext.Provider value={{ user: oneOrgUser, loading: false }}>
+      <DataCacheContext.Provider
+        value={{
+          children: {
+            records: children,
+            loading: false,
+            addOrUpdateRecord: jest.fn(),
+          },
+        }}
+      >
+        <Roster />
+      </DataCacheContext.Provider>
     </UserContext.Provider>,
-    helperOpts
+    helperOpts,
+    'matches snapshot for user with 1 org'
   );
+
+  snapshotTestHelper(
+    <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
+      <DataCacheContext.Provider
+        value={{
+          children: {
+            records: children,
+            loading: false,
+            addOrUpdateRecord: jest.fn(),
+          },
+        }}
+      >
+        <Roster />
+      </DataCacheContext.Provider>
+    </UserContext.Provider>,
+    helperOpts,
+    'matches snapshot for user with >1 org'
+  );
+
   accessibilityTestHelper(
-    <UserContext.Provider value={{ user, loading: false }}>
-      <Roster />
+    <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
+      <DataCacheContext.Provider
+        value={{
+          children: {
+            records: children,
+            loading: false,
+            addOrUpdateRecord: jest.fn(),
+          },
+        }}
+      >
+        <Roster />
+      </DataCacheContext.Provider>
     </UserContext.Provider>,
     helperOpts
   );
 
   it('correctly separates children by ageGroup', async () => {
-    const renderResult = await renderHelper(<Roster />, helperOpts);
+    const renderResult = await renderHelper(
+      <DataCacheContext.Provider
+        value={{
+          children: {
+            records: children,
+            loading: false,
+            addOrUpdateRecord: jest.fn(),
+          },
+        }}
+      >
+        <Roster />
+      </DataCacheContext.Provider>,
+      helperOpts
+    );
 
     // Assert there are two roster sections
     const accordionHeaders = (

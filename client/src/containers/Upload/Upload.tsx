@@ -9,6 +9,7 @@ import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { CheckReplaceData } from './CheckReplaceData';
+import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -39,6 +40,9 @@ const Upload: React.FC = () => {
   const [error, setError] = useState<string>();
   const [file, setFile] = useState<File>();
   const history = useHistory();
+  const {
+    children: { refetch: refetchChildren },
+  } = useContext(DataCacheContext);
 
   const [queryStringForUpload, setQueryStringForUpload] = useState('');
   const [postUpload, setPostUpload] = useState(false);
@@ -53,7 +57,8 @@ const Upload: React.FC = () => {
         accessToken,
         rawBody: true,
       })
-        .then((res) => {
+        .then(() => {
+          refetchChildren();
           history.push(`/roster`);
         })
         .catch(

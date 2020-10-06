@@ -25,13 +25,13 @@ const child = {
     {
       id: 1,
       child: {} as Child,
-      site: { siteName: 'Site A' } as Site,
+      site: { siteName: 'Site A', organization: { id: 1 } } as Site,
       entry: moment.utc('2020-09-03'),
     },
     {
       id: 2,
       child: {} as Child,
-      site: { siteName: 'Site B' } as Site,
+      site: { siteName: 'Site B', organization: { id: 1 } } as Site,
       entry: moment.utc('2019-09-03'),
       exit: moment.utc('2020-08-01'),
       fundings: [

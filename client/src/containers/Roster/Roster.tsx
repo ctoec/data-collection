@@ -1,9 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import idx from 'idx';
 import { Accordion, Table, Button, AlertProps } from '@ctoec/component-library';
-import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, AgeGroup } from '../../shared/models';
-import { apiGet } from '../../utils/api';
 import { tableColumns } from '../Roster/TableColumns';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
@@ -14,30 +12,20 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { Link } from 'react-router-dom';
+import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 
 const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-  const { accessToken } = useContext(AuthenticationContext);
   const { user } = useContext(UserContext);
   const organizations = user?.organizations;
-  // TODO: let user select between orgs
   const organization = organizations ? organizations[0] : undefined;
   const showOrgInTables = idx(user, (_) => _.organizations.length > 1) || false;
 
-  const [children, setChildren] = useState<Child[]>([]);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    setLoading(true);
-    apiGet('children', { accessToken })
-      .then((_children) => {
-        if (_children) setChildren(_children);
-      })
-      .finally(() => setLoading(false));
-  }, [accessToken]);
+  const { children } = useContext(DataCacheContext);
 
-  const numberOfChildrenWithErrors = children.filter(
+  const numberOfChildrenWithErrors = children.records.filter(
     (c) => c.validationErrors && c.validationErrors.length > 0
   ).length;
   const childrenWithErrorsAlert: AlertProps = {
@@ -63,7 +51,7 @@ const Roster: React.FC = () => {
   }, [numberOfChildrenWithErrors]);
 
   const childrenByAgeGroup: { [key in AgeGroup]?: Child[] } = {};
-  children.reduce((_byAgeGroup, _child) => {
+  children.records.reduce((_byAgeGroup, _child) => {
     const ageGroup = idx(_child, (_) => _.enrollments[0].ageGroup) || undefined;
     if (ageGroup) {
       if (!!!_byAgeGroup[ageGroup]) {
@@ -107,7 +95,7 @@ const Roster: React.FC = () => {
     }));
 
   const distinctSiteIds: number[] = [];
-  children.reduce((total, child) => {
+  children.records.reduce((total, child) => {
     const siteId = idx(child, (_) => _.enrollments[0].site.id);
     if (siteId && !total.includes(siteId)) total.push(siteId);
     return total;
@@ -121,9 +109,9 @@ const Roster: React.FC = () => {
           {organization?.providerName}
         </h1>
         <p className="font-body-xl margin-top-1">
-          {loading
+          {children.loading
             ? 'Loading...'
-            : `${children.length} children enrolled at ${distinctSiteIds.length} sites`}
+            : `${children.records.length} children enrolled at ${distinctSiteIds.length} sites`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <AddRecordButton orgs={organizations} />

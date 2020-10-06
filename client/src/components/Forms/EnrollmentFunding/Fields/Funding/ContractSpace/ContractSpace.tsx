@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   SelectProps,
   FormField,
@@ -9,6 +9,8 @@ import {
   FundingSpace,
   Funding,
   Enrollment,
+  AgeGroup,
+  FundingSource,
 } from '../../../../../../shared/models';
 import { SingleContractSpaceField } from './SingleContractSpace';
 import {
@@ -16,18 +18,31 @@ import {
   ChangeEnrollment,
 } from '../../../../../../shared/payloads';
 import { fundingSpaceFormatter } from '../../../../../../utils/formatters';
+import DataCacheContext from '../../../../../../contexts/DataCacheContext/DataCacheContext';
 
 type ContractSpaceProps<T> = {
-  fundingSpaceOptions: FundingSpace[];
+  ageGroup: AgeGroup | undefined;
+  fundingSource: FundingSource;
+  organizationId: number;
   accessor: (_: TObjectDriller<T>) => TObjectDriller<FundingSpace>;
 };
 
 export const ContractSpaceField = <
   T extends Funding | ChangeFunding | ChangeEnrollment | Enrollment
 >({
-  fundingSpaceOptions,
+  ageGroup,
+  fundingSource,
+  organizationId,
   accessor,
 }: ContractSpaceProps<T>) => {
+  const { fundingSpaces } = useContext(DataCacheContext);
+  const fundingSpaceOptions = fundingSpaces.records.filter(
+    (fs) =>
+      fs.ageGroup === ageGroup &&
+      fs.source === fundingSource &&
+      fs.organization.id === organizationId
+  );
+
   if (fundingSpaceOptions.length === 1) {
     return (
       <SingleContractSpaceField<T>
