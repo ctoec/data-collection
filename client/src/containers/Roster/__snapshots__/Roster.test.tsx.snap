@@ -538,12 +538,12 @@ exports[`Roster matches snapshot 1`] = `
         >
           Back to getting started
         </a>
-        <a
+        <button
           class="usa-button"
-          href="/success"
+          type="button"
         >
           Send to OEC
-        </a>
+        </button>
       </div>
     </div>
   </div>
