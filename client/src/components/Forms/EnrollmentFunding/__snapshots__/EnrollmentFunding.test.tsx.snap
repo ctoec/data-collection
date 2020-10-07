@@ -12,7 +12,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       class="oec-card-cell"
     >
       <div
-        class="display-flex flex-justify"
+        class="display-flex flex-justify flex-row flex-align-center"
       >
         <div
           class="usa-prose-body"

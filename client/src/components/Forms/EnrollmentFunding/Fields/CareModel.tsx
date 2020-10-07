@@ -7,7 +7,7 @@ import {
   RadioOptionRenderProps,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { CareModel, Enrollment } from '../../../../shared/models';
+import { Enrollment, CareModel } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
 
 type CareModelProps<T> = {
