@@ -25,6 +25,7 @@ const UNFUNDED = 'Unfunded';
 type FundingFieldProps<T> = {
   fundingAccessor: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
+  organizationId?: number;
 };
 
 /**
@@ -36,6 +37,7 @@ export const NewFundingField = <
 >({
   fundingAccessor,
   getEnrollment,
+  organizationId,
 }: FundingFieldProps<T>) => {
   const { fundingSpaces } = useContext(DataCacheContext);
   const { dataDriller } = useGenericContext<T>(FormContext);
@@ -51,12 +53,12 @@ export const NewFundingField = <
   useEffect(() => {
     const _fundingSourceOptions = new Set(
       fundingSpaces.records
-        .filter(
-          (fs) => fs.ageGroup === enrollment.ageGroup
-          // site is set via enrollment.siteId, so site is undefined
-          // need to find a different way to pass in org id
-          // && fs.organization.id === enrollment.site.organization.id
-        )
+        .filter((fs) => {
+          return (
+            fs.ageGroup === enrollment.ageGroup &&
+            (!organizationId || fs.organization.id === organizationId)
+          );
+        })
         .map((fs) => fs.source)
     );
 
