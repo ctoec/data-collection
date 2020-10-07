@@ -77,6 +77,7 @@ export const NewEnrollment = ({
         <NewFundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
+          organizationId={child.organizationId}
         />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}

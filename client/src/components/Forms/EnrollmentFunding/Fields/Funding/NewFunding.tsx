@@ -25,7 +25,7 @@ const UNFUNDED = 'Unfunded';
 type FundingFieldProps<T> = {
   fundingAccessor: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
-  organizationId?: number;
+  organizationId: number;
 };
 
 /**
@@ -89,8 +89,7 @@ export const NewFundingField = <
               <ContractSpaceField<T>
                 ageGroup={enrollment.ageGroup}
                 fundingSource={fundingSource}
-                // see comment on line 56
-                organizationId={enrollment.site?.organization?.id}
+                organizationId={organizationId}
                 accessor={(data) => fundingAccessor(data).at('fundingSpace')}
               />
               <ReportingPeriodField<T>
