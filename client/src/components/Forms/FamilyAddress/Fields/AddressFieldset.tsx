@@ -22,7 +22,7 @@ export const AddressFieldset: React.FC = () => {
     <FormFieldSet<Family>
       id="family-address"
       legend="Address"
-      horizontal
+      childrenGroupClassName="grid-col"
       className="display-inline-block"
       status={(data) =>
         getValidationStatusForFields(
@@ -43,8 +43,8 @@ export const AddressFieldset: React.FC = () => {
           status={getValidationStatusForFieldInFieldset}
         />
       </div>
-      <div className="grid-row grid-gap">
-        <div className="grid-col-8 display-inline-block">
+      <div className="grid-row grid-gap display-flex flex-row flex-align-end">
+        <div className="grid-col-8 display-inline-block flex-align-self-end">
           <FormField<Family, TextInputProps, string>
             getValue={(data) => data.at('town')}
             type="input"
@@ -55,7 +55,7 @@ export const AddressFieldset: React.FC = () => {
             status={getValidationStatusForFieldInFieldset}
           />
         </div>
-        <div className="grid-col-4 display-inline-block">
+        <div className="grid-col-4 display-inline-block flex-align-self-end">
           <FormField<Family, SelectProps, string>
             id="state"
             label="State"

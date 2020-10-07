@@ -12,7 +12,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
       class="oec-card-cell"
     >
       <div
-        class="display-flex flex-justify"
+        class="display-flex flex-justify flex-row flex-align-center"
       >
         <div
           class="usa-prose-body"
@@ -39,11 +39,11 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         New enrollment
       </h3>
       <form
-        class="usa-form"
+        class="usa-form usa-form"
         id="change-enrollment-form"
       >
         <fieldset
-          class="grid-gap grid-row usa-fieldset"
+          class="usa-fieldset"
           id="site-radiogroup-fieldset"
         >
           <legend
@@ -55,13 +55,11 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
               Site
             </span>
           </legend>
-          <div
-            class="grid-gap margin-top-3 grid-row flex-align-start"
-          />
+          <div />
         </fieldset>
         <fieldset
           aria-describedby="start-date-hint"
-          class="grid-gap grid-row usa-fieldset"
+          class="usa-fieldset"
           id="start-date"
         >
           <legend
@@ -78,14 +76,12 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
           >
             For example: 6 21 2008
           </span>
-          <div
-            class="grid-gap grid-row flex-align-start"
-          >
+          <div>
             <div
               class="flex-row flex-align-end usa-memorable-date"
             >
               <div
-                class="oec-date-input__input margin-right-1 usa-form-group"
+                class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
               >
                 <label
                   class="usa-label"
@@ -104,7 +100,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
                 />
               </div>
               <div
-                class="oec-date-input__input margin-right-1 usa-form-group"
+                class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
               >
                 <label
                   class="usa-label"
@@ -123,7 +119,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
                 />
               </div>
               <div
-                class="oec-date-input__input margin-right-1 usa-form-group"
+                class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
               >
                 <label
                   class="usa-label"
@@ -1344,7 +1340,99 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
-          class="grid-gap grid-row usa-fieldset"
+          class="usa-fieldset"
+          id="care-model-radiogroup-fieldset"
+        >
+          <legend
+            id="fieldset-legend-care-model-radiogroup-fieldset"
+          >
+            <span
+              class="usa-label"
+            >
+              Care model
+            </span>
+          </legend>
+          <div>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="In-person"
+                  name="care-model"
+                  type="radio"
+                  value="In-person"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="In-person"
+                >
+                  In-person
+                </label>
+              </div>
+            </span>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="Hybrid"
+                  name="care-model"
+                  type="radio"
+                  value="Hybrid"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Hybrid"
+                >
+                  Hybrid
+                </label>
+              </div>
+            </span>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="Distance"
+                  name="care-model"
+                  type="radio"
+                  value="Distance"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Distance"
+                >
+                  Distance
+                </label>
+              </div>
+            </span>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  class="usa-radio__input"
+                  id="Unknown"
+                  name="care-model"
+                  type="radio"
+                  value="Unknown"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Unknown"
+                >
+                  Unknown
+                </label>
+              </div>
+            </span>
+          </div>
+        </fieldset>
+        <fieldset
+          class="usa-fieldset"
           id="age-group-radiogroup-fieldset"
         >
           <legend
@@ -1356,9 +1444,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
               Age group
             </span>
           </legend>
-          <div
-            class="grid-gap margin-top-3 grid-row flex-align-start"
-          >
+          <div>
             <span>
               <div
                 class="usa-radio"
@@ -1419,7 +1505,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
-          class="grid-gap grid-row usa-fieldset"
+          class="usa-fieldset"
           id="funding-source-fieldset"
         >
           <legend
@@ -1431,9 +1517,7 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
               Funding source options
             </span>
           </legend>
-          <div
-            class="grid-gap margin-top-3 grid-row flex-align-start"
-          >
+          <div>
             <span>
               <div
                 class="usa-radio"

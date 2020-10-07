@@ -1,10 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import {
-  Funding,
-  FundingSpace,
-  Enrollment,
-  ReportingPeriod,
-} from '../../../../shared/models';
+import { Funding, Enrollment } from '../../../../shared/models';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut, apiDelete } from '../../../../utils/api';
 import {
@@ -23,8 +18,6 @@ import {
 import { ReportingPeriodField, ContractSpaceField } from '../Fields';
 
 type EditFundingFormProps = {
-  fundingSpaces: FundingSpace[];
-  reportingPeriods: ReportingPeriod[];
   funding: Funding;
   enrollment: Enrollment;
   isCurrent?: boolean;
@@ -38,8 +31,6 @@ type EditFundingFormProps = {
  * instead be handled by deleting and creating new funding.
  */
 export const EditFundingForm: React.FC<EditFundingFormProps> = ({
-  fundingSpaces,
-  reportingPeriods,
   funding,
   enrollment,
   isCurrent,
@@ -139,25 +130,18 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
           onSubmit={onSubmit}
         >
           <ContractSpaceField<Funding>
-            fundingSpaceOptions={fundingSpaces.filter(
-              (fs) =>
-                fs.ageGroup === enrollment.ageGroup &&
-                fs.source === funding.fundingSpace.source &&
-                fs.organization.id === enrollment.site.organization.id
-            )}
+            ageGroup={enrollment.ageGroup}
+            fundingSource={funding.fundingSpace.source}
+            organizationId={enrollment.site.organization.id}
             accessor={(data) => data.at('fundingSpace')}
           />
           <ReportingPeriodField<Funding>
-            reportingPeriods={reportingPeriods.filter(
-              (rp) => rp.type === funding.fundingSpace.source
-            )}
+            fundingSource={funding.fundingSpace.source}
             accessor={(data) => data.at('firstReportingPeriod')}
           />
           {!!funding.lastReportingPeriod && (
             <ReportingPeriodField<Funding>
-              reportingPeriods={reportingPeriods.filter(
-                (rp) => rp.type === funding.fundingSpace.source
-              )}
+              fundingSource={funding.fundingSpace.source}
               accessor={(data) => data.at('lastReportingPeriod')}
               isLast={true}
             />

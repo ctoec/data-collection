@@ -9,6 +9,7 @@ import * as serviceWorker from './serviceWorker';
 
 import '@ctoec/component-library/dist/assets/styles/index.scss';
 import './index.scss';
+import { DataCacheProvider } from './contexts/DataCacheContext/DataCacheContext';
 
 const render = (Component: React.FC) =>
   ReactDOM.render(
@@ -29,7 +30,9 @@ const render = (Component: React.FC) =>
           }}
         >
           <UserProvider>
-            <Component />
+            <DataCacheProvider>
+              <Component />
+            </DataCacheProvider>
           </UserProvider>
         </AuthenticationProvider>
       </BrowserRouter>

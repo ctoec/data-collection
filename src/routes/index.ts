@@ -12,6 +12,7 @@ import { reportingPeriodsRouter } from './reportingPeriods';
 import { fundingsRouter } from './fundings';
 import { templateRouter } from './template';
 import { exportRouter } from './export';
+import { oecReportRouter } from './oecReport';
 
 export const router = express.Router();
 
@@ -36,3 +37,5 @@ router.use('/funding-spaces', authenticate, fundingSpacesRouter);
 
 router.use('/reporting-periods', authenticate, reportingPeriodsRouter);
 router.use('/export', authenticate, exportRouter);
+
+router.use('/oec-report', authenticate, oecReportRouter);

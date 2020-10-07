@@ -25,9 +25,10 @@ export const accessibilityTestHelper = (
   opts: {
     before?: (_: RenderResult) => Promise<void>;
     wrapInRouter?: boolean;
-  } = {}
+  } = {},
+  name?: string
 ) => {
-  it('passes AXE accessibility checks', async () => {
+  it(name || 'passes AXE accessibility checks', async () => {
     await act(async () => {
       const renderResult = await renderHelper(component, opts);
       const results = await axe(renderResult.container);
@@ -43,9 +44,10 @@ export const snapshotTestHelper = (
   opts: {
     before?: (_: RenderResult) => Promise<void>;
     wrapInRouter?: boolean;
-  } = {}
+  } = {},
+  name?: string
 ) => {
-  it('matches snapshot', async () => {
+  it(name || 'matches snapshot', async () => {
     await act(async () => {
       const renderResult = await renderHelper(component, opts);
       expect(renderResult.asFragment()).toMatchSnapshot();

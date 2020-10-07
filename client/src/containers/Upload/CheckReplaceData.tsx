@@ -100,7 +100,7 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
             id="replace-data-sites"
             legend="Choose sites"
             showLegend
-            horizontal
+            childrenGroupClassName="grid-col"
             options={options}
           />
 

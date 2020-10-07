@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   ReportingPeriod,
   Funding,
   Enrollment,
+  FundingSource,
 } from '../../../../../shared/models';
 import {
   useGenericContext,
@@ -19,10 +20,11 @@ import {
   Withdraw,
 } from '../../../../../shared/payloads';
 import { reportingPeriodFormatter } from '../../../../../utils/formatters';
+import DataCacheContext from '../../../../../contexts/DataCacheContext/DataCacheContext';
 
 type ReportingPeriodProps<T> = {
-  reportingPeriods: ReportingPeriod[];
   accessor: (_: TObjectDriller<T>) => TObjectDriller<ReportingPeriod>;
+  fundingSource: FundingSource;
   isLast?: boolean;
   label?: string;
   optional?: boolean;
@@ -38,34 +40,37 @@ type ReportingPeriodProps<T> = {
 export const ReportingPeriodField = <
   T extends Funding | ChangeFunding | Withdraw | ChangeEnrollment | Enrollment
 >({
-  reportingPeriods,
   accessor,
+  fundingSource,
   isLast,
   label,
   optional,
 }: ReportingPeriodProps<T>) => {
+  const { reportingPeriods } = useContext(DataCacheContext);
+
   const { dataDriller } = useGenericContext<T>(FormContext);
   const [reportingPeriodOptions, setReportingPeriodOptions] = useState<
     ReportingPeriod[]
   >([]);
 
-  const reportingPeriod = accessor(dataDriller).value;
+  const currentReportingPeriod = accessor(dataDriller).value;
   useEffect(() => {
     // Only display 5 options, centered around existing value or today
     // No need to account for "isChangeFunding", because in that situation
     // a reporting period value will never exist
     const existingValueOrThisMonth =
-      reportingPeriod?.period || moment.utc().startOf('month');
+      currentReportingPeriod?.period || moment.utc().startOf('month');
     const twoMonthsPrior = existingValueOrThisMonth.clone().add(-2, 'months');
     const twoMonthsAfter = existingValueOrThisMonth.clone().add(2, 'months');
-    const _reportingPeriodOptions = reportingPeriods.filter(
+    const _reportingPeriodOptions = reportingPeriods.records.filter(
       (rp) =>
+        rp.type === fundingSource &&
         rp.period.isSameOrAfter(twoMonthsPrior) &&
         rp.period.isSameOrBefore(twoMonthsAfter)
     );
 
     setReportingPeriodOptions(_reportingPeriodOptions);
-  }, [reportingPeriods, reportingPeriod]);
+  }, [reportingPeriods, fundingSource, currentReportingPeriod]);
 
   return (
     <FormField<T, SelectProps, number | null>

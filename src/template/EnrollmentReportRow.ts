@@ -4,6 +4,7 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
+  CareModel,
 } from '../../client/src/shared/models';
 
 import {
@@ -191,7 +192,18 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  white?: boolean = undefined;
+  white?: boolean = false;
+
+  @ColumnMetadata({
+    formattedName: 'Race Not Disclosed',
+    required: REQUIRED_AT_LEAST_ONE,
+    definition: "The child's race, as identified by the family.",
+    reason: DEMOGRAPHIC_REPORTING_REASON,
+    format: BOOLEAN_FORMAT,
+    example: 'Yes',
+    section: SECTIONS.CHILD_INFO,
+  })
+  raceNotDisclosed?: boolean = true;
 
   @ColumnMetadata({
     formattedName: 'Hispanic or Latinx Ethnicity',
@@ -229,28 +241,16 @@ export class EnrollmentReportRow {
   dualLanguageLearner?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Receiving Special Education Services',
+    formattedName: 'Receiving Disability Services',
     required: REQUIRED,
     definition:
-      'Children receiving services with an IEP or an IFSP are receiving special education services.',
+      'Children receiving services for Autism, emotional disturbance, intellectual disability, learning disability, speech-language impairment, and other disabilities.',
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
     section: SECTIONS.CHILD_INFO,
   })
-  receivesSpecialEducationServices?: boolean = false;
-
-  @ColumnMetadata({
-    formattedName: 'Special Education Services Type',
-    required: 'Required if child is receiving special education services.',
-    definition:
-      'Whether a child receives special education services from a Local Education Agency (LEA) or another provider.',
-    reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: Object.values(SpecialEducationServicesType).join(', '),
-    example: 'Non-LEA',
-    section: SECTIONS.CHILD_INFO,
-  })
-  specialEducationServicesType?: string = undefined;
+  receivesDisabilityServices?: boolean = false;
 
   @ColumnMetadata({
     formattedName: 'Street address',
@@ -384,9 +384,10 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'Model',
     required: REQUIRED,
-    definition: 'The type of services received by the child.',
+    definition:
+      'The type of services received by the child. In-Person: In-school learning for all students on a full-time basis.\nHybrid: A combination of both in-person and remote learning support resulting in a limited student population on school premises at any given time.\nDistance: Learning opportunities in which students and educators are not physically present in a classroom environment.',
     reason: 'Used to identify children receiving in-person or virtual services',
-    format: 'In-person, Virtual, Hybrid',
+    format: Object.values(CareModel).join(', '),
     example: 'Hybrid',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -483,16 +484,4 @@ export class EnrollmentReportRow {
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
   lastFundingPeriod?: Moment = moment.invalid();
-
-  @ColumnMetadata({
-    formattedName: 'Receiving Care 4 Kids?',
-    required: REQUIRED,
-    definition: "Whether the child's family is receiving a Care 4 Kids subsidy",
-    reason:
-      'Used to identify overlaps between state funded spaces and Care 4 Kids subsidies',
-    format: BOOLEAN_FORMAT,
-    example: 'Yes',
-    section: SECTIONS.ENROLLMENT_FUNDING,
-  })
-  receivesC4K?: boolean = false;
 }

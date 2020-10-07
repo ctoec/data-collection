@@ -13,7 +13,11 @@ import {
   TrashCan,
 } from '@ctoec/component-library';
 import { Enrollment } from '../../../../shared/models';
-import { EnrollmentEndDateField, EnrollmentStartDateField } from '../Fields';
+import {
+  CareModelField,
+  EnrollmentEndDateField,
+  EnrollmentStartDateField,
+} from '../Fields';
 import { apiPut, apiDelete } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 
@@ -129,6 +133,7 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
           data={enrollment}
           onSubmit={onSubmit}
         >
+          <CareModelField<Enrollment> accessor={(data) => data.at('model')} />
           <EnrollmentStartDateField<Enrollment>
             accessor={(data) => data.at('entry')}
           />
@@ -147,6 +152,10 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
             text={loading ? 'Saving...' : 'Save'}
             disabled={loading}
           />
+          <p className="text-italic">
+            Add a new enrollment if you're looking to change site and/or age
+            group.
+          </p>
         </Form>
       </CardExpansion>
     </Card>
