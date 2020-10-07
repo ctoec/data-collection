@@ -7,7 +7,11 @@ import {
 import { Organization } from '../shared/models';
 import { Link, useHistory } from 'react-router-dom';
 
-export const AddRecordButton = ({ orgs }: { orgs?: Organization[] }) => {
+type AddRecordButtonProps = {
+  orgs?: Organization[];
+};
+
+export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
   const history = useHistory();
 
   if (!orgs) {

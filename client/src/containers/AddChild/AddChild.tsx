@@ -10,10 +10,12 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { EditFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
+// import { ReadWriteDataCache } from '../../contexts/DataCacheContext/DataCacheContext';
 
 type LocationType = Location & {
   state: {
     organization: Organization;
+    // childCache: ReadWriteDataCache<Child>;
   };
 };
 
@@ -21,6 +23,7 @@ const AddChild: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { state: locationState, hash } = useLocation() as LocationType;
+  // console.log(locationState);
   const { childId } = useParams() as { childId: string };
   const activeStep = hash.slice(1);
   const history = useHistory();
@@ -48,6 +51,7 @@ const AddChild: React.FC = () => {
   const [child, updateChild] = useState<Child>();
   // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
+  // const addOrUpdateRecord = locationState?.childCache.addOrUpdateRecord;
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
 
@@ -119,6 +123,7 @@ const AddChild: React.FC = () => {
   }, [accessToken, childId, refetchChild]);
 
   const finishRecord = () => {
+    // if (child !== undefined) addOrUpdateRecord(child);
     history.push('/roster', {
       alerts: [
         {
@@ -127,6 +132,8 @@ const AddChild: React.FC = () => {
           text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
         },
       ],
+      editChild: child?.id,
+      addChild: true,
     });
   };
 

@@ -11,26 +11,50 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
+import { apiGet } from '../../utils/api';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 
 const MAX_LENGTH_EXPANDED = 50;
+
+type LocationType = Location & {
+  state: {
+    editChild?: string;
+    addChild?: boolean;
+    deleteChild?: boolean;
+  };
+};
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
+  const { accessToken } = useContext(AuthenticationContext);
+  const location = useLocation() as LocationType;
   const organizations = user?.organizations;
   const organization = organizations ? organizations[0] : undefined;
   const showOrgInTables = idx(user, (_) => _.organizations.length > 1) || false;
 
   const { children } = useContext(DataCacheContext);
-
-  // TODO: When we add or delete records, the number of records enrolled /
-  // number of kids shown doesn't update until you refresh the page (the new
-  // record isn't shown and the old record still is); triggers a cache
-  // refresh to reflect the change
+  const editChild = location.state?.editChild;
+  const addChild = location.state?.addChild;
+  const deleteChild = location.state?.deleteChild;
+  // if (newChild !== undefined) console.log(newChild);
+  console.log(editChild, deleteChild);
   useEffect(() => {
-    children.refetch();
+    if (editChild !== undefined && addChild) {
+      apiGet(`children/${editChild}`, {
+        accessToken,
+      })
+        .then((updatedChild) => {
+          children.addOrUpdateRecord(updatedChild);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (editChild !== undefined && deleteChild) {
+      children.deleteRecordById(editChild);
+    }
   }, []);
 
   const numberOfChildrenWithErrors = children.records.filter(

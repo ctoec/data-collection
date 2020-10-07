@@ -45,37 +45,11 @@ exports[`Upload matches snapshot 1`] = `
         >
           Choose a file
         </label>
-        <div
+        <input
           class="usa-file-input"
-        >
-          <div
-            class="usa-file-input__target"
-          >
-            <div
-              aria-hidden="true"
-              class="usa-file-input__instructions"
-            >
-              <span
-                class="usa-file-input__drag-text"
-              >
-                Drag file here or 
-              </span>
-              <span
-                class="usa-file-input__choose"
-              >
-                choose from folder
-              </span>
-            </div>
-            <div
-              class="usa-file-input__box"
-            />
-            <input
-              class="usa-file-input__input"
-              id="report"
-              type="file"
-            />
-          </div>
-        </div>
+          id="report"
+          type="file"
+        />
       </form>
     </div>
   </div>

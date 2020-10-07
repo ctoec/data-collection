@@ -31,6 +31,8 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
               text: `${child.firstName} ${child.lastName}'s record was deleted from your roster.`,
             },
           ],
+          editChild: child.id,
+          deleteChild: true,
         });
       })
       .catch((err) => {
