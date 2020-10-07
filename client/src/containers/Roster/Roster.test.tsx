@@ -130,6 +130,10 @@ const multiOrgUser = {
     { id: 1, providerName: 'Organization' },
     { id: 2, providerName: 'Org 2' },
   ],
+  sites: [
+    { id: 1, siteName: 'Site1' },
+    { id: 2, siteName: 'Site 2' },
+  ],
 } as User;
 
 describe('Roster', () => {
