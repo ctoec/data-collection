@@ -7,23 +7,17 @@ import {
   TextWithIcon,
   Pencil,
   CardExpansion,
-  Form,
-  FormSubmitButton,
   Alert,
   TrashCan,
 } from '@ctoec/component-library';
-import { Enrollment } from '../../../../shared/models';
-import {
-  CareModelField,
-  EnrollmentEndDateField,
-  EnrollmentStartDateField,
-  AgeGroupField,
-} from '../Fields';
+import { Enrollment, Child } from '../../../shared/models';
 import { apiPut, apiDelete } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
 
-type EditEnrollmentFormProps = {
-  enrollment: Enrollment;
+type EditEnrollmentCardProps = {
+  child: Child;
+  enrollmentId: number;
   isCurrent?: boolean;
   afterDataSave: () => void;
 };
@@ -34,15 +28,20 @@ type EditEnrollmentFormProps = {
  * all funding information, and should instead be handled by deleting
  * and creating a new Enrollment object.
  */
-export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
-  enrollment,
+export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
+  child,
+  enrollmentId,
   isCurrent = false,
   afterDataSave,
 }) => {
+  const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
+  if (!enrollment) {
+    throw new Error('Edit enrollment rendered without enrollment');
+  }
+
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState(false);
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
@@ -53,24 +52,8 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
     if (closeCard) setCloseCard(false);
   });
 
-  const onSubmit = (updatedEnrollment: Enrollment) => {
-    setLoading(true);
-    apiPut(`enrollments/${enrollment.id}`, updatedEnrollment, {
-      accessToken,
-    })
-      .then(() => {
-        setError(undefined);
-        setCloseCard(true);
-        afterDataSave();
-      })
-      .catch((err) => {
-        setError('Unable to edit enrollment');
-      })
-      .finally(() => setLoading(false));
-  };
-
   function deleteEnrollment() {
-    apiDelete(`enrollments/${enrollment.id}`, {
+    apiDelete(`enrollments/${enrollmentId}`, {
       accessToken,
     })
       .then(() => {
@@ -81,9 +64,14 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
       });
   }
 
+  const saveData = async (updatedData: Enrollment) =>
+    apiPut(`enrollments/${enrollmentId}`, updatedData, {
+      accessToken,
+    });
+
   return (
     <Card
-      key={enrollment.id}
+      key={enrollmentId}
       appearance={isCurrent ? 'primary' : 'secondary'}
       forceClose={closeCard}
     >
@@ -128,41 +116,35 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
       </div>
       <CardExpansion>
         {error && <Alert type="error" text={error} />}
-        <Form<Enrollment>
+        <EnrollmentForm
           id={`edit-enrollment-${enrollment.id}`}
-          className="usa-form"
-          data={enrollment}
-          onSubmit={onSubmit}
-        >
-          {!enrollment.ageGroup && (
-            <AgeGroupField<Enrollment>
-              accessor={(data) => data.at('ageGroup')}
-            />
-          )}
-          <CareModelField<Enrollment> accessor={(data) => data.at('model')} />
-          <EnrollmentStartDateField<Enrollment>
-            accessor={(data) => data.at('entry')}
-          />
-          {enrollment.exit && (
-            <>
-              <EnrollmentEndDateField<Enrollment>
-                accessor={(data) => data.at('exit')}
-              />
-            </>
-          )}
-
-          <ExpandCard>
-            <Button text="Cancel" appearance="outline" />
-          </ExpandCard>
-          <FormSubmitButton
-            text={loading ? 'Saving...' : 'Save'}
-            disabled={loading}
-          />
-          <p className="text-italic">
-            Add a new enrollment if you're looking to change site and/or age
-            group.
-          </p>
-        </Form>
+          child={child}
+          enrollmentId={enrollment.id}
+          afterSaveSuccess={() => {
+            setError(undefined);
+            setCloseCard(true);
+            afterDataSave();
+          }}
+          setAlerts={() => {}}
+          submitButtonText="Save"
+          CancelButton={
+            <ExpandCard>
+              <Button text="Cancel" appearance="outline" />
+            </ExpandCard>
+          }
+          showField={(enrollment, fields) => {
+            const [field] = fields;
+            if (field === 'agegroup') return false;
+            if (field === 'fundings') return false;
+            if (field === 'site' && (enrollment as Enrollment).site)
+              return false;
+            return true;
+          }}
+        />
+        <p className="text-italic">
+          Add a new enrollment if you're looking to change site and/or age
+          group.
+        </p>
       </CardExpansion>
     </Card>
   );

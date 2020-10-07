@@ -7,10 +7,10 @@ import React from 'react';
 import {
   FamilyIncomeForm,
   ChildInfoForm,
-  EnrollmentFundingForm,
   ChildIdentifiersForm,
   FamilyAddressForm,
 } from '../../components/Forms';
+import { EnrollmentFundingForm } from './EnrollmentFunding/EnrollmentFunding';
 import {
   SECTION_KEYS,
   formSections,

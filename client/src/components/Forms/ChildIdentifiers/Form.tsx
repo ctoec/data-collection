@@ -34,7 +34,7 @@ export const doesChildIdFormHaveErrors = (child?: Child) =>
 
 export const ChildIdentifiersForm = ({
   child: inputChild,
-  afterDataSave,
+  afterSaveSuccess: afterDataSave,
   hideHeader = false,
   hideErrorsOnFirstLoad,
 }: EditFormProps) => {

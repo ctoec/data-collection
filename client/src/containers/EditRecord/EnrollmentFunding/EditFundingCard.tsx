@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Funding, Enrollment } from '../../../../shared/models';
-import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPut, apiDelete } from '../../../../utils/api';
+import { Funding, Enrollment, Child } from '../../../shared/models';
+import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiPut, apiDelete } from '../../../utils/api';
 import {
   Card,
   Tag,
@@ -11,15 +11,14 @@ import {
   Pencil,
   CardExpansion,
   Alert,
-  Form,
-  FormSubmitButton,
   TrashCan,
 } from '@ctoec/component-library';
-import { ReportingPeriodField, ContractSpaceField } from '../Fields';
+import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 
-type EditFundingFormProps = {
-  funding: Funding;
-  enrollment: Enrollment;
+type EditFundingCardProps = {
+  child: Child;
+  fundingId: number;
+  enrollmentId: number;
   isCurrent?: boolean;
   afterDataSave: () => void;
 };
@@ -30,16 +29,26 @@ type EditFundingFormProps = {
  * reporting period and fundingSpace information, and should
  * instead be handled by deleting and creating new funding.
  */
-export const EditFundingForm: React.FC<EditFundingFormProps> = ({
-  funding,
-  enrollment,
+export const EditFundingCard: React.FC<EditFundingCardProps> = ({
+  child,
+  fundingId,
+  enrollmentId,
   isCurrent,
   afterDataSave,
 }) => {
+  const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
+  if (!enrollment) {
+    throw new Error('Edit funding rendered without enrollment');
+  }
+
+  const funding = enrollment.fundings?.find((f) => f.id === fundingId);
+  if (!funding) {
+    throw new Error('Edit funding rendered without funding');
+  }
+
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState(false);
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
@@ -50,24 +59,14 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
     if (closeCard) setCloseCard(false);
   });
 
-  const onSubmit = (updatedFunding: Funding) => {
-    setLoading(true);
-    apiPut(
-      `enrollments/${enrollment.id}/fundings/${funding.id}`,
-      updatedFunding,
-      { accessToken }
-    )
-      .then(() => {
-        setError(undefined);
-        setCloseCard(true);
-        afterDataSave();
-      })
-      .catch(() => setError('Unable to edit funding'))
-      .finally(() => setLoading(false));
+  const afterSaveSuccess = () => {
+    setError(undefined);
+    setCloseCard(true);
+    afterDataSave();
   };
 
   function deleteFunding() {
-    apiDelete(`/enrollments/${enrollment.id}/fundings/${funding.id}`, {
+    apiDelete(`/enrollments/${enrollmentId}/fundings/${fundingId}`, {
       accessToken,
     })
       .then(() => {
@@ -80,7 +79,7 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
 
   return (
     <Card
-      key={funding.id}
+      key={fundingId}
       appearance={isCurrent ? 'primary' : 'secondary'}
       forceClose={closeCard}
       borderless={true}
@@ -123,37 +122,14 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
       </div>
       <CardExpansion>
         {error && <Alert type="error" text={error} />}
-        <Form<Funding>
-          id={`edit-funding-${funding.id}`}
-          className="usa-form"
-          data={funding}
-          onSubmit={onSubmit}
-        >
-          <ContractSpaceField<Funding>
-            ageGroup={enrollment.ageGroup}
-            fundingSource={funding.fundingSpace.source}
-            organizationId={enrollment.site.organization.id}
-            accessor={(data) => data.at('fundingSpace')}
-          />
-          <ReportingPeriodField<Funding>
-            fundingSource={funding.fundingSpace.source}
-            accessor={(data) => data.at('firstReportingPeriod')}
-          />
-          {!!funding.lastReportingPeriod && (
-            <ReportingPeriodField<Funding>
-              fundingSource={funding.fundingSpace.source}
-              accessor={(data) => data.at('lastReportingPeriod')}
-              isLast={true}
-            />
-          )}
-          <ExpandCard>
-            <Button text="Cancel" appearance="outline" />
-          </ExpandCard>
-          <FormSubmitButton
-            text={loading ? 'Saving...' : 'Save'}
-            disabled={loading}
-          />
-        </Form>
+        <FundingForm
+          id={`edit-funding-form-${funding.id}`}
+          child={child}
+          fundingId={funding.id}
+          enrollmentId={enrollment.id}
+          afterSaveSuccess={afterSaveSuccess}
+          setAlerts={() => setError('Unable to save funding')}
+        />
       </CardExpansion>
     </Card>
   );

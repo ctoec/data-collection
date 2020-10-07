@@ -8,9 +8,10 @@ import {
 import { ChangeEnrollment, Withdraw } from '../../../../shared/payloads';
 import { Moment } from 'moment';
 import { Enrollment } from '../../../../shared/models';
+import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 
 type EnrollmentEndDateProps<T> = {
-  accessor: (_: TObjectDriller<T>) => TObjectDriller<Moment>;
+  enrollmentAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Enrollment>;
   optional?: boolean;
 };
 /**
@@ -19,7 +20,7 @@ type EnrollmentEndDateProps<T> = {
 export const EnrollmentEndDateField = <
   T extends Enrollment | ChangeEnrollment | Withdraw
 >({
-  accessor,
+  enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
   optional = false,
 }: EnrollmentEndDateProps<T>) => {
   return (
@@ -27,12 +28,19 @@ export const EnrollmentEndDateField = <
       // if field is optional, force default value empty (null)
       // otherwise, use default value today (undefined)
       defaultValue={optional ? null : undefined}
-      getValue={(data) => accessor(data)}
+      getValue={(data) => enrollmentAccessor(data).at('exit')}
       optional={optional}
       parseOnChangeEvent={(e: any) => e}
       inputComponent={DateInput}
       label="Enrollment end date"
       id="end-date"
+      status={(data, _, props) =>
+        getValidationStatusForField(
+          enrollmentAccessor(data),
+          enrollmentAccessor(data).at('exit').path,
+          props
+        )
+      }
     />
   );
 };

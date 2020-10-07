@@ -35,7 +35,7 @@ describe('EditRecord', () => {
     snapshotTestHelper(
       <FamilyAddressForm
         child={child}
-        afterDataSave={jest.fn()}
+        afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
       />,
       { wrapInRouter: true }
@@ -44,7 +44,7 @@ describe('EditRecord', () => {
     accessibilityTestHelper(
       <FamilyAddressForm
         child={child}
-        afterDataSave={jest.fn()}
+        afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
       />,
       { wrapInRouter: true }

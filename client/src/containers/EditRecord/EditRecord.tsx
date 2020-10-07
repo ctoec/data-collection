@@ -4,7 +4,7 @@ import { AlertProps, TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
-import { WithdrawRecord } from './WithdrawRecord';
+import { WithdrawRecord } from './WithdrawRecord/WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
@@ -90,7 +90,7 @@ const EditRecord: React.FC = () => {
 
   const commonFormProps = {
     child: child,
-    afterDataSave,
+    afterSaveSuccess: afterDataSave,
     setAlerts,
   };
 

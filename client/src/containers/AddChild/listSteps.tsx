@@ -6,8 +6,8 @@ import {
   ChildIdentifiersForm,
   ChildInfoForm,
   FamilyAddressForm,
+  EnrollmentForm,
 } from '../../components/Forms';
-import { NewEnrollment } from '../../components/Forms/EnrollmentFunding/NewEnrollmentForm/NewEnrollment';
 import { NewFamilyIncome } from '../../components/Forms/FamilyIncome/NewFamilyIncome/NewFamilyIncome';
 import {
   SECTION_KEYS,
@@ -19,7 +19,7 @@ export const newForms = [
   { key: SECTION_KEYS.DEMO, form: ChildInfoForm },
   { key: SECTION_KEYS.FAMILY, form: FamilyAddressForm },
   { key: SECTION_KEYS.INCOME, form: NewFamilyIncome },
-  { key: SECTION_KEYS.ENROLLMENT, form: NewEnrollment },
+  { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentForm },
 ];
 
 export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
