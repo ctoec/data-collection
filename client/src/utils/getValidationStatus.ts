@@ -73,7 +73,7 @@ export function getValidationStatusForField<
     type: 'error',
     id: `status-${field}`,
     message: `${drillReactNodeForText(
-      fieldProps.label
+      fieldProps.label || fieldProps.legend
     )} is required for OEC reporting.`,
     ...options,
   };

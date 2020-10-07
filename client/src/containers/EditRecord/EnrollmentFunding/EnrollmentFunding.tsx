@@ -1,12 +1,12 @@
 import React from 'react';
-import { ChangeEnrollmentForm } from './ChangeEnrollmentForm';
-import { EditEnrollmentForm } from './EditEnrollmentForm';
-import { EditFundingForm } from './EditFundingForm';
-import { ChangeFundingForm } from './ChangeFundingForm';
-import { EditFormProps } from '../../types';
-import { useSites } from '../../../../hooks/useSites';
-import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { Child, Enrollment } from '../../../../shared/models';
+import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+import { EditFormProps } from '../../../components/Forms/types';
+import { useSites } from '../../../hooks/useSites';
+import { EditFundingCard } from './EditFundingCard';
+import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
+import { ChangeFundingCard } from './ChangeFunding/Card';
+import { EditEnrollmentCard } from './EditEnrollmentCard';
 
 const enrollmentFields = ['site', 'model', 'ageGroup', 'entry', 'fundings'];
 // TODO: check this after debugging enrollment-- can't save partially filled out form
@@ -15,14 +15,9 @@ export const doesEnrollmentFormHaveErrors = (child?: Child) =>
     ? !!getValidationStatusForFields(child.enrollments, enrollmentFields)
     : true;
 
-// The fields we use to check to see if this form has errors or missing info
-export const enrollmentFundingFields = {
-  enrollments: [],
-};
-
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
-  afterDataSave,
+  afterSaveSuccess: afterDataSave,
 }) => {
   // Get site options for new enrollments
   const { sites } = useSites(child?.organization?.id);
@@ -46,33 +41,32 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   return (
     <>
       <h2>Enrollment and funding</h2>
-      <ChangeEnrollmentForm
-        childName={child.firstName || ''}
-        orgId={child.organization.id}
+      <ChangeEnrollmentCard
+        child={child}
         currentEnrollment={currentEnrollment}
-        childId={child.id}
-        sites={sites}
         afterDataSave={afterDataSave}
       />
       {currentEnrollment && (
         <>
           <h3>Current enrollment</h3>
-          <EditEnrollmentForm
+          <EditEnrollmentCard
             key="edit-current-enrollment"
             isCurrent={true}
-            enrollment={currentEnrollment}
+            child={child}
+            enrollmentId={currentEnrollment.id}
             afterDataSave={afterDataSave}
           />
           {currentEnrollment.fundings?.map((funding) => (
-            <EditFundingForm
+            <EditFundingCard
               key={funding.id}
               isCurrent={true}
-              funding={funding}
-              enrollment={currentEnrollment}
+              child={child}
+              fundingId={funding.id}
+              enrollmentId={currentEnrollment.id}
               afterDataSave={afterDataSave}
             />
           ))}
-          <ChangeFundingForm
+          <ChangeFundingCard
             enrollment={currentEnrollment}
             orgId={child.organization.id}
             afterDataSave={afterDataSave}
@@ -84,16 +78,18 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
           <h3>Past enrollments</h3>
           {pastEnrollments.map((enrollment) => (
             <>
-              <EditEnrollmentForm
+              <EditEnrollmentCard
                 key={enrollment.id}
-                enrollment={enrollment}
+                child={child}
+                enrollmentId={enrollment.id}
                 afterDataSave={afterDataSave}
               />
               {enrollment.fundings?.map((funding) => (
-                <EditFundingForm
+                <EditFundingCard
                   key={funding.id}
-                  funding={funding}
-                  enrollment={enrollment}
+                  child={child}
+                  fundingId={funding.id}
+                  enrollmentId={enrollment.id}
                   afterDataSave={afterDataSave}
                 />
               ))}

@@ -11,10 +11,8 @@ import { Enrollment } from '../../../shared/models';
 import { apiPost } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { useHistory } from 'react-router-dom';
-import {
-  EnrollmentEndDateField,
-  ReportingPeriodField,
-} from '../../../components/Forms/EnrollmentFunding/Fields';
+import { EnrollmentEndDateField } from '../../../components/Forms/Enrollment/Fields';
+import { ReportingPeriodField } from '../../../components/Forms/Enrollment/Funding/Fields';
 import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
 
@@ -109,9 +107,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               data={{} as Withdraw}
               className="usa-form"
             >
-              <EnrollmentEndDateField<Withdraw>
-                accessor={(data) => data.at('exitDate')}
-              />
+              <EnrollmentEndDateField<Withdraw> />
               <ExitReasonField />
               {!!activeFunding && (
                 <ReportingPeriodField<Withdraw>

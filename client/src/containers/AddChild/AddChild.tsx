@@ -108,6 +108,9 @@ const AddChild: React.FC = () => {
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as EditFormProps);
+        console.log('CURRENT STEP KEY', steps[indexOfCurrentStep].key);
+        console.log('INDEX OF CURRENT STEP', indexOfCurrentStep);
+        console.log('STATUS', currentStepStatus);
         if (currentStepStatus === 'complete') {
           moveToNextStep();
         }
@@ -124,12 +127,11 @@ const AddChild: React.FC = () => {
 
   const commonFormProps = {
     child,
-    afterDataSave: triggerRefetchChild,
+    afterSaveSuccess: triggerRefetchChild,
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: (_hash: string) => {
-      const hashMinusOctothorpe = _hash.replace('#', '');
-      return !stepsVisited.find((s) => s.key === hashMinusOctothorpe)?.visited;
+      return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
     },
   };
 

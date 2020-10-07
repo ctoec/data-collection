@@ -1,9 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import {
-  FundingSource,
-  Funding,
-  Enrollment,
-} from '../../../../../shared/models';
+import { FundingSource, Funding, Enrollment } from '../../../../shared/models';
 import {
   RadioButtonGroup,
   RadioButton,
@@ -12,13 +8,10 @@ import {
   FormContext,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { ContractSpaceField } from './ContractSpace/ContractSpace';
-import { ReportingPeriodField } from './ReportingPeriod';
-import {
-  ChangeFunding,
-  ChangeEnrollment,
-} from '../../../../../shared/payloads';
-import DataCacheContext from '../../../../../contexts/DataCacheContext/DataCacheContext';
+import { ContractSpaceField } from '../Funding/Fields/ContractSpace/ContractSpace';
+import { ReportingPeriodField } from '../Funding/Fields/ReportingPeriod';
+import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
+import DataCacheContext from '../../../../contexts/DataCacheContext/DataCacheContext';
 
 const UNFUNDED = 'Unfunded';
 

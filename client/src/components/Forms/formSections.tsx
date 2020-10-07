@@ -20,7 +20,7 @@ export const SECTION_KEYS = {
 export type FormSectionInfo = {
   key: string;
   name: string;
-  status: (child?: Child) => boolean;
+  status: (child?: Child, itemId?: number) => boolean;
 };
 
 export const formSections: FormSectionInfo[] = [

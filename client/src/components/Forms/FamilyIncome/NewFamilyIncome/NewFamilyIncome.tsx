@@ -16,7 +16,7 @@ import { useValidationErrors } from '../../../../hooks/useValidationErrors';
  */
 export const NewFamilyIncome: React.FC<EditFormProps> = ({
   child: inputChild,
-  afterDataSave,
+  afterSaveSuccess: afterDataSave,
   setAlerts,
   hideErrorsOnFirstLoad = false,
 }) => {
