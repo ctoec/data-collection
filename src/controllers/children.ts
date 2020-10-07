@@ -1,6 +1,5 @@
 import { getManager, In } from 'typeorm';
 import idx from 'idx';
-import { Moment } from 'moment';
 import { validate } from 'class-validator';
 import {
   ExitReason,
@@ -20,6 +19,7 @@ import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { distributeValidationErrorsToSubObjects } from '../utils/distributeValidationErrorsToSubObjects';
+import { propertyDateSorter } from '../utils/propertyDateSorter';
 
 /**
  * Get all children for organizations the user has access to
@@ -115,21 +115,6 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
     validationError: { target: false },
   });
   return distributeValidationErrorsToSubObjects(child, validationErrors);
-};
-
-const propertyDateSorter = <T>(
-  a: T,
-  b: T,
-  accessor: (_: T) => Moment | null | undefined
-) => {
-  const aDate = accessor(a);
-  const bDate = accessor(b);
-
-  if (!aDate) return 1;
-  if (!bDate) return -1;
-  if (aDate < bDate) return 1;
-  if (bDate < aDate) return -1;
-  return 0;
 };
 
 /**
@@ -232,14 +217,16 @@ export const changeEnrollment = async (
           oldEnrollmentLastReportingPeriod ||
           (await tManager.findOne(ReportingPeriod, {
             where: {
-              period: newEnrollmentNextReportingPeriod.period.add(-1, 'month'),
+              period: newEnrollmentNextReportingPeriod.period
+                .clone()
+                .add(-1, 'month'),
               type: currentFunding.fundingSpace.source,
             },
           }));
 
         // Update current funding lastReportinPeriod
         currentFunding.lastReportingPeriod = lastReportingPeriod;
-        await tManager.save(currentFunding);
+        await tManager.save(Funding, currentFunding);
       }
 
       // Update current enrollment exitReason
@@ -253,9 +240,9 @@ export const changeEnrollment = async (
       const oldEnrollmentExit = changeEnrollmentData.oldEnrollment?.exitDate;
       const newEnrollmentStart = changeEnrollmentData.newEnrollment.entry;
       currentEnrollment.exit =
-        oldEnrollmentExit || newEnrollmentStart.add(-1, 'day');
+        oldEnrollmentExit || newEnrollmentStart.clone().add(-1, 'day');
 
-      await tManager.save(currentEnrollment);
+      await tManager.save(Enrollment, currentEnrollment);
     }
 
     await createNewEnrollment(
@@ -288,7 +275,7 @@ async function createNewEnrollment(
     entry: newEnrollment.entry,
     child,
   });
-  await tManager.save(enrollment);
+  await tManager.save(Enrollment, enrollment);
 
   // Create new funding, if exists
   if (newEnrollment.fundings && newEnrollment.fundings.length) {
@@ -315,6 +302,6 @@ async function createNewEnrollment(
         (_) => _.fundings[0].firstReportingPeriod
       ),
     });
-    await tManager.save(funding);
+    await tManager.save(Funding, funding);
   }
 }

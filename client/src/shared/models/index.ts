@@ -1,5 +1,3 @@
-import { CareModel } from './CareModel';
-
 export * from './db';
 
 export * from './AgeGroup';

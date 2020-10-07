@@ -5,8 +5,6 @@ import { EditFundingForm } from './EditFundingForm';
 import { ChangeFundingForm } from './ChangeFundingForm';
 import { EditFormProps } from '../../types';
 import { useSites } from '../../../../hooks/useSites';
-import { useFundingSpaces } from '../../../../hooks/useFundingSpaces';
-import { useReportingPeriods } from '../../../../hooks/useReportingPeriods';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { Child, Enrollment } from '../../../../shared/models';
 
@@ -25,16 +23,16 @@ export const enrollmentFundingFields = {
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
   afterDataSave,
-  reportingPeriods: inputReportingPeriods,
 }) => {
+  // Get site options for new enrollments
   const { sites } = useSites(child?.organization?.id);
-  const { fundingSpaces } = useFundingSpaces(child?.organization?.id);
-  const { reportingPeriods } = useReportingPeriods(inputReportingPeriods);
 
   if (!child) {
     return <></>;
   }
 
+  // Separate enrollments into current (no end date) and past
+  // (with end date). Either may not exist
   const enrollments: Enrollment[] = child.enrollments || [];
   const currentEnrollment: Enrollment | undefined = enrollments.find(
     (e) => !e.exit
@@ -49,8 +47,6 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
     <>
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentForm
-        reportingPeriods={reportingPeriods}
-        fundingSpaces={fundingSpaces}
         childName={child.firstName || ''}
         currentEnrollment={currentEnrollment}
         childId={child.id}
@@ -70,16 +66,12 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
             <EditFundingForm
               key={funding.id}
               isCurrent={true}
-              reportingPeriods={reportingPeriods}
-              fundingSpaces={fundingSpaces}
               funding={funding}
               enrollment={currentEnrollment}
               afterDataSave={afterDataSave}
             />
           ))}
           <ChangeFundingForm
-            fundingSpaces={fundingSpaces}
-            reportingPeriods={reportingPeriods}
             enrollment={currentEnrollment}
             afterDataSave={afterDataSave}
           />
@@ -98,8 +90,6 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
               {enrollment.fundings?.map((funding) => (
                 <EditFundingForm
                   key={funding.id}
-                  reportingPeriods={reportingPeriods}
-                  fundingSpaces={fundingSpaces}
                   funding={funding}
                   enrollment={enrollment}
                   afterDataSave={afterDataSave}

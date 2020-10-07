@@ -5,10 +5,11 @@ import { useHistory } from 'react-router-dom';
 
 type BackButtonParams = {
   text?: string;
+  location?: string;
 };
 
-export const BackButton = ({ text = 'Back' }: BackButtonParams) => {
-  const { goBack } = useHistory();
+export const BackButton = ({ text = 'Back', location }: BackButtonParams) => {
+  const { goBack, replace } = useHistory();
 
   return (
     <Button
@@ -22,7 +23,7 @@ export const BackButton = ({ text = 'Back' }: BackButtonParams) => {
           iconSide="left"
         />
       }
-      onClick={goBack}
+      onClick={location ? () => replace(location) : goBack}
     />
   );
 };
