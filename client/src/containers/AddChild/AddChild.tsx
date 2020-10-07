@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
-import { Button, StepList } from '@ctoec/component-library';
+import { StepList } from '@ctoec/component-library';
 import { Child, Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
@@ -10,6 +10,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { EditFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
+import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 
 type LocationType = Location & {
   state: {
@@ -36,7 +37,6 @@ const AddChild: React.FC = () => {
       active: key === activeStep,
     }))
   );
-  const [completed, setCompleted] = useState<boolean>(false);
 
   // On initial load, set url hash to first step hash
   useEffect(() => {
@@ -46,6 +46,7 @@ const AddChild: React.FC = () => {
   }, [activeStep, history, steps]);
 
   const [child, updateChild] = useState<Child>();
+  const { children } = useContext(DataCacheContext);
   // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
   const [refetchChild, setRefetchChild] = useState<number>(0);
@@ -67,6 +68,7 @@ const AddChild: React.FC = () => {
     })
       .then((res) => {
         updateChild(res);
+        children.addOrUpdateRecord(res);
         history.replace({ pathname: `/create-record/${res.id}` });
       })
       .catch((err) => {
@@ -88,10 +90,16 @@ const AddChild: React.FC = () => {
 
     const moveToNextStep = () => {
       if (indexOfCurrentStep === steps.length - 1) {
-        setCompleted(true);
+        history.push('/roster', {
+          alerts: [
+            {
+              type: 'success',
+              heading: 'Record added',
+              text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
+            },
+          ],
+        });
       } else {
-        // In case a user goes back to edit a previous section
-        setCompleted(false);
         updateStepsVisited((oldSteps) => {
           const newSteps = [...oldSteps];
           newSteps[indexOfCurrentStep].visited = true;
@@ -106,6 +114,7 @@ const AddChild: React.FC = () => {
     })
       .then((updatedChild) => {
         updateChild(updatedChild);
+        children.addOrUpdateRecord(updatedChild);
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as EditFormProps);
@@ -117,20 +126,6 @@ const AddChild: React.FC = () => {
         console.log(err);
       });
   }, [accessToken, childId, refetchChild]);
-
-  const finishRecord = () => {
-    history.push('/roster', {
-      alerts: [
-        {
-          type: 'success',
-          heading: 'Record added',
-          text: `${child?.firstName} ${child?.lastName}'s record was added to your roster.`,
-        },
-      ],
-      editChild: child?.id,
-      addChild: true,
-    });
-  };
 
   // After child is updated, programmatically focus on the first input with an error
   useFocusFirstError([child]);
@@ -161,13 +156,6 @@ const AddChild: React.FC = () => {
         Information is required unless otherwise specified.
       </p>
       <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
-      <div className="margin-top-2">
-        <Button
-          text="Save record"
-          disabled={!completed}
-          onClick={finishRecord}
-        />
-      </div>
     </div>
   );
 };

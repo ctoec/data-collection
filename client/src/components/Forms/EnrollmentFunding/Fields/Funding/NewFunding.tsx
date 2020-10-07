@@ -54,16 +54,14 @@ export const NewFundingField = <
     const _fundingSourceOptions = new Set(
       fundingSpaces.records
         .filter(
-          (fs) => fs.ageGroup === enrollment.ageGroup
-          // site is set via enrollment.siteId, so site is undefined
-          // need to find a different way to pass in org id
-          // && fs.organization.id === enrollment.site.organization.id
+          (fs) =>
+            fs.ageGroup === enrollment.ageGroup && fs.organization.id === orgId
         )
         .map((fs) => fs.source)
     );
 
     setFundingSourceOptions(Array.from(_fundingSourceOptions));
-  }, [enrollment]);
+  }, [enrollment, fundingSpaces]);
 
   return (
     <RadioButtonGroup

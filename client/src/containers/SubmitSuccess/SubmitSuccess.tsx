@@ -33,7 +33,7 @@ const SubmitSuccess: React.FC = () => {
       <div className="grid-row text-bold">
         <Link className="usa-button usa-button--unstyled" to="/roster">
           <TextWithIcon
-            text="Back to Roster"
+            text="Back to roster"
             Icon={Arrow}
             direction="left"
             iconSide="left"

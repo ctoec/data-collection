@@ -15,7 +15,7 @@ exports[`SubmitSuccess matches snapshot 1`] = `
         <span
           class="oec-text-with-icon"
         >
-          Back to Roster
+          Back to roster
         </span>
       </a>
     </div>

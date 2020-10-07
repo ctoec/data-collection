@@ -22,7 +22,6 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
   return (
     <FormField<T, RadioButtonGroupProps, CareModel | null>
       getValue={(data) => accessor(data)}
-      preprocessForDisplay={(data) => data}
       parseOnChangeEvent={(e) => e.target.value as CareModel}
       inputComponent={RadioButtonGroup}
       name="care-model"

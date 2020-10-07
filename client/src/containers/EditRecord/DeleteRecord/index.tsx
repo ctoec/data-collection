@@ -4,6 +4,7 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
 import { Button, Modal } from '@ctoec/component-library';
+import DataCacheContext from '../../../contexts/DataCacheContext/DataCacheContext';
 
 type DeleteProps = {
   child: Child;
@@ -14,6 +15,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
   const toggleIsOpen = () => setIsOpen((o) => !o);
 
   const { accessToken } = useContext(AuthenticationContext);
+  const { children } = useContext(DataCacheContext);
   const history = useHistory();
 
   const [isDeleting, setIsDeleting] = useState(false);
@@ -23,6 +25,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
     apiDelete(`children/${child.id}`, { accessToken })
       .then(() => {
         toggleIsOpen();
+        children.deleteRecordById(child.id);
         history.push('/roster', {
           alerts: [
             {
@@ -31,8 +34,6 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
               text: `${child.firstName} ${child.lastName}'s record was deleted from your roster.`,
             },
           ],
-          editChild: child.id,
-          deleteChild: true,
         });
       })
       .catch((err) => {
