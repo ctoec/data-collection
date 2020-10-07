@@ -137,7 +137,19 @@ const propertyDateSorter = <T>(
  * Also, creates a family if one does not exist.
  * @param _child
  */
-export const createChild = async (_child) => {
+export const createChild = async (_child: Child, user: User) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  if (
+    !readOrgIds.length ||
+    !_child.organization ||
+    !readOrgIds.includes(_child.organization.id)
+  ) {
+    console.error(
+      'User does not have permission to create the child row supplied'
+    );
+    throw new Error('Child creation request denied');
+  }
+
   // TODO: make family optional on the child
   // (to enable family lookup when adding new child)
   // and stop creating it here
