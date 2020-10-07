@@ -77,7 +77,8 @@ export const NewEnrollment = ({
         <NewFundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
-          // Always has an organization
+          // Always has an organization because either modifies an
+          // existing child, or creates a new one via org roster
           orgId={child.organization?.id || 0}
         />
         <FormSubmitButton

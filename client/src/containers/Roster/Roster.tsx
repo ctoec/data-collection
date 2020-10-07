@@ -39,8 +39,6 @@ const Roster: React.FC = () => {
   const editChild = location.state?.editChild;
   const addChild = location.state?.addChild;
   const deleteChild = location.state?.deleteChild;
-  // if (newChild !== undefined) console.log(newChild);
-  console.log(editChild, deleteChild);
   useEffect(() => {
     if (editChild !== undefined && addChild) {
       apiGet(`children/${editChild}`, {
