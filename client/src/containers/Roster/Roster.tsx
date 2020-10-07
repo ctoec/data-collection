@@ -132,18 +132,13 @@ const Roster: React.FC = () => {
             heading="No records in your roster"
             type="info"
             text="Get started by adding records to your roster"
-            actionItem={
-              <Button
-                text="Add a record"
-                href="/create-record"
-                appearance="default"
-              />
-            }
+            actionItem={<AddRecordButton orgs={organizations} />}
           />
         ) : (
           <Accordion items={accordionItems} titleHeadingLevel="h2" />
         )}
       </div>
+
       <FixedBottomBar>
         <Button
           text="Back to getting started"
