@@ -11,14 +11,19 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
+import { apiPut } from '../../utils/api';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 
 const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
+  const { accessToken } = useContext(AuthenticationContext);
+  const history = useHistory();
+
   const organizations = user?.organizations;
   const organization = organizations ? organizations[0] : undefined;
   const showOrgInTables = idx(user, (_) => _.organizations.length > 1) || false;
@@ -101,6 +106,11 @@ const Roster: React.FC = () => {
     return total;
   }, distinctSiteIds);
 
+  async function submitToOEC() {
+    await apiPut(`oec-report/${organization?.id}`, undefined, { accessToken });
+    history.push('/success');
+  }
+
   return (
     <>
       <div className="Roster grid-container">
@@ -125,7 +135,7 @@ const Roster: React.FC = () => {
           href="/getting-started"
           appearance="outline"
         />
-        <Button text="Send to OEC" href="/success" />
+        <Button text="Send to OEC" onClick={submitToOEC} />
       </FixedBottomBar>
     </>
   );
