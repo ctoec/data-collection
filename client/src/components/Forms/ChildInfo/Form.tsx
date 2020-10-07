@@ -7,8 +7,8 @@ import {
   DualLanguageLearner,
   Foster,
 } from './Fields';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { EditFormProps } from '../types';
+import { Form, FormSubmitButton, Button } from '@ctoec/component-library';
+import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
@@ -34,11 +34,15 @@ export const doesChildInfoFormHaveErrors = (child?: Child) =>
   child ? !!getValidationStatusForFields(child, childInfoFields) : true;
 
 export const ChildInfoForm = ({
-  child: inputChild,
+  record: inputChild,
   afterDataSave,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
-}: EditFormProps) => {
+  batchEditProps = {
+    showField: () => true,
+    SkipButton: <></>,
+  },
+}: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
@@ -63,6 +67,7 @@ export const ChildInfoForm = ({
       .finally(() => (isMounted() ? setSaving(false) : null));
   };
 
+  const { showField, SkipButton } = batchEditProps;
   return (
     <Form<Child>
       className="ChildInfoForm usa-form"
@@ -72,20 +77,38 @@ export const ChildInfoForm = ({
       autoComplete="off"
     >
       {!hideHeader && <h2>Child info</h2>}
-      <RaceField />
-      <EthnicityField />
-      <GenderField />
+      {showField(
+        [
+          'americanIndianOrAlaskaNative',
+          'asian',
+          'blackOrAfricanAmerican',
+          'nativeHawaiianOrPacificIslander',
+          'white',
+          'raceNotDisclosed',
+        ],
+        childInfoFields,
+        child
+      ) && <RaceField />}
+      {showField('hispanicOrLatinxEthnicity', childInfoFields, child) && (
+        <EthnicityField />
+      )}
+      {showField('gender', childInfoFields, child) && <GenderField />}
 
       <br />
       <h3 className="margin-bottom-0">Special circumstances</h3>
-      <DisabilityServices />
-      <DualLanguageLearner />
-      <Foster />
+      {showField('receivingDisabilityServices', childInfoFields, child) && (
+        <DisabilityServices />
+      )}
+      {showField('dualLanguageLearner', childInfoFields, child) && (
+        <DualLanguageLearner />
+      )}
+      {showField('foster', childInfoFields, child) && <Foster />}
 
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}
       />
+      {SkipButton}
     </Form>
   );
 };

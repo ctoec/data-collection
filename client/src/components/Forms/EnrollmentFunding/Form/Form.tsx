@@ -3,7 +3,7 @@ import { ChangeEnrollmentForm } from './ChangeEnrollmentForm';
 import { EditEnrollmentForm } from './EditEnrollmentForm';
 import { EditFundingForm } from './EditFundingForm';
 import { ChangeFundingForm } from './ChangeFundingForm';
-import { EditFormProps } from '../../types';
+import { RecordFormProps } from '../../types';
 import { useSites } from '../../../../hooks/useSites';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { Child } from '../../../../shared/models';
@@ -20,8 +20,8 @@ export const enrollmentFundingFields = {
   enrollments: [],
 };
 
-export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
-  child,
+export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
+  record: child,
   afterDataSave,
 }) => {
   // Get site options for new enrollments

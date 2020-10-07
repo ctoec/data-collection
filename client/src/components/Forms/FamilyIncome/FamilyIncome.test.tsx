@@ -34,7 +34,7 @@ describe('EditForms', () => {
   describe('FamilyIncome', () => {
     snapshotTestHelper(
       <FamilyIncomeForm
-        child={child}
+        record={child}
         afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />
@@ -42,7 +42,7 @@ describe('EditForms', () => {
 
     accessibilityTestHelper(
       <FamilyIncomeForm
-        child={child}
+        record={child}
         afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />

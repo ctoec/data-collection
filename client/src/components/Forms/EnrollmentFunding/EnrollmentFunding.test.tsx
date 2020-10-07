@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { RenderResult, fireEvent, wait } from '@testing-library/react';
-import { EnrollmentFundingForm } from './Form';
+import { EnrollmentFundingForm } from './Form/Form';
 import {
   snapshotTestHelper,
   accessibilityTestHelper,
@@ -68,7 +68,7 @@ describe('EditRecord', () => {
 
     snapshotTestHelper(
       <EnrollmentFundingForm
-        child={child}
+        record={child}
         afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,
@@ -76,7 +76,7 @@ describe('EditRecord', () => {
     );
     accessibilityTestHelper(
       <EnrollmentFundingForm
-        child={child}
+        record={child}
         afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,

@@ -15,12 +15,13 @@ import {
   SECTION_KEYS,
   formSections,
 } from '../../components/Forms/formSections';
+import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
   const { childId } = useParams() as { childId: string };
   const { accessToken } = useContext(AuthenticationContext);
-  const [rowData, setRowData] = useState<Child>();
+  const { children } = useContext(DataCacheContext);
   const { alertElements, setAlerts } = useAlerts();
 
   // Counter to trigger re-run of child fetch in
@@ -48,16 +49,17 @@ const EditRecord: React.FC = () => {
   useEffect(() => {
     apiGet(`children/${childId}`, {
       accessToken,
-    }).then((_rowData) => setRowData(_rowData));
+    }).then((updatedRecord) => children.addOrUpdateRecord(updatedRecord));
   }, [accessToken, childId, refetch]);
 
-  useFocusFirstError([rowData]);
+  const record = children.records.find((c) => c.id === childId);
+  useFocusFirstError([record]);
 
-  if (!rowData) {
+  if (!record) {
     return <></>;
   }
 
-  const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
+  const activeEnrollment = (record?.enrollments || []).find((e) => !e.exit);
 
   const afterDataSave = () => {
     setRefetch((r) => r + 1);
@@ -65,11 +67,11 @@ const EditRecord: React.FC = () => {
       {
         type: 'success',
         heading: 'Record updated',
-        text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
+        text: `Your changes to ${record?.firstName} ${record?.lastName}'s record have been saved.`,
       },
     ];
     const formStepInfo = formSections.find((s) => s.key === activeTab);
-    const incomplete = formStepInfo?.status(rowData);
+    const incomplete = formStepInfo?.hasErrors(record);
     const formName = formStepInfo?.name.toLowerCase();
     if (incomplete) {
       newAlerts.push({
@@ -82,7 +84,7 @@ const EditRecord: React.FC = () => {
   };
 
   const commonFormProps = {
-    child: rowData,
+    record,
     afterDataSave,
     setAlerts,
   };
@@ -95,19 +97,19 @@ const EditRecord: React.FC = () => {
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
             <span className="h2 h2--lighter">Edit record </span>
-            {rowData.firstName} {rowData.lastName}
+            {record.firstName} {record.lastName}
           </h1>
         </div>
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
               <WithdrawRecord
-                childName={rowData.firstName}
+                childName={record.firstName}
                 enrollment={activeEnrollment}
               />
             </>
           )}
-          <DeleteRecord child={rowData} />
+          <DeleteRecord child={record} />
         </div>
       </div>
       <TabNav

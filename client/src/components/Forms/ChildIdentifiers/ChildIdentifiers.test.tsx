@@ -17,7 +17,7 @@ describe('EditRecord', () => {
   describe('ChildIdentifiers', () => {
     snapshotTestHelper(
       <ChildIdentifiersForm
-        child={child}
+        record={child}
         afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,
@@ -26,7 +26,7 @@ describe('EditRecord', () => {
 
     accessibilityTestHelper(
       <ChildIdentifiersForm
-        child={child}
+        record={child}
         afterDataSave={jest.fn()}
         setAlerts={jest.fn()}
       />,

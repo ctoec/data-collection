@@ -1,4 +1,4 @@
-export * from './EnrollmentFunding/Form';
+export * from './EnrollmentFunding/Form/Form';
 export * from './FamilyAddress/Form';
 export * from './ChildInfo/Form';
 export * from './ChildIdentifiers/Form';

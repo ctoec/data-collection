@@ -4,14 +4,14 @@ import { Button, Form, FormSubmitButton } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from '../Fields';
-import { EditFormProps } from '../../types';
+import { RecordFormProps } from '../../types';
 
 type RedeterminationFormProps = {
   familyId: number;
   setIsNew: () => void;
   hideForm: () => void;
   afterDataSave: () => void;
-  setAlerts: EditFormProps['setAlerts'];
+  setAlerts: RecordFormProps['setAlerts'];
 };
 
 /**

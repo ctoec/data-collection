@@ -15,7 +15,7 @@ import {
   SECTION_KEYS,
   formSections,
 } from '../../components/Forms/formSections';
-import { EditFormProps } from '../../components/Forms/types';
+import { RecordFormProps } from '../../components/Forms/types';
 
 const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
   Icon: Info,
@@ -31,13 +31,13 @@ export const editForms = [
   { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm },
 ];
 
-export const tabItems = (commonFormProps: EditFormProps) =>
-  formSections.map(({ key, name, status }) => {
+export const tabItems = (commonFormProps: RecordFormProps) =>
+  formSections.map(({ key, name, hasErrors }) => {
     const EditForm =
       editForms.find((e) => e.key === key)?.form || (() => <></>);
     return {
       id: key,
-      text: status(commonFormProps.child) ? (
+      text: hasErrors(commonFormProps.record) ? (
         <TextWithIcon {...commonTextWithIconProps} text={name} />
       ) : (
         name

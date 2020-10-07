@@ -15,6 +15,7 @@ import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
 import { Link } from 'react-router-dom';
+import { BatchEditItemContent } from './BatchEditItemContent';
 
 const BatchEdit: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -65,7 +66,7 @@ const BatchEdit: React.FC = () => {
         <>Loading</>
       ) : (
         <>
-          <p className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+          <div className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
             {missingInformationRecordsCount ? (
               <>
                 <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
@@ -82,7 +83,7 @@ const BatchEdit: React.FC = () => {
                 enrollments are complete
               </>
             )}
-          </p>
+          </div>
           <SideNav
             externalActiveItemIndex={activeRecordIdx}
             items={allRecords.map((record) => ({
@@ -95,7 +96,12 @@ const BatchEdit: React.FC = () => {
                 </span>
               ),
               description: 'Placeholder',
-              content: <div>PLACEHOLDER </div>,
+              content: (
+                <BatchEditItemContent
+                  record={record}
+                  moveNextRecord={moveNextRecord}
+                />
+              ),
             }))}
             noActiveItemContent={
               <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">

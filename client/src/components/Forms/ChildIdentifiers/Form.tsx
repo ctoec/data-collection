@@ -8,8 +8,8 @@ import {
   DateOfBirthField,
   BirthCertificateFormFieldSet,
 } from './Fields';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { EditFormProps } from '../types';
+import { Form, FormSubmitButton, Button } from '@ctoec/component-library';
+import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
@@ -33,11 +33,15 @@ export const doesChildIdFormHaveErrors = (child?: Child) =>
   child ? !!getValidationStatusForFields(child, childIdentifiersFields) : true;
 
 export const ChildIdentifiersForm = ({
-  child: inputChild,
+  record: inputChild,
   afterDataSave,
   hideHeader = false,
   hideErrorsOnFirstLoad,
-}: EditFormProps) => {
+  batchEditProps = {
+    showField: () => true,
+    SkipButton: <></>,
+  },
+}: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
@@ -62,6 +66,7 @@ export const ChildIdentifiersForm = ({
       .finally(() => (isMounted() ? setSaving(false) : null));
   };
 
+  const { showField, SkipButton } = batchEditProps;
   return (
     <Form<Child>
       className="ChildIdentifiersForm usa-form"
@@ -71,29 +76,44 @@ export const ChildIdentifiersForm = ({
       autoComplete="off"
     >
       {!hideHeader && <h2>Child's identifiers</h2>}
-      <div className="mobile-lg:grid-col-12">
-        <SasidField />
-      </div>
-      <div className="mobile-lg:grid-col-9">
-        <FirstNameField />
-      </div>
-      <div className="mobile-lg:grid-col-9">
-        <MiddleNameField />
-      </div>
-      <div className="display-flex flex-row flex-align-end grid-row grid-gap">
+      {showField('sasid', childIdentifiersFields, child) && (
+        <div className="mobile-lg:grid-col-12">
+          <SasidField />
+        </div>
+      )}
+      {showField('firstName', childIdentifiersFields, child) && (
         <div className="mobile-lg:grid-col-9">
-          <LastNameField />
+          <FirstNameField />
         </div>
-        <div className="mobile-lg:grid-col-3">
-          <SuffixField />
+      )}
+      {showField('middleName', childIdentifiersFields, child) && (
+        <div className="mobile-lg:grid-col-9">
+          <MiddleNameField />
         </div>
+      )}
+      <div className="display-flex flex-row flex-align-end grid-row grid-gap">
+        {showField('lastName', childIdentifiersFields, child) && (
+          <div className="mobile-lg:grid-col-9">
+            <LastNameField />
+          </div>
+        )}
+        {showField('suffix', childIdentifiersFields, child) && (
+          <div className="mobile-lg:grid-col-3">
+            <SuffixField />
+          </div>
+        )}
       </div>
-      <DateOfBirthField />
-      <BirthCertificateFormFieldSet />
+      {showField('birthdate', childIdentifiersFields, child) && (
+        <DateOfBirthField />
+      )}
+      {showField('birthCertificateId', childIdentifiersFields, child) && (
+        <BirthCertificateFormFieldSet />
+      )}
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}
       />
+      {SkipButton}
     </Form>
   );
 };

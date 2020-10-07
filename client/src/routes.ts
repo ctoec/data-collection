@@ -7,7 +7,7 @@ import GettingStarted from './containers/GettingStarted/GettingStarted';
 import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
-import AddChild from './containers/AddChild/AddChild';
+import AddRecord from './containers/AddRecord/AddRecord';
 import FundingSourceTimes from './containers/FundingSourceTimes/FundingSourceTimes';
 import Roster from './containers/Roster/Roster';
 import BatchEdit from './containers/BatchEdit/BatchEdit';
@@ -65,7 +65,7 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/create-record/:childId?',
-    component: AddChild,
+    component: AddRecord,
     unauthorized: false,
   },
   {

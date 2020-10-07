@@ -1,7 +1,7 @@
 import { StepProps, Button } from '@ctoec/component-library';
 import React from 'react';
 import { History } from 'history';
-import { EditFormProps } from '../../components/Forms/types';
+import { RecordFormProps } from '../../components/Forms/types';
 import {
   ChildIdentifiersForm,
   ChildInfoForm,
@@ -22,16 +22,15 @@ export const newForms = [
   { key: SECTION_KEYS.ENROLLMENT, form: NewEnrollment },
 ];
 
-export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
+export const listSteps: (_: any) => StepProps<RecordFormProps>[] = (
   history: History
 ) =>
-  formSections.map(({ key, name, status }) => {
+  formSections.map(({ key, name, hasErrors }) => {
     const Form = newForms.find((s) => s.key === key)?.form || (() => <></>);
     return {
       key,
       name,
-      status: ({ child }) =>
-        child && status(child) ? 'incomplete' : 'complete',
+      status: ({ record }) => (hasErrors(record) ? 'incomplete' : 'complete'),
       EditComponent: () => (
         <Button
           appearance="unstyled"

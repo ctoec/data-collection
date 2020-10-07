@@ -7,7 +7,7 @@ import {
   NewFundingField,
 } from '../Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { EditFormProps } from '../../types';
+import { RecordFormProps } from '../../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost } from '../../../../utils/api';
 import { useSites } from '../../../../hooks/useSites';
@@ -18,10 +18,10 @@ import { getCurrentEnrollment } from '../../../../utils/models';
 // This is separate from the other enrollment forms because they're pretty complicated
 // Maybe we should try to reconcile though?
 export const NewEnrollment = ({
-  child: inputChild,
+  record: inputChild,
   afterDataSave,
   hideErrorsOnFirstLoad = false,
-}: EditFormProps) => {
+}: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);

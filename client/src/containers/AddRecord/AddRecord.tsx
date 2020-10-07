@@ -7,7 +7,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { EditFormProps } from '../../components/Forms/types';
+import { RecordFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
 
@@ -17,16 +17,17 @@ type LocationType = Location & {
   };
 };
 
-const AddChild: React.FC = () => {
+const AddRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { state: locationState, hash } = useLocation() as LocationType;
   const { childId } = useParams() as { childId: string };
   const activeStep = hash.slice(1);
   const history = useHistory();
+
+  // Keep track of steps that have been visited at least once
   const steps = listSteps(history);
   const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep) || 0;
-  // Keep track of steps that have been visited at least once
   const [stepsVisited, updateStepsVisited] = useState<
     { key: string; visited: boolean; active: boolean }[]
   >(
@@ -45,7 +46,6 @@ const AddChild: React.FC = () => {
   }, [activeStep, history, steps]);
 
   const [child, updateChild] = useState<Child>();
-  // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
@@ -111,8 +111,10 @@ const AddChild: React.FC = () => {
       .then((updatedChild) => {
         updateChild(updatedChild);
         const currentStepStatus = steps[indexOfCurrentStep].status({
-          child: updatedChild,
-        } as EditFormProps);
+          record: updatedChild,
+        } as RecordFormProps);
+        // only allow the user to progress to next step if they have
+        // added all necessary information to current step
         if (currentStepStatus === 'complete') {
           moveToNextStep();
         }
@@ -128,7 +130,7 @@ const AddChild: React.FC = () => {
   const { alertElements, setAlerts } = useAlerts();
 
   const commonFormProps = {
-    child,
+    record: child,
     afterDataSave: triggerRefetchChild,
     setAlerts,
     hideHeader: true,
@@ -154,4 +156,4 @@ const AddChild: React.FC = () => {
     </div>
   );
 };
-export default AddChild;
+export default AddRecord;
