@@ -16,6 +16,12 @@ export const useReadWriteCache = <T extends { id: any }>(apiPath: string) => {
     ]);
   };
 
+  const removeRecordById = (id: string) => {
+    setRecords((existingRecords) => [
+      ...existingRecords.filter((r) => r.id !== id),
+    ]);
+  };
+
   const refetch = () => setHaveFetched(false);
 
   useEffect(() => {
@@ -36,6 +42,7 @@ export const useReadWriteCache = <T extends { id: any }>(apiPath: string) => {
     records,
     loading,
     addOrUpdateRecord,
+    removeRecordById,
     refetch,
   } as ReadWriteDataCache<T>;
 };

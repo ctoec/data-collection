@@ -10,6 +10,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { EditFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
+import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 
 type LocationType = Location & {
   state: {
@@ -44,7 +45,8 @@ const AddChild: React.FC = () => {
     }
   }, [activeStep, history, steps]);
 
-  const [child, updateChild] = useState<Child>();
+  const { children } = useContext(DataCacheContext);
+  const child = children.records.find((_child) => _child.id === childId);
   // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
   const [refetchChild, setRefetchChild] = useState<number>(0);
@@ -58,27 +60,20 @@ const AddChild: React.FC = () => {
       firstName: '',
       lastName: '',
       organization,
+      raceNotDisclosed: false,
     };
 
     apiPost('children', placeholderChild, {
       accessToken,
     })
       .then((res) => {
-        updateChild(res);
+        children.addOrUpdateRecord(res);
         history.replace({ pathname: `/create-record/${res.id}` });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [
-    accessToken,
-    child,
-    locationState,
-    organization,
-    history,
-    updateChild,
-    childId,
-  ]);
+  }, [accessToken, child, locationState, organization, history, childId]);
 
   // Fetch fresh child from API whenever refetch is triggered
   useEffect(() => {
@@ -109,7 +104,7 @@ const AddChild: React.FC = () => {
       accessToken,
     })
       .then((updatedChild) => {
-        updateChild(updatedChild);
+        children.addOrUpdateRecord(updatedChild);
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as EditFormProps);

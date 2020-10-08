@@ -11,6 +11,7 @@ export type ReadOnlyDataCache<T> = {
 
 export type ReadWriteDataCache<T> = ReadOnlyDataCache<T> & {
   addOrUpdateRecord: (record: T) => void;
+  removeRecordById: (id: string) => void;
 };
 
 export type DataCacheContextType = {
@@ -23,6 +24,7 @@ const DataCacheContext = createContext<DataCacheContextType>({
   children: {
     records: [],
     addOrUpdateRecord: (_) => {},
+    removeRecordById: (_) => {},
     loading: true,
     refetch: () => {},
   },

@@ -13,6 +13,7 @@ import {
   FundingTime,
   Funding,
   Family,
+  Organization,
 } from '../../../shared/models';
 
 const child = {
@@ -21,6 +22,7 @@ const child = {
   lastName: 'Last',
   id: '00000000-0000-0000-0000-000000000000',
   family: {} as Family,
+  organization: { id: 1 } as Organization,
   enrollments: [
     {
       id: 1,

@@ -25,6 +25,7 @@ const UNFUNDED = 'Unfunded';
 type FundingFieldProps<T> = {
   fundingAccessor: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
+  orgId: number;
 };
 
 /**
@@ -36,6 +37,7 @@ export const NewFundingField = <
 >({
   fundingAccessor,
   getEnrollment,
+  orgId,
 }: FundingFieldProps<T>) => {
   const { fundingSpaces } = useContext(DataCacheContext);
   const { dataDriller } = useGenericContext<T>(FormContext);
@@ -52,10 +54,8 @@ export const NewFundingField = <
     const _fundingSourceOptions = new Set(
       fundingSpaces.records
         .filter(
-          (fs) => fs.ageGroup === enrollment.ageGroup
-          // site is set via enrollment.siteId, so site is undefined
-          // need to find a different way to pass in org id
-          // && fs.organization.id === enrollment.site.organization.id
+          (fs) =>
+            fs.ageGroup === enrollment.ageGroup && fs.organization.id === orgId
         )
         .map((fs) => fs.source)
     );
@@ -87,8 +87,7 @@ export const NewFundingField = <
               <ContractSpaceField<T>
                 ageGroup={enrollment.ageGroup}
                 fundingSource={fundingSource}
-                // see comment on line 56
-                organizationId={enrollment.site?.organization?.id}
+                organizationId={orgId}
                 accessor={(data) => fundingAccessor(data).at('fundingSpace')}
               />
               <ReportingPeriodField<T>
