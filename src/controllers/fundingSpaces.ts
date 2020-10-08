@@ -9,24 +9,12 @@ import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
  * own the sites the user has permissions for
  * @param user
  */
-export const getFundingSpaces = async (
-  user: User,
-  organizationId?: number
-): Promise<FundingSpace[]> => {
+export const getFundingSpaces = async (user: User): Promise<FundingSpace[]> => {
   const readOrgIds: number[] = await getReadAccessibileOrgIds(user);
-
-  if (organizationId && !readOrgIds.includes(organizationId)) {
-    console.warn(
-      'User attempted to retrieve funding spaces for an org they dont have access to'
-    );
-    return [];
-  }
-
-  let orgIds: number[] = organizationId ? [organizationId] : readOrgIds;
 
   return getManager().find(FundingSpace, {
     where: {
-      organization: { id: In(orgIds) },
+      organization: { id: In(readOrgIds) },
     },
     relations: ['organization'],
   });
