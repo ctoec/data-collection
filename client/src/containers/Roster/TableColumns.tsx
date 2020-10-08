@@ -18,20 +18,29 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
       name: 'Name',
       sort: (row) => row.lastName || '',
       width: `${longColumnWidthPercent}%`,
+      cell: ({ row }) => (
+        <th scope="row" className={tableRowClassName}>
+          <Link
+            className="usa-button usa-button--unstyled font-body-2xs text-no-wrap" // set font size again to override font size from usa-button
+            to={{
+              pathname: `/edit-record/${row.id}`,
+            }}
+          >
+            {row.lastName}, {row.firstName}{' '}
+          </Link>
+        </th>
+      ),
+    },
+    {
+      className: tableColumnClassName,
+      name: 'Missing info',
+      width: `${shortColumnWidthPercent}%`,
       cell: ({ row }) => {
         return (
           <th scope="row" className={tableRowClassName}>
-            <Link
-              className="usa-button usa-button--unstyled font-body-2xs text-no-wrap" // set font size again to override font size from usa-button
-              to={{
-                pathname: `/edit-record/${row.id}`,
-              }}
-            >
-              {row.lastName}, {row.firstName}{' '}
-              {(!!row.validationErrors && row.validationErrors.length == 0) ||
-                row.validationErrors == undefined ||
-                InlineIcon({ icon: 'incomplete' })}
-            </Link>
+            {(!!row.validationErrors && row.validationErrors.length == 0) ||
+              row.validationErrors == undefined ||
+              InlineIcon({ icon: 'incomplete' })}
           </th>
         );
       },
