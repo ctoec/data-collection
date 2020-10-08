@@ -5,6 +5,7 @@ import {
   EnrollmentStartDateField,
   AgeGroupField,
   NewFundingField,
+  CareModelField,
 } from '../Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../../types';
@@ -73,11 +74,14 @@ export const NewEnrollment = ({
         <EnrollmentStartDateField<Enrollment>
           accessor={(data) => data.at('entry')}
         />
+        <CareModelField<Enrollment> accessor={(data) => data.at('model')} />
         <AgeGroupField<Enrollment> accessor={(data) => data.at('ageGroup')} />
         <NewFundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
-          organizationId={child.organizationId}
+          // Always has an organization because either modifies an
+          // existing child, or creates a new one via org roster
+          orgId={child.organization.id}
         />
         <FormSubmitButton
           text={saving ? 'Saving...' : 'Save'}

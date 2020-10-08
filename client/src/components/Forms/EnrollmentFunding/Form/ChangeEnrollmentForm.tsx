@@ -24,7 +24,7 @@ import {
 type ChangeEnrollmentFormProps = {
   childName: string;
   childId: string;
-  childOrgId: number;
+  orgId: number;
   currentEnrollment?: Enrollment;
   sites: Site[];
   afterDataSave: () => void;
@@ -38,7 +38,7 @@ type ChangeEnrollmentFormProps = {
 export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   childName,
   childId,
-  childOrgId,
+  orgId,
   currentEnrollment,
   sites,
   afterDataSave,
@@ -122,7 +122,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
               data.at('newEnrollment').at('fundings').at(0)
             }
             getEnrollment={(data) => data.at('newEnrollment').value}
-            organizationId={childOrgId}
+            orgId={orgId}
           />
 
           {!!currentEnrollment && (

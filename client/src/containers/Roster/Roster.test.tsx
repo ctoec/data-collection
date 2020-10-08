@@ -123,12 +123,17 @@ const children: Child[] = [
 
 const oneOrgUser = {
   organizations: [{ id: 1, providerName: 'Organization' }],
+  sites: [{ id: 1, siteName: 'Site1' }],
 } as User;
 
 const multiOrgUser = {
   organizations: [
     { id: 1, providerName: 'Organization' },
     { id: 2, providerName: 'Org 2' },
+  ],
+  sites: [
+    { id: 1, siteName: 'Site1' },
+    { id: 2, siteName: 'Site 2' },
   ],
 } as User;
 

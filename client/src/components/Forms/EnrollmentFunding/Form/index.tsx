@@ -48,6 +48,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentForm
         childName={child.firstName || ''}
+        orgId={child.organization.id}
         currentEnrollment={currentEnrollment}
         childId={child.id}
         sites={sites}
@@ -73,6 +74,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
           ))}
           <ChangeFundingForm
             enrollment={currentEnrollment}
+            orgId={child.organization.id}
             afterDataSave={afterDataSave}
           />
         </>

@@ -14,9 +14,9 @@ exports[`EditRecord DeleteRecord matches snapshot 1`] = `
       class="grid-row display-flex flex-justify flex-align-center"
     >
       <h2>
-        Do you want to delete the enrollment for
-         
+        Delete enrollment for 
         First Last
+        ?
       </h2>
       <button
         class="usa-button usa-button--unstyled margin-bottom-2"

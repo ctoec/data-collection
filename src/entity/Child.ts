@@ -126,7 +126,7 @@ export class Child implements ChildInterface {
   family?: Family;
 
   @ManyToOne(() => Organization, { nullable: false })
-  organization?: Organization;
+  organization: Organization;
 
   @Column()
   organizationId: number;

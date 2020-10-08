@@ -10,12 +10,12 @@ exports[`SubmitSuccess matches snapshot 1`] = `
     >
       <a
         class="usa-button usa-button--unstyled"
-        href="/check-data"
+        href="/roster"
       >
         <span
           class="oec-text-with-icon"
         >
-          Back
+          Back to roster
         </span>
       </a>
     </div>
