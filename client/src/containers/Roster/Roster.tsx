@@ -104,13 +104,6 @@ const Roster: React.FC = () => {
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
 
-  const distinctSiteIds: number[] = [];
-  children.records.reduce((total, child) => {
-    const siteId = idx(child, (_) => _.enrollments[0].site.id);
-    if (siteId && !total.includes(siteId)) total.push(siteId);
-    return total;
-  }, distinctSiteIds);
-
   async function submitToOEC() {
     await apiPut(`oec-report/${organization?.id}`, undefined, { accessToken });
     history.push('/success');
