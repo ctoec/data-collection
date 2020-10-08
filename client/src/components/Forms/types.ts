@@ -5,9 +5,6 @@ import { AlertProps } from '@ctoec/component-library';
 
 export type EditFormProps = {
   child: Child | undefined;
-  enrollmentId?: number;
-  fundingId?: number;
-  incomeDeterminationId?: number;
   afterSaveSuccess: () => void;
   // afterSaveFailure: (err: any) => void;
   setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
@@ -18,4 +15,5 @@ export type EditFormProps = {
     fields: string[],
     allFormFields: string[]
   ) => boolean;
+  AdditionalButton?: JSX.Element;
 };

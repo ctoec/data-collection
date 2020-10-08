@@ -18,12 +18,15 @@ import { apiPost, apiPut } from '../../../utils/api';
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'model', 'fundings'];
 export const doesEnrollmentFormHaveErrors = (
   child?: Child,
-  itemId?: number
+  enrollmentId?: number
 ) => {
-  if (itemId) {
-    const enrollment = child?.enrollments?.find((e) => e.id === itemId);
+  if (enrollmentId) {
+    const enrollment = child?.enrollments?.find((e) => e.id === enrollmentId);
     return enrollment
-      ? !!getValidationStatusForFields(enrollment, enrollmentFields)
+      ? !!getValidationStatusForFields(
+          enrollment,
+          enrollmentFields.filter((field) => field !== 'fundings')
+        )
       : false;
   }
 
@@ -34,6 +37,7 @@ export const doesEnrollmentFormHaveErrors = (
 
 type EnrollmentFormProps = {
   id?: string;
+  enrollmentId?: number;
   submitButtonText?: string;
   CancelButton?: JSX.Element;
 } & EditFormProps;
@@ -105,7 +109,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       {showField(enrollment, ['entry'], enrollmentFields) && (
         <EnrollmentStartDateField<Enrollment> />
       )}
-      {showField(enrollment, ['careModel'], enrollmentFields) && (
+      {showField(enrollment, ['model'], enrollmentFields) && (
         <CareModelField<Enrollment> />
       )}
       {showField(enrollment, ['ageGroup'], enrollmentFields) && (
