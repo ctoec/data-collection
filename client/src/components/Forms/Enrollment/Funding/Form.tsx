@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { Funding } from '../../../../shared/models';
+import { Funding, Child } from '../../../../shared/models';
 import { ContractSpaceField, ReportingPeriodField } from './Fields';
 import { EditFormProps } from '../../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -9,9 +9,33 @@ import {
   getCurrentEnrollment,
   getCurrentFunding,
 } from '../../../../utils/models';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+
+const fundingFields = [
+  'fundingSpace',
+  'firstReportingPeriod',
+  'lastReportingPeriod',
+];
+export const doesFundingFormHaveErrors = (
+  child?: Child,
+  enrollmentId?: number,
+  fundingId?: number
+) => {
+  if (enrollmentId && fundingId) {
+    const funding = child?.enrollments
+      ?.find((enrollment) => enrollment.id === enrollmentId)
+      ?.fundings?.find((funding) => funding.id === fundingId);
+    return funding
+      ? !!getValidationStatusForFields(funding, fundingFields)
+      : false;
+  }
+  return false;
+};
 
 type FundingFormProps = {
   id: string;
+  enrollmentId: number;
+  fundingId: number;
   submitButtonText?: string;
   CancelButton?: JSX.Element;
 } & EditFormProps;

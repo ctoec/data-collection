@@ -25,7 +25,7 @@ export const newForms = [
 export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
   history: History
 ) =>
-  formSections.map(({ key, name, status }) => {
+  formSections.map(({ key, name, hasError: status }) => {
     const Form = newForms.find((s) => s.key === key)?.form || (() => <></>);
     return {
       key,

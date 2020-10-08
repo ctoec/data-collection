@@ -62,7 +62,7 @@ const EditRecord: React.FC = () => {
           },
         ];
         const formStepInfo = formSections.find((s) => s.key === activeTab);
-        const incomplete = formStepInfo?.status(updatedChild);
+        const incomplete = formStepInfo?.hasError(updatedChild);
         const formName = formStepInfo?.name.toLowerCase();
         if (incomplete) {
           newAlerts.push({

@@ -20,33 +20,33 @@ export const SECTION_KEYS = {
 export type FormSectionInfo = {
   key: string;
   name: string;
-  status: (child?: Child, itemId?: number) => boolean;
+  hasError: (child?: Child, itemId?: number) => boolean;
 };
 
 export const formSections: FormSectionInfo[] = [
   {
     key: SECTION_KEYS.IDENT,
     name: 'Child identifiers',
-    status: doesChildIdFormHaveErrors,
+    hasError: doesChildIdFormHaveErrors,
   },
   {
     key: SECTION_KEYS.DEMO,
     name: 'Child info',
-    status: doesChildInfoFormHaveErrors,
+    hasError: doesChildInfoFormHaveErrors,
   },
   {
     key: SECTION_KEYS.FAMILY,
     name: 'Family address',
-    status: doesFamilyAddressFormHaveErrors,
+    hasError: doesFamilyAddressFormHaveErrors,
   },
   {
     key: SECTION_KEYS.INCOME,
     name: 'Family income',
-    status: doesFamilyIncomeFormHaveErrors,
+    hasError: doesFamilyIncomeFormHaveErrors,
   },
   {
     key: SECTION_KEYS.ENROLLMENT,
     name: 'Enrollment and funding',
-    status: doesEnrollmentFormHaveErrors,
+    hasError: doesEnrollmentFormHaveErrors,
   },
 ];

@@ -1,19 +1,9 @@
 import React from 'react';
-import { Child, Enrollment } from '../../../../shared/models';
-import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { EditFormProps } from '../../../components/Forms/types';
-import { useSites } from '../../../hooks/useSites';
 import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
-
-const enrollmentFields = ['site', 'ageGroup', 'entry', 'fundings'];
-// TODO: check this after debugging enrollment-- can't save partially filled out form
-export const doesEnrollmentFormHaveErrors = (child?: Child) =>
-  child?.enrollments?.length
-    ? !!getValidationStatusForFields(child.enrollments, enrollmentFields)
-    : true;
 
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,

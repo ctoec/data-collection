@@ -32,7 +32,7 @@ export const editForms = [
 ];
 
 export const tabItems = (commonFormProps: EditFormProps) =>
-  formSections.map(({ key, name, status }) => {
+  formSections.map(({ key, name, hasError }) => {
     const EditForm =
       editForms.find((e) => e.key === key)?.form || (() => <></>);
     return {
