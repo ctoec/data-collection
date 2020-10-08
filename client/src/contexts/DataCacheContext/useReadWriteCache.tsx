@@ -16,7 +16,7 @@ export const useReadWriteCache = <T extends { id: any }>(apiPath: string) => {
     ]);
   };
 
-  const deleteRecordById = (id: string) => {
+  const removeRecordById = (id: string) => {
     setRecords((existingRecords) => [
       ...existingRecords.filter((r) => r.id !== id),
     ]);
@@ -42,7 +42,7 @@ export const useReadWriteCache = <T extends { id: any }>(apiPath: string) => {
     records,
     loading,
     addOrUpdateRecord,
-    deleteRecordById,
+    removeRecordById,
     refetch,
   } as ReadWriteDataCache<T>;
 };

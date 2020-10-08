@@ -27,6 +27,6 @@ export interface Child extends ObjectWithValidationErrors {
   foster?: boolean;
   receivesDisabilityServices?: boolean;
   family?: Family;
-  organization?: Organization;
+  organization: Organization;
   enrollments?: Array<Enrollment>;
 }

@@ -25,7 +25,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
     apiDelete(`children/${child.id}`, { accessToken })
       .then(() => {
         toggleIsOpen();
-        children.deleteRecordById(child.id);
+        children.removeRecordById(child.id);
         history.push('/roster', {
           alerts: [
             {
@@ -55,10 +55,11 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
       <Modal
         isOpen={isOpen}
         toggleOpen={toggleIsOpen}
+        // Shorten to accomodate modal close button in a
+        // nice looking way
         header={
           <h2>
-            Do you want to delete the enrollment for{' '}
-            {`${child.firstName} ${child.lastName}`}
+            Delete enrollment for {`${child.firstName} ${child.lastName}`}?
           </h2>
         }
         content={
