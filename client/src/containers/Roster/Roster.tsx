@@ -1,6 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import idx from 'idx';
-import { Accordion, Table, Button, AlertProps } from '@ctoec/component-library';
+import {
+  Accordion,
+  Table,
+  Button,
+  AlertProps,
+  Alert,
+} from '@ctoec/component-library';
 import { Child, AgeGroup } from '../../shared/models';
 import { tableColumns } from '../Roster/TableColumns';
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -11,14 +17,19 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
+import { apiPut } from '../../utils/api';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 
 const MAX_LENGTH_EXPANDED = 50;
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
+  const { accessToken } = useContext(AuthenticationContext);
+  const history = useHistory();
+
   const organizations = user?.organizations;
   const organization = organizations ? organizations[0] : undefined;
   const showOrgInTables = idx(user, (_) => _.organizations.length > 1) || false;
@@ -61,7 +72,6 @@ const Roster: React.FC = () => {
         _byAgeGroup[ageGroup]?.push(_child);
       }
     }
-
     return _byAgeGroup;
   }, childrenByAgeGroup);
 
@@ -94,12 +104,10 @@ const Roster: React.FC = () => {
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
 
-  const distinctSiteIds: number[] = [];
-  children.records.reduce((total, child) => {
-    const siteId = idx(child, (_) => _.enrollments[0].site.id);
-    if (siteId && !total.includes(siteId)) total.push(siteId);
-    return total;
-  }, distinctSiteIds);
+  async function submitToOEC() {
+    await apiPut(`oec-report/${organization?.id}`, undefined, { accessToken });
+    history.push('/success');
+  }
 
   return (
     <>
@@ -111,21 +119,32 @@ const Roster: React.FC = () => {
         <p className="font-body-xl margin-top-1">
           {children.loading
             ? 'Loading...'
-            : `${children.records.length} children enrolled at ${distinctSiteIds.length} sites`}
+            : `${children.records.length} children enrolled at ${user?.sites?.length} sites`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <AddRecordButton orgs={organizations} />
           <CSVDownloadLink />
         </div>
-        <Accordion items={accordionItems} titleHeadingLevel="h2" />
+
+        {children.records.length == 0 ? (
+          <Alert
+            heading="No records in your roster"
+            type="info"
+            text="Get started by adding records to your roster"
+            actionItem={<AddRecordButton orgs={organizations} />}
+          />
+        ) : (
+          <Accordion items={accordionItems} titleHeadingLevel="h2" />
+        )}
       </div>
+
       <FixedBottomBar>
         <Button
           text="Back to getting started"
           href="/getting-started"
           appearance="outline"
         />
-        <Button text="Send to OEC" href="/success" />
+        <Button text="Send to OEC" onClick={submitToOEC} />
       </FixedBottomBar>
     </>
   );
