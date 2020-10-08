@@ -37,11 +37,13 @@ export const tabItems = (commonFormProps: EditFormProps) =>
       editForms.find((e) => e.key === key)?.form || (() => <></>);
     return {
       id: key,
-      text: status(commonFormProps.child) ? (
-        <TextWithIcon {...commonTextWithIconProps} text={name} />
-      ) : (
-        name
-      ),
       content: <EditForm {...commonFormProps} />,
+      tabText: name,
+      tabTextFormatter: (_name: string) =>
+        status(commonFormProps.child) ? (
+          <TextWithIcon {...commonTextWithIconProps} text={_name} />
+        ) : (
+          _name
+        ),
     };
   });

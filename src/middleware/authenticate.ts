@@ -41,10 +41,20 @@ const addUser = passAsyncError(
 
       //  TODO: Remove once an actual user management system is implemented
       if (!fawkesUser) {
-        const res: AxiosResponse<any> = await getUserFromWingedKeys(req.headers.authorization);
+        const res: AxiosResponse<any> = await getUserFromWingedKeys(
+          req.headers.authorization
+        );
 
-        if (res && res.data && res.data.sub && res.data.sub === req.claims.sub) {
-          fawkesUser = await createUserWithFullPermissions(req.claims.sub, res.data);
+        if (
+          res &&
+          res.data &&
+          res.data.sub &&
+          res.data.sub === req.claims.sub
+        ) {
+          fawkesUser = await createUserWithFullPermissions(
+            req.claims.sub,
+            res.data
+          );
         } else {
           throw new InvalidSubClaimError();
         }
@@ -107,18 +117,23 @@ const getUser = async (wingedKeysId: string) => {
   return user;
 };
 
-async function getUserFromWingedKeys(bearerToken: string): Promise<AxiosResponse<any>> {
-    return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
-      headers: {
-        authorization: bearerToken
-      },
-      httpsAgent: new https.Agent({  
-        rejectUnauthorized: false
-      })
-    });
+async function getUserFromWingedKeys(
+  bearerToken: string
+): Promise<AxiosResponse<any>> {
+  return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
+    headers: {
+      authorization: bearerToken,
+    },
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false,
+    }),
+  });
 }
 
-async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUser: { given_name: string, family_name: string }): Promise<User> {
+async function createUserWithFullPermissions(
+  wingedKeysId: string,
+  wingedKeysUser: { given_name: string; family_name: string }
+): Promise<User> {
   let user: User;
 
   await getManager().transaction(async (manager) => {
@@ -127,15 +142,18 @@ async function createUserWithFullPermissions(wingedKeysId: string, wingedKeysUse
       firstName: wingedKeysUser.given_name,
       lastName: wingedKeysUser.family_name,
     });
-    
+
     user = await manager.save(_user);
 
     const orgs: Organization[] = await manager.find(Organization);
     if (orgs.length) {
-      const orgPermsForUser = manager.create(OrganizationPermission, orgs.map(org => ({
-        user,
-        organizationId: org.id
-      })));
+      const orgPermsForUser = manager.create(
+        OrganizationPermission,
+        orgs.map((org) => ({
+          user,
+          organizationId: org.id,
+        }))
+      );
       await manager.save(orgPermsForUser);
     }
   });
