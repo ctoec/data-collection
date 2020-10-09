@@ -7,7 +7,7 @@ import { EditEnrollmentCard } from './EditEnrollmentCard';
 
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
-  afterSaveSuccess: afterDataSave,
+  afterSaveSuccess,
 }) => {
   // Get site options for new enrollments
   const { sites } = useSites(child?.organization?.id);
@@ -34,7 +34,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
       <ChangeEnrollmentCard
         child={child}
         currentEnrollment={currentEnrollment}
-        afterDataSave={afterDataSave}
+        afterSaveSuccess={afterSaveSuccess}
       />
       {currentEnrollment && (
         <>
@@ -44,7 +44,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
             isCurrent={true}
             child={child}
             enrollmentId={currentEnrollment.id}
-            afterDataSave={afterDataSave}
+            afterSaveSuccess={afterSaveSuccess}
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingCard
@@ -53,13 +53,13 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
               child={child}
               fundingId={funding.id}
               enrollmentId={currentEnrollment.id}
-              afterDataSave={afterDataSave}
+              afterSaveSuccess={afterSaveSuccess}
             />
           ))}
           <ChangeFundingCard
             enrollment={currentEnrollment}
             orgId={child.organization.id}
-            afterDataSave={afterDataSave}
+            afterSaveSuccess={afterSaveSuccess}
           />
         </>
       )}
@@ -72,7 +72,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
                 key={enrollment.id}
                 child={child}
                 enrollmentId={enrollment.id}
-                afterDataSave={afterDataSave}
+                afterSaveSuccess={afterSaveSuccess}
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingCard
@@ -80,7 +80,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
                   child={child}
                   fundingId={funding.id}
                   enrollmentId={enrollment.id}
-                  afterDataSave={afterDataSave}
+                  afterSaveSuccess={afterSaveSuccess}
                 />
               ))}
             </>

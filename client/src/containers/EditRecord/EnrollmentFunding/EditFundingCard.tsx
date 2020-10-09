@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Funding, Enrollment, Child } from '../../../shared/models';
+import { Child } from '../../../shared/models';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiPut, apiDelete } from '../../../utils/api';
+import { apiDelete } from '../../../utils/api';
 import {
   Card,
   Tag,
@@ -20,7 +20,7 @@ type EditFundingCardProps = {
   fundingId: number;
   enrollmentId: number;
   isCurrent?: boolean;
-  afterDataSave: () => void;
+  afterSaveSuccess: () => void;
 };
 
 /**
@@ -34,7 +34,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   fundingId,
   enrollmentId,
   isCurrent,
-  afterDataSave,
+  afterSaveSuccess: _afterSaveSuccess,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -62,7 +62,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   const afterSaveSuccess = () => {
     setError(undefined);
     setCloseCard(true);
-    afterDataSave();
+    _afterSaveSuccess();
   };
 
   function deleteFunding() {
@@ -70,7 +70,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       accessToken,
     })
       .then(() => {
-        afterDataSave();
+        afterSaveSuccess();
       })
       .catch((err) => {
         console.error('Unable to delete enrollment', err);

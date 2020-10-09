@@ -76,6 +76,7 @@ const AddChild: React.FC = () => {
   }, [accessToken, child, locationState, organization, history, childId]);
 
   // Fetch fresh child from API whenever refetch is triggered
+  // And move to next step, if current step is complete (has no validation errors)
   useEffect(() => {
     if (!childId) return;
 
@@ -108,9 +109,7 @@ const AddChild: React.FC = () => {
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as EditFormProps);
-        console.log('CURRENT STEP KEY', steps[indexOfCurrentStep].key);
-        console.log('INDEX OF CURRENT STEP', indexOfCurrentStep);
-        console.log('STATUS', currentStepStatus);
+
         if (currentStepStatus === 'complete') {
           moveToNextStep();
         }

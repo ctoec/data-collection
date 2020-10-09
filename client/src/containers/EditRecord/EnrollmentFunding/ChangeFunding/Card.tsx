@@ -1,23 +1,12 @@
-import React, { useContext, useState } from 'react';
-import {
-  Card,
-  Button,
-  Form,
-  FormSubmitButton,
-  Alert,
-} from '@ctoec/component-library';
+import React, { useState } from 'react';
+import { Card, Button, Alert } from '@ctoec/component-library';
 import { Enrollment } from '../../../../shared/models';
-import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
-import { ChangeFunding } from '../../../../shared/payloads';
-import { apiPost } from '../../../../utils/api';
-import { NewFundingField } from '../../../../components/Forms/Enrollment/Fields';
-import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Funding/Fields';
 import { ChangeFundingForm } from './Form';
 
 type ChangeFundingCardProps = {
   enrollment: Enrollment;
   orgId: number;
-  afterDataSave: () => void;
+  afterSaveSuccess: () => void;
 };
 
 /**
@@ -29,36 +18,10 @@ type ChangeFundingCardProps = {
 export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
   enrollment,
   orgId,
-  afterDataSave,
+  afterSaveSuccess,
 }) => {
-  const { accessToken } = useContext(AuthenticationContext);
   const [error, setError] = useState<string>();
-  const [loading, setLoading] = useState(false);
-
-  const onSubmit = (changeFunding: ChangeFunding) => {
-    setLoading(true);
-    apiPost(`enrollments/${enrollment.id}/change-funding`, changeFunding, {
-      accessToken,
-      jsonParse: false,
-    })
-      .then(() => {
-        setError(undefined);
-        setVisibleForm(undefined);
-        afterDataSave();
-      })
-      .catch((err) => {
-        console.log(err);
-        setError(
-          'Unable to change funding. Make sure all required information is provided'
-        );
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
   const [visibleForm, setVisibleForm] = useState<'end' | 'start'>();
-
   const activeFunding = (enrollment.fundings || []).find(
     (f) => !f.lastReportingPeriod
   );
@@ -75,7 +38,7 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
               afterSaveSuccess={() => {
                 setError(undefined);
                 setVisibleForm(undefined);
-                afterDataSave();
+                afterSaveSuccess();
               }}
               afterSaveFailure={(err) => {
                 console.log(err);
@@ -86,6 +49,7 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
               changeType={visibleForm}
               enrollment={enrollment}
               hideForm={() => setVisibleForm(undefined)}
+              orgId={orgId}
             />
           </>
         </Card>
