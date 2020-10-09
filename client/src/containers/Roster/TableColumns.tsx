@@ -46,11 +46,11 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
 
       cell: ({ row }) => {
         return (
-          <th scope="row" className={tableRowClassName}>
+          <td scope="row" className={tableRowClassName}>
             {(!!row.validationErrors && row.validationErrors.length == 0) ||
               row.validationErrors == undefined ||
               InlineIcon({ icon: 'incomplete' })}
-          </th>
+          </td>
         );
       },
     },
