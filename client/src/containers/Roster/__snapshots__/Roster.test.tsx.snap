@@ -260,7 +260,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                   Toddler, First 
                 </a>
               </th>
-              <th
+              <td
                 class="font-body-2xs"
                 scope="row"
               />
@@ -301,7 +301,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                   Toddler, Second 
                 </a>
               </th>
-              <th
+              <td
                 class="font-body-2xs"
                 scope="row"
               />
@@ -535,7 +535,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                   Preschool, First 
                 </a>
               </th>
-              <th
+              <td
                 class="font-body-2xs"
                 scope="row"
               />
@@ -828,7 +828,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                   Toddler, First 
                 </a>
               </th>
-              <th
+              <td
                 class="font-body-2xs"
                 scope="row"
               />
@@ -866,7 +866,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                   Toddler, Second 
                 </a>
               </th>
-              <th
+              <td
                 class="font-body-2xs"
                 scope="row"
               />
@@ -1080,7 +1080,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                   Preschool, First 
                 </a>
               </th>
-              <th
+              <td
                 class="font-body-2xs"
                 scope="row"
               />
