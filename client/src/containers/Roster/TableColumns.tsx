@@ -35,6 +35,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
       className: tableColumnClassName,
       name: 'Missing info',
       width: `${shortColumnWidthPercent}%`,
+      // Default sort with missing records on top on the assumption that missing records will be the priority
       sort: (row) =>
         !row.validationErrors || !row.validationErrors.length ? 1 : 0,
       cell: ({ row }) => {
