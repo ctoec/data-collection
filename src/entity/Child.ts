@@ -27,6 +27,7 @@ import { momentTransformer, enumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
+import { ChildBirthCertificateSpecified } from './decorators/Child/birthCertificateValidation';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -69,18 +70,19 @@ export class Child implements ChildInterface {
     nullable: false,
     transformer: enumTransformer(BirthCertificateType),
   })
+  @ChildBirthCertificateSpecified()
   birthCertificateType: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'Birth town is required' })
+  @ChildBirthCertificateSpecified()
   birthTown?: string;
 
   @Column({ nullable: true })
-  @Length(2)
+  @ChildBirthCertificateSpecified()
   birthState?: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'Birth certificate ID is required' })
+  @ChildBirthCertificateSpecified()
   birthCertificateId?: string;
 
   @Column({ nullable: true, default: false })

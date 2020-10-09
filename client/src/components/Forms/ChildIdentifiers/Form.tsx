@@ -6,7 +6,7 @@ import {
   LastNameField,
   SuffixField,
   DateOfBirthField,
-  BirthCertificateField,
+  BirthCertificateFieldSet,
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { EditFormProps } from '../types';
@@ -90,7 +90,7 @@ export const ChildIdentifiersForm = ({
         </div>
       </div>
       <DateOfBirthField />
-      <BirthCertificateField />
+      <BirthCertificateFieldSet />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

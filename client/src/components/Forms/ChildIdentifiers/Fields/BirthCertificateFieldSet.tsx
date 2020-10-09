@@ -3,7 +3,6 @@ import {
   RadioButtonGroup,
   RadioButton,
   RadioOptionRenderProps,
-  TObjectDriller,
   RadioButtonGroupProps,
   FormField,
 } from '@ctoec/component-library';
@@ -18,7 +17,7 @@ import { getValidationStatusForFields } from '../../../../utils/getValidationSta
  * If type selected is US birth certificate, user is prompted to
  * enter additional required information in an expansion.
  */
-export const BirthCertificateField: React.FC = () => {
+export const BirthCertificateFieldSet: React.FC = () => {
   return (
     <FormField<Child, RadioButtonGroupProps, string>
       id="birth-certificate-fields"
@@ -38,8 +37,7 @@ export const BirthCertificateField: React.FC = () => {
           ],
           {
             message:
-              'Birth certificate type selection is required for OEC reporting. ' +
-              'Additional birth certificate information required for US birth certificates.',
+              'Birth certificate ID, birth town, and birth state are required for US birth certificates.',
           }
         )
       }
@@ -67,8 +65,5 @@ export const BirthCertificateField: React.FC = () => {
         })),
       ]}
     />
-
-    // childrenGroupClassName="grid-col grid-gap"
-    // >
   );
 };
