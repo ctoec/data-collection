@@ -19,7 +19,7 @@ type EditEnrollmentCardProps = {
   child: Child;
   enrollmentId: number;
   isCurrent?: boolean;
-  afterDataSave: () => void;
+  afterSaveSuccess: () => void;
 };
 
 /**
@@ -32,7 +32,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   child,
   enrollmentId,
   isCurrent = false,
-  afterDataSave,
+  afterSaveSuccess,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -57,7 +57,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
       accessToken,
     })
       .then(() => {
-        afterDataSave();
+        afterSaveSuccess();
       })
       .catch((err) => {
         console.error('Unable to delete enrollment', err);
@@ -123,7 +123,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
           afterSaveSuccess={() => {
             setError(undefined);
             setCloseCard(true);
-            afterDataSave();
+            afterSaveSuccess();
           }}
           setAlerts={() => {}}
           submitButtonText="Save"

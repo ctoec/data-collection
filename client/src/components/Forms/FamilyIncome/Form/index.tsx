@@ -17,7 +17,7 @@ export const doesFamilyIncomeFormHaveErrors = (child?: Child) =>
     : true;
 
 export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
-  const { child, afterSaveSuccess: afterDataSave } = props;
+  const { child, afterSaveSuccess } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
@@ -47,7 +47,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
               familyId={familyId}
               setIsNew={() => setCurrentIsNew(true)}
               hideForm={() => setShowRedeterminationForm(false)}
-              afterDataSave={afterDataSave}
+              afterSaveSuccess={afterSaveSuccess}
             />
           </Card>
         </>
@@ -78,7 +78,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
               familyId={familyId}
               isCurrent={true}
               isNew={currentIsNew}
-              afterDataSave={afterDataSave}
+              afterSaveSuccess={afterSaveSuccess}
             />
           )}
         </div>
@@ -97,7 +97,7 @@ export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
                   familyId={familyId}
                   isCurrent={false}
                   isNew={false}
-                  afterDataSave={afterDataSave}
+                  afterSaveSuccess={afterSaveSuccess}
                 />
               ))}
             </div>

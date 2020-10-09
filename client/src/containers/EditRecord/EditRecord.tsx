@@ -84,13 +84,13 @@ const EditRecord: React.FC = () => {
 
   const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
 
-  const afterDataSave = () => {
+  const afterSaveSuccess = () => {
     setRefetch((r) => r + 1);
   };
 
   const commonFormProps = {
-    child: child,
-    afterSaveSuccess: afterDataSave,
+    child,
+    afterSaveSuccess,
     setAlerts,
   };
 

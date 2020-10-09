@@ -3,11 +3,12 @@ import { Form, Button, FormSubmitButton } from '@ctoec/component-library';
 import { ChangeFunding } from '../../../../shared/payloads';
 import { NewFundingField } from '../../../../components/Forms/Enrollment/Fields';
 import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Funding/Fields';
-import { Enrollment } from '../../../../shared/models';
+import { Enrollment, Child } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 
 type ChangeFundingFormProps = {
+  orgId: number;
   afterSaveSuccess: () => void;
   afterSaveFailure: (err: any) => void;
   changeType: 'start' | 'end';
@@ -16,6 +17,7 @@ type ChangeFundingFormProps = {
 };
 
 export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
+  orgId,
   afterSaveSuccess,
   afterSaveFailure,
   changeType,
@@ -50,6 +52,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
         <NewFundingField<ChangeFunding>
           fundingAccessor={(data) => data.at('newFunding')}
           getEnrollment={() => enrollment}
+          orgId={orgId}
         />
       )}
       {!!activeFunding && (

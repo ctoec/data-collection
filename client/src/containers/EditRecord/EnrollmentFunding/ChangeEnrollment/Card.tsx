@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import React, { useState, useEffect } from 'react';
 import {
   Card,
   ExpandCard,
@@ -7,16 +6,13 @@ import {
   CardExpansion,
   Alert,
 } from '@ctoec/component-library';
-import { ChangeEnrollment } from '../../../../shared/payloads';
 import { Enrollment, Child } from '../../../../shared/models';
-import { apiPost } from '../../../../utils/api';
-import { EnrollmentForm } from '../../../../components/Forms/Enrollment/Form';
 import { ChangeEnrollmentForm } from './Form';
 
 type ChangeEnrollmentCardProps = {
   child: Child;
   currentEnrollment?: Enrollment;
-  afterDataSave: () => void;
+  afterSaveSuccess: () => void;
 };
 
 /**
@@ -27,9 +23,8 @@ type ChangeEnrollmentCardProps = {
 export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
   child,
   currentEnrollment,
-  afterDataSave,
+  afterSaveSuccess,
 }) => {
-  const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();
 
@@ -61,7 +56,7 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
         <h3 className="margin-top-2 margin-bottom-2">New enrollment</h3>
         {error && <Alert type="error" text={error} />}
         <ChangeEnrollmentForm
-          afterSaveSuccess={afterDataSave}
+          afterSaveSuccess={afterSaveSuccess}
           afterSaveFailure={(err) => setError(err)}
           child={child}
           currentEnrollment={currentEnrollment}
