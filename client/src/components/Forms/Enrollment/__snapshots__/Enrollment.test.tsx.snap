@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FormsFORM Enrollment matches snapshot 1`] = `
+exports[`Forms Enrollment matches snapshot 1`] = `
 <DocumentFragment>
   <form
     class="usa-form usa-form"

@@ -1,0 +1,82 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Forms Funding matches snapshot 1`] = `
+<DocumentFragment>
+  <form
+    class="usa-form usa-form"
+    id="id"
+  >
+    <div
+      class="usa-form-group"
+    >
+      <label
+        class="usa-label"
+        for="contract-space"
+      >
+        Contract space
+      </label>
+      <select
+        aria-required="true"
+        class="usa-select"
+        id="contract-space"
+        name="contract-space"
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+      </select>
+    </div>
+    <div
+      class="usa-form-group"
+    >
+      <label
+        class="usa-label"
+        for="first-reporting-period"
+      >
+        First reporting period
+      </label>
+      <select
+        aria-required="true"
+        class="usa-select"
+        id="first-reporting-period"
+        name="first-reporting-period"
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+      </select>
+    </div>
+    <div
+      class="usa-form-group"
+    >
+      <label
+        class="usa-label"
+        for="last-reporting-period"
+      >
+        Last reporting period
+      </label>
+      <select
+        aria-required="true"
+        class="usa-select"
+        id="last-reporting-period"
+        name="last-reporting-period"
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+      </select>
+    </div>
+    <input
+      class="usa-button"
+      type="submit"
+      value="Save"
+    />
+  </form>
+</DocumentFragment>
+`;

@@ -25,7 +25,7 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
     >
       Add needed information
     </h1>
-    <p
+    <div
       class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
     >
       <span
@@ -38,7 +38,7 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
         </span>
       </span>
        All enrollments are complete
-    </p>
+    </div>
     <div
       class="oec-sidenav grid-row"
     >
@@ -110,7 +110,7 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
     >
       Add needed information
     </h1>
-    <p
+    <div
       class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
     >
       <span
@@ -123,7 +123,7 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
         </span>
       </span>
        All enrollments are complete
-    </p>
+    </div>
     <div
       class="oec-sidenav grid-row"
     >

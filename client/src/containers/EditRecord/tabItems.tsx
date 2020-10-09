@@ -40,7 +40,7 @@ export const tabItems = (commonFormProps: EditFormProps) =>
       content: <EditForm {...commonFormProps} />,
       tabText: name,
       tabTextFormatter: (_name: string) =>
-        status(commonFormProps.child) ? (
+        hasError(commonFormProps.child) ? (
           <TextWithIcon {...commonTextWithIconProps} text={_name} />
         ) : (
           _name

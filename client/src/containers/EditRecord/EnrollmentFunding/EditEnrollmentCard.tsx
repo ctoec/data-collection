@@ -10,9 +10,9 @@ import {
   Alert,
   TrashCan,
 } from '@ctoec/component-library';
-import { Enrollment, Child } from '../../../shared/models';
-import { apiPut, apiDelete } from '../../../../utils/api';
-import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { Enrollment, Child } from '../../shared/models';
+import { apiPut, apiDelete } from '../../../utils/api';
+import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
 
 type EditEnrollmentCardProps = {
