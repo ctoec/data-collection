@@ -5,14 +5,13 @@ https: nightwatch_config = {
     start_process: false,
     host: 'hub-cloud.browserstack.com',
     port: 80,
-    // proxy: 'http://PROXY_USERNAME:PROXY_PASSWORD@proxy-host:proxy-port',
   },
   test_settings: {
     default: {
       desiredCapabilities: {
         'browserstack.user': 'julia518',
         'browserstack.key': 'Uq4nUNp12oP9oMoYquej',
-        browser: 'chrome',
+        browserName: 'edge',
       },
     },
   },
