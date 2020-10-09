@@ -262,7 +262,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-                scope="row"
               />
               <td
                 class="font-body-2xs"
@@ -303,7 +302,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-                scope="row"
               />
               <td
                 class="font-body-2xs"
@@ -537,7 +535,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-                scope="row"
               />
               <td
                 class="font-body-2xs"
@@ -830,7 +827,6 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-                scope="row"
               />
               <td
                 class="font-body-2xs"
@@ -868,7 +864,6 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-                scope="row"
               />
               <td
                 class="font-body-2xs"
@@ -1082,7 +1077,6 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
-                scope="row"
               />
               <td
                 class="font-body-2xs"

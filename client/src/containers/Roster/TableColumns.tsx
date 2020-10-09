@@ -40,7 +40,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
         !row.validationErrors || !row.validationErrors.length ? 1 : 0,
       cell: ({ row }) => {
         return (
-          <td scope="row" className={tableRowClassName}>
+          <td className={tableRowClassName}>
             {(!!row.validationErrors && row.validationErrors.length == 0) ||
               row.validationErrors == undefined ||
               InlineIcon({ icon: 'incomplete' })}
