@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="1">
+
+  <testsuite name="smokeTest"
+    errors="0" failures="0" hostname="" id="" package="smokeTest" skipped="0"
+    tests="1" time="4.822" timestamp="">
+  
+    <testcase name="smoke-test" classname="smokeTest" time="4.822" assertions="2">
+
+    
+
+    
+    </testcase>
+  
+
+  
+
+    
+
+  
+  </testsuite>
+</testsuites>
