@@ -16,7 +16,7 @@ import {
 import {
   Child as ChildInterface,
   Gender,
-  SpecialEducationServicesType,
+  BirthCertificateType,
 } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
@@ -63,12 +63,19 @@ export class Child implements ChildInterface {
   })
   birthdate?: Moment;
 
+  @Column({
+    type: 'varchar',
+    length: 30,
+    nullable: false,
+    transformer: enumTransformer(BirthCertificateType),
+  })
+  birthCertificateType: string;
+
   @Column({ nullable: true })
   @IsNotEmpty({ message: 'Birth town is required' })
   birthTown?: string;
 
   @Column({ nullable: true })
-  // TODO: do we account for birth certs from outside the US?
   @Length(2)
   birthState?: string;
 

@@ -87,16 +87,16 @@ export const EditFundingForm: React.FC<EditFundingFormProps> = ({
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">
-          <p>Funding</p>
-          <Tag text={funding.fundingSpace.source} />
+          <p className="margin-bottom-0">Funding</p>
+          <Tag className="margin-top-0" text={funding.fundingSpace.source} />
         </div>
         <div className="flex-1">
-          <p>Space type</p>
-          <p className="text-bold">{funding.fundingSpace.time}</p>
+          <p className="margin-bottom-0">Space type</p>
+          <p className="text-bold margin-top-0">{funding.fundingSpace.time}</p>
         </div>
         <div className="flex-2">
-          <p>Reporting periods</p>
-          <p className="text-bold">
+          <p className="margin-bottom-0">Reporting periods</p>
+          <p className="text-bold margin-top-0">
             {funding.firstReportingPeriod?.period.format('MMMM YYYY')} -{' '}
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')

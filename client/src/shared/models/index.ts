@@ -1,6 +1,7 @@
 export * from './db';
 
 export * from './AgeGroup';
+export * from './BirthCertificateType';
 export * from './CareModel';
 export * from './ColumnMetadata';
 export * from './ExitReason';

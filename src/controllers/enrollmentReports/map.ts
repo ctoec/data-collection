@@ -19,6 +19,7 @@ import {
   FundingSourceTime,
   FundingTimeInput,
   CareModel,
+  BirthCertificateType,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
@@ -112,6 +113,13 @@ const mapChild = (
   const gender: Gender =
     mapEnum(Gender, source.gender, true) || Gender.NotSpecified;
 
+  //Birth certificate type
+  const birthCertificateType: BirthCertificateType = mapEnum(
+    BirthCertificateType,
+    source.birthCertificateType,
+    true
+  );
+
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
@@ -122,6 +130,7 @@ const mapChild = (
     lastName: source.lastName,
     suffix: source.suffix,
     birthdate: source.birthdate,
+    birthCertificateType: birthCertificateType,
     birthTown: source.birthTown,
     birthState: source.birthState,
     birthCertificateId: source.birthCertificateId,
@@ -312,6 +321,7 @@ const mapFunding = async (
 
 const mapEnum = <T>(
   referenceEnum:
+    | typeof BirthCertificateType
     | typeof Gender
     | typeof CareModel
     | typeof AgeGroup
