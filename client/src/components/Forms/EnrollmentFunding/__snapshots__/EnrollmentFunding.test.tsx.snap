@@ -1572,11 +1572,13 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-1"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
             Site
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             Site A
           </p>
@@ -1584,11 +1586,35 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-1"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
+            Model type
+          </p>
+          <p
+            class="text-bold margin-top-0"
+          >
+            <span
+              class="oec-inline-icon oec-inline-icon--incomplete"
+            >
+              <span
+                class="usa-sr-only"
+              >
+                (incomplete)
+              </span>
+            </span>
+          </p>
+        </div>
+        <div
+          class="flex-1"
+        >
+          <p
+            class="margin-bottom-0"
+          >
             Age group
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             <span
               class="oec-inline-icon oec-inline-icon--incomplete"
@@ -1604,11 +1630,13 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-2"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
             Enrollment dates
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             09/03/2020 - present
           </p>
@@ -1689,11 +1717,13 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-1"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
             Site
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             Site B
           </p>
@@ -1701,11 +1731,35 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-1"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
+            Model type
+          </p>
+          <p
+            class="text-bold margin-top-0"
+          >
+            <span
+              class="oec-inline-icon oec-inline-icon--incomplete"
+            >
+              <span
+                class="usa-sr-only"
+              >
+                (incomplete)
+              </span>
+            </span>
+          </p>
+        </div>
+        <div
+          class="flex-1"
+        >
+          <p
+            class="margin-bottom-0"
+          >
             Age group
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             <span
               class="oec-inline-icon oec-inline-icon--incomplete"
@@ -1721,11 +1775,13 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-2"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
             Enrollment dates
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             09/03/2019 - 08/01/2020
           </p>
@@ -1780,11 +1836,13 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-1"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
             Funding
           </p>
           <span
-            class="usa-tag usa-tag--no-transform"
+            class="usa-tag usa-tag--no-transform margin-top-0"
           >
             CDC - Child Day Care
           </span>
@@ -1792,11 +1850,13 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-1"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
             Space type
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             Full time
           </p>
@@ -1804,11 +1864,13 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <div
           class="flex-2"
         >
-          <p>
+          <p
+            class="margin-bottom-0"
+          >
             Reporting periods
           </p>
           <p
-            class="text-bold"
+            class="text-bold margin-top-0"
           >
             September 2019 - July 2020
           </p>

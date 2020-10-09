@@ -116,8 +116,7 @@ const mapChild = (
   //Birth certificate type
   const birthCertificateType: BirthCertificateType = mapEnum(
     BirthCertificateType,
-    source.birthCertificateType,
-    true
+    source.birthCertificateType
   );
 
   // TODO: Could do city/state verification here for birth cert location
