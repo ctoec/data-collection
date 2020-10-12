@@ -63,40 +63,45 @@ enrollmentReportsRouter.post(
   '/',
   upload,
   passAsyncError(async (req, res) => {
-    // Prepare for ingestion by removing any existing data
-    try {
-      const siteIdsToReplace = parseQueryString(req, 'overwriteSites', {
-        post: parseInt,
-        forceArray: true,
-      }) as number[];
-      controller.removeExistingEnrollmentDataForUser(
-        req.user,
-        siteIdsToReplace
-      );
-    } catch (err) {
-      console.error('Unable to delete existing data for user:', err);
-      throw new InternalServerError('Unable to remove existing roster data');
-    }
+    return getManager().transaction(async (tManager) => {
+      // Prepare for ingestion by removing any existing data
+      try {
+        const siteIdsToReplace = parseQueryString(req, 'overwriteSites', {
+          post: parseInt,
+          forceArray: true,
+        }) as number[];
 
-    // Ingest upload by parsing, mapping, and saving uploaded data
-    try {
-      const reportRows = controller.parseUploadedTemplate(req.file);
-      const reportChildren = await Promise.all(
-        reportRows.map(controller.mapRow)
-      );
+        await controller.removeExistingEnrollmentDataForUser(
+          tManager,
+          req.user,
+          siteIdsToReplace
+        );
+      } catch (err) {
+        console.error('Unable to delete existing data for user:', err);
+        throw new InternalServerError('Unable to remove existing roster data');
+      }
 
-      const report = await getManager().save(
-        getManager().create(EnrollmentReport, { children: reportChildren })
-      );
-      res.status(201).json({ id: report.id });
-    } catch (err) {
-      if (err instanceof ApiError) throw err;
+      // Ingest upload by parsing, mapping, and saving uploaded data
+      try {
+        const reportRows = controller.parseUploadedTemplate(req.file);
+        const reportChildren = await controller.mapAndSaveRows(
+          tManager,
+          reportRows,
+          req.user
+        );
+        const report = await tManager.save(
+          tManager.create(EnrollmentReport, { children: reportChildren })
+        );
+        res.status(201).json({ id: report.id });
+      } catch (err) {
+        if (err instanceof ApiError) throw err;
 
-      console.error('Error parsing uploaded enrollment report: ', err);
-      throw new BadRequestError(
-        'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
-      );
-    }
+        console.error('Error parsing uploaded enrollment report: ', err);
+        throw new BadRequestError(
+          'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
+        );
+      }
+    });
   })
 );
 

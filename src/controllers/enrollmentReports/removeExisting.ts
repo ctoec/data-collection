@@ -1,5 +1,5 @@
-import { User, Child, Enrollment } from '../../entity';
-import { getManager, In } from 'typeorm';
+import { User, Child } from '../../entity';
+import { EntityManager, In } from 'typeorm';
 
 /**
  * Removes existing child records for the given user, to prepare for uploading a new
@@ -10,10 +10,11 @@ import { getManager, In } from 'typeorm';
  * be removed.
  */
 export const removeExistingEnrollmentDataForUser = async (
+  transaction: EntityManager,
   user: User,
   siteIdsToReplace: number[]
 ) => {
-  const allChildren = await getManager().find(Child, {
+  const allChildren = await transaction.find(Child, {
     relations: ['enrollments'],
     where: { organization: { id: In(user.organizationIds) } },
   });
@@ -28,5 +29,5 @@ export const removeExistingEnrollmentDataForUser = async (
       )
     : allChildren;
 
-  await getManager().delete(Child, childrenToDelete);
+  await transaction.delete(Child, childrenToDelete);
 };
