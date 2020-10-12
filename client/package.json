@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ctoec/component-library": "https://github.com/ctoec/component-library#icons-once-and-for-all",
+    "@ctoec/component-library": "https://github.com/ctoec/component-library#base",
     "@openid/appauth": "^1.2.7",
     "@testing-library/dom": "^7.24.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -26,7 +26,7 @@
     "idx": "^2.5.6",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
-    "node-sass": "^4.12",
+    "node-sass": "yarn:sass",
     "pluralize": "^8.0.0",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
@@ -34,7 +34,7 @@
     "react-markdown": "^4.3.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "3.4.1",
     "sass": "^1.26.10",
     "typescript": "^3.9.5",
     "uswds": "^2.8.0"

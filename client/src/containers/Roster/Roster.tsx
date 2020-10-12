@@ -6,7 +6,6 @@ import {
   Button,
   AlertProps,
   Alert,
-  Error,
   InlineIcon,
 } from '@ctoec/component-library';
 import { Child, AgeGroup } from '../../shared/models';
