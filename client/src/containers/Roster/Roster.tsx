@@ -6,6 +6,8 @@ import {
   Button,
   AlertProps,
   Alert,
+  Error,
+  InlineIcon,
 } from '@ctoec/component-library';
 import { Child, AgeGroup } from '../../shared/models';
 import { tableColumns } from '../Roster/TableColumns';
@@ -56,12 +58,19 @@ const Roster: React.FC = () => {
   const { alertElements, setAlerts, alerts } = useAlerts();
 
   useEffect(() => {
+    if (children.loading) {
+      setAlerts([]);
+      return;
+    }
+
     if (numberOfChildrenWithErrors) {
       setAlerts([...alerts, childrenWithErrorsAlert]);
     }
-  }, [numberOfChildrenWithErrors]);
+  }, [children.loading, numberOfChildrenWithErrors]);
 
-  const childrenByAgeGroup: { [key in AgeGroup]?: Child[] } = {};
+  const NoAgeGroup = 'No age group';
+  type RosterSections = AgeGroup | typeof NoAgeGroup;
+  const childrenByAgeGroup: { [key in RosterSections]?: Child[] } = {};
   children.records.reduce((_byAgeGroup, _child) => {
     const ageGroup = idx(_child, (_) => _.enrollments[0].ageGroup) || undefined;
     if (ageGroup) {
@@ -71,20 +80,37 @@ const Roster: React.FC = () => {
         // acc[ageGroup] is not _actually_ possibly undefined; checked in above if
         _byAgeGroup[ageGroup]?.push(_child);
       }
+    } else {
+      if (!_byAgeGroup[NoAgeGroup]) {
+        _byAgeGroup[NoAgeGroup] = [_child];
+      } else {
+        _byAgeGroup[NoAgeGroup]?.push(_child);
+      }
     }
     return _byAgeGroup;
   }, childrenByAgeGroup);
 
   const accordionItems = Object.entries(childrenByAgeGroup)
-    .filter((entry) => entry[1] && entry[1].length)
+    .filter(
+      ([_, ageGroupChildren]) => ageGroupChildren && ageGroupChildren.length
+    )
     .map(([ageGroup, ageGroupChildren = []]) => ({
       id: ageGroup,
       title: (
         <>
+          {ageGroup === NoAgeGroup && <InlineIcon icon="attentionNeeded" />}
           {ageGroup}{' '}
           <span className="text-normal">
             {pluralize('children', ageGroupChildren.length, true)}{' '}
           </span>
+          {ageGroup === NoAgeGroup && (
+            <>
+              <br />
+              <p className="usa-error-message margin-y-0 font-body-md">
+                All records must have an assigned age group
+              </p>
+            </>
+          )}
         </>
       ),
       headerContent: <RosterSectionHeader children={ageGroupChildren} />,

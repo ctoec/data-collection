@@ -10,6 +10,8 @@ export const useReadOnlyCache = <T extends { id: any }>(apiPath: string) => {
   const [haveFetched, setHaveFetched] = useState(false);
 
   const refetch = () => setHaveFetched(false);
+  const getRecordById = (id: number | string) =>
+    records.find((r) => r.id === id);
 
   useEffect(() => {
     if (!haveFetched) {
@@ -29,5 +31,6 @@ export const useReadOnlyCache = <T extends { id: any }>(apiPath: string) => {
     records,
     loading,
     refetch,
+    getRecordById,
   } as ReadOnlyDataCache<T>;
 };
