@@ -4,14 +4,12 @@ import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
+import { Enrollment } from '../../../shared/models';
 
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
   afterSaveSuccess,
 }) => {
-  // Get site options for new enrollments
-  const { sites } = useSites(child?.organization?.id);
-
   if (!child) {
     return <></>;
   }
