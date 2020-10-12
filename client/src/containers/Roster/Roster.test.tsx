@@ -18,11 +18,15 @@ import {
   ReportingPeriod,
   Funding,
   User,
+  Organization,
 } from '../../shared/models';
 
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
-import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
+import DataCacheContext, {
+  DataCacheContextType,
+  ReadOnlyDataCache,
+} from '../../contexts/DataCacheContext/DataCacheContext';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const _child = {
@@ -74,7 +78,7 @@ const children: Child[] = [
         ],
       },
     ],
-  },
+  } as Child,
   {
     id: '11111111-0000-0000-0000-0000000000000',
     firstName: 'Second',
@@ -118,7 +122,7 @@ const children: Child[] = [
         ],
       },
     ],
-  },
+  } as Child,
 ];
 
 const oneOrgUser = {
@@ -137,57 +141,43 @@ const multiOrgUser = {
   ],
 } as User;
 
+const cacheProps = {
+  children: {
+    records: children,
+    loading: false,
+    addOrUpdateRecord: jest.fn(),
+    refetch: jest.fn(),
+    removeRecordById: jest.fn(),
+  },
+  fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
+  reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
+} as DataCacheContextType;
+
 describe('Roster', () => {
   const helperOpts = {
     wrapInRouter: true,
   };
   snapshotTestHelper(
     <UserContext.Provider value={{ user: oneOrgUser, loading: false }}>
-      <DataCacheContext.Provider
-        value={{
-          children: {
-            records: children,
-            loading: false,
-            addOrUpdateRecord: jest.fn(),
-          },
-        }}
-      >
+      <DataCacheContext.Provider value={cacheProps}>
         <Roster />
       </DataCacheContext.Provider>
     </UserContext.Provider>,
-    helperOpts,
-    'matches snapshot for user with 1 org'
+    { ...helperOpts, name: 'matches snapshot for user with 1 org' }
   );
 
   snapshotTestHelper(
     <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
-      <DataCacheContext.Provider
-        value={{
-          children: {
-            records: children,
-            loading: false,
-            addOrUpdateRecord: jest.fn(),
-          },
-        }}
-      >
+      <DataCacheContext.Provider value={cacheProps}>
         <Roster />
       </DataCacheContext.Provider>
     </UserContext.Provider>,
-    helperOpts,
-    'matches snapshot for user with >1 org'
+    { ...helperOpts, name: 'matches snapshot for user with >1 org' }
   );
 
   accessibilityTestHelper(
     <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
-      <DataCacheContext.Provider
-        value={{
-          children: {
-            records: children,
-            loading: false,
-            addOrUpdateRecord: jest.fn(),
-          },
-        }}
-      >
+      <DataCacheContext.Provider value={cacheProps}>
         <Roster />
       </DataCacheContext.Provider>
     </UserContext.Provider>,
@@ -196,15 +186,7 @@ describe('Roster', () => {
 
   it('correctly separates children by ageGroup', async () => {
     const renderResult = await renderHelper(
-      <DataCacheContext.Provider
-        value={{
-          children: {
-            records: children,
-            loading: false,
-            addOrUpdateRecord: jest.fn(),
-          },
-        }}
-      >
+      <DataCacheContext.Provider value={cacheProps}>
         <Roster />
       </DataCacheContext.Provider>,
       helperOpts

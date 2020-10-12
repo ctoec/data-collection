@@ -44,10 +44,10 @@ export const snapshotTestHelper = (
   opts: {
     before?: (_: RenderResult) => Promise<void>;
     wrapInRouter?: boolean;
-  } = {},
-  name?: string
+    name?: string;
+  } = {}
 ) => {
-  it(name || 'matches snapshot', async () => {
+  it(opts.name || 'matches snapshot', async () => {
     await act(async () => {
       const renderResult = await renderHelper(component, opts);
       expect(renderResult.asFragment()).toMatchSnapshot();
