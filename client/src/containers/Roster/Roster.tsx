@@ -42,7 +42,7 @@ const Roster: React.FC = () => {
   const childrenWithErrorsAlert: AlertProps = {
     text: (
       <span>
-        `You'll need to add required info for{' '}
+        You'll need to add required info for{' '}
         {pluralize('record', numberOfChildrenWithErrors, true)} before
         submitting your data to OEC. Update with{' '}
         <Link className="usa-button usa-button--unstyled" to="/batch-edit">

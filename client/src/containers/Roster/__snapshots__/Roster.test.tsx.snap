@@ -134,6 +134,23 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 style="width: 10%;"
               >
                 <button
+                  aria-label="Sort table by Missing info in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Missing info
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 10%;"
+              >
+                <button
                   aria-label="Sort table by Birth Date in ascending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
@@ -165,13 +182,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 10%;"
+                style="width: 20%;"
               >
                 <button
-                  aria-label="Sort table by Contract space in ascending order"
+                  aria-label="Sort table by Organization in ascending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
-                  Contract space
+                  Organization
                   <div
                     class="oec-table__sort-controls"
                   />
@@ -182,13 +199,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 20%;"
+                style="width: 10%;"
               >
                 <button
-                  aria-label="Sort table by Organization in ascending order"
+                  aria-label="Sort table by Contract space in ascending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
-                  Organization
+                  Contract space
                   <div
                     class="oec-table__sort-controls"
                   />
@@ -245,6 +262,9 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs"
               >
                 06/01/2019
               </td>
@@ -254,10 +274,10 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 CDC - Child Day Care
               </td>
               <td
-                class="font-body-2xs"
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               />
               <td
-                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                class="font-body-2xs"
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
@@ -282,6 +302,9 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs"
               >
                 11/01/2018
               </td>
@@ -291,10 +314,10 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 PSR - Priority School Readiness
               </td>
               <td
-                class="font-body-2xs"
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               />
               <td
-                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                class="font-body-2xs"
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
@@ -384,6 +407,23 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 style="width: 10%;"
               >
                 <button
+                  aria-label="Sort table by Missing info in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Missing info
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 10%;"
+              >
+                <button
                   aria-label="Sort table by Birth Date in ascending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
@@ -415,13 +455,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 10%;"
+                style="width: 20%;"
               >
                 <button
-                  aria-label="Sort table by Contract space in ascending order"
+                  aria-label="Sort table by Organization in ascending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
-                  Contract space
+                  Organization
                   <div
                     class="oec-table__sort-controls"
                   />
@@ -432,13 +472,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                 role="columnheader"
                 scope="col"
-                style="width: 20%;"
+                style="width: 10%;"
               >
                 <button
-                  aria-label="Sort table by Organization in ascending order"
+                  aria-label="Sort table by Contract space in ascending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
-                  Organization
+                  Contract space
                   <div
                     class="oec-table__sort-controls"
                   />
@@ -495,6 +535,9 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs"
               >
                 01/01/2016
               </td>
@@ -504,10 +547,10 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                 CDC - Child Day Care
               </td>
               <td
-                class="font-body-2xs"
+                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
               />
               <td
-                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                class="font-body-2xs"
               />
               <td
                 class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
@@ -673,6 +716,23 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                 style="width: 10%;"
               >
                 <button
+                  aria-label="Sort table by Missing info in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Missing info
+                  <div
+                    class="oec-table__sort-controls"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 10%;"
+              >
+                <button
                   aria-label="Sort table by Birth Date in ascending order"
                   class="oec-table__column-title usa-button--unstyled width-full"
                 >
@@ -767,6 +827,9 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
               </th>
               <td
                 class="font-body-2xs"
+              />
+              <td
+                class="font-body-2xs"
               >
                 06/01/2019
               </td>
@@ -799,6 +862,9 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                   Toddler, Second 
                 </a>
               </th>
+              <td
+                class="font-body-2xs"
+              />
               <td
                 class="font-body-2xs"
               >
@@ -889,6 +955,23 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                   Name
                   <div
                     class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                  />
+                </button>
+              </th>
+              <th
+                aria-sort="ascending"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                role="columnheader"
+                scope="col"
+                style="width: 10%;"
+              >
+                <button
+                  aria-label="Sort table by Missing info in ascending order"
+                  class="oec-table__column-title usa-button--unstyled width-full"
+                >
+                  Missing info
+                  <div
+                    class="oec-table__sort-controls"
                   />
                 </button>
               </th>
@@ -992,6 +1075,9 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                   Preschool, First 
                 </a>
               </th>
+              <td
+                class="font-body-2xs"
+              />
               <td
                 class="font-body-2xs"
               >
