@@ -15,6 +15,7 @@ export const DeterminationDateField: React.FC = () => {
   return (
     <FormField<IncomeDetermination, DateInputProps, Moment | null>
       getValue={(data) => data.at('determinationDate')}
+      defaultValue={null}
       parseOnChangeEvent={(e: any) => e}
       inputComponent={DateInput}
       id="determination-date-"
