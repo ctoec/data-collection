@@ -35,6 +35,9 @@ export class FundingSpace implements FundingSpaceInterface {
   @ManyToOne(() => Organization, { nullable: false })
   organization: Organization;
 
+  @Column()
+  organizationId: number;
+
   @Column({
     type: 'varchar',
     length: 20,
