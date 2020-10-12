@@ -3,13 +3,18 @@ import { Site } from '../shared/models';
 import { apiGet } from '../utils/api';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
 
-export function useSites() {
-  // Get site options for new enrollments
+export function useSites(organizationId?: number) {
   const { accessToken } = useContext(AuthenticationContext);
   const [sites, setSites] = useState<Site[]>([]);
 
   useEffect(() => {
-    apiGet('sites', { accessToken }).then((_sites) => setSites(_sites));
+    let path: string = 'sites';
+
+    if (!!organizationId) {
+      path += `?organizationId=${organizationId}`;
+    }
+
+    apiGet(path, { accessToken }).then((_sites) => setSites(_sites));
   }, [accessToken]);
 
   return { sites };

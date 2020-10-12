@@ -9,11 +9,13 @@ import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
  * own the sites the user has permissions for
  * @param user
  */
-export const getFundingSpaces = async (user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
+export const getFundingSpaces = async (user: User): Promise<FundingSpace[]> => {
+  const readOrgIds: number[] = await getReadAccessibileOrgIds(user);
 
   return getManager().find(FundingSpace, {
-    where: { organization: { id: In(readOrgIds) } },
+    where: {
+      organization: { id: In(readOrgIds) },
+    },
     relations: ['organization'],
   });
 };

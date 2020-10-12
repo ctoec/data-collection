@@ -33,12 +33,12 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
   }, fundingSpaceCounts);
 
   return (
-    <div className="display-flex">
+    <div className="display-flex flex-wrap">
       {fundingSpaceCounts.map(({ fundingSpace, count }) => {
         return (
           <div
             key={fundingSpace.id}
-            className="margin-top-2 margin-right-2 font-body-sm text-base-darker"
+            className="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
           >
             {fundingSpace.source} {fundingSpace.time} — {count}/
             {fundingSpace.capacity}

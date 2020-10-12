@@ -8,7 +8,6 @@ fundingSpacesRouter.get(
   '/',
   passAsyncError(async (req, res) => {
     const fundingSpaces = await controller.getFundingSpaces(req.user);
-
     res.send(fundingSpaces);
   })
 );

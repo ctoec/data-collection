@@ -128,6 +128,9 @@ export class Child implements ChildInterface {
   @ManyToOne(() => Organization, { nullable: false })
   organization: Organization;
 
+  @Column()
+  organizationId: number;
+
   @ValidateNested({ each: true })
   @OneToMany(() => Enrollment, (enrollment) => enrollment.child)
   enrollments?: Array<Enrollment>;
