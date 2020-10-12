@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
+<DocumentFragment>
+  <form
+    class="usa-form usa-form"
+    id="batch-edit-enrollment-1"
+  >
+    <input
+      class="usa-button"
+      type="submit"
+      value="Save"
+    />
+  </form>
+  <form
+    class="usa-form usa-form"
+    id="batch-edit-funding-1"
+  >
+    <input
+      class="usa-button"
+      type="submit"
+      value="Save"
+    />
+  </form>
+   
+</DocumentFragment>
+`;

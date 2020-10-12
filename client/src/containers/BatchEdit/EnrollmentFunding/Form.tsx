@@ -7,6 +7,14 @@ import {
   EnrollmentForm,
 } from '../../../components/Forms';
 
+/**
+ * Special Enrollment / Funding form for batch edit,
+ * which chains individual edit forms for all enrollments and fundings
+ * with missing or invalid information. As the user completes updating
+ * each invdividual funding or enrollment form, they will disappear as
+ * this component is re-rendered and the objects themselves no longer
+ * have any missing info.
+ */
 export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   child,
   afterSaveSuccess,
@@ -15,6 +23,8 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
 }) => {
   const enrollmentsWithValidationErrors = child?.enrollments?.map(
     (enrollment) => {
+      // will return true if enrollment has validation errors,
+      // including if any fundings have validation errors
       if (doesEnrollmentFormHaveErrors(child, enrollment.id)) {
         const fundingsWithValidationErrors = enrollment.fundings?.filter(
           (funding) =>
@@ -47,14 +57,18 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
         return (
           <>
             {fundingForms}
-            <EnrollmentForm
-              id={`batch-edit-enrollment-${enrollment.id}`}
-              enrollmentId={enrollment.id}
-              child={child}
-              afterSaveSuccess={afterSaveSuccess}
-              setAlerts={setAlerts}
-              showField={showField}
-            />
+            {doesEnrollmentFormHaveErrors(child, enrollment.id, {
+              excludeFundings: true,
+            }) && (
+              <EnrollmentForm
+                id={`batch-edit-enrollment-${enrollment.id}`}
+                enrollmentId={enrollment.id}
+                child={child}
+                afterSaveSuccess={afterSaveSuccess}
+                setAlerts={setAlerts}
+                showField={showField}
+              />
+            )}
           </>
         );
       })}

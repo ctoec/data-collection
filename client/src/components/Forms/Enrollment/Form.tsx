@@ -18,14 +18,17 @@ import { apiPost, apiPut } from '../../../utils/api';
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'model', 'fundings'];
 export const doesEnrollmentFormHaveErrors = (
   child?: Child,
-  enrollmentId?: number
+  enrollmentId?: number,
+  opts: { excludeFundings?: boolean } = {}
 ) => {
   if (enrollmentId) {
     const enrollment = child?.enrollments?.find((e) => e.id === enrollmentId);
     return enrollment
       ? !!getValidationStatusForFields(
           enrollment,
-          enrollmentFields.filter((field) => field !== 'fundings')
+          opts.excludeFundings
+            ? enrollmentFields.filter((field) => field !== 'fundings')
+            : enrollmentFields
         )
       : false;
   }

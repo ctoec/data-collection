@@ -34,7 +34,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
 }) => {
   const { user } = useContext(UserContext);
   const sites = (user?.sites || []).filter(
-    (site) => site.organization.id === child.organization?.id
+    (site) => site.organizationId === child.organization?.id
   );
 
   const { accessToken } = useContext(AuthenticationContext);
@@ -82,20 +82,19 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
         orgId={child.organization.id}
       />
 
-      {!!currentEnrollment && (
+      {!!currentEnrollment && activeFunding && (
         <>
           <h3>Previous enrollment</h3>
-          {activeFunding && (
-            <ReportingPeriodField<ChangeEnrollment>
-              accessor={(data) =>
-                data.at('oldEnrollment').at('funding').at('lastReportingPeriod')
-              }
-              fundingSource={activeFunding.fundingSpace?.source}
-              isLast={true}
-              optional={true}
-              label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
-            />
-          )}
+          <ReportingPeriodField<ChangeEnrollment>
+            accessor={(data) =>
+              data.at('oldEnrollment').at('funding').at('lastReportingPeriod')
+            }
+            fundingSource={activeFunding.fundingSpace?.source}
+            isLast={true}
+            optional={true}
+            label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
+          />
+          )
         </>
       )}
 
