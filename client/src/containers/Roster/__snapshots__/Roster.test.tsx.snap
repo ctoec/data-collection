@@ -648,6 +648,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
         </a>
         <button
           class="usa-button"
+          disabled=""
           type="button"
         >
           Send to OEC
@@ -1187,6 +1188,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
         </a>
         <button
           class="usa-button"
+          disabled=""
           type="button"
         >
           Send to OEC

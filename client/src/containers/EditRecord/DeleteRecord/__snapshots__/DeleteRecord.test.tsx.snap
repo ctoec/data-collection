@@ -8,18 +8,18 @@ exports[`EditRecord DeleteRecord matches snapshot 1`] = `
   tabindex="-1"
 >
   <div
-    class="grid-row display-flex flex-justify flex-align-center"
+    class="margin-2"
   >
-    <h2>
-      Delete enrollment for 
-      First Last
-      ?
-    </h2>
     <div
-      class="oec-modal-close"
+      class="grid-row display-flex flex-justify flex-align-center"
     >
+      <h2>
+        Delete enrollment for 
+        First Last
+        ?
+      </h2>
       <button
-        class="usa-button usa-button--unstyled"
+        class="usa-button usa-button--unstyled margin-bottom-2"
         type="button"
       >
         <div
@@ -33,35 +33,35 @@ exports[`EditRecord DeleteRecord matches snapshot 1`] = `
         </div>
       </button>
     </div>
-  </div>
-  <div
-    class=""
-  >
     <div
-      class="grid-row"
-    >
-      <span>
-        Deleting an enrollment record will permanently remove all of its data
-      </span>
-    </div>
-    <div
-      class="margin-top-4"
+      class=""
     >
       <div
-        class="grid-row flex-first-baseline space-between-4"
+        class="grid-row"
       >
-        <button
-          class="usa-button usa-button--outline"
-          type="button"
+        <span>
+          Deleting an enrollment record will permanently remove all of its data
+        </span>
+      </div>
+      <div
+        class="margin-top-4"
+      >
+        <div
+          class="grid-row flex-first-baseline space-between-4"
         >
-          No, cancel
-        </button>
-        <button
-          class="usa-button"
-          type="button"
-        >
-          Yes, delete record
-        </button>
+          <button
+            class="usa-button usa-button--outline"
+            type="button"
+          >
+            No, cancel
+          </button>
+          <button
+            class="usa-button"
+            type="button"
+          >
+            Yes, delete record
+          </button>
+        </div>
       </div>
     </div>
   </div>

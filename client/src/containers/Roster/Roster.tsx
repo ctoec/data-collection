@@ -79,13 +79,25 @@ const Roster: React.FC = () => {
     }
   }, [childrenCache.loading, numberOfChildrenWithErrors]);
 
-  const childrenByAgeGroup = getChildrenByAgeGroup(filteredChildren)
+  const childrenByAgeGroup = getChildrenByAgeGroup(filteredChildren);
 
   const accordionItems = getAccordionItems(childrenByAgeGroup, showOrgInTables);
 
+  // If there's an active org use that, otherwise grab it from the site
+  let currentOrgId = activeOrgId;
+  if (!activeOrgId && activeSiteId) {
+    const activeSite = sites.find((s) => s.id === +activeSiteId);
+    currentOrgId = `${
+      activeSite?.organizationId || activeSite?.organization.id || ''
+    }`;
+  }
   async function submitToOEC() {
-    // TODO: how should we do this?
-    // await apiPut(`oec-report/${organization?.id}`, undefined, { accessToken });
+    // If there's an active org submit
+    // Otherwise button should be disabled for now
+    // TODO: figure out how submit works for multi-site users
+    if (currentOrgId) {
+      await apiPut(`oec-report/${currentOrgId}`, undefined, { accessToken });
+    }
     history.push('/success');
   }
 
@@ -159,8 +171,8 @@ const Roster: React.FC = () => {
             <Accordion {...accordionProps} />
           </TabNav>
         ) : (
-              <Accordion {...accordionProps} />
-            )}
+          <Accordion {...accordionProps} />
+        )}
       </div>
 
       <FixedBottomBar>
@@ -169,8 +181,12 @@ const Roster: React.FC = () => {
           href="/getting-started"
           appearance="outline"
         />
-        {/* TODO: how do we want to do this? by org? */}
-        <Button text="Send to OEC" onClick={submitToOEC} />
+        {/* TODO: change when we figure out multi-site entity */}
+        <Button
+          text="Send to OEC"
+          onClick={submitToOEC}
+          disabled={!currentOrgId}
+        />
       </FixedBottomBar>
     </>
   );

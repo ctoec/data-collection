@@ -1,5 +1,10 @@
 import React from 'react';
-import { AlertProps, InlineIcon, TabItem, Table } from '@ctoec/component-library';
+import {
+  AlertProps,
+  InlineIcon,
+  TabItem,
+  Table,
+} from '@ctoec/component-library';
 import { AgeGroup, Child, Organization, Site } from '../../shared/models';
 import pluralize from 'pluralize';
 import { RosterSectionHeader } from './RosterSectionHeader';
@@ -122,7 +127,6 @@ export function getOrganizationItems(
   return items;
 }
 
-
 const NoAgeGroup = 'No age group';
 type RosterSections = AgeGroup | typeof NoAgeGroup;
 type ChildrenByAgeGroup = {
@@ -150,7 +154,7 @@ export function getChildrenByAgeGroup(
       }
     }
     return _byAgeGroup;
-  }, childrenByAgeGroup)
+  }, childrenByAgeGroup);
 }
 
 export function getAccordionItems(
