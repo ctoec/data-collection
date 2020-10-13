@@ -6,7 +6,7 @@ import { ChangeFundingForm } from './ChangeFundingForm';
 import { EditFormProps } from '../../types';
 import { useSites } from '../../../../hooks/useSites';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
-import { Child } from '../../../../shared/models';
+import { Child, Enrollment } from '../../../../shared/models';
 
 const enrollmentFields = ['site', 'model', 'ageGroup', 'entry', 'fundings'];
 // TODO: check this after debugging enrollment-- can't save partially filled out form
@@ -25,7 +25,7 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
   afterDataSave,
 }) => {
   // Get site options for new enrollments
-  const { sites } = useSites();
+  const { sites } = useSites(child?.organization?.id);
 
   if (!child) {
     return <></>;
@@ -33,12 +33,16 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
 
   // Separate enrollments into current (no end date) and past
   // (with end date). Either may not exist
-  const enrollments = child.enrollments || [];
-  const currentEnrollment = enrollments.find((e) => !e.exit);
-  const pastEnrollments = currentEnrollment
+  const enrollments: Enrollment[] = child.enrollments || [];
+  const currentEnrollment: Enrollment | undefined = enrollments.find(
+    (e) => !e.exit
+  );
+  const pastEnrollments: Enrollment[] = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
+  // Separate enrollments into current (no end date) and past
+  // (with end date). Either may not exist
   return (
     <>
       <h2>Enrollment and funding</h2>

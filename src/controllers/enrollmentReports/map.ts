@@ -1,4 +1,4 @@
-import { getManager } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import {
   Child,
   Family,
@@ -9,6 +9,7 @@ import {
   Organization,
   FundingSpace,
   ReportingPeriod,
+  User,
 } from '../../entity';
 import {
   Gender,
@@ -23,65 +24,130 @@ import {
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
+import { BadRequestError, ApiError } from '../../middleware/error/errors';
+
+export const mapAndSaveRows = async (
+  transaction: EntityManager,
+  rows: EnrollmentReportRow[],
+  user: User
+) => {
+  const [organizations, sites] = await Promise.all([
+    transaction.findByIds(Organization, user.organizationIds),
+    transaction.findByIds(Site, user.siteIds),
+  ]);
+
+  const children = [];
+  for (let i = 0; i < rows.length; i++) {
+    try {
+      const child = await mapAndSaveRow(
+        transaction,
+        rows[i],
+        organizations,
+        sites
+      );
+      children.push(child);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.log('Unable to parse row, dropping: ', JSON.stringify(rows[i]));
+    }
+  }
+
+  return children;
+};
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
  * from source FlattenedEnrollment.
- * Also looks up existing Organization and Site by name.
  *
- *
- * TODO: Implement some Org/Site access authorization layer.
- * When/where/how do we layer in internal app authorization?
- * TODO: Cache Org/Site, since they are definitely reused a lot in an enrollment report
  * @param source
  */
-export const mapRow = async (source: EnrollmentReportRow) => {
-  try {
-    const organization = await mapOrganization(source);
-    const site = await mapSite(source);
-    const family = await mapFamily(source, organization);
-    const child = await mapChild(source, organization, family);
-    const incomeDetermination = await mapIncomeDetermination(source, family);
-    const enrollment = await mapEnrollment(source, site, child);
-    const funding = await mapFunding(source, organization, enrollment);
-
-    family.incomeDeterminations = [incomeDetermination];
-    child.family = family;
-    enrollment.fundings = [funding];
-    child.enrollments = [enrollment];
-
-    return child;
-  } catch (err) {
-    console.error('Unable to map row: ', err);
-    return;
+const mapAndSaveRow = async (
+  transaction: EntityManager,
+  source: EnrollmentReportRow,
+  userOrganizations: Organization[],
+  userSites: Site[]
+) => {
+  const organization = lookUpOrganization(source, userOrganizations);
+  if (!organization) {
+    const orgNames = userOrganizations.map((org) => `"${org.providerName}"`);
+    const orgNamesForError = `${orgNames
+      .slice(0, -1)
+      .join(', ')}, or ${orgNames.slice(-1)}`;
+    throw new BadRequestError(
+      `You entered invalid provider names\nCheck that your spreadsheet provider column only contains ${orgNamesForError} before uploading again.`
+    );
   }
+
+  const site = lookUpSite(source, organization.id, userSites);
+  const family = await mapFamily(transaction, source, organization);
+  const child = await mapChild(transaction, source, organization, family);
+  const incomeDetermination = await mapIncomeDetermination(
+    transaction,
+    source,
+    family
+  );
+  const enrollment = await mapEnrollment(transaction, source, site, child);
+  const funding = await mapFunding(
+    transaction,
+    source,
+    organization,
+    enrollment
+  );
+
+  family.incomeDeterminations = [incomeDetermination];
+  child.family = family;
+  enrollment.fundings = [funding];
+  child.enrollments = [enrollment];
+
+  return child;
 };
 
 /**
- * Get organization from our system that matches FlattenedEnrollment
+ * Look up organization from user's organizations that matches
  * source provider name.
+ * If the source provider name does not exist, throw an error
+ * as this is required for upload to succeed
  * TODO: How do we want to implement fuzzy matching here?
- * TODO: What do we want to do if the organization does not exist?
  * @param source
  */
-const mapOrganization = (source: EnrollmentReportRow) => {
-  return getManager().findOneOrFail(Organization, {
-    where: { providerName: source.providerName },
-  });
+const lookUpOrganization = (
+  source: EnrollmentReportRow,
+  organizations: Organization[]
+) => {
+  if (organizations.length === 1) return organizations[0];
+
+  if (!source.providerName)
+    throw new BadRequestError(`
+			You uploaded a file with missing information\n
+			Provider name is required for every record in your upload.
+			Make sure this column is not empty. 
+		`);
+
+  return organizations.find(
+    (organization) =>
+      organization.providerName.toLowerCase() ===
+      source.providerName.toLowerCase()
+  );
 };
 
 /**
- * Get Site from our system that matches FlattenedEnrollment source
- * site name.
- * TODO: Confirm that site belongs to org from same row
- * TODO: How do we want to implement fuzzy matching here?
- * TODO: What do we want to do if the organization does not exist?
+ * Look up site from user's sites that matches source site name,
+ * and belongs to the organization indiated in the source row.
+ *
  * @param source
  */
-const mapSite = (source: EnrollmentReportRow) => {
-  return getManager().findOneOrFail(Site, {
-    where: { siteName: source.siteName },
-  });
+const lookUpSite = (
+  source: EnrollmentReportRow,
+  organizationId: number,
+  sites: Site[]
+) => {
+  if (!source.siteName) return;
+
+  return sites.find(
+    (site) =>
+      site.siteName.toLowerCase() === source.siteName.toLowerCase() &&
+      site.organizationId === organizationId
+  );
 };
 
 /**
@@ -105,6 +171,7 @@ const raceIndicated = (source: EnrollmentReportRow) => {
  * @param source
  */
 const mapChild = (
+  transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
   family: Family
@@ -122,7 +189,7 @@ const mapChild = (
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
-  const child = getManager().create(Child, {
+  const child = transaction.create(Child, {
     sasid: source.sasid,
     firstName: source.firstName,
     middleName: source.middleName,
@@ -148,7 +215,7 @@ const mapChild = (
     family: family,
   });
 
-  return getManager().save(child);
+  return transaction.save(child);
 };
 
 /**
@@ -157,8 +224,12 @@ const mapChild = (
  * TODO: Lookup existing families before creating new one
  * @param source
  */
-const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
-  const family = getManager().create(Family, {
+const mapFamily = (
+  transaction: EntityManager,
+  source: EnrollmentReportRow,
+  organization: Organization
+) => {
+  const family = transaction.create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
@@ -167,7 +238,7 @@ const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
     organization,
   });
 
-  return getManager().save(family);
+  return transaction.save(family);
 };
 
 /**
@@ -175,17 +246,18 @@ const mapFamily = (source: EnrollmentReportRow, organization: Organization) => {
  * @param source
  */
 const mapIncomeDetermination = (
+  transaction: EntityManager,
   source: EnrollmentReportRow,
   family: Family
 ) => {
-  const incomeDetermination = getManager().create(IncomeDetermination, {
+  const incomeDetermination = transaction.create(IncomeDetermination, {
     numberOfPeople: source.numberOfPeople,
     income: source.income,
     determinationDate: source.determinationDate,
     familyId: family.id,
   });
 
-  return getManager().save(incomeDetermination);
+  return transaction.save(incomeDetermination);
 };
 
 /**
@@ -195,6 +267,7 @@ const mapIncomeDetermination = (
  * @param site
  */
 const mapEnrollment = (
+  transaction: EntityManager,
   source: EnrollmentReportRow,
   site: Site,
   child: Child
@@ -202,7 +275,7 @@ const mapEnrollment = (
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
   const model: CareModel = mapEnum(CareModel, source.model);
 
-  const enrollment = getManager().create(Enrollment, {
+  const enrollment = transaction.create(Enrollment, {
     site,
     childId: child.id,
     model,
@@ -212,7 +285,7 @@ const mapEnrollment = (
     exitReason: source.exitReason,
   });
 
-  return getManager().save(enrollment);
+  return transaction.save(enrollment);
 };
 
 /**
@@ -224,6 +297,7 @@ const mapEnrollment = (
  * @param ageGroup
  */
 const mapFunding = async (
+  transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
   enrollment: Enrollment
@@ -258,7 +332,7 @@ const mapFunding = async (
     // Get the FundingSpace with associated funding source and agegroup for the given organization
     // TODO: Cache FundingSpace, as they'll be reused a lot
     let fundingSpace: FundingSpace;
-    const fundingSpaces = await getManager().find(FundingSpace, {
+    const fundingSpaces = await transaction.find(FundingSpace, {
       where: {
         source: fundingSource,
         ageGroup: enrollment.ageGroup,
@@ -281,23 +355,23 @@ const mapFunding = async (
       let firstReportingPeriod: ReportingPeriod,
         lastReportingPeriod: ReportingPeriod;
       if (source.firstFundingPeriod) {
-        firstReportingPeriod = await getManager().findOne(ReportingPeriod, {
+        firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.firstFundingPeriod },
         });
       }
       if (source.lastFundingPeriod) {
-        lastReportingPeriod = await getManager().findOne(ReportingPeriod, {
+        lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
           where: { type: fundingSource, period: source.lastFundingPeriod },
         });
       }
-      const funding = getManager().create(Funding, {
+      const funding = transaction.create(Funding, {
         firstReportingPeriod,
         lastReportingPeriod,
         fundingSpace,
         enrollmentId: enrollment.id,
       });
 
-      return getManager().save(funding);
+      return transaction.save(funding);
     }
   }
 

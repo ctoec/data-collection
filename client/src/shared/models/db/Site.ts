@@ -10,6 +10,7 @@ export interface Site {
   licenseNumber?: number;
   naeycId?: number;
   registryId?: number;
+  organizationId?: number;
   organization: Organization;
   enrollments?: Array<Enrollment>;
 }

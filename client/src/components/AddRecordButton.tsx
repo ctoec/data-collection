@@ -35,10 +35,14 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
     <ButtonWithDropdown
       text={<TextWithIcon Icon={PlusCircle} text="Add a record" />}
       id="select-organization"
+      appearance="unstyled"
       options={orgs.map((p) => ({
         text: p.providerName,
         href: '/create-record',
-        onClick: () => {
+        onClick: (e: any) => {
+          if (e) {
+            e.preventDefault();
+          }
           history.push('/create-record', { state: { organization: p } });
         },
       }))}

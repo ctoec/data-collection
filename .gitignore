@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# package lock files needed for npm audit
+package-lock.json
+client/package-lock.json
+
 # dependencies
 /node_modules
 /.pnp
@@ -43,3 +47,7 @@ fawkes-bundle.zip
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Browserstack/nightwatch makes a folder
+/tests_output
+.env

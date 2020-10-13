@@ -17,6 +17,7 @@ import {
   CareModelField,
   EnrollmentEndDateField,
   EnrollmentStartDateField,
+  AgeGroupField,
 } from '../Fields';
 import { apiPut, apiDelete } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -139,6 +140,11 @@ export const EditEnrollmentForm: React.FC<EditEnrollmentFormProps> = ({
           data={enrollment}
           onSubmit={onSubmit}
         >
+          {!enrollment.ageGroup && (
+            <AgeGroupField<Enrollment>
+              accessor={(data) => data.at('ageGroup')}
+            />
+          )}
           <CareModelField<Enrollment> accessor={(data) => data.at('model')} />
           <EnrollmentStartDateField<Enrollment>
             accessor={(data) => data.at('entry')}

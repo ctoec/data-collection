@@ -7,6 +7,7 @@ export type ReadOnlyDataCache<T> = {
   records: T[];
   loading: boolean;
   refetch: () => void;
+  getRecordById: (id: number | string) => T | undefined;
 };
 
 export type ReadWriteDataCache<T> = ReadOnlyDataCache<T> & {
@@ -25,11 +26,22 @@ const DataCacheContext = createContext<DataCacheContextType>({
     records: [],
     addOrUpdateRecord: (_) => {},
     removeRecordById: (_) => {},
+    getRecordById: (_) => undefined,
     loading: true,
     refetch: () => {},
   },
-  fundingSpaces: { records: [], loading: true, refetch: () => {} },
-  reportingPeriods: { records: [], loading: true, refetch: () => {} },
+  fundingSpaces: {
+    records: [],
+    loading: true,
+    refetch: () => {},
+    getRecordById: (_) => undefined,
+  },
+  reportingPeriods: {
+    records: [],
+    loading: true,
+    refetch: () => {},
+    getRecordById: (_) => undefined,
+  },
 });
 
 const { Provider, Consumer } = DataCacheContext;

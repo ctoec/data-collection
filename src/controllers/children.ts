@@ -1,7 +1,10 @@
 import { getManager, In } from 'typeorm';
 import idx from 'idx';
 import { validate } from 'class-validator';
-import { ExitReason } from '../../client/src/shared/models';
+import {
+  ExitReason,
+  Enrollment as EnrollmentInterface,
+} from '../../client/src/shared/models';
 import {
   Child,
   ReportingPeriod,
@@ -9,6 +12,8 @@ import {
   Funding,
   User,
   Family,
+  Site,
+  FundingSpace,
 } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
@@ -32,13 +37,50 @@ export const getChildren = async (user: User) => {
   });
 };
 
+export const updateChild = async (
+  id: string,
+  user: User,
+  update: Partial<Child>
+) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const child = await getManager().findOne(Child, id, {
+    where: { organization: { id: In(readOrgIds) } },
+  });
+
+  if (!child) {
+    console.warn(
+      'Child either does not exist, or user does not have permission to modify'
+    );
+    throw new NotFoundError();
+  }
+
+  await getManager().save(getManager().merge(Child, child, update));
+};
+
+export const deleteChild = async (id: string, user: User) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const child = await getManager().findOne(Child, id, {
+    where: { organization: { id: In(readOrgIds) } },
+  });
+
+  if (!child) {
+    console.warn(
+      'Child either does not exist, or user does not have permission to modify'
+    );
+    throw new NotFoundError();
+  }
+
+  await getManager().delete(Child, { id });
+};
+
 /**
  * Get child by id, with related family and related
  * family income determinations, and enrollments and
  * related fundings
  * @param id
  */
-export const getChildById = async (id: string) => {
+export const getChildById = async (id: string, user: User): Promise<Child> => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
   const child = await getManager().findOne(Child, id, {
     relations: [
       'family',
@@ -49,6 +91,7 @@ export const getChildById = async (id: string) => {
       'enrollments.fundings',
       'organization',
     ],
+    where: { organization: { id: In(readOrgIds) } },
   });
 
   // Sort enrollments by exit date
@@ -79,7 +122,19 @@ export const getChildById = async (id: string) => {
  * Also, creates a family if one does not exist.
  * @param _child
  */
-export const createChild = async (_child) => {
+export const createChild = async (_child: Child, user: User) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  if (
+    !readOrgIds.length ||
+    !_child.organization ||
+    !readOrgIds.includes(_child.organization.id)
+  ) {
+    console.error(
+      'User does not have permission to create the child row supplied'
+    );
+    throw new Error('Child creation request denied');
+  }
+
   // TODO: make family optional on the child
   // (to enable family lookup when adding new child)
   // and stop creating it here
@@ -108,9 +163,10 @@ export const createChild = async (_child) => {
  */
 export const changeEnrollment = async (
   id: string,
-  changeEnrollmentData: ChangeEnrollment
+  changeEnrollmentData: ChangeEnrollment,
+  user: User
 ) => {
-  const child = await getChildById(id);
+  const child = await getChildById(id, user);
 
   if (!child) throw new NotFoundError();
 
@@ -189,29 +245,63 @@ export const changeEnrollment = async (
       await tManager.save(Enrollment, currentEnrollment);
     }
 
-    // Create new enrollment
-    const enrollment = tManager.create(Enrollment, {
-      ageGroup: changeEnrollmentData.newEnrollment.ageGroup,
-      site: changeEnrollmentData.newEnrollment.site,
-      entry: changeEnrollmentData.newEnrollment.entry,
+    await createNewEnrollment(
+      changeEnrollmentData.newEnrollment,
       child,
-    });
-    await tManager.save(Enrollment, enrollment);
-
-    // Create new funding, if exists
-    if (changeEnrollmentData.newEnrollment.fundings) {
-      const funding = tManager.create(Funding, {
-        enrollment,
-        fundingSpace: idx(
-          changeEnrollmentData,
-          (_) => _.newEnrollment.fundings[0].fundingSpace
-        ),
-        firstReportingPeriod: idx(
-          changeEnrollmentData,
-          (_) => _.newEnrollment.fundings[0].firstReportingPeriod
-        ),
-      });
-      await tManager.save(Funding, funding);
-    }
+      tManager
+    );
   });
 };
+
+async function createNewEnrollment(
+  newEnrollment: EnrollmentInterface,
+  child: Child,
+  tManager
+): Promise<void> {
+  if (newEnrollment.site) {
+    const matchingSite = await tManager.findOne(Site, newEnrollment.site.id);
+
+    if (!matchingSite || matchingSite.organizationId !== child.organizationId) {
+      console.error(
+        'User either provided an unknown site or a site this childs org does not have permission for'
+      );
+      throw new Error('Invalid site supplied for enrollment');
+    }
+  }
+
+  const enrollment = tManager.create(Enrollment, {
+    ageGroup: newEnrollment.ageGroup,
+    site: newEnrollment.site,
+    entry: newEnrollment.entry,
+    child,
+  });
+  await tManager.save(Enrollment, enrollment);
+
+  // Create new funding, if exists
+  if (newEnrollment.fundings && newEnrollment.fundings.length) {
+    const matchingFundingSpace: FundingSpace = await tManager.findOne(
+      FundingSpace,
+      newEnrollment.fundings[0].fundingSpace.id
+    );
+
+    if (
+      !matchingFundingSpace ||
+      matchingFundingSpace.organizationId !== child.organizationId
+    ) {
+      console.error(
+        'User either provided an unknown funding space or a funding space this childs org does not have permission for'
+      );
+      throw new Error('Invalid funding space supplied for enrollment');
+    }
+
+    const funding = tManager.create(Funding, {
+      enrollment,
+      fundingSpace: idx(newEnrollment, (_) => _.fundings[0].fundingSpace),
+      firstReportingPeriod: idx(
+        newEnrollment,
+        (_) => _.fundings[0].firstReportingPeriod
+      ),
+    });
+    await tManager.save(Funding, funding);
+  }
+}

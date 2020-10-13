@@ -66,7 +66,9 @@ const Upload: React.FC = () => {
             setError(err);
             setFile(undefined);
           })
-        );
+        )
+        // Reset this flag to false so the upload can be subsequently re-triggered
+        .finally(() => setPostUpload(false));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postUpload]);
@@ -110,6 +112,13 @@ const Upload: React.FC = () => {
         setPostUpload={setPostUpload}
         setQueryString={setQueryStringForUpload}
       />
+      {error && (
+        <Alert
+          heading={getErrorHeading(error)}
+          text={getErrorText(error)}
+          type="error"
+        />
+      )}
       <div className="margin-bottom-2 text-bold">
         <Link className="usa-button usa-button--unstyled" to="/">
           <TextWithIcon
@@ -120,13 +129,7 @@ const Upload: React.FC = () => {
           />
         </Link>
       </div>
-      {error && (
-        <Alert
-          heading={getErrorHeading(error)}
-          text={getErrorText(error)}
-          type="error"
-        />
-      )}
+
       <div className="grid-row">
         <h1 ref={h1Ref}>Upload your enrollment data</h1>
         <p>

@@ -24,6 +24,11 @@ const App: React.FC = () => {
         navItems={[
           {
             type: 'primary',
+            text: 'Home',
+            path: '/getting-started',
+          },
+          {
+            type: 'primary',
             text: 'Roster',
             path: '/roster',
           },
