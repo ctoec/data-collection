@@ -90,7 +90,7 @@ export const ChildIdentifiersForm = ({
         </div>
       </div>
       <DateOfBirthField />
-      <BirthCertificateFieldSet />
+      <BirthCertificateFieldSet child={child} />
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

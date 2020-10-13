@@ -12,12 +12,18 @@ import { BirthStateField } from './BirthState';
 import { BirthCertificateType, Child } from '../../../../shared/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
+type BirthCertificateFieldsetProps = {
+  child: Child;
+};
+
 /**
  * Component that allows a user to select a birth certificate type.
  * If type selected is US birth certificate, user is prompted to
  * enter additional required information in an expansion.
  */
-export const BirthCertificateFieldSet: React.FC = () => {
+export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> = ({
+  child,
+}) => {
   return (
     <FormField<Child, RadioButtonGroupProps, string>
       id="birth-certificate-fields"
@@ -53,11 +59,9 @@ export const BirthCertificateFieldSet: React.FC = () => {
                 <BirthCertificateIdField />
               </div>
               <div className="display-flex flex-row flex-align-end grid-row grid-gap">
-                <div className="mobile-lg:grid-col-8 display-inline-block flex-align-self-end">
-                  <BirthTownField />
-                </div>
-                <div className="mobile-lg:grid-col-4 display-inline-block flex-align-self-end">
-                  <BirthStateField />
+                <BirthTownField child={child} />
+                <div className="margin-top-2">
+                  <BirthStateField child={child} />
                 </div>
               </div>
             </>
