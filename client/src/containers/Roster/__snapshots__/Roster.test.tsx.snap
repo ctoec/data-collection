@@ -135,7 +135,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     <span
                       class="text-normal"
                     >
-                      2 children  
+                      2 children 
                     </span>
                   </h2>
                   <div
@@ -413,7 +413,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     <span
                       class="text-normal"
                     >
-                      1 child  
+                      1 child 
                     </span>
                   </h2>
                   <div
@@ -719,7 +719,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                 <span
                   class="text-normal"
                 >
-                  2 children  
+                  2 children 
                 </span>
               </h2>
               <div
@@ -974,7 +974,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                 <span
                   class="text-normal"
                 >
-                  1 child  
+                  1 child 
                 </span>
               </h2>
               <div
