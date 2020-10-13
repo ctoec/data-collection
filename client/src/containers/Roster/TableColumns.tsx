@@ -26,7 +26,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
               pathname: `/edit-record/${row.id}`,
             }}
           >
-           {row.lastName}, {row.firstName}{' '}
+            {row.lastName}, {row.firstName}{' '}
           </Link>
         </th>
       ),
