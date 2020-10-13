@@ -3,7 +3,6 @@ import { useParams, useLocation, useHistory } from 'react-router-dom';
 import { AlertProps, TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
-import { Child } from '../../shared/models';
 import { BackButton } from '../../components/BackButton';
 import { WithdrawRecord } from './WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
@@ -15,13 +14,15 @@ import {
   SECTION_KEYS,
   formSections,
 } from '../../components/Forms/formSections';
+import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
   const { childId } = useParams() as { childId: string };
   const { accessToken } = useContext(AuthenticationContext);
-  const [rowData, setRowData] = useState<Child>();
   const { alertElements, setAlerts } = useAlerts();
+  const { children } = useContext(DataCacheContext);
+  const child = children.getRecordById(childId);
 
   // Counter to trigger re-run of child fetch in
   // useEffect hook
@@ -48,41 +49,47 @@ const EditRecord: React.FC = () => {
   useEffect(() => {
     apiGet(`children/${childId}`, {
       accessToken,
-    }).then((_rowData) => setRowData(_rowData));
+    }).then((updatedChild) => {
+      children.addOrUpdateRecord(updatedChild);
+
+      // On initial fetch, refetch = 0 AND we do not want to create alerts
+      if (refetch) {
+        const newAlerts: AlertProps[] = [
+          {
+            type: 'success',
+            heading: 'Record updated',
+            text: `Your changes to ${child?.firstName} ${child?.lastName}'s record have been saved.`,
+          },
+        ];
+        const formStepInfo = formSections.find((s) => s.key === activeTab);
+        const incomplete = formStepInfo?.status(updatedChild);
+        const formName = formStepInfo?.name.toLowerCase();
+        if (incomplete) {
+          newAlerts.push({
+            type: 'error',
+            heading: 'This record has missing or incorrect info',
+            text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
+          });
+        }
+        setAlerts(newAlerts);
+      }
+    });
   }, [accessToken, childId, refetch]);
 
-  useFocusFirstError([rowData]);
+  useFocusFirstError([child]);
 
-  if (!rowData) {
+  if (!child) {
     return <></>;
   }
 
-  const activeEnrollment = (rowData?.enrollments || []).find((e) => !e.exit);
+  const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
 
   const afterDataSave = () => {
     setRefetch((r) => r + 1);
-    const newAlerts: AlertProps[] = [
-      {
-        type: 'success',
-        heading: 'Record updated',
-        text: `Your changes to ${rowData?.firstName} ${rowData?.lastName}'s record have been saved.`,
-      },
-    ];
-    const formStepInfo = formSections.find((s) => s.key === activeTab);
-    const incomplete = formStepInfo?.status(rowData);
-    const formName = formStepInfo?.name.toLowerCase();
-    if (incomplete) {
-      newAlerts.push({
-        type: 'error',
-        heading: 'This record has missing or incorrect info',
-        text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
-      });
-    }
-    setAlerts(newAlerts);
   };
 
   const commonFormProps = {
-    child: rowData,
+    child: child,
     afterDataSave,
     setAlerts,
   };
@@ -95,19 +102,19 @@ const EditRecord: React.FC = () => {
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
             <span className="h2 h2--lighter">Edit record </span>
-            {rowData.firstName} {rowData.lastName}
+            {child.firstName} {child.lastName}
           </h1>
         </div>
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
               <WithdrawRecord
-                childName={rowData.firstName}
+                childName={child.firstName}
                 enrollment={activeEnrollment}
               />
             </>
           )}
-          <DeleteRecord child={rowData} />
+          <DeleteRecord child={child} />
         </div>
       </div>
       <TabNav

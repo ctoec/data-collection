@@ -52,6 +52,7 @@ const Upload: React.FC = () => {
     // then trigger the API request
     if (file && postUpload) {
       const formData = new FormData();
+      formData.set('file', file);
       apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
         accessToken,
         rawBody: true,

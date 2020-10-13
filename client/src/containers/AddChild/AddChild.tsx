@@ -46,7 +46,7 @@ const AddChild: React.FC = () => {
   }, [activeStep, history, steps]);
 
   const { children } = useContext(DataCacheContext);
-  const child = children.records.find((_child) => _child.id === childId);
+  const child = children.getRecordById(childId);
   // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
   const [refetchChild, setRefetchChild] = useState<number>(0);

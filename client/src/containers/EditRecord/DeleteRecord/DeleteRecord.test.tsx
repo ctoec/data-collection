@@ -2,14 +2,7 @@ import React from 'react';
 import { screen } from '@testing-library/dom';
 import { DeleteRecord } from '.';
 import { Child } from '../../../shared/models';
-import {
-  RenderResult,
-  fireEvent,
-  wait,
-  render,
-  act,
-  waitFor,
-} from '@testing-library/react';
+import { RenderResult, fireEvent } from '@testing-library/react';
 import { renderHelper } from '../../../testHelpers';
 import { axe } from 'jest-axe';
 
@@ -19,13 +12,13 @@ const child = {
   lastName: 'Last',
 } as Child;
 
+const expandModal = async (renderResult: RenderResult) => {
+  const deleteButton = renderResult.getByText(/Delete/);
+  fireEvent.click(deleteButton);
+};
+
 describe('EditRecord', () => {
   describe('DeleteRecord', () => {
-    const expandModal = async (renderResult: RenderResult) => {
-      const deleteButton = renderResult.getByText(/Delete/);
-      fireEvent.click(deleteButton);
-    };
-
     it('matches snapshot', async () => {
       await renderHelper(<DeleteRecord child={child} />, {
         before: expandModal,
