@@ -9,17 +9,11 @@ https: nightwatch_config = {
   test_settings: {
     default: {
       desiredCapabilities: {
-        // ADD TO CI
-        'browserstack.user': process.env.BROWSERSTACK_USER,
-        'browserstack.key': process.env.BROWSERSTACK_KEY,
         browserName: 'edge',
       },
     },
     ie: {
       desiredCapabilities: {
-        // ADD TO CI
-        'browserstack.user': process.env.BROWSERSTACK_USER,
-        'browserstack.key': process.env.BROWSERSTACK_KEY,
         browserName: 'internet explorer',
       },
     },
@@ -27,10 +21,11 @@ https: nightwatch_config = {
 };
 
 // Code to copy seleniumhost/port into test settings
-// We're only using one desired capability for now but we will be using more later
 for (var i in nightwatch_config.test_settings) {
   var config = nightwatch_config.test_settings[i];
   config['selenium_host'] = nightwatch_config.selenium.host;
   config['selenium_port'] = nightwatch_config.selenium.port;
+  config.desiredCapabilities['browserstack.user'] = process.env.BROWSERSTACK_USER;
+  config.desiredCapabilities['browserstack.key'] = process.env.BROWSERSTACK_KEY;
 }
 module.exports = nightwatch_config;

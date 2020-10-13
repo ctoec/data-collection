@@ -50,3 +50,4 @@ fawkes-bundle.zip
 
 # Browserstack/nightwatch makes a folder
 /tests_output
+.env
