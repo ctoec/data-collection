@@ -25,10 +25,10 @@ export const accessibilityTestHelper = (
   opts: {
     before?: (_: RenderResult) => Promise<void>;
     wrapInRouter?: boolean;
-  } = {},
-  name?: string
+    name?: string;
+  } = {}
 ) => {
-  it(name || 'passes AXE accessibility checks', async () => {
+  it(opts.name || 'passes AXE accessibility checks', async () => {
     await act(async () => {
       const renderResult = await renderHelper(component, opts);
       const results = await axe(renderResult.container);

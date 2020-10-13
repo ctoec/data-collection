@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
 import { StepList } from '@ctoec/component-library';
-import { Child, Organization } from '../../shared/models';
+import { Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';

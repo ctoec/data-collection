@@ -8,7 +8,6 @@ import {
   FundingSource,
   ReportingPeriod,
   Funding,
-  Enrollment,
 } from '../../../../shared/models';
 import moment from 'moment';
 import { RenderResult } from '@testing-library/react';

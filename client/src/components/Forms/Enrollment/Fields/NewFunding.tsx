@@ -8,8 +8,7 @@ import {
   FormContext,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { ContractSpaceField } from '../Funding/Fields/ContractSpace/ContractSpace';
-import { ReportingPeriodField } from '../Funding/Fields/ReportingPeriod';
+import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
 import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
 import DataCacheContext from '../../../../contexts/DataCacheContext/DataCacheContext';
 

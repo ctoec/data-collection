@@ -3,7 +3,7 @@ import { Form, Button, FormSubmitButton } from '@ctoec/component-library';
 import { ChangeFunding } from '../../../../shared/payloads';
 import { NewFundingField } from '../../../../components/Forms/Enrollment/Fields';
 import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Funding/Fields';
-import { Enrollment, Child } from '../../../../shared/models';
+import { Enrollment } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 

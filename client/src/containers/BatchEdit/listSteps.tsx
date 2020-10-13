@@ -1,15 +1,12 @@
+import { StepProps } from '@ctoec/component-library';
 import React from 'react';
-import { StepProps, Button } from '@ctoec/component-library';
 import {
   EditFormProps,
-  SECTION_KEYS,
   formSections,
-  // ChildIdentifiersForm,
-  // ChildInfoForm,
-  // FamilyAddressForm,
+  SECTION_KEYS,
 } from '../../components/Forms';
-import { EnrollmentFundingForm } from './EnrollmentFunding/Form';
 import { Child } from '../../shared/models';
+import { EnrollmentFundingForm } from './EnrollmentFunding/Form';
 
 const forms = [{ key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm }];
 

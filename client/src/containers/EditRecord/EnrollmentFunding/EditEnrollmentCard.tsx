@@ -10,7 +10,7 @@ import {
   Alert,
   TrashCan,
 } from '@ctoec/component-library';
-import { Enrollment, Child } from '../../shared/models';
+import { Enrollment, Child } from '../../../shared/models';
 import { apiPut, apiDelete } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
@@ -63,11 +63,6 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         console.error('Unable to delete enrollment', err);
       });
   }
-
-  const saveData = async (updatedData: Enrollment) =>
-    apiPut(`enrollments/${enrollmentId}`, updatedData, {
-      accessToken,
-    });
 
   return (
     <Card
@@ -140,8 +135,11 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
           }
           showField={(enrollment, fields) => {
             const [field] = fields;
-            if (field === 'agegroup') return false;
+            // Do not enable user to edit ageGroup
+            if (field === 'ageGroup') return false;
+            // Do not show "new funding" field
             if (field === 'fundings') return false;
+            // Do not enable user to edit site, unless site does not exist
             if (field === 'site' && (enrollment as Enrollment).site)
               return false;
             return true;

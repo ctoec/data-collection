@@ -102,11 +102,7 @@ const BatchEdit: React.FC = () => {
               description: 'Placeholder',
               content: (
                 <BatchEditItemContent
-                  record={
-                    children.records.find(
-                      (child) => child.id === record.id
-                    ) as Child
-                  }
+                  record={children.getRecordById(record.id) as Child}
                   moveNextRecord={moveNextRecord}
                 />
               ),
