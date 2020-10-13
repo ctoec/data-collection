@@ -11,6 +11,7 @@ import {
   ValidateNested,
   IsNotEmpty,
   ValidationError,
+  ValidateIf,
 } from 'class-validator';
 
 import {
@@ -70,19 +71,22 @@ export class Child implements ChildInterface {
     nullable: false,
     transformer: enumTransformer(BirthCertificateType),
   })
-  @ChildBirthCertificateSpecified()
-  birthCertificateType: string;
+  @IsNotEmpty()
+  birthCertificateType: BirthCertificateType;
 
   @Column({ nullable: true })
+  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
   @ChildBirthCertificateSpecified()
   birthTown?: string;
 
   @Column({ nullable: true })
+  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
   @ChildBirthCertificateSpecified()
   birthState?: string;
 
   @Column({ nullable: true })
-  @ChildBirthCertificateSpecified()
+  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
+  @IsNotEmpty()
   birthCertificateId?: string;
 
   @Column({ nullable: true, default: false })

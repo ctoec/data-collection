@@ -43,7 +43,7 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
           ],
           {
             message:
-              'Birth certificate ID, birth town, and birth state are required for US birth certificates.',
+              'Birth certificate ID, birth town, and birth state are required (or must be "Unknown/not collected") for US birth certificates.',
           }
         )
       }
@@ -53,7 +53,7 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
             <RadioButton {...props} text={certificateType} />
           ),
           value: certificateType,
-          expansion: certificateType === 'US birth certificate' && (
+          expansion: certificateType === BirthCertificateType.US && (
             <>
               <div className="mobile-lg:grid-col-12">
                 <BirthCertificateIdField />

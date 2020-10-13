@@ -114,7 +114,7 @@ export class EnrollmentReportRow {
     example: 'US birth certificate',
     section: SECTIONS.CHILD_INFO,
   })
-  birthCertificateType: string = undefined;
+  birthCertificateType: BirthCertificateType = undefined;
 
   @ColumnMetadata({
     formattedName: 'Birth certificate ID #',

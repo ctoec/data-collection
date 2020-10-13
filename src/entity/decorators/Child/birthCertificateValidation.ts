@@ -1,17 +1,13 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { Child } from '../../Child';
 
-const childUSCertificateMessage =
-  'Birth certificate ID, birth town, and birth state are required for US birth certificates.';
-const birthFieldsForUSCert = ['birthCertificateId', 'birthTown', 'birthState'];
+const birthTownMessage =
+  'Birth town must be provided or unknown for US birth certificates.';
+const birthStateMessage =
+  'Birth state must be provided or unknown for US birth certificates.';
 
-function isBirthCertificateValid(child: Child) {
-  return (
-    child.birthCertificateType !== 'US birth certificate' ||
-    birthFieldsForUSCert.every((field) => {
-      return child[field] !== undefined && child[field] !== '';
-    })
-  );
+function isBirthCertificateFieldValid(child: Child, field: string) {
+  return child[field] === null || child[field] !== '';
 }
 
 export function ChildBirthCertificateSpecified(
@@ -22,10 +18,14 @@ export function ChildBirthCertificateSpecified(
       name: 'birthCertificate',
       target: object.constructor,
       propertyName: propertyName,
-      options: { message: childUSCertificateMessage, ...validationOptions },
+      options: {
+        message:
+          propertyName === 'birthTown' ? birthTownMessage : birthStateMessage,
+        ...validationOptions,
+      },
       validator: {
         validate(_, { object: child }) {
-          return isBirthCertificateValid(child as Child);
+          return isBirthCertificateFieldValid(child as Child, propertyName);
         },
       },
     });

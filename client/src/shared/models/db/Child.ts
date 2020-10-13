@@ -3,6 +3,7 @@ import { Gender } from '../';
 
 import { Moment } from 'moment';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
+import { BirthCertificateType } from '../BirthCertificateType';
 
 export interface Child extends ObjectWithValidationErrors {
   id: string;
@@ -12,7 +13,7 @@ export interface Child extends ObjectWithValidationErrors {
   lastName?: string;
   suffix?: string;
   birthdate?: Moment;
-  birthCertificateType: string;
+  birthCertificateType: BirthCertificateType;
   birthTown?: string;
   birthState?: string;
   birthCertificateId?: string;
