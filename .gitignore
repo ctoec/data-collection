@@ -48,5 +48,5 @@ fawkes-bundle.zip
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# Browserstack/nightwatch  makes a folder
+# Browserstack/nightwatch makes a folder
 /tests_output
