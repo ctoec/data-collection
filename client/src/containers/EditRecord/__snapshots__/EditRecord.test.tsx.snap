@@ -1555,11 +1555,11 @@ exports[`EditRecord matches snapshot 1`] = `
             </div>
           </fieldset>
           <fieldset
-            class="usa-fieldset display-inline-block"
-            id="birth-certificate-fields"
+            class="usa-fieldset"
+            id="birth-certificate-fields-fieldset"
           >
             <legend
-              id="fieldset-legend-birth-certificate-fields"
+              id="fieldset-legend-birth-certificate-fields-fieldset"
             >
               <span
                 class="usa-label"
@@ -1567,76 +1567,64 @@ exports[`EditRecord matches snapshot 1`] = `
                 Birth certificate
               </span>
             </legend>
-            <div
-              class="grid-col grid-gap"
-            >
-              <div
-                class="mobile-lg:grid-col-12"
-              >
+            <div>
+              <span>
                 <div
-                  class=" usa-form-group"
+                  class="usa-radio"
                 >
-                  <label
-                    class="usa-label"
-                    for="birthCertificateId"
-                  >
-                    Birth certificate ID # 
-                  </label>
                   <input
-                    aria-required="true"
-                    class="usa-input"
-                    id="birthCertificateId"
-                    type="text"
-                    value=""
+                    class="usa-radio__input"
+                    id="US birth certificate"
+                    name="birth-certificate-fields"
+                    type="radio"
+                    value="US birth certificate"
                   />
-                </div>
-              </div>
-              <div
-                class="display-flex flex-row flex-align-end grid-row grid-gap"
-              >
-                <div
-                  class="mobile-lg:grid-col-8 display-inline-block flex-align-self-end"
-                >
-                  <div
-                    class=" usa-form-group"
+                  <label
+                    class="usa-radio__label"
+                    for="US birth certificate"
                   >
-                    <label
-                      class="usa-label"
-                      for="birthTown"
-                    >
-                      Town 
-                    </label>
-                    <input
-                      aria-required="true"
-                      class="usa-input"
-                      id="birthTown"
-                      type="text"
-                      value=""
-                    />
-                  </div>
+                    US birth certificate
+                  </label>
                 </div>
+              </span>
+              <span>
                 <div
-                  class="mobile-lg:grid-col-4 display-inline-block flex-align-self-end"
+                  class="usa-radio"
                 >
-                  <div
-                    class=" usa-form-group"
+                  <input
+                    class="usa-radio__input"
+                    id="Non-US birth certificate"
+                    name="birth-certificate-fields"
+                    type="radio"
+                    value="Non-US birth certificate"
+                  />
+                  <label
+                    class="usa-radio__label"
+                    for="Non-US birth certificate"
                   >
-                    <label
-                      class="usa-label"
-                      for="birthState"
-                    >
-                      State 
-                    </label>
-                    <input
-                      aria-required="true"
-                      class="usa-input"
-                      id="birthState"
-                      type="text"
-                      value=""
-                    />
-                  </div>
+                    Non-US birth certificate
+                  </label>
                 </div>
-              </div>
+              </span>
+              <span>
+                <div
+                  class="usa-radio"
+                >
+                  <input
+                    class="usa-radio__input"
+                    id="Birth certificate unavailable"
+                    name="birth-certificate-fields"
+                    type="radio"
+                    value="Birth certificate unavailable"
+                  />
+                  <label
+                    class="usa-radio__label"
+                    for="Birth certificate unavailable"
+                  >
+                    Birth certificate unavailable
+                  </label>
+                </div>
+              </span>
             </div>
           </fieldset>
           <input

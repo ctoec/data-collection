@@ -8,7 +8,7 @@ import { useSites } from '../../../../hooks/useSites';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { Child, Enrollment } from '../../../../shared/models';
 
-const enrollmentFields = ['site', 'ageGroup', 'entry', 'fundings'];
+const enrollmentFields = ['site', 'model', 'ageGroup', 'entry', 'fundings'];
 // TODO: check this after debugging enrollment-- can't save partially filled out form
 export const doesEnrollmentFormHaveErrors = (child?: Child) =>
   child?.enrollments?.length

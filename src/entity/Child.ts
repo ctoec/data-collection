@@ -11,12 +11,13 @@ import {
   ValidateNested,
   IsNotEmpty,
   ValidationError,
+  ValidateIf,
 } from 'class-validator';
 
 import {
   Child as ChildInterface,
   Gender,
-  SpecialEducationServicesType,
+  BirthCertificateType,
 } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
@@ -27,6 +28,7 @@ import { momentTransformer, enumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
+import { ChildBirthCertificateSpecified } from './decorators/Child/birthCertificateValidation';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -63,17 +65,28 @@ export class Child implements ChildInterface {
   })
   birthdate?: Moment;
 
+  @Column({
+    type: 'varchar',
+    length: 30,
+    nullable: false,
+    transformer: enumTransformer(BirthCertificateType),
+  })
+  @IsNotEmpty()
+  birthCertificateType: BirthCertificateType;
+
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'Birth town is required' })
+  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
+  @ChildBirthCertificateSpecified()
   birthTown?: string;
 
   @Column({ nullable: true })
-  // TODO: do we account for birth certs from outside the US?
-  @Length(2)
+  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
+  @ChildBirthCertificateSpecified()
   birthState?: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'Birth certificate ID is required' })
+  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
+  @IsNotEmpty()
   birthCertificateId?: string;
 
   @Column({ nullable: true, default: false })

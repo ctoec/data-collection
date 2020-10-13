@@ -5,6 +5,7 @@ import {
   FundingSource,
   FundingTime,
   CareModel,
+  BirthCertificateType,
 } from '../../client/src/shared/models';
 
 import {
@@ -102,6 +103,18 @@ export class EnrollmentReportRow {
     section: SECTIONS.CHILD_INFO,
   })
   birthdate?: Moment = moment.invalid();
+
+  @ColumnMetadata({
+    formattedName: 'Birth certificate type',
+    required: REQUIRED,
+    definition: 'Type of birth certificate based on country of issue',
+    reason:
+      'Used for a variety of reporting; allows linking to a variety of data sets, including SASID-backed data.',
+    format: Object.values(BirthCertificateType).join(', '),
+    example: 'US birth certificate',
+    section: SECTIONS.CHILD_INFO,
+  })
+  birthCertificateType: BirthCertificateType = undefined;
 
   @ColumnMetadata({
     formattedName: 'Birth certificate ID #',
