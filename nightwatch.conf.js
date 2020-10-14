@@ -7,6 +7,7 @@ https: nightwatch_config = {
     host: 'hub-cloud.browserstack.com',
     port: 80,
   },
+  launch_url: 'https://staging.ece-fawkes.ctoecskylight.com',
   test_settings: {
     default: {
       desiredCapabilities: {
@@ -19,6 +20,7 @@ https: nightwatch_config = {
       },
     },
     ie: {
+      // TODO: make app work in ie and add ie to test command in package json
       desiredCapabilities: {
         browserName: 'internet explorer',
       },

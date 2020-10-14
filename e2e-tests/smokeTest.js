@@ -1,10 +1,10 @@
 module.exports = {
   '@tags': ['smoke-test'],
-  'smoke-test': function (browser) {
-    browser
-      .url('https://staging.ece-fawkes.ctoecskylight.com')
-      .waitForElementVisible('body')
-      .assert.titleContains('Upload your enrollment data')
-      .end();
+  'smoke-test': async function (browser) {
+    await browser.init();
+
+    await browser.waitForElementVisible('body');
+
+    browser.assert.titleContains('Upload your enrollment data').end();
   },
 };

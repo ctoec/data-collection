@@ -1,20 +1,22 @@
 module.exports = {
   '@tags': ['login'],
-  login: function (browser) {
-    browser
-      .url('https://staging.ece-fawkes.ctoecskylight.com')
-      .useXpath()
-      .click("//*/a[contains(@href,'/login')]")
-      .useCss()
-      .waitForElementVisible('body')
-      .assert.titleContains('IdentityServer4')
-      .setValue('#Username', 'voldemort')
-      .setValue('#Password', 'thechosenone')
-      .useXpath()
-      .click("//*/button[contains(@value,'login')]")
-      .useCss()
-      .waitForElementVisible('body')
-      .assert.titleContains('Getting started')
-      .end();
+  login: async function (browser) {
+    // Initializes with the launch_url value set in config
+    await browser.init();
+
+    // Click login from ECE Reporter
+    await browser.click('xpath', "//*/a[contains(@href,'/login')]");
+    await browser.waitForElementVisible('css selector', 'body');
+    browser.assert.title('IdentityServer4');
+
+    // Enter username and password
+    await browser.setValue('css-selector', '#Username', 'voldemort');
+    await browser.setValue('css-selector', '#Password', 'thechosenone');
+    await browser.click('xpath', "//*/button[contains(@value,'login')]");
+
+    // Check to see if we logged in and the title has been changed
+    await browser.waitForElementVisible('body');
+    browser.assert.title('Getting started');
+    browser.end();
   },
 };
