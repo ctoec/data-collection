@@ -98,23 +98,29 @@ describe('BatchEdit', () => {
       />
     );
 
-    it('only shows forms for families with validationErrors in their address fields', async () => {
-      const renderResult = await renderHelper(
-        <FamilyAddressForm
-          child={child}
-          afterSaveSuccess={jest.fn}
-          setAlerts={jest.fn()}
-          showField={jest.fn()}
-        />
-      );
+    /**
+     * Commented out because there is no "Save" button text for forms that aren't
+     * EnrollmentFunding. The save thing was residual from earlier BatchEdit
+     * testing.
+     * TODO: Check to make sure this is cool to cut out.
+     */
+    // it('only shows forms for families with validationErrors in their address fields', async () => {
+    //   const renderResult = await renderHelper(
+    //     <FamilyAddressForm
+    //       child={child}
+    //       afterSaveSuccess={jest.fn}
+    //       setAlerts={jest.fn()}
+    //       showField={jest.fn()}
+    //     />
+    //   );
 
-      // Assert there are only forms for objects with validation errors:
-      // 1 enrollment and 1 funding.
-      //
-      // For now, we can only deduce presence of forms based on their submit
-      // buttons (TODO: add some headings to the forms?)
-      const formSubmitButtons = await renderResult.findAllByText('Save');
-      expect(formSubmitButtons).toHaveLength(2);
-    });
+    //   // Assert there are only forms for objects with validation errors:
+    //   // 1 enrollment and 1 funding.
+    //   //
+    //   // For now, we can only deduce presence of forms based on their submit
+    //   // buttons (TODO: add some headings to the forms?)
+    //   const formSubmitButtons = await renderResult.findAllByText('Save');
+    //   expect(formSubmitButtons).toHaveLength(2);
+    // });
   });
 });
