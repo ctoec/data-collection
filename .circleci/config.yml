@@ -53,7 +53,7 @@ jobs:
           command: npm i --package-lock-only && npm audit
       - run:
           name: Run npm audit for front-end dependencies
-          command: npm i --package-lock-only && npm audit
+          command: cd client && npm i --package-lock-only && npm audit
       - run:
           name: Run back-end tests
           command: yarn run test
