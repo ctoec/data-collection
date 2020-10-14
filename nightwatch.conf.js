@@ -1,6 +1,7 @@
 // nightwatchjs.org/gettingstarted/configuration/
 
 https: nightwatch_config = {
+  src_folders: ['e2e-tests'],
   selenium: {
     start_process: false,
     host: 'hub-cloud.browserstack.com',
@@ -8,6 +9,11 @@ https: nightwatch_config = {
   },
   test_settings: {
     default: {
+      desiredCapabilities: {
+        browserName: 'chrome',
+      },
+    },
+    edge: {
       desiredCapabilities: {
         browserName: 'edge',
       },
