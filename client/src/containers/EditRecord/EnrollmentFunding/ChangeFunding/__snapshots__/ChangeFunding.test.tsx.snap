@@ -1,0 +1,605 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end funding 1`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <h3>
+        End current funding
+      </h3>
+      <form
+        class="usa-form usa-form"
+        id="change-funding-form"
+      >
+        <div
+          class="usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="last-reporting-period"
+          >
+            Last reporting period for current CDC - Child Day Care - undefined funding
+          </label>
+          <select
+            aria-required="true"
+            class="usa-select"
+            id="last-reporting-period"
+            name="last-reporting-period"
+          >
+            <option
+              value=""
+            >
+              - Select -
+            </option>
+          </select>
+        </div>
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Cancel
+        </button>
+        <input
+          class="usa-button"
+          type="submit"
+          value="End current funding"
+        />
+      </form>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled margin-right-4"
+            type="button"
+          >
+            End current funding
+          </button>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Start new funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end funding 2`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <h3>
+        End current funding
+      </h3>
+      <form
+        class="usa-form usa-form"
+        id="change-funding-form"
+      >
+        <div
+          class="usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="last-reporting-period"
+          >
+            Last reporting period for current CDC - Child Day Care - undefined funding
+          </label>
+          <select
+            aria-required="true"
+            class="usa-select"
+            id="last-reporting-period"
+            name="last-reporting-period"
+          >
+            <option
+              value=""
+            >
+              - Select -
+            </option>
+          </select>
+        </div>
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Cancel
+        </button>
+        <input
+          class="usa-button"
+          type="submit"
+          value="End current funding"
+        />
+      </form>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled margin-right-4"
+            type="button"
+          >
+            End current funding
+          </button>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Start new funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start funding 1`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <h3>
+        Change funding
+      </h3>
+      <form
+        class="usa-form usa-form"
+        id="change-funding-form"
+      >
+        <fieldset
+          class="usa-fieldset"
+          id="funding-source-fieldset"
+        >
+          <legend
+            id="fieldset-legend-funding-source-fieldset"
+          >
+            <span
+              class="usa-label"
+            >
+              Funding source options
+            </span>
+          </legend>
+          <div>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  checked=""
+                  class="usa-radio__input"
+                  id="Unfunded"
+                  name="funding-source"
+                  type="radio"
+                  value="Unfunded"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Unfunded"
+                >
+                  Unfunded
+                </label>
+              </div>
+            </span>
+          </div>
+        </fieldset>
+        <div
+          class="usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="last-reporting-period"
+          >
+            Last reporting period for current CDC - Child Day Care - undefined funding
+          </label>
+          <select
+            aria-required="false"
+            class="usa-select"
+            id="last-reporting-period"
+            name="last-reporting-period"
+          >
+            <option
+              value=""
+            >
+              - Select -
+            </option>
+          </select>
+        </div>
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Cancel
+        </button>
+        <input
+          class="usa-button"
+          type="submit"
+          value="Change current funding"
+        />
+      </form>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled margin-right-4"
+            type="button"
+          >
+            End current funding
+          </button>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Start new funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start funding 2`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <h3>
+        Change funding
+      </h3>
+      <form
+        class="usa-form usa-form"
+        id="change-funding-form"
+      >
+        <fieldset
+          class="usa-fieldset"
+          id="funding-source-fieldset"
+        >
+          <legend
+            id="fieldset-legend-funding-source-fieldset"
+          >
+            <span
+              class="usa-label"
+            >
+              Funding source options
+            </span>
+          </legend>
+          <div>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  checked=""
+                  class="usa-radio__input"
+                  id="Unfunded"
+                  name="funding-source"
+                  type="radio"
+                  value="Unfunded"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Unfunded"
+                >
+                  Unfunded
+                </label>
+              </div>
+            </span>
+          </div>
+        </fieldset>
+        <div
+          class="usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="last-reporting-period"
+          >
+            Last reporting period for current CDC - Child Day Care - undefined funding
+          </label>
+          <select
+            aria-required="false"
+            class="usa-select"
+            id="last-reporting-period"
+            name="last-reporting-period"
+          >
+            <option
+              value=""
+            >
+              - Select -
+            </option>
+          </select>
+        </div>
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Cancel
+        </button>
+        <input
+          class="usa-button"
+          type="submit"
+          value="Change current funding"
+        />
+      </form>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled margin-right-4"
+            type="button"
+          >
+            End current funding
+          </button>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Start new funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without funding 1`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <h3>
+        Change funding
+      </h3>
+      <form
+        class="usa-form usa-form"
+        id="change-funding-form"
+      >
+        <fieldset
+          class="usa-fieldset"
+          id="funding-source-fieldset"
+        >
+          <legend
+            id="fieldset-legend-funding-source-fieldset"
+          >
+            <span
+              class="usa-label"
+            >
+              Funding source options
+            </span>
+          </legend>
+          <div>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  checked=""
+                  class="usa-radio__input"
+                  id="Unfunded"
+                  name="funding-source"
+                  type="radio"
+                  value="Unfunded"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Unfunded"
+                >
+                  Unfunded
+                </label>
+              </div>
+            </span>
+          </div>
+        </fieldset>
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Cancel
+        </button>
+        <input
+          class="usa-button"
+          type="submit"
+          value="Change current funding"
+        />
+      </form>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Start new funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without funding 2`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <h3>
+        Change funding
+      </h3>
+      <form
+        class="usa-form usa-form"
+        id="change-funding-form"
+      >
+        <fieldset
+          class="usa-fieldset"
+          id="funding-source-fieldset"
+        >
+          <legend
+            id="fieldset-legend-funding-source-fieldset"
+          >
+            <span
+              class="usa-label"
+            >
+              Funding source options
+            </span>
+          </legend>
+          <div>
+            <span>
+              <div
+                class="usa-radio"
+              >
+                <input
+                  checked=""
+                  class="usa-radio__input"
+                  id="Unfunded"
+                  name="funding-source"
+                  type="radio"
+                  value="Unfunded"
+                />
+                <label
+                  class="usa-radio__label"
+                  for="Unfunded"
+                >
+                  Unfunded
+                </label>
+              </div>
+            </span>
+          </div>
+        </fieldset>
+        <button
+          class="usa-button usa-button--outline"
+          type="button"
+        >
+          Cancel
+        </button>
+        <input
+          class="usa-button"
+          type="submit"
+          value="Change current funding"
+        />
+      </form>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Start new funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;

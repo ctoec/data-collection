@@ -10,7 +10,7 @@ type RedeterminationFormProps = {
   familyId: number;
   setIsNew: () => void;
   hideForm: () => void;
-  afterDataSave: () => void;
+  afterSaveSuccess: () => void;
   setAlerts: EditFormProps['setAlerts'];
 };
 
@@ -23,7 +23,7 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
   familyId,
   setIsNew,
   hideForm,
-  afterDataSave,
+  afterSaveSuccess,
   setAlerts,
 }) => {
   // Set up form state
@@ -43,7 +43,7 @@ export const RedeterminationForm: React.FC<RedeterminationFormProps> = ({
     })
       .then(() => {
         setIsNew();
-        afterDataSave();
+        afterSaveSuccess();
         hideForm();
       })
       .catch((err) => {

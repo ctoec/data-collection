@@ -9,10 +9,11 @@ import {
 } from '@ctoec/component-library';
 import { Site, Enrollment } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
+import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 
 type SiteProps<T> = {
   sites: Site[];
-  accessor: (_: TObjectDriller<T>) => TObjectDriller<Site>;
+  enrollmentAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Enrollment>;
 };
 
 /**
@@ -20,11 +21,11 @@ type SiteProps<T> = {
  */
 export const SiteField = <T extends Enrollment | ChangeEnrollment>({
   sites,
-  accessor,
+  enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: SiteProps<T>) => {
   return (
     <FormField<T, RadioButtonGroupProps, number | null>
-      getValue={(data) => accessor(data).at('id')}
+      getValue={(data) => enrollmentAccessor(data).at('site').at('id')}
       parseOnChangeEvent={(e: React.ChangeEvent<any>) =>
         parseInt(e.target.value) || null
       }
@@ -39,6 +40,13 @@ export const SiteField = <T extends Enrollment | ChangeEnrollment>({
         ),
         value: `${site.id}`,
       }))}
+      status={(data, _, props) =>
+        getValidationStatusForField(
+          enrollmentAccessor(data),
+          enrollmentAccessor(data).at('site').path,
+          props
+        )
+      }
     />
   );
 };

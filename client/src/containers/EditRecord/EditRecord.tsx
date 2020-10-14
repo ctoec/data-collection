@@ -4,7 +4,7 @@ import { AlertProps, TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
-import { WithdrawRecord } from './WithdrawRecord';
+import { WithdrawRecord } from './WithdrawRecord/WithdrawRecord';
 import { DeleteRecord } from './DeleteRecord';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
@@ -62,7 +62,7 @@ const EditRecord: React.FC = () => {
           },
         ];
         const formStepInfo = formSections.find((s) => s.key === activeTab);
-        const incomplete = formStepInfo?.status(updatedChild);
+        const incomplete = formStepInfo?.hasError(updatedChild);
         const formName = formStepInfo?.name.toLowerCase();
         if (incomplete) {
           newAlerts.push({
@@ -84,13 +84,13 @@ const EditRecord: React.FC = () => {
 
   const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
 
-  const afterDataSave = () => {
+  const afterSaveSuccess = () => {
     setRefetch((r) => r + 1);
   };
 
   const commonFormProps = {
-    child: child,
-    afterDataSave,
+    child,
+    afterSaveSuccess,
     setAlerts,
   };
 

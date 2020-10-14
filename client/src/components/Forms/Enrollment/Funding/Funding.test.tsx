@@ -1,20 +1,19 @@
 import React from 'react';
-import moment from 'moment';
-import { RenderResult, fireEvent, wait } from '@testing-library/react';
-import { EnrollmentFundingForm } from './Form';
 import {
   snapshotTestHelper,
   accessibilityTestHelper,
-} from '../../../testHelpers';
+} from '../../../../testHelpers';
+import { FundingForm } from './Form';
 import {
+  Family,
+  Organization,
   Child,
   Site,
   FundingSource,
   FundingTime,
   Funding,
-  Family,
-  Organization,
-} from '../../../shared/models';
+} from '../../../../shared/models';
+import moment from 'moment';
 
 const child = {
   name: 'First Last',
@@ -51,40 +50,28 @@ const child = {
   ],
 };
 
-jest.mock('../../../utils/api');
-import * as api from '../../../utils/api';
-const apiMock = api as jest.Mocked<typeof api>;
-describe('EditRecord', () => {
-  describe('EnrollmentFunding', () => {
-    beforeAll(() =>
-      apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([])))
-    );
-
-    const waitExpandChangeEnrollment = async (renderResult: RenderResult) => {
-      const changeEnrollmentButton = await renderResult.findByText(
-        'Change enrollment'
-      );
-      fireEvent.click(changeEnrollmentButton);
-      await wait();
-    };
-
+describe('Forms', () => {
+  describe('Funding', () => {
     snapshotTestHelper(
-      <EnrollmentFundingForm
+      <FundingForm
+        id={'id'}
         child={child}
-        afterDataSave={jest.fn()}
+        enrollmentId={2}
+        fundingId={1}
+        afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />,
-      { before: waitExpandChangeEnrollment }
-    );
-    accessibilityTestHelper(
-      <EnrollmentFundingForm
-        child={child}
-        afterDataSave={jest.fn()}
-        setAlerts={jest.fn()}
-      />,
-      { before: waitExpandChangeEnrollment }
+      />
     );
 
-    afterAll(() => jest.clearAllMocks());
+    accessibilityTestHelper(
+      <FundingForm
+        id={'id'}
+        child={child}
+        enrollmentId={2}
+        fundingId={1}
+        afterSaveSuccess={jest.fn()}
+        setAlerts={jest.fn()}
+      />
+    );
   });
 });

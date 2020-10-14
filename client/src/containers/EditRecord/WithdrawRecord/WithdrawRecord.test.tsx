@@ -4,7 +4,7 @@ import {
   accessibilityTestHelper,
   renderHelper,
 } from '../../../testHelpers';
-import { WithdrawRecord } from '.';
+import { WithdrawRecord } from './WithdrawRecord';
 import { Enrollment } from '../../../shared/models';
 import { RenderResult, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
@@ -21,11 +21,7 @@ describe('EditRecord', () => {
     };
     it('matches snapshot', async () => {
       await renderHelper(
-        <WithdrawRecord
-          childName="Name"
-          enrollment={enrollment}
-          reportingPeriods={[]}
-        />,
+        <WithdrawRecord childName="Name" enrollment={enrollment} />,
         { before: expandModal }
       );
 
@@ -35,11 +31,7 @@ describe('EditRecord', () => {
 
     it('passes AXE accessibility checks', async () => {
       await renderHelper(
-        <WithdrawRecord
-          childName="Name"
-          enrollment={enrollment}
-          reportingPeriods={[]}
-        />,
+        <WithdrawRecord childName="Name" enrollment={enrollment} />,
         { before: expandModal }
       );
 

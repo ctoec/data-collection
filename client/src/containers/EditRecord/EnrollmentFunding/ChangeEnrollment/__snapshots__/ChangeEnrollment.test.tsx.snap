@@ -1,10 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
+exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
 <DocumentFragment>
-  <h2>
-    Enrollment and funding
-  </h2>
   <div
     class="oec-card"
   >
@@ -1543,6 +1540,29 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         <h3>
           Previous enrollment
         </h3>
+        <div
+          class="usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="last-reporting-period"
+          >
+            Last reporting period for current CDC - Child Day Care - undefined funding
+          </label>
+          <select
+            aria-required="false"
+            class="usa-select"
+            id="last-reporting-period"
+            name="last-reporting-period"
+          >
+            <option
+              value=""
+            >
+              - Select -
+            </option>
+          </select>
+        </div>
+        )
         <button
           class="usa-button usa-button--outline"
           type="button"
@@ -1556,362 +1576,6 @@ exports[`EditRecord EnrollmentFunding matches snapshot 1`] = `
         />
       </form>
     </div>
-  </div>
-  <h3>
-    Current enrollment
-  </h3>
-  <div
-    class="oec-card oec-card--primary"
-  >
-    <div
-      class="oec-card-cell"
-    >
-      <div
-        class="display-flex flex-justify"
-      >
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Site
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            Site A
-          </p>
-        </div>
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Model type
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            <span
-              class="oec-inline-icon oec-inline-icon--incomplete"
-            >
-              <span
-                class="usa-sr-only"
-              >
-                (incomplete)
-              </span>
-            </span>
-          </p>
-        </div>
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Age group
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            <span
-              class="oec-inline-icon oec-inline-icon--incomplete"
-            >
-              <span
-                class="usa-sr-only"
-              >
-                (incomplete)
-              </span>
-            </span>
-          </p>
-        </div>
-        <div
-          class="flex-2"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Enrollment dates
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            09/03/2020 - present
-          </p>
-        </div>
-        <div
-          class="display-flex align-center flex-space-between"
-        >
-          <div
-            class="display-flex align-center margin-right-2"
-          >
-            <button
-              class="usa-button usa-button--unstyled"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon"
-              >
-                Edit
-              </span>
-            </button>
-          </div>
-          <div
-            class="display-flex align-center margin-right-2"
-          >
-            <button
-              class="usa-button usa-button--unstyled"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon"
-              >
-                Delete
-              </span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class=""
-    />
-  </div>
-  <div
-    class="oec-card"
-  >
-    <div
-      class="oec-card-cell"
-    >
-      <div
-        class="display-flex flex-column flex-align-end"
-      >
-        <div>
-          <button
-            class="usa-button usa-button--unstyled"
-            type="button"
-          >
-            Start new funding
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      class=""
-    />
-  </div>
-  <h3>
-    Past enrollments
-  </h3>
-  <div
-    class="oec-card oec-card--secondary"
-  >
-    <div
-      class="oec-card-cell"
-    >
-      <div
-        class="display-flex flex-justify"
-      >
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Site
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            Site B
-          </p>
-        </div>
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Model type
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            <span
-              class="oec-inline-icon oec-inline-icon--incomplete"
-            >
-              <span
-                class="usa-sr-only"
-              >
-                (incomplete)
-              </span>
-            </span>
-          </p>
-        </div>
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Age group
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            <span
-              class="oec-inline-icon oec-inline-icon--incomplete"
-            >
-              <span
-                class="usa-sr-only"
-              >
-                (incomplete)
-              </span>
-            </span>
-          </p>
-        </div>
-        <div
-          class="flex-2"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Enrollment dates
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            09/03/2019 - 08/01/2020
-          </p>
-        </div>
-        <div
-          class="display-flex align-center flex-space-between"
-        >
-          <div
-            class="display-flex align-center margin-right-2"
-          >
-            <button
-              class="usa-button usa-button--unstyled"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon"
-              >
-                Edit
-              </span>
-            </button>
-          </div>
-          <div
-            class="display-flex align-center margin-right-2"
-          >
-            <button
-              class="usa-button usa-button--unstyled"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon"
-              >
-                Delete
-              </span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class=""
-    />
-  </div>
-  <div
-    class="oec-card oec-card--secondary oec-card--borderless"
-  >
-    <div
-      class="oec-card-cell"
-    >
-      <div
-        class="display-flex flex-justify"
-      >
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Funding
-          </p>
-          <span
-            class="usa-tag usa-tag--no-transform margin-top-0"
-          >
-            CDC - Child Day Care
-          </span>
-        </div>
-        <div
-          class="flex-1"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Space type
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            Full time
-          </p>
-        </div>
-        <div
-          class="flex-2"
-        >
-          <p
-            class="margin-bottom-0"
-          >
-            Reporting periods
-          </p>
-          <p
-            class="text-bold margin-top-0"
-          >
-            September 2019 - July 2020
-          </p>
-        </div>
-        <div
-          class="display-flex align-center flex-space-between"
-        >
-          <div
-            class="display-flex align-center margin-right-2"
-          >
-            <button
-              class="usa-button usa-button--unstyled"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon"
-              >
-                Edit
-              </span>
-            </button>
-          </div>
-          <div
-            class="display-flex align-center margin-right-2"
-          >
-            <button
-              class="usa-button usa-button--unstyled"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon"
-              >
-                Delete
-              </span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class=""
-    />
   </div>
 </DocumentFragment>
 `;

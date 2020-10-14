@@ -26,7 +26,7 @@ import { propertyDateSorter } from '../utils/propertyDateSorter';
  */
 export const getChildren = async (user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
-  return await getManager().find(Child, {
+  return getManager().find(Child, {
     relations: [
       'enrollments',
       'enrollments.site',

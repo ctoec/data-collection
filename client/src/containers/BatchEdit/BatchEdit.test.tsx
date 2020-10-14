@@ -3,6 +3,7 @@ import BatchEdit from './BatchEdit';
 import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 import DataCacheContext, {
   ReadOnlyDataCache,
+  ReadWriteDataCache,
 } from '../../contexts/DataCacheContext/DataCacheContext';
 import {
   Child,
@@ -21,61 +22,57 @@ const children: Child[] = [
     birthdate: moment.utc('2019-06-01', 'YYYY-MM-DD'),
     family: {} as Family,
     validationErrors: [{} as ValidationError],
-  },
+  } as Child,
 ];
+
+const cacheContext = {
+  children: {
+    records: [],
+    loading: false,
+    refetch: jest.fn(),
+    addOrUpdateRecord: jest.fn(),
+    getRecordById: jest.fn(),
+    removeRecordById: jest.fn(),
+  },
+  fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
+  reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
+};
 
 describe('BatchEdit', () => {
   snapshotTestHelper(
-    <DataCacheContext.Provider
-      value={{
-        children: {
-          records: [],
-          loading: false,
-          addOrUpdateRecord: jest.fn(),
-          refetch: jest.fn(),
-        },
-        reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-        fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
-      }}
-    >
+    <DataCacheContext.Provider value={cacheContext}>
       <BatchEdit />
     </DataCacheContext.Provider>,
-    { wrapInRouter: true },
-    'matches snapshot when no records are missing info'
+    {
+      wrapInRouter: true,
+      name: 'matches snapshot when no records are missing info',
+    }
   );
 
   snapshotTestHelper(
     <DataCacheContext.Provider
       value={{
+        ...cacheContext,
         children: {
           records: children,
           loading: false,
           addOrUpdateRecord: jest.fn(),
+          getRecordById: () => children[0],
           refetch: jest.fn(),
+          removeRecordById: jest.fn(),
         },
-        reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-        fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
       }}
     >
       <BatchEdit />
     </DataCacheContext.Provider>,
-    { wrapInRouter: true },
-    'matches snapshot when >0 records are missing info'
+    {
+      wrapInRouter: true,
+      name: 'matches snapshot when >0 records are missing info',
+    }
   );
 
   accessibilityTestHelper(
-    <DataCacheContext.Provider
-      value={{
-        children: {
-          records: [],
-          loading: false,
-          addOrUpdateRecord: jest.fn(),
-          refetch: jest.fn(),
-        },
-        reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-        fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
-      }}
-    >
+    <DataCacheContext.Provider value={cacheContext}>
       <BatchEdit />
     </DataCacheContext.Provider>,
     { wrapInRouter: true }

@@ -16,7 +16,7 @@ import { useValidationErrors } from '../../../../hooks/useValidationErrors';
  */
 export const NewFamilyIncome: React.FC<EditFormProps> = ({
   child: inputChild,
-  afterDataSave,
+  afterSaveSuccess,
   setAlerts,
   hideErrorsOnFirstLoad = false,
 }) => {
@@ -49,7 +49,7 @@ export const NewFamilyIncome: React.FC<EditFormProps> = ({
       accessToken,
       jsonParse: false,
     })
-      .then(afterDataSave)
+      .then(afterSaveSuccess)
       .catch((err) => {
         console.log('Unable to create income determination: ', err);
         setAlerts([
