@@ -1,11 +1,14 @@
 import { getManager } from 'typeorm';
 import { Organization, Site, FundingSpace, ReportingPeriod } from '../entity';
 import { AgeGroup, FundingSource } from '../../client/src/shared/models';
-import { reportingPeriods } from './reportingPeriods';
-import moment from 'moment';
+import {
+  getReportingPeriodFromDates,
+  reportingPeriods,
+} from './reportingPeriods';
 import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
 import { organizations } from './organizations';
 import { sitesByOrgName } from './sites';
+import { getFakeFundingSpaces } from './fundingSpace';
 
 export const initialize = async () => {
   const qb = getManager().createQueryBuilder();
@@ -38,28 +41,9 @@ export const initialize = async () => {
       );
 
       if (!(await getManager().find(FundingSpace)).length) {
-        let fundingSpacesToAdd = [];
-        await Promise.all(
-          Object.values(AgeGroup).map((ageGroup) => {
-            for (const source of Object.values(FundingSource)) {
-              const match = FUNDING_SOURCE_TIMES.find((fst) =>
-                fst.fundingSources.includes(source)
-              );
-
-              if (match) {
-                const spaces = match.fundingTimes.map((fundingTime) => {
-                  return getManager().create(FundingSpace, {
-                    ageGroup,
-                    capacity: 10,
-                    source,
-                    time: fundingTime.value,
-                    organization,
-                  });
-                });
-
-                fundingSpacesToAdd = fundingSpacesToAdd.concat(spaces);
-              }
-            }
+        const fundingSpacesToAdd = await Promise.all(
+          getFakeFundingSpaces(organization).map((fs) => {
+            return getManager().create(FundingSpace, fs);
           })
         );
         await getManager().save(fundingSpacesToAdd);
@@ -76,13 +60,10 @@ export const initialize = async () => {
       FundingSource.SS,
     ]) {
       for (let dates of reportingPeriods) {
-        const reportingPeriod = getManager().create(ReportingPeriod, {
-          type: fundingSource,
-          period: moment.utc(dates[0]),
-          periodStart: moment.utc(dates[1]),
-          periodEnd: moment.utc(dates[2]),
-          dueAt: moment.utc(dates[3]),
-        });
+        const reportingPeriod = getManager().create(
+          ReportingPeriod,
+          getReportingPeriodFromDates(fundingSource, dates)
+        );
         reportingPeriodsToAdd.push(reportingPeriod);
       }
     }

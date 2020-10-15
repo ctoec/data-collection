@@ -8,7 +8,7 @@ import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/hom
 import UserContext from '../../contexts/UserContext/UserContext';
 
 import { MailToLink } from '../../components/MailToLink';
-import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
+import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const Home: React.FC = () => {
@@ -105,8 +105,11 @@ const Home: React.FC = () => {
             </div>
             <div>
               <p className="text-bold">Download the data collection template</p>
-              <TemplateDownloadLink type="xlsx" />
-              <TemplateDownloadLink type="csv" />
+              <CSVExcelDownloadButton
+                fileType="xlsx"
+                whichDownload={'template'}
+              />
+              <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
             </div>
           </div>
         </div>

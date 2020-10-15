@@ -2,8 +2,8 @@ import React from 'react';
 import { MailToLink } from '../../components/MailToLink';
 import { Button, Alert } from '@ctoec/component-library';
 import { Link } from 'react-router-dom';
-import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 
 const GettingStarted: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -42,9 +42,14 @@ const GettingStarted: React.FC = () => {
             Use one of these templates to enter your enrollment data for all
             state-funded children.
           </p>
-          <TemplateDownloadLink type="xlsx" />
-          <TemplateDownloadLink type="csv" />
+          <CSVExcelDownloadButton fileType="xlsx" whichDownload={'template'} />
+          <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
         </div>
+      </div>
+      <div className="display-block">
+        <p>You can see a completed example template here:</p>
+        <CSVExcelDownloadButton fileType="xlsx" whichDownload={'example'} />
+        <CSVExcelDownloadButton fileType="csv" whichDownload="example" />{' '}
       </div>
       <div className="grid-row margin-top-2">
         <Button text="Go to file upload" href="/upload" />

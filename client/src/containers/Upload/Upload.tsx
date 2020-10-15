@@ -10,7 +10,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { CheckReplaceData } from './CheckReplaceData';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
-import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
+import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -123,8 +123,11 @@ const Upload: React.FC = () => {
               <p className="margin-bottom-2 text-bold">
                 Download the data collection template
               </p>
-              <TemplateDownloadLink type="xlsx" />
-              <TemplateDownloadLink type="csv" />
+              <CSVExcelDownloadButton
+                fileType="xlsx"
+                whichDownload={'template'}
+              />
+              <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
             </div>
           }
         />
