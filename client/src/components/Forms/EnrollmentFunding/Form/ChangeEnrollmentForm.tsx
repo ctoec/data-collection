@@ -20,6 +20,10 @@ import {
   NewFundingField,
   CareModelField,
 } from '../Fields';
+import {
+  getValidationStatusForField,
+  getValidationStatusForFields,
+} from '../../../../utils/getValidationStatus';
 
 type ChangeEnrollmentFormProps = {
   childName: string;
@@ -55,6 +59,14 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   useEffect(() => {
     if (closeCard) setCloseCard(false);
   });
+
+  const newEnrollment = {} as Enrollment;
+
+  function getEnrollmentFieldStatus(field: string, label: string) {
+    return getValidationStatusForFields(newEnrollment, [field], {
+      message: `${label} is required for OEC reporting.`,
+    });
+  }
 
   const onSubmit = (changeEnrollment: ChangeEnrollment) => {
     setLoading(true);
@@ -101,12 +113,13 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
         <Form<ChangeEnrollment>
           id="change-enrollment-form"
           className="usa-form"
-          data={{ newEnrollment: {} as Enrollment }}
+          data={{ newEnrollment }}
           onSubmit={onSubmit}
         >
           <SiteField<ChangeEnrollment>
             sites={sites}
             accessor={(data) => data.at('newEnrollment').at('site')}
+            status={() => getEnrollmentFieldStatus('site', 'Site')}
           />
           <EnrollmentStartDateField<ChangeEnrollment>
             accessor={(data) => data.at('newEnrollment').at('entry')}
@@ -116,6 +129,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           />
           <AgeGroupField<ChangeEnrollment>
             accessor={(data) => data.at('newEnrollment').at('ageGroup')}
+            status={() => getEnrollmentFieldStatus('ageGroup', 'Age Group')}
           />
           <NewFundingField<ChangeEnrollment>
             fundingAccessor={(data) =>

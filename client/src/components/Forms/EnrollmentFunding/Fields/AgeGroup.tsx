@@ -9,15 +9,19 @@ import {
 } from '@ctoec/component-library';
 import { AgeGroup, Enrollment } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
+import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
+import { FieldStatusFunc } from '@ctoec/component-library/dist/components/Form/FormStatusFunc';
 
 type AgeGroupProps<T> = {
   accessor: (_: TObjectDriller<T>) => TObjectDriller<AgeGroup>;
+  status?: FieldStatusFunc<T, any>;
 };
 /**
  * Component for updating an enrollment's age group.
  */
 export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
   accessor,
+  status = () => undefined,
 }: AgeGroupProps<T>) => {
   return (
     <FormField<T, RadioButtonGroupProps, AgeGroup | null>
@@ -34,6 +38,7 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
         ),
         value: ageGroup,
       }))}
+      status={status}
     />
   );
 };
