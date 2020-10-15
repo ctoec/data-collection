@@ -1,4 +1,5 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
+import pluralize from 'pluralize';
 import { getConnection } from 'typeorm';
 import moment from 'moment';
 import {
@@ -43,10 +44,48 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   const { headers, data } = parseSheet(sheet, objectProperties);
 
   // Array comparison was returning false even when the strings matched
-  if (!expectedHeaders.every((header, idx) => header === headers[idx])) {
-    throw new BadRequestError(
-      "The columns in your uploaded file don't match our template. Use the newest template without changing the column order."
+  if (
+    !expectedHeaders.every((header, idx) => header === headers[idx]) &&
+    expectedHeaders.length == headers.length
+  ) {
+    const headersSet = new Set(headers);
+    const expectedHeadersSet = new Set(expectedHeaders);
+    const missingHeaders = expectedHeaders.filter(
+      (x) => !headersSet.has(x) && x
     );
+    const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x));
+
+    let errorMessage = '';
+    if (!!missingHeaders) {
+      const [missingMessage, missingNumber] = getInvalidColumnData(
+        missingHeaders,
+        'missing'
+      );
+      if (!!excessHeaders) {
+        const [excessMessage, excessNumber] = getInvalidColumnData(
+          excessHeaders,
+          'extra'
+        );
+        errorMessage =
+          'You have ' +
+          missingNumber +
+          ' and ' +
+          excessNumber +
+          '.\n' +
+          missingMessage +
+          ' ' +
+          excessMessage;
+      } else {
+        errorMessage = 'You have ' + missingNumber + '.\n' + missingMessage;
+      }
+    } else {
+      const [excessMessage, excessNumber] = getInvalidColumnData(
+        excessHeaders,
+        'extra'
+      );
+      errorMessage = 'You entered ' + excessNumber + '.\n' + excessMessage;
+    }
+    throw new BadRequestError(errorMessage);
   }
 
   if (!data.length) {
@@ -200,4 +239,32 @@ function getBoolean(value: string): boolean {
   if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
   else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
   return null;
+}
+
+/**
+ * Converts an array of column names and returns a comma separated string ended with and if appropriate
+ * @param invalidColumns - Array of columns that are invalid
+ * @param invalidReason - Single word describing why columns are invalid
+ */
+function getInvalidColumnData(
+  invalidColumns: string[],
+  invalidReason: string
+): [string, string] {
+  if (invalidColumns.length == 1) {
+    const invalidString =
+      invalidColumns[0] + ' is an ' + invalidReason + ' column.';
+    const invalidNumber = '1 ' + invalidReason + ' header';
+    return [invalidString, invalidNumber];
+  } else {
+    const invalidString =
+      invalidColumns.slice(0, -1).join(', ') +
+      ' and ' +
+      invalidColumns.slice(-1) +
+      ' are ' +
+      invalidReason +
+      ' columns.';
+    const invalidNumber =
+      invalidColumns.length + ' ' + invalidReason + ' headers';
+    return [invalidString, invalidNumber];
+  }
 }
