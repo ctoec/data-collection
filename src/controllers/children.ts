@@ -28,6 +28,7 @@ export const getChildren = async (user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
   return getManager().find(Child, {
     relations: [
+      'family',
       'enrollments',
       'enrollments.site',
       'enrollments.site.organization',
