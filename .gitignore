@@ -5,7 +5,7 @@ package-lock.json
 client/package-lock.json
 
 # dependencies
-/node_modules
+*/node_modules
 /.pnp
 .pnp.js
 
@@ -51,3 +51,4 @@ fawkes-bundle.zip
 # Browserstack/nightwatch makes a folder
 /tests_output
 .env
+node_modules
