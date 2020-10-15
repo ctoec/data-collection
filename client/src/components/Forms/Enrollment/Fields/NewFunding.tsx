@@ -80,7 +80,7 @@ export const NewFundingField = <
                 ageGroup={enrollment.ageGroup}
                 fundingSource={fundingSource}
                 organizationId={orgId}
-                accessor={(data) => fundingAccessor(data).at('fundingSpace')}
+                fundingAccessor={fundingAccessor}
               />
               <ReportingPeriodField<T>
                 fundingSource={fundingSource}

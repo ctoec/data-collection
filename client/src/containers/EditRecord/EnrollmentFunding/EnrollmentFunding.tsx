@@ -24,8 +24,6 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
-  // Separate enrollments into current (no end date) and past
-  // (with end date). Either may not exist
   return (
     <>
       <h2>Enrollment and funding</h2>
