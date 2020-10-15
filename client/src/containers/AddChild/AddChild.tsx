@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
 import { StepList } from '@ctoec/component-library';
-import { Child, Organization } from '../../shared/models';
+import { Organization } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
@@ -76,6 +76,7 @@ const AddChild: React.FC = () => {
   }, [accessToken, child, locationState, organization, history, childId]);
 
   // Fetch fresh child from API whenever refetch is triggered
+  // And move to next step, if current step is complete (has no validation errors)
   useEffect(() => {
     if (!childId) return;
 
@@ -108,6 +109,7 @@ const AddChild: React.FC = () => {
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as EditFormProps);
+
         if (currentStepStatus === 'complete') {
           moveToNextStep();
         }
@@ -124,12 +126,11 @@ const AddChild: React.FC = () => {
 
   const commonFormProps = {
     child,
-    afterDataSave: triggerRefetchChild,
+    afterSaveSuccess: triggerRefetchChild,
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: (_hash: string) => {
-      const hashMinusOctothorpe = _hash.replace('#', '');
-      return !stepsVisited.find((s) => s.key === hashMinusOctothorpe)?.visited;
+      return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
     },
   };
 

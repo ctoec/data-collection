@@ -1,0 +1,13 @@
+{
+  "name": "e2e-tests",
+  "version": "1.0.0",
+  "description": "End to end tests for OEC data collection tool",
+  "main": "login.js",
+  "scripts": {
+    "test": "node_modules/nightwatch/bin/nightwatch -e default,edge"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "nightwatch": "^1.4.3"
+  }
+}

@@ -7,10 +7,10 @@ import React from 'react';
 import {
   FamilyIncomeForm,
   ChildInfoForm,
-  EnrollmentFundingForm,
   ChildIdentifiersForm,
   FamilyAddressForm,
 } from '../../components/Forms';
+import { EnrollmentFundingForm } from './EnrollmentFunding/EnrollmentFunding';
 import {
   SECTION_KEYS,
   formSections,
@@ -32,7 +32,7 @@ export const editForms = [
 ];
 
 export const tabItems = (commonFormProps: EditFormProps) =>
-  formSections.map(({ key, name, status }) => {
+  formSections.map(({ key, name, hasError }) => {
     const EditForm =
       editForms.find((e) => e.key === key)?.form || (() => <></>);
     return {
@@ -40,7 +40,7 @@ export const tabItems = (commonFormProps: EditFormProps) =>
       content: <EditForm {...commonFormProps} />,
       tabText: name,
       tabTextFormatter: (_name: string) =>
-        status(commonFormProps.child) ? (
+        hasError(commonFormProps.child) ? (
           <TextWithIcon {...commonTextWithIconProps} text={_name} />
         ) : (
           _name

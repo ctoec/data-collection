@@ -1,13 +1,19 @@
-import { Child, ReportingPeriod } from '../../shared/models';
+import { Child } from '../../shared/models';
+import { HideErrors } from '../../hooks/useValidationErrors';
 import { Dispatch, SetStateAction } from 'react';
 import { AlertProps } from '@ctoec/component-library';
-import { HideErrors } from '../../hooks/useValidationErrors';
 
 export type EditFormProps = {
   child: Child | undefined;
-  afterDataSave: () => void;
+  afterSaveSuccess: () => void;
+  // afterSaveFailure: (err: any) => void;
   setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
-  hideHeader?: boolean;
+  hideHeader?: boolean; // Header needs to be hidden in step list because the step list includes a header
   hideErrorsOnFirstLoad?: HideErrors;
-  // Header needs to be hidden in step list because the step list includes a header
+  showField?: (
+    formData: any,
+    fields: string[],
+    allFormFields: string[]
+  ) => boolean;
+  AdditionalButton?: JSX.Element;
 };

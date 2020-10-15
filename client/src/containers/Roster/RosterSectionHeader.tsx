@@ -19,7 +19,7 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
     count: number;
   }[] = [];
   children.reduce((_counts, _child) => {
-    const fundingSpace = getCurrentFunding(_child)?.fundingSpace;
+    const fundingSpace = getCurrentFunding({ child: _child })?.fundingSpace;
     if (fundingSpace) {
       const entry = _counts.find((e) => e.fundingSpace.id === fundingSpace.id);
       if (entry) {

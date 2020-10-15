@@ -15,30 +15,35 @@ import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
 import { Link } from 'react-router-dom';
+import { BatchEditItemContent } from './BatchEditItemContent';
 
 const BatchEdit: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { children } = useContext(DataCacheContext);
 
-  const [allRecords, setAllRecords] = useState<Child[]>([]);
+  const [fixedRecordsForDisplay, setFixedRecordsForDisplay] = useState<Child[]>(
+    []
+  );
   useEffect(() => {
     if (!children.loading) {
-      setAllRecords(children.records.filter(hasValidationError));
+      setFixedRecordsForDisplay(children.records.filter(hasValidationError));
     }
   }, [children.loading]);
-  const missingInformationRecordsCount = allRecords.filter(hasValidationError)
-    .length;
+
+  const currentlyMissingInfoCount = fixedRecordsForDisplay.filter(
+    hasValidationError
+  ).length;
 
   const [activeRecordIdx, setActiveRecordIdx] = useState<number>();
   useEffect(() => {
-    if (allRecords.length) setActiveRecordIdx(0);
-  }, [allRecords.length]);
+    if (fixedRecordsForDisplay.length) setActiveRecordIdx(0);
+  }, [fixedRecordsForDisplay.length]);
 
   const moveNextRecord = () => {
     // If active record is last record in the list
-    if (activeRecordIdx === allRecords.length - 1) {
+    if (activeRecordIdx === fixedRecordsForDisplay.length - 1) {
       // Then look for the first record that is still missing info
-      const firstStillMissingInformationRecordIdx = allRecords.findIndex(
+      const firstStillMissingInformationRecordIdx = fixedRecordsForDisplay.findIndex(
         hasValidationError
       );
 
@@ -65,14 +70,14 @@ const BatchEdit: React.FC = () => {
         <>Loading</>
       ) : (
         <>
-          <p className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
-            {missingInformationRecordsCount ? (
+          <div className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            {currentlyMissingInfoCount ? (
               <>
                 <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
-                  {missingInformationRecordsCount}
+                  {currentlyMissingInfoCount}
                 </div>
-                {pluralize('record', missingInformationRecordsCount)}{' '}
-                {pluralize('has', missingInformationRecordsCount)} missing or
+                {pluralize('record', currentlyMissingInfoCount)}{' '}
+                {pluralize('has', currentlyMissingInfoCount)} missing or
                 incomplete info required to submit your data
               </>
             ) : (
@@ -82,10 +87,10 @@ const BatchEdit: React.FC = () => {
                 enrollments are complete
               </>
             )}
-          </p>
+          </div>
           <SideNav
             externalActiveItemIndex={activeRecordIdx}
-            items={allRecords.map((record) => ({
+            items={fixedRecordsForDisplay.map((record) => ({
               title: (
                 <span>
                   {nameFormatter(record)}
@@ -95,7 +100,12 @@ const BatchEdit: React.FC = () => {
                 </span>
               ),
               description: 'Placeholder',
-              content: <div>PLACEHOLDER </div>,
+              content: (
+                <BatchEditItemContent
+                  record={children.getRecordById(record.id) as Child}
+                  moveNextRecord={moveNextRecord}
+                />
+              ),
             }))}
             noActiveItemContent={
               <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
