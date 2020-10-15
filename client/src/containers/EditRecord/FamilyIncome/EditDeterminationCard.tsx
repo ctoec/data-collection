@@ -1,64 +1,65 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Child } from '../../../shared/models';
 import {
   Card,
   InlineIcon,
+  ExpandCard,
   Button,
   TextWithIcon,
-  CardExpansion,
-  ExpandCard,
   Pencil,
   TrashCan,
+  CardExpansion,
 } from '@ctoec/component-library';
-import { IncomeDetermination } from '../../../../shared/models';
-import { currencyFormatter } from '../../../../utils/formatters';
-import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
-import { apiDelete } from '../../../../utils/api';
+import { currencyFormatter } from '../../../utils/formatters';
+import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiDelete } from '../../../utils/api';
+import { FamilyIncomeForm } from '../../../components/Forms';
 
-/**
- * Type to hold the basic properties of an income determination card.
- */
-type IncomeDeterminationCardProps = {
-  determination: IncomeDetermination;
-  isCurrent: boolean;
-  isNew?: boolean;
-  forceClose: boolean;
-  expansion: JSX.Element;
+type EditDeterminationCardProps = {
+  child: Child;
+  determinationId: number;
   afterSaveSuccess: () => void;
+  isCurrent?: boolean;
+  currentIsNew?: boolean;
 };
 
-/**
- * Card that displays an income determination record.
- * This is the basic unit of displaying income determinations
- * in the TabNav form, and is used for both redetermining
- * income as well as editing a determination.
- */
-export const IncomeDeterminationCard = ({
-  determination,
-  isCurrent,
-  isNew = false,
-  forceClose,
-  expansion,
+export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
+  child,
+  determinationId,
   afterSaveSuccess,
-}: IncomeDeterminationCardProps) => {
-  const { accessToken } = useContext(AuthenticationContext);
-
-  function deleteDetermination() {
-    apiDelete(`families/income-determination/${determination.id}`, {
-      accessToken,
-    })
-      .then(afterSaveSuccess)
-      .catch((err) => {
-        console.error('Unable to delete determination', err);
-      });
+  isCurrent,
+  currentIsNew,
+}) => {
+  const determination = child?.family?.incomeDeterminations?.find(
+    (d) => d.id === determinationId
+  );
+  if (!determination) {
+    throw new Error('Edit determination rendered without enrollment');
   }
+
+  const { accessToken } = useContext(AuthenticationContext);
+  const [closeCard, setCloseCard] = useState(false);
+
+  useEffect(() => {
+    if (closeCard) setCloseCard(false);
+  });
+
+  const deleteDetermination = () => {
+    apiDelete(
+      `families/${child?.family?.id}/income-determinations/${determinationId}`,
+      { accessToken }
+    )
+      .then(afterSaveSuccess)
+      .catch((err) => console.error('Unable to delete determination'));
+  };
 
   return (
     <Card
       className="margin-bottom-2"
       appearance={isCurrent ? 'primary' : 'secondary'}
-      showTag={isCurrent ? isNew : undefined}
-      forceClose={forceClose}
+      forceClose={closeCard}
       key={determination.id}
+      showTag={currentIsNew}
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">
@@ -101,7 +102,18 @@ export const IncomeDeterminationCard = ({
           </div>
         </div>
       </div>
-      <CardExpansion>{expansion}</CardExpansion>
+      <CardExpansion>
+        <FamilyIncomeForm
+          child={child}
+          id={`edit-determination-${determinationId}`}
+          legend={`Edit income determiniation ${determinationId}`}
+          afterSaveSuccess={() => {
+            setCloseCard(true);
+            afterSaveSuccess();
+          }}
+          setAlerts={() => {}}
+        />
+      </CardExpansion>
     </Card>
   );
 };

@@ -48,8 +48,12 @@ const EditRecord: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Get child data
+  // Child re-fetch
+  const [didInitialFetch, setDidInitialFetch] = useState(false);
+  const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
+    // Wait until after initial cache load incase this is the first place the user is landing
+    if (children.loading) return;
     apiGet(`children/${childId}`, {
       accessToken,
     }).then((updatedChild) => {
@@ -79,6 +83,7 @@ const EditRecord: React.FC = () => {
       }
     });
   }, [accessToken, childId, triggerRefetchCounter]);
+  }, [accessToken, childId, triggerRefetchCounter, children.loading]);
 
   useFocusFirstError([child]);
 
