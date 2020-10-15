@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Child, IncomeDetermination } from '../../../shared/models';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
-import { EditFormProps } from '../types';
+import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
 import idx from 'idx';
@@ -44,7 +44,7 @@ type FamilyIncomeFormProps = {
   incomeDeterminationId?: number;
   CancelButton?: JSX.Element;
   type?: 'edit' | 'redetermination';
-} & EditFormProps;
+} & RecordFormProps;
 
 export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   id = 'new-income-determination',

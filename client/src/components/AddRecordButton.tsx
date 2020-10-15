@@ -36,14 +36,14 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
       text={<TextWithIcon Icon={PlusCircle} text="Add a record" />}
       id="select-organization"
       appearance="unstyled"
-      options={orgs.map((p) => ({
-        text: p.providerName,
+      options={orgs.map((org) => ({
+        text: org.providerName,
         href: '/create-record',
         onClick: (e: any) => {
           if (e) {
             e.preventDefault();
           }
-          history.push('/create-record', { organization: p });
+          history.push('/create-record', { organization: org });
         },
       }))}
     />

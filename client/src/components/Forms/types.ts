@@ -14,5 +14,5 @@ export type RecordFormProps = {
     fields: string[],
     allFormFields: string[]
   ) => boolean;
-  AdditionalButton?: JSX.Element;
+  AdditionalButton?: JSX.Element; // Optional 'Cancel' (for forms in cards or card expansions) or 'Skip' (for forms in BatchEdit steplist) button
 };

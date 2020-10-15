@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { EditFormProps } from '../../../components/Forms';
+import React, { useState } from 'react';
+import { RecordFormProps } from '../../../components/Forms';
 import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
 import { Button } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
 
-export const FamilyIncomeForm: React.FC<EditFormProps> = ({
+/**
+ * Component enabling user to edit the family income portion of a child
+ * record. Renders RedeterminationCard and EditDeterminationCard which
+ * enable the user to edit existing family income determinations or add
+ * a new one.
+ */
+export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
 }) => {

@@ -23,6 +23,11 @@ type EditDeterminationCardProps = {
   currentIsNew?: boolean;
 };
 
+/**
+ * Component for editing a family income determination in the EditRecord flow.
+ * Renders a card component that displays determination info, with a card expansion
+ * containing a general-purpose FamilyIncome form
+ */
 export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
   child,
   determinationId,
@@ -34,7 +39,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
     (d) => d.id === determinationId
   );
   if (!determination) {
-    throw new Error('Edit determination rendered without enrollment');
+    throw new Error('Edit determination rendered without determination');
   }
 
   const { accessToken } = useContext(AuthenticationContext);

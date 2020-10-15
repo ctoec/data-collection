@@ -9,6 +9,10 @@ type RedeterminationCardProps = {
   onCancel: () => void;
 };
 
+/**
+ * Component for re-determining family income in the EditRecord flow.
+ * Renders a card component that contains a general-purpose FamilyIncome form
+ */
 export const RedeterminationCard: React.FC<RedeterminationCardProps> = ({
   child,
   afterSaveSuccess,

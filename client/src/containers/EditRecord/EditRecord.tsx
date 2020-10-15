@@ -27,10 +27,6 @@ const EditRecord: React.FC = () => {
   } = useContext(DataCacheContext);
   const [child, setChild] = useState<Child>();
 
-  // Counter to trigger re-run of child fetch in
-  // useEffect hook
-  const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
-
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
   // Clear any previously displayed alerts from other tabs
@@ -49,11 +45,8 @@ const EditRecord: React.FC = () => {
   }, []);
 
   // Child re-fetch
-  const [didInitialFetch, setDidInitialFetch] = useState(false);
   const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
-    // Wait until after initial cache load incase this is the first place the user is landing
-    if (children.loading) return;
     apiGet(`children/${childId}`, {
       accessToken,
     }).then((updatedChild) => {
@@ -83,7 +76,6 @@ const EditRecord: React.FC = () => {
       }
     });
   }, [accessToken, childId, triggerRefetchCounter]);
-  }, [accessToken, childId, triggerRefetchCounter, children.loading]);
 
   useFocusFirstError([child]);
 
