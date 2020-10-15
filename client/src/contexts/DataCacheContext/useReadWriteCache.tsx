@@ -28,7 +28,7 @@ export const useReadWriteCache = <T extends { id: any }>(apiPath: string) => {
   const refetch = () => setHaveFetched(false);
 
   useEffect(() => {
-    if (!haveFetched) {
+    if (!haveFetched && accessToken) {
       setLoading(true);
       apiGet(apiPath, { accessToken })
         .then((_records) => {
