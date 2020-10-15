@@ -1,8 +1,7 @@
 // nightwatchjs.org/gettingstarted/configuration/
 
 https: nightwatch_config = {
-  src_folders: ['.'],
-  filter: '*.test.js',
+  src_folders: ['./tests'],
   selenium: {
     start_process: false,
     host: 'hub-cloud.browserstack.com',
