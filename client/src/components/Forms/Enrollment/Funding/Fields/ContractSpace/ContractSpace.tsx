@@ -19,12 +19,13 @@ import {
 } from '../../../../../../shared/payloads';
 import { fundingSpaceFormatter } from '../../../../../../utils/formatters';
 import DataCacheContext from '../../../../../../contexts/DataCacheContext/DataCacheContext';
+import { getValidationStatusForField } from '../../../../../../utils/getValidationStatus';
 
 type ContractSpaceProps<T> = {
   ageGroup: AgeGroup | undefined;
   fundingSource: FundingSource;
   organizationId: number;
-  accessor: (_: TObjectDriller<T>) => TObjectDriller<FundingSpace>;
+  fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
 };
 
 export const ContractSpaceField = <
@@ -33,7 +34,7 @@ export const ContractSpaceField = <
   ageGroup,
   fundingSource,
   organizationId,
-  accessor,
+  fundingAccessor = (data) => data as TObjectDriller<Funding>,
 }: ContractSpaceProps<T>) => {
   const { fundingSpaces } = useContext(DataCacheContext);
   const fundingSpaceOptions = fundingSpaces.records.filter(
@@ -47,14 +48,14 @@ export const ContractSpaceField = <
     return (
       <SingleContractSpaceField<T>
         fundingSpace={fundingSpaceOptions[0]}
-        accessor={accessor}
+        accessor={(data) => fundingAccessor(data).at('fundingSpace')}
       />
     );
   }
 
   return (
     <FormField<T, SelectProps, number | null>
-      getValue={(data) => accessor(data).at('id')}
+      getValue={(data) => fundingAccessor(data).at('fundingSpace').at('id')}
       parseOnChangeEvent={(e: React.ChangeEvent<any>) =>
         parseInt(e.target.value) || null
       }
@@ -66,6 +67,13 @@ export const ContractSpaceField = <
         text: fundingSpaceFormatter(fs),
         value: `${fs.id}`,
       }))}
+      status={(data, _, props) =>
+        getValidationStatusForField(
+          fundingAccessor(data),
+          fundingAccessor(data).at('fundingSpace').path,
+          props
+        )
+      }
     />
   );
 };

@@ -3,14 +3,11 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import {
   SideNav,
   TextWithIcon,
-  Success,
-  Button,
   ArrowRight,
   InlineIcon,
 } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
-import { Child } from '../../shared/models';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
@@ -21,14 +18,20 @@ const BatchEdit: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { children } = useContext(DataCacheContext);
 
-  const [fixedRecordsForDisplay, setFixedRecordsForDisplay] = useState<Child[]>(
-    []
-  );
+  const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
+    string[]
+  >([]);
   useEffect(() => {
     if (!children.loading) {
-      setFixedRecordsForDisplay(children.records.filter(hasValidationError));
+      setFixedRecordsForDisplayIds(
+        children.records.filter(hasValidationError).map((child) => child.id)
+      );
     }
   }, [children.loading]);
+
+  const fixedRecordsForDisplay = children.records.filter((child) =>
+    fixedRecordsForDisplayIds.includes(child.id)
+  );
 
   const currentlyMissingInfoCount = fixedRecordsForDisplay.filter(
     hasValidationError
@@ -36,12 +39,12 @@ const BatchEdit: React.FC = () => {
 
   const [activeRecordIdx, setActiveRecordIdx] = useState<number>();
   useEffect(() => {
-    if (fixedRecordsForDisplay.length) setActiveRecordIdx(0);
-  }, [fixedRecordsForDisplay.length]);
+    if (fixedRecordsForDisplayIds.length) setActiveRecordIdx(0);
+  }, [fixedRecordsForDisplayIds.length]);
 
   const moveNextRecord = () => {
     // If active record is last record in the list
-    if (activeRecordIdx === fixedRecordsForDisplay.length - 1) {
+    if (activeRecordIdx === fixedRecordsForDisplayIds.length - 1) {
       // Then look for the first record that is still missing info
       const firstStillMissingInformationRecordIdx = fixedRecordsForDisplay.findIndex(
         hasValidationError
@@ -102,7 +105,7 @@ const BatchEdit: React.FC = () => {
               description: 'Placeholder',
               content: (
                 <BatchEditItemContent
-                  record={children.getRecordById(record.id) as Child}
+                  record={record}
                   moveNextRecord={moveNextRecord}
                 />
               ),

@@ -41,7 +41,6 @@ export const doesEnrollmentFormHaveErrors = (
 type EnrollmentFormProps = {
   id?: string;
   enrollmentId?: number;
-  submitButtonText?: string;
   CancelButton?: JSX.Element;
 } & EditFormProps;
 
@@ -49,7 +48,6 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   id,
   child,
   enrollmentId,
-  submitButtonText = 'Save',
   CancelButton,
   afterSaveSuccess,
   setAlerts,
@@ -127,7 +125,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       )}
       {CancelButton}
       <FormSubmitButton
-        text={loading ? 'Saving...' : submitButtonText}
+        text={loading ? 'Saving...' : 'Save'}
         disabled={loading}
       />
     </Form>
