@@ -63,7 +63,7 @@ The application has a SQL Server backend. We use [typeORM](https://typeorm.io/) 
 
 Testing on the front end is run through react-scripts and jest to compare rendered pages to stored snapshots. Running `docker-compose exec client yarn run test` will run all test and only pass if all rendered pages match the expected snapshots. Adding a `-u` flag to the end of the command will update all snapshots to be the results of the current code.
 
-To run the e2e tests on browserstack, `node_modules/nightwatch/bin/nightwatch e2e-tests/smokeTest.js`
+To run the e2e tests on browserstack against the staging environment, `yarn install` in the e2e-tests directory, add your credentials in a `.env` file, and then `yarn test` from the e2e directory.
 
 ## Deploy
 
