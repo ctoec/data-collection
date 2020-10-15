@@ -14,7 +14,7 @@ export const useReadOnlyCache = <T extends { id: any }>(apiPath: string) => {
     records.find((r) => r.id === id);
 
   useEffect(() => {
-    if (!haveFetched) {
+    if (!haveFetched && accessToken) {
       setLoading(true);
       apiGet(apiPath, { accessToken })
         .then((_records) => {
