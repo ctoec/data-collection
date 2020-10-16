@@ -23,7 +23,7 @@ export const TemplateDownloadLink = ({
   }
 
   if (nav) {
-    downloadText = type === 'csv' ? '.csv' : 'Excel';
+    downloadText = type === 'csv' ? 'csv' : 'Excel';
 
     return (
       <Button

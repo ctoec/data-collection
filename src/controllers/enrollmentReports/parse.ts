@@ -45,23 +45,25 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
 
   // Array comparison was returning false even when the strings matched
   if (
-    !expectedHeaders.every((header, idx) => header === headers[idx]) &&
-    expectedHeaders.length == headers.length
+    !expectedHeaders.every((header, idx) => header === headers[idx]) ||
+    expectedHeaders.length != headers.length
   ) {
     const headersSet = new Set(headers);
     const expectedHeadersSet = new Set(expectedHeaders);
     const missingHeaders = expectedHeaders.filter(
       (x) => !headersSet.has(x) && x
     );
-    const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x));
+    const excessHeaders = headers.filter(
+      (x) => !expectedHeadersSet.has(x) && x
+    );
 
     let errorMessage = '';
-    if (!!missingHeaders) {
+    if (missingHeaders.length > 0) {
       const [missingMessage, missingNumber] = getInvalidColumnData(
         missingHeaders,
         'missing'
       );
-      if (!!excessHeaders) {
+      if (excessHeaders.length > 0) {
         const [excessMessage, excessNumber] = getInvalidColumnData(
           excessHeaders,
           'extra'
@@ -76,14 +78,15 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
           ' ' +
           excessMessage;
       } else {
-        errorMessage = 'You have ' + missingNumber + '.\n' + missingMessage;
+        errorMessage =
+          'Your file has ' + missingNumber + '.\n' + missingMessage;
       }
     } else {
       const [excessMessage, excessNumber] = getInvalidColumnData(
         excessHeaders,
         'extra'
       );
-      errorMessage = 'You entered ' + excessNumber + '.\n' + excessMessage;
+      errorMessage = 'Your file has ' + excessNumber + '.\n' + excessMessage;
     }
     throw new BadRequestError(errorMessage);
   }
@@ -251,9 +254,8 @@ function getInvalidColumnData(
   invalidReason: string
 ): [string, string] {
   if (invalidColumns.length == 1) {
-    const invalidString =
-      invalidColumns[0] + ' is an ' + invalidReason + ' column.';
-    const invalidNumber = '1 ' + invalidReason + ' header';
+    const invalidString = invalidColumns[0] + ' is ' + invalidReason + '.';
+    const invalidNumber = '1 ' + invalidReason + ' column';
     return [invalidString, invalidNumber];
   } else {
     const invalidString =
@@ -262,9 +264,9 @@ function getInvalidColumnData(
       invalidColumns.slice(-1) +
       ' are ' +
       invalidReason +
-      ' columns.';
+      '.';
     const invalidNumber =
-      invalidColumns.length + ' ' + invalidReason + ' headers';
+      invalidColumns.length + ' ' + invalidReason + ' columns';
     return [invalidString, invalidNumber];
   }
 }
