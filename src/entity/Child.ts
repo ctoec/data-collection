@@ -134,6 +134,7 @@ export class Child implements ChildInterface {
   @Column({ nullable: true, default: null })
   receivesDisabilityServices?: boolean;
 
+  @ValidateIf((child) => !child.foster)
   @ValidateNested()
   @ManyToOne(() => Family)
   family?: Family;

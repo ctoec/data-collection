@@ -81,12 +81,14 @@ export const NewFundingField = <
                 fundingSource={fundingSource}
                 organizationId={orgId}
                 accessor={(data) => fundingAccessor(data).at('fundingSpace')}
+                getFunding={(data) => fundingAccessor(data).value}
               />
               <ReportingPeriodField<T>
                 fundingSource={fundingSource}
                 accessor={(data) =>
                   fundingAccessor(data).at('firstReportingPeriod')
                 }
+                getFunding={(data) => fundingAccessor(data).value}
               />
             </>
           ),

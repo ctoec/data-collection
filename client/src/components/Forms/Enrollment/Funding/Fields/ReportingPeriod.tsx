@@ -21,10 +21,12 @@ import {
 } from '../../../../../shared/payloads';
 import { reportingPeriodFormatter } from '../../../../../utils/formatters';
 import DataCacheContext from '../../../../../contexts/DataCacheContext/DataCacheContext';
+import { getValidationStatusForFields } from '../../../../../utils/getValidationStatus';
 
 type ReportingPeriodProps<T> = {
   accessor: (_: TObjectDriller<T>) => TObjectDriller<ReportingPeriod>;
   fundingSource: FundingSource;
+  getFunding: (_: TObjectDriller<T>) => Funding;
   isLast?: boolean;
   label?: string;
   optional?: boolean;
@@ -42,6 +44,7 @@ export const ReportingPeriodField = <
 >({
   accessor,
   fundingSource,
+  getFunding,
   isLast,
   label,
   optional,
@@ -52,6 +55,7 @@ export const ReportingPeriodField = <
   const [reportingPeriodOptions, setReportingPeriodOptions] = useState<
     ReportingPeriod[]
   >([]);
+  const funding = getFunding(dataDriller);
 
   const currentReportingPeriod = accessor(dataDriller).value;
   useEffect(() => {
@@ -85,6 +89,11 @@ export const ReportingPeriodField = <
         value: `${rp.id}`,
       }))}
       optional={optional}
+      status={(data, _, props) =>
+        getValidationStatusForFields(funding, [
+          isLast ? 'lastReportingPeriod' : 'firstReportingPeriod',
+        ])
+      }
     />
   );
 };

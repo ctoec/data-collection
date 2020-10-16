@@ -4,6 +4,8 @@ import {
   FormField,
   Select,
   TObjectDriller,
+  FormContext,
+  useGenericContext,
 } from '@ctoec/component-library';
 import {
   FundingSpace,
@@ -19,12 +21,14 @@ import {
 } from '../../../../../../shared/payloads';
 import { fundingSpaceFormatter } from '../../../../../../utils/formatters';
 import DataCacheContext from '../../../../../../contexts/DataCacheContext/DataCacheContext';
+import { getValidationStatusForFields } from '../../../../../../utils/getValidationStatus';
 
 type ContractSpaceProps<T> = {
   ageGroup: AgeGroup | undefined;
   fundingSource: FundingSource;
   organizationId: number;
   accessor: (_: TObjectDriller<T>) => TObjectDriller<FundingSpace>;
+  getFunding: (_: TObjectDriller<T>) => Funding;
 };
 
 export const ContractSpaceField = <
@@ -34,6 +38,7 @@ export const ContractSpaceField = <
   fundingSource,
   organizationId,
   accessor,
+  getFunding,
 }: ContractSpaceProps<T>) => {
   const { fundingSpaces } = useContext(DataCacheContext);
   const fundingSpaceOptions = fundingSpaces.records.filter(
@@ -42,6 +47,9 @@ export const ContractSpaceField = <
       fs.source === fundingSource &&
       fs.organization.id === organizationId
   );
+
+  const { dataDriller } = useGenericContext<T>(FormContext);
+  const funding = getFunding(dataDriller);
 
   if (fundingSpaceOptions.length === 1) {
     return (
@@ -66,6 +74,9 @@ export const ContractSpaceField = <
         text: fundingSpaceFormatter(fs),
         value: `${fs.id}`,
       }))}
+      status={(data, _, props) =>
+        getValidationStatusForFields(funding, ['firstReportingPeriod'])
+      }
     />
   );
 };
