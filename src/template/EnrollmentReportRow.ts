@@ -1,6 +1,5 @@
 import {
   Gender,
-  SpecialEducationServicesType,
   AgeGroup,
   FundingSource,
   FundingTime,
@@ -84,13 +83,14 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'SASID',
     required: OPTIONAL,
-    definition: 'The State Assigned Student ID',
-    reason: 'Used for linking to SASID-backed data.',
-    format: 'Valid SASID (10-digit number)',
+    definition:
+      'A unique number used to identify children. Can be either an SDE-backed SASID or another unique identifier from a system of record such as Childplus.',
+    reason: "Allows for easy reference with your program's system of record.",
+    format: 'Text (if SASID, a valid 10-digit number)',
     example: '0123456789',
     section: SECTIONS.CHILD_INFO,
   })
-  sasid?: string = undefined;
+  uniqueIdentifier?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Date of birth',
@@ -119,11 +119,11 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'Birth certificate ID #',
     required: REQUIRED_IF_US_BORN,
-    definition: "The identification number of the child's birth certificate.",
+    definition: "The identification number on the child's birth certificate.",
     reason: 'Tiebreaker for linking to SASID-backed data.',
     format:
-      'Text; comprised of numbers, letters, and dashes (-); exact format varies by state/country',
-    example: '2015-00-1234567',
+      'Text; Generally an 11-digit number written in XXX-XX-XXXXXX format. Format varies by state.',
+    example: '123-20-000000',
     section: SECTIONS.CHILD_INFO,
   })
   birthCertificateId?: string = undefined;
@@ -245,7 +245,7 @@ export class EnrollmentReportRow {
     formattedName: 'Dual language learner',
     required: REQUIRED,
     definition:
-      'Children who have a home language other than English and are learning to or more launguages at the same time, or learning a second language while continuing to develop their first language are dual language learners.',
+      'Children who have a home language other than English and are learning to or more languages at the same time, or learning a second language while continuing to develop their first language.',
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: BOOLEAN_FORMAT,
     example: 'Yes',
@@ -322,7 +322,7 @@ export class EnrollmentReportRow {
   foster?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Experienced homelessness or housing insecurity',
+    formattedName: 'Experiencing homelessness or housing insecurity',
     required: OPTIONAL,
     definition:
       "Children and youth who lack a fixed, regular, and adequate nighttime residence. See [Decision-making Tool to Determine a Family's Homeless Situation](https://eclkc.ohs.acf.hhs.gov/sites/default/files/learning-modules/homelessness-v2/module-4/story_content/external_files/HL%20Module%204%20Decision-Tool_Final%204_20_18.pdf) for definitions and guidance.",
@@ -395,7 +395,7 @@ export class EnrollmentReportRow {
   siteName?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Model',
+    formattedName: 'Care Model',
     required: REQUIRED,
     definition:
       'The type of services received by the child. In-Person: In-school learning for all students on a full-time basis.\nHybrid: A combination of both in-person and remote learning support resulting in a limited student population on school premises at any given time.\nDistance: Learning opportunities in which students and educators are not physically present in a classroom environment.',
@@ -443,7 +443,8 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'Enrollment Exit Reason',
     required: 'Required if exited',
-    definition: 'The reason for ending an enrollment',
+    definition:
+      'The reason for ending an enrollment. Options include: Aged out, stopped attending, chose to attend another program, moved within Connecticut, moved to another state, Withdrew due to lack of payment, Child was asked to leave, unknown.',
     reason: REPORTING_REASON,
     format: 'Text',
     example: 'Aged out',
@@ -466,7 +467,8 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'Space type',
     required: REQUIRED,
-    definition: 'The period during the day when services are provided',
+    definition:
+      'The contract space type that funds an enrollment. See contract spaces for the full list of accepted space types.',
     reason: UTILIZATION_REPORTING_REASON,
     format: Object.values(FundingTime).join(', '),
     example: 'Wraparound',

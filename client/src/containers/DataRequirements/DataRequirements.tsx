@@ -107,7 +107,7 @@ const getSectionCopy = (section: string) => {
   if (section.toLowerCase().includes('child'))
     return 'A unique person enrolled in an ECE program.';
   if (section.toLowerCase().includes('income'))
-    return "A determination by a provider of a family's income, for purposes of assessing eligibility for public funding; must be updated at least once a year.";
+    return 'This data is collected to assess eligibility for public funding by calculating state median income percentage. Income determinations must be updated at least once a year.';
   if (section.toLowerCase().includes('family'))
     return 'One or more children that share the same address and household income.';
   if (section.toLowerCase().includes('enrollment'))

@@ -7,7 +7,7 @@ import { BirthCertificateType } from '../BirthCertificateType';
 
 export interface Child extends ObjectWithValidationErrors {
   id: string;
-  sasid?: string;
+  uniqueIdentifier?: string;
   firstName?: string;
   middleName?: string;
   lastName?: string;

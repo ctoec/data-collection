@@ -18,9 +18,9 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       >
         <label
           class="usa-label"
-          for="sasid"
+          for="uniqueId"
         >
-          SASID 
+          Unique identifier 
           <span
             class="usa-hint"
           >
@@ -30,7 +30,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
         <input
           aria-required="false"
           class="usa-input"
-          id="sasid"
+          id="uniqueId"
           type="text"
           value=""
         />
