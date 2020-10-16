@@ -1,6 +1,4 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
-import pluralize from 'pluralize';
-import { getConnection } from 'typeorm';
 import moment from 'moment';
 import {
   EnrollmentReportRow,
