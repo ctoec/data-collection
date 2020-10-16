@@ -127,7 +127,6 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
             afterSaveSuccess();
           }}
           setAlerts={() => {}}
-          submitButtonText="Save"
           CancelButton={
             <ExpandCard>
               <Button text="Cancel" appearance="outline" />

@@ -36,7 +36,6 @@ type FundingFormProps = {
   id: string;
   enrollmentId: number;
   fundingId: number;
-  submitButtonText?: string;
   CancelButton?: JSX.Element;
 } & EditFormProps;
 
@@ -45,7 +44,6 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   child,
   enrollmentId,
   fundingId,
-  submitButtonText = 'Save',
   CancelButton,
   setAlerts,
   afterSaveSuccess,
@@ -103,13 +101,13 @@ export const FundingForm: React.FC<FundingFormProps> = ({
           ageGroup={enrollment.ageGroup}
           fundingSource={funding.fundingSpace.source}
           organizationId={enrollment.site.organization.id}
-          accessor={(data) => data.at('fundingSpace')}
         />
       )}
       {showField(funding, ['firstReportingPeriod'], []) && (
         <ReportingPeriodField<Funding>
           fundingSource={funding.fundingSpace.source}
           accessor={(data) => data.at('firstReportingPeriod')}
+          showStatus
         />
       )}
       {showField(funding, ['lastReportingPeriod'], []) && (
@@ -117,11 +115,12 @@ export const FundingForm: React.FC<FundingFormProps> = ({
           fundingSource={funding.fundingSpace.source}
           accessor={(data) => data.at('lastReportingPeriod')}
           isLast={true}
+          showStatus
         />
       )}
       {CancelButton}
       <FormSubmitButton
-        text={loading ? 'Saving...' : submitButtonText}
+        text={loading ? 'Saving...' : 'Save'}
         disabled={loading}
       />
     </Form>

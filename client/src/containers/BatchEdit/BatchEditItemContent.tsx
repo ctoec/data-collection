@@ -86,10 +86,11 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   ) => {
     for (let i = 0; i < fields.length; i++) {
       if (
-        allFormFields.includes(fields[i]) &&
+        fields[i] !== 'fundings' &&
         hasValidationErrorForField(formData, fields[i])
-      )
+      ) {
         return true;
+      }
     }
     return false;
   };
