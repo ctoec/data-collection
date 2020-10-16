@@ -10,7 +10,7 @@ import { IncomeDetermination } from '../../../../shared/models';
 import { apiPut } from '../../../../utils/api';
 import { IncomeDeterminationFieldSet } from '../Fields';
 import { IncomeDeterminationCard } from './DeterminationCard';
-import { EditFormProps } from '../../types';
+import { RecordFormProps } from '../../types';
 
 type EditDeterminationFormProps = {
   determination: IncomeDetermination;
@@ -18,7 +18,7 @@ type EditDeterminationFormProps = {
   isCurrent: boolean;
   isNew: boolean;
   afterSaveSuccess: () => void;
-  setAlerts: EditFormProps['setAlerts'];
+  setAlerts: RecordFormProps['setAlerts'];
 };
 
 /**

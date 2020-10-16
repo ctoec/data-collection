@@ -1,7 +1,7 @@
 import { StepProps, Button } from '@ctoec/component-library';
 import React from 'react';
 import { History } from 'history';
-import { EditFormProps } from '../../components/Forms/types';
+import { RecordFormProps } from '../../components/Forms/types';
 import {
   ChildIdentifiersForm,
   ChildInfoForm,
@@ -22,7 +22,7 @@ export const newForms = [
   { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentForm },
 ];
 
-export const listSteps: (_: any) => StepProps<EditFormProps>[] = (
+export const listSteps: (_: any) => StepProps<RecordFormProps>[] = (
   history: History
 ) =>
   formSections.map(({ key, name, hasError: status }) => {
