@@ -1175,9 +1175,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#update-sidenav-render-children":
-  version "0.0.35"
-  resolved "https://github.com/ctoec/component-library#4a29bf5a19caed14e21970bb3b8ab536374c2523"
+"@ctoec/component-library@0.0.36":
+  version "0.0.36"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-0.0.36.tgz#29d75b7bad8aba1e36cf8f755a09adc94d144464"
+  integrity sha512-K1k9lmEKoNuLPlFNXmTXPLAAM/KuvhRvYvNgDasqpmAwHLZ0yvYOPZtO05uvp585T3XpT+MAmun9exPjXGm1ug==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

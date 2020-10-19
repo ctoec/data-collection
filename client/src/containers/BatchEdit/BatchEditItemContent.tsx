@@ -62,12 +62,9 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
         // If child has loaded, steps are created, and first step is active
         // then attempt to advance after refetch
         if (activeStepKey && steps) {
-          console.log('updated child', updatedChild);
-          console.log('sttep', activeStepKey);
           const currentStepStatus = steps
             .find((step) => step.key === activeStepKey)
             ?.status({ child: updatedChild } as RecordFormProps);
-          console.log('status', currentStepStatus);
           if (currentStepStatus === 'complete') {
             moveNextStep();
           }

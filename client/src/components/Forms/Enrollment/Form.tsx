@@ -33,10 +33,9 @@ export const doesEnrollmentFormHaveErrors = (
       : false;
   }
 
-  const result = child?.enrollments?.length
+  return child?.enrollments?.length
     ? !!getValidationStatusForFields(child.enrollments, enrollmentFields)
     : true;
-  return result;
 };
 
 type EnrollmentFormProps = {
