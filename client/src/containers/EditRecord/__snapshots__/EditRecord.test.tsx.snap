@@ -156,9 +156,9 @@ exports[`EditRecord matches snapshot 1`] = `
             >
               <label
                 class="usa-label"
-                for="uniqueId"
+                for="sasid"
               >
-                Unique identifier 
+                SASID 
                 <span
                   class="usa-hint"
                 >
@@ -168,7 +168,7 @@ exports[`EditRecord matches snapshot 1`] = `
               <input
                 aria-required="false"
                 class="usa-input"
-                id="uniqueId"
+                id="sasid"
                 type="text"
                 value=""
               />

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {
-  UniqueIdentifierField,
+  SasidField,
   FirstNameField,
   MiddleNameField,
   LastNameField,
@@ -19,7 +19,7 @@ import { getValidationStatusForFields } from '../../../utils/getValidationStatus
 
 // The fields we use to check to see if this form has errors or missing info
 const childIdentifiersFields = [
-  'uniqueIdentifier',
+  'sasid',
   'firstName',
   'middleName',
   'lastName',
@@ -73,7 +73,7 @@ export const ChildIdentifiersForm = ({
     >
       {!hideHeader && <h2>Child's identifiers</h2>}
       <div className="mobile-lg:grid-col-12">
-        <UniqueIdentifierField />
+        <SasidField />
       </div>
       <div className="mobile-lg:grid-col-9">
         <FirstNameField />

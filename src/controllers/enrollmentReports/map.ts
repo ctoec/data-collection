@@ -190,7 +190,7 @@ const mapChild = (
   // TODO: Could do birthdate verification (post-20??)
 
   const child = transaction.create(Child, {
-    uniqueIdentifier: source.uniqueIdentifier,
+    sasid: source.sasid,
     firstName: source.firstName,
     middleName: source.middleName,
     lastName: source.lastName,
