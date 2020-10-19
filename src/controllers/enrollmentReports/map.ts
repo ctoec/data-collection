@@ -26,10 +26,11 @@ import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
 
-export const mapAndSaveRows = async (
+export const mapRows = async (
   transaction: EntityManager,
   rows: EnrollmentReportRow[],
-  user: User
+  user: User,
+  save: boolean
 ) => {
   const [organizations, sites] = await Promise.all([
     transaction.findByIds(Organization, user.organizationIds),
@@ -39,11 +40,12 @@ export const mapAndSaveRows = async (
   const children = [];
   for (let i = 0; i < rows.length; i++) {
     try {
-      const child = await mapAndSaveRow(
+      const child = await mapRow(
         transaction,
         rows[i],
         organizations,
-        sites
+        sites,
+        save
       );
       children.push(child);
     } catch (err) {
@@ -61,11 +63,12 @@ export const mapAndSaveRows = async (
  *
  * @param source
  */
-const mapAndSaveRow = async (
+const mapRow = async (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
-  userSites: Site[]
+  userSites: Site[],
+  save: boolean
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -79,19 +82,27 @@ const mapAndSaveRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  const family = await mapFamily(transaction, source, organization);
-  const child = await mapChild(transaction, source, organization, family);
+  const family = await mapFamily(transaction, source, organization, save);
+  const child = await mapChild(transaction, source, organization, family, save);
   const incomeDetermination = await mapIncomeDetermination(
     transaction,
     source,
-    family
+    family,
+    save
   );
-  const enrollment = await mapEnrollment(transaction, source, site, child);
+  const enrollment = await mapEnrollment(
+    transaction,
+    source,
+    site,
+    child,
+    save
+  );
   const funding = await mapFunding(
     transaction,
     source,
     organization,
-    enrollment
+    enrollment,
+    save
   );
 
   family.incomeDeterminations = [incomeDetermination];
@@ -174,7 +185,8 @@ const mapChild = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
-  family: Family
+  family: Family,
+  save: boolean
 ) => {
   // Gender
   const gender: Gender =
@@ -189,7 +201,7 @@ const mapChild = (
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
-  const child = transaction.create(Child, {
+  let child = {
     uniqueIdentifier: source.uniqueIdentifier,
     firstName: source.firstName,
     middleName: source.middleName,
@@ -213,9 +225,14 @@ const mapChild = (
     receivesDisabilityServices: source.receivesDisabilityServices,
     organization,
     family: family,
-  });
+  } as Child;
 
-  return transaction.save(child);
+  if (save) {
+    child = transaction.create(Child, child);
+    return transaction.save(child);
+  }
+
+  return child;
 };
 
 /**
@@ -227,18 +244,24 @@ const mapChild = (
 const mapFamily = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
-  organization: Organization
+  organization: Organization,
+  save: boolean
 ) => {
-  const family = transaction.create(Family, {
+  let family = {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zipCode: source.zipCode,
     homelessness: source.homelessness,
     organization,
-  });
+  } as Family;
 
-  return transaction.save(family);
+  if (save) {
+    family = transaction.create(Family, family);
+    return transaction.save(family);
+  }
+
+  return family;
 };
 
 /**
@@ -248,16 +271,25 @@ const mapFamily = (
 const mapIncomeDetermination = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
-  family: Family
+  family: Family,
+  save: boolean
 ) => {
-  const incomeDetermination = transaction.create(IncomeDetermination, {
+  let incomeDetermination = {
     numberOfPeople: source.numberOfPeople,
     income: source.income,
     determinationDate: source.determinationDate,
     familyId: family.id,
-  });
+  } as IncomeDetermination;
 
-  return transaction.save(incomeDetermination);
+  if (save) {
+    incomeDetermination = transaction.create(
+      IncomeDetermination,
+      incomeDetermination
+    );
+    return transaction.save(incomeDetermination);
+  }
+
+  return incomeDetermination;
 };
 
 /**
@@ -270,12 +302,13 @@ const mapEnrollment = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   site: Site,
-  child: Child
+  child: Child,
+  save: boolean
 ) => {
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
   const model: CareModel = mapEnum(CareModel, source.model);
 
-  const enrollment = transaction.create(Enrollment, {
+  let enrollment = {
     site,
     childId: child.id,
     model,
@@ -283,9 +316,14 @@ const mapEnrollment = (
     entry: source.entry,
     exit: source.exit,
     exitReason: source.exitReason,
-  });
+  } as Enrollment;
 
-  return transaction.save(enrollment);
+  if (save) {
+    enrollment = transaction.create(Enrollment, enrollment);
+    return transaction.save(enrollment);
+  }
+
+  return enrollment;
 };
 
 /**
@@ -300,7 +338,8 @@ const mapFunding = async (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
-  enrollment: Enrollment
+  enrollment: Enrollment,
+  save: boolean
 ) => {
   const fundingSource: FundingSource = mapEnum(FundingSource, source.source);
   let fundingTime: FundingTime = mapEnum(FundingTime, source.time);
@@ -364,14 +403,20 @@ const mapFunding = async (
           where: { type: fundingSource, period: source.lastFundingPeriod },
         });
       }
-      const funding = transaction.create(Funding, {
+
+      let funding = {
         firstReportingPeriod,
         lastReportingPeriod,
         fundingSpace,
         enrollmentId: enrollment.id,
-      });
+      } as Funding;
 
-      return transaction.save(funding);
+      if (save) {
+        funding = transaction.create(Funding, funding);
+        return transaction.save(funding);
+      }
+
+      return funding;
     }
   }
 
