@@ -13,6 +13,7 @@ import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
 import { Link } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
+import { Child } from '../../shared/models';
 
 const BatchEdit: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -29,38 +30,41 @@ const BatchEdit: React.FC = () => {
     }
   }, [children.loading]);
 
-  const fixedRecordsForDisplay = children.records.filter((child) =>
-    fixedRecordsForDisplayIds.includes(child.id)
-  );
-
+  const fixedRecordsForDisplay = fixedRecordsForDisplayIds.map((id) =>
+    children.getRecordById(id)
+  ) as Child[];
   const currentlyMissingInfoCount = fixedRecordsForDisplay.filter(
     hasValidationError
   ).length;
 
-  const [activeRecordIdx, setActiveRecordIdx] = useState<number>();
+  const [activeRecordId, setActiveRecordId] = useState<string>();
   useEffect(() => {
-    if (fixedRecordsForDisplayIds.length) setActiveRecordIdx(0);
+    if (fixedRecordsForDisplayIds.length)
+      setActiveRecordId(fixedRecordsForDisplayIds[0]);
   }, [fixedRecordsForDisplayIds.length]);
 
   const moveNextRecord = () => {
     // If active record is last record in the list
+    const activeRecordIdx = fixedRecordsForDisplayIds.findIndex(
+      (id) => id === activeRecordId
+    );
     if (activeRecordIdx === fixedRecordsForDisplayIds.length - 1) {
       // Then look for the first record that is still missing info
-      const firstStillMissingInformationRecordIdx = fixedRecordsForDisplay.findIndex(
+      const firstStillMissingInformationRecord = fixedRecordsForDisplay.find(
         hasValidationError
       );
 
-      setActiveRecordIdx(
+      setActiveRecordId(
         // If a no records are missing info, then set active record to none
-        firstStillMissingInformationRecordIdx < 0
+        !firstStillMissingInformationRecord
           ? undefined
           : // otherwise set active record to first that is still missing info
-            firstStillMissingInformationRecordIdx
+            firstStillMissingInformationRecord.id
       );
     }
 
     // otherwise, move to next record in the list
-    setActiveRecordIdx((idx) => (idx === undefined ? idx : idx + 1));
+    setActiveRecordId(fixedRecordsForDisplayIds[activeRecordIdx + 1]);
   };
 
   return (
@@ -92,8 +96,10 @@ const BatchEdit: React.FC = () => {
             )}
           </div>
           <SideNav
-            externalActiveItemIndex={activeRecordIdx}
+            activeItemId={activeRecordId}
             items={fixedRecordsForDisplay.map((record) => ({
+              id: record.id,
+              onClick: () => setActiveRecordId(record.id),
               title: (
                 <span>
                   {nameFormatter(record)}
@@ -103,14 +109,14 @@ const BatchEdit: React.FC = () => {
                 </span>
               ),
               description: 'Placeholder',
-              content: (
-                <BatchEditItemContent
-                  record={record}
-                  moveNextRecord={moveNextRecord}
-                />
-              ),
             }))}
-            noActiveItemContent={
+          >
+            {activeRecordId !== undefined ? (
+              <BatchEditItemContent
+                childId={activeRecordId}
+                moveNextRecord={moveNextRecord}
+              />
+            ) : (
               <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
                 <InlineIcon icon="complete" />
                 <p className="font-body-lg text-bold margin-y-1">
@@ -125,8 +131,8 @@ const BatchEdit: React.FC = () => {
                   />
                 </Link>
               </div>
-            }
-          />
+            )}
+          </SideNav>
         </>
       )}
     </div>

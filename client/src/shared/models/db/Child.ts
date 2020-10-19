@@ -13,7 +13,7 @@ export interface Child extends ObjectWithValidationErrors {
   lastName?: string;
   suffix?: string;
   birthdate?: Moment;
-  birthCertificateType: BirthCertificateType;
+  birthCertificateType?: BirthCertificateType;
   birthTown?: string;
   birthState?: string;
   birthCertificateId?: string;

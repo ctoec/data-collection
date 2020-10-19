@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  EditFormProps,
+  RecordFormProps,
   doesEnrollmentFormHaveErrors,
   doesFundingFormHaveErrors,
   FundingForm,
@@ -15,7 +15,7 @@ import {
  * this component is re-rendered and the objects themselves no longer
  * have any missing info.
  */
-export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
+export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   setAlerts,

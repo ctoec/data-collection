@@ -1,23 +1,18 @@
 import { StepProps } from '@ctoec/component-library';
 import React from 'react';
 import {
-  ChildIdentifiersForm,
-  EditFormProps,
-  FamilyAddressForm,
+  RecordFormProps,
   formSections,
   SECTION_KEYS,
 } from '../../components/Forms';
 import { Child } from '../../shared/models';
 import { EnrollmentFundingForm } from './EnrollmentFunding/Form';
 
-const forms = [
-  { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm },
-  { key: SECTION_KEYS.FAMILY, form: FamilyAddressForm },
-  { key: SECTION_KEYS.IDENT, form: ChildIdentifiersForm },
-];
+const forms = [{ key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm }];
 
 export const listSteps = (child: Child) =>
   formSections
+    .filter((s) => s.key === SECTION_KEYS.ENROLLMENT)
     .map(({ key, name, hasError }) => {
       const Form = forms.find((s) => s.key === key)?.form || (() => <></>);
       if (hasError(child)) {
@@ -27,7 +22,7 @@ export const listSteps = (child: Child) =>
           status: (props) =>
             hasError(props.child) ? 'incomplete' : 'complete',
           Form,
-        } as StepProps<EditFormProps>;
+        } as StepProps<RecordFormProps>;
       }
     })
-    .filter((step) => !!step) as StepProps<EditFormProps>[];
+    .filter((step) => !!step) as StepProps<RecordFormProps>[];

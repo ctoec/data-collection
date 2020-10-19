@@ -4,7 +4,7 @@ import { Child, Family } from '../../../shared/models';
 import { AddressFieldset, HomelessnessField } from './Fields';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut } from '../../../utils/api';
-import { EditFormProps } from '../types';
+import { RecordFormProps } from '../types';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
@@ -28,7 +28,7 @@ export const doesFamilyAddressFormHaveErrors = (child?: Child) =>
  * with the Child object that the family form doesn't need
  * to know about.
  */
-export const FamilyAddressForm: React.FC<EditFormProps> = ({
+export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   hideHeader = false,
