@@ -1,5 +1,4 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
-import { getConnection } from 'typeorm';
 import moment from 'moment';
 import {
   EnrollmentReportRow,
@@ -43,10 +42,12 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   const { headers, data } = parseSheet(sheet, objectProperties);
 
   // Array comparison was returning false even when the strings matched
-  if (!expectedHeaders.every((header, idx) => header === headers[idx])) {
-    throw new BadRequestError(
-      "The columns in your uploaded file don't match our template. Use the newest template without changing the column order."
-    );
+  if (
+    !expectedHeaders.every((header, idx) => header === headers[idx]) ||
+    expectedHeaders.length != headers.length
+  ) {
+    const errorMessage = getExcessandInvalidString(headers, expectedHeaders);
+    throw new BadRequestError(errorMessage);
   }
 
   if (!data.length) {
@@ -200,4 +201,64 @@ function getBoolean(value: string): boolean {
   if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
   else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
   return null;
+}
+
+/**
+ * Converts an array of column names and returns a comma separated string ended with and if appropriate
+ * @param invalidColumns - Array of columns that are invalid
+ * @param invalidReason - Single word describing why columns are invalid
+ */
+function getInvalidColumnData(
+  invalidColumns: string[],
+  invalidReason: string
+): [string, string] {
+  if (invalidColumns.length == 1) {
+    const invalidString = invalidColumns[0] + ' is ' + invalidReason + '.';
+    const invalidNumber = '1 ' + invalidReason + ' column';
+    return [invalidString, invalidNumber];
+  } else {
+    const invalidString = `${invalidColumns
+      .slice(0, -1)
+      .join(', ')} and ${invalidColumns.slice(-1)} are ${invalidReason}.`;
+    const invalidNumber = `${invalidColumns.length} ${invalidReason} columns`;
+    return [invalidString, invalidNumber];
+  }
+}
+/**
+ * Returns a string for an error message with the excess or invalid columns that are in the uploaded spreadsheet
+ * @param headers
+ * @param expectedHeaders
+ */
+function getExcessandInvalidString(
+  headers: any[],
+  expectedHeaders: any[]
+): string {
+  const headersSet = new Set(headers);
+  const expectedHeadersSet = new Set(expectedHeaders);
+  const missingHeaders = expectedHeaders.filter((x) => !headersSet.has(x) && x);
+  const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x) && x);
+  const [excessMessage, excessNumber] = getInvalidColumnData(
+    excessHeaders,
+    'extra'
+  );
+  const [missingMessage, missingNumber] = getInvalidColumnData(
+    missingHeaders,
+    'missing'
+  );
+
+  let errorMessage = '';
+  if (missingHeaders.length > 0) {
+    if (excessHeaders.length > 0) {
+      errorMessage = `You have ${missingNumber} and ${excessNumber}.\n'${missingMessage} ${excessMessage}`;
+    } else {
+      errorMessage = `Your file has ${missingNumber}.\n ${missingMessage}`;
+    }
+  } else {
+    if (excessHeaders.length > 0) {
+      errorMessage = `Your file has ${excessNumber}.\n ${excessMessage}`;
+    } else {
+      errorMessage = `Your file has all the correct columns but they are out of order.`;
+    }
+  }
+  return errorMessage;
 }
