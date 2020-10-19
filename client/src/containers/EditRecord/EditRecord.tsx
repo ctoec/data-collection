@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { AlertProps, TabNav } from '@ctoec/component-library';
+import { AlertProps, TabNav, TabItem } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
@@ -9,24 +9,27 @@ import { DeleteRecord } from './DeleteRecord';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
-import { tabItems } from './tabItems';
+import { getTabItems, getTabContent } from './tabItems';
 import {
   SECTION_KEYS,
   formSections,
 } from '../../components/Forms/formSections';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
+import { Child } from '../../shared/models';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
   const { childId } = useParams() as { childId: string };
   const { accessToken } = useContext(AuthenticationContext);
   const { alertElements, setAlerts } = useAlerts();
-  const { children } = useContext(DataCacheContext);
-  const child = children.getRecordById(childId);
+  const {
+    children: { addOrUpdateRecord: updateRecordInCache },
+  } = useContext(DataCacheContext);
+  const [child, setChild] = useState<Child>();
 
   // Counter to trigger re-run of child fetch in
   // useEffect hook
-  const [refetch, setRefetch] = useState(0);
+  const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -50,15 +53,16 @@ const EditRecord: React.FC = () => {
     apiGet(`children/${childId}`, {
       accessToken,
     }).then((updatedChild) => {
-      children.addOrUpdateRecord(updatedChild);
+      setChild(updatedChild);
+      updateRecordInCache(updatedChild);
 
       // On initial fetch, refetch = 0 AND we do not want to create alerts
-      if (refetch) {
+      if (triggerRefetchCounter > 0) {
         const newAlerts: AlertProps[] = [
           {
             type: 'success',
             heading: 'Record updated',
-            text: `Your changes to ${child?.firstName} ${child?.lastName}'s record have been saved.`,
+            text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
           },
         ];
         const formStepInfo = formSections.find((s) => s.key === activeTab);
@@ -74,7 +78,7 @@ const EditRecord: React.FC = () => {
         setAlerts(newAlerts);
       }
     });
-  }, [accessToken, childId, refetch]);
+  }, [accessToken, childId, triggerRefetchCounter]);
 
   useFocusFirstError([child]);
 
@@ -82,18 +86,12 @@ const EditRecord: React.FC = () => {
     return <></>;
   }
 
-  const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
-
-  const afterSaveSuccess = () => {
-    setRefetch((r) => r + 1);
-  };
-
   const commonFormProps = {
     child,
-    afterSaveSuccess,
+    afterSaveSuccess: () => setTriggerRefetchCounter((r) => r + 1),
     setAlerts,
   };
-
+  const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
   return (
     <div className="grid-container">
       {alertElements}
@@ -118,12 +116,14 @@ const EditRecord: React.FC = () => {
         </div>
       </div>
       <TabNav
-        items={tabItems(commonFormProps)}
+        items={getTabItems(commonFormProps)}
         activeId={activeTab}
         onClick={(tabId) => {
           history.replace({ hash: tabId });
         }}
-      />
+      >
+        {getTabContent(activeTab, commonFormProps)}
+      </TabNav>
     </div>
   );
 };

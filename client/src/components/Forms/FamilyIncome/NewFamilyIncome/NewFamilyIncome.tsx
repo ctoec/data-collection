@@ -4,7 +4,7 @@ import { Child, IncomeDetermination } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { IncomeDeterminationFieldSet } from '../Fields';
-import { EditFormProps } from '../../types';
+import { RecordFormProps } from '../../types';
 import useIsMounted from '../../../../hooks/useIsMounted';
 import idx from 'idx';
 import { useValidationErrors } from '../../../../hooks/useValidationErrors';
@@ -14,7 +14,7 @@ import { useValidationErrors } from '../../../../hooks/useValidationErrors';
  * Form is accessed via a button revealed by clicking "Redetermine income,"
  * and values default to 0 but are overwritten by user input.
  */
-export const NewFamilyIncome: React.FC<EditFormProps> = ({
+export const NewFamilyIncome: React.FC<RecordFormProps> = ({
   child: inputChild,
   afterSaveSuccess,
   setAlerts,
