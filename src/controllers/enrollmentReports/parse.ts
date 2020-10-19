@@ -46,46 +46,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
     !expectedHeaders.every((header, idx) => header === headers[idx]) ||
     expectedHeaders.length != headers.length
   ) {
-    const headersSet = new Set(headers);
-    const expectedHeadersSet = new Set(expectedHeaders);
-    const missingHeaders = expectedHeaders.filter(
-      (x) => !headersSet.has(x) && x
-    );
-    const excessHeaders = headers.filter(
-      (x) => !expectedHeadersSet.has(x) && x
-    );
-
-    let errorMessage = '';
-    if (missingHeaders.length > 0) {
-      const [missingMessage, missingNumber] = getInvalidColumnData(
-        missingHeaders,
-        'missing'
-      );
-      if (excessHeaders.length > 0) {
-        const [excessMessage, excessNumber] = getInvalidColumnData(
-          excessHeaders,
-          'extra'
-        );
-        errorMessage =
-          'You have ' +
-          missingNumber +
-          ' and ' +
-          excessNumber +
-          '.\n' +
-          missingMessage +
-          ' ' +
-          excessMessage;
-      } else {
-        errorMessage =
-          'Your file has ' + missingNumber + '.\n' + missingMessage;
-      }
-    } else {
-      const [excessMessage, excessNumber] = getInvalidColumnData(
-        excessHeaders,
-        'extra'
-      );
-      errorMessage = 'Your file has ' + excessNumber + '.\n' + excessMessage;
-    }
+    const errorMessage = getExcessandInvalidString(headers, expectedHeaders);
     throw new BadRequestError(errorMessage);
   }
 
@@ -256,15 +217,48 @@ function getInvalidColumnData(
     const invalidNumber = '1 ' + invalidReason + ' column';
     return [invalidString, invalidNumber];
   } else {
-    const invalidString =
-      invalidColumns.slice(0, -1).join(', ') +
-      ' and ' +
-      invalidColumns.slice(-1) +
-      ' are ' +
-      invalidReason +
-      '.';
-    const invalidNumber =
-      invalidColumns.length + ' ' + invalidReason + ' columns';
+    const invalidString = `${invalidColumns
+      .slice(0, -1)
+      .join(', ')} and ${invalidColumns.slice(-1)} are ${invalidReason}.`;
+    const invalidNumber = `${invalidColumns.length} ${invalidReason} columns`;
     return [invalidString, invalidNumber];
   }
+}
+/**
+ * Returns a string for an error message with the excess or invalid columns that are in the uploaded spreadsheet
+ * @param headers
+ * @param expectedHeaders
+ */
+function getExcessandInvalidString(
+  headers: any[],
+  expectedHeaders: any[]
+): string {
+  const headersSet = new Set(headers);
+  const expectedHeadersSet = new Set(expectedHeaders);
+  const missingHeaders = expectedHeaders.filter((x) => !headersSet.has(x) && x);
+  const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x) && x);
+
+  let errorMessage = '';
+  if (missingHeaders.length > 0) {
+    const [missingMessage, missingNumber] = getInvalidColumnData(
+      missingHeaders,
+      'missing'
+    );
+    if (excessHeaders.length > 0) {
+      const [excessMessage, excessNumber] = getInvalidColumnData(
+        excessHeaders,
+        'extra'
+      );
+      errorMessage = `You have ${missingNumber} and ${excessNumber}.\n'${missingMessage} ${excessMessage}`;
+    } else {
+      errorMessage = `Your file has ${missingNumber}.\n ${missingMessage}`;
+    }
+  } else {
+    const [excessMessage, excessNumber] = getInvalidColumnData(
+      excessHeaders,
+      'extra'
+    );
+    errorMessage = `Your file has ${excessNumber}.\n ${excessMessage}`;
+  }
+  return errorMessage;
 }
