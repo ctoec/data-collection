@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
 import { StepList } from '@ctoec/component-library';
-import { Organization } from '../../shared/models';
+import { Organization, Child } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { EditFormProps } from '../../components/Forms/types';
+import { RecordFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
@@ -18,7 +18,7 @@ type LocationType = Location & {
   };
 };
 
-const AddChild: React.FC = () => {
+const CreateRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const { state: locationState, hash } = useLocation() as LocationType;
@@ -45,8 +45,11 @@ const AddChild: React.FC = () => {
     }
   }, [activeStep, history, steps]);
 
-  const { children } = useContext(DataCacheContext);
-  const child = children.getRecordById(childId);
+  const [child, setChild] = useState<Child>();
+  const {
+    children: { addOrUpdateRecord: updateRecordInCache },
+  } = useContext(DataCacheContext);
+
   // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
   const [refetchChild, setRefetchChild] = useState<number>(0);
@@ -67,7 +70,8 @@ const AddChild: React.FC = () => {
       accessToken,
     })
       .then((res) => {
-        children.addOrUpdateRecord(res);
+        setChild(res);
+        updateRecordInCache(res);
         history.replace({ pathname: `/create-record/${res.id}` });
       })
       .catch((err) => {
@@ -105,10 +109,11 @@ const AddChild: React.FC = () => {
       accessToken,
     })
       .then((updatedChild) => {
-        children.addOrUpdateRecord(updatedChild);
+        setChild(updatedChild);
+        updateRecordInCache(updatedChild);
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
-        } as EditFormProps);
+        } as RecordFormProps);
 
         if (currentStepStatus === 'complete') {
           moveToNextStep();
@@ -150,4 +155,4 @@ const AddChild: React.FC = () => {
     </div>
   );
 };
-export default AddChild;
+export default CreateRecord;

@@ -8,7 +8,7 @@ import {
   Foster,
 } from './Fields';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
-import { EditFormProps } from '../types';
+import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
@@ -38,7 +38,7 @@ export const ChildInfoForm = ({
   afterSaveSuccess,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
-}: EditFormProps) => {
+}: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);

@@ -43,7 +43,7 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
           if (e) {
             e.preventDefault();
           }
-          history.push('/create-record', { state: { organization: p } });
+          history.push('/create-record', { organization: p });
         },
       }))}
     />

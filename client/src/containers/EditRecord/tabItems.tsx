@@ -15,7 +15,7 @@ import {
   SECTION_KEYS,
   formSections,
 } from '../../components/Forms/formSections';
-import { EditFormProps } from '../../components/Forms/types';
+import { RecordFormProps } from '../../components/Forms/types';
 
 const commonTextWithIconProps: Omit<TextWithIconProps, 'text'> = {
   Icon: Info,
@@ -31,13 +31,10 @@ export const editForms = [
   { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm },
 ];
 
-export const tabItems = (commonFormProps: EditFormProps) =>
+export const getTabItems = (commonFormProps: RecordFormProps) =>
   formSections.map(({ key, name, hasError }) => {
-    const EditForm =
-      editForms.find((e) => e.key === key)?.form || (() => <></>);
     return {
       id: key,
-      content: <EditForm {...commonFormProps} />,
       tabText: name,
       tabTextFormatter: (_name: string) =>
         hasError(commonFormProps.child) ? (
@@ -47,3 +44,12 @@ export const tabItems = (commonFormProps: EditFormProps) =>
         ),
     };
   });
+
+export const getTabContent = (
+  activeTab: string,
+  commonFormProps: RecordFormProps
+) => {
+  const EditForm =
+    editForms.find((e) => e.key === activeTab)?.form || (() => <></>);
+  return <EditForm {...commonFormProps} />;
+};
