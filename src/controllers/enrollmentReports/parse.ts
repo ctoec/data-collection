@@ -237,28 +237,28 @@ function getExcessandInvalidString(
   const expectedHeadersSet = new Set(expectedHeaders);
   const missingHeaders = expectedHeaders.filter((x) => !headersSet.has(x) && x);
   const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x) && x);
+  const [excessMessage, excessNumber] = getInvalidColumnData(
+    excessHeaders,
+    'extra'
+  );
+  const [missingMessage, missingNumber] = getInvalidColumnData(
+    missingHeaders,
+    'missing'
+  );
 
   let errorMessage = '';
   if (missingHeaders.length > 0) {
-    const [missingMessage, missingNumber] = getInvalidColumnData(
-      missingHeaders,
-      'missing'
-    );
     if (excessHeaders.length > 0) {
-      const [excessMessage, excessNumber] = getInvalidColumnData(
-        excessHeaders,
-        'extra'
-      );
       errorMessage = `You have ${missingNumber} and ${excessNumber}.\n'${missingMessage} ${excessMessage}`;
     } else {
       errorMessage = `Your file has ${missingNumber}.\n ${missingMessage}`;
     }
   } else {
-    const [excessMessage, excessNumber] = getInvalidColumnData(
-      excessHeaders,
-      'extra'
-    );
-    errorMessage = `Your file has ${excessNumber}.\n ${excessMessage}`;
+    if (excessHeaders.length > 0) {
+      errorMessage = `Your file has ${excessNumber}.\n ${excessMessage}`;
+    } else {
+      errorMessage = `Your file has all the correct columns but they are out of order.`;
+    }
   }
   return errorMessage;
 }
