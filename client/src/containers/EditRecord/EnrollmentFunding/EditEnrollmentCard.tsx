@@ -11,7 +11,7 @@ import {
   TrashCan,
 } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../shared/models';
-import { apiPut, apiDelete } from '../../../utils/api';
+import { apiDelete } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
 
@@ -126,7 +126,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
             setCloseCard(true);
             afterSaveSuccess();
           }}
-          setAlerts={() => {}}
+          setAlerts={() => { }}
           AdditionalButton={
             <ExpandCard>
               <Button text="Cancel" appearance="outline" />

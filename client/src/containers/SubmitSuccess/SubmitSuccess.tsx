@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { MailToLink } from '../../components/MailToLink';
 import {

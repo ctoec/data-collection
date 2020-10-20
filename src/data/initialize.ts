@@ -1,11 +1,10 @@
 import { getManager } from 'typeorm';
 import { Organization, Site, FundingSpace, ReportingPeriod } from '../entity';
-import { AgeGroup, FundingSource } from '../../client/src/shared/models';
+import { FundingSource } from '../../client/src/shared/models';
 import {
   getReportingPeriodFromDates,
   reportingPeriods,
 } from './reportingPeriods';
-import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
 import { organizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import { getFakeFundingSpaces } from './fundingSpace';
