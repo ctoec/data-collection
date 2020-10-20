@@ -37,17 +37,27 @@ const cache = {
   reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
 } as DataCacheContextType;
 
+jest.mock('../../utils/api');
+import * as api from '../../utils/api';
+import { waitFor } from '@testing-library/dom';
+const apiMock = api as jest.Mocked<typeof api>;
+const waitFetchChild = () => waitFor(() => expect(apiMock.apiGet).toBeCalled());
+
 describe('EditRecord', () => {
+  beforeEach(() => {
+    apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve(child)));
+  });
   snapshotTestHelper(
     <DataCacheContext.Provider value={cache}>
       <EditRecord />
     </DataCacheContext.Provider>,
-    { wrapInRouter: true }
+    { wrapInRouter: true, before: waitFetchChild }
   );
   accessibilityTestHelper(
     <DataCacheContext.Provider value={cache}>
       <EditRecord />
     </DataCacheContext.Provider>,
-    { wrapInRouter: true }
+    { wrapInRouter: true, before: waitFetchChild }
   );
+  afterEach(() => jest.clearAllMocks());
 });

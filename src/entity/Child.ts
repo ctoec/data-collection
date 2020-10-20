@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import moment, { Moment } from 'moment';
 import {
-  Length,
   ValidateNested,
   IsNotEmpty,
   ValidationError,
@@ -68,11 +67,11 @@ export class Child implements ChildInterface {
   @Column({
     type: 'varchar',
     length: 30,
-    nullable: false,
+    nullable: true,
     transformer: enumTransformer(BirthCertificateType),
   })
   @IsNotEmpty()
-  birthCertificateType: BirthCertificateType;
+  birthCertificateType?: BirthCertificateType;
 
   @Column({ nullable: true })
   @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)

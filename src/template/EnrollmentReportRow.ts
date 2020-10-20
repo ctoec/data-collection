@@ -468,7 +468,7 @@ export class EnrollmentReportRow {
     formattedName: 'Space type',
     required: REQUIRED,
     definition:
-      'The contract space type that funds an enrollment. See contract spaces for the full list of accepted space types.',
+      'The contract space type that funds an enrollment. See [contract spaces](#/funding-space-types) for the full list of accepted space types.',
     reason: UTILIZATION_REPORTING_REASON,
     format: Object.values(FundingTime).join(', '),
     example: 'Wraparound',

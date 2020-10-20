@@ -1,9 +1,7 @@
 import { StepProps } from '@ctoec/component-library';
 import React from 'react';
 import {
-  ChildIdentifiersForm,
-  EditFormProps,
-  FamilyAddressForm,
+  RecordFormProps,
   formSections,
   SECTION_KEYS,
 } from '../../components/Forms';
@@ -27,7 +25,7 @@ export const listSteps = (child: Child) =>
           status: (props) =>
             hasError(props.child) ? 'incomplete' : 'complete',
           Form,
-        } as StepProps<EditFormProps>;
+        } as StepProps<RecordFormProps>;
       }
     })
-    .filter((step) => !!step) as StepProps<EditFormProps>[];
+    .filter((step) => !!step) as StepProps<RecordFormProps>[];

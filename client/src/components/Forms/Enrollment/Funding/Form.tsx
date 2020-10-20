@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { Funding, Child } from '../../../../shared/models';
 import { ContractSpaceField, ReportingPeriodField } from './Fields';
-import { EditFormProps } from '../../types';
+import { RecordFormProps } from '../../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut } from '../../../../utils/api';
 import {
@@ -36,15 +36,14 @@ type FundingFormProps = {
   id: string;
   enrollmentId: number;
   fundingId: number;
-  CancelButton?: JSX.Element;
-} & EditFormProps;
+} & RecordFormProps;
 
 export const FundingForm: React.FC<FundingFormProps> = ({
   id,
   child,
   enrollmentId,
   fundingId,
-  CancelButton,
+  AdditionalButton,
   setAlerts,
   afterSaveSuccess,
   showField = () => true,
@@ -118,7 +117,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
           showStatus
         />
       )}
-      {CancelButton}
+      {AdditionalButton}
       <FormSubmitButton
         text={loading ? 'Saving...' : 'Save'}
         disabled={loading}
