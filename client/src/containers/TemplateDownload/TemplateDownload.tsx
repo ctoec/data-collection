@@ -13,14 +13,14 @@ const TemplateDownload: React.FC = () => {
           You can use this template to batch upload many enrollment records to
           ECE Reporter.
         </p>
-        <CSVExcelDownloadButton fileType="xlsx" whichDownload={'template'} />
+        <CSVExcelDownloadButton fileType="xlsx" whichDownload="template" />
         <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
         <h2>Sample data</h2>
         <p>
           We created a sample set of data to show how to format enrollment
           records for batch uploading.
         </p>
-        <CSVExcelDownloadButton fileType="xlsx" whichDownload={'example'} />
+        <CSVExcelDownloadButton fileType="xlsx" whichDownload="example" />
         <CSVExcelDownloadButton fileType="csv" whichDownload="example" />
         <h2>Data requirements</h2>
         <p>

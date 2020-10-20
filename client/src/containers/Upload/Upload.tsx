@@ -125,7 +125,7 @@ const Upload: React.FC = () => {
               </p>
               <CSVExcelDownloadButton
                 fileType="xlsx"
-                whichDownload={'template'}
+                whichDownload="template"
               />
               <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
             </div>

@@ -107,7 +107,7 @@ const Home: React.FC = () => {
               <p className="text-bold">Download the data collection template</p>
               <CSVExcelDownloadButton
                 fileType="xlsx"
-                whichDownload={'template'}
+                whichDownload="template"
               />
               <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
             </div>

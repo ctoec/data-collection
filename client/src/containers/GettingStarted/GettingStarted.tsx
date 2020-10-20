@@ -42,13 +42,13 @@ const GettingStarted: React.FC = () => {
             Use one of these templates to enter your enrollment data for all
             state-funded children.
           </p>
-          <CSVExcelDownloadButton fileType="xlsx" whichDownload={'template'} />
+          <CSVExcelDownloadButton fileType="xlsx" whichDownload="template" />
           <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
         </div>
       </div>
       <div className="display-block">
         <p>You can see a completed example template here:</p>
-        <CSVExcelDownloadButton fileType="xlsx" whichDownload={'example'} />
+        <CSVExcelDownloadButton fileType="xlsx" whichDownload="example" />
         <CSVExcelDownloadButton fileType="csv" whichDownload="example" />{' '}
       </div>
       <div className="grid-row margin-top-2">
