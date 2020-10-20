@@ -208,18 +208,26 @@ function getBoolean(value: string): boolean {
  * @param invalidColumns - Array of columns that are invalid
  * @param invalidReason - Single word describing why columns are invalid
  */
+type invalidReasons = 'unmatched' | 'missing';
 function getInvalidColumnData(
   invalidColumns: string[],
-  invalidReason: string
+  invalidReason: invalidReasons
 ): [string, string] {
   if (invalidColumns.length == 1) {
-    const invalidString = invalidColumns[0] + ' is ' + invalidReason + '.';
+    const invalidString =
+      invalidReason == 'missing'
+        ? `${invalidColumns[0]} is ${invalidReason}.`
+        : `${invalidColumns[0]} doesn't match the most recent template.`;
     const invalidNumber = '1 ' + invalidReason + ' column';
     return [invalidString, invalidNumber];
   } else {
-    const invalidString = `${invalidColumns
+    const columnNames = `${invalidColumns
       .slice(0, -1)
-      .join(', ')} and ${invalidColumns.slice(-1)} are ${invalidReason}.`;
+      .join(', ')} and ${invalidColumns.slice(-1)}`;
+    const invalidString =
+      invalidReason == 'missing'
+        ? `${columnNames} are ${invalidReason}.`
+        : `${columnNames} don't match the most recent template.`;
     const invalidNumber = `${invalidColumns.length} ${invalidReason} columns`;
     return [invalidString, invalidNumber];
   }
@@ -239,7 +247,7 @@ function getExcessandInvalidString(
   const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x) && x);
   const [excessMessage, excessNumber] = getInvalidColumnData(
     excessHeaders,
-    'extra'
+    'unmatched'
   );
   const [missingMessage, missingNumber] = getInvalidColumnData(
     missingHeaders,
@@ -249,7 +257,7 @@ function getExcessandInvalidString(
   let errorMessage = '';
   if (missingHeaders.length > 0) {
     if (excessHeaders.length > 0) {
-      errorMessage = `You have ${missingNumber} and ${excessNumber}.\n'${missingMessage} ${excessMessage}`;
+      errorMessage = `You have ${missingNumber} and ${excessNumber}.\n ${missingMessage} ${excessMessage}`;
     } else {
       errorMessage = `Your file has ${missingNumber}.\n ${missingMessage}`;
     }
