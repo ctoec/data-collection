@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Child, ObjectWithValidationErrors } from '../../shared/models';
 import { StepProps, StepList, Button } from '@ctoec/component-library';
-import { EditFormProps } from '../../components/Forms/types';
+import { RecordFormProps } from '../../components/Forms/types';
 import { listSteps } from './listSteps';
 import { nameFormatter } from '../../utils/formatters';
 import { useAlerts } from '../../hooks/useAlerts';
@@ -12,26 +12,36 @@ import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { Link } from 'react-router-dom';
 
 type BatchEditItemContentProps = {
-  record: Child;
+  childId: string;
   moveNextRecord: () => void;
 };
 
 export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
-  record,
+  childId,
   moveNextRecord,
 }) => {
-  const { children } = useContext(DataCacheContext);
+  const [child, setChild] = useState<Child>();
+  const {
+    children: { addOrUpdateRecord: updateRecordInCache },
+  } = useContext(DataCacheContext);
   const { setAlerts } = useAlerts();
 
-  const [steps, setSteps] = useState<StepProps<EditFormProps>[]>([]);
-  const [activeStepKey, setActiveStep] = useState('');
+  const [steps, setSteps] = useState<StepProps<RecordFormProps>[]>();
+  const [activeStepKey, setActiveStep] = useState<string>();
 
   const { accessToken } = useContext(AuthenticationContext);
-  const [refetchChild, setRefetchChild] = useState(0);
-  const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
+  const [triggerRefetchCount, setTriggerRefetchCount] = useState(0);
 
+  // Reset state when new child
+  useEffect(() => {
+    setChild(undefined);
+    setActiveStep(undefined);
+    setSteps(undefined);
+  }, [childId]);
+
+  // Function to progress to next step
   const moveNextStep = () => {
-    if (!activeStepKey) return;
+    if (!activeStepKey || !steps) return;
 
     const activeStepIdx = steps.findIndex((step) => step.key === activeStepKey);
     if (activeStepIdx === steps.length - 1) {
@@ -41,62 +51,65 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     }
   };
 
+  // Fetch child record
+  // and if fetch is re-fetch,
+  // then progress to next step if step is complete
   useEffect(() => {
-    setDidInitialFetch(false);
-    apiGet(`/children/${record.id}`, { accessToken })
+    apiGet(`/children/${childId}`, { accessToken })
       .then((updatedChild) => {
-        children.addOrUpdateRecord(updatedChild);
-        if (activeStepKey.length) {
+        setChild(updatedChild);
+        updateRecordInCache(updatedChild);
+        // If child has loaded, steps are created, and first step is active
+        // then attempt to advance after refetch
+        if (activeStepKey && steps) {
           const currentStepStatus = steps
             .find((step) => step.key === activeStepKey)
-            ?.status(updatedChild);
+            ?.status({ child: updatedChild } as RecordFormProps);
           if (currentStepStatus === 'complete') {
             moveNextStep();
           }
-        } else {
-          setDidInitialFetch(true);
         }
       })
       .catch((err) => {
         console.log(err);
       });
-    // only trigger refetch on explicit refetch
-    // not when record prop changes (user clicks on tab nav)
-    //es-lint-disable-next-line
-  }, [accessToken, refetchChild, record.id]);
+  }, [accessToken, triggerRefetchCount, !!child]);
 
-  // Trigger step generation after initial individual fetch
-  // but on the next render loop so that the form props include
-  // the updated child
-  const [didInitialFetch, setDidInitialFetch] = useState(false);
+  // Generate steps for the current record
+  // after fetching a new one
   useEffect(() => {
-    if (didInitialFetch) {
-      const _steps = listSteps(record);
+    if (child) {
+      const _steps = listSteps(child);
       setSteps(_steps);
       if (_steps.length) {
         setActiveStep(_steps[0].key);
       }
     }
-  }, [didInitialFetch]);
+  }, [child?.id]);
 
+  // Function that defined what fields should be shown in
+  // forms during batch edit
   const showFieldInBatchEditForm = (
     formData: ObjectWithValidationErrors,
-    fields: string[],
-    allFormFields: string[]
+    fields: string[]
   ) => {
     for (let i = 0; i < fields.length; i++) {
       if (
-        allFormFields.includes(fields[i]) &&
+        // special case to account for separation of
+        // enrollment and funding forms in batch edit flow
+        // (the 'fundings' field in enrollment form shoud never be shown)
+        fields[i] !== 'fundings' &&
         hasValidationErrorForField(formData, fields[i])
-      )
+      ) {
         return true;
+      }
     }
     return false;
   };
 
-  const props: EditFormProps = {
-    child: record,
-    afterSaveSuccess: triggerRefetchChild,
+  const props: RecordFormProps = {
+    child,
+    afterSaveSuccess: () => setTriggerRefetchCount((r) => r + 1),
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: () => false,
@@ -110,33 +123,33 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     <div className="margin-y-2 display-flex flex-center">All complete!</div>
   );
 
-  if (!steps.length || !activeStepKey) {
-    return AllComplete;
+  if (!child) {
+    return <></>;
   }
 
   return (
     <>
       <div className="padding-x-2 padding-bottom-3">
         <div className="display-flex flex-row flex-justify flex-align-end">
-          <h2>{nameFormatter(record)}</h2>
+          <h2>{nameFormatter(child)}</h2>
           <div className="text-baseline">
-            Date of birth: {record.birthdate?.format('MM/DD/YYYY')}
+            Date of birth: {child.birthdate?.format('MM/DD/YYYY')}
           </div>
         </div>
         <div className="margin-top-1">
-          <Link to={`/edit-record/${record.id}`} />
+          <Link to={`/edit-record/${child.id}`} />
         </div>
       </div>
       <div className="padding-top-1 border-top-1px border-base-light">
-        {steps.length ? (
-          <StepList<EditFormProps>
-            key={record.id}
+        {steps && steps.length ? (
+          <StepList<RecordFormProps>
+            key={child.id}
             steps={steps}
             props={props}
-            activeStep={activeStepKey}
+            activeStep={activeStepKey || ''}
           />
         ) : (
-          { AllComplete }
+          AllComplete
         )}
       </div>
     </>

@@ -18,7 +18,7 @@ export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [
       },
       {
         value: FundingTime.SplitTime,
-        formats: ['3', FundingTime.SplitTime, 'Part time/Full time', 'PT/FT'],
+        formats: ['3', FundingTime.SplitTime, 'PT/FT'],
       },
     ],
   },
@@ -59,12 +59,28 @@ export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [
     fundingSources: [FundingSource.SHS],
     fundingTimes: [
       {
-        value: FundingTime.ExtendedDay,
-        formats: ['9', FundingTime.ExtendedDay, 'ED'],
+        value: FundingTime.AdditionalFull,
+        formats: ['9', '+FD/FY'],
+      },
+      {
+        value: FundingTime.AdditionalSchool,
+        formats: ['10', '+SD/SY'],
+      },
+      {
+        value: FundingTime.AdditionalExtendedSchool,
+        formats: ['11', '+SD/SY/EY'],
+      },
+      {
+        value: FundingTime.ExtendedDayYear,
+        formats: ['12', 'ED/EY'],
       },
       {
         value: FundingTime.ExtendedYear,
-        formats: ['10', FundingTime.ExtendedYear, 'EY'],
+        formats: ['13', 'EY'],
+      },
+      {
+        value: FundingTime.ExtendedDay,
+        formats: ['14', 'ED'],
       },
     ],
   },

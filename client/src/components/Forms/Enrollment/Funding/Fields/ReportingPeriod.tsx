@@ -12,6 +12,7 @@ import {
   FormField,
   Select,
   TObjectDriller,
+  FormStatusProps,
 } from '@ctoec/component-library';
 import moment from 'moment';
 import {
@@ -21,7 +22,8 @@ import {
 } from '../../../../../shared/payloads';
 import { reportingPeriodFormatter } from '../../../../../utils/formatters';
 import DataCacheContext from '../../../../../contexts/DataCacheContext/DataCacheContext';
-import { getValidationStatusForFields } from '../../../../../utils/getValidationStatus';
+import { getValidationStatusForField } from '../../../../../utils/getValidationStatus';
+import { FieldStatusFunc } from '@ctoec/component-library/dist/components/Form/FormStatusFunc';
 
 type ReportingPeriodProps<T> = {
   accessor: (_: TObjectDriller<T>) => TObjectDriller<ReportingPeriod>;
@@ -30,6 +32,7 @@ type ReportingPeriodProps<T> = {
   isLast?: boolean;
   label?: string;
   optional?: boolean;
+  showStatus?: boolean;
 };
 
 /**
@@ -48,6 +51,7 @@ export const ReportingPeriodField = <
   isLast,
   label,
   optional,
+  showStatus,
 }: ReportingPeriodProps<T>) => {
   const { reportingPeriods } = useContext(DataCacheContext);
 
@@ -76,6 +80,17 @@ export const ReportingPeriodField = <
     setReportingPeriodOptions(_reportingPeriodOptions);
   }, [reportingPeriods, fundingSource, currentReportingPeriod]);
 
+  const statusFunc: FieldStatusFunc<Funding, SelectProps> = (
+    data: TObjectDriller<Funding>,
+    _,
+    props
+  ) =>
+    getValidationStatusForField(
+      data as TObjectDriller<Funding>,
+      data.at(isLast ? 'lastReportingPeriod' : 'firstReportingPeriod').path,
+      props
+    );
+
   return (
     <FormField<T, SelectProps, number | null>
       getValue={(data) => accessor(data).at('id')}
@@ -89,10 +104,8 @@ export const ReportingPeriodField = <
         value: `${rp.id}`,
       }))}
       optional={optional}
-      status={(data, _, props) =>
-        getValidationStatusForFields(funding, [
-          isLast ? 'lastReportingPeriod' : 'firstReportingPeriod',
-        ])
+      status={
+        showStatus ? (statusFunc as FieldStatusFunc<T, SelectProps>) : undefined
       }
     />
   );

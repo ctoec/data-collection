@@ -3,7 +3,7 @@ import { Button, Card } from '@ctoec/component-library';
 import { propertyDateSorter } from '../../../../utils/dateSorter';
 import { EditDeterminationForm } from './EditDeterminationForm';
 import { RedeterminationForm } from './RedeterminationForm';
-import { EditFormProps } from '../../types';
+import { RecordFormProps } from '../../types';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { Child } from '../../../../shared/models';
 
@@ -16,7 +16,7 @@ export const doesFamilyIncomeFormHaveErrors = (child?: Child) =>
       )
     : true;
 
-export const FamilyIncomeForm: React.FC<EditFormProps> = (props) => {
+export const FamilyIncomeForm: React.FC<RecordFormProps> = (props) => {
   const { child, afterSaveSuccess } = props;
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);

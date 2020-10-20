@@ -3,61 +3,68 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import {
   SideNav,
   TextWithIcon,
-  Success,
-  Button,
   ArrowRight,
   InlineIcon,
 } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
-import { Child } from '../../shared/models';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
 import { Link } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
+import { Child } from '../../shared/models';
 
 const BatchEdit: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { children } = useContext(DataCacheContext);
 
-  const [fixedRecordsForDisplay, setFixedRecordsForDisplay] = useState<Child[]>(
-    []
-  );
+  const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
+    string[]
+  >([]);
   useEffect(() => {
     if (!children.loading) {
-      setFixedRecordsForDisplay(children.records.filter(hasValidationError));
+      setFixedRecordsForDisplayIds(
+        children.records.filter(hasValidationError).map((child) => child.id)
+      );
     }
   }, [children.loading]);
 
+  const fixedRecordsForDisplay = fixedRecordsForDisplayIds.map((id) =>
+    children.getRecordById(id)
+  ) as Child[];
   const currentlyMissingInfoCount = fixedRecordsForDisplay.filter(
     hasValidationError
   ).length;
 
-  const [activeRecordIdx, setActiveRecordIdx] = useState<number>();
+  const [activeRecordId, setActiveRecordId] = useState<string>();
   useEffect(() => {
-    if (fixedRecordsForDisplay.length) setActiveRecordIdx(0);
-  }, [fixedRecordsForDisplay.length]);
+    if (fixedRecordsForDisplayIds.length)
+      setActiveRecordId(fixedRecordsForDisplayIds[0]);
+  }, [fixedRecordsForDisplayIds.length]);
 
   const moveNextRecord = () => {
     // If active record is last record in the list
-    if (activeRecordIdx === fixedRecordsForDisplay.length - 1) {
+    const activeRecordIdx = fixedRecordsForDisplayIds.findIndex(
+      (id) => id === activeRecordId
+    );
+    if (activeRecordIdx === fixedRecordsForDisplayIds.length - 1) {
       // Then look for the first record that is still missing info
-      const firstStillMissingInformationRecordIdx = fixedRecordsForDisplay.findIndex(
+      const firstStillMissingInformationRecord = fixedRecordsForDisplay.find(
         hasValidationError
       );
 
-      setActiveRecordIdx(
+      setActiveRecordId(
         // If a no records are missing info, then set active record to none
-        firstStillMissingInformationRecordIdx < 0
+        !firstStillMissingInformationRecord
           ? undefined
           : // otherwise set active record to first that is still missing info
-            firstStillMissingInformationRecordIdx
+            firstStillMissingInformationRecord.id
       );
     }
 
     // otherwise, move to next record in the list
-    setActiveRecordIdx((idx) => (idx === undefined ? idx : idx + 1));
+    setActiveRecordId(fixedRecordsForDisplayIds[activeRecordIdx + 1]);
   };
 
   return (
@@ -89,8 +96,10 @@ const BatchEdit: React.FC = () => {
             )}
           </div>
           <SideNav
-            externalActiveItemIndex={activeRecordIdx}
+            activeItemId={activeRecordId}
             items={fixedRecordsForDisplay.map((record) => ({
+              id: record.id,
+              onClick: () => setActiveRecordId(record.id),
               title: (
                 <span>
                   {nameFormatter(record)}
@@ -100,14 +109,14 @@ const BatchEdit: React.FC = () => {
                 </span>
               ),
               description: 'Placeholder',
-              content: (
-                <BatchEditItemContent
-                  record={children.getRecordById(record.id) as Child}
-                  moveNextRecord={moveNextRecord}
-                />
-              ),
             }))}
-            noActiveItemContent={
+          >
+            {activeRecordId !== undefined ? (
+              <BatchEditItemContent
+                childId={activeRecordId}
+                moveNextRecord={moveNextRecord}
+              />
+            ) : (
               <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
                 <InlineIcon icon="complete" />
                 <p className="font-body-lg text-bold margin-y-1">
@@ -122,8 +131,8 @@ const BatchEdit: React.FC = () => {
                   />
                 </Link>
               </div>
-            }
-          />
+            )}
+          </SideNav>
         </>
       )}
     </div>

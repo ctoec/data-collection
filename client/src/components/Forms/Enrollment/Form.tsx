@@ -9,7 +9,7 @@ import {
   NewFundingField,
 } from './Fields';
 import UserContext from '../../../contexts/UserContext/UserContext';
-import { EditFormProps } from '../types';
+import { RecordFormProps } from '../types';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { getCurrentEnrollment } from '../../../utils/models';
@@ -41,16 +41,13 @@ export const doesEnrollmentFormHaveErrors = (
 type EnrollmentFormProps = {
   id?: string;
   enrollmentId?: number;
-  submitButtonText?: string;
-  CancelButton?: JSX.Element;
-} & EditFormProps;
+} & RecordFormProps;
 
 export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   id,
   child,
   enrollmentId,
-  submitButtonText = 'Save',
-  CancelButton,
+  AdditionalButton,
   afterSaveSuccess,
   setAlerts,
   showField = () => true,
@@ -125,9 +122,9 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
           orgId={child.organization.id}
         />
       )}
-      {CancelButton}
+      {AdditionalButton}
       <FormSubmitButton
-        text={loading ? 'Saving...' : submitButtonText}
+        text={loading ? 'Saving...' : 'Save'}
         disabled={loading}
       />
     </Form>

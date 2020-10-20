@@ -1,12 +1,12 @@
 import React from 'react';
-import { EditFormProps } from '../../../components/Forms/types';
+import { RecordFormProps } from '../../../components/Forms/types';
 import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
 import { Enrollment } from '../../../shared/models';
 
-export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
+export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
 }) => {
@@ -24,8 +24,6 @@ export const EnrollmentFundingForm: React.FC<EditFormProps> = ({
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
-  // Separate enrollments into current (no end date) and past
-  // (with end date). Either may not exist
   return (
     <>
       <h2>Enrollment and funding</h2>
