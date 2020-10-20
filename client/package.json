@@ -33,7 +33,7 @@
     "react-markdown": "^4.3.1",
     "react-perfect-scrollbar": "^1.5.8",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.3",
+    "react-scripts": "^3.4.3",
     "sass": "^1.27.0",
     "typescript": "^3.9.5",
     "uswds": "^2.8.0"
