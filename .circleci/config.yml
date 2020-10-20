@@ -36,8 +36,11 @@ jobs:
           name: Build Express server
           command: yarn build
       - run:
+          working_directory: client
           name: Build React app
-          command: cd client && CI="" REACT_APP_STAGE="<< parameters.env >>" yarn build
+          # move server node_modules so they don't interfere with preflight checks for the client node_modules
+          # (yarn looks for node_modules in parent directories)
+          command: mv ../node_modules ../IGNORE && CI="" REACT_APP_STAGE="<< parameters.env >>" yarn build && mv ../IGNORE ../node_modules
       - persist_to_workspace:
           root: .
           paths:
@@ -59,7 +62,8 @@ jobs:
           command: yarn run test
       - run:
           name: Run front-end tests
-          command: cd client && yarn run test
+          # skip pre-flight checks to avoid the parent-directory node_module issues
+          command: cd client && SKIP_PREFLIGHT_CHECKS=true yarn run test
 
   deploy:
     description: "Job for deploying Fawkes to the specified environment"

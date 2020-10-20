@@ -3,7 +3,7 @@ import { Form, Button, FormSubmitButton } from '@ctoec/component-library';
 import { ChangeFunding } from '../../../../shared/payloads';
 import { NewFundingField } from '../../../../components/Forms/Enrollment/Fields';
 import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Funding/Fields';
-import { Enrollment } from '../../../../shared/models';
+import { Enrollment, FundingSource } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 
@@ -41,6 +41,18 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
     (f) => !f.lastReportingPeriod
   );
 
+  if (activeFunding && !activeFunding.fundingSpace) {
+    return (
+      <div>
+        <p>
+          Changes cannot be made to an enrollment's fundings while there is
+          missing information.
+        </p>
+        <Button text="Cancel" appearance="outline" onClick={hideForm} />
+      </div>
+    );
+  }
+
   return (
     <Form<ChangeFunding>
       id="change-funding-form"
@@ -58,7 +70,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
       {!!activeFunding && (
         <ReportingPeriodField<ChangeFunding>
           accessor={(data) => data.at('oldFunding').at('lastReportingPeriod')}
-          fundingSource={activeFunding.fundingSpace.source}
+          fundingSource={activeFunding.fundingSpace?.source as FundingSource} // This is known to have a value (check on line 44)
           isLast={true}
           label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
           optional={changeType === 'start'}
