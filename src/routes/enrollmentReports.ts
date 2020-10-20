@@ -45,6 +45,46 @@ enrollmentReportsRouter.get(
 );
 
 /**
+ * /enrollment-reports/checkForErrors POST
+ *
+ * Ingests an uploaded file, leveraging multer middleware to save it
+ * to /tmp/uploads. Then:
+ *  - parses the saved file into an array of EnrollmentReportRows
+ *  - maps EnrollmentReportRows to child records, which are NOT
+ *    persisted to the DB
+ *  - computes how many validation errors occur for each column in
+ *    the template
+ *  - sends back an Error Dictionary mapping columns to how many errors
+ *    of that kind occur in the file
+ */
+const temp = multer({ dest: 'tmp/uploads' }).single('file');
+enrollmentReportsRouter.post(
+  '/checkForErrors',
+  temp,
+  passAsyncError(async (req, res) => {
+    return getManager().transaction(async (tManager) => {
+      try {
+        const reportRows = controller.parseUploadedTemplate(req.file);
+        const reportChildren = await controller.mapRows(
+          tManager,
+          reportRows,
+          req.user,
+          false
+        );
+        const errorDict = controller.checkErrorsInChildren(reportChildren);
+        res.send(errorDict);
+      } catch (err) {
+        console.error(
+          'Unable to determine validation errors in spreadsheet: ',
+          err
+        );
+        throw new BadRequestError('Cannot parse uploaded sheet');
+      }
+    });
+  })
+);
+
+/**
  * /enrollment-reports POST
  *
  * Ingests an uploaded file, leveraging multer middleware to
@@ -84,10 +124,11 @@ enrollmentReportsRouter.post(
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const reportChildren = await controller.mapAndSaveRows(
+        const reportChildren = await controller.mapRows(
           tManager,
           reportRows,
-          req.user
+          req.user,
+          true
         );
         const report = await tManager.save(
           tManager.create(EnrollmentReport, { children: reportChildren })

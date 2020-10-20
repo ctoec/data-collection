@@ -11,6 +11,13 @@ import { handleJWTError } from '../../utils/handleJWTError';
 import { CheckReplaceData } from './CheckReplaceData';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
+import { ErrorsModal } from './ErrorsModal';
+
+export type ErrorObjectForTable = {
+  property: string;
+  count: number;
+  formattedName: string;
+};
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -32,6 +39,10 @@ const Upload: React.FC = () => {
 
   const [userRosterCount, setUserRosterCount] = useState(undefined);
   const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
+  const [errorDict, setErrorDict] = useState<ErrorObjectForTable[] | undefined>(
+    undefined
+  );
+  const [errorsModalOpen, setErrorsModalOpen] = useState(false);
   useEffect(() => {
     apiGet('children?count=true', { accessToken }).then((res) =>
       setUserRosterCount(res.count)
@@ -47,6 +58,28 @@ const Upload: React.FC = () => {
 
   const [queryStringForUpload, setQueryStringForUpload] = useState('');
   const [postUpload, setPostUpload] = useState(false);
+
+  useEffect(() => {
+    // Haven't yet determined how many errors of each type there are
+    if (file && errorDict === undefined) {
+      const formData = new FormData();
+      formData.set('file', file);
+      apiPost(`enrollment-reports/checkForErrors`, formData, {
+        accessToken,
+        rawBody: true,
+      })
+        // TODO: DEFINE APPROPRIATE BEHAVIOR AFTER SENDING BACK ERROR DICT
+        .then((resp) => {
+          setErrorDict(resp);
+        })
+        .catch(
+          handleJWTError(history, (err) => {
+            setError(err);
+            setFile(undefined);
+          })
+        );
+    }
+  }, [file, errorDict]);
 
   useEffect(() => {
     // If the file exists and the upload should be posted,
@@ -79,11 +112,20 @@ const Upload: React.FC = () => {
     // before allowing them to submit data
     if (userRosterCount === undefined) return;
 
-    // If they have selected a file, then decide if the upload
-    // should occur or we should display the check replace data modal
-    if (file) {
-      if (userRosterCount === 0) setPostUpload(true);
-      else setCheckReplaceDataOpen(true);
+    // If they have selected a file, then open the error checking modal
+    // to let the user see where the errors are. If they wish to proceed,
+    //  decide if the upload should occur or we should display the
+    // check replace data modal
+    if (file && errorDict) {
+      if (userRosterCount === 0) {
+        if (errorDict.length > 0) setErrorsModalOpen(true);
+        else setPostUpload(true);
+      } else {
+        // TODO: MODIFY THIS SO THAT AFTER THE USER DOES WHAT THEY WANT IN
+        // THE CHECK REPLACE MODAL, WE GO TO THE ERROR MODAL IF APPLICABLE
+        // setCheckReplaceDataOpen(true);
+        // setErrorsModalOpen(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, userRosterCount]);
@@ -106,6 +148,13 @@ const Upload: React.FC = () => {
 
   return (
     <div className="grid-container margin-top-4">
+      <ErrorsModal
+        isOpen={errorsModalOpen}
+        toggleIsOpen={() => setErrorsModalOpen((o) => !o)}
+        clearFile={() => setFile(undefined)}
+        errorDict={errorDict || []}
+        setPostUpload={setPostUpload}
+      />
       <CheckReplaceData
         isOpen={checkReplaceDataOpen}
         clearFile={() => setFile(undefined)}
