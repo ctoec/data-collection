@@ -117,11 +117,9 @@ const lookUpOrganization = (
   if (organizations.length === 1) return organizations[0];
 
   if (!source.providerName)
-    throw new BadRequestError(`
-			You uploaded a file with missing information\n
-			Provider name is required for every record in your upload.
-			Make sure this column is not empty. 
-		`);
+    throw new BadRequestError(
+      'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.'
+    );
 
   return organizations.find(
     (organization) =>

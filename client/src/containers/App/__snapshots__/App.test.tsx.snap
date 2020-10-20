@@ -112,7 +112,7 @@ exports[`App matches snapshot 1`] = `
                             class="usa-button usa-button--unstyled"
                             type="button"
                           >
-                            .csv
+                            CSV
                           </button>
                         </li>
                       </ul>
