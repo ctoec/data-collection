@@ -208,10 +208,10 @@ function getBoolean(value: string): boolean {
  * @param invalidColumns - Array of columns that are invalid
  * @param invalidReason - Single word describing why columns are invalid
  */
-type invalidReasons = 'unmatched' | 'missing';
+type invalidReason = 'unmatched' | 'missing';
 function getInvalidColumnData(
   invalidColumns: string[],
-  invalidReason: invalidReasons
+  invalidReason: invalidReason
 ): [string, string] {
   if (invalidColumns.length == 1) {
     const invalidString =
