@@ -1,36 +1,9 @@
-import { write, WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
+import { WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { wrapText } from '../utils/string';
-import { Response } from 'express';
 import { getAllColumnMetadata } from '../template';
 
-export function streamTemplate(response: Response, bookType: 'csv' | 'xlsx') {
-  const template: WorkBook =
-    bookType === 'csv' ? generateCsvWorkbook() : generateExcelWorkbook();
-
-  const templateStream = write(template, {
-    bookType,
-    type: 'buffer',
-  });
-  response.contentType('application/octet-stream');
-  response.send(templateStream);
-}
-
-function generateCsvWorkbook(): WorkBook {
-  const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
-
-  const formattedColumnNames: string[] = columnMetadatas.map(
-    (c) => c.formattedName
-  );
-  const sheet = utils.aoa_to_sheet([formattedColumnNames]);
-
-  const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, sheet);
-
-  return workbook;
-}
-
-function generateExcelWorkbook(): WorkBook {
+export function generateExcelWorkbook(rows?: string[][]): WorkBook {
   const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
 
   let columnNames: string[] = [];
@@ -63,9 +36,12 @@ function generateExcelWorkbook(): WorkBook {
     }
   });
 
-  const aoa = [sections, columnNames, formats];
+  const twoDimensionalArray = [sections, columnNames, formats];
 
-  const sheet: WorkSheet = utils.aoa_to_sheet(aoa);
+  const sheet: WorkSheet = utils.aoa_to_sheet(twoDimensionalArray);
+  if (rows) {
+    utils.sheet_add_aoa(sheet, rows, { origin: -1 });
+  }
 
   let merges = [];
   let start = 0;

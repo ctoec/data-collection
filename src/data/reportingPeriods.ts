@@ -1,3 +1,7 @@
+import moment from 'moment';
+import { FundingSource } from '../../client/src/shared/models';
+import { ReportingPeriod } from '../entity';
+
 export const reportingPeriods = [
   ['2019-07-01', '2019-07-01', '2019-07-28', '2019-08-16'],
   ['2019-08-01', '2019-07-29', '2019-09-01', '2019-09-20'],
@@ -18,3 +22,16 @@ export const reportingPeriods = [
   ['2020-11-01', '2020-11-02', '2020-11-29', '2020-12-18'],
   ['2020-12-01', '2020-11-30', '2020-12-27', '2021-01-15'],
 ];
+
+export const getReportingPeriodFromDates = (
+  fundingSource: FundingSource,
+  dates
+): Omit<ReportingPeriod, 'id'> => {
+  return {
+    type: fundingSource,
+    period: moment.utc(dates[0]),
+    periodStart: moment.utc(dates[1]),
+    periodEnd: moment.utc(dates[2]),
+    dueAt: moment.utc(dates[3]),
+  };
+};

@@ -1,3 +1,5 @@
+// These don't have ids because when putting them into the db the db assigns an id that doesn't necessarily align with what we specify
+
 export const hogwarts = {
   providerName: 'Hogwarts Childcare',
 };

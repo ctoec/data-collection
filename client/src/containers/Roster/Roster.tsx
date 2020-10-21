@@ -9,7 +9,7 @@ import {
 } from '@ctoec/component-library';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
-import { CSVDownloadLink } from '../../components/CSVDownloadLink';
+import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { AddRecordButton } from '../../components/AddRecordButton';
@@ -157,7 +157,7 @@ const Roster: React.FC = () => {
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <AddRecordButton orgs={organizations} />
-          <CSVDownloadLink />
+          <CSVExcelDownloadButton fileType="csv" whichDownload="roster" />
         </div>
         {!filteredChildren.length ? (
           <Alert

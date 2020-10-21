@@ -1,5 +1,4 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
 import { MailToLink } from '../../components/MailToLink';
 import {
@@ -7,7 +6,7 @@ import {
   TextWithIcon,
   ArrowRight as Arrow,
 } from '@ctoec/component-library';
-import { CSVDownloadLink } from '../../components/CSVDownloadLink';
+import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import LogoWithCheckSrc from '@ctoec/component-library/dist/assets/images/logoWithCheck.svg';
 
 import { Link } from 'react-router-dom';
@@ -26,7 +25,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
  */
 const SubmitSuccess: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-  const { reportId } = useParams();
 
   return (
     <div className="grid-container margin-top-4">
@@ -61,7 +59,7 @@ const SubmitSuccess: React.FC = () => {
         <strong>Want a copy of your enrollment data?</strong>
       </div>
       <div className="grid-row margin-top-1 margin-bottom-2">
-        <CSVDownloadLink reportId={reportId} />
+        <CSVExcelDownloadButton whichDownload="roster" fileType="csv" />
       </div>
       <div className="grid-row marging-top-6">
         <strong>Need to make changes?</strong>
