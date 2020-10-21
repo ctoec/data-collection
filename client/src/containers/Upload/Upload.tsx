@@ -114,23 +114,28 @@ const Upload: React.FC = () => {
         setQueryString={setQueryStringForUpload}
       />
       {error && (
-        <Alert
-          heading={getErrorHeading(error)}
-          text={getErrorText(error)}
-          type="error"
-          actionItem={
-            <div>
-              <p className="margin-bottom-2 text-bold">
-                Download the data collection template
-              </p>
-              <CSVExcelDownloadButton
-                fileType="xlsx"
-                whichDownload="template"
-              />
-              <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
-            </div>
-          }
-        />
+        <div className="margin-bottom-2">
+          <Alert
+            heading={getErrorHeading(error)}
+            text={getErrorText(error)}
+            type="error"
+            actionItem={
+              <div>
+                <p className="margin-bottom-2 text-bold">
+                  Download the data collection template
+                </p>
+                <CSVExcelDownloadButton
+                  fileType="xlsx"
+                  whichDownload="template"
+                />
+                <CSVExcelDownloadButton
+                  fileType="csv"
+                  whichDownload="template"
+                />
+              </div>
+            }
+          />
+        </div>
       )}
       <div className="margin-bottom-2 text-bold">
         <Link className="usa-button usa-button--unstyled" to="/">
