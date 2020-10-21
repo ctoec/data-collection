@@ -9,7 +9,7 @@ const TemplateDownload: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row grid-gap">
-        <div className="grid-col-8">
+        <div className="desktop:grid-col-8">
           <h1 ref={h1Ref}>Batch upload data template</h1>
           <p>
             You can use this template to batch upload many enrollment records to
@@ -35,7 +35,7 @@ const TemplateDownload: React.FC = () => {
             </Link>
           </p>
         </div>
-        <div className="grid-col-4" role="presentation">
+        <div className="tablet:grid-col-4" role="presentation">
           <Image />
         </div>
       </div>

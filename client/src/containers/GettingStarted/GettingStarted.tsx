@@ -10,7 +10,7 @@ const GettingStarted: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
       <div className="grid-row grid-gap">
-        <div className="grid-col-8">
+        <div className="tablet:grid-col-8">
           <h1 ref={h1Ref}>Let's get started</h1>
           <p>
             This tool will allow you to share your state-funded enrollment data
@@ -58,13 +58,17 @@ const GettingStarted: React.FC = () => {
             />{' '}
           </div>
         </div>
-        <div className="grid-col-4" role="presentation">
+        <div className="tablet:grid-col-4" role="presentation">
           <Image />
         </div>
       </div>
-      <div className="grid-row margin-top-2">
-        <Button text="Go to file upload" href="/upload" />
-        <Button text="Go to roster" href="/roster" />
+      <div className="grid-row">
+        <Button
+          text="Go to file upload"
+          href="/upload"
+          className="margin-top-2"
+        />
+        <Button text="Go to roster" href="/roster" className="margin-top-2" />
       </div>
     </div>
   );

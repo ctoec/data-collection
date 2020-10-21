@@ -9,7 +9,7 @@ exports[`GettingStarted matches snapshot 1`] = `
       class="grid-row grid-gap"
     >
       <div
-        class="grid-col-8"
+        class="tablet:grid-col-8"
       >
         <h1>
           Let's get started
@@ -131,7 +131,7 @@ exports[`GettingStarted matches snapshot 1`] = `
         </div>
       </div>
       <div
-        class="grid-col-4"
+        class="tablet:grid-col-4"
         role="presentation"
       >
         <svg>
@@ -140,16 +140,16 @@ exports[`GettingStarted matches snapshot 1`] = `
       </div>
     </div>
     <div
-      class="grid-row margin-top-2"
+      class="grid-row"
     >
       <a
-        class="usa-button"
+        class="usa-button margin-top-2"
         href="/upload"
       >
         Go to file upload
       </a>
       <a
-        class="usa-button"
+        class="usa-button margin-top-2"
         href="/roster"
       >
         Go to roster
