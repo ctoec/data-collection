@@ -42,10 +42,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   const { headers, data } = parseSheet(sheet, objectProperties);
 
   // Array comparison was returning false even when the strings matched
-  if (
-    !expectedHeaders.every((header, idx) => header === headers[idx]) ||
-    expectedHeaders.length != headers.length
-  ) {
+  if (!expectedHeaders.every((header, idx) => header === headers[idx])) {
     const errorMessage = getExcessandInvalidString(headers, expectedHeaders);
     throw new BadRequestError(errorMessage);
   }
@@ -208,27 +205,18 @@ function getBoolean(value: string): boolean {
  * @param invalidColumns - Array of columns that are invalid
  * @param invalidReason - Single word describing why columns are invalid
  */
-type invalidReason = 'unmatched' | 'missing';
-function getInvalidColumnData(
-  invalidColumns: string[],
-  invalidReason: invalidReason
-): [string, string] {
+function getInvalidColumnData(invalidColumns: string[]): [string, string] {
+  const invalidMessage = 'missing or incorrectly formatted';
   if (invalidColumns.length == 1) {
-    const invalidString =
-      invalidReason == 'missing'
-        ? `${invalidColumns[0]} is ${invalidReason}.`
-        : `${invalidColumns[0]} doesn't match the most recent template.`;
-    const invalidNumber = '1 ' + invalidReason + ' column';
+    const invalidString = `"${invalidColumns[0]}" is ${invalidMessage}.`;
+    const invalidNumber = `1 ${invalidMessage} column`;
     return [invalidString, invalidNumber];
   } else {
-    const columnNames = `${invalidColumns
+    const columnNames = `"${invalidColumns
       .slice(0, -1)
-      .join(', ')} and ${invalidColumns.slice(-1)}`;
-    const invalidString =
-      invalidReason == 'missing'
-        ? `${columnNames} are ${invalidReason}.`
-        : `${columnNames} don't match the most recent template.`;
-    const invalidNumber = `${invalidColumns.length} ${invalidReason} columns`;
+      .join('", "')}" and "${invalidColumns.slice(-1)}"`;
+    const invalidString = `${columnNames} are ${invalidMessage}.`;
+    const invalidNumber = `${invalidColumns.length} ${invalidMessage} columns`;
     return [invalidString, invalidNumber];
   }
 }
@@ -242,31 +230,12 @@ function getExcessandInvalidString(
   expectedHeaders: any[]
 ): string {
   const headersSet = new Set(headers);
-  const expectedHeadersSet = new Set(expectedHeaders);
   const missingHeaders = expectedHeaders.filter((x) => !headersSet.has(x) && x);
-  const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x) && x);
-  const [excessMessage, excessNumber] = getInvalidColumnData(
-    excessHeaders,
-    'unmatched'
-  );
-  const [missingMessage, missingNumber] = getInvalidColumnData(
-    missingHeaders,
-    'missing'
-  );
+  const [missingMessage, missingNumber] = getInvalidColumnData(missingHeaders);
 
   let errorMessage = '';
   if (missingHeaders.length > 0) {
-    if (excessHeaders.length > 0) {
-      errorMessage = `You have ${missingNumber} and ${excessNumber}.\n ${missingMessage} ${excessMessage}`;
-    } else {
-      errorMessage = `Your file has ${missingNumber}.\n ${missingMessage}`;
-    }
-  } else {
-    if (excessHeaders.length > 0) {
-      errorMessage = `Your file has ${excessNumber}.\n ${excessMessage}`;
-    } else {
-      errorMessage = `Your file has all the correct columns but they are out of order.`;
-    }
+    errorMessage = `Your upload has ${missingNumber}.\n ${missingMessage} Download the latest template for the correct column headers and formatting.`;
   }
   return errorMessage;
 }
