@@ -12,6 +12,8 @@ import { ChangeEnrollmentForm } from './Form';
 type ChangeEnrollmentCardProps = {
   child: Child;
   currentEnrollment?: Enrollment;
+  key?: string;
+  activeKey?: string;
   afterSaveSuccess: () => void;
 };
 
@@ -24,6 +26,8 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
   child,
   currentEnrollment,
   afterSaveSuccess,
+  key,
+  activeKey,
 }) => {
   const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();

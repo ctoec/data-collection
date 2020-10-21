@@ -28,6 +28,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     <>
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentCard
+        key="change-enrollement"
         child={child}
         currentEnrollment={currentEnrollment}
         afterSaveSuccess={afterSaveSuccess}
@@ -53,6 +54,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             />
           ))}
           <ChangeFundingCard
+            key="change-funding-card"
             enrollment={currentEnrollment}
             orgId={child.organization.id}
             afterSaveSuccess={afterSaveSuccess}
