@@ -26,6 +26,12 @@ import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
 
+/**
+ * Can use optional save parameter to decide whether to persist
+ * the mapped results to the DB or not. If we don't persist,
+ * mappnig is still performed to get the data in the right format.
+ * Useful for analyzing validation errors before committing.
+ */
 export const mapRows = async (
   transaction: EntityManager,
   rows: EnrollmentReportRow[],

@@ -4,20 +4,26 @@ import { Button } from '@ctoec/component-library';
 import { ErrorObjectForTable } from './Upload';
 import { tableColumns } from './TableColumns';
 
-type ErrorsModalProps = {
+type ErrorModalProps = {
   isOpen: boolean;
   toggleIsOpen: () => void;
   clearFile: () => void;
   errorDict: ErrorObjectForTable[];
-  setPostUpload: Dispatch<SetStateAction<boolean>>;
+  nextFunc: () => void;
 };
 
-export const ErrorsModal: React.FC<ErrorsModalProps> = ({
+/**
+ * Modal that lets users know whether a Batch Uploaded sheet contains
+ * any data errors. If so, it shows a count of how many errors occur
+ * across each field of uploaded data.
+ * @param param0
+ */
+export const ErrorModal: React.FC<ErrorModalProps> = ({
   isOpen,
   toggleIsOpen,
   clearFile,
   errorDict,
-  setPostUpload,
+  nextFunc,
 }) => {
   return (
     <Modal
@@ -51,10 +57,9 @@ export const ErrorsModal: React.FC<ErrorsModalProps> = ({
               }}
             />
             <Button
-              text="Upload and replace in roster"
+              text="Upload and correct in roster"
               onClick={() => {
-                setPostUpload(true);
-                toggleIsOpen();
+                nextFunc();
               }}
             />
           </div>

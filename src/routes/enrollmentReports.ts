@@ -5,7 +5,7 @@ import fs from 'fs';
 import { v4 as uuid } from 'uuid';
 import multer from 'multer';
 
-import { EnrollmentReport } from '../entity';
+import { Child, EnrollmentReport } from '../entity';
 import {
   NotFoundError,
   BadRequestError,
@@ -15,6 +15,7 @@ import {
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/enrollmentReports/index';
 import { parseQueryString } from '../utils/parseQueryString';
+import { validate } from 'class-validator';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -57,7 +58,7 @@ enrollmentReportsRouter.get(
  *  - sends back an Error Dictionary mapping columns to how many errors
  *    of that kind occur in the file
  */
-const temp = multer({ dest: 'tmp/uploads' }).single('file');
+const temp = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
   '/checkForErrors',
   temp,
@@ -65,13 +66,26 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (tManager) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const reportChildren = await controller.mapRows(
+        const reportChildren: Child[] = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
           false
         );
-        const errorDict = controller.checkErrorsInChildren(reportChildren);
+        const schemaChildren: Child[] = await Promise.all(
+          reportChildren.map(async (child) => {
+            // Create object as the DB would see it without saving
+            return getManager().create(Child, child);
+          })
+        );
+        const childrenWithErrors = await Promise.all(
+          schemaChildren.map(async (child) => {
+            return { ...child, validationErrors: await validate(child) };
+          })
+        );
+        const errorDict = await controller.checkErrorsInChildren(
+          childrenWithErrors
+        );
         res.send(errorDict);
       } catch (err) {
         console.error(
