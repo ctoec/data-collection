@@ -1,6 +1,6 @@
 import express from 'express';
 
-import * as controller from '../controllers/template';
+import { streamTabularData } from '../utils/streamTabularData';
 import { getAllColumnMetadata } from '../template';
 
 export const templateRouter = express.Router();
@@ -10,7 +10,7 @@ export const templateRouter = express.Router();
  * Returns all column metadata from the FlattenedEnrollment model,
  * as an array of ColumnMetadata objects
  */
-templateRouter.get('/column-metadata', (req, res) => {
+templateRouter.get('/column-metadata', (_, res) => {
   res.send(getAllColumnMetadata());
 });
 
@@ -20,8 +20,8 @@ templateRouter.get('/column-metadata', (req, res) => {
  * Returns all column metadata from the FlattenedEnrollment model,
  * in the form of an csv file stream.
  */
-templateRouter.get('/csv', (req, res) => {
-  controller.streamTemplate(res, 'csv');
+templateRouter.get('/csv', (_, res) => {
+  streamTabularData(res, 'csv');
 });
 
 /**
@@ -30,6 +30,6 @@ templateRouter.get('/csv', (req, res) => {
  * Returns all column metadata from the FlattenedEnrollment model,
  * in the form of an xlsx file stream.
  */
-templateRouter.get('/xlsx', (req, res) => {
-  controller.streamTemplate(res, 'xlsx');
+templateRouter.get('/xlsx', (_, res) => {
+  streamTabularData(res, 'xlsx');
 });

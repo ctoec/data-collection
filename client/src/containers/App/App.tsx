@@ -6,7 +6,6 @@ import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { mailToLinkProps } from '../../components/MailToLink';
-import { TemplateDownloadLink } from '../../components/TemplateDownloadLink';
 
 const App: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -38,19 +37,9 @@ const App: React.FC = () => {
             path: '/upload',
           },
           {
-            id: 'templates-nav',
             text: 'Data template',
             type: 'secondary',
-            children: [
-              {
-                text: 'Excel',
-                renderer: () => <TemplateDownloadLink type="xlsx" nav />,
-              },
-              {
-                text: '.csv',
-                renderer: () => <TemplateDownloadLink type="csv" nav />,
-              },
-            ],
+            path: '/template',
           },
           {
             type: 'secondary',

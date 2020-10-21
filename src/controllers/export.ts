@@ -1,18 +1,12 @@
-import { write, WorkBook, utils } from 'xlsx';
+import { BookType } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { getManager, In } from 'typeorm';
-import {
-  Child,
-  EnrollmentReport,
-  Site,
-  Enrollment,
-  User,
-  Organization,
-} from '../entity';
+import { getManager } from 'typeorm';
+import { Child, Site, Enrollment } from '../entity';
 import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
 import { Response } from 'express';
 import { isMoment } from 'moment';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
+import { streamTabularData } from '../utils/streamTabularData';
 
 // Make sure to load all nested levels of the Child objects
 // we fetch
@@ -95,15 +89,14 @@ export async function getChildrenBySites(sites: Site[]) {
  */
 export async function streamUploadedChildren(
   response: Response,
-  childrenToMap: Child[]
+  childrenToMap: Child[],
+  format: BookType = 'csv'
 ) {
-  const csvToExport: WorkBook = generateCSV(childrenToMap);
-  const csvStream = write(csvToExport, {
-    bookType: 'csv',
-    type: 'buffer',
-  });
-  response.contentType('application/octet-stream');
-  response.send(csvStream);
+  const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
+  const childStrings = childrenToMap.map((c) =>
+    flattenChild(c, columnMetadatas)
+  );
+  streamTabularData(response, format, childStrings);
 }
 
 /**
@@ -157,7 +150,8 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
   const fundings =
     activeEnrollment == undefined ? undefined : activeEnrollment.fundings || [];
 
-  const activeFunding = fundings.length > 0 ? fundings[0] : undefined;
+  const activeFunding =
+    fundings && fundings.length > 0 ? fundings[0] : undefined;
 
   // Note: There is still some nested depth checking because we store
   // records as nested data structures within a Child object
@@ -167,7 +161,7 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
     const c = cols[i];
     if (child.hasOwnProperty(c.propertyName)) {
       childString.push(formatStringPush(child[c.propertyName]));
-    } else if (child.family.hasOwnProperty(c.propertyName)) {
+    } else if (child.family?.hasOwnProperty(c.propertyName)) {
       childString.push(formatStringPush(child.family[c.propertyName]));
     } else if (
       !!currentDetermination &&
@@ -180,12 +174,12 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
     ) {
       childString.push(formatStringPush(activeEnrollment[c.propertyName]));
     } else if (
-      !!activeEnrollment.site &&
+      !!activeEnrollment?.site &&
       activeEnrollment.site.hasOwnProperty(c.propertyName)
     ) {
       childString.push(formatStringPush(activeEnrollment.site[c.propertyName]));
     } else if (
-      !!activeEnrollment.site.organization &&
+      !!activeEnrollment?.site?.organization &&
       activeEnrollment.site.organization.hasOwnProperty(c.propertyName)
     ) {
       childString.push(
@@ -193,18 +187,18 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
       );
     } else if (
       !!activeFunding &&
-      activeFunding.fundingSpace.hasOwnProperty(c.propertyName)
+      activeFunding.fundingSpace?.hasOwnProperty(c.propertyName)
     ) {
       childString.push(
         formatStringPush(activeFunding.fundingSpace[c.propertyName])
       );
     } else if (c.propertyName.toLowerCase().includes('fundingperiod')) {
-      if (c.propertyName.toLowerCase().startsWith('first')) {
+      if (!!activeFunding && c.propertyName.toLowerCase().startsWith('first')) {
         childString.push(
           formatStringPush(activeFunding.firstReportingPeriod.period)
         );
       } else {
-        if (!!activeFunding.lastReportingPeriod) {
+        if (!!activeFunding?.lastReportingPeriod) {
           childString.push(
             formatStringPush(activeFunding.lastReportingPeriod.period)
           );
@@ -213,29 +207,11 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
         }
       }
     } else {
-      childString.push('Unrecognized property name: ' + c.propertyName);
+      // We shouldn't do this if things are undefined probably??
+      // childString.push('Unrecognized property name: ' + c.propertyName);
+
+      childString.push('');
     }
   }
   return childString;
-}
-
-/**
- * Process an array of retrieved child objects and turn them into
- * string representations to cascade into a CSV with column headers.
- * @param childArray
- */
-export function generateCSV(childArray: Child[]) {
-  const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
-  const formattedColumnNames: string[] = columnMetadatas.map(
-    (c) => c.formattedName
-  );
-  const childStrings = childArray.map((c) => flattenChild(c, columnMetadatas));
-  const sheet = utils.aoa_to_sheet([formattedColumnNames]);
-
-  // Adding to the origin at the end appends the data instead of
-  // replacing it
-  utils.sheet_add_aoa(sheet, childStrings, { origin: -1 });
-  const workbook = utils.book_new();
-  utils.book_append_sheet(workbook, sheet);
-  return workbook;
 }
