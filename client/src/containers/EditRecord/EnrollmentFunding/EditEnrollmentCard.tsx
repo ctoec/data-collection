@@ -68,7 +68,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
     <Card
       key={enrollmentId}
       appearance={isCurrent ? 'primary' : 'secondary'}
-      forceClose={closeCard}
+      forceClose={false}
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">

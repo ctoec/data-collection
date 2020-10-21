@@ -81,7 +81,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
     <Card
       key={fundingId}
       appearance={isCurrent ? 'primary' : 'secondary'}
-      forceClose={closeCard}
+      forceClose={false}
       borderless={true}
     >
       <div className="display-flex flex-justify">
@@ -104,12 +104,12 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         </div>
         <div className="display-flex align-center flex-space-between">
           <div className="display-flex align-center margin-right-2">
-            <ExpandCard>
-              <Button
-                text={<TextWithIcon text="Edit" Icon={Pencil} />}
-                appearance="unstyled"
-              />
-            </ExpandCard>
+            {/* <ExpandCard> */}
+            <Button
+              text={<TextWithIcon text="Edit" Icon={Pencil} />}
+              appearance="unstyled"
+            />
+            {/* </ExpandCard> */}
           </div>
           <div className="display-flex align-center margin-right-2">
             <Button
