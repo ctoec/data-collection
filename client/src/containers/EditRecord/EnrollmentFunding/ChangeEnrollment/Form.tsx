@@ -94,7 +94,6 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
             optional={true}
             label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
           />
-          )
         </>
       )}
 
@@ -102,7 +101,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
         <Button text="Cancel" appearance="outline" />
       </ExpandCard>
       <FormSubmitButton
-        text={loading ? 'Chaging enrollment...' : 'Change enrollment'}
+        text={loading ? 'Changing enrollment...' : 'Change enrollment'}
         disabled={loading}
       />
     </Form>
