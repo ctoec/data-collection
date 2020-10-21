@@ -120,12 +120,7 @@ exports[`Home matches snapshot 1`] = `
               <span
                 class="oec-text-with-icon text-underline"
               >
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-                >
-                  download.svg
-                </svg>
-                Download Excel Template
+                Download Excel template
               </span>
             </button>
             <button
@@ -135,12 +130,7 @@ exports[`Home matches snapshot 1`] = `
               <span
                 class="oec-text-with-icon text-underline"
               >
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-                >
-                  download.svg
-                </svg>
-                Download .csv Template
+                Download CSV template
               </span>
             </button>
           </div>

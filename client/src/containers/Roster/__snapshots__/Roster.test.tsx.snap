@@ -39,7 +39,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
         </button>
       </div>
       <button
-        class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+        class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
         type="button"
       >
         <span
@@ -687,7 +687,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
         </span>
       </a>
       <button
-        class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+        class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
         type="button"
       >
         <span

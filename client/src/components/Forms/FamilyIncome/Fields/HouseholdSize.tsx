@@ -13,7 +13,7 @@ export const HouseholdSizeField: React.FC = () => {
       getValue={(data) => data.at('numberOfPeople')}
       parseOnChangeEvent={(e) => parseInt(e.target.value, 10) || null}
       inputComponent={TextInput}
-      id={'number-of-people'}
+      id="number-of-people"
       label="Household size"
       small
       status={getValidationStatusForFieldInFieldset}
