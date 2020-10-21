@@ -87,7 +87,6 @@ export const NewFundingField = <
                 accessor={(data) =>
                   fundingAccessor(data).at('firstReportingPeriod')
                 }
-                getFunding={(data) => fundingAccessor(data).value}
               />
             </>
           ),

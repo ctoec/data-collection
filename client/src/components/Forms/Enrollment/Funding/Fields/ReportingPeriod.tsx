@@ -28,7 +28,6 @@ import { FieldStatusFunc } from '@ctoec/component-library/dist/components/Form/F
 type ReportingPeriodProps<T> = {
   accessor: (_: TObjectDriller<T>) => TObjectDriller<ReportingPeriod>;
   fundingSource: FundingSource;
-  getFunding: (_: TObjectDriller<T>) => Funding;
   isLast?: boolean;
   label?: string;
   optional?: boolean;
@@ -47,11 +46,10 @@ export const ReportingPeriodField = <
 >({
   accessor,
   fundingSource,
-  getFunding,
   isLast,
   label,
   optional,
-  showStatus,
+  showStatus = true,
 }: ReportingPeriodProps<T>) => {
   const { reportingPeriods } = useContext(DataCacheContext);
 
@@ -59,7 +57,6 @@ export const ReportingPeriodField = <
   const [reportingPeriodOptions, setReportingPeriodOptions] = useState<
     ReportingPeriod[]
   >([]);
-  const funding = getFunding(dataDriller);
 
   const currentReportingPeriod = accessor(dataDriller).value;
   useEffect(() => {
@@ -80,16 +77,33 @@ export const ReportingPeriodField = <
     setReportingPeriodOptions(_reportingPeriodOptions);
   }, [reportingPeriods, fundingSource, currentReportingPeriod]);
 
-  const statusFunc: FieldStatusFunc<Funding, SelectProps> = (
-    data: TObjectDriller<Funding>,
+  const statusFunc: FieldStatusFunc<T, SelectProps> = (
+    data: TObjectDriller<T>,
     _,
     props
-  ) =>
-    getValidationStatusForField(
-      data as TObjectDriller<Funding>,
-      data.at(isLast ? 'lastReportingPeriod' : 'firstReportingPeriod').path,
+  ) => {
+    let objDriller: TObjectDriller<Funding> = data as TObjectDriller<Funding>;
+
+    //  Properly handle status changes when pertaining directly to enrollments as well
+    if ((data as TObjectDriller<Enrollment>).at('fundings').value) {
+      objDriller = (data as TObjectDriller<Enrollment>).at('fundings').at(0);
+    } else if (
+      (data as TObjectDriller<ChangeEnrollment>)
+        .at('newEnrollment')
+        .at('fundings').value
+    ) {
+      objDriller = (data as TObjectDriller<ChangeEnrollment>)
+        .at('newEnrollment')
+        .at('fundings')
+        .at(0);
+    }
+
+    return getValidationStatusForField(
+      objDriller,
+      isLast ? 'lastReportingPeriod' : 'firstReportingPeriod',
       props
     );
+  };
 
   return (
     <FormField<T, SelectProps, number | null>

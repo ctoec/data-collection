@@ -106,7 +106,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
         <ReportingPeriodField<Funding>
           fundingSource={funding.fundingSpace.source}
           accessor={(data) => data.at('firstReportingPeriod')}
-          showStatus
+          showStatus={true}
         />
       )}
       {showField(funding, ['lastReportingPeriod'], []) && (
@@ -114,7 +114,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
           fundingSource={funding.fundingSpace.source}
           accessor={(data) => data.at('lastReportingPeriod')}
           isLast={true}
-          showStatus
+          showStatus={true}
         />
       )}
       {AdditionalButton}
