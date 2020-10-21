@@ -23,6 +23,7 @@ export class Funding implements FundingInterface {
 
   @ManyToOne(() => FundingSpace, { nullable: false, eager: true })
   @IsNotEmpty()
+  @ValidateNested()
   fundingSpace: FundingSpace;
 
   @ManyToOne(() => ReportingPeriod, { eager: true })
