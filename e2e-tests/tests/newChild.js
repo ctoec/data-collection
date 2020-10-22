@@ -2,7 +2,7 @@ const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
 
 module.exports = {
-  '@tags': ['child', 'new-child'],
+  '@tags': ['child', 'new'],
   newChild: async function (browser) {
     // Initializes with the launch_url value set in config
     await browser.init();

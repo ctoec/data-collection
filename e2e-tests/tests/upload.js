@@ -34,9 +34,6 @@ module.exports = {
       }
     });
 
-    // TODO: fix bug-- should be taken to roster automagically
-    await navigateToRoster(browser);
-
     await browser.waitForElementVisible(
       'xpath',
       '//*/p[contains(text(),"50 children enrolled at 4 sites")]'

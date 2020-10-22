@@ -3,7 +3,7 @@ const { navigateToRoster } = require('../utils/navigateToRoster');
 const { clickOnFirstChildInRoster } = require('../utils/clickOnFirstChildInRoster');
 
 module.exports = {
-  '@tags': ['child', 'change-child'],
+  '@tags': ['child', 'change'],
   changeChild: async function (browser) {
     await browser.init();
     await login(browser);
