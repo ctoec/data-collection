@@ -10,7 +10,7 @@ https: nightwatch_config = {
   selenium: {
     start_process: false,
     host: 'hub-cloud.browserstack.com',
-    port: 80,
+    port: 443,
     silent: true,
     disable_error_log: true,
   },
