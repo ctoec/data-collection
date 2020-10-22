@@ -17,7 +17,6 @@ import {
 import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';
 import { enumTransformer } from './transformers';
-import { IsNotEmpty } from 'class-validator';
 
 @Entity()
 @Unique('UQ_Source_AgeGroup_Time_Organization', [
@@ -58,7 +57,6 @@ export class FundingSpace implements FundingSpaceInterface {
     length: 20,
     transformer: enumTransformer(FundingTime),
   })
-  @IsNotEmpty()
   time: FundingTime;
 
   @OneToOne(() => FundingTimeSplit, (split) => split.fundingSpace, {
