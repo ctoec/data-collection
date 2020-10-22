@@ -103,7 +103,11 @@ const EditRecord: React.FC = () => {
         <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
-              <WithdrawRecord child={child} enrollment={activeEnrollment} />
+              <WithdrawRecord
+                setAlerts={setAlerts}
+                child={child}
+                enrollment={activeEnrollment}
+              />
             </>
           )}
           <DeleteRecord child={child} />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Dispatch, SetStateAction } from 'react';
 import {
   Tag,
   Form,
@@ -6,6 +6,7 @@ import {
   FormSubmitButton,
   Alert,
   Modal,
+  AlertProps,
 } from '@ctoec/component-library';
 import {
   Enrollment,
@@ -24,10 +25,12 @@ import { Withdraw } from '../../../shared/payloads';
 type WithdrawProps = {
   child: Child;
   enrollment: Enrollment;
+  setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
 };
 export const WithdrawRecord: React.FC<WithdrawProps> = ({
   child,
   enrollment,
+  setAlerts,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
@@ -66,12 +69,26 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
     (f) => !f.lastReportingPeriod
   );
 
+  const onClick =
+    child.validationErrors && child.validationErrors.length
+      ? () =>
+          setAlerts((alerts) => [
+            {
+              type: 'error',
+              heading:
+                'Records cannot be withdrawn with missing or incorrect info',
+              text: 'Add required info before withdrawing.',
+            },
+            ...alerts,
+          ])
+      : toggleIsOpen;
+
   return (
     <>
       <Button
         appearance="unstyled"
         text="Withdraw"
-        onClick={() => toggleIsOpen()}
+        onClick={onClick}
         className="margin-right-2"
       />
       <Modal
@@ -84,67 +101,58 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
           </>
         }
         content={
-          child.validationErrors && child.validationErrors.length ? (
-            <div>
-              You cannot withdraw a child with missing or incomplete
-              information.
-            </div>
-          ) : (
-            <>
-              <div className="grid-row">
-                <div className="grid-col">
-                  <p>{enrollment.site.siteName}</p>
-                  <p>Age: {enrollment.ageGroup}</p>
-                  <p>
-                    Enrollment date: {enrollment.entry?.format('MM/DD/YYYY')}
-                  </p>
-                </div>
-                <div className="grid-col">
-                  {activeFunding && (
-                    <>
-                      <p>
-                        <Tag text={activeFunding.fundingSpace?.source || ''} />
-                      </p>
-                      <p>Contract space: {activeFunding.fundingSpace?.time}</p>
-                      <p>
-                        First reporting period:{' '}
-                        {activeFunding.firstReportingPeriod?.period.format(
-                          'MMMM YYYY'
-                        )}
-                      </p>
-                    </>
-                  )}
-                </div>
+          <>
+            <div className="grid-row">
+              <div className="grid-col">
+                <p>{enrollment.site.siteName}</p>
+                <p>Age: {enrollment.ageGroup}</p>
+                <p>Enrollment date: {enrollment.entry?.format('MM/DD/YYYY')}</p>
               </div>
-              <Form<Withdraw>
-                onSubmit={onSubmit}
-                data={{} as Withdraw}
-                className="usa-form"
-              >
-                <EnrollmentEndDateField<Withdraw> />
-                <ExitReasonField />
-                {!!activeFunding && (
-                  <ReportingPeriodField<Withdraw>
-                    fundingSource={
-                      activeFunding.fundingSpace?.source as FundingSource
-                    } // This is known to have a value (checked no validation errors on line 81)
-                    isLast={true}
-                    accessor={(data) =>
-                      data.at('funding').at('lastReportingPeriod')
-                    }
-                  />
+              <div className="grid-col">
+                {activeFunding && (
+                  <>
+                    <p>
+                      <Tag text={activeFunding.fundingSpace?.source || ''} />
+                    </p>
+                    <p>Contract space: {activeFunding.fundingSpace?.time}</p>
+                    <p>
+                      First reporting period:{' '}
+                      {activeFunding.firstReportingPeriod?.period.format(
+                        'MMMM YYYY'
+                      )}
+                    </p>
+                  </>
                 )}
-                <Button
-                  appearance="outline"
-                  text="Cancel"
-                  onClick={toggleIsOpen}
+              </div>
+            </div>
+            <Form<Withdraw>
+              onSubmit={onSubmit}
+              data={{} as Withdraw}
+              className="usa-form"
+            >
+              <EnrollmentEndDateField<Withdraw> />
+              <ExitReasonField />
+              {!!activeFunding && (
+                <ReportingPeriodField<Withdraw>
+                  fundingSource={
+                    activeFunding.fundingSpace?.source as FundingSource
+                  } // Known to have value (modal only displayed when record has no missing info)
+                  isLast={true}
+                  accessor={(data) =>
+                    data.at('funding').at('lastReportingPeriod')
+                  }
                 />
-                <FormSubmitButton
-                  text={isSaving ? 'Withdrawing...' : 'Withdraw'}
-                />
-              </Form>
-            </>
-          )
+              )}
+              <Button
+                appearance="outline"
+                text="Cancel"
+                onClick={toggleIsOpen}
+              />
+              <FormSubmitButton
+                text={isSaving ? 'Withdrawing...' : 'Withdraw'}
+              />
+            </Form>
+          </>
         }
       />
     </>

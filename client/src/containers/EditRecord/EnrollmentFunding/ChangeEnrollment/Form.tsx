@@ -59,8 +59,8 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
     return (
       <div>
         <p>
-          Changes cannot be made to {child.firstName}'s enrollments while there
-          is missing information.
+          Add missing enrollment and/or funding information before you can
+          change {child.firstName}'s enrollment
         </p>
         <ExpandCard>
           <Button text="Cancel" appearance="outline" />

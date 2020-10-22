@@ -45,8 +45,8 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
     return (
       <div>
         <p>
-          Changes cannot be made to an enrollment's fundings while there is
-          missing information.
+          Add missing enrollment and/or funding formatoin before you can change
+          funding.
         </p>
         <Button text="Cancel" appearance="outline" onClick={hideForm} />
       </div>

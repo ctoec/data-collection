@@ -62,8 +62,9 @@ jobs:
           command: yarn run test
       - run:
           name: Run front-end tests
+          working_directory: client
           # skip pre-flight checks to avoid the parent-directory node_module issues
-          command: cd client && SKIP_PREFLIGHT_CHECKS=true yarn run test
+          command: SKIP_PREFLIGHT_CHECK=true yarn run test
 
   deploy:
     description: "Job for deploying Fawkes to the specified environment"
