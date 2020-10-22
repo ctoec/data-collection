@@ -15,9 +15,10 @@ import DataCacheContext from '../../../../contexts/DataCacheContext/DataCacheCon
 const UNFUNDED = 'Unfunded';
 
 type FundingFieldProps<T> = {
-  fundingAccessor: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
+  fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
   orgId: number;
+  isEdit?: boolean;
 };
 
 /**
@@ -25,11 +26,12 @@ type FundingFieldProps<T> = {
  * or as part of creating a new enrollment.
  */
 export const NewFundingField = <
-  T extends ChangeFunding | ChangeEnrollment | Enrollment
+  T extends ChangeFunding | ChangeEnrollment | Enrollment | Funding
 >({
-  fundingAccessor,
+  fundingAccessor = (data) => data as TObjectDriller<Funding>,
   getEnrollment,
   orgId,
+  isEdit,
 }: FundingFieldProps<T>) => {
   const { fundingSpaces } = useContext(DataCacheContext);
   const { dataDriller } = useGenericContext<T>(FormContext);
@@ -77,6 +79,9 @@ export const NewFundingField = <
           expansion: (
             <>
               <ContractSpaceField<T>
+                // Do not show status when field is editing an existing funding
+                // because the user will be creating this data for the first time
+                showStatus={!isEdit}
                 ageGroup={enrollment.ageGroup}
                 fundingSource={fundingSource}
                 organizationId={orgId}
@@ -88,6 +93,16 @@ export const NewFundingField = <
                   fundingAccessor(data).at('firstReportingPeriod')
                 }
               />
+              {/* Show last reporting period when field is editing an existing funding*/}
+              {isEdit && (
+                <ReportingPeriodField<T>
+                  isLast={true}
+                  fundingSource={fundingSource}
+                  accessor={(data) =>
+                    fundingAccessor(data).at('lastReportingPeriod')
+                  }
+                />
+              )}
             </>
           ),
         })),
