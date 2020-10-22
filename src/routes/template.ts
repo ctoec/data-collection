@@ -1,7 +1,13 @@
 import express from 'express';
+import { Response, Request } from 'express';
+import { BookType } from 'xlsx/types';
 
 import { streamTabularData } from '../utils/streamTabularData';
 import { getAllColumnMetadata } from '../template';
+import { InternalServerError } from '../middleware/error/errors';
+import { passAsyncError } from '../middleware/error/passAsyncError';
+import { completeChildren as fakeChildren } from '../data/children';
+import { streamUploadedChildren } from '../controllers/export';
 
 export const templateRouter = express.Router();
 /**
@@ -33,3 +39,26 @@ templateRouter.get('/csv', (_, res) => {
 templateRouter.get('/xlsx', (_, res) => {
   streamTabularData(res, 'xlsx');
 });
+
+/**
+ * /template/example/:fileType GET
+ */
+templateRouter.get(
+  '/example/:fileType',
+  passAsyncError(async (req: Request, res: Response) => {
+    try {
+      const fileType = req.params['fileType'] || 'csv';
+      res.send(
+        await streamUploadedChildren(
+          res,
+          fakeChildren,
+          fileType as BookType
+        )
+      );
+    } catch (err) {
+      console.error('Unable to download example', err);
+      throw new InternalServerError('Could not download example file: ' + err);
+    }
+  })
+);
+
