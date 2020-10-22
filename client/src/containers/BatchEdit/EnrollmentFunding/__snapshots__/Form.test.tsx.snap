@@ -3,7 +3,7 @@
 exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
 <DocumentFragment>
   <form
-    class="usa-form usa-form"
+    class="usa-form"
     id="batch-edit-enrollment-1"
   >
     <input

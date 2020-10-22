@@ -99,7 +99,6 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   return (
     <Form<Enrollment>
       id={id || `edit-enrollment-form-${enrollment.id}`}
-      className="usa-form"
       data={enrollment}
       onSubmit={onSubmit}
     >
