@@ -6,7 +6,7 @@ import { ReadWriteDataCache } from './DataCacheContext';
 export const useReadWriteCache = <T extends { id: any }>(apiPath: string) => {
   const { accessToken } = useContext(AuthenticationContext);
   const [records, setRecords] = useState<T[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [haveFetched, setHaveFetched] = useState(false);
 
   const addOrUpdateRecord = (_record: T) => {

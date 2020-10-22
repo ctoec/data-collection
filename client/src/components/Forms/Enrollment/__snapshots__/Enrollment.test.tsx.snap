@@ -3,7 +3,7 @@
 exports[`Forms Enrollment matches snapshot 1`] = `
 <DocumentFragment>
   <form
-    class="usa-form usa-form"
+    class="usa-form"
     id="edit-enrollment-form-1"
   >
     <fieldset

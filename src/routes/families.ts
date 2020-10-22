@@ -36,7 +36,7 @@ familyRouter.put(
  * /families/:familyId/income-determination/:determinationId PUT
  */
 familyRouter.put(
-  '/:familyId/income-determination/:determinationId',
+  '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const famId = parseInt(req.params['familyId']);
@@ -68,7 +68,7 @@ familyRouter.put(
  * /families/:familyId/income-determination POST
  */
 familyRouter.post(
-  '/:familyId/income-determination',
+  '/:familyId/income-determinations',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const famId = parseInt(req.params['familyId']);
@@ -91,7 +91,7 @@ familyRouter.post(
 );
 
 familyRouter.delete(
-  '/income-determination/:determinationId',
+  '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const detId = parseInt(req.params['determinationId']);
