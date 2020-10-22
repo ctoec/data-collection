@@ -23,7 +23,7 @@ const forms = [
  * and creates a formated string to display in the BatchEdit cards
  * below the name
  */
-export const formatBatchEditPlaceholderString = (child: Child) => {
+export const getBatchEditErrorDetailsString = (child: Child) => {
   const formsWithErrors = formSections.filter((section) =>
     section.hasError(child)
   );

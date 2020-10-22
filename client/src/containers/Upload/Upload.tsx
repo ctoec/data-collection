@@ -11,18 +11,8 @@ import { handleJWTError } from '../../utils/handleJWTError';
 import { CheckReplaceData } from './CheckReplaceData';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
-import { ErrorModal } from './ErrorsModal';
-
-/**
- * Object format to hold the information the error dictionary
- * compiler sends from the back end. Used in the error modal
- * to create a table of columns within the modal.
- */
-export type ErrorObjectForTable = {
-  property: string;
-  count: number;
-  formattedName: string;
-};
+import { ErrorModal } from './ErrorModal/ErrorsModal';
+import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -44,9 +34,7 @@ const Upload: React.FC = () => {
 
   const [userRosterCount, setUserRosterCount] = useState(undefined);
   const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
-  const [errorDict, setErrorDict] = useState<ErrorObjectForTable[] | undefined>(
-    undefined
-  );
+  const [errorDict, setErrorDict] = useState<ErrorObjectForTable[]>();
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   useEffect(() => {
     apiGet('children?count=true', { accessToken }).then((res) =>
@@ -69,7 +57,7 @@ const Upload: React.FC = () => {
     if (file && errorDict === undefined) {
       const formData = new FormData();
       formData.set('file', file);
-      apiPost(`enrollment-reports/checkForErrors`, formData, {
+      apiPost(`enrollment-reports/check`, formData, {
         accessToken,
         rawBody: true,
       })

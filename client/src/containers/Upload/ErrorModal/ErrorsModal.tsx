@@ -1,7 +1,7 @@
 import { Modal, Table } from '@ctoec/component-library';
 import React, { Dispatch, SetStateAction } from 'react';
 import { Button } from '@ctoec/component-library';
-import { ErrorObjectForTable } from './Upload';
+import { ErrorObjectForTable } from './ErrorObjectForTable';
 import { tableColumns } from './TableColumns';
 
 type ErrorModalProps = {

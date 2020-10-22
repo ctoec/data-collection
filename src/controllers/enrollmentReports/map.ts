@@ -36,7 +36,7 @@ export const mapRows = async (
   transaction: EntityManager,
   rows: EnrollmentReportRow[],
   user: User,
-  save: boolean
+  opts: { save: boolean } = { save: false }
 ) => {
   const [organizations, sites] = await Promise.all([
     transaction.findByIds(Organization, user.organizationIds),
@@ -51,7 +51,7 @@ export const mapRows = async (
         rows[i],
         organizations,
         sites,
-        save
+        opts
       );
       children.push(child);
     } catch (err) {
@@ -74,7 +74,7 @@ const mapRow = async (
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
-  save: boolean
+  opts: { save: boolean } = { save: false }
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -88,27 +88,33 @@ const mapRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  const family = await mapFamily(transaction, source, organization, save);
-  const child = await mapChild(transaction, source, organization, family, save);
+  const family = await mapFamily(transaction, source, organization, opts.save);
+  const child = await mapChild(
+    transaction,
+    source,
+    organization,
+    family,
+    opts.save
+  );
   const incomeDetermination = await mapIncomeDetermination(
     transaction,
     source,
     family,
-    save
+    opts.save
   );
   const enrollment = await mapEnrollment(
     transaction,
     source,
     site,
     child,
-    save
+    opts.save
   );
   const funding = await mapFunding(
     transaction,
     source,
     organization,
     enrollment,
-    save
+    opts.save
   );
 
   family.incomeDeterminations = [incomeDetermination];

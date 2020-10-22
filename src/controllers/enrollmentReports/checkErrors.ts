@@ -19,14 +19,13 @@ export const checkErrorsInChildren = async (children: Child[]) => {
     propertyNameToFormattedName[c.propertyName] = c.formattedName;
   });
 
-  for (let i = 0; i < children.length; i++) {
-    const errs = children[i].validationErrors;
+  children.forEach((child) => {
     // Accumulate counts across all children (don't need to
     // differentiate errors by individual child)
-    errs.map((e) => {
+    child.validationErrors.map((e) => {
       errorDict[e.property] += 1;
     });
-  }
+  });
 
   // Only need fields with error counts; send back a formated
   // object for tabular display

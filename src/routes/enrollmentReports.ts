@@ -60,7 +60,7 @@ enrollmentReportsRouter.get(
  */
 const temp = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
-  '/checkForErrors',
+  '/check',
   temp,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
@@ -70,7 +70,7 @@ enrollmentReportsRouter.post(
           tManager,
           reportRows,
           req.user,
-          false
+          { save: false }
         );
         const schemaChildren: Child[] = await Promise.all(
           reportChildren.map(async (child) => {
@@ -142,7 +142,7 @@ enrollmentReportsRouter.post(
           tManager,
           reportRows,
           req.user,
-          true
+          { save: true }
         );
         const report = await tManager.save(
           tManager.create(EnrollmentReport, { children: reportChildren })

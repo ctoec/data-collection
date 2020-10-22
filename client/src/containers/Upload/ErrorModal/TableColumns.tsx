@@ -1,6 +1,6 @@
 import React from 'react';
 import { Column } from '@ctoec/component-library';
-import { ErrorObjectForTable } from './Upload';
+import { ErrorObjectForTable } from './ErrorObjectForTable';
 
 /**
  * Tabular column formatter that displays a dictionary of
