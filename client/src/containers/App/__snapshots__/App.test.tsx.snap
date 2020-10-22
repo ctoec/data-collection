@@ -76,48 +76,12 @@ exports[`App matches snapshot 1`] = `
                 <li
                   class="usa-nav__secondary-item"
                 >
-                  <span
-                    class="display-inline-block with-dropdown"
-                    id="Data template"
+                  <a
+                    class="usa-nav__link"
+                    href="/template"
                   >
-                    <button
-                      aria-controls="templates-nav"
-                      aria-expanded="false"
-                      aria-haspopup="true"
-                      class="usa-nav__link"
-                    >
-                      Data template
-                    </button>
-                    <div
-                      class="display-none dropdown"
-                    >
-                      <ul
-                        hidden=""
-                        id="templates-nav"
-                      >
-                        <li
-                          class="option"
-                        >
-                          <button
-                            class="usa-button usa-button--unstyled"
-                            type="button"
-                          >
-                            Excel
-                          </button>
-                        </li>
-                        <li
-                          class="option"
-                        >
-                          <button
-                            class="usa-button usa-button--unstyled"
-                            type="button"
-                          >
-                            CSV
-                          </button>
-                        </li>
-                      </ul>
-                    </div>
-                  </span>
+                    Data template
+                  </a>
                 </li>
                 <li
                   class="usa-nav__secondary-item"

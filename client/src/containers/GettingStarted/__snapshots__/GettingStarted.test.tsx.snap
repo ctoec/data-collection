@@ -6,108 +6,150 @@ exports[`GettingStarted matches snapshot 1`] = `
     class="grid-container margin-top-4"
   >
     <div
-      class="grid-row"
+      class="grid-row grid-gap"
     >
-      <h1>
-        Getting started
-      </h1>
-      <p>
-        This tool will allow you to upload and submit the most recent enrollment data for all state funded childcare spaces at your program.
-      </p>
-      <p>
-        To get started, download the spreadsheet template that contains all required data for each field. If you have any questions, reach out to 
-        <a
-          class="usa-button usa-button--unstyled"
-          href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          oec-data-pilot@skylight.digital
-        </a>
-      </p>
       <div
-        class="usa-alert usa-alert--info grid-row"
+        class="tablet:grid-col-8"
       >
+        <h1>
+          Let's get started
+        </h1>
+        <p>
+          This tool will allow you to share your state-funded enrollment data with OEC.
+        </p>
+        <h2>
+          Here's what to include
+        </h2>
+        <h3>
+          Enrollments in spaces funded by
+        </h3>
+        <ul>
+          <li>
+            Child Day Care (CDC)
+          </li>
+          <li>
+            Priority or Competitive School Readiness (PSR and CSR)
+          </li>
+          <li>
+            Smart Start (SS)
+          </li>
+          <li>
+            State Head Start (SHS)
+          </li>
+        </ul>
         <div
-          class="display-flex flex-fill"
+          class="usa-alert usa-alert--info grid-row"
         >
           <div
-            class="usa-alert__body grid-col flex-fill"
+            class="display-flex flex-fill"
           >
-            <h2
-              class="usa-alert__heading"
+            <div
+              class="usa-alert__body grid-col flex-fill"
             >
-              OEC's enrollment data requirements
-            </h2>
-            <p
-              class="usa-alert__text"
-            >
-              <span>
-                To see all required data fields, definitions, and rationale, see 
-                <a
-                  class="usa-button usa-button--unstyled"
-                  href="/data-requirements"
-                >
-                  enrollment data requirements.
-                </a>
-              </span>
-            </p>
+              <h2
+                class="usa-alert__heading"
+              >
+                Learn more about required data
+              </h2>
+              <p
+                class="usa-alert__text"
+              >
+                <span>
+                  See all required data fields, definitions and rationale in 
+                  <a
+                    class="usa-button usa-button--unstyled"
+                    href="/data-requirements"
+                  >
+                    OEC's enrollment data requirements
+                  </a>
+                </span>
+              </p>
+            </div>
+            <div
+              class="usa-alert__body flex-auto display-flex flex-align-center"
+            />
           </div>
-          <div
-            class="usa-alert__body flex-auto display-flex flex-align-center"
-          />
+        </div>
+        <h3>
+          Reporting period
+        </h3>
+        <p>
+          Data is due on March 31, 2020 and must include data from July 1, 2020 to at least Jan 1, 2021.
+        </p>
+        <div>
+          <h2>
+            Download the latest batch upload template
+          </h2>
+          <button
+            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            type="button"
+          >
+            <span
+              class="oec-text-with-icon text-underline"
+            >
+              Download Excel template
+            </span>
+          </button>
+          <button
+            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            type="button"
+          >
+            <span
+              class="oec-text-with-icon text-underline"
+            >
+              Download CSV template
+            </span>
+          </button>
+        </div>
+        <div
+          class="display-block"
+        >
+          <p>
+            You can see a completed example template here:
+          </p>
+          <button
+            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            type="button"
+          >
+            <span
+              class="oec-text-with-icon text-underline"
+            >
+              Download Excel sample data
+            </span>
+          </button>
+          <button
+            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            type="button"
+          >
+            <span
+              class="oec-text-with-icon text-underline"
+            >
+              Download CSV sample data
+            </span>
+          </button>
+           
         </div>
       </div>
-      <div>
-        <h2>
-          Download the data entry template
-        </h2>
-        <p>
-          Use one of these templates to enter your enrollment data for all state-funded children.
-        </p>
-        <button
-          class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-          type="button"
-        >
-          <span
-            class="oec-text-with-icon text-underline"
-          >
-            <svg
-              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-            >
-              download.svg
-            </svg>
-            Download Excel Template
-          </span>
-        </button>
-        <button
-          class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-          type="button"
-        >
-          <span
-            class="oec-text-with-icon text-underline"
-          >
-            <svg
-              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-            >
-              download.svg
-            </svg>
-            Download .csv Template
-          </span>
-        </button>
+      <div
+        class="tablet:grid-col-4"
+        role="presentation"
+      >
+        <svg>
+          PersonWithSpreadsheet.svg
+        </svg>
       </div>
     </div>
     <div
-      class="grid-row margin-top-2"
+      class="grid-row"
     >
       <a
-        class="usa-button"
+        class="usa-button margin-top-2"
         href="/upload"
       >
         Go to file upload
       </a>
       <a
-        class="usa-button"
+        class="usa-button margin-top-2"
         href="/roster"
       >
         Go to roster

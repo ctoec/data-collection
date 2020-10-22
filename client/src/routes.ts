@@ -1,5 +1,6 @@
 import React from 'react';
 import Home from './containers/Home/Home';
+import TemplateDownload from './containers/TemplateDownload/TemplateDownload';
 import Login from './containers/Login/Login';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
@@ -26,6 +27,12 @@ export const routes: RouteConfig[] = [
     path: '/',
     exact: true,
     component: Home,
+    unauthorized: true,
+  },
+  {
+    path: '/template',
+    exact: true,
+    component: TemplateDownload,
     unauthorized: true,
   },
   {
