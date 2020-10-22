@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Card, Button, Alert } from '@ctoec/component-library';
+import { Card, Button, Alert, CardProps } from '@ctoec/component-library';
 import { Enrollment } from '../../../../shared/models';
 import { ChangeFundingForm } from './Form';
 
-type ChangeFundingCardProps = {
+type ChangeFundingCardProps = CardProps & {
   enrollment: Enrollment;
   orgId: number;
   afterSaveSuccess: () => void;

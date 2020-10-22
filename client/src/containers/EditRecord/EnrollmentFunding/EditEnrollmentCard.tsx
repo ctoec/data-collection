@@ -9,13 +9,14 @@ import {
   CardExpansion,
   Alert,
   TrashCan,
+  CardProps,
 } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../shared/models';
 import { apiDelete } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
 
-type EditEnrollmentCardProps = {
+type EditEnrollmentCardProps = CardProps & {
   child: Child;
   enrollmentId: number;
   isCurrent?: boolean;
@@ -68,7 +69,8 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
     <Card
       key={enrollmentId}
       appearance={isCurrent ? 'primary' : 'secondary'}
-      forceClose={false}
+      forceClose={closeCard}
+      expanded={true}
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">

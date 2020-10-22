@@ -12,10 +12,11 @@ import {
   CardExpansion,
   Alert,
   TrashCan,
+  CardProps,
 } from '@ctoec/component-library';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 
-type EditFundingCardProps = {
+type EditFundingCardProps = CardProps & {
   child: Child;
   fundingId: number;
   enrollmentId: number;
