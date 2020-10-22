@@ -4,7 +4,7 @@ const { clickOnFirstChildInRoster } = require('../utils/clickOnFirstChildInRoste
 
 module.exports = {
   '@tags': ['child', 'delete-child'],
-  login: async function (browser) {
+  deleteChild: async function (browser) {
     await browser.init();
     await login(browser);
     await navigateToRoster(browser);
@@ -13,6 +13,8 @@ module.exports = {
     await browser.click('xpath', "//*/button[contains(., 'Delete record')]");
     await browser.click('xpath', "//*/button[contains(., 'Yes, delete record')]");
     await browser.element('xpath', "//*/h2[contains(., 'Record deleted')]");
+
+    // TODO: make sure the record deleted was the right one
     browser.end();
   },
 };

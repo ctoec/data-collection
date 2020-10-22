@@ -1,6 +1,6 @@
 module.exports = {
   '@tags': ['smoke-test'],
-  'smoke-test': async function (browser) {
+  smoke: async function (browser) {
     await browser.init();
 
     await browser.waitForElementVisible('body');
