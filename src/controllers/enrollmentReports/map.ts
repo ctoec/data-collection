@@ -56,7 +56,7 @@ export const mapRows = async (
       children.push(child);
     } catch (err) {
       if (err instanceof ApiError) throw err;
-      console.log('Unable to parse row, dropping: ', JSON.stringify(rows[i]));
+      console.error('Error occured while parsing row', err);
     }
   }
 
@@ -280,22 +280,27 @@ const mapIncomeDetermination = (
   family: Family,
   save: boolean
 ) => {
-  let incomeDetermination = {
-    numberOfPeople: source.numberOfPeople,
-    income: source.income,
-    determinationDate: source.determinationDate,
-    familyId: family.id,
-  } as IncomeDetermination;
+  // Only attempt to create an income determination if the user supplied any
+  // of the necessary data points
+  if (source.numberOfPeople || source.income || source.determinationDate) {
+    let incomeDetermination = {
+      // Cast empty strings to undefined to avoid DB write failures
+      numberOfPeople: source.numberOfPeople || undefined,
+      income: source.income || undefined,
+      determinationDate: source.determinationDate,
+      familyId: family.id,
+    } as IncomeDetermination;
 
-  if (save) {
-    incomeDetermination = transaction.create(
-      IncomeDetermination,
-      incomeDetermination
-    );
-    return transaction.save(incomeDetermination);
+    if (save) {
+      incomeDetermination = transaction.create(
+        IncomeDetermination,
+        incomeDetermination
+      );
+      return transaction.save(incomeDetermination);
+    }
+
+    return incomeDetermination;
   }
-
-  return incomeDetermination;
 };
 
 /**
