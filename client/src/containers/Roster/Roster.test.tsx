@@ -141,7 +141,7 @@ const multiOrgUser = {
   ],
 } as User;
 
-const cacheProps = {
+const cacheProps = ({
   children: {
     records: children,
     loading: false,
@@ -151,7 +151,7 @@ const cacheProps = {
   },
   fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
   reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-} as DataCacheContextType;
+} as unknown) as DataCacheContextType;
 
 describe('Roster', () => {
   const helperOpts = {

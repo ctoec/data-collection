@@ -159,7 +159,8 @@ export function getChildrenByAgeGroup(
 
 export function getAccordionItems(
   childrenByAgeGroup: ChildrenByAgeGroup,
-  showOrgInTables: boolean
+  showOrgInTables: boolean,
+  hideCapacity: boolean
 ) {
   return Object.entries(childrenByAgeGroup)
     .filter(
@@ -184,7 +185,12 @@ export function getAccordionItems(
           )}
         </>
       ),
-      headerContent: <RosterSectionHeader children={ageGroupChildren} />,
+      headerContent: (
+        <RosterSectionHeader
+          children={ageGroupChildren}
+          hideCapacity={hideCapacity}
+        />
+      ),
       expandText: `Show ${ageGroup} roster`,
       collapseText: `Hide ${ageGroup} roster`,
       content: (

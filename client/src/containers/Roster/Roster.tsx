@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Accordion,
   Button,
@@ -15,7 +15,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { useHistory, useLocation } from 'react-router-dom';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
-import { apiPut } from '../../utils/api';
+import { apiGet, apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   getAccordionItems,
@@ -54,6 +54,24 @@ const Roster: React.FC = () => {
     activeSiteId
   );
 
+  // Use state to determine whether current user is a single-site
+  // accessor of a provider with multiple sites--limit options if so
+  const [isSSUserOfMSProvider, setIsSSUser] = useState<boolean>(false);
+  useEffect(() => {
+    if (accessToken) {
+      apiGet('users/isSSofMS', { accessToken })
+        .then((res) => {
+          setIsSSUser(res);
+        })
+        .catch((err) => {
+          console.error(
+            'Could not determine whether user has single-site access: ',
+            err
+          );
+        });
+    }
+  }, [accessToken]);
+
   // TODO: should this be all of the children for the whole org or what?
   const numberOfChildrenWithErrors = childrenCache.records.filter(
     (c) => c.validationErrors && c.validationErrors.length > 0
@@ -81,7 +99,11 @@ const Roster: React.FC = () => {
 
   const childrenByAgeGroup = getChildrenByAgeGroup(filteredChildren);
 
-  const accordionItems = getAccordionItems(childrenByAgeGroup, showOrgInTables);
+  const accordionItems = getAccordionItems(
+    childrenByAgeGroup,
+    showOrgInTables,
+    isSSUserOfMSProvider
+  );
 
   // If there's an active org use that, otherwise grab it from the site
   let currentOrgId = activeOrgId;
@@ -140,6 +162,10 @@ const Roster: React.FC = () => {
       nestedActiveId: activeSiteId,
       activeId: activeOrgId,
     };
+  } else if (isSSUserOfMSProvider) {
+    h1Content = sites[0].siteName;
+    // No access to a tabnav bar to switch sites/orgs
+    tabNavProps = undefined;
   }
 
   return (
@@ -147,12 +173,19 @@ const Roster: React.FC = () => {
       <div className="Roster grid-container">
         {alertElements}
         <h1 className="margin-bottom-0" ref={h1Ref}>
+          {isSSUserOfMSProvider && (
+            <div className="margin-bottom-1 font-body-sm text-base-darker">
+              {organizations[0].providerName}
+            </div>
+          )}
           {h1Content}
         </h1>
         <p className="font-body-xl margin-top-1">
           {/* TODO: should this count be just for the thing showing or for all of them? */}
           {childrenCache.loading
             ? 'Loading...'
+            : isSSUserOfMSProvider
+            ? `${childrenCache.records.length} children enrolled`
             : `${childrenCache.records.length} children enrolled at ${sites.length} sites`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
@@ -183,9 +216,13 @@ const Roster: React.FC = () => {
         />
         {/* TODO: change when we figure out multi-site entity */}
         <Button
-          text="Send to OEC"
+          text={
+            isSSUserOfMSProvider
+              ? 'Only users with all site access can submit'
+              : 'Send to OEC'
+          }
           onClick={submitToOEC}
-          disabled={!currentOrgId}
+          disabled={!currentOrgId || isSSUserOfMSProvider}
         />
       </FixedBottomBar>
     </>

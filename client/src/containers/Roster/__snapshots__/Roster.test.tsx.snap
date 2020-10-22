@@ -144,12 +144,12 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      CDC - Child Day Care  — 1/3
+                      CDC - Child Day Care undefined - 1/3
                     </div>
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      PSR - Priority School Readiness  — 1/5
+                      PSR - Priority School Readiness undefined - 1/5
                     </div>
                   </div>
                 </div>
@@ -422,7 +422,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      CDC - Child Day Care  — 1/10
+                      CDC - Child Day Care undefined - 1/10
                     </div>
                   </div>
                 </div>
@@ -729,12 +729,12 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                 <div
                   class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                 >
-                  CDC - Child Day Care  — 1/3
+                  CDC - Child Day Care undefined - 1/3
                 </div>
                 <div
                   class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                 >
-                  PSR - Priority School Readiness  — 1/5
+                  PSR - Priority School Readiness undefined - 1/5
                 </div>
               </div>
             </div>
@@ -984,7 +984,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
                 <div
                   class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                 >
-                  CDC - Child Day Care  — 1/10
+                  CDC - Child Day Care undefined - 1/10
                 </div>
               </div>
             </div>
