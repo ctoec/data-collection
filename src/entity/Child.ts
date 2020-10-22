@@ -150,5 +150,5 @@ export class Child implements ChildInterface {
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
 
-  validationErrors: ValidationError[];
+  validationErrors?: ValidationError[];
 }
