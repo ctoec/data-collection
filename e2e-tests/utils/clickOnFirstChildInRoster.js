@@ -1,5 +1,3 @@
-const { makeSureNavIsOpen } = require('./makeSureNavIsOpen');
-
 module.exports = {
   clickOnFirstChildInRoster: async function (browser) {
     const childLinkSelectorArgs = ['xpath', "//*/a[contains(@href,'/edit-record')][1]"];
