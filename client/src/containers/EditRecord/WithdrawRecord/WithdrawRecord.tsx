@@ -69,6 +69,8 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
     (f) => !f.lastReportingPeriod
   );
 
+  // If record has validation errors, onClick action is to display alert informing the user they cannot withdraw
+  // Otherwise, onClick action is to display the withdraw modal
   const onClick =
     child.validationErrors && child.validationErrors.length
       ? () =>
@@ -104,7 +106,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
           <>
             <div className="grid-row">
               <div className="grid-col">
-                <p>{enrollment.site.siteName}</p>
+                <p>{enrollment.site?.siteName}</p>
                 <p>Age: {enrollment.ageGroup}</p>
                 <p>Enrollment date: {enrollment.entry?.format('MM/DD/YYYY')}</p>
               </div>
