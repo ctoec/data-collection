@@ -88,6 +88,8 @@ enrollmentReportsRouter.post(
         );
         res.send(errorDict);
       } catch (err) {
+        if (err instanceof ApiError) throw err;
+
         console.error(
           'Unable to determine validation errors in spreadsheet: ',
           err
