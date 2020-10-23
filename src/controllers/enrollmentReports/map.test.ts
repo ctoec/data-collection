@@ -270,7 +270,8 @@ describe('controllers', () => {
             transaction,
             source as EnrollmentReportRow,
             {} as Organization,
-            {} as Enrollment
+            {} as Enrollment,
+            true,
           );
           expect(transaction.create).toBeCalledTimes(doesCreateFunding ? 1 : 0);
           expect(transaction.save).toBeCalledTimes(doesCreateFunding ? 1 : 0);

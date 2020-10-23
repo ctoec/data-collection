@@ -104,13 +104,15 @@ const DataRequirements: React.FC = () => {
 };
 
 const getSectionCopy = (section: string) => {
-  if (section.toLowerCase().includes('child'))
-    return 'A unique person enrolled in an ECE program.';
+  if (section.toLowerCase().includes('child identifier'))
+    return 'Data used to identify unique children enrolled in an ECE program.';
+  if (section.toLocaleLowerCase().includes('child information'))
+    return "Data on children's circumstances. This data is used to ensure children from different backgrounds are equitably served by ECE programs.";
   if (section.toLowerCase().includes('income'))
     return 'This data is collected to assess eligibility for public funding by calculating state median income percentage. Income determinations must be updated at least once a year.';
   if (section.toLowerCase().includes('family'))
     return 'One or more children that share the same address and household income.';
   if (section.toLowerCase().includes('enrollment'))
-    return 'Enrollment: A period of time during which a child recieved ECE services.\nFunding: A period of time during which an enrollment was subsidized by a state-funded contract space.\nCare 4 Kids: Whether or not the enrollment was subsidized by the Care 4 Kids program.';
+    return 'Enrollment: A period of time during which a child recieved ECE services.\nFunding: A period of time during which an enrollment was subsidized by a state-funded contract space.';
 };
 export default DataRequirements;

@@ -25,6 +25,7 @@ import {
 import moment, { Moment } from 'moment';
 
 export const SECTIONS = {
+  CHILD_IDENTIFIER: 'Child identifiers',
   CHILD_INFO: 'Child information',
   FAMILY_INFO: 'Family information',
   FAMILY_INCOME: 'Family income determination',
@@ -40,7 +41,7 @@ export class EnrollmentReportRow {
       'Used for linking to a variety of datasets, including SASID-backed data.',
     format: 'Text',
     example: 'Firstname',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   firstName?: string = undefined;
 
@@ -52,7 +53,7 @@ export class EnrollmentReportRow {
       'Used for linking to a variety of datasets, including SASID-backed data.',
     format: 'Text',
     example: 'Middlename',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   middleName?: string = undefined;
 
@@ -64,7 +65,7 @@ export class EnrollmentReportRow {
       'Used for linking to a variety of datasets, including SASID-backed data.',
     format: 'Text',
     example: 'Lastname',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   lastName?: string = undefined;
 
@@ -76,7 +77,7 @@ export class EnrollmentReportRow {
       'Used for linking to a variety of datasets, including SASID-backed data.',
     format: 'Text',
     example: 'Sr',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   suffix?: string = undefined;
 
@@ -88,7 +89,7 @@ export class EnrollmentReportRow {
     reason: "Allows for easy reference with your program's system of record.",
     format: 'Text (if SASID, a valid 10-digit number)',
     example: '0123456789',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   sasid?: string = undefined;
 
@@ -100,7 +101,7 @@ export class EnrollmentReportRow {
       'Used for a variety of reporting; allows linking to a variety of data sets, including SASID-backed data.',
     format: DATE_FORMAT,
     example: '10/01/2016',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   birthdate?: Moment = moment.invalid();
 
@@ -112,7 +113,7 @@ export class EnrollmentReportRow {
       'Used for a variety of reporting; allows linking to a variety of data sets, including SASID-backed data.',
     format: Object.values(BirthCertificateType).join(', '),
     example: 'US birth certificate',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   birthCertificateType: BirthCertificateType = undefined;
 
@@ -124,7 +125,7 @@ export class EnrollmentReportRow {
     format:
       'Text; Generally an 11-digit number written in XXX-XX-XXXXXX format. Format varies by state.',
     example: '123-20-000000',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   birthCertificateId?: string = undefined;
 
@@ -136,7 +137,7 @@ export class EnrollmentReportRow {
     reason: 'Tiebreaker for linking to SASID-backed data.',
     format: 'Text',
     example: 'Hartford',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   birthTown?: string = undefined;
 
@@ -148,7 +149,7 @@ export class EnrollmentReportRow {
     reason: 'Tiebreaker for linking to SASID-backed data.',
     format: 'Text; two-letter state abbreviation',
     example: 'CT',
-    section: SECTIONS.CHILD_INFO,
+    section: SECTIONS.CHILD_IDENTIFIER,
   })
   birthState?: string = undefined;
 
@@ -317,7 +318,7 @@ export class EnrollmentReportRow {
       'Affects eligibility for state funding, and used for demographic reporting.',
     format: BOOLEAN_FORMAT,
     example: 'Yes',
-    section: SECTIONS.FAMILY_INFO,
+    section: SECTIONS.CHILD_INFO,
   })
   foster?: boolean = false;
 
@@ -468,7 +469,7 @@ export class EnrollmentReportRow {
     formattedName: 'Space type',
     required: REQUIRED,
     definition:
-      'The contract space type that funds an enrollment. See [contract spaces](#/funding-space-types) for the full list of accepted space types.',
+      'The contract space type that funds an enrollment. See [contract spaces](/funding-space-types) for the full list of accepted space types.',
     reason: UTILIZATION_REPORTING_REASON,
     format: Object.values(FundingTime).join(', '),
     example: 'Wraparound',

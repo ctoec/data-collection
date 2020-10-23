@@ -6,7 +6,6 @@ import {
   ApiError,
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
-import { getManager } from 'typeorm';
 import { Child } from '../entity';
 import { validate } from 'class-validator';
 

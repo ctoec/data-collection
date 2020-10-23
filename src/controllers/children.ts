@@ -283,9 +283,7 @@ async function createNewEnrollment(
   }
 
   const enrollment = tManager.create(Enrollment, {
-    ageGroup: newEnrollment.ageGroup,
-    site: newEnrollment.site,
-    entry: newEnrollment.entry,
+    ...newEnrollment,
     child,
   });
   await tManager.save(Enrollment, enrollment);
