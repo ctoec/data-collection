@@ -27,10 +27,6 @@ const EditRecord: React.FC = () => {
   } = useContext(DataCacheContext);
   const [child, setChild] = useState<Child>();
 
-  // Counter to trigger re-run of child fetch in
-  // useEffect hook
-  const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
-
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
   // Clear any previously displayed alerts from other tabs
@@ -48,7 +44,8 @@ const EditRecord: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Get child data
+  // Child re-fetch
+  const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
     apiGet(`children/${childId}`, {
       accessToken,
@@ -107,7 +104,8 @@ const EditRecord: React.FC = () => {
           {!!activeEnrollment && (
             <>
               <WithdrawRecord
-                childName={child.firstName}
+                setAlerts={setAlerts}
+                child={child}
                 enrollment={activeEnrollment}
               />
             </>

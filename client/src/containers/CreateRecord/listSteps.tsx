@@ -7,8 +7,8 @@ import {
   ChildInfoForm,
   FamilyAddressForm,
   EnrollmentForm,
+  FamilyIncomeForm,
 } from '../../components/Forms';
-import { NewFamilyIncome } from '../../components/Forms/FamilyIncome/NewFamilyIncome/NewFamilyIncome';
 import {
   SECTION_KEYS,
   formSections,
@@ -18,7 +18,7 @@ export const newForms = [
   { key: SECTION_KEYS.IDENT, form: ChildIdentifiersForm },
   { key: SECTION_KEYS.DEMO, form: ChildInfoForm },
   { key: SECTION_KEYS.FAMILY, form: FamilyAddressForm },
-  { key: SECTION_KEYS.INCOME, form: NewFamilyIncome },
+  { key: SECTION_KEYS.INCOME, form: FamilyIncomeForm },
   { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentForm },
 ];
 

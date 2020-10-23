@@ -10,6 +10,7 @@ import {
   getCurrentFunding,
 } from '../../../../utils/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { NewFundingField } from '../Fields';
 
 const fundingFields = [
   'fundingSpace',
@@ -88,7 +89,14 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       .finally(() => setLoading(false));
   };
 
-  return (
+  // If the funding has a funding space, render
+  // the normal edit funding form (where only contract space,
+  // first and last reporting periods are editable).
+  // If the funding does NOT have a funding space, render
+  // a form containing the "new funding" field, to enable
+  // the user to select a funding source, contract space
+  // and reporting periods
+  return funding.fundingSpace ? (
     <Form<Funding>
       id={id}
       className="usa-form"
@@ -117,6 +125,24 @@ export const FundingForm: React.FC<FundingFormProps> = ({
           showStatus
         />
       )}
+      {AdditionalButton}
+      <FormSubmitButton
+        text={loading ? 'Saving...' : 'Save'}
+        disabled={loading}
+      />
+    </Form>
+  ) : (
+    <Form<Funding>
+      id={id}
+      className="usa-form"
+      data={funding}
+      onSubmit={onSubmit}
+    >
+      <NewFundingField<Funding>
+        getEnrollment={() => enrollment}
+        orgId={child.organization.id}
+        isEdit={true}
+      />
       {AdditionalButton}
       <FormSubmitButton
         text={loading ? 'Saving...' : 'Save'}

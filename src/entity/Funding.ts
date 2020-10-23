@@ -21,9 +21,9 @@ export class Funding implements FundingInterface {
   @Column()
   enrollmentId: number;
 
-  @ManyToOne(() => FundingSpace, { nullable: false, eager: true })
+  @ManyToOne(() => FundingSpace, { nullable: true, eager: true })
   @IsNotEmpty()
-  fundingSpace: FundingSpace;
+  fundingSpace?: FundingSpace;
 
   @ManyToOne(() => ReportingPeriod, { eager: true })
   @IsNotEmpty()
