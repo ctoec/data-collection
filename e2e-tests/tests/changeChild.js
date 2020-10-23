@@ -1,6 +1,8 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const { clickOnFirstChildInRoster } = require('../utils/clickOnFirstChildInRoster');
+const {
+  clickOnFirstChildInRoster,
+} = require('../utils/clickOnFirstChildInRoster');
 const { scrollToElement } = require('../utils/scrollToElement');
 
 module.exports = {
@@ -27,7 +29,10 @@ module.exports = {
     await browser.click(...saveButtonArgs);
     await scrollToElement(browser, ['css selector', 'header']);
     // TODO: change if we change alert header level
-    await browser.waitForElementVisible('xpath', "//*/h2[contains(., 'Record updated')]");
+    await browser.waitForElementVisible(
+      'xpath',
+      "//*/h2[contains(., 'Record updated')]"
+    );
 
     // Then navigate to roster and see if that text is on the roster
     await navigateToRoster(browser);
