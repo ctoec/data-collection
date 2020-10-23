@@ -127,7 +127,7 @@ function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
  * @param sheet
  */
 function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
-  return sheet['B1'].v === SECTIONS.CHILD_INFO ? 'xlxs' : 'csv';
+  return sheet['B1'].v === SECTIONS.CHILD_IDENTIFIER ? 'xlxs' : 'csv';
 }
 
 /**
