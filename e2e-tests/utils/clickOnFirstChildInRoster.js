@@ -1,10 +1,9 @@
+const { scrollToElement } = require('./scrollToElement');
+
 module.exports = {
   clickOnFirstChildInRoster: async function (browser) {
     const childLinkSelectorArgs = ['xpath', "//*/a[contains(@href,'/edit-record')][1]"];
-    const location = await browser.getLocation(...childLinkSelectorArgs);
-    const { x, y } = location.value;
-    await browser.execute(`window.scrollTo(${x},${y});`);
-    await browser.waitForElementVisible(...childLinkSelectorArgs, 1000);
+    await scrollToElement(browser, childLinkSelectorArgs);
     await browser.click(...childLinkSelectorArgs);
     await browser.waitForElementVisible('xpath', `//*/h1[contains(., 'Edit record')]`);
     browser.assert.title('Edit record');
