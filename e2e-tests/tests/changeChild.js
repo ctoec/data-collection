@@ -1,9 +1,8 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const {
-  clickOnFirstChildInRoster,
-} = require('../utils/clickOnFirstChildInRoster');
+const { clickOnFirstChildInRoster } = require('../utils/clickOnFirstChildInRoster');
 const { scrollToElement } = require('../utils/scrollToElement');
+const { enterFormData } = require('../utils/enterFormData');
 
 module.exports = {
   '@tags': ['child', 'change'],
@@ -14,25 +13,15 @@ module.exports = {
     await clickOnFirstChildInRoster(browser);
 
     const firstNameSelectorArgs = ['css selector', 'input#firstName'];
-    await scrollToElement(browser, firstNameSelectorArgs);
-    let initialFirstName;
-    await browser.getAttribute(...firstNameSelectorArgs, 'value', (res) => {
-      initialFirstName = res.value;
-    });
-
     const newFirstNameText = 'New first name';
-    await browser.clearValue(...firstNameSelectorArgs);
-    await browser.setValue(...firstNameSelectorArgs, newFirstNameText);
-    await browser.pause(5000); // Wait for change... annoying but better than flaky tests
+    await enterFormData(browser, firstNameSelectorArgs, newFirstNameText);
+
     const saveButtonArgs = ['xpath', "//*/input[contains(@value,'Save')]"];
     await scrollToElement(browser, saveButtonArgs);
     await browser.click(...saveButtonArgs);
     await scrollToElement(browser, ['css selector', 'header']);
     // TODO: change if we change alert header level
-    await browser.waitForElementVisible(
-      'xpath',
-      "//*/h2[contains(., 'Record updated')]"
-    );
+    await browser.waitForElementVisible('xpath', "//*/h2[contains(., 'Record updated')]");
 
     // Then navigate to roster and see if that text is on the roster
     await navigateToRoster(browser);
