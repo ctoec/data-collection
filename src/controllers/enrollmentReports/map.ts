@@ -51,7 +51,7 @@ export const mapRows = async (
         rows[i],
         organizations,
         sites,
-        opts
+        opts.save
       );
       children.push(child);
     } catch (err) {
@@ -74,7 +74,7 @@ const mapRow = async (
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
-  opts: { save: boolean } = { save: false }
+  save: boolean
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -88,33 +88,28 @@ const mapRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  const family = await mapFamily(transaction, source, organization, opts.save);
-  const child = await mapChild(
-    transaction,
-    source,
-    organization,
-    family,
-    opts.save
-  );
+  const family = await mapFamily(transaction, source, organization, save);
+  const child = await mapChild(transaction, source, organization, family, save);
   const incomeDetermination = await mapIncomeDetermination(
     transaction,
     source,
     family,
-    opts.save
+    save
   );
   const enrollment = await mapEnrollment(
     transaction,
     source,
     site,
     child,
-    opts.save
+    save
   );
+
   const funding = await mapFunding(
     transaction,
     source,
     organization,
     enrollment,
-    opts.save
+    save
   );
 
   family.incomeDeterminations = [incomeDetermination];
@@ -392,7 +387,6 @@ export const mapFunding = async (
       where: { type: fundingSource, period: source.lastFundingPeriod },
     });
   }
-
   // If the user supplied _any_ funding-related fields, create the funding.
   if (
     source.source ||
@@ -400,14 +394,23 @@ export const mapFunding = async (
     source.firstFundingPeriod ||
     source.lastFundingPeriod
   ) {
-    const funding = transaction.create(Funding, {
+    let funding = {
       firstReportingPeriod,
       lastReportingPeriod,
       fundingSpace,
       enrollmentId: enrollment.id,
-    });
+    } as Funding;
+    if (save) {
+      funding = transaction.create(Funding, {
+        firstReportingPeriod,
+        lastReportingPeriod,
+        fundingSpace,
+        enrollmentId: enrollment.id,
+      });
 
-    return transaction.save(funding);
+      return transaction.save(funding);
+    }
+    return funding;
   }
 };
 
@@ -415,8 +418,8 @@ export const mapFunding = async (
  * Leverage funding source -> time -> format mappings from FUNDING_SOURCE_TIMES
  * to determine the valid funding time entered by the user.
  */
-const mapFundingTime = (
-  value: string | undefined,
+export const mapFundingTime = (
+  value: number | string | undefined,
   fundingSource: FundingSource | undefined
 ) => {
   if (!value) return;
@@ -429,7 +432,7 @@ const mapFundingTime = (
   );
   return sourceTimes.fundingTimes.find((time) =>
     time.formats.some(
-      (format) => format.toLowerCase() === value.trim().toLowerCase()
+      (format) => format.toLowerCase() === value.toString().trim().toLowerCase()
     )
   )?.value;
 };
