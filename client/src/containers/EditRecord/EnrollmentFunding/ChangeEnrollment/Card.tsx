@@ -5,11 +5,12 @@ import {
   Button,
   CardExpansion,
   Alert,
+  CardProps,
 } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../../shared/models';
 import { ChangeEnrollmentForm } from './Form';
 
-type ChangeEnrollmentCardProps = {
+type ChangeEnrollmentCardProps = CardProps & {
   child: Child;
   currentEnrollment?: Enrollment;
   key?: string;
@@ -26,22 +27,13 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
   child,
   currentEnrollment,
   afterSaveSuccess,
-  key,
-  activeKey,
+  expanded,
 }) => {
-  const [closeCard, setCloseCard] = useState(false);
+  const [expandedCard, setExpandedCard] = useState(expanded);
   const [error, setError] = useState<string>();
 
-  // Explicitly don't want `closeCard` as a dep, as this
-  // needs to be triggered on render caused by child refetch
-  // (not only when closeCard changes)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (closeCard) setCloseCard(false);
-  });
-
   return (
-    <Card forceClose={closeCard}>
+    <Card>
       <div className="display-flex flex-justify flex-row flex-align-center">
         {!currentEnrollment ? (
           <div className="usa-prose-body">
@@ -61,7 +53,7 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
         {error && <Alert type="error" text={error} />}
         <ChangeEnrollmentForm
           afterSaveSuccess={() => {
-            setCloseCard(true);
+            setExpandedCard(false);
             afterSaveSuccess();
           }}
           afterSaveFailure={(err) => setError(err)}

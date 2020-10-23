@@ -7,6 +7,14 @@ import { EditEnrollmentCard } from './EditEnrollmentCard';
 import { Enrollment } from '../../../shared/models';
 import { useState } from 'react';
 
+enum FormName {
+  EditCurrentEnrollment = 'edit-current-enrollment',
+  EditCurrentFunding = 'edit-current-enrollment',
+  EditFunding = 'edit-funding',
+  ChangeFunding = 'change-funding',
+  EditEnrollment = 'edit-enrollment',
+}
+
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
@@ -40,8 +48,13 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
         <>
           <h3>Current enrollment</h3>
           <EditEnrollmentCard
-            key="edit-current-enrollment"
-            expanded={true}
+            key={FormName.EditCurrentEnrollment}
+            expanded={activeCard === FormName.EditCurrentEnrollment}
+            onExpansionChange={(isActive) =>
+              isActive
+                ? setActiveCard(FormName.EditCurrentEnrollment)
+                : setActiveCard(undefined)
+            }
             isCurrent={true}
             child={child}
             enrollmentId={currentEnrollment.id}
@@ -49,9 +62,13 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingCard
-              key={`edit-funding-${funding.id}`}
-              expanded={true}
-              isCurrent={true}
+              key={`${FormName.EditFunding}-${funding.id}`}
+              onExpansionChange={(isActive) =>
+                isActive
+                  ? setActiveCard(`${FormName.EditFunding}-${funding.id}`)
+                  : setActiveCard(undefined)
+              }
+              expanded={activeCard === `${FormName.EditFunding}-${funding.id}`}
               child={child}
               fundingId={funding.id}
               enrollmentId={currentEnrollment.id}
@@ -59,8 +76,13 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             />
           ))}
           <ChangeFundingCard
-            key="change-funding-card"
-            expanded={true}
+            key={FormName.ChangeFunding}
+            onExpansionChange={(isActive) =>
+              isActive
+                ? setActiveCard(FormName.ChangeFunding)
+                : setActiveCard(undefined)
+            }
+            expanded={activeCard === FormName.ChangeFunding}
             enrollment={currentEnrollment}
             orgId={child.organization.id}
             afterSaveSuccess={afterSaveSuccess}
@@ -73,10 +95,16 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
           {pastEnrollments.map((enrollment) => (
             <>
               <EditEnrollmentCard
-                key={`edit-enrollment-card-${enrollment.id}`}
-                // onExpansionChange={(isActive) => isActive ? setActiveCard(`edit-enrollment-card-${enrollment.id}`) : setActiveCard(undefined)}
+                key={`${FormName.EditEnrollment}-${enrollment.id}`}
+                onExpansionChange={(isActive) =>
+                  isActive
+                    ? setActiveCard(
+                        `${FormName.EditEnrollment}-${enrollment.id}`
+                      )
+                    : setActiveCard(undefined)
+                }
                 expanded={
-                  activeCard === `edit-enrollment-card-${enrollment.id}`
+                  activeCard === `${FormName.EditEnrollment}-${enrollment.id}`
                 }
                 child={child}
                 enrollmentId={enrollment.id}
@@ -84,8 +112,15 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingCard
-                  key={`edit-funding-card-${funding.id}`}
-                  expanded={true}
+                  key={`${FormName.EditFunding}-${funding.id}`}
+                  onExpansionChange={(isActive) =>
+                    isActive
+                      ? setActiveCard(`${FormName.EditFunding}-${funding.id}`)
+                      : setActiveCard(undefined)
+                  }
+                  expanded={
+                    activeCard === `${FormName.EditFunding}-${funding.id}`
+                  }
                   child={child}
                   fundingId={funding.id}
                   enrollmentId={enrollment.id}

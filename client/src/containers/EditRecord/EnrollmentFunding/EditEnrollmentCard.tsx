@@ -32,6 +32,7 @@ type EditEnrollmentCardProps = CardProps & {
 export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   child,
   enrollmentId,
+  expanded,
   isCurrent = false,
   afterSaveSuccess,
 }) => {
@@ -41,23 +42,15 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   }
 
   const { accessToken } = useContext(AuthenticationContext);
-  const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();
-
-  // Explicitly don't want `closeCard` as a dep, as this
-  // needs to be triggered on render caused by child refetch
-  // to make form re-openable
-  // (not only when closeCard changes)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (closeCard) setCloseCard(false);
-  });
+  const [expandedCard, setExpandedCard] = useState(expanded);
 
   function deleteEnrollment() {
     apiDelete(`enrollments/${enrollmentId}`, {
       accessToken,
     })
       .then(() => {
+        setExpandedCard(false);
         afterSaveSuccess();
       })
       .catch((err) => {
@@ -69,8 +62,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
     <Card
       key={enrollmentId}
       appearance={isCurrent ? 'primary' : 'secondary'}
-      forceClose={closeCard}
-      expanded={true}
+      expanded={expandedCard}
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">

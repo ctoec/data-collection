@@ -43,11 +43,6 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
   }
 
   const { accessToken } = useContext(AuthenticationContext);
-  const [closeCard, setCloseCard] = useState(false);
-
-  useEffect(() => {
-    if (closeCard) setCloseCard(false);
-  });
 
   const deleteDetermination = () => {
     apiDelete(
@@ -62,7 +57,6 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
     <Card
       className="margin-bottom-2"
       appearance={isCurrent ? 'primary' : 'secondary'}
-      forceClose={closeCard}
       key={determination.id}
       showTag={currentIsNew}
     >
