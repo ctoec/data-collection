@@ -30,6 +30,7 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
       name="birth-certificate-fields"
       legend="Birth certificate"
       showLegend
+      useFormFieldSet
       getValue={(data) => data.at('birthCertificateType')}
       inputComponent={RadioButtonGroup}
       status={(data) =>
