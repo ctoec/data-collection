@@ -32,11 +32,11 @@ export class Enrollment implements EnrollmentInterface {
   @Column({ type: 'uuid' })
   childId: string;
 
-  @ManyToOne(() => Site, { nullable: false })
-  site: Site;
+  @ManyToOne(() => Site)
+  site?: Site;
 
-  @Column()
-  siteId: number;
+  @Column({ nullable: true })
+  siteId?: number;
 
   @Column({
     type: 'varchar',

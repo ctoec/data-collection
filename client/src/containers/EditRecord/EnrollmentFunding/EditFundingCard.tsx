@@ -96,13 +96,9 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Space type</p>
-          {funding.fundingSpace ? (
-            <p className="text-bold margin-top-0">
-              {funding.fundingSpace?.time}
-            </p>
-          ) : (
-            <InlineIcon icon="incomplete" />
-          )}
+          <p className="text-bold margin-top-0">
+            {funding.fundingSpace?.time || <InlineIcon icon="incomplete" />}
+          </p>
         </div>
         <div className="flex-2">
           <p className="margin-bottom-0">Reporting periods</p>

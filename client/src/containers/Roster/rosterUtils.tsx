@@ -12,7 +12,7 @@ import { tableColumns } from './TableColumns';
 import idx from 'idx';
 import { Link } from 'react-router-dom';
 
-export const all = {
+export const ALL = {
   SITES: 'all-sites',
   ORGS: 'all-organizations',
 };
@@ -59,13 +59,11 @@ export function filterChildrenByOrg(
   children?: Child[]
 ): Child[] {
   if (!children) return [];
-  if (!orgId || orgId === all.ORGS) return children;
+  if (!orgId || orgId === ALL.ORGS) return children;
 
   // Coerce siteId to an integer
   const _orgId = +orgId;
-  return children.filter(
-    (c) => c.enrollments?.find((e) => !e.exit)?.site.organization.id === _orgId
-  );
+  return children.filter((c) => c.organization.id === _orgId);
 }
 
 /**
@@ -76,12 +74,12 @@ export function filterChildrenBySite(
   children?: Child[]
 ): Child[] {
   if (!children) return [];
-  if (!siteId || siteId === all.SITES) return children;
+  if (!siteId || siteId === ALL.SITES) return children;
 
   // Coerce siteId to an integer
   const _siteId = +siteId;
   return children.filter(
-    (c) => c.enrollments?.find((e) => !e.exit)?.site.id === _siteId
+    (c) => c.enrollments?.find((e) => !e.exit)?.site?.id === _siteId
   );
 }
 
@@ -99,7 +97,7 @@ export function getSiteItems(sites: Site[]): TabItem[] {
     tabTextFormatter: formatRosterTabText,
   }));
   siteItems.splice(0, 0, {
-    id: all.SITES,
+    id: ALL.SITES,
     tabText: 'All sites',
     firstItem: true,
   });
@@ -118,7 +116,7 @@ export function getOrganizationItems(
     nestedTabs: getSiteItems(sites.filter((s) => s.organizationId === id)),
   }));
   items.splice(0, 0, {
-    id: all.ORGS,
+    id: ALL.ORGS,
     tabText: 'All organizations',
     firstItem: true,
     nestedItemType: 'site',

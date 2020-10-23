@@ -107,7 +107,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
         <ContractSpaceField<Funding>
           ageGroup={enrollment.ageGroup}
           fundingSource={funding.fundingSpace.source}
-          organizationId={enrollment.site.organization.id}
+          organizationId={child.organization.id}
         />
       )}
       {showField(funding, ['firstReportingPeriod'], []) && (
