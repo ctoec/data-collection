@@ -8,8 +8,18 @@ module.exports = {
     await browser.init();
     await login(browser);
     await navigateToRoster(browser);
-    const childFirstNameEl = await clickOnFirstChildInRoster(browser);
-    console.log(childFirstNameEl);
+    await clickOnFirstChildInRoster(browser);
+
+    const firstNameSelectorArgs = ['css selector', 'input#firstName'];
+    await browser.waitForElementVisible(...firstNameSelectorArgs);
+    // const val = await browser.getValue(...firstNameSelectorArgs);
+
+    // let currentFirstName;
+    // await browser.execute(async function () {
+    //   return document.getElementById('firstName');
+    // });
+
+    // console.log(el);
 
     // await browser.click('xpath', "//*/button[contains(., 'Delete record')]");
     // await browser.click('xpath', "//*/button[contains(., 'Yes, delete record')]");
