@@ -63,6 +63,7 @@ export const NewFundingField = <
       name="funding-source"
       legend="Funding source options"
       showLegend
+      useFormFieldSet
       defaultValue={UNFUNDED}
       options={[
         {

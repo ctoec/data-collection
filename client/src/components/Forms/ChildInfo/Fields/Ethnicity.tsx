@@ -33,6 +33,7 @@ export const EthnicityField: React.FC = () => {
       name="ethnicity"
       legend="Ethnicity"
       showLegend
+      useFormFieldSet
       hint="As identified by family"
       options={[
         {

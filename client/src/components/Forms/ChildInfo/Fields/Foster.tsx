@@ -27,6 +27,7 @@ export const Foster: React.FC = () => (
     name="foster"
     legend="Child lives with foster family"
     showLegend
+    useFormFieldSet
     options={[
       {
         render: (props) => <RadioButton text="Yes" {...props} />,

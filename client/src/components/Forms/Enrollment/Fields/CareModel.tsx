@@ -29,6 +29,7 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
       id="care-model-radiogroup"
       legend="Care model"
       showLegend
+      useFormFieldSet
       options={Object.values(CareModel).map((model) => ({
         render: (props: RadioOptionRenderProps) => (
           <RadioButton {...props} text={model} />

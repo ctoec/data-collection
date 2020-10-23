@@ -26,6 +26,7 @@ export const HomelessnessField: React.FC = () => {
       name="homelessness"
       legend="Homelessness status"
       showLegend
+      useFormFieldSet
       options={[
         {
           render: (props) => (

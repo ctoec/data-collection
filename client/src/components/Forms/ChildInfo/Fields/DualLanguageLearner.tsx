@@ -27,6 +27,7 @@ export const DualLanguageLearner: React.FC = () => (
     name="dualLanguageLearner"
     legend="Dual Language Learner"
     showLegend
+    useFormFieldSet
     options={[
       {
         render: (props) => (

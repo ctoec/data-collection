@@ -27,6 +27,7 @@ export const DisabilityServices: React.FC = () => (
     name="disability"
     legend="Receiving disability services"
     showLegend
+    useFormFieldSet
     options={[
       {
         render: (props) => (

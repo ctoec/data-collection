@@ -29,6 +29,7 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
       id="age-group-radiogroup"
       legend="Age group"
       showLegend
+      useFormFieldSet
       options={Object.values(AgeGroup).map((ageGroup) => ({
         render: (props: RadioOptionRenderProps) => (
           <RadioButton {...props} text={ageGroup} />
