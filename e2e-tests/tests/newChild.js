@@ -24,7 +24,23 @@ const childIdentFields = [
   },
   // TODO: FIX ID FOR BIRTH CERT RADIO BUTTONS
 ];
-const childInfoFields = [];
+const childInfoFields = [
+  {
+    id: 'raceNotDisclosed',
+    value: true,
+  },
+  {
+    // TODO: fix radio button ids
+    id: 'Unknown',
+    // TODO: make enter form data func able to handle attribute changes
+    change: {
+      attribute: 'checked',
+      value: 'true',
+    },
+    // TODO: gender-- need to indicate which option is selected
+    // TODO: fix radio button ids for disability services, dual language, foster family
+  },
+];
 const familyAddressFields = [];
 const familyIncomeFields = [];
 const enrollmentFundingFields = [];
