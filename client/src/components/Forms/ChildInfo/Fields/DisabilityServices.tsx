@@ -1,51 +1,46 @@
 import React from 'react';
 import {
-  FormField,
-  RadioButtonGroupProps,
-  RadioButtonGroup,
-  RadioButton,
+  RadioButtonGroup, RadioOptionInForm,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
 import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 import { UNKNOWN } from '../../../../shared/constants';
 
-export const DisabilityServices: React.FC = () => (
-  <FormField<Child, RadioButtonGroupProps, boolean | null>
-    id="disability-button-group"
-    getValue={(data) => data.at('receivesDisabilityServices')}
-    preprocessForDisplay={(data) => {
-      if (data === true) return 'disability-yes';
-      else if (data === false) return 'disability-no';
-      else return 'disability-unknown';
-    }}
-    parseOnChangeEvent={(e) => {
+export const DisabilityServices: React.FC = () => {
+
+  const getRadioButtonProps = ({ label, id }: { label: string, id: string }): Pick<RadioOptionInForm<Child>, 'getValue' | 'parseOnChangeEvent' | 'preprocessForDisplay'> => ({
+    getValue: (data) => data.at('receivesDisabilityServices'),
+    parseOnChangeEvent: (e) => {
       if (e.target.value !== 'disability-unknown')
         return e.target.value === 'disability-yes';
       else return null;
-    }}
-    inputComponent={RadioButtonGroup}
-    name="disability"
+    },
+    preprocessForDisplay: (data) => {
+      if (data === true) return 'disability-yes';
+      else if (data === false) return 'disability-no';
+      else return 'disability-unknown';
+    }
+  })
+
+  return <RadioButtonGroup<Child>
+    inForm
+    id="disability-button-group"
     legend="Receiving disability services"
     showLegend
-    useFormFieldSet
     options={[
       {
-        render: (props) => (
-          <RadioButton text="Receives disability services" {...props} />
-        ),
-        value: 'disability-yes',
+        id: "disability-yes",
+        label: 'Receives disability services',
       },
       {
-        render: (props) => (
-          <RadioButton text="Does not receive disability services" {...props} />
-        ),
-        value: 'disability-no',
+        id: 'disability-no',
+        label: 'Does not receive disability services',
       },
       {
-        render: (props) => <RadioButton text={UNKNOWN} {...props} />,
-        value: 'disability-unknown',
+        id: 'disability-unknown',
+        label: UNKNOWN,
       },
-    ]}
+    ].map(o => getRadioButtonProps(o)}
     status={getValidationStatusForField}
   />
-);
+};

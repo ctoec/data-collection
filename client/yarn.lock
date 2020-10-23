@@ -1177,7 +1177,7 @@
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#550-radio-id":
   version "0.0.37"
-  resolved "https://github.com/ctoec/component-library#c6d67d0603a1f6bd03f51047efed4e3ac25b8b28"
+  resolved "https://github.com/ctoec/component-library#5d697b0f99b3fb71fe9bf1aba6414f76097ec966"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
