@@ -14,6 +14,7 @@ import { nameFormatter } from '../../utils/formatters';
 import { Link } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
 import { Child } from '../../shared/models';
+import { getBatchEditErrorDetailsString } from './listSteps';
 
 const BatchEdit: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -108,7 +109,9 @@ const BatchEdit: React.FC = () => {
                   )}
                 </span>
               ),
-              description: 'Placeholder',
+              description: `Errors in ${getBatchEditErrorDetailsString(
+                record
+              )}`,
             }))}
           >
             {activeRecordId !== undefined ? (
