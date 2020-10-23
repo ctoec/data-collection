@@ -16,15 +16,15 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
-  SpecialEducationServicesType,
-  FundingSourceTime,
-  FundingTimeInput,
   CareModel,
   BirthCertificateType,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
+
+export const MISSING_PROVIDER_ERROR =
+  'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.';
 
 /**
  * Can use optional save parameter to decide whether to persist
