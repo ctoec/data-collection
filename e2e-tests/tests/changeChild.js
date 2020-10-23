@@ -21,7 +21,7 @@ module.exports = {
     const newFirstNameText = 'New first name';
     await browser.clearValue(...firstNameSelectorArgs);
     await browser.setValue(...firstNameSelectorArgs, newFirstNameText);
-    await browser.pause(2000); // Wait for change
+    await browser.pause(5000); // Wait for change... annoying but better than flaky tests
     const saveButtonArgs = ['xpath', "//*/input[contains(@value,'Save')]"];
     await scrollToElement(browser, saveButtonArgs);
     await browser.click(...saveButtonArgs);

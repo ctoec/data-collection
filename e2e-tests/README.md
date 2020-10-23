@@ -7,3 +7,5 @@ Gotchas:
 - Xpath arrays start at 1-- so if more than one el will be returned, use `[1]`, not `[0]`
 
 - We have to use CommonJS modules, even though VSCode will try to tell you that you can use ES Modules
+
+- Most nightwatch functions take a selection type `xpath` or `css selector`. The option to do this on a given function is usually but not always indicated in the nightwatch docs. It is totally unclear whether this is required, though there are funcs that switch the browser to using one selector type to another... so we default here to specifying it. There are also some nightwatch functions that specifically do not take a selector even though the docs seem to indicate that they do (`browser.assert.containsText`, for example, only works when a selector was not specified and a css selector was used).
