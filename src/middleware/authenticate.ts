@@ -111,6 +111,9 @@ const getUser = async (wingedKeysId: string) => {
     ])
   );
 
+  // Determine access pattern level of the user
+  user.accessType = allOrgIds.length === 0 ? 'site' : 'organization';
+
   // Add values to the user object
   user.organizationIds = allOrgIds;
   user.siteIds = allSiteIds;

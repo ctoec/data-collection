@@ -53,24 +53,7 @@ const Roster: React.FC = () => {
     activeOrgId,
     activeSiteId
   );
-
-  // Use state to determine whether current user is a single-site
-  // accessor of a provider with multiple sites--limit options if so
-  const [isSSUserOfMSProvider, setIsSSUser] = useState<boolean>(false);
-  useEffect(() => {
-    if (accessToken) {
-      apiGet('users/isSSofMS', { accessToken })
-        .then((res) => {
-          setIsSSUser(res);
-        })
-        .catch((err) => {
-          console.error(
-            'Could not determine whether user has single-site access: ',
-            err
-          );
-        });
-    }
-  }, [accessToken]);
+  const isSiteLevelUser = user?.accessType === 'site';
 
   // TODO: should this be all of the children for the whole org or what?
   const numberOfChildrenWithErrors = childrenCache.records.filter(
@@ -102,7 +85,7 @@ const Roster: React.FC = () => {
   const accordionItems = getAccordionItems(
     childrenByAgeGroup,
     showOrgInTables,
-    isSSUserOfMSProvider
+    { hideCapacity: isSiteLevelUser }
   );
 
   // If there's an active org use that, otherwise grab it from the site
@@ -162,9 +145,9 @@ const Roster: React.FC = () => {
       nestedActiveId: activeSiteId,
       activeId: activeOrgId,
     };
-  } else if (isSSUserOfMSProvider) {
+  } else if (isSiteLevelUser) {
+    // User has no organization permissions, is restricted on page
     h1Content = sites[0].siteName;
-    // No access to a tabnav bar to switch sites/orgs
     tabNavProps = undefined;
   }
 
@@ -173,7 +156,7 @@ const Roster: React.FC = () => {
       <div className="Roster grid-container">
         {alertElements}
         <h1 className="margin-bottom-0" ref={h1Ref}>
-          {isSSUserOfMSProvider && (
+          {isSiteLevelUser && (
             <div className="margin-bottom-1 font-body-sm text-base-darker">
               {organizations[0].providerName}
             </div>
@@ -184,7 +167,7 @@ const Roster: React.FC = () => {
           {/* TODO: should this count be just for the thing showing or for all of them? */}
           {childrenCache.loading
             ? 'Loading...'
-            : isSSUserOfMSProvider
+            : isSiteLevelUser
             ? `${childrenCache.records.length} children enrolled`
             : `${childrenCache.records.length} children enrolled at ${sites.length} sites`}
         </p>
@@ -217,12 +200,12 @@ const Roster: React.FC = () => {
         {/* TODO: change when we figure out multi-site entity */}
         <Button
           text={
-            isSSUserOfMSProvider
-              ? 'Only users with all site access can submit'
+            isSiteLevelUser
+              ? 'Organization permissions required to submit'
               : 'Send to OEC'
           }
           onClick={submitToOEC}
-          disabled={!currentOrgId || isSSUserOfMSProvider}
+          disabled={!currentOrgId || isSiteLevelUser}
         />
       </FixedBottomBar>
     </>
