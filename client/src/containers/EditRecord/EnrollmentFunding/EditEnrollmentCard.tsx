@@ -73,7 +73,9 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
       <div className="display-flex flex-justify">
         <div className="flex-1">
           <p className="margin-bottom-0">Site</p>
-          <p className="text-bold margin-top-0">{enrollment.site.siteName}</p>
+          <p className="text-bold margin-top-0">
+            {enrollment.site?.siteName || InlineIcon({ icon: 'incomplete' })}
+          </p>
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Model type</p>
