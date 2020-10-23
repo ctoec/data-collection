@@ -6,7 +6,7 @@ import {
   FormSubmitButton,
 } from '@ctoec/component-library';
 import { ChangeEnrollment } from '../../../../shared/payloads';
-import { Enrollment, Child } from '../../../../shared/models';
+import { Enrollment, Child, FundingSource } from '../../../../shared/models';
 import {
   SiteField,
   EnrollmentStartDateField,
@@ -54,6 +54,21 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   const activeFunding = currentEnrollment?.fundings?.find(
     (f) => !f.lastReportingPeriod
   );
+
+  if (activeFunding && !activeFunding?.fundingSpace) {
+    return (
+      <div>
+        <p>
+          Add missing enrollment and/or funding information before you can
+          change {child.firstName}'s enrollment
+        </p>
+        <ExpandCard>
+          <Button text="Cancel" appearance="outline" />
+        </ExpandCard>
+      </div>
+    );
+  }
+
   return (
     <Form<ChangeEnrollment>
       id="change-enrollment-form"
@@ -89,7 +104,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
             accessor={(data) =>
               data.at('oldEnrollment').at('funding').at('lastReportingPeriod')
             }
-            fundingSource={activeFunding.fundingSpace?.source}
+            fundingSource={activeFunding.fundingSpace?.source as FundingSource} // This is known to have a value (check on line 58)
             isLast={true}
             optional={true}
             label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}

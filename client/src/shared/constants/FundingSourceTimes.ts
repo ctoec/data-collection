@@ -3,6 +3,8 @@ import { FundingSourceTime } from '../models/FundingSourceTime';
 
 //  This enumerates all of the valid funding source/funding time combinations,
 //  as well as all of the acceptable formats for each associated funding time
+// TODO: should fulltime and fullday roll up to the same "time"?
+// TODO: should parttime and partday roll up to the same "time"?
 export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [
   {
     displayName: 'Child Day Care',

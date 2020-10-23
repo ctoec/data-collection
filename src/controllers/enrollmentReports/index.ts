@@ -1,3 +1,3 @@
-export * from './parse';
-export * from './map';
+export { parseUploadedTemplate } from './parse';
+export { mapAndSaveRows } from './map';
 export * from './removeExisting';

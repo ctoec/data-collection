@@ -104,7 +104,8 @@ const EditRecord: React.FC = () => {
           {!!activeEnrollment && (
             <>
               <WithdrawRecord
-                childName={child.firstName}
+                setAlerts={setAlerts}
+                child={child}
                 enrollment={activeEnrollment}
               />
             </>
