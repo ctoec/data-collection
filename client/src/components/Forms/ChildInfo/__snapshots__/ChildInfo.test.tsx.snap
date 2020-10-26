@@ -11,12 +11,12 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       Child info
     </h2>
     <fieldset
-      aria-describedby="race-fieldset-hint"
+      aria-describedby="race-hint"
       class="usa-fieldset"
-      id="race-fieldset"
+      id="race"
     >
       <legend
-        id="fieldset-legend-race-fieldset"
+        id="fieldset-legend-race"
       >
         <span
           class="usa-label"
@@ -38,7 +38,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-checkbox__input"
               id="americanIndianOrAlaskaNative"
               type="checkbox"
-              value=""
+              value="americanIndianOrAlaskaNative"
             />
             <label
               class="usa-checkbox__label"
@@ -56,7 +56,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-checkbox__input"
               id="asian"
               type="checkbox"
-              value=""
+              value="asian"
             />
             <label
               class="usa-checkbox__label"
@@ -74,7 +74,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-checkbox__input"
               id="blackOrAfricanAmerican"
               type="checkbox"
-              value=""
+              value="blackOrAfricanAmerican"
             />
             <label
               class="usa-checkbox__label"
@@ -92,7 +92,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-checkbox__input"
               id="nativeHawaiianOrPacificIslander"
               type="checkbox"
-              value=""
+              value="nativeHawaiianOrPacificIslander"
             />
             <label
               class="usa-checkbox__label"
@@ -110,7 +110,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-checkbox__input"
               id="white"
               type="checkbox"
-              value=""
+              value="white"
             />
             <label
               class="usa-checkbox__label"
@@ -128,7 +128,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-checkbox__input"
               id="raceNotDisclosed"
               type="checkbox"
-              value=""
+              value="raceNotDisclosed"
             />
             <label
               class="usa-checkbox__label"
@@ -141,12 +141,11 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      aria-describedby="ethnicity-radiogroup-fieldset-hint"
       class="usa-fieldset"
-      id="ethnicity-radiogroup-fieldset"
+      id="ethnicity-radiogroup"
     >
       <legend
-        id="fieldset-legend-ethnicity-radiogroup-fieldset"
+        id="fieldset-legend-ethnicity-radiogroup"
       >
         <span
           class="usa-label"
@@ -154,11 +153,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           Ethnicity
         </span>
       </legend>
-      <span
-        class="usa-hint text-italic"
-      >
-        As identified by family
-      </span>
       <div>
         <span>
           <div
@@ -166,14 +160,14 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="Yes"
-              name="ethnicity"
+              id="hispanic-ethnicity-yes"
+              name="hispanicOrLatinxEthnicity"
               type="radio"
-              value="Yes"
+              value="hispanic-ethnicity-yes"
             />
             <label
               class="usa-radio__label"
-              for="Yes"
+              for="hispanic-ethnicity-yes"
             >
               Hispanic or Latinx
             </label>
@@ -185,14 +179,14 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="No"
-              name="ethnicity"
+              id="hispanic-ethnicity-no"
+              name="hispanicOrLatinxEthnicity"
               type="radio"
-              value="No"
+              value="hispanic-ethnicity-no"
             />
             <label
               class="usa-radio__label"
-              for="No"
+              for="hispanic-ethnicity-no"
             >
               Not Hispanic or Latinx
             </label>
@@ -203,16 +197,15 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
-              checked=""
               class="usa-radio__input"
-              id="Unknown"
-              name="ethnicity"
+              id="hispanic-ethnicity-unknown"
+              name="hispanicOrLatinxEthnicity"
               type="radio"
-              value="Unknown"
+              value="hispanic-ethnicity-unknown"
             />
             <label
               class="usa-radio__label"
-              for="Unknown"
+              for="hispanic-ethnicity-unknown"
             >
               Unknown/not collected
             </label>
@@ -274,10 +267,10 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     </h3>
     <fieldset
       class="usa-fieldset"
-      id="disability-button-group-fieldset"
+      id="disability-button-group"
     >
       <legend
-        id="fieldset-legend-disability-button-group-fieldset"
+        id="fieldset-legend-disability-button-group"
       >
         <span
           class="usa-label"
@@ -293,7 +286,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="disability-yes"
-              name="disability"
+              name="receivesDisabilityServices"
               type="radio"
               value="disability-yes"
             />
@@ -312,7 +305,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="disability-no"
-              name="disability"
+              name="receivesDisabilityServices"
               type="radio"
               value="disability-no"
             />
@@ -329,10 +322,9 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
-              checked=""
               class="usa-radio__input"
               id="disability-unknown"
-              name="disability"
+              name="receivesDisabilityServices"
               type="radio"
               value="disability-unknown"
             />
@@ -348,10 +340,10 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
     </fieldset>
     <fieldset
       class="usa-fieldset"
-      id="duallanguage-button-group-fieldset"
+      id="duallanguage-button-group"
     >
       <legend
-        id="fieldset-legend-duallanguage-button-group-fieldset"
+        id="fieldset-legend-duallanguage-button-group"
       >
         <span
           class="usa-label"
@@ -361,77 +353,70 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </legend>
       <div>
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="dual-yes"
+              name="dualLanguageLearner"
+              type="radio"
+              value="dual-yes"
+            />
+            <label
+              class="usa-radio__label"
+              for="dual-yes"
             >
-              <input
-                class="usa-radio__input"
-                id="dual-yes"
-                name="dualLanguageLearner"
-                type="radio"
-                value="dual-yes"
-              />
-              <label
-                class="usa-radio__label"
-                for="dual-yes"
-              >
-                Is a dual language learner
-              </label>
-            </div>
+              Is a dual language learner
+            </label>
           </div>
         </span>
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="dual-no"
+              name="dualLanguageLearner"
+              type="radio"
+              value="dual-no"
+            />
+            <label
+              class="usa-radio__label"
+              for="dual-no"
             >
-              <input
-                class="usa-radio__input"
-                id="dual-no"
-                name="dualLanguageLearner"
-                type="radio"
-                value="dual-no"
-              />
-              <label
-                class="usa-radio__label"
-                for="dual-no"
-              >
-                Is not a dual language learner
-              </label>
-            </div>
+              Is not a dual language learner
+            </label>
           </div>
         </span>
         <span>
-          <div>
-            <div
-              class="usa-radio"
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="dual-unknown"
+              name="dualLanguageLearner"
+              type="radio"
+              value="dual-unknown"
+            />
+            <label
+              class="usa-radio__label"
+              for="dual-unknown"
             >
-              <input
-                checked=""
-                class="usa-radio__input"
-                id="dual-unknown"
-                name="dualLanguageLearner"
-                type="radio"
-                value="dual-unknown"
-              />
-              <label
-                class="usa-radio__label"
-                for="dual-unknown"
-              >
-                Unknown/not collected
-              </label>
-            </div>
+              Unknown/not collected
+            </label>
           </div>
         </span>
       </div>
     </fieldset>
     <fieldset
       class="usa-fieldset"
-      id="foster-button-group-fieldset"
+      id="foster-button-group"
     >
       <legend
-        id="fieldset-legend-foster-button-group-fieldset"
+        id="fieldset-legend-foster-button-group"
       >
         <span
           class="usa-label"
@@ -483,7 +468,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
-              checked=""
               class="usa-radio__input"
               id="foster-unknown"
               name="foster"

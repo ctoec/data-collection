@@ -22,15 +22,15 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
       inForm
       id="age-group-radiogroup"
       legend="Age group"
+      inputName="ageGroup"
       showLegend
       options={Object.values(AgeGroup).map(
         (ageGroup): RadioOptionInForm<T> => {
-          const id = ageGroup.replace(' ', '-');
+          const id = ageGroup.replace(/\s/g, '-');
           return {
             id,
+            value: id,
             text: ageGroup,
-            value: ageGroup,
-            name: id,
             getValue: (data) => enrollmentAccessor(data).at('ageGroup'),
             parseOnChangeEvent: (e) => e.target.value as AgeGroup,
           };

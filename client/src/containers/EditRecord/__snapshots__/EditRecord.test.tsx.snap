@@ -1552,10 +1552,10 @@ exports[`EditRecord matches snapshot 1`] = `
           </fieldset>
           <fieldset
             class="usa-fieldset"
-            id="birth-certificate-fields-fieldset"
+            id="birth-certificate-fields"
           >
             <legend
-              id="fieldset-legend-birth-certificate-fields-fieldset"
+              id="fieldset-legend-birth-certificate-fields"
             >
               <span
                 class="usa-label"
@@ -1570,14 +1570,15 @@ exports[`EditRecord matches snapshot 1`] = `
                 >
                   <input
                     class="usa-radio__input"
-                    id="US birth certificate"
-                    name="birth-certificate-fields"
+                    expansion="[object Object]"
+                    id="US-birth-certificate"
+                    name="birthCertificateType"
                     type="radio"
-                    value="US birth certificate"
+                    value="US-birth-certificate"
                   />
                   <label
                     class="usa-radio__label"
-                    for="US birth certificate"
+                    for="US-birth-certificate"
                   >
                     US birth certificate
                   </label>
@@ -1589,14 +1590,14 @@ exports[`EditRecord matches snapshot 1`] = `
                 >
                   <input
                     class="usa-radio__input"
-                    id="Non-US birth certificate"
-                    name="birth-certificate-fields"
+                    id="Non-US-birth-certificate"
+                    name="birthCertificateType"
                     type="radio"
-                    value="Non-US birth certificate"
+                    value="Non-US-birth-certificate"
                   />
                   <label
                     class="usa-radio__label"
-                    for="Non-US birth certificate"
+                    for="Non-US-birth-certificate"
                   >
                     Non-US birth certificate
                   </label>
@@ -1607,16 +1608,15 @@ exports[`EditRecord matches snapshot 1`] = `
                   class="usa-radio"
                 >
                   <input
-                    checked=""
                     class="usa-radio__input"
-                    id="Birth certificate unavailable"
-                    name="birth-certificate-fields"
+                    id="Birth-certificate-unavailable"
+                    name="birthCertificateType"
                     type="radio"
-                    value="Birth certificate unavailable"
+                    value="Birth-certificate-unavailable"
                   />
                   <label
                     class="usa-radio__label"
-                    for="Birth certificate unavailable"
+                    for="Birth-certificate-unavailable"
                   >
                     Birth certificate unavailable
                   </label>

@@ -46,12 +46,12 @@ export const TripleBooleanRadio = <T extends {}>({
     id,
     text: label,
     value: id,
-    name: id,
   });
 
   return (
     <RadioButtonGroup<T>
       inForm
+      inputName={field as string}
       id={id}
       legend={legend}
       showLegend

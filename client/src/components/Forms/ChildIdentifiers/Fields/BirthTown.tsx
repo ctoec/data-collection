@@ -6,10 +6,7 @@ import {
   useGenericContext,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
-import {
-  getValidationStatusForField,
-  getValidationStatusForFieldInFieldset,
-} from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
 import set from 'lodash/set';
 
 type TownFieldProps = {

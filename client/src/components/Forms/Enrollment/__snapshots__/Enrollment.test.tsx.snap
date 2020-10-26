@@ -8,10 +8,10 @@ exports[`Forms Enrollment matches snapshot 1`] = `
   >
     <fieldset
       class="usa-fieldset"
-      id="site-radiogroup-fieldset"
+      id="site-radiogroup"
     >
       <legend
-        id="fieldset-legend-site-radiogroup-fieldset"
+        id="fieldset-legend-site-radiogroup"
       >
         <span
           class="usa-label"
@@ -1305,10 +1305,10 @@ exports[`Forms Enrollment matches snapshot 1`] = `
     </fieldset>
     <fieldset
       class="usa-fieldset"
-      id="care-model-radiogroup-fieldset"
+      id="care-model-radiogroup"
     >
       <legend
-        id="fieldset-legend-care-model-radiogroup-fieldset"
+        id="fieldset-legend-care-model-radiogroup"
       >
         <span
           class="usa-label"
@@ -1324,7 +1324,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="In-person"
-              name="care-model"
+              name="model"
               type="radio"
               value="In-person"
             />
@@ -1343,7 +1343,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="Hybrid"
-              name="care-model"
+              name="model"
               type="radio"
               value="Hybrid"
             />
@@ -1362,7 +1362,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="Distance"
-              name="care-model"
+              name="model"
               type="radio"
               value="Distance"
             />
@@ -1381,7 +1381,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="Unknown"
-              name="care-model"
+              name="model"
               type="radio"
               value="Unknown"
             />
@@ -1397,10 +1397,10 @@ exports[`Forms Enrollment matches snapshot 1`] = `
     </fieldset>
     <fieldset
       class="usa-fieldset"
-      id="age-group-radiogroup-fieldset"
+      id="age-group-radiogroup"
     >
       <legend
-        id="fieldset-legend-age-group-radiogroup-fieldset"
+        id="fieldset-legend-age-group-radiogroup"
       >
         <span
           class="usa-label"
@@ -1416,7 +1416,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="Infant/toddler"
-              name="age-group"
+              name="ageGroup"
               type="radio"
               value="Infant/toddler"
             />
@@ -1435,7 +1435,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             <input
               class="usa-radio__input"
               id="Preschool"
-              name="age-group"
+              name="ageGroup"
               type="radio"
               value="Preschool"
             />
@@ -1453,14 +1453,14 @@ exports[`Forms Enrollment matches snapshot 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="School aged"
-              name="age-group"
+              id="School-aged"
+              name="ageGroup"
               type="radio"
-              value="School aged"
+              value="School-aged"
             />
             <label
               class="usa-radio__label"
-              for="School aged"
+              for="School-aged"
             >
               School aged
             </label>
@@ -1470,10 +1470,10 @@ exports[`Forms Enrollment matches snapshot 1`] = `
     </fieldset>
     <fieldset
       class="usa-fieldset"
-      id="funding-source-fieldset"
+      id="funding-source"
     >
       <legend
-        id="fieldset-legend-funding-source-fieldset"
+        id="fieldset-legend-funding-source"
       >
         <span
           class="usa-label"
@@ -1490,7 +1490,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
               checked=""
               class="usa-radio__input"
               id="Unfunded"
-              name="funding-source"
+              name="fundingSource"
               type="radio"
               value="Unfunded"
             />

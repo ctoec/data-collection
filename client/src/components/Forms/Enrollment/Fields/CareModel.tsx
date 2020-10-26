@@ -19,13 +19,13 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
       id="care-model-radiogroup"
       legend="Care model"
       showLegend
+      inputName="model"
       options={Object.values(CareModel).map((model) => {
-        const id = model.replace(' ', '-');
+        const id = model.replace(/\s/g, '-');
         return {
           value: model,
           text: model,
           id,
-          name: id,
           getValue: (data) => enrollmentAccessor(data).at('model'),
           parseOnChangeEvent: (e) => e.target.value as CareModel,
         };

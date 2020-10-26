@@ -18,17 +18,17 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
       inForm
       id="birth-certificate-fields"
       legend="Birth certificate"
+      inputName="birthCertificateType"
       showLegend
       options={[
         ...Object.values(BirthCertificateType).map(
           (certificateType): RadioOptionInForm<Child> => {
-            const id = certificateType.replace(' ', '_');
+            const id = certificateType.replace(/\s/g, '-');
             return {
               getValue: (data) => data.at('birthCertificateType'),
-              text: certificateType,
               id,
               value: id,
-              name: id,
+              text: certificateType,
               expansion: certificateType === BirthCertificateType.US && (
                 <>
                   <div className="mobile-lg:grid-col-12">

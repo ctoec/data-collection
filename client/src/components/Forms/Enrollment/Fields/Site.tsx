@@ -1,17 +1,8 @@
 import React from 'react';
-import {
-  FormField,
-  RadioButtonGroupProps,
-  RadioButtonGroup,
-  RadioButton,
-  TObjectDriller,
-} from '@ctoec/component-library';
+import { RadioButtonGroup, TObjectDriller } from '@ctoec/component-library';
 import { Site, Enrollment } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
-import {
-  getValidationStatusForField,
-  getValidationStatusForFields,
-} from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 type SiteProps<T> = {
   sites: Site[];
@@ -31,13 +22,13 @@ export const SiteField = <T extends Enrollment | ChangeEnrollment>({
       legend="Site"
       showLegend
       inForm
+      inputName="site"
       options={sites.map((site) => ({
         text: site.siteName,
         getValue: (data) => enrollmentAccessor(data).at('site').at('id'),
         parseOnChangeEvent: (e: React.ChangeEvent<any>) =>
           parseInt(e.target.value) || null,
         value: `${site.id}`,
-        name: site.siteName,
         id: `site-${site.id}`,
       }))}
       status={(_, dataDriller) =>

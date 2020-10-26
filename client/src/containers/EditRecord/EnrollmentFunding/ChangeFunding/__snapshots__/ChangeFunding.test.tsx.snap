@@ -189,10 +189,10 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
       >
         <fieldset
           class="usa-fieldset"
-          id="funding-source-fieldset"
+          id="funding-source"
         >
           <legend
-            id="fieldset-legend-funding-source-fieldset"
+            id="fieldset-legend-funding-source"
           >
             <span
               class="usa-label"
@@ -209,7 +209,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
                   checked=""
                   class="usa-radio__input"
                   id="Unfunded"
-                  name="funding-source"
+                  name="fundingSource"
                   type="radio"
                   value="Unfunded"
                 />
@@ -311,10 +311,10 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
       >
         <fieldset
           class="usa-fieldset"
-          id="funding-source-fieldset"
+          id="funding-source"
         >
           <legend
-            id="fieldset-legend-funding-source-fieldset"
+            id="fieldset-legend-funding-source"
           >
             <span
               class="usa-label"
@@ -331,7 +331,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
                   checked=""
                   class="usa-radio__input"
                   id="Unfunded"
-                  name="funding-source"
+                  name="fundingSource"
                   type="radio"
                   value="Unfunded"
                 />
@@ -433,10 +433,10 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
       >
         <fieldset
           class="usa-fieldset"
-          id="funding-source-fieldset"
+          id="funding-source"
         >
           <legend
-            id="fieldset-legend-funding-source-fieldset"
+            id="fieldset-legend-funding-source"
           >
             <span
               class="usa-label"
@@ -453,7 +453,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
                   checked=""
                   class="usa-radio__input"
                   id="Unfunded"
-                  name="funding-source"
+                  name="fundingSource"
                   type="radio"
                   value="Unfunded"
                 />
@@ -527,10 +527,10 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
       >
         <fieldset
           class="usa-fieldset"
-          id="funding-source-fieldset"
+          id="funding-source"
         >
           <legend
-            id="fieldset-legend-funding-source-fieldset"
+            id="fieldset-legend-funding-source"
           >
             <span
               class="usa-label"
@@ -547,7 +547,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
                   checked=""
                   class="usa-radio__input"
                   id="Unfunded"
-                  name="funding-source"
+                  name="fundingSource"
                   type="radio"
                   value="Unfunded"
                 />
