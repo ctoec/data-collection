@@ -82,11 +82,10 @@ const Roster: React.FC = () => {
 
   const childrenByAgeGroup = getChildrenByAgeGroup(filteredChildren);
 
-  const accordionItems = getAccordionItems(
-    childrenByAgeGroup,
-    showOrgInTables,
-    { hideCapacity: isSiteLevelUser }
-  );
+  const accordionItems = getAccordionItems(childrenByAgeGroup, {
+    hideCapacity: isSiteLevelUser,
+    showOrgInTables: showOrgInTables,
+  });
 
   // If there's an active org use that, otherwise grab it from the site
   let currentOrgId = activeOrgId;
@@ -167,7 +166,7 @@ const Roster: React.FC = () => {
           {/* TODO: should this count be just for the thing showing or for all of them? */}
           {childrenCache.loading
             ? 'Loading...'
-            : isSiteLevelUser
+            : user?.accessType === 'organization' || sites.length > 1
             ? `${childrenCache.records.length} children enrolled`
             : `${childrenCache.records.length} children enrolled at ${sites.length} sites`}
         </p>
@@ -198,15 +197,17 @@ const Roster: React.FC = () => {
           appearance="outline"
         />
         {/* TODO: change when we figure out multi-site entity */}
-        <Button
-          text={
-            isSiteLevelUser
-              ? 'Organization permissions required to submit'
-              : 'Send to OEC'
-          }
-          onClick={submitToOEC}
-          disabled={!currentOrgId || isSiteLevelUser}
-        />
+        {!isSiteLevelUser && (
+          <Button
+            text={
+              isSiteLevelUser
+                ? 'Organization permissions required to submit'
+                : 'Send to OEC'
+            }
+            onClick={submitToOEC}
+            disabled={!currentOrgId}
+          />
+        )}
       </FixedBottomBar>
     </>
   );

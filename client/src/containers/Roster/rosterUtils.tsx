@@ -159,8 +159,10 @@ export function getChildrenByAgeGroup(
 
 export function getAccordionItems(
   childrenByAgeGroup: ChildrenByAgeGroup,
-  showOrgInTables: boolean,
-  opts: { hideCapacity: boolean } = { hideCapacity: false }
+  opts: { hideCapacity: boolean; showOrgInTables: boolean } = {
+    hideCapacity: false,
+    showOrgInTables: false,
+  }
 ) {
   return Object.entries(childrenByAgeGroup)
     .filter(
@@ -199,7 +201,7 @@ export function getAccordionItems(
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
           data={ageGroupChildren}
-          columns={tableColumns(showOrgInTables)}
+          columns={tableColumns(opts.showOrgInTables)}
           defaultSortColumn={0}
           defaultSortOrder="ascending"
         />
