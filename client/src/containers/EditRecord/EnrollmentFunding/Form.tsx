@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { RecordFormProps } from '../../../components/Forms/types';
 import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
@@ -34,6 +34,10 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   const pastEnrollments: Enrollment[] = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
+  useEffect(() => {
+    console.log('*********');
+    console.log(activeCard);
+  }, []);
 
   return (
     <>
