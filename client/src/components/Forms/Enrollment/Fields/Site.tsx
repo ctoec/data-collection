@@ -4,12 +4,11 @@ import {
   RadioButtonGroupProps,
   RadioButtonGroup,
   RadioButton,
-  RadioOptionRenderProps,
   TObjectDriller,
 } from '@ctoec/component-library';
 import { Site, Enrollment } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
-import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForField, getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 type SiteProps<T> = {
   sites: Site[];
@@ -24,28 +23,25 @@ export const SiteField = <T extends Enrollment | ChangeEnrollment>({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: SiteProps<T>) => {
   return (
-    <FormField<T, RadioButtonGroupProps, number | null>
-      getValue={(data) => enrollmentAccessor(data).at('site').at('id')}
-      parseOnChangeEvent={(e: React.ChangeEvent<any>) =>
-        parseInt(e.target.value) || null
-      }
-      inputComponent={RadioButtonGroup}
-      name="site"
+    <RadioButtonGroup<T>
       id="site-radiogroup"
       legend="Site"
       showLegend
-      useFormFieldSet
+      inForm
       options={sites.map((site) => ({
-        render: (props: RadioOptionRenderProps) => (
-          <RadioButton text={`${site.siteName}`} {...props} />
-        ),
+        text: site.siteName,
+        getValue: (data) => enrollmentAccessor(data).at('site').at('id'),
+        parseOnChangeEvent: (e: React.ChangeEvent<any>) =>
+          parseInt(e.target.value) || null,
         value: `${site.id}`,
+        name: site.siteName,
+        id: `site-${site.id}`,
       }))}
-      status={(data, _, props) =>
-        getValidationStatusForField(
-          enrollmentAccessor(data),
-          enrollmentAccessor(data).at('site').path,
-          props
+      status={(_, dataDriller) =>
+        getValidationStatusForFields(
+          enrollmentAccessor(dataDriller).value,
+          ['site'],
+          { message: `Site is required for OEC reporting.` }
         )
       }
     />

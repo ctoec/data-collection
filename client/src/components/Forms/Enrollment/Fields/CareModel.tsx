@@ -25,9 +25,9 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
       options={Object.values(CareModel).map((model) => {
         const id = model.replace(' ', '-')
         return {
+          value: model,
           text: model,
           id,
-          value: id,
           name: id,
           getValue: (data) => enrollmentAccessor(data).at('model'),
           parseOnChangeEvent: (e) => e.target.value as CareModel

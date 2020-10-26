@@ -28,7 +28,7 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
         return {
           id,
           text: ageGroup,
-          value: id,
+          value: ageGroup,
           name: id,
           getValue: (data) => enrollmentAccessor(data).at('ageGroup'),
           parseOnChangeEvent: (e) => e.target.value as AgeGroup
