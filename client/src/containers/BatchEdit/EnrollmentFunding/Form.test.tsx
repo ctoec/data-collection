@@ -80,7 +80,7 @@ describe('BatchEdit', () => {
         child={child}
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
-        showField={jest.fn()}
+        showFieldOrFieldset={jest.fn()}
       />
     );
 
@@ -89,7 +89,7 @@ describe('BatchEdit', () => {
         child={child}
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
-        showField={jest.fn()}
+        showFieldOrFieldset={jest.fn()}
       />
     );
 
@@ -99,7 +99,7 @@ describe('BatchEdit', () => {
           child={child}
           afterSaveSuccess={jest.fn}
           setAlerts={jest.fn()}
-          showField={jest.fn()}
+          showFieldOrFieldset={jest.fn()}
         />
       );
 

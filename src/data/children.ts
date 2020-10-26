@@ -6,11 +6,14 @@ import {
   Organization,
   Site,
 } from '../entity';
-import { BirthCertificateType, Gender } from '../../client/src/shared/models';
+import {
+  BirthCertificateType,
+  Gender,
+  RACE_FIELDS,
+} from '../../client/src/shared/models';
 import { organizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import moment from 'moment';
-import { raceFields } from '../utils/raceFields';
 import { makeFakeFamily } from './family';
 import { getFakeIncomeDet } from './incomeDeterminations';
 import { makeFakeEnrollment } from './enrollment';
@@ -76,7 +79,7 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
   const childRace = random.boolean()
     ? { notDisclosed: true }
     : random
-        .arrayElements(raceFields, random.number(raceFields.length))
+        .arrayElements(RACE_FIELDS, random.number(RACE_FIELDS.length))
         .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);

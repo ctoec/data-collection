@@ -19,7 +19,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   setAlerts,
-  showField,
+  showFieldOrFieldset,
 }) => {
   const enrollmentsWithValidationErrors = child?.enrollments?.map(
     (enrollment) => {
@@ -50,7 +50,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             child={child}
             afterSaveSuccess={afterSaveSuccess}
             setAlerts={setAlerts}
-            showField={showField}
+            showFieldOrFieldset={showFieldOrFieldset}
           />
         ));
 
@@ -66,7 +66,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                 child={child}
                 afterSaveSuccess={afterSaveSuccess}
                 setAlerts={setAlerts}
-                showField={showField}
+                showFieldOrFieldset={showFieldOrFieldset}
               />
             )}
           </>

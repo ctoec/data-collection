@@ -7,6 +7,7 @@ import {
   ChildInfoForm,
   ChildIdentifiersForm,
   FamilyAddressForm,
+  FamilyIncomeForm,
 } from '../../components/Forms';
 import { Child } from '../../shared/models';
 import { EnrollmentFundingForm } from './EnrollmentFunding/Form';
@@ -15,6 +16,7 @@ const forms = [
   { key: SECTION_KEYS.IDENT, form: ChildIdentifiersForm },
   { key: SECTION_KEYS.DEMO, form: ChildInfoForm },
   { key: SECTION_KEYS.FAMILY, form: FamilyAddressForm },
+  { key: SECTION_KEYS.INCOME, form: FamilyIncomeForm },
   { key: SECTION_KEYS.ENROLLMENT, form: EnrollmentFundingForm },
 ];
 

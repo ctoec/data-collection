@@ -1,12 +1,13 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { raceFields } from '../../../utils/raceFields';
+import { RACE_FIELDS } from '../../../../client/src/shared/models';
 import { Child } from '../../Child';
 
 const childRaceNotNullMessage = 'Child race is required';
 
 function isChildRaceIndicated(child: Child) {
   if (child.raceNotDisclosed) return true;
-  return !raceFields.every((field) => !child[field]);
+  return !RACE_FIELDS.every((field) => !child[field]);
 }
 
 export function ChildRaceIndicated(

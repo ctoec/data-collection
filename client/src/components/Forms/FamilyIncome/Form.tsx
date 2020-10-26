@@ -55,7 +55,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   type,
   afterSaveSuccess,
   setAlerts,
-  showField = () => true,
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
@@ -106,38 +105,21 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
         id={`${id}-fieldset`}
         legend={legend}
         status={(data) =>
-          getValidationStatusForFields(
-            data,
-            ['numberOfPeople', 'income', 'determinationDate'],
-            { message: 'Income determination is required for OEC reporting.' }
-          )
+          getValidationStatusForFields(data, incomeDeterminationFields, {
+            message: 'Income determination is required for OEC reporting.',
+          })
         }
       >
-        {showField(
-          determination,
-          ['householdSize'],
-          incomeDeterminationFields
-        ) && (
-          <div>
-            <HouseholdSizeField />
-          </div>
-        )}
-        {showField(determination, ['income'], incomeDeterminationFields) && (
-          <div>
-            <AnnualHouseholdIncomeField />
-          </div>
-        )}
-        {showField(
-          determination,
-          ['determinationDate'],
-          incomeDeterminationFields
-        ) && (
-          <div>
-            <DeterminationDateField />
-          </div>
-        )}
+        <div>
+          <HouseholdSizeField />
+        </div>
+        <div>
+          <AnnualHouseholdIncomeField />
+        </div>
+        <div>
+          <DeterminationDateField />
+        </div>
       </FormFieldSet>
-
       {CancelButton}
       <FormSubmitButton text={loading ? 'Saving... ' : 'Save'} />
     </Form>
