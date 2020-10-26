@@ -2,8 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { FundingSource, Funding, Enrollment } from '../../../../shared/models';
 import {
   RadioButtonGroup,
-  RadioButton,
-  RadioOptionRenderProps,
   useGenericContext,
   FormContext,
   TObjectDriller,
@@ -59,54 +57,59 @@ export const NewFundingField = <
 
   return (
     <RadioButtonGroup
+      // The radio buttons only really control what expansions are shown
+      // They don't change any form data on their own
       id="funding-source"
-      name="funding-source"
       legend="Funding source options"
       showLegend
-      useFormFieldSet
-      defaultValue={UNFUNDED}
+      defaultSelectedItemId={UNFUNDED}
       options={[
         {
-          render: (props: RadioOptionRenderProps) => (
-            <RadioButton {...props} text={UNFUNDED} />
-          ),
+          text: UNFUNDED,
+          id: UNFUNDED,
+          name: UNFUNDED,
           value: UNFUNDED,
+          onChange: () => { }
         },
-        ...fundingSourceOptions.map((fundingSource) => ({
-          render: (props: RadioOptionRenderProps) => (
-            <RadioButton {...props} text={fundingSource} />
-          ),
-          value: fundingSource,
-          expansion: (
-            <>
-              <ContractSpaceField<T>
-                // Do not show status when field is editing an existing funding
-                // because the user will be creating this data for the first time
-                showStatus={!isEdit}
-                ageGroup={enrollment.ageGroup}
-                fundingSource={fundingSource}
-                organizationId={orgId}
-                fundingAccessor={fundingAccessor}
-              />
-              <ReportingPeriodField<T>
-                fundingSource={fundingSource}
-                accessor={(data) =>
-                  fundingAccessor(data).at('firstReportingPeriod')
-                }
-              />
-              {/* Show last reporting period when field is editing an existing funding*/}
-              {isEdit && (
+        ...fundingSourceOptions.map((fundingSource) => {
+          const id = fundingSource.replace(' ', '-');
+          return {
+            text: fundingSource,
+            id,
+            name: id,
+            value: id,
+            onChange: () => { },
+            expansion: (
+              <>
+                <ContractSpaceField<T>
+                  // Do not show status when field is editing an existing funding
+                  // because the user will be creating this data for the first time
+                  showStatus={!isEdit}
+                  ageGroup={enrollment.ageGroup}
+                  fundingSource={fundingSource}
+                  organizationId={orgId}
+                  fundingAccessor={fundingAccessor}
+                />
                 <ReportingPeriodField<T>
-                  isLast={true}
                   fundingSource={fundingSource}
                   accessor={(data) =>
-                    fundingAccessor(data).at('lastReportingPeriod')
+                    fundingAccessor(data).at('firstReportingPeriod')
                   }
                 />
-              )}
-            </>
-          ),
-        })),
+                {/* Show last reporting period when field is editing an existing funding*/}
+                {isEdit && (
+                  <ReportingPeriodField<T>
+                    isLast={true}
+                    fundingSource={fundingSource}
+                    accessor={(data) =>
+                      fundingAccessor(data).at('lastReportingPeriod')
+                    }
+                  />
+                )}
+              </>
+            ),
+          }
+        }),
       ]}
     />
   );
