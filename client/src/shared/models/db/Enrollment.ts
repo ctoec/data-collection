@@ -7,7 +7,7 @@ import { CareModel } from '../CareModel';
 export interface Enrollment extends ObjectWithValidationErrors {
   id: number;
   child: Child;
-  site: Site;
+  site?: Site;
   model?: CareModel;
   ageGroup?: AgeGroup;
   entry?: Moment;
