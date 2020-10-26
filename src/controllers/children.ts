@@ -18,8 +18,8 @@ import {
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
-import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
+import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
 
 const FULL_RECORD_RELATIONS = [
   'family',
@@ -253,7 +253,7 @@ export const changeEnrollment = async (
       // Update current enrollment exitReason
       currentEnrollment.exitReason =
         currentEnrollment.ageGroup !==
-        changeEnrollmentData.newEnrollment.ageGroup
+          changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
 

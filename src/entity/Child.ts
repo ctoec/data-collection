@@ -134,6 +134,10 @@ export class Child implements ChildInterface {
   receivesDisabilityServices?: boolean;
 
   @ValidateNested()
+  @ValidateIf((child) => {
+    if (child.family) child.family.childIsFoster = child.foster;
+    return true;
+  })
   @ManyToOne(() => Family)
   family?: Family;
 

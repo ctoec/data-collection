@@ -8,12 +8,18 @@ import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
 import idx from 'idx';
-import { Form, FormSubmitButton, FormFieldSet } from '@ctoec/component-library';
+import {
+  Form,
+  FormSubmitButton,
+  FormFieldSet,
+  Alert,
+} from '@ctoec/component-library';
 import {
   HouseholdSizeField,
   AnnualHouseholdIncomeField,
   DeterminationDateField,
 } from './Fields';
+import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -24,6 +30,10 @@ export const doesFamilyIncomeFormHaveErrors = (
   child?: Child,
   determinationId?: number
 ) => {
+  if (child?.foster) {
+    return false;
+  }
+
   if (determinationId) {
     const determination = child?.family?.incomeDeterminations?.find(
       (f) => f.id === determinationId
@@ -71,6 +81,11 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
+
+  if (child?.foster) {
+    // This shows up for new child
+    return <FosterIncomeNotRequiredAlert />;
+  }
 
   const determination = (type === 'edit'
     ? (incomeDeterminationId
