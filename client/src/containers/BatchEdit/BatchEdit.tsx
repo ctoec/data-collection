@@ -121,9 +121,7 @@ const BatchEdit: React.FC = () => {
                   )}
                 </span>
               ),
-              description: `Errors in ${getBatchEditErrorDetailsString(
-                record
-              )}`,
+              description: getBatchEditErrorDetailsString(record),
             }))}
           >
             {activeRecordId !== undefined ? (

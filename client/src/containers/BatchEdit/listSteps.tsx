@@ -29,10 +29,10 @@ export const getBatchEditErrorDetailsString = (child: Child) => {
   const formsWithErrors = formSections.filter((section) =>
     section.hasError(child)
   );
-  let errorStr = formsWithErrors
-    .map(({ key, name, hasError }) => name)
-    .join(', ');
-  return errorStr;
+  if (!formsWithErrors.length) return '';
+
+  let errorStr = formsWithErrors.map(({ name }) => name).join(', ');
+  return `Errors in ${errorStr.toLowerCase()}`;
 };
 
 export const listSteps = (child: Child) =>
