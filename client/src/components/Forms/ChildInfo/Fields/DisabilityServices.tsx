@@ -3,14 +3,12 @@ import {
   RadioButtonGroup, RadioOptionInForm,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
-import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { UNKNOWN } from '../../../../shared/constants';
 
 export const DisabilityServices: React.FC = () => {
 
-
-  // TODO: further refactor radiogroup to take common option props?
-  const getRadioButtonProps = ({ label, id }: { label: string, id: string }): Pick<RadioOptionInForm<Child>, 'getValue' | 'parseOnChangeEvent' | 'preprocessForDisplay'> => ({
+  const getRadioButtonProps = ({ label, id }: { label: string, id: string }): RadioOptionInForm<Child> => ({
     getValue: (data) => data.at('receivesDisabilityServices'),
     parseOnChangeEvent: (e) => {
       if (e.target.value !== 'disability-unknown')
@@ -21,7 +19,11 @@ export const DisabilityServices: React.FC = () => {
       if (data === true) return 'disability-yes';
       else if (data === false) return 'disability-no';
       else return 'disability-unknown';
-    }
+    },
+    id,
+    text: label,
+    value: id,
+    name: id
   })
 
   return <RadioButtonGroup<Child>
@@ -42,7 +44,12 @@ export const DisabilityServices: React.FC = () => {
         id: 'disability-unknown',
         label: UNKNOWN,
       },
-    ].map(o => getRadioButtonProps(o)}
-    status={getValidationStatusForField}
-  />
+    ].map(o => getRadioButtonProps(o))}
+    status={(data) =>
+      getValidationStatusForFields(
+        data,
+        ['receivesDisabilityServices'],
+        { message: 'Disability services status is required for OEC reporting.' }
+      )
+    } />
 };

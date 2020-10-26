@@ -1,59 +1,54 @@
 import React from 'react';
 import {
-  FormField,
-  RadioButtonGroupProps,
-  RadioButtonGroup,
-  RadioButton,
+  RadioButtonGroup, RadioOptionInForm,
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
-import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { UNKNOWN } from '../../../../shared/constants';
 
-export const DualLanguageLearner: React.FC = () => (
-  <FormField<Child, RadioButtonGroupProps, boolean | null>
-    id="duallanguage-button-group"
-    getValue={(data) => data.at('dualLanguageLearner')}
-    preprocessForDisplay={(data) => {
-      if (data === true) return 'dual-yes';
-      else if (data === false) return 'dual-no';
-      else return 'dual-unknown';
-    }}
-    parseOnChangeEvent={(e) => {
+export const DualLanguageLearner: React.FC = () => {
+  const getRadioButtonProps = ({ label, id }: { label: string, id: string }): RadioOptionInForm<Child> => ({
+    getValue: (data) => data.at('dualLanguageLearner'),
+    parseOnChangeEvent: (e) => {
       if (e.target.value !== 'dual-unknown')
         return e.target.value === 'dual-yes';
       else return null;
-    }}
-    inputComponent={RadioButtonGroup}
-    name="dualLanguageLearner"
-    legend="Dual Language Learner"
+    },
+    preprocessForDisplay: (data) => {
+      if (data === true) return 'dual-yes';
+      else if (data === false) return 'dual-no';
+      else return 'dual-unknown';
+    },
+    id,
+    text: label,
+    value: id,
+    name: id
+  })
+
+  return <RadioButtonGroup<Child>
+    inForm
+    id="duallanguage-button-group"
+    legend="Dual language learner"
     showLegend
-    useFormFieldSet
     options={[
       {
-        render: (props) => (
-          <div>
-            <RadioButton text="Is a dual language learner" {...props} />
-          </div>
-        ),
-        value: 'dual-yes',
+        id: "dual-yes",
+        label: 'Is a dual language learner',
       },
       {
-        render: (props) => (
-          <div>
-            <RadioButton text="Is not a dual language learner" {...props} />
-          </div>
-        ),
-        value: 'dual-no',
+        id: 'dual-no',
+        label: 'Is not a dual language learner',
       },
       {
-        render: (props) => (
-          <div>
-            <RadioButton text={UNKNOWN} {...props} />
-          </div>
-        ),
-        value: 'dual-unknown',
+        id: 'dual-unknown',
+        label: UNKNOWN,
       },
-    ]}
-    status={getValidationStatusForField}
-  />
-);
+    ].map(o => getRadioButtonProps(o))}
+    status={(data) =>
+      getValidationStatusForFields(
+        data,
+        ['dualLanguageLearner'],
+        { message: 'Dual language learner status is required for OEC reporting.' }
+      )
+    } />
+};
