@@ -10,6 +10,11 @@ type BirthCertificateFieldsetProps = {
   child: Child;
 };
 
+/**
+ * Component that allows a user to select a birth certificate type.
+ * If type selected is US birth certificate, user is prompted to
+ * enter additional required information in an expansion.
+ */
 export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> = ({
   child,
 }) => {

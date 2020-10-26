@@ -188,6 +188,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
         id="change-funding-form"
       >
         <fieldset
+          aria-labelledby="fieldset-legend-funding-source"
           class="usa-fieldset"
           id="funding-source"
         >
@@ -310,6 +311,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
         id="change-funding-form"
       >
         <fieldset
+          aria-labelledby="fieldset-legend-funding-source"
           class="usa-fieldset"
           id="funding-source"
         >
@@ -432,6 +434,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
         id="change-funding-form"
       >
         <fieldset
+          aria-labelledby="fieldset-legend-funding-source"
           class="usa-fieldset"
           id="funding-source"
         >
@@ -526,6 +529,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
         id="change-funding-form"
       >
         <fieldset
+          aria-labelledby="fieldset-legend-funding-source"
           class="usa-fieldset"
           id="funding-source"
         >

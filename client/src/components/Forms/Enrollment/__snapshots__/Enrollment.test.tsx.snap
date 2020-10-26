@@ -7,6 +7,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
     id="edit-enrollment-form-1"
   >
     <fieldset
+      aria-labelledby="fieldset-legend-site-radiogroup"
       class="usa-fieldset"
       id="site-radiogroup"
     >
@@ -22,7 +23,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       <div />
     </fieldset>
     <fieldset
-      aria-describedby="start-date-hint"
+      aria-labelledby="fieldset-legend-start-date start-date-hint"
       class="usa-fieldset"
       id="start-date"
     >
@@ -37,6 +38,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </legend>
       <span
         class="usa-hint text-italic"
+        id="start-date-hint"
       >
         For example: 6 21 2008
       </span>
@@ -1304,6 +1306,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
+      aria-labelledby="fieldset-legend-care-model-radiogroup"
       class="usa-fieldset"
       id="care-model-radiogroup"
     >
@@ -1396,6 +1399,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
+      aria-labelledby="fieldset-legend-age-group-radiogroup"
       class="usa-fieldset"
       id="age-group-radiogroup"
     >
@@ -1469,6 +1473,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
+      aria-labelledby="fieldset-legend-funding-source"
       class="usa-fieldset"
       id="funding-source"
     >

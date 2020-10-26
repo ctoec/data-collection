@@ -135,7 +135,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       </div>
     </div>
     <fieldset
-      aria-describedby="dateOfBirth-picker-hint"
+      aria-labelledby="fieldset-legend-dateOfBirth-picker dateOfBirth-picker-hint"
       class="usa-fieldset"
       id="dateOfBirth-picker"
     >
@@ -150,6 +150,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       </legend>
       <span
         class="usa-hint text-italic"
+        id="dateOfBirth-picker-hint"
       >
         For example: 6 21 2008
       </span>
@@ -1417,6 +1418,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
+      aria-labelledby="fieldset-legend-birth-certificate-fields"
       class="usa-fieldset"
       id="birth-certificate-fields"
     >
@@ -1436,7 +1438,6 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
           >
             <input
               class="usa-radio__input"
-              expansion="[object Object]"
               id="US-birth-certificate"
               name="birthCertificateType"
               type="radio"

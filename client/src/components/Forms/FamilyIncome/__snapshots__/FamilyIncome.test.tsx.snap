@@ -7,6 +7,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
     id="new-income-determination"
   >
     <fieldset
+      aria-labelledby="fieldset-legend-new-income-determination-fieldset"
       class="usa-fieldset"
       id="new-income-determination-fieldset"
     >
@@ -60,7 +61,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
         </div>
         <div>
           <fieldset
-            aria-describedby="determination-date--hint"
+            aria-labelledby="fieldset-legend-determination-date- determination-date--hint"
             class="usa-fieldset"
             id="determination-date-"
           >
@@ -75,6 +76,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
             </legend>
             <span
               class="usa-hint text-italic"
+              id="determination-date--hint"
             >
               For example: 6 21 2008
             </span>

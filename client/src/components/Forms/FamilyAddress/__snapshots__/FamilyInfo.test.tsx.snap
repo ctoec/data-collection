@@ -16,6 +16,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
       novalidate=""
     >
       <fieldset
+        aria-labelledby="fieldset-legend-family-address"
         class="usa-fieldset display-inline-block"
         id="family-address"
       >
@@ -147,6 +148,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
         </div>
       </fieldset>
       <fieldset
+        aria-labelledby="fieldset-legend-homelessness-button-group"
         class="usa-fieldset"
         id="homelessness-button-group"
       >

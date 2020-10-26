@@ -11,7 +11,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       Child info
     </h2>
     <fieldset
-      aria-describedby="race-hint"
+      aria-labelledby="fieldset-legend-race race-hint"
       class="usa-fieldset"
       id="race"
     >
@@ -26,6 +26,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </legend>
       <span
         class="usa-hint text-italic"
+        id="race-hint"
       >
         As identified by family
       </span>
@@ -141,6 +142,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
+      aria-labelledby="fieldset-legend-ethnicity-radiogroup"
       class="usa-fieldset"
       id="ethnicity-radiogroup"
     >
@@ -266,6 +268,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       Special circumstances
     </h3>
     <fieldset
+      aria-labelledby="fieldset-legend-disability-button-group"
       class="usa-fieldset"
       id="disability-button-group"
     >
@@ -339,6 +342,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
+      aria-labelledby="fieldset-legend-duallanguage-button-group"
       class="usa-fieldset"
       id="duallanguage-button-group"
     >
@@ -412,6 +416,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
+      aria-labelledby="fieldset-legend-foster-button-group"
       class="usa-fieldset"
       id="foster-button-group"
     >
