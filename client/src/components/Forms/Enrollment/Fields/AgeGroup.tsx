@@ -1,15 +1,12 @@
 import React from 'react';
 import {
-  RadioButton,
-  RadioButtonGroupProps,
   RadioButtonGroup,
-  FormField,
-  RadioOptionRenderProps,
+  RadioOptionInForm,
   TObjectDriller,
 } from '@ctoec/component-library';
 import { AgeGroup, Enrollment } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
-import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 type AgeGroupProps<T> = {
   enrollmentAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Enrollment>;
@@ -21,26 +18,27 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: AgeGroupProps<T>) => {
   return (
-    <FormField<T, RadioButtonGroupProps, AgeGroup | null>
-      getValue={(data) => enrollmentAccessor(data).at('ageGroup')}
-      parseOnChangeEvent={(e) => e.target.value as AgeGroup}
-      inputComponent={RadioButtonGroup}
-      name="age-group"
+    <RadioButtonGroup<T>
+      inForm
       id="age-group-radiogroup"
       legend="Age group"
       showLegend
-      useFormFieldSet
-      options={Object.values(AgeGroup).map((ageGroup) => ({
-        render: (props: RadioOptionRenderProps) => (
-          <RadioButton {...props} text={ageGroup} />
-        ),
-        value: ageGroup,
-      }))}
-      status={(data, _, props) =>
-        getValidationStatusForField(
-          enrollmentAccessor(data),
-          enrollmentAccessor(data).at('ageGroup').path,
-          props
+      options={Object.values(AgeGroup).map((ageGroup): RadioOptionInForm<T> => {
+        const id = ageGroup.replace(' ', '-')
+        return {
+          id,
+          text: ageGroup,
+          value: id,
+          name: id,
+          getValue: (data) => enrollmentAccessor(data).at('ageGroup'),
+          parseOnChangeEvent: (e) => e.target.value as AgeGroup
+        }
+      })}
+      status={(_, dataDriller) =>
+        getValidationStatusForFields(
+          enrollmentAccessor(dataDriller).value,
+          ['ageGroup'],
+          { message: `Age group is required for OEC reporting.` }
         )
       }
     />

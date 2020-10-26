@@ -61,5 +61,6 @@ export const TripleBooleanRadio = <T extends {}>({
         [field as string],
         { message: `${legend} status is required for OEC reporting.` }
       )
-    } />
+    }
+  />
 };
