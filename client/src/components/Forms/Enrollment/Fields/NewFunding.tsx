@@ -69,7 +69,7 @@ export const NewFundingField = <
           id: UNFUNDED,
           name: UNFUNDED,
           value: UNFUNDED,
-          onChange: () => { }
+          onChange: () => {},
         },
         ...fundingSourceOptions.map((fundingSource) => {
           const id = fundingSource.replace(' ', '-');
@@ -78,7 +78,7 @@ export const NewFundingField = <
             id,
             name: id,
             value: id,
-            onChange: () => { },
+            onChange: () => {},
             expansion: (
               <>
                 <ContractSpaceField<T>
@@ -108,7 +108,7 @@ export const NewFundingField = <
                 )}
               </>
             ),
-          }
+          };
         }),
       ]}
     />

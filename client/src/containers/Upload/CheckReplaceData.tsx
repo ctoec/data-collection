@@ -3,8 +3,7 @@ import { stringify } from 'query-string';
 import {
   Modal,
   CheckboxGroup,
-  Checkbox,
-  CheckboxOption,
+  CheckboxInGroup,
   Button,
 } from '@ctoec/component-library';
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -34,51 +33,37 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
     );
   }, [siteIdsToReplace]);
 
-  const options: CheckboxOption[] = [
+  const options: CheckboxInGroup[] = [
     // All sites option
     {
+      id: 'all-sites',
+      text: 'All sites',
       value: 'all',
-      render: (props) => (
-        <Checkbox
-          {...props}
-          checked={siteIdsToReplace.length === 0}
-          id="all-sites"
-          text="All sites"
-          onChange={(e) => {
-            if (e.target.checked) {
-              setSiteIdsToReplace([]);
-            }
-          }}
-        />
-      ),
+      defaultValue: siteIdsToReplace.length === 0,
+      onChange: (e) => {
+        if (e.target.checked) {
+          setSiteIdsToReplace([]);
+        }
+      },
     },
     // If it's a single-site user of a multi-site provider, user
     // should already be access-limited to only be able to replace
     // the one site they have access to
     ...(user?.sites || []).map(
-      (site) =>
-        ({
-          value: `${site.id}`,
-          render: (props) => (
-            <Checkbox
-              {...props}
-              value={`${site.id}`}
-              checked={siteIdsToReplace.includes(site.id)}
-              id={`site-${site.id}`}
-              text={site.siteName}
-              onChange={(e) => {
-                const siteId = parseInt(e.target.value);
-                if (e.target.checked) {
-                  setSiteIdsToReplace((ids) => [...ids, siteId]);
-                } else {
-                  setSiteIdsToReplace((ids) =>
-                    ids.filter((id) => id !== siteId)
-                  );
-                }
-              }}
-            />
-          ),
-        } as CheckboxOption)
+      (site): CheckboxInGroup => ({
+        value: `${site.id}`,
+        defaultValue: siteIdsToReplace.includes(site.id),
+        id: `site-${site.id}`,
+        text: site.siteName,
+        onChange: (e) => {
+          const siteId = parseInt(e.target.value);
+          if (e.target.checked) {
+            setSiteIdsToReplace((ids) => [...ids, siteId]);
+          } else {
+            setSiteIdsToReplace((ids) => ids.filter((id) => id !== siteId));
+          }
+        },
+      })
     ),
   ];
 

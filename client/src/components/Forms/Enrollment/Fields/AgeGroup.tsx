@@ -23,17 +23,19 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
       id="age-group-radiogroup"
       legend="Age group"
       showLegend
-      options={Object.values(AgeGroup).map((ageGroup): RadioOptionInForm<T> => {
-        const id = ageGroup.replace(' ', '-')
-        return {
-          id,
-          text: ageGroup,
-          value: ageGroup,
-          name: id,
-          getValue: (data) => enrollmentAccessor(data).at('ageGroup'),
-          parseOnChangeEvent: (e) => e.target.value as AgeGroup
+      options={Object.values(AgeGroup).map(
+        (ageGroup): RadioOptionInForm<T> => {
+          const id = ageGroup.replace(' ', '-');
+          return {
+            id,
+            text: ageGroup,
+            value: ageGroup,
+            name: id,
+            getValue: (data) => enrollmentAccessor(data).at('ageGroup'),
+            parseOnChangeEvent: (e) => e.target.value as AgeGroup,
+          };
         }
-      })}
+      )}
       status={(_, dataDriller) =>
         getValidationStatusForFields(
           enrollmentAccessor(dataDriller).value,

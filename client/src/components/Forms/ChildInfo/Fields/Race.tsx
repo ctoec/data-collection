@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import {
-  CheckboxGroup,
-  CheckboxOptionInForm,
-} from '@ctoec/component-library';
+import { CheckboxGroup, CheckboxOptionInForm } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 

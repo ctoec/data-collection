@@ -8,7 +8,10 @@ import {
 } from '@ctoec/component-library';
 import { Site, Enrollment } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
-import { getValidationStatusForField, getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import {
+  getValidationStatusForField,
+  getValidationStatusForFields,
+} from '../../../../utils/getValidationStatus';
 
 type SiteProps<T> = {
   sites: Site[];

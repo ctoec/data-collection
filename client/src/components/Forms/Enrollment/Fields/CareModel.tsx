@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  RadioButtonGroup,
-  TObjectDriller,
-} from '@ctoec/component-library';
+import { RadioButtonGroup, TObjectDriller } from '@ctoec/component-library';
 import { Enrollment, CareModel } from '../../../../shared/models';
 import { ChangeEnrollment } from '../../../../shared/payloads';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
@@ -23,15 +20,15 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
       legend="Care model"
       showLegend
       options={Object.values(CareModel).map((model) => {
-        const id = model.replace(' ', '-')
+        const id = model.replace(' ', '-');
         return {
           value: model,
           text: model,
           id,
           name: id,
           getValue: (data) => enrollmentAccessor(data).at('model'),
-          parseOnChangeEvent: (e) => e.target.value as CareModel
-        }
+          parseOnChangeEvent: (e) => e.target.value as CareModel,
+        };
       })}
       status={(_, dataDriller) =>
         getValidationStatusForFields(
