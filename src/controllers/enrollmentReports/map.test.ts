@@ -5,6 +5,7 @@ import {
   getRaceIndicated,
   mapEnum,
   mapFunding,
+  mapFundingTime,
 } from './map';
 import { EnrollmentReportRow } from '../../template';
 import { Organization, Site, Enrollment } from '../../entity';
@@ -15,6 +16,8 @@ import {
   CareModel,
   AgeGroup,
   FundingSource,
+  FundingTime,
+  FundingSourceTime,
 } from '../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import moment from 'moment';
@@ -248,7 +251,37 @@ describe('controllers', () => {
     });
 
     describe('mapFundingTime', () => {
-      // TODO implement these!
+      describe.each([
+        ...Object.values(FundingSource).map((source) => [
+          source,
+          FUNDING_SOURCE_TIMES.find((fst) =>
+            fst.fundingSources.includes(source)
+          ),
+        ]),
+      ])(
+        'for funding source %s',
+        (source: FundingSource, fundingSourceTimes: FundingSourceTime) => {
+          describe.each([
+            ...fundingSourceTimes.fundingTimes.map((ft) => [
+              ft.value,
+              ft.formats,
+            ]),
+          ])(
+            'for funding time time: %s',
+            (time: FundingTime, formats: string[]) => {
+              it.each(formats)('can parse format: %s', (format) => {
+                const formatAsInt = parseInt(format);
+                if (!isNaN(formatAsInt)) {
+                  const parsedFromInt = mapFundingTime(formatAsInt, source);
+                  expect(parsedFromInt).toEqual(time);
+                }
+                const parsed = mapFundingTime(format, source);
+                expect(parsed).toEqual(time);
+              });
+            }
+          );
+        }
+      );
     });
 
     describe('mapFunding', () => {
@@ -271,7 +304,7 @@ describe('controllers', () => {
             source as EnrollmentReportRow,
             {} as Organization,
             {} as Enrollment,
-            true,
+            true
           );
           expect(transaction.create).toBeCalledTimes(doesCreateFunding ? 1 : 0);
           expect(transaction.save).toBeCalledTimes(doesCreateFunding ? 1 : 0);
