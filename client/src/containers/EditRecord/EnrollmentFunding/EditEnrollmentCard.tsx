@@ -117,7 +117,6 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
           enrollmentId={enrollment.id}
           afterSaveSuccess={() => {
             setError(undefined);
-            setCloseCard(true);
             afterSaveSuccess();
           }}
           setAlerts={() => {}}
