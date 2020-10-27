@@ -37,6 +37,7 @@ type FundingFormProps = {
   id: string;
   enrollmentId: number;
   fundingId: number;
+  showFundingSource?: boolean;
 } & RecordFormProps;
 
 export const FundingForm: React.FC<FundingFormProps> = ({
@@ -44,6 +45,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   child,
   enrollmentId,
   fundingId,
+  showFundingSource,
   AdditionalButton,
   setAlerts,
   afterSaveSuccess,
@@ -102,6 +104,11 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       data={funding}
       onSubmit={onSubmit}
     >
+      {showFundingSource && (
+        <div className="text-bold margin-top-1">
+          Funding source: {funding.fundingSpace.source}
+        </div>
+      )}
       <ContractSpaceField<Funding>
         ageGroup={enrollment.ageGroup}
         fundingSource={funding.fundingSpace.source}
@@ -112,12 +119,15 @@ export const FundingForm: React.FC<FundingFormProps> = ({
         accessor={(data) => data.at('firstReportingPeriod')}
         showStatus
       />
-      <ReportingPeriodField<Funding>
-        fundingSource={funding.fundingSpace.source}
-        accessor={(data) => data.at('lastReportingPeriod')}
-        isLast={true}
-        showStatus
-      />
+      {/* Only display last reporting period field if a value already exists */}
+      {!!funding.lastReportingPeriod && (
+        <ReportingPeriodField<Funding>
+          fundingSource={funding.fundingSpace.source}
+          accessor={(data) => data.at('lastReportingPeriod')}
+          isLast={true}
+          showStatus
+        />
+      )}
       {AdditionalButton}
       <FormSubmitButton
         text={loading ? 'Saving...' : 'Save'}

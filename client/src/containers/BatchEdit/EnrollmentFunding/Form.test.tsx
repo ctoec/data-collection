@@ -16,6 +16,7 @@ import {
 } from '../../../shared/models';
 import moment from 'moment';
 import { ValidationError } from 'class-validator';
+import { showFieldInBatchEditForm } from '../BatchEditItemContent';
 
 const child = {
   name: 'First Last',
@@ -28,6 +29,7 @@ const child = {
     {
       id: 1,
       child: {} as Child,
+      childId: '',
       site: { siteName: 'Site A', organization: { id: 1 } } as Site,
       entry: moment.utc('2020-09-03'),
       validationErrors: [
@@ -39,6 +41,7 @@ const child = {
     {
       id: 2,
       child: {} as Child,
+      childId: '',
       site: { siteName: 'Site B', organization: { id: 1 } } as Site,
       entry: moment.utc('2019-09-03'),
       exit: moment.utc('2020-08-01'),
@@ -67,6 +70,7 @@ const child = {
     {
       id: 3,
       child: {} as Child,
+      childId: '',
       site: { siteName: 'Site A', organization: { id: 1 } } as Site,
       entry: moment.utc('2018-09-03'),
       exit: moment.utc('2019-08-01'),
@@ -80,7 +84,7 @@ describe('BatchEdit', () => {
         child={child}
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
-        showFieldOrFieldset={jest.fn()}
+        showFieldOrFieldset={showFieldInBatchEditForm}
       />
     );
 
@@ -89,7 +93,7 @@ describe('BatchEdit', () => {
         child={child}
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
-        showFieldOrFieldset={jest.fn()}
+        showFieldOrFieldset={showFieldInBatchEditForm}
       />
     );
 
@@ -99,7 +103,7 @@ describe('BatchEdit', () => {
           child={child}
           afterSaveSuccess={jest.fn}
           setAlerts={jest.fn()}
-          showFieldOrFieldset={jest.fn()}
+          showFieldOrFieldset={showFieldInBatchEditForm}
         />
       );
 

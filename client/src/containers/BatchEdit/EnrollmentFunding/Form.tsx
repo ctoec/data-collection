@@ -51,6 +51,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             afterSaveSuccess={afterSaveSuccess}
             setAlerts={setAlerts}
             showFieldOrFieldset={showFieldOrFieldset}
+            showFundingSource={true}
           />
         ));
 

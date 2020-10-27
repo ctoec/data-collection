@@ -79,27 +79,6 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     }
   }, [child?.id]);
 
-  // Function that defined what fields should be shown in
-  // forms during batch edit
-  const showFieldInBatchEditForm = (
-    formData: ObjectWithValidationErrors | undefined,
-    fields: string[]
-  ) => {
-    if (!formData) return false;
-    for (let i = 0; i < fields.length; i++) {
-      if (
-        // special case to account for separation of
-        // enrollment and funding forms in batch edit flow
-        // (the 'fundings' field in enrollment form shoud never be shown)
-        fields[i] !== 'fundings' &&
-        hasValidationErrorForField(formData, fields[i])
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const props: RecordFormProps = {
     child,
     afterSaveSuccess: () => setTriggerRefetchCount((r) => r + 1),
@@ -151,4 +130,25 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
       </div>
     </>
   );
+};
+
+// Function that defined what fields should be shown in
+// forms during batch edit
+export const showFieldInBatchEditForm = (
+  formData: ObjectWithValidationErrors | undefined,
+  fields: string[]
+) => {
+  if (!formData) return false;
+  for (let i = 0; i < fields.length; i++) {
+    if (
+      // special case to account for separation of
+      // enrollment and funding forms in batch edit flow
+      // (the 'fundings' field in enrollment form shoud never be shown)
+      fields[i] !== 'fundings' &&
+      hasValidationErrorForField(formData, fields[i])
+    ) {
+      return true;
+    }
+  }
+  return false;
 };

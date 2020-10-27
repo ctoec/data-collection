@@ -16,7 +16,7 @@ import { getCurrentEnrollment } from '../../../utils/models';
 import { apiPost, apiPut } from '../../../utils/api';
 
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'model'];
-const enrollmentFundingFields = [...enrollmentFields, 'funding'];
+const enrollmentFundingFields = [...enrollmentFields, 'fundings'];
 export const doesEnrollmentFormHaveErrors = (
   child?: Child,
   enrollmentId?: number,

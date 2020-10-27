@@ -21,57 +21,15 @@ import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { distributeValidationErrorsToSubObjects } from '../utils/distributeValidationErrorsToSubObjects';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
 
-/**
- * Get all children for organizations the user has access to
- */
-export const getChildren = async (user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  return getManager().find(Child, {
-    relations: [
-      'enrollments',
-      'enrollments.site',
-      'enrollments.site.organization',
-      'enrollments.fundings',
-    ],
-    where: { organization: { id: In(readOrgIds) } },
-  });
-};
-
-export const updateChild = async (
-  id: string,
-  user: User,
-  update: Partial<Child>
-) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
-    where: { organization: { id: In(readOrgIds) } },
-  });
-
-  if (!child) {
-    console.warn(
-      'Child either does not exist, or user does not have permission to modify'
-    );
-    throw new NotFoundError();
-  }
-
-  await getManager().save(getManager().merge(Child, child, update));
-};
-
-export const deleteChild = async (id: string, user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
-    where: { organization: { id: In(readOrgIds) } },
-  });
-
-  if (!child) {
-    console.warn(
-      'Child either does not exist, or user does not have permission to modify'
-    );
-    throw new NotFoundError();
-  }
-
-  await getManager().delete(Child, { id });
-};
+const FULL_RECORD_RELATIONS = [
+  'family',
+  'family.incomeDeterminations',
+  'enrollments',
+  'enrollments.site',
+  'enrollments.site.organization',
+  'enrollments.fundings',
+  'organization',
+];
 
 /**
  * Get child by id, with related family and related
@@ -82,15 +40,7 @@ export const deleteChild = async (id: string, user: User) => {
 export const getChildById = async (id: string, user: User): Promise<Child> => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
   const child = await getManager().findOne(Child, id, {
-    relations: [
-      'family',
-      'family.incomeDeterminations',
-      'enrollments',
-      'enrollments.site',
-      'enrollments.site.organization',
-      'enrollments.fundings',
-      'organization',
-    ],
+    relations: FULL_RECORD_RELATIONS,
     where: { organization: { id: In(readOrgIds) } },
   });
 
@@ -128,6 +78,64 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
     validationError: { target: false },
   });
   return distributeValidationErrorsToSubObjects(child, validationErrors);
+};
+
+/**
+ * Get all children for organizations the user has access to
+ */
+export const getChildren = async (user: User) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  return getManager().find(Child, {
+    relations: FULL_RECORD_RELATIONS,
+    where: { organization: { id: In(readOrgIds) } },
+  });
+};
+
+/**
+ * Update child record, if user has access
+ * @param id
+ * @param user
+ * @param update
+ */
+export const updateChild = async (
+  id: string,
+  user: User,
+  update: Partial<Child>
+) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const child = await getManager().findOne(Child, id, {
+    where: { organization: { id: In(readOrgIds) } },
+  });
+
+  if (!child) {
+    console.warn(
+      'Child either does not exist, or user does not have permission to modify'
+    );
+    throw new NotFoundError();
+  }
+
+  await getManager().save(getManager().merge(Child, child, update));
+};
+
+/**
+ * Delete child record, if user has access
+ * @param id
+ * @param user
+ */
+export const deleteChild = async (id: string, user: User) => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const child = await getManager().findOne(Child, id, {
+    where: { organization: { id: In(readOrgIds) } },
+  });
+
+  if (!child) {
+    console.warn(
+      'Child either does not exist, or user does not have permission to modify'
+    );
+    throw new NotFoundError();
+  }
+
+  await getManager().delete(Child, { id });
 };
 
 /**
