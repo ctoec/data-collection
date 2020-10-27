@@ -1175,10 +1175,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@0.0.38":
-  version "0.0.38"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-0.0.38.tgz#ed9a6a0e422922018c16c6d6db6351961d901c1e"
-  integrity sha512-4wTkQG4nzmpZ5qdVzVH53b9+PVRM9Y4qplf5XXvAUFVgL8mmBYlxqFLn0QtpiUzbx0ZxEtjde7v1YTDgYML1eg==
+"@ctoec/component-library@https://github.com/ctoec/component-library#fix-roster-spacing":
+  version "1.0.0"
+  resolved "https://github.com/ctoec/component-library#cf00447da7982f3be6216c6b2247477d26a28673"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

@@ -26,7 +26,7 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
           value: model,
           text: model,
           id,
-          getValue: (data) => enrollmentAccessor(data).at('model')
+          getValue: (data) => enrollmentAccessor(data).at('model'),
         };
       })}
       status={(_, dataDriller) =>

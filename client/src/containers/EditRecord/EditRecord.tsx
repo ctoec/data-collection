@@ -91,8 +91,8 @@ const EditRecord: React.FC = () => {
   const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
   return (
     <div className="grid-container">
-      {alertElements}
       <BackButton />
+      {alertElements}
       <div className="display-flex flex-justify">
         <div>
           <h1 ref={h1Ref} className="margin-top-0">

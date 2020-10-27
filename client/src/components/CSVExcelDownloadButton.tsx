@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import cx from 'classnames';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
@@ -12,6 +13,7 @@ const fileTypeName = {
 type CSVExcelDownloadButtonProps = {
   whichDownload: 'roster' | 'template' | 'example';
   fileType?: FileTypeOpts;
+  className?: string;
 };
 
 type DownloadOptionsType = {
@@ -42,6 +44,7 @@ const getExampleProps = (fileType: FileTypeOpts): DownloadOptionsType => ({
 export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
   whichDownload,
   fileType = 'csv',
+  className,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
 
@@ -66,7 +69,7 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
     <Button
       appearance="unstyled"
       onClick={download}
-      className="text-bold margin-bottom-3 display-block"
+      className={cx('text-bold display-block', className)}
       external
       text={
         <TextWithIcon
