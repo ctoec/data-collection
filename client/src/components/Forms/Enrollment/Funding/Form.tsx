@@ -37,7 +37,6 @@ type FundingFormProps = {
   id: string;
   enrollmentId: number;
   fundingId: number;
-  showFundingSource?: boolean;
 } & RecordFormProps;
 
 export const FundingForm: React.FC<FundingFormProps> = ({
@@ -45,7 +44,6 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   child,
   enrollmentId,
   fundingId,
-  showFundingSource,
   AdditionalButton,
   setAlerts,
   afterSaveSuccess,
@@ -104,11 +102,6 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       data={funding}
       onSubmit={onSubmit}
     >
-      {showFundingSource && (
-        <div className="text-bold margin-top-1">
-          Funding source: {funding.fundingSpace.source}
-        </div>
-      )}
       <ContractSpaceField<Funding>
         ageGroup={enrollment.ageGroup}
         fundingSource={funding.fundingSpace.source}

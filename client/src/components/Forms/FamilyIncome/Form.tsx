@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Child, IncomeDetermination } from '../../../shared/models';
-import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+import {
+  getValidationStatusForFields,
+  getValidationStatusForField,
+} from '../../../utils/getValidationStatus';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
@@ -30,12 +33,18 @@ export const doesFamilyIncomeFormHaveErrors = (
       : false;
   }
 
-  return child?.family?.incomeDeterminations?.length
+  const familyHasIncomeDeterminationError = child?.family
+    ? !!getValidationStatusForFields(child.family, ['incomeDeterminations'])
+    : false;
+  const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
+    ?.length
     ? !!getValidationStatusForFields(
         child.family.incomeDeterminations,
         incomeDeterminationFields
       )
-    : true;
+    : false;
+
+  return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
 };
 
 type FamilyIncomeFormProps = {

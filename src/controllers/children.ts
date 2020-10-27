@@ -1,6 +1,6 @@
 import { getManager, In } from 'typeorm';
 import idx from 'idx';
-import { validate } from 'class-validator';
+import { validate, validateSync } from 'class-validator';
 import {
   ExitReason,
   Enrollment as EnrollmentInterface,
@@ -18,7 +18,7 @@ import {
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
-import { distributeValidationErrorsToSubObjects } from '../utils/distributeValidationErrorsToSubObjects';
+import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
 
 const FULL_RECORD_RELATIONS = [
@@ -74,10 +74,7 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
     }
   }
 
-  const validationErrors = await validate(child, {
-    validationError: { target: false },
-  });
-  return distributeValidationErrorsToSubObjects(child, validationErrors);
+  return validateObject(child);
 };
 
 /**
@@ -85,10 +82,12 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
  */
 export const getChildren = async (user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
-  return getManager().find(Child, {
-    relations: FULL_RECORD_RELATIONS,
-    where: { organization: { id: In(readOrgIds) } },
-  });
+  return (
+    await getManager().find(Child, {
+      relations: FULL_RECORD_RELATIONS,
+      where: { organization: { id: In(readOrgIds) } },
+    })
+  ).map(validateObject);
 };
 
 /**

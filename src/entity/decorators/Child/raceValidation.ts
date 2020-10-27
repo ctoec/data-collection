@@ -1,5 +1,4 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { raceFields } from '../../../utils/raceFields';
 import { RACE_FIELDS } from '../../../../client/src/shared/models';
 import { Child } from '../../Child';
 
