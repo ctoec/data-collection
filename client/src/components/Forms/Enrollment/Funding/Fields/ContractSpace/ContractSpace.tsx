@@ -44,6 +44,7 @@ export const ContractSpaceField = <
       fs.source === fundingSource &&
       fs.organization.id === organizationId
   );
+
   if (fundingSpaceOptions.length === 1) {
     return (
       <SingleContractSpaceField<T>
