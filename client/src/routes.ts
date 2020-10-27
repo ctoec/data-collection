@@ -86,7 +86,7 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/batch-edit/',
+    path: '/batch-edit/:childId?',
     component: BatchEdit,
     unauthorized: false,
   },

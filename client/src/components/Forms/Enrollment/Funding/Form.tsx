@@ -47,7 +47,6 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   AdditionalButton,
   setAlerts,
   afterSaveSuccess,
-  showField = () => true,
 }) => {
   if (!child) {
     throw new Error('Funding form rendered without child');
@@ -103,26 +102,23 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       data={funding}
       onSubmit={onSubmit}
     >
-      {showField(funding, ['fundingSpace'], []) && (
-        <ContractSpaceField<Funding>
-          ageGroup={enrollment.ageGroup}
-          fundingSource={funding.fundingSpace.source}
-          organizationId={child.organization.id}
-        />
-      )}
-      {showField(funding, ['firstReportingPeriod'], []) && (
-        <ReportingPeriodField<Funding>
-          fundingSource={funding.fundingSpace.source}
-          accessor={(data) => data.at('firstReportingPeriod')}
-          showStatus={true}
-        />
-      )}
-      {showField(funding, ['lastReportingPeriod'], []) && (
+      <ContractSpaceField<Funding>
+        ageGroup={enrollment.ageGroup}
+        fundingSource={funding.fundingSpace.source}
+        organizationId={child.organization.id}
+      />
+      <ReportingPeriodField<Funding>
+        fundingSource={funding.fundingSpace.source}
+        accessor={(data) => data.at('firstReportingPeriod')}
+        showStatus
+      />
+      {/* Only display last reporting period field if a value already exists */}
+      {!!funding.lastReportingPeriod && (
         <ReportingPeriodField<Funding>
           fundingSource={funding.fundingSpace.source}
           accessor={(data) => data.at('lastReportingPeriod')}
           isLast={true}
-          showStatus={true}
+          showStatus
         />
       )}
       {AdditionalButton}

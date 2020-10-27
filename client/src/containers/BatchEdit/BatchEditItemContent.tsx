@@ -10,6 +10,7 @@ import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { Link } from 'react-router-dom';
+import { getCurrentEnrollment } from '../../utils/models';
 
 type BatchEditItemContentProps = {
   childId: string;
@@ -59,16 +60,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
       .then((updatedChild) => {
         setChild(updatedChild);
         updateRecordInCache(updatedChild);
-        // If child has loaded, steps are created, and first step is active
-        // then attempt to advance after refetch
-        if (activeStepKey && steps) {
-          const currentStepStatus = steps
-            .find((step) => step.key === activeStepKey)
-            ?.status({ child: updatedChild } as RecordFormProps);
-          if (currentStepStatus === 'complete') {
-            moveNextStep();
-          }
-        }
+        moveNextStep();
       })
       .catch((err) => {
         console.log(err);
@@ -87,33 +79,13 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     }
   }, [child?.id]);
 
-  // Function that defined what fields should be shown in
-  // forms during batch edit
-  const showFieldInBatchEditForm = (
-    formData: ObjectWithValidationErrors,
-    fields: string[]
-  ) => {
-    for (let i = 0; i < fields.length; i++) {
-      if (
-        // special case to account for separation of
-        // enrollment and funding forms in batch edit flow
-        // (the 'fundings' field in enrollment form shoud never be shown)
-        fields[i] !== 'fundings' &&
-        hasValidationErrorForField(formData, fields[i])
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
-
   const props: RecordFormProps = {
     child,
     afterSaveSuccess: () => setTriggerRefetchCount((r) => r + 1),
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: () => false,
-    showField: showFieldInBatchEditForm,
+    showFieldOrFieldset: showFieldInBatchEditForm,
     AdditionalButton: (
       <Button text="Skip" onClick={moveNextStep} appearance="outline" />
     ),
@@ -127,17 +99,21 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     return <></>;
   }
 
+  const currentEnrollment = getCurrentEnrollment(child);
   return (
     <>
       <div className="padding-x-2 padding-bottom-3">
         <div className="display-flex flex-row flex-justify flex-align-end">
-          <h2>{nameFormatter(child)}</h2>
-          <div className="text-baseline">
+          <h2 className="margin-bottom-0">{nameFormatter(child)}</h2>
+          <div className="text-baseline text-base">
             Date of birth: {child.birthdate?.format('MM/DD/YYYY')}
           </div>
         </div>
-        <div className="margin-top-1">
-          <Link to={`/edit-record/${child.id}`} />
+        <div className="margin-top-1 display-flex flex-row flex-justify">
+          <Link to={`/edit-record/${child.id}`}>View full profile</Link>
+          <div className="text-base">
+            {currentEnrollment?.ageGroup} — {currentEnrollment?.site?.siteName}
+          </div>
         </div>
       </div>
       <div className="padding-top-1 border-top-1px border-base-light">
@@ -154,4 +130,25 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
       </div>
     </>
   );
+};
+
+// Function that defined what fields should be shown in
+// forms during batch edit
+export const showFieldInBatchEditForm = (
+  formData: ObjectWithValidationErrors | undefined,
+  fields: string[]
+) => {
+  if (!formData) return false;
+  for (let i = 0; i < fields.length; i++) {
+    if (
+      // special case to account for separation of
+      // enrollment and funding forms in batch edit flow
+      // (the 'fundings' field in enrollment form shoud never be shown)
+      fields[i] !== 'fundings' &&
+      hasValidationErrorForField(formData, fields[i])
+    ) {
+      return true;
+    }
+  }
+  return false;
 };
