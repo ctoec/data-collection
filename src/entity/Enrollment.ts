@@ -34,10 +34,10 @@ export class Enrollment implements EnrollmentInterface {
 
   @ManyToOne(() => Site, { nullable: true })
   @IsNotEmpty()
-  site: Site;
+  site?: Site;
 
-  @Column()
-  siteId: number;
+  @Column({ nullable: true })
+  siteId?: number;
 
   @Column({
     type: 'varchar',

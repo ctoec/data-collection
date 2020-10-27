@@ -35,7 +35,7 @@ const getTemplateProps = (fileType: FileTypeOpts): DownloadOptionsType => ({
 
 const getExampleProps = (fileType: FileTypeOpts): DownloadOptionsType => ({
   downloadText: `Download ${fileTypeName[fileType]} sample data`,
-  backendPath: `export/example/${fileType}`,
+  backendPath: `template/example/${fileType}`,
   fileName: `Example.${fileType}`,
 });
 

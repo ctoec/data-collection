@@ -16,9 +16,6 @@ import {
   AgeGroup,
   FundingSource,
   FundingTime,
-  SpecialEducationServicesType,
-  FundingSourceTime,
-  FundingTimeInput,
   CareModel,
   BirthCertificateType,
 } from '../../../client/src/shared/models';
@@ -26,10 +23,20 @@ import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
 
-export const mapAndSaveRows = async (
+export const MISSING_PROVIDER_ERROR =
+  'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.';
+
+/**
+ * Can use optional save parameter to decide whether to persist
+ * the mapped results to the DB or not. If we don't persist,
+ * mappnig is still performed to get the data in the right format.
+ * Useful for analyzing validation errors before committing.
+ */
+export const mapRows = async (
   transaction: EntityManager,
   rows: EnrollmentReportRow[],
-  user: User
+  user: User,
+  opts: { save: boolean } = { save: false }
 ) => {
   const [organizations, sites] = await Promise.all([
     transaction.findByIds(Organization, user.organizationIds),
@@ -39,16 +46,17 @@ export const mapAndSaveRows = async (
   const children = [];
   for (let i = 0; i < rows.length; i++) {
     try {
-      const child = await mapAndSaveRow(
+      const child = await mapRow(
         transaction,
         rows[i],
         organizations,
-        sites
+        sites,
+        opts.save
       );
       children.push(child);
     } catch (err) {
       if (err instanceof ApiError) throw err;
-      console.log('Unable to parse row, dropping: ', JSON.stringify(rows[i]));
+      console.error('Error occured while parsing row', err);
     }
   }
 
@@ -61,11 +69,12 @@ export const mapAndSaveRows = async (
  *
  * @param source
  */
-const mapAndSaveRow = async (
+const mapRow = async (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
-  userSites: Site[]
+  userSites: Site[],
+  save: boolean
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -79,19 +88,28 @@ const mapAndSaveRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  const family = await mapFamily(transaction, source, organization);
-  const child = await mapChild(transaction, source, organization, family);
+  const family = await mapFamily(transaction, source, organization, save);
+  const child = await mapChild(transaction, source, organization, family, save);
   const incomeDetermination = await mapIncomeDetermination(
     transaction,
     source,
-    family
+    family,
+    save
   );
-  const enrollment = await mapEnrollment(transaction, source, site, child);
+  const enrollment = await mapEnrollment(
+    transaction,
+    source,
+    site,
+    child,
+    save
+  );
+
   const funding = await mapFunding(
     transaction,
     source,
     organization,
-    enrollment
+    enrollment,
+    save
   );
 
   family.incomeDeterminations = [incomeDetermination];
@@ -110,16 +128,13 @@ const mapAndSaveRow = async (
  * TODO: How do we want to implement fuzzy matching here?
  * @param source
  */
-const lookUpOrganization = (
+export const lookUpOrganization = (
   source: EnrollmentReportRow,
   organizations: Organization[]
 ) => {
   if (organizations.length === 1) return organizations[0];
 
-  if (!source.providerName)
-    throw new BadRequestError(
-      'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.'
-    );
+  if (!source.providerName) throw new BadRequestError(MISSING_PROVIDER_ERROR);
 
   return organizations.find(
     (organization) =>
@@ -134,7 +149,7 @@ const lookUpOrganization = (
  *
  * @param source
  */
-const lookUpSite = (
+export const lookUpSite = (
   source: EnrollmentReportRow,
   organizationId: number,
   sites: Site[]
@@ -153,7 +168,7 @@ const lookUpSite = (
  * respective child's race (in which case, assume not disclosed).
  * @param source
  */
-const raceIndicated = (source: EnrollmentReportRow) => {
+export const getRaceIndicated = (source: EnrollmentReportRow) => {
   return (
     !!source.americanIndianOrAlaskaNative ||
     !!source.asian ||
@@ -172,11 +187,11 @@ const mapChild = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
-  family: Family
+  family: Family,
+  save: boolean
 ) => {
   // Gender
-  const gender: Gender =
-    mapEnum(Gender, source.gender, true) || Gender.NotSpecified;
+  const gender: Gender = mapEnum(Gender, source.gender) || Gender.NotSpecified;
 
   //Birth certificate type
   const birthCertificateType: BirthCertificateType = mapEnum(
@@ -187,7 +202,7 @@ const mapChild = (
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
-  const child = transaction.create(Child, {
+  let child = {
     sasid: source.sasid,
     firstName: source.firstName,
     middleName: source.middleName,
@@ -203,7 +218,7 @@ const mapChild = (
     blackOrAfricanAmerican: source.blackOrAfricanAmerican,
     nativeHawaiianOrPacificIslander: source.nativeHawaiianOrPacificIslander,
     white: source.white,
-    raceNotDisclosed: !raceIndicated(source),
+    raceNotDisclosed: !getRaceIndicated(source),
     hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
     gender,
     dualLanguageLearner: source.dualLanguageLearner,
@@ -211,9 +226,14 @@ const mapChild = (
     receivesDisabilityServices: source.receivesDisabilityServices,
     organization,
     family: family,
-  });
+  } as Child;
 
-  return transaction.save(child);
+  if (save) {
+    child = transaction.create(Child, child);
+    return transaction.save(child);
+  }
+
+  return child;
 };
 
 /**
@@ -225,18 +245,24 @@ const mapChild = (
 const mapFamily = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
-  organization: Organization
+  organization: Organization,
+  save: boolean
 ) => {
-  const family = transaction.create(Family, {
+  let family = {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zipCode: source.zipCode,
     homelessness: source.homelessness,
     organization,
-  });
+  } as Family;
 
-  return transaction.save(family);
+  if (save) {
+    family = transaction.create(Family, family);
+    return transaction.save(family);
+  }
+
+  return family;
 };
 
 /**
@@ -246,16 +272,30 @@ const mapFamily = (
 const mapIncomeDetermination = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
-  family: Family
+  family: Family,
+  save: boolean
 ) => {
-  const incomeDetermination = transaction.create(IncomeDetermination, {
-    numberOfPeople: source.numberOfPeople,
-    income: source.income,
-    determinationDate: source.determinationDate,
-    familyId: family.id,
-  });
+  // Only attempt to create an income determination if the user supplied any
+  // of the necessary data points
+  if (source.numberOfPeople || source.income || source.determinationDate) {
+    let incomeDetermination = {
+      // Cast empty strings to undefined to avoid DB write failures
+      numberOfPeople: source.numberOfPeople || undefined,
+      income: source.income || undefined,
+      determinationDate: source.determinationDate,
+      familyId: family.id,
+    } as IncomeDetermination;
 
-  return transaction.save(incomeDetermination);
+    if (save) {
+      incomeDetermination = transaction.create(
+        IncomeDetermination,
+        incomeDetermination
+      );
+      return transaction.save(incomeDetermination);
+    }
+
+    return incomeDetermination;
+  }
 };
 
 /**
@@ -268,12 +308,13 @@ const mapEnrollment = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   site: Site,
-  child: Child
+  child: Child,
+  save: boolean
 ) => {
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
   const model: CareModel = mapEnum(CareModel, source.model);
 
-  const enrollment = transaction.create(Enrollment, {
+  let enrollment = {
     site,
     childId: child.id,
     model,
@@ -281,55 +322,41 @@ const mapEnrollment = (
     entry: source.entry,
     exit: source.exit,
     exitReason: source.exitReason,
-  });
+  } as Enrollment;
 
-  return transaction.save(enrollment);
+  if (save) {
+    enrollment = transaction.create(Enrollment, enrollment);
+    return transaction.save(enrollment);
+  }
+
+  return enrollment;
 };
 
 /**
  * Create a Funding object from FlattenedEnrollment source,
  * associated with a FundingSpace for given organization and ageGroup
- * (already parsed from source).
+ * (already parsed from source, stored as enrollment.ageGroup)
+ * @param transaction
  * @param source
  * @param organization
- * @param ageGroup
+ * @param enrollment
  */
-const mapFunding = async (
+export const mapFunding = async (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
-  enrollment: Enrollment
+  enrollment: Enrollment,
+  save: boolean
 ) => {
-  const fundingSource: FundingSource = mapEnum(FundingSource, source.source);
-  let fundingTime: FundingTime = mapEnum(FundingTime, source.time);
+  const fundingSource: FundingSource = mapEnum(FundingSource, source.source, {
+    isFundingSource: true,
+  });
+  const fundingTime: FundingTime = mapFundingTime(source.time, fundingSource);
 
-  //  If we haven't found a matching FundingTime, check to see if one of the non-standard formats
-  //  was supplied instead and look up the corresponding FundingTime
-  if (!fundingTime && fundingSource) {
-    const matchingSourceTime: FundingSourceTime = FUNDING_SOURCE_TIMES.find(
-      (fst) => fst.fundingSources.includes(fundingSource)
-    );
-
-    if (matchingSourceTime) {
-      const matchingTime: FundingTimeInput = matchingSourceTime.fundingTimes.find(
-        (fundingTime) => {
-          return fundingTime.formats.includes(source.time.toString());
-        }
-      );
-
-      if (matchingTime) {
-        fundingTime = matchingTime.value;
-      }
-    }
-  }
-
-  // Cannot create funding without FundingSpace, and cannot find FundingSpace
-  // without fundingSource AND fundingTime, so if you don't have them
-  // MOVE ALONG
+  let fundingSpace: FundingSpace;
   if (fundingSource && fundingTime) {
     // Get the FundingSpace with associated funding source and agegroup for the given organization
     // TODO: Cache FundingSpace, as they'll be reused a lot
-    let fundingSpace: FundingSpace;
     const fundingSpaces = await transaction.find(FundingSpace, {
       where: {
         source: fundingSource,
@@ -345,24 +372,36 @@ const mapFunding = async (
         (space) => space.time === FundingTime.SplitTime
       );
     }
+  }
 
-    // Cannot create funding without FundingSpace, so if you don't have one
-    // MOVE ALONG
-    if (fundingSpace) {
-      // TODO: Cache ReportingPeriods, as they'll be reused a lot
-      let firstReportingPeriod: ReportingPeriod,
-        lastReportingPeriod: ReportingPeriod;
-      if (source.firstFundingPeriod) {
-        firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-          where: { type: fundingSource, period: source.firstFundingPeriod },
-        });
-      }
-      if (source.lastFundingPeriod) {
-        lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
-          where: { type: fundingSource, period: source.lastFundingPeriod },
-        });
-      }
-      const funding = transaction.create(Funding, {
+  // TODO: Cache ReportingPeriods, as they'll be reused a lot
+  let firstReportingPeriod: ReportingPeriod,
+    lastReportingPeriod: ReportingPeriod;
+  if (source.firstFundingPeriod) {
+    firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
+      where: { type: fundingSource, period: source.firstFundingPeriod },
+    });
+  }
+  if (source.lastFundingPeriod) {
+    lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
+      where: { type: fundingSource, period: source.lastFundingPeriod },
+    });
+  }
+  // If the user supplied _any_ funding-related fields, create the funding.
+  if (
+    source.source ||
+    source.time ||
+    source.firstFundingPeriod ||
+    source.lastFundingPeriod
+  ) {
+    let funding = {
+      firstReportingPeriod,
+      lastReportingPeriod,
+      fundingSpace,
+      enrollmentId: enrollment.id,
+    } as Funding;
+    if (save) {
+      funding = transaction.create(Funding, {
         firstReportingPeriod,
         lastReportingPeriod,
         fundingSpace,
@@ -371,68 +410,99 @@ const mapFunding = async (
 
       return transaction.save(funding);
     }
-  }
-
-  // If we could not find a fundingSpace, we cannot create a funding
-  // so NOTHING is returned.
-  if (
-    source.source ||
-    source.time ||
-    source.firstFundingPeriod ||
-    source.lastFundingPeriod
-  ) {
-    // TODO: If the user supplied fundingType or spaceType, capture that
-    // there was an error ingesting the funding info for this row so UI can
-    // prompt user to fix it
-    console.log(
-      "User tried to enter funding information but we couldn't figure it out"
-    );
+    return funding;
   }
 };
 
-const mapEnum = <T>(
+/**
+ * Leverage funding source -> time -> format mappings from FUNDING_SOURCE_TIMES
+ * to determine the valid funding time entered by the user.
+ */
+export const mapFundingTime = (
+  value: number | string | undefined,
+  fundingSource: FundingSource | undefined
+) => {
+  if (!value) return;
+
+  // Cannot determine a funding time without a funding space, as they are space-specific
+  if (!fundingSource) return;
+
+  const sourceTimes = FUNDING_SOURCE_TIMES.find((fst) =>
+    fst.fundingSources.includes(fundingSource)
+  );
+  return sourceTimes.fundingTimes.find((time) =>
+    time.formats.some(
+      (format) => format.toLowerCase() === value.toString().trim().toLowerCase()
+    )
+  )?.value;
+};
+
+/**
+ * Helper function to lookup enum values from source string values.
+ *
+ * Can optionally do first letter comparison, indicated by the
+ * `firstLetterComparison` flag, which limits comparison to only
+ * the first letter of the input value and enum values.
+ *
+ * Also, does special case handling for FundingSource lookup,
+ * indicated by the `isFundingSource` flag.
+ * @param referenceEnum
+ * @param value
+ * @param firstLetterComparison
+ * @param isFundingSource
+ */
+export const mapEnum = <T>(
   referenceEnum:
     | typeof BirthCertificateType
     | typeof Gender
     | typeof CareModel
     | typeof AgeGroup
-    | typeof FundingSource
-    | typeof FundingTime
-    | typeof SpecialEducationServicesType,
+    | typeof FundingSource,
   value: string | undefined,
-  firstLetterComparison: boolean = false,
-  isFundingSource: boolean = false
+  opts: {
+    isFundingSource?: boolean;
+  } = {}
 ) => {
   if (!value) return;
 
   const stripRegex = /[-\/\s]+/;
-  const normalizedValue = value
+  const normalizedInput = value
     .toString()
     .trim()
     .replace(stripRegex, '')
     .toLowerCase();
-
   let ret: T;
 
-  Object.values(referenceEnum).forEach((ref) => {
-    let normalizedRef: string;
+  // Iterate through all enum values and check if any match
+  Object.values(referenceEnum).forEach((ref: T) => {
+    const refString = (ref as unknown) as string;
 
-    // Leverage the hyphen in Funding Source descriptors
-    if (isFundingSource) {
-      normalizedRef = ref.split(' - ')[0].trim().toLowerCase();
-    } else {
-      normalizedRef = ref.replace(stripRegex, '').toLowerCase();
+    // Special case for mapping FundingSource, to check for
+    // the acronym (i.e. CDC), full name (i.e. Child day care)
+    // or full combined (i.e. CDC - Child day care) version
+    if (opts.isFundingSource) {
+      const normalizedReferences = refString
+        .split('-')
+        .map((r) => r.trim().replace(stripRegex, '').toLowerCase());
+      normalizedReferences.forEach((normalizedReference) => {
+        if (normalizedInput.startsWith(normalizedReference)) {
+          ret = ref;
+        }
+      });
     }
-
-    if (firstLetterComparison) {
-      if (normalizedRef[0] === normalizedValue[0]) {
+    // Base case for all other enums -- compare the normalized enum values
+    // to the normalized input value
+    else {
+      const normalizedReference = refString
+        .trim()
+        .replace(stripRegex, '')
+        .toLowerCase();
+      if (
+        normalizedReference.startsWith(normalizedInput) ||
+        normalizedInput.startsWith(normalizedReference)
+      ) {
         ret = ref;
       }
-    } else if (
-      normalizedValue.startsWith(normalizedRef) ||
-      normalizedRef.startsWith(normalizedValue)
-    ) {
-      ret = ref;
     }
   });
 

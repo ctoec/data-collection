@@ -11,7 +11,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   afterSaveSuccess,
 }) => {
   if (!child) {
-    return <></>;
+    throw new Error('Enrollment funding form rendered without child');
   }
 
   // Separate enrollments into current (no end date) and past

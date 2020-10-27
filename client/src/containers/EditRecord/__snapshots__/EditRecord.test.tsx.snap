@@ -1611,6 +1611,7 @@ exports[`EditRecord matches snapshot 1`] = `
                   class="usa-radio"
                 >
                   <input
+                    checked=""
                     class="usa-radio__input"
                     id="Birth certificate unavailable"
                     name="birth-certificate-fields"

@@ -8,7 +8,6 @@ import {
   useGenericContext,
 } from '@ctoec/component-library';
 import {
-  FundingSpace,
   Funding,
   Enrollment,
   AgeGroup,
@@ -28,6 +27,7 @@ type ContractSpaceProps<T> = {
   fundingSource: FundingSource;
   organizationId: number;
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
+  showStatus?: boolean;
 };
 
 export const ContractSpaceField = <
@@ -37,6 +37,7 @@ export const ContractSpaceField = <
   fundingSource,
   organizationId,
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
+  showStatus,
 }: ContractSpaceProps<T>) => {
   const { fundingSpaces } = useContext(DataCacheContext);
   const fundingSpaceOptions = fundingSpaces.records.filter(
@@ -71,12 +72,15 @@ export const ContractSpaceField = <
         text: fundingSpaceFormatter(fs),
         value: `${fs.id}`,
       }))}
-      status={(data, _, props) =>
-        getValidationStatusForField(
-          fundingAccessor(data),
-          fundingAccessor(data).at('fundingSpace').path,
-          props
-        )
+      status={
+        showStatus
+          ? (data, _, props) =>
+              getValidationStatusForField(
+                fundingAccessor(data),
+                fundingAccessor(data).at('fundingSpace').path,
+                props
+              )
+          : undefined
       }
     />
   );

@@ -94,8 +94,8 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
     where: { organization: { id: In(readOrgIds) } },
   });
 
-  // Sort enrollments by exit date
   if (child) {
+    // Sort enrollments by exit date
     child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
       if (enrollmentA.fundings) {
         // Sort fundings by last reporting period
@@ -110,7 +110,20 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
 
       return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
     });
+
+    if (child.family) {
+      // Sort income determinations by date
+      child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
+        (determinationA, determinationB) =>
+          propertyDateSorter(
+            determinationA,
+            determinationB,
+            (d) => d.determinationDate
+          )
+      );
+    }
   }
+
   const validationErrors = await validate(child, {
     validationError: { target: false },
   });
@@ -271,9 +284,7 @@ async function createNewEnrollment(
   }
 
   const enrollment = tManager.create(Enrollment, {
-    ageGroup: newEnrollment.ageGroup,
-    site: newEnrollment.site,
-    entry: newEnrollment.entry,
+    ...newEnrollment,
     child,
   });
   await tManager.save(Enrollment, enrollment);

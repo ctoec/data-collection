@@ -5,12 +5,12 @@ import {
 } from '@ctoec/component-library';
 import React from 'react';
 import {
-  FamilyIncomeForm,
   ChildInfoForm,
   ChildIdentifiersForm,
   FamilyAddressForm,
 } from '../../components/Forms';
-import { EnrollmentFundingForm } from './EnrollmentFunding/EnrollmentFunding';
+import { EnrollmentFundingForm } from './EnrollmentFunding/Form';
+import { FamilyIncomeForm } from './FamilyIncome/Form';
 import {
   SECTION_KEYS,
   formSections,

@@ -99,12 +99,15 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   return (
     <Form<Enrollment>
       id={id || `edit-enrollment-form-${enrollment.id}`}
-      className="usa-form"
       data={enrollment}
       onSubmit={onSubmit}
     >
       {showField(enrollment, ['site'], enrollmentFields) && (
-        <SiteField<Enrollment> sites={sites} />
+        <SiteField<Enrollment>
+          sites={sites.filter(
+            (s) => s.organizationId === child.organization.id
+          )}
+        />
       )}
       {showField(enrollment, ['entry'], enrollmentFields) && (
         <EnrollmentStartDateField<Enrollment> />

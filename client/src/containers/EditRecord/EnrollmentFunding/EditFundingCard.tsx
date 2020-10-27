@@ -12,6 +12,7 @@ import {
   CardExpansion,
   Alert,
   TrashCan,
+  InlineIcon,
 } from '@ctoec/component-library';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 
@@ -87,16 +88,27 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       <div className="display-flex flex-justify">
         <div className="flex-1">
           <p className="margin-bottom-0">Funding</p>
-          <Tag className="margin-top-0" text={funding.fundingSpace.source} />
+          {funding.fundingSpace ? (
+            <Tag className="margin-top-0" text={funding.fundingSpace.source} />
+          ) : (
+            <InlineIcon icon="incomplete" />
+          )}
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Space type</p>
-          <p className="text-bold margin-top-0">{funding.fundingSpace.time}</p>
+          <p className="text-bold margin-top-0">
+            {funding.fundingSpace?.time || <InlineIcon icon="incomplete" />}
+          </p>
         </div>
         <div className="flex-2">
           <p className="margin-bottom-0">Reporting periods</p>
           <p className="text-bold margin-top-0">
-            {funding.firstReportingPeriod?.period.format('MMMM YYYY')} -{' '}
+            {funding.firstReportingPeriod ? (
+              funding.firstReportingPeriod.period.format('MMMM YYYY')
+            ) : (
+              <InlineIcon icon="incomplete" />
+            )}{' '}
+            -{' '}
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')
               : 'present'}
