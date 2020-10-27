@@ -4,8 +4,6 @@ import {
   FormField,
   Select,
   TObjectDriller,
-  FormContext,
-  useGenericContext,
 } from '@ctoec/component-library';
 import {
   Funding,
@@ -46,9 +44,6 @@ export const ContractSpaceField = <
       fs.source === fundingSource &&
       fs.organization.id === organizationId
   );
-
-  const { dataDriller } = useGenericContext<T>(FormContext);
-
   if (fundingSpaceOptions.length === 1) {
     return (
       <SingleContractSpaceField<T>
