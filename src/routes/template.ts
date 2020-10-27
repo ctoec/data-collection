@@ -49,11 +49,7 @@ templateRouter.get(
     try {
       const fileType = req.params['fileType'] || 'csv';
       res.send(
-        await streamUploadedChildren(
-          res,
-          fakeChildren,
-          fileType as BookType
-        )
+        await streamUploadedChildren(res, fakeChildren, fileType as BookType)
       );
     } catch (err) {
       console.error('Unable to download example', err);
@@ -61,4 +57,3 @@ templateRouter.get(
     }
   })
 );
-

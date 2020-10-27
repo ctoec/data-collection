@@ -215,6 +215,7 @@ export const changeEnrollment = async (
         // on that value
         if (
           !oldEnrollmentLastReportingPeriod &&
+          newEnrollmentNextReportingPeriod &&
           newEnrollmentNextReportingPeriod.id &&
           !newEnrollmentNextReportingPeriod.period
         ) {
