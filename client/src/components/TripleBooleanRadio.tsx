@@ -34,8 +34,6 @@ export const TripleBooleanRadio = <T extends {}>({
   }): RadioOptionInForm<T> => ({
     getValue: (data) => data.at(field),
     parseOnChangeEvent: (e) => {
-      console.log(e.target.value)
-      // TODO: can't select unknown
       if (e.target.value === unknownOption.id) {
         return null
       }

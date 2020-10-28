@@ -32,8 +32,9 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
             return {
               getValue: (data) => data.at('birthCertificateType'),
               id,
-              value: id,
+              value: certificateType,
               text: certificateType,
+              preprocessForDisplay: data => data === certificateType,
               expansion: certificateType === BirthCertificateType.US && (
                 <>
                   <div className="mobile-lg:grid-col-12">
