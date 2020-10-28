@@ -1,4 +1,4 @@
-import { EntityManager, In } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import {
   Child,
   Family,
@@ -57,6 +57,37 @@ export const isChildUpdate = (
   return null;
 };
 
+export const enrollmentExistsOnChild = (
+  row: EnrollmentReportRow,
+  child: Child
+) => {
+  for (let i = 0; i < child.enrollments.length; i++) {
+    const enrollment = child.enrollments[i];
+    if (
+      enrollment.site.siteName === row.siteName &&
+      enrollment.entry.format('MM/DD/YYYY') === row.entry.format('MM/DD/YYYY')
+    )
+      return enrollment;
+  }
+  return null;
+};
+
+export const rowModifiesExistingFunding = (
+  row: EnrollmentReportRow,
+  enrollment: Enrollment
+) => {
+  for (let i = 0; i < enrollment.fundings.length; i++) {
+    const funding = enrollment.fundings[i];
+    if (
+      row.firstFundingPeriod.format('MM/DD/YYYY') ===
+        funding.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
+      row.source === funding.fundingSpace.source &&
+      row.time === funding.fundingSpace.time
+    )
+      return funding;
+  }
+  return null;
+};
 /**
  * Can use optional save parameter to decide whether to persist
  * the mapped results to the DB or not. If we don't persist,
@@ -152,26 +183,54 @@ const mapRow = async (
     processedChildren.push(child);
   }
 
-  const enrollment = await mapEnrollment(
+  let enrollment = enrollmentExistsOnChild(source, child);
+  const enrollmentUpdate = await mapEnrollment(
     transaction,
     source,
     site,
     child,
-    opts.save
+    enrollment === null
   );
-  const funding = await mapFunding(
+  let funding = rowModifiesExistingFunding(source, enrollment);
+  const fundingUpdate = await mapFunding(
     transaction,
     source,
     organization,
     enrollment,
-    opts.save
+    funding === null
   );
 
-  enrollment.fundings = [funding];
-  child.enrollments = [enrollment];
+  // Row provides updated info about an existing enrollment
+  if (enrollment) {
+    transaction.create(Enrollment, enrollmentUpdate);
+    enrollment = await transaction.save(
+      transaction.merge(Enrollment, enrollment, enrollmentUpdate)
+    );
+
+    // Row also updates that enrollment's funding info
+    if (funding) {
+      transaction.create(Funding, fundingUpdate);
+      funding = await transaction.save(
+        transaction.merge(Funding, funding, fundingUpdate)
+      );
+    }
+
+    // Row provides a new funding for an existing enrollment
+    else {
+      enrollment.fundings.push(funding);
+      await transaction.save(Enrollment, enrollment);
+    }
+  }
+
+  // Row provides entirely new enrollment with new funding
+  // Will always be the case for a child we haven't seen yet
+  else {
+    enrollmentUpdate.fundings = [fundingUpdate];
+    if (existingChild) child.enrollments.push(enrollmentUpdate);
+    else child.enrollments = [enrollmentUpdate];
+  }
 
   if (!existingChild) return child;
-  // }
 };
 
 /**
