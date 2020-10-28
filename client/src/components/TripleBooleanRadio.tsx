@@ -34,14 +34,16 @@ export const TripleBooleanRadio = <T extends {}>({
   }): RadioOptionInForm<T> => ({
     getValue: (data) => data.at(field),
     parseOnChangeEvent: (e) => {
-      if (e.target.value !== unknownOption.id)
-        return e.target.value === trueOption.id;
-      else return null;
+      if (e.target.value === unknownOption.id) {
+        return null
+      }
+      return e.target.value === trueOption.id;
     },
     preprocessForDisplay: (data) => {
-      if (data === true) return trueOption.id;
-      else if (data === false) return falseOption.id;
-      else return unknownOption.id;
+      // TODO: CHANGE THIS EVERYWHERE
+      if (data === true) return trueOption.id === id;
+      else if (data === false) return falseOption.id === id;
+      else return unknownOption.id === id;
     },
     id,
     text: label,
