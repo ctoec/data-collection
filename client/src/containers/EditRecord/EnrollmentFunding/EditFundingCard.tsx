@@ -50,8 +50,18 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   }
 
   const { accessToken } = useContext(AuthenticationContext);
+  const [closeCard, setCloseCard] = useState(false);
   const [expandedCard, setExpandedCard] = useState(expanded);
   const [error, setError] = useState<string>();
+
+  // Explicitly don't want `closeCard` as a dep, as this
+  // needs to be triggered on render caused by child refetch
+  // to make forms re-openable
+  // (not only when closeCard changes)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (closeCard) setCloseCard(false);
+  });
 
   const afterSaveSuccess = () => {
     setError(undefined);
@@ -77,6 +87,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       appearance={isCurrent ? 'primary' : 'secondary'}
       borderless={true}
       expanded={expanded}
+      forceClose={closeCard}
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">

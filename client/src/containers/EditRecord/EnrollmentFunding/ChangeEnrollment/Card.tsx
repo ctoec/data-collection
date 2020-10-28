@@ -30,10 +30,19 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
   expanded,
 }) => {
   const [expandedCard, setExpandedCard] = useState(expanded);
+  const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();
 
+  // Explicitly don't want `closeCard` as a dep, as this
+  // needs to be triggered on render caused by child refetch
+  // (not only when closeCard changes)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (closeCard) setCloseCard(false);
+  });
+
   return (
-    <Card>
+    <Card forceClose={closeCard}>
       <div className="display-flex flex-justify flex-row flex-align-center">
         {!currentEnrollment ? (
           <div className="usa-prose-body">
@@ -53,7 +62,7 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
         {error && <Alert type="error" text={error} />}
         <ChangeEnrollmentForm
           afterSaveSuccess={() => {
-            setExpandedCard(false);
+            setCloseCard(true);
             afterSaveSuccess();
           }}
           afterSaveFailure={(err) => setError(err)}
