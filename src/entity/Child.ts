@@ -54,12 +54,12 @@ export class Child implements ChildInterface {
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @IsNotEmpty()
   @MomentComparison({
-    context: (birthdate: Moment) =>
+    compareFunc: (birthdate: Moment) =>
       birthdate.isSameOrAfter(moment().add(-12, 'years')),
     message: 'Birth date must be within last 12 years',
   })
   @MomentComparison({
-    context: (birthdate: Moment) => birthdate.isBefore(moment()),
+    compareFunc: (birthdate: Moment) => birthdate.isBefore(moment()),
     message: 'Birth date must be in the past',
   })
   birthdate?: Moment;
@@ -134,6 +134,11 @@ export class Child implements ChildInterface {
   receivesDisabilityServices?: boolean;
 
   @ValidateNested()
+  @ValidateIf((child) => {
+    if (child.family) child.family.childIsFoster = child.foster;
+    // This value is used in family to conditionally validate income determinations and then removed
+    return true;
+  })
   @ManyToOne(() => Family)
   family?: Family;
 

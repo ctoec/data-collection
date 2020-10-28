@@ -98,11 +98,7 @@ exports[`EditRecord matches snapshot 1`] = `
             type="button"
           >
             <span>
-              <span
-                class="oec-text-with-icon svg-gold-20v"
-              >
-                Family income
-              </span>
+              Family income
             </span>
           </button>
           <button

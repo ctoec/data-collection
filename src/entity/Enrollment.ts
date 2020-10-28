@@ -32,7 +32,8 @@ export class Enrollment implements EnrollmentInterface {
   @Column({ type: 'uuid' })
   childId: string;
 
-  @ManyToOne(() => Site)
+  @ManyToOne(() => Site, { nullable: true })
+  @IsNotEmpty()
   site?: Site;
 
   @Column({ nullable: true })

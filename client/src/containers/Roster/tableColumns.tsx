@@ -1,7 +1,7 @@
 import React from 'react';
 import idx from 'idx';
 import { Link } from 'react-router-dom';
-import { Column, InlineIcon } from '@ctoec/component-library';
+import { Column, InlineIcon, Button } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 
 const tableColumnClassName = 'text-pre text-center font-body-2xs';
@@ -35,15 +35,16 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
       className: tableColumnClassName,
       name: 'Missing info',
       width: `${shortColumnWidthPercent}%`,
-      // Default sort with missing records on top on the assumption that missing records will be the priority
       sort: (row) =>
         !row.validationErrors || !row.validationErrors.length ? 1 : 0,
       cell: ({ row }) => {
         return (
           <td className={tableRowClassName}>
-            {(!!row.validationErrors && row.validationErrors.length == 0) ||
-              row.validationErrors == undefined ||
-              InlineIcon({ icon: 'incomplete' })}
+            {!!row.validationErrors && !!row.validationErrors.length && (
+              <Link to={`/batch-edit/${row.id}`}>
+                <InlineIcon icon="incomplete" />
+              </Link>
+            )}
           </td>
         );
       },
