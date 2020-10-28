@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, In } from 'typeorm';
 import {
   Child,
   Family,
@@ -22,9 +22,40 @@ import {
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
+import { Moment } from 'moment';
 
 export const MISSING_PROVIDER_ERROR =
   'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.';
+
+export const isIdentifierMatch = (
+  child: Child | EnrollmentReportRow,
+  other: EnrollmentReportRow
+) => {
+  return (
+    child.firstName === other.firstName &&
+    child.lastName === other.lastName &&
+    child.birthdate.format('MM/DD/YYYY') ===
+      other.birthdate.format('MM/DD/YYYY') &&
+    child.sasid === other.sasid
+  );
+};
+
+/**
+ * Determine whether a child with the given identifying information has
+ * already been seen and parsed into the DB.
+ * @param row
+ * @param processedChildren
+ */
+export const isChildUpdate = (
+  row: EnrollmentReportRow,
+  processedChildren: Child[]
+) => {
+  for (let i = 0; i < processedChildren.length; i++) {
+    const c = processedChildren[i];
+    if (isIdentifierMatch(c, row)) return c;
+  }
+  return null;
+};
 
 /**
  * Can use optional save parameter to decide whether to persist
@@ -43,7 +74,8 @@ export const mapRows = async (
     transaction.findByIds(Site, user.siteIds),
   ]);
 
-  const children = [];
+  const processedChildren: Child[] = [];
+  const children: Child[] = [];
   for (let i = 0; i < rows.length; i++) {
     try {
       const child = await mapRow(
@@ -51,9 +83,10 @@ export const mapRows = async (
         rows[i],
         organizations,
         sites,
-        opts.save
+        processedChildren,
+        opts
       );
-      children.push(child);
+      if (child) children.push(child);
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error occured while parsing row', err);
@@ -74,7 +107,8 @@ const mapRow = async (
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
-  save: boolean
+  processedChildren: Child[],
+  opts: { save: boolean } = { save: false }
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -88,36 +122,56 @@ const mapRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  const family = await mapFamily(transaction, source, organization, save);
-  const child = await mapChild(transaction, source, organization, family, save);
-  const incomeDetermination = await mapIncomeDetermination(
-    transaction,
-    source,
-    family,
-    save
-  );
+  let child: Child;
+  const existingChild = isChildUpdate(source, processedChildren);
+  child = existingChild;
+
+  if (!child) {
+    const family = await mapFamily(
+      transaction,
+      source,
+      organization,
+      opts.save
+    );
+    child = await mapChild(
+      transaction,
+      source,
+      organization,
+      family,
+      opts.save
+    );
+    const incomeDetermination = await mapIncomeDetermination(
+      transaction,
+      source,
+      family,
+      opts.save
+    );
+
+    family.incomeDeterminations = [incomeDetermination];
+    child.family = family;
+    processedChildren.push(child);
+  }
+
   const enrollment = await mapEnrollment(
     transaction,
     source,
     site,
     child,
-    save
+    opts.save
   );
-
   const funding = await mapFunding(
     transaction,
     source,
     organization,
     enrollment,
-    save
+    opts.save
   );
 
-  family.incomeDeterminations = [incomeDetermination];
-  child.family = family;
   enrollment.fundings = [funding];
   child.enrollments = [enrollment];
 
-  return child;
+  if (!existingChild) return child;
+  // }
 };
 
 /**
@@ -366,7 +420,7 @@ export const mapFunding = async (
     });
     fundingSpace = fundingSpaces.find((space) => space.time === fundingTime);
 
-    // If no direct match on time and source === CDC, look for a split
+    //   // If no direct match on time and source === CDC, look for a split
     if (!fundingSpace && fundingSource === FundingSource.CDC) {
       fundingSpace = fundingSpaces.find(
         (space) => space.time === FundingTime.SplitTime
@@ -387,6 +441,7 @@ export const mapFunding = async (
       where: { type: fundingSource, period: source.lastFundingPeriod },
     });
   }
+
   // If the user supplied _any_ funding-related fields, create the funding.
   if (
     source.source ||
@@ -400,16 +455,12 @@ export const mapFunding = async (
       fundingSpace,
       enrollmentId: enrollment.id,
     } as Funding;
-    if (save) {
-      funding = transaction.create(Funding, {
-        firstReportingPeriod,
-        lastReportingPeriod,
-        fundingSpace,
-        enrollmentId: enrollment.id,
-      });
 
+    if (save) {
+      funding = transaction.create(Funding, funding);
       return transaction.save(funding);
     }
+
     return funding;
   }
 };
@@ -418,7 +469,7 @@ export const mapFunding = async (
  * Leverage funding source -> time -> format mappings from FUNDING_SOURCE_TIMES
  * to determine the valid funding time entered by the user.
  */
-export const mapFundingTime = (
+const mapFundingTime = (
   value: number | string | undefined,
   fundingSource: FundingSource | undefined
 ) => {
