@@ -13,7 +13,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
     <p
       class="font-body-xl margin-top-1"
     >
-      3 children enrolled
+      3 children enrolled at 2 sites
     </p>
     <div
       class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"
@@ -678,7 +678,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
     <p
       class="font-body-xl margin-top-1"
     >
-      3 children enrolled at 1 sites
+      3 children enrolled 
     </p>
     <div
       class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"

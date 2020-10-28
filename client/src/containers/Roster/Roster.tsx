@@ -144,22 +144,14 @@ const Roster: React.FC = () => {
       nestedActiveId: activeSiteId,
       activeId: activeOrgId,
     };
-  } else if (organizations.length === 1) {
-    h1Content = organizations[0].providerName;
-    // Will only have a single site if we reach this conditional
-    tabNavProps = undefined;
-  } else if (isSiteLevelUser) {
+  } else if (sites.length > 1) {
     // User has no organization permissions, is restricted on page
-    h1Content = sites[0].siteName;
-    if (sites.length == 1) tabNavProps = undefined;
-    else {
-      tabNavProps = {
-        itemType: 'site',
-        onClick: tabNavOnClick,
-        items: getSiteItems(sites),
-        activeId: activeSiteId,
-      };
-    }
+    tabNavProps = {
+      itemType: 'site',
+      onClick: tabNavOnClick,
+      items: getSiteItems(sites),
+      activeId: activeSiteId,
+    };
   }
 
   return (
