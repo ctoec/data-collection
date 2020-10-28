@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   Accordion,
   Button,
@@ -15,7 +15,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { useHistory, useLocation } from 'react-router-dom';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
-import { apiGet, apiPut } from '../../utils/api';
+import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   getAccordionItems,
@@ -144,10 +144,22 @@ const Roster: React.FC = () => {
       nestedActiveId: activeSiteId,
       activeId: activeOrgId,
     };
+  } else if (organizations.length === 1) {
+    h1Content = organizations[0].providerName;
+    // Will only have a single site if we reach this conditional
+    tabNavProps = undefined;
   } else if (isSiteLevelUser) {
     // User has no organization permissions, is restricted on page
     h1Content = sites[0].siteName;
-    tabNavProps = undefined;
+    if (sites.length == 1) tabNavProps = undefined;
+    else {
+      tabNavProps = {
+        itemType: 'site',
+        onClick: tabNavOnClick,
+        items: getSiteItems(sites),
+        activeId: activeSiteId,
+      };
+    }
   }
 
   return (
@@ -166,9 +178,11 @@ const Roster: React.FC = () => {
           {/* TODO: should this count be just for the thing showing or for all of them? */}
           {childrenCache.loading
             ? 'Loading...'
-            : user?.accessType === 'organization' || sites.length > 1
-            ? `${childrenCache.records.length} children enrolled`
-            : `${childrenCache.records.length} children enrolled at ${sites.length} sites`}
+            : `${childrenCache.records.length} children enrolled ${
+                user?.accessType === 'organization' || sites.length > 1
+                  ? `at ${sites.length} sites`
+                  : ''
+              }`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <AddRecordButton orgs={organizations} />
