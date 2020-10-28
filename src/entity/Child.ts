@@ -136,6 +136,7 @@ export class Child implements ChildInterface {
   @ValidateNested()
   @ValidateIf((child) => {
     if (child.family) child.family.childIsFoster = child.foster;
+    // This value is used in family to conditionally validate income determinations and then removed
     return true;
   })
   @ManyToOne(() => Family)

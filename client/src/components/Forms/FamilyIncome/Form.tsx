@@ -83,7 +83,9 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
 
   if (child?.foster) {
-    // This shows up for new child
+    // New child is and batch edit both use this form directly
+    // So this alert will show for those two forms
+    // Edit child conditionally shows this form, so this alert is in that container too
     return <FosterIncomeNotRequiredAlert />;
   }
 

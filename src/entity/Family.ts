@@ -51,6 +51,7 @@ export class Family implements FamilyInterface {
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
   @ValidateIf((family) => {
+    // This value is set in child validation of family
     const childIsFoster = family.childIsFoster;
     delete family.childIsFoster;
     return !childIsFoster;
