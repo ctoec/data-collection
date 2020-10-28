@@ -18,7 +18,7 @@ import {
   ReportingPeriod,
   Funding,
   User,
-  Organization,
+  FundingTime,
 } from '../../shared/models';
 
 jest.mock('../../utils/api');
@@ -40,6 +40,7 @@ const INFANT_TODDLER_CDC = {
   source: FundingSource.CDC,
   ageGroup: AgeGroup.InfantToddler,
   capacity: 3,
+  time: FundingTime.FullDay,
 } as FundingSpace;
 
 const INFANT_TODDLER_PSR = {
@@ -47,14 +48,16 @@ const INFANT_TODDLER_PSR = {
   source: FundingSource.PSR,
   ageGroup: AgeGroup.InfantToddler,
   capacity: 5,
-};
+  time: FundingTime.FullTime,
+} as FundingSpace;
 
 const PRESCHOOL_CDC = {
   id: 3,
   source: FundingSource.CDC,
   ageGroup: AgeGroup.Preschool,
   capacity: 10,
-};
+  time: FundingTime.ExtendedDay,
+} as FundingSpace;
 
 const children: Child[] = [
   {
@@ -141,7 +144,7 @@ const multiOrgUser = {
   ],
 } as User;
 
-const cacheProps = {
+const cacheProps = ({
   children: {
     records: children,
     loading: false,
@@ -151,7 +154,7 @@ const cacheProps = {
   },
   fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
   reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-} as DataCacheContextType;
+} as unknown) as DataCacheContextType;
 
 describe('Roster', () => {
   const helperOpts = {
