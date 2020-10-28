@@ -1,4 +1,4 @@
 export { parseUploadedTemplate } from './parse';
-export { mapRows, applyUpdates } from './map';
+export { mapRows } from './map';
 export * from './removeExisting';
 export * from './checkErrors';

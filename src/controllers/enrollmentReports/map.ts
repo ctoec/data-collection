@@ -553,7 +553,7 @@ export const mapFunding = async (
  * Leverage funding source -> time -> format mappings from FUNDING_SOURCE_TIMES
  * to determine the valid funding time entered by the user.
  */
-const mapFundingTime = (
+export const mapFundingTime = (
   value: number | string | undefined,
   fundingSource: FundingSource | undefined
 ) => {

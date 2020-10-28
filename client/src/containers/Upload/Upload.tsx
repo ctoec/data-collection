@@ -85,8 +85,7 @@ const Upload: React.FC = () => {
         accessToken,
         rawBody: true,
       })
-        .then((res) => {
-          console.log(res);
+        .then(() => {
           refetchChildren();
           history.push(`/roster`);
         })
