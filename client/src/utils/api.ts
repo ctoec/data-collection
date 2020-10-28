@@ -11,10 +11,15 @@ type ApiOpts = {
 /**
  * Helper function to perform a fetch GET request against the backend
  * @param path
+ * @param accessToken - separate access token to make it play nicer with SWR
  * @param opts
  */
-export function apiGet(path: string, opts?: ApiOpts) {
-  return api(path, undefined, 'GET', opts || {});
+export function apiGet(
+  path: string,
+  accessToken?: string | null,
+  opts?: ApiOpts
+) {
+  return api(path, undefined, 'GET', { accessToken, ...opts });
 }
 
 /**

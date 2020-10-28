@@ -56,7 +56,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   // and if fetch is re-fetch,
   // then progress to next step if step is complete
   useEffect(() => {
-    apiGet(`/children/${childId}`, { accessToken })
+    apiGet(`/children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
         updateRecordInCache(updatedChild);

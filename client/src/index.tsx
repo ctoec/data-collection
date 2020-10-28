@@ -4,6 +4,7 @@ import 'react-app-polyfill/stable';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { SWRConfig } from 'swr';
 
 import App from './containers/App/App';
 import { AuthenticationProvider } from './contexts/AuthenticationContext/AuthenticationContext';
@@ -13,6 +14,7 @@ import * as serviceWorker from './serviceWorker';
 import '@ctoec/component-library/dist/assets/styles/index.scss';
 import './index.scss';
 import { DataCacheProvider } from './contexts/DataCacheContext/DataCacheContext';
+import { apiGet } from './utils/api';
 
 const render = (Component: React.FC) =>
   ReactDOM.render(
@@ -33,9 +35,17 @@ const render = (Component: React.FC) =>
           }}
         >
           <UserProvider>
-            <DataCacheProvider>
-              <Component />
-            </DataCacheProvider>
+            <SWRConfig
+              value={{
+                fetcher: apiGet,
+                refreshInterval: 0,
+                dedupingInterval: 60 * 60 * 100, // assume query results are valid until manually retriggered; set to 100 mins
+              }}
+            >
+              <DataCacheProvider>
+                <Component />
+              </DataCacheProvider>
+            </SWRConfig>
           </UserProvider>
         </AuthenticationProvider>
       </BrowserRouter>

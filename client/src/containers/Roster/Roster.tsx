@@ -8,7 +8,7 @@ import {
   TabNav,
   HeadingLevel,
 } from '@ctoec/component-library';
-import { stringify } from 'query-string';
+import { stringify, parse } from 'query-string';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { useAlerts } from '../../hooks/useAlerts';
@@ -27,11 +27,16 @@ import {
   getSiteItems,
   getSubHeaderText,
   parseQueryParams,
+	QUERY_STRING_MONTH_FORMAT,
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
 import { MonthFilterIndicator } from './MonthFilter/MonthFilterIndicator';
+import { Child } from '../../shared/models';
 import { useRosterFilters } from './useRosterFilters';
+import useSWR from 'swr';
+import moment from 'moment';
+import { NoRecordsAlert } from './NoRecordsAlert';
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -39,38 +44,73 @@ const Roster: React.FC = () => {
   const isSiteLevelUser = user?.accessType === 'site';
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
-  const location = useLocation();
+ 
+ // Parse query params
+ const location = useLocation();
+ const query = parse(location.search) as {
+   organization: string;
+	 site: string;
+	 month: string;
+ };
+ const queryMonth = query.month ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT) : undefined;
 
-  // TODO: if query params are nonsense or user doesn't have access, should we throw an error or just ignore?
-  const userOrganizations = user?.organizations || [];
-  const userSites = user?.sites || [];
+ const organizations = user?.organizations || [];
+ const sites = user?.sites || [];
+ const isMultiOrgUser = organizations.length > 1;
+ const hasSiteLevelAccess = user?.accessType === 'site';
 
-  const { children: childrenCache } = useContext(DataCacheContext);
-  const { records: allChildren } = childrenCache;
+ // If missing (initial load), bad or invalid params, set them based on user data
+ useEffect(() => {
+   // Wait until user exists
+   if (!user) return;
 
-  // Parse query params and filter children
-  const { activeMonth, activeSiteId, activeOrgId } = parseQueryParams(
-    location.search,
-    userSites
-  );
+   let updatedQuery = { ...query };
+   // Add org id if user has org-access AND:
+   // - no org is active OR
+   // - active org is invalid (user does not have access)
+   if (isMultiOrgUser) {
+     if (
+       !query.organization ||
+       !organizations.find((o) => o.id.toString() === query.organization)
+     ) {
+       updatedQuery.organization = organizations[0].id.toString();
+     }
+   }
+   // Add site id if user has site access AND
+   // - there is an active site AND
+   // - active site is invalid (user does not have access)
+   if (query.site && !sites.find((s) => s.id.toString() === query.site)) {
+     delete updatedQuery.site;
+   }
 
-  const updateActiveMonth = (newMonth: Moment) => {
-    const month = getQueryMonthFormat(newMonth);
-    history.replace({
-      search: stringify({
-        organization: activeOrgId,
-        site: activeSiteId,
-        month,
-      }),
-    });
-  };
+   if (Object.values(query) !== Object.values(updatedQuery)) {
+     history.replace({ search: stringify(updatedQuery) });
+   }
+ }, [query.organization, query.site, organizations, sites]);
+
+ // Update active month 
+	const updateActiveMonth = (newMonth: Moment) => {
+		const month = getQueryMonthFormat(newMonth);
+		history.push({
+			search: stringify({
+				organization: query.organization,
+				site: query.site,
+				month,
+			}),
+		});
+	};
+
+ const { data: children, isValidating } = useSWR([
+   `/children?organizationId=${query.organization}`,
+   accessToken,
+ ]) as { data: Child[] | undefined; isValidating: boolean };
 
   const {
     childrenFilteredByMonth,
     childrenFilteredByLocation,
     childrenFilteredByAll,
     childrenWithErrors,
-  } = useRosterFilters({ allChildren, activeOrgId, activeSiteId, activeMonth });
+  } = useRosterFilters({ allChildren: children || [], activeOrgId: query.organization, activeSiteId: query.site, activeMonth: queryMonth });
 
   // Out of all of the children ever
   const numberOfChildrenWithErrors = childrenWithErrors.length;
@@ -80,7 +120,7 @@ const Roster: React.FC = () => {
   const { alertElements, setAlerts, alerts } = useAlerts();
 
   useEffect(() => {
-    if (childrenCache.loading) {
+    if (isValidating) {
       setAlerts([]);
       return;
     }
@@ -91,81 +131,80 @@ const Roster: React.FC = () => {
       // TODO: if we decide to count children shown on page in alert, need to use a different way to check whether we've already set the alert
       setAlerts([...alerts, childrenWithErrorsAlert]);
     }
-  }, [childrenCache.loading, numberOfChildrenWithErrors]);
+  }, [isValidating, numberOfChildrenWithErrors]);
 
   async function submitToOEC() {
     // If there's an active org submit
     // Otherwise button should be disabled for now
     // TODO: figure out how submit works for multi-site users
-    if (activeOrgId) {
-      await apiPut(`oec-report/${activeOrgId}`, undefined, { accessToken });
+    if (query.organization) {
+      await apiPut(`oec-report/${query.organization}`, undefined, { accessToken });
     }
     history.push('/success');
   }
 
   // Base case is single site user
-  let h1Content = userSites.length ? userSites[0].siteName : 'Loading...';
+  let h1Content = sites.length ? sites[0].siteName : 'Loading...';
   let subHeaderText = '';
 
-  if (user && !childrenCache.loading) {
+  if (user && !isValidating) {
     subHeaderText = getSubHeaderText(
-      activeMonth ? childrenFilteredByMonth : allChildren,
-      userSites,
-      activeMonth
+      queryMonth ? childrenFilteredByMonth : (children || []),
+			sites,
+			queryMonth
     );
   }
 
   const childrenByAgeGroup = getChildrenByAgeGroup(childrenFilteredByAll);
   const accordionItems = getAccordionItems(childrenByAgeGroup, {
     hideCapacity: isSiteLevelUser,
-    showOrgInTables: userOrganizations.length > 1 || false,
+    showOrgInTables: organizations.length > 1 || false,
   });
+
+  let tabNavProps: TabNav | undefined;
+  const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
+    if (clickedItem.nestedItemType) {
+      // If it has a nested item type then it's an org
+      history.push({
+        search: stringify({ organization: clickedId, month: query.month }),
+      });
+    } else {
+      history.push({ search: stringify({ site: clickedId, month: query.month }) });
+    }
+	};
+	
   const accordionProps = {
     items: accordionItems,
     titleHeadingLevel: 'h2' as HeadingLevel,
   };
-
-  let tabNavProps: TabNav | undefined;
-  const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
-    const month = getQueryMonthFormat(activeMonth);
-    if (clickedItem.nestedItemType) {
-      // If it has a nested item type then it's an org
-      history.replace({
-        search: stringify({ organization: clickedId, month }),
-      });
-    } else {
-      history.replace({ search: stringify({ site: clickedId, month }) });
-    }
-  };
-
   // Multi site, single org user
-  if (userSites.length > 1 && userOrganizations.length === 1) {
+  if (sites.length > 1 && organizations.length === 1) {
     // If user only has one org, just show sites and make the h1 the org
-    h1Content = userOrganizations[0].providerName;
+    h1Content = organizations[0].providerName;
     tabNavProps = {
       itemType: 'site',
       onClick: tabNavOnClick,
-      items: getSiteItems(userSites),
-      activeId: activeSiteId,
+      items: getSiteItems(sites),
+      activeId: query.site,
     };
-  } else if (userOrganizations.length > 1) {
+  } else if (organizations.length > 1) {
     // If user has multiple orgs, show them all and placeholder the h1
     h1Content = 'Multiple organizations';
     // TODO: replace placeholder with community name
     tabNavProps = {
       itemType: 'organization',
-      items: getOrganizationItems(userOrganizations, userSites),
+      items: getOrganizationItems(organizations, sites),
       onClick: tabNavOnClick,
-      nestedActiveId: activeSiteId,
-      activeId: activeOrgId,
+      nestedActiveId: query.site,
+      activeId: query.organization,
     };
-  } else if (userSites.length > 1) {
+  } else if (sites.length > 1) {
     // User has no organization permissions, is restricted on page
     tabNavProps = {
       itemType: 'site',
       onClick: tabNavOnClick,
-      items: getSiteItems(userSites),
-      activeId: activeSiteId,
+      items: getSiteItems(sites),
+      activeId: query.site,
     };
   }
 
@@ -182,7 +221,7 @@ const Roster: React.FC = () => {
             <h1 className="margin-bottom-0" ref={h1Ref}>
               {isSiteLevelUser && (
                 <div className="margin-bottom-1 font-body-sm text-base-darker">
-                  {userOrganizations[0].providerName}
+                  {organizations[0].providerName}
                 </div>
               )}
               {h1Content}
@@ -191,35 +230,25 @@ const Roster: React.FC = () => {
           </div>
           <div className="tablet:grid-col-2">
             <MonthFilterIndicator
-              filterByMonth={activeMonth}
+              filterByMonth={queryMonth}
               setFilterByMonth={updateActiveMonth}
             />
           </div>
         </div>
         <RosterButtonsTable
-          organizations={userOrganizations}
-          filterByMonth={activeMonth}
+          organizations={organizations}
+          filterByMonth={queryMonth}
           setFilterByMonth={updateActiveMonth}
         />
-        {!childrenFilteredByLocation.length ? (
-          <Alert
-            heading="No records in your roster"
-            type="info"
-            text="Get started by adding records to your roster"
-            actionItem={
-              <AddRecordButton
-                orgs={userOrganizations}
-                id="add-record-in-alert"
-              />
-            }
-          />
+        {!(children || []).length ? (
+         <NoRecordsAlert organizations={organizations} />
         ) : tabNavProps ? (
           <TabNav {...tabNavProps}>
-            <Accordion {...accordionProps} />
+            {accordionProps.items.length ? <Accordion {...accordionProps} /> : <NoRecordsAlert organizations={organizations} />}
           </TabNav>
         ) : (
-          <Accordion {...accordionProps} />
-        )}
+          accordionProps.items.length ? <Accordion {...accordionProps} /> : <NoRecordsAlert organizations={organizations} />
+				)}
       </div>
 
       <FixedBottomBar>
@@ -229,15 +258,15 @@ const Roster: React.FC = () => {
           appearance="outline"
         />
         {/* TODO: change when we figure out multi-site entity */}
-        {!isSiteLevelUser && (
+        {!hasSiteLevelAccess && (
           <Button
             text={
-              isSiteLevelUser
+              hasSiteLevelAccess
                 ? 'Organization permissions required to submit'
                 : 'Send to OEC'
             }
             onClick={submitToOEC}
-            disabled={!activeOrgId}
+            disabled={!query.organization}
           />
         )}
       </FixedBottomBar>

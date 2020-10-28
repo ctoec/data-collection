@@ -7,6 +7,7 @@ import {
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 import { Child } from '../entity';
+import { parseQueryString } from '../utils/parseQueryString';
 import { validate } from 'class-validator';
 
 export const childrenRouter = express.Router();
@@ -39,9 +40,13 @@ childrenRouter.post(
 childrenRouter.get(
   '/',
   passAsyncError(async (req, res) => {
-    const children = await controller.getChildren(req.user);
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      post: parseInt,
+      forceArray: true,
+    }) as number[];
+    const children = await controller.getChildren(req.user, organizationIds);
 
-    const count = req.query['count'];
+    const count = req.query['count'] as string;
     if (count && count === 'true') {
       res.send({ count: children.length });
       return;

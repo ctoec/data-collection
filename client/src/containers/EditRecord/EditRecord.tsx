@@ -47,9 +47,7 @@ const EditRecord: React.FC = () => {
   // Child re-fetch
   const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
-    apiGet(`children/${childId}`, {
-      accessToken,
-    }).then((updatedChild) => {
+    apiGet(`children/${childId}`, accessToken).then((updatedChild) => {
       setChild(updatedChild);
       updateRecordInCache(updatedChild);
 

@@ -105,9 +105,7 @@ const CreateRecord: React.FC = () => {
       }
     };
 
-    apiGet(`children/${childId}`, {
-      accessToken,
-    })
+    apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
         updateRecordInCache(updatedChild);

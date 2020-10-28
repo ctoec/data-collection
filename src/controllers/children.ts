@@ -16,7 +16,11 @@ import {
   FundingSpace,
 } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
-import { BadRequestError, NotFoundError } from '../middleware/error/errors';
+import {
+  BadRequestError,
+  NotFoundError,
+  ApiError,
+} from '../middleware/error/errors';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
 import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
@@ -80,12 +84,16 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
 /**
  * Get all children for organizations the user has access to
  */
-export const getChildren = async (user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
+export const getChildren = async (
+  user: User,
+  organizationIds: number[] | undefined
+) => {
+  if (!organizationIds || !organizationIds.length)
+    organizationIds = await getReadAccessibileOrgIds(user);
   return (
     await getManager().find(Child, {
       relations: FULL_RECORD_RELATIONS,
-      where: { organization: { id: In(readOrgIds) } },
+      where: { organization: { id: In(organizationIds) } },
     })
   ).map(validateObject);
 };

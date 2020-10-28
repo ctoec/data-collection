@@ -37,7 +37,7 @@ const Upload: React.FC = () => {
   const [errorDict, setErrorDict] = useState<ErrorObjectForTable[]>();
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   useEffect(() => {
-    apiGet('children?count=true', { accessToken }).then((res) =>
+    apiGet('children?count=true', accessToken).then((res) =>
       setUserRosterCount(res.count)
     );
   }, [accessToken]);
