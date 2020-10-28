@@ -38,6 +38,7 @@ export const ChildIdentifiersForm = ({
   afterSaveSuccess,
   hideHeader = false,
   hideErrorsOnFirstLoad,
+  showFieldOrFieldset = () => true,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -72,25 +73,40 @@ export const ChildIdentifiersForm = ({
       autoComplete="off"
     >
       {!hideHeader && <h2>Child's identifiers</h2>}
-      <div className="mobile-lg:grid-col-12">
-        <SasidField />
-      </div>
-      <div className="mobile-lg:grid-col-9">
-        <FirstNameField />
-      </div>
-      <div className="mobile-lg:grid-col-9">
-        <MiddleNameField />
-      </div>
-      <div className="display-flex flex-row flex-align-end grid-row grid-gap">
-        <div className="mobile-lg:grid-col-9">
-          <LastNameField />
+      {showFieldOrFieldset(child, ['sasid']) && (
+        <div className="mobile-lg:grid-col-12">
+          <SasidField />
         </div>
-        <div className="mobile-lg:grid-col-3">
-          <SuffixField />
-        </div>
-      </div>
-      <DateOfBirthField />
-      <BirthCertificateFieldSet child={child} />
+      )}
+      {showFieldOrFieldset(child, [
+        'firstName',
+        'lastName',
+        'middleName',
+        'suffix',
+      ]) && (
+        <>
+          <div className="mobile-lg:grid-col-9">
+            <FirstNameField />
+          </div>
+          <div className="mobile-lg:grid-col-9">
+            <MiddleNameField />
+          </div>
+          <div className="display-flex flex-row flex-align-end grid-row grid-gap">
+            <div className="mobile-lg:grid-col-9">
+              <LastNameField />
+            </div>
+            <div className="mobile-lg:grid-col-3">
+              <SuffixField />
+            </div>
+          </div>
+        </>
+      )}
+      {showFieldOrFieldset(child, ['birthdate']) && <DateOfBirthField />}
+      {showFieldOrFieldset(child, [
+        'birthCertificateId',
+        'birthTown',
+        'birthState',
+      ]) && <BirthCertificateFieldSet child={child} />}
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

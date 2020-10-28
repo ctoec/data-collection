@@ -15,7 +15,8 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { getCurrentEnrollment } from '../../../utils/models';
 import { apiPost, apiPut } from '../../../utils/api';
 
-const enrollmentFields = ['site', 'ageGroup', 'entry', 'model', 'fundings'];
+const enrollmentFields = ['site', 'ageGroup', 'entry', 'model'];
+const enrollmentFundingFields = [...enrollmentFields, 'fundings'];
 export const doesEnrollmentFormHaveErrors = (
   child?: Child,
   enrollmentId?: number,
@@ -26,15 +27,13 @@ export const doesEnrollmentFormHaveErrors = (
     return enrollment
       ? !!getValidationStatusForFields(
           enrollment,
-          opts.excludeFundings
-            ? enrollmentFields.filter((field) => field !== 'fundings')
-            : enrollmentFields
+          opts.excludeFundings ? enrollmentFields : enrollmentFundingFields
         )
       : false;
   }
 
   return child?.enrollments?.length
-    ? !!getValidationStatusForFields(child.enrollments, enrollmentFields)
+    ? !!getValidationStatusForFields(child.enrollments, enrollmentFundingFields)
     : true;
 };
 
@@ -50,7 +49,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   AdditionalButton,
   afterSaveSuccess,
   setAlerts,
-  showField = () => true,
+  showFieldOrFieldset = () => true,
 }) => {
   if (!child) {
     throw new Error('Enrollment form rendered without child');
@@ -102,23 +101,23 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       data={enrollment}
       onSubmit={onSubmit}
     >
-      {showField(enrollment, ['site'], enrollmentFields) && (
+      {showFieldOrFieldset(enrollment, ['site']) && (
         <SiteField<Enrollment>
           sites={sites.filter(
             (s) => s.organizationId === child.organization.id
           )}
         />
       )}
-      {showField(enrollment, ['entry'], enrollmentFields) && (
-        <EnrollmentStartDateField<Enrollment> />
+      {showFieldOrFieldset(enrollment, ['entry', 'model']) && (
+        <>
+          <EnrollmentStartDateField<Enrollment> />
+          <CareModelField<Enrollment> />
+        </>
       )}
-      {showField(enrollment, ['model'], enrollmentFields) && (
-        <CareModelField<Enrollment> />
-      )}
-      {showField(enrollment, ['ageGroup'], enrollmentFields) && (
+      {showFieldOrFieldset(enrollment, ['ageGroup']) && (
         <AgeGroupField<Enrollment> />
       )}
-      {showField(enrollment, ['fundings'], enrollmentFields) && (
+      {showFieldOrFieldset(enrollment, ['fundings']) && (
         <NewFundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}

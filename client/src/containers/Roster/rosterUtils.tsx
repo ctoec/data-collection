@@ -8,7 +8,7 @@ import {
 import { AgeGroup, Child, Organization, Site } from '../../shared/models';
 import pluralize from 'pluralize';
 import { RosterSectionHeader } from './RosterSectionHeader';
-import { tableColumns } from './TableColumns';
+import { tableColumns } from './tableColumns';
 import idx from 'idx';
 import { Link } from 'react-router-dom';
 

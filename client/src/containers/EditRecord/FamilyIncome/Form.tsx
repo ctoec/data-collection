@@ -4,6 +4,7 @@ import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
 import { Button } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
+import { FosterIncomeNotRequiredAlert } from '../../../components/Forms/FamilyIncome/FosterIncomeNotRequiredAlert';
 
 /**
  * Component enabling user to edit the family income portion of a child
@@ -21,6 +22,15 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
 
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
+
+  if (child?.foster) {
+    return (
+      <>
+        <h2>Family income determination</h2>
+        <FosterIncomeNotRequiredAlert />
+      </>
+    );
+  }
 
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted

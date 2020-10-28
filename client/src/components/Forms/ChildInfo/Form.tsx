@@ -10,13 +10,18 @@ import {
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { Child } from '../../../shared/models';
+import { Child, RACE_FIELDS } from '../../../shared/models';
 import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 
 // The fields we use to check to see if this form has errors or missing info
+const specialCircumstancesFields = [
+  'receivingDisabilityServices',
+  'dualLanguageLearner',
+  'foster',
+];
 export const childInfoFields = [
   'americanIndianOrAlaskaNative',
   'asian',
@@ -26,9 +31,7 @@ export const childInfoFields = [
   'raceNotDisclosed',
   'hispanicOrLatinxEthnicity',
   'gender',
-  'receivingDisabilityServices',
-  'dualLanguageLearner',
-  'foster',
+  ...specialCircumstancesFields,
 ];
 export const doesChildInfoFormHaveErrors = (child?: Child) =>
   child ? !!getValidationStatusForFields(child, childInfoFields) : true;
@@ -38,6 +41,7 @@ export const ChildInfoForm = ({
   afterSaveSuccess,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
+  showFieldOrFieldset = () => true,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -72,16 +76,28 @@ export const ChildInfoForm = ({
       autoComplete="off"
     >
       {!hideHeader && <h2>Child info</h2>}
-      <RaceField />
-      <EthnicityField />
-      <GenderField />
-
+      {showFieldOrFieldset(child, [
+        ...RACE_FIELDS,
+        'hispanixOrLatinxEthnicity',
+      ]) && (
+        <>
+          <RaceField />
+          <EthnicityField />
+        </>
+      )}
+      {showFieldOrFieldset(child, ['gender']) && <GenderField />}
       <br />
-      <h3 className="margin-bottom-0">Special circumstances</h3>
-      <DisabilityServices />
-      <DualLanguageLearner />
-      <Foster />
 
+      {showFieldOrFieldset(child, specialCircumstancesFields) && (
+        <h3 className="margin-bottom-0">Special circumstances</h3>
+      )}
+      {showFieldOrFieldset(child, ['receivesDisabilityServices']) && (
+        <DisabilityServices />
+      )}
+      {showFieldOrFieldset(child, ['dualLanguageLearner']) && (
+        <DualLanguageLearner />
+      )}
+      {showFieldOrFieldset(child, ['foster']) && <Foster />}
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

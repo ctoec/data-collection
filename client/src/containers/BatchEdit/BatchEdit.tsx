@@ -11,15 +11,16 @@ import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
-import { Link } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
 import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
 
 const BatchEdit: React.FC = () => {
+  const { childId } = useParams() as { childId: string };
+  const history = useHistory();
   const h1Ref = getH1RefForTitle();
   const { children } = useContext(DataCacheContext);
-
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
   >([]);
@@ -68,6 +69,17 @@ const BatchEdit: React.FC = () => {
     setActiveRecordId(fixedRecordsForDisplayIds[activeRecordIdx + 1]);
   };
 
+  if (childId) {
+    return (
+      <div className="grid-container">
+        <BatchEditItemContent
+          childId={childId}
+          moveNextRecord={() => history.goBack()}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="grid-container">
       <BackButton text="Back to roster" location="/roster" />
@@ -109,9 +121,7 @@ const BatchEdit: React.FC = () => {
                   )}
                 </span>
               ),
-              description: `Errors in ${getBatchEditErrorDetailsString(
-                record
-              )}`,
+              description: getBatchEditErrorDetailsString(record),
             }))}
           >
             {activeRecordId !== undefined ? (
