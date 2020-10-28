@@ -1,4 +1,4 @@
-import { Child } from '../../shared/models';
+import { Child, ObjectWithValidationErrors } from '../../shared/models';
 import { HideErrors } from '../../hooks/useValidationErrors';
 import { Dispatch, SetStateAction } from 'react';
 import { AlertProps } from '@ctoec/component-library';
@@ -9,10 +9,9 @@ export type RecordFormProps = {
   setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
   hideHeader?: boolean; // Header needs to be hidden in step list because the step list includes a header
   hideErrorsOnFirstLoad?: HideErrors;
-  showField?: (
-    formData: any,
-    fields: string[],
-    allFormFields: string[]
+  showFieldOrFieldset?: (
+    formData: ObjectWithValidationErrors | undefined,
+    fields: string[]
   ) => boolean;
-  AdditionalButton?: JSX.Element;
+  AdditionalButton?: JSX.Element; // Optional 'Cancel' (for forms in cards or card expansions) or 'Skip' (for forms in BatchEdit steplist) button
 };

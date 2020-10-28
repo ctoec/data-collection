@@ -52,16 +52,11 @@ export const initialize = async () => {
 
   if (!(await getManager().find(ReportingPeriod)).length) {
     const reportingPeriodsToAdd = [];
-    for (let fundingSource of [
-      FundingSource.CDC,
-      FundingSource.PSR,
-      FundingSource.SHS,
-      FundingSource.SS,
-    ]) {
+    for (let fundingSource of Object.values(FundingSource)) {
       for (let dates of reportingPeriods) {
         const reportingPeriod = getManager().create(
           ReportingPeriod,
-          getReportingPeriodFromDates(fundingSource, dates)
+          getReportingPeriodFromDates(fundingSource as FundingSource, dates)
         );
         reportingPeriodsToAdd.push(reportingPeriod);
       }

@@ -1,6 +1,6 @@
 import { getManager, In } from 'typeorm';
 import idx from 'idx';
-import { validate } from 'class-validator';
+import { validate, validateSync } from 'class-validator';
 import {
   ExitReason,
   Enrollment as EnrollmentInterface,
@@ -18,25 +18,84 @@ import {
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
-import { distributeValidationErrorsToSubObjects } from '../utils/distributeValidationErrorsToSubObjects';
+import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
+
+const FULL_RECORD_RELATIONS = [
+  'family',
+  'family.incomeDeterminations',
+  'enrollments',
+  'enrollments.site',
+  'enrollments.site.organization',
+  'enrollments.fundings',
+  'organization',
+];
+
+/**
+ * Get child by id, with related family and related
+ * family income determinations, and enrollments and
+ * related fundings
+ * @param id
+ */
+export const getChildById = async (id: string, user: User): Promise<Child> => {
+  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const child = await getManager().findOne(Child, id, {
+    relations: FULL_RECORD_RELATIONS,
+    where: { organization: { id: In(readOrgIds) } },
+  });
+
+  if (child) {
+    // Sort enrollments by exit date
+    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
+      if (enrollmentA.fundings) {
+        // Sort fundings by last reporting period
+        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
+          propertyDateSorter(
+            fundingA,
+            fundingB,
+            (f) => f.lastReportingPeriod?.period
+          )
+        );
+      }
+
+      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
+    });
+
+    if (child.family) {
+      // Sort income determinations by date
+      child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
+        (determinationA, determinationB) =>
+          propertyDateSorter(
+            determinationA,
+            determinationB,
+            (d) => d.determinationDate
+          )
+      );
+    }
+  }
+
+  return validateObject(child);
+};
 
 /**
  * Get all children for organizations the user has access to
  */
 export const getChildren = async (user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
-  return getManager().find(Child, {
-    relations: [
-      'enrollments',
-      'enrollments.site',
-      'enrollments.site.organization',
-      'enrollments.fundings',
-    ],
-    where: { organization: { id: In(readOrgIds) } },
-  });
+  return (
+    await getManager().find(Child, {
+      relations: FULL_RECORD_RELATIONS,
+      where: { organization: { id: In(readOrgIds) } },
+    })
+  ).map(validateObject);
 };
 
+/**
+ * Update child record, if user has access
+ * @param id
+ * @param user
+ * @param update
+ */
 export const updateChild = async (
   id: string,
   user: User,
@@ -57,6 +116,11 @@ export const updateChild = async (
   await getManager().save(getManager().merge(Child, child, update));
 };
 
+/**
+ * Delete child record, if user has access
+ * @param id
+ * @param user
+ */
 export const deleteChild = async (id: string, user: User) => {
   const readOrgIds = await getReadAccessibileOrgIds(user);
   const child = await getManager().findOne(Child, id, {
@@ -71,50 +135,6 @@ export const deleteChild = async (id: string, user: User) => {
   }
 
   await getManager().delete(Child, { id });
-};
-
-/**
- * Get child by id, with related family and related
- * family income determinations, and enrollments and
- * related fundings
- * @param id
- */
-export const getChildById = async (id: string, user: User): Promise<Child> => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
-    relations: [
-      'family',
-      'family.incomeDeterminations',
-      'enrollments',
-      'enrollments.site',
-      'enrollments.site.organization',
-      'enrollments.fundings',
-      'organization',
-    ],
-    where: { organization: { id: In(readOrgIds) } },
-  });
-
-  // Sort enrollments by exit date
-  if (child) {
-    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
-      if (enrollmentA.fundings) {
-        // Sort fundings by last reporting period
-        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
-          propertyDateSorter(
-            fundingA,
-            fundingB,
-            (f) => f.lastReportingPeriod?.period
-          )
-        );
-      }
-
-      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
-    });
-  }
-  const validationErrors = await validate(child, {
-    validationError: { target: false },
-  });
-  return distributeValidationErrorsToSubObjects(child, validationErrors);
 };
 
 /**
@@ -202,6 +222,7 @@ export const changeEnrollment = async (
         // on that value
         if (
           !oldEnrollmentLastReportingPeriod &&
+          newEnrollmentNextReportingPeriod &&
           newEnrollmentNextReportingPeriod.id &&
           !newEnrollmentNextReportingPeriod.period
         ) {
@@ -270,9 +291,7 @@ async function createNewEnrollment(
   }
 
   const enrollment = tManager.create(Enrollment, {
-    ageGroup: newEnrollment.ageGroup,
-    site: newEnrollment.site,
-    entry: newEnrollment.entry,
+    ...newEnrollment,
     child,
   });
   await tManager.save(Enrollment, enrollment);

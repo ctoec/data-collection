@@ -14,7 +14,7 @@ const defaultMomentMessage = 'Date is invalid';
  */
 export function MomentComparison(
   validationOptions?: ValidationOptions & {
-    context: (validatingValue: Moment) => boolean;
+    compareFunc: (validatingValue: Moment) => boolean;
   }
 ): PropertyDecorator {
   return function (object: Object, propertyName: string) {
@@ -26,7 +26,7 @@ export function MomentComparison(
       validator: {
         validate(value: Moment) {
           if (!value) return true;
-          return validationOptions.context(value);
+          return validationOptions.compareFunc(value);
         },
       },
     });

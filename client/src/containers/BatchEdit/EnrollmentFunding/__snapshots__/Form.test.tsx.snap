@@ -2,20 +2,129 @@
 
 exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
 <DocumentFragment>
+  <div
+    class="text-bold font-body-md"
+  >
+     Site: Site A 
+  </div>
   <form
-    class="usa-form usa-form"
+    class="usa-form"
     id="batch-edit-enrollment-1"
   >
+    <fieldset
+      aria-describedby="status-site"
+      aria-invalid="true"
+      class="usa-fieldset usa-fieldset--error"
+      id="site-radiogroup-fieldset"
+    >
+      <legend
+        id="fieldset-legend-site-radiogroup-fieldset"
+      >
+        <span
+          class="usa-label"
+        >
+          Site
+        </span>
+      </legend>
+      <span
+        class="usa-error-message"
+        id="status-site"
+        role="alert"
+      >
+         Site is required for OEC reporting.
+      </span>
+      <div />
+    </fieldset>
     <input
       class="usa-button"
       type="submit"
       value="Save"
     />
   </form>
+  <div
+    class="text-bold font-body-md"
+  >
+    Funding source: CDC - Child Day Care
+  </div>
   <form
     class="usa-form usa-form"
     id="batch-edit-funding-1"
   >
+    <div
+      class="usa-form-group"
+    >
+      <label
+        class="usa-label"
+        for="contract-space"
+      >
+        Contract space
+      </label>
+      <select
+        aria-required="true"
+        class="usa-select"
+        id="contract-space"
+        name="contract-space"
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+      </select>
+    </div>
+    <div
+      class="usa-form-group usa-form-group--error"
+    >
+      <label
+        class="usa-label usa-label--error"
+        for="first-reporting-period"
+      >
+        First reporting period
+      </label>
+      <span
+        class="usa-error-message"
+        id="status-firstReportingPeriod"
+        role="alert"
+      >
+         First reporting period is required for OEC reporting.
+      </span>
+      <select
+        aria-describedby="status-firstReportingPeriod"
+        aria-invalid="true"
+        aria-required="true"
+        class="usa-select usa-input--error"
+        id="first-reporting-period"
+        name="first-reporting-period"
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+      </select>
+    </div>
+    <div
+      class="usa-form-group"
+    >
+      <label
+        class="usa-label"
+        for="last-reporting-period"
+      >
+        Last reporting period
+      </label>
+      <select
+        aria-required="true"
+        class="usa-select"
+        id="last-reporting-period"
+        name="last-reporting-period"
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+      </select>
+    </div>
     <input
       class="usa-button"
       type="submit"

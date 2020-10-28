@@ -1,5 +1,5 @@
 import { readFile, utils, WorkSheet } from 'xlsx';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import {
   EnrollmentReportRow,
   SECTIONS,
@@ -17,11 +17,44 @@ import { getAllColumnMetadata } from '../../template';
  * @param file
  */
 export function parseUploadedTemplate(file: Express.Multer.File) {
-  /** MODEL PROPERTY CONSTS **/
+  const fileData = readFile(file.path);
+  const sheet = Object.values(fileData.Sheets)[0];
 
-  const columnMeta = getAllColumnMetadata();
+  updateSheetRange(sheet);
 
-  const [objectProperties, expectedHeaders] = columnMeta
+  const {
+    propertyNames,
+    expectedHeaders,
+  } = getPropertyNamesAndExpectedHeaders();
+  const { headers, data } = parseSheet(sheet, propertyNames);
+
+  if (!expectedHeaders.every((header, idx) => header === headers[idx])) {
+    const errorMessage = getExcessandInvalidString(headers, expectedHeaders);
+    throw new BadRequestError(errorMessage);
+  }
+
+  if (!data.length) {
+    throw new BadRequestError(
+      'You uploaded an empty file\nCheck to make sure your file has enrollment data in it.'
+    );
+  }
+
+  const { booleanProperties, dateProperties } = getSpecialProperties();
+  return data.map((rawRow) =>
+    parseEnrollmentReportRow(rawRow, booleanProperties, dateProperties)
+  );
+}
+
+/************************ HELPER FUNCTIONS *****************************/
+/**
+ * From template metadata, pull out the property names for a flattened enrollment
+ * object and the formatted field names, used as template headers.
+ *
+ * Returned as on object containing `propertyNames` and `expectedHeaders`, which
+ * are both string arrays.
+ */
+function getPropertyNamesAndExpectedHeaders() {
+  const [properties, headers] = getAllColumnMetadata()
     // remove any columns without data definitions, as these are not present in the template
     .filter((dataDefinition) => !!dataDefinition)
     // create two arrays:
@@ -35,41 +68,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
       [[], []]
     );
 
-  const fileData = readFile(file.path);
-  const sheet = Object.values(fileData.Sheets)[0];
-
-  updateSheetRange(sheet);
-  const { headers, data } = parseSheet(sheet, objectProperties);
-
-  // Array comparison was returning false even when the strings matched
-  if (
-    !expectedHeaders.every((header, idx) => header === headers[idx]) ||
-    expectedHeaders.length != headers.length
-  ) {
-    const errorMessage = getExcessandInvalidString(headers, expectedHeaders);
-    throw new BadRequestError(errorMessage);
-  }
-
-  if (!data.length) {
-    throw new BadRequestError(
-      'You uploaded an empty file\nCheck to make sure your file has child data in it.'
-    );
-  }
-
-  const booleanProperties: string[] = [];
-  const dateProperties: string[] = [];
-  Object.entries(new EnrollmentReportRow()).forEach(([prop, value]) => {
-    if (typeof value === 'boolean') {
-      booleanProperties.push(prop);
-    }
-    if (moment.isMoment(value)) {
-      dateProperties.push(prop);
-    }
-  });
-
-  return data.map((rawRow) =>
-    parseEnrollmentReportRow(rawRow, booleanProperties, dateProperties)
-  );
+  return { propertyNames: properties, expectedHeaders: headers };
 }
 
 /**
@@ -128,7 +127,28 @@ function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
  * @param sheet
  */
 function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
-  return sheet['B1'].v === SECTIONS.CHILD_INFO ? 'xlxs' : 'csv';
+  return sheet['B1'].v === SECTIONS.CHILD_IDENTIFIER ? 'xlxs' : 'csv';
+}
+
+/**
+ * Returns an object with lists of all property names for given
+ * 'special' property types (which required special handling in
+ * row parsing). Currently, returns a list of boolean properties
+ * and date properties.
+ */
+function getSpecialProperties() {
+  const booleanProperties: string[] = [];
+  const dateProperties: string[] = [];
+  Object.entries(new EnrollmentReportRow()).forEach(([prop, value]) => {
+    if (typeof value === 'boolean') {
+      booleanProperties.push(prop);
+    }
+    if (moment.isMoment(value)) {
+      dateProperties.push(prop);
+    }
+  });
+
+  return { booleanProperties, dateProperties };
 }
 
 /**
@@ -150,31 +170,50 @@ function parseEnrollmentReportRow(
 
     // Parse dates
     if (dateProperties.includes(prop)) {
-      if (typeof value === 'string') {
-        const m = moment.utc(value, [
-          ...DATE_FORMATS,
-          ...REPORTING_PERIOD_FORMATS,
-        ]);
-        rawEnrollment[prop] = m.isValid() ? m : undefined;
-      } else if (typeof value === 'number') {
-        rawEnrollment[prop] = excelDateToDate(value);
-      }
+      rawEnrollment[prop] = getDate(value);
     }
 
-    // Parse zip codes
-    if (prop.match(/zipCode/i)) {
-      const zipString = value.toString();
-      if (zipString.length === 4) {
-        rawEnrollment[prop] = `0${zipString}`;
-      }
-
-      if (zipString.length > 5) {
-        rawEnrollment[prop] = zipString.slice(0, 5);
-      }
+    // Parse zipcodes
+    if (prop.match('/zipcode/i')) {
+      rawEnrollment[prop] = getZipcode(value);
     }
   });
 
   return rawEnrollment as EnrollmentReportRow;
+}
+
+/**
+ * Gets boolean value from a raw string value.
+ *
+ * Empty or missing string, 'N', and 'No' (case-insensitive) return false.
+ * Other values return true.
+ * @param value
+ */
+function getBoolean(value: string): boolean {
+  if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
+  else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
+  return null;
+}
+
+/**
+ * Gets Moment date value from a raw string or number value.
+ *
+ * Dates that have been parsed by excel as strings are converted
+ * to moments using all of the date formats (for full date values)
+ * and reporting period formats (for month/year values).
+ *
+ * Dates that have been parsed by excel as numbers are converted
+ * to moments using a helper function to convert excel serial
+ * date number to Moment date (excelDateToDate)
+ */
+function getDate(value: string | number): Moment {
+  if (typeof value === 'string') {
+    const m = moment.utc(value, [...DATE_FORMATS, ...REPORTING_PERIOD_FORMATS]);
+    return m.isValid() ? m : undefined;
+  }
+  if (typeof value === 'number') {
+    return excelDateToDate(value);
+  }
 }
 
 /**
@@ -191,16 +230,23 @@ function excelDateToDate(excelDate: number) {
 }
 
 /**
- * Gets boolean value for a raw string boolean.
+ * Gets zipcode from raw string value.
  *
- * Empty or missing string, 'N', and 'No' (case-insensitive) return false.
- * Other values return true.
+ * In Connecticut, many zipcodes start with 0. Excel truncates leading zeros,
+ * so this adds a leading zero to any 4-digit zipcodes (which are invalid
+ * and assumed truncated by excel). If zipcodes include more than 5-digits,
+ * they are truncated to return just the first 5 digits.
  * @param value
  */
-function getBoolean(value: string): boolean {
-  if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
-  else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
-  return null;
+function getZipcode(value: any) {
+  const stringValue = value.toString();
+  if (stringValue.length === 4) {
+    return `0${stringValue}`;
+  }
+
+  if (stringValue.length > 5) {
+    return stringValue.slice(0, 5);
+  }
 }
 
 /**
@@ -208,19 +254,18 @@ function getBoolean(value: string): boolean {
  * @param invalidColumns - Array of columns that are invalid
  * @param invalidReason - Single word describing why columns are invalid
  */
-function getInvalidColumnData(
-  invalidColumns: string[],
-  invalidReason: string
-): [string, string] {
+function getInvalidColumnData(invalidColumns: string[]): [string, string] {
+  const invalidMessage = 'missing or incorrectly formatted';
   if (invalidColumns.length == 1) {
-    const invalidString = invalidColumns[0] + ' is ' + invalidReason + '.';
-    const invalidNumber = '1 ' + invalidReason + ' column';
+    const invalidString = `"${invalidColumns[0]}" is ${invalidMessage}.`;
+    const invalidNumber = `1 ${invalidMessage} column`;
     return [invalidString, invalidNumber];
   } else {
-    const invalidString = `${invalidColumns
+    const columnNames = `"${invalidColumns
       .slice(0, -1)
-      .join(', ')} and ${invalidColumns.slice(-1)} are ${invalidReason}.`;
-    const invalidNumber = `${invalidColumns.length} ${invalidReason} columns`;
+      .join('", "')}" and "${invalidColumns.slice(-1)}"`;
+    const invalidString = `${columnNames} are ${invalidMessage}.`;
+    const invalidNumber = `${invalidColumns.length} ${invalidMessage} columns`;
     return [invalidString, invalidNumber];
   }
 }
@@ -234,31 +279,12 @@ function getExcessandInvalidString(
   expectedHeaders: any[]
 ): string {
   const headersSet = new Set(headers);
-  const expectedHeadersSet = new Set(expectedHeaders);
   const missingHeaders = expectedHeaders.filter((x) => !headersSet.has(x) && x);
-  const excessHeaders = headers.filter((x) => !expectedHeadersSet.has(x) && x);
-  const [excessMessage, excessNumber] = getInvalidColumnData(
-    excessHeaders,
-    'extra'
-  );
-  const [missingMessage, missingNumber] = getInvalidColumnData(
-    missingHeaders,
-    'missing'
-  );
+  const [missingMessage, missingNumber] = getInvalidColumnData(missingHeaders);
 
   let errorMessage = '';
   if (missingHeaders.length > 0) {
-    if (excessHeaders.length > 0) {
-      errorMessage = `You have ${missingNumber} and ${excessNumber}.\n'${missingMessage} ${excessMessage}`;
-    } else {
-      errorMessage = `Your file has ${missingNumber}.\n ${missingMessage}`;
-    }
-  } else {
-    if (excessHeaders.length > 0) {
-      errorMessage = `Your file has ${excessNumber}.\n ${excessMessage}`;
-    } else {
-      errorMessage = `Your file has all the correct columns but they are out of order.`;
-    }
+    errorMessage = `Your upload has ${missingNumber}.\n ${missingMessage} Download the latest template for the correct column headers and formatting.`;
   }
   return errorMessage;
 }

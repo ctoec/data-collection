@@ -1,3 +1,6 @@
+// https://stackoverflow.com/questions/56421417/react-app-not-working-in-internet-explorer-11
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';

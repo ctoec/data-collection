@@ -11,6 +11,8 @@ import { handleJWTError } from '../../utils/handleJWTError';
 import { CheckReplaceData } from './CheckReplaceData';
 import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
+import { ErrorModal } from './ErrorModal/ErrorsModal';
+import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -32,6 +34,8 @@ const Upload: React.FC = () => {
 
   const [userRosterCount, setUserRosterCount] = useState(undefined);
   const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
+  const [errorDict, setErrorDict] = useState<ErrorObjectForTable[]>();
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
   useEffect(() => {
     apiGet('children?count=true', { accessToken }).then((res) =>
       setUserRosterCount(res.count)
@@ -47,6 +51,29 @@ const Upload: React.FC = () => {
 
   const [queryStringForUpload, setQueryStringForUpload] = useState('');
   const [postUpload, setPostUpload] = useState(false);
+
+  useEffect(() => {
+    // Haven't yet determined how many errors of each type there are
+    if (file && errorDict === undefined) {
+      const formData = new FormData();
+      formData.set('file', file);
+      apiPost(`enrollment-reports/check`, formData, {
+        accessToken,
+        rawBody: true,
+      })
+        // Back end sends back an object whose fields are error table obj.
+        .then((resp) => {
+          setErrorDict(resp);
+        })
+        .catch(
+          handleJWTError(history, (err) => {
+            setError(err);
+            setFile(undefined);
+            setErrorDict(undefined);
+          })
+        );
+    }
+  }, [file, errorDict]);
 
   useEffect(() => {
     // If the file exists and the upload should be posted,
@@ -74,19 +101,39 @@ const Upload: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postUpload]);
 
+  // Case where the user doesn't already have a roster so we
+  // don't need to go to CheckReplace: next step is confirm upload
+  const advanceToPostUpload = () => {
+    setPostUpload(true);
+    setErrorModalOpen(false);
+  };
+
+  // Case where the user does have an existing roster; need to
+  // open the CheckReplace modal as a next step
+  const advanceToCheckReplace = () => {
+    setErrorModalOpen(false);
+    setCheckReplaceDataOpen(true);
+  };
   useEffect(() => {
     // wait until we know if the user already has a roster or not
     // before allowing them to submit data
     if (userRosterCount === undefined) return;
 
-    // If they have selected a file, then decide if the upload
-    // should occur or we should display the check replace data modal
-    if (file) {
-      if (userRosterCount === 0) setPostUpload(true);
-      else setCheckReplaceDataOpen(true);
+    // If they have selected a file, then open the error checking modal.
+    // If they confirm the upload, decide if we just post the upload
+    // or we display check replace data modal
+    if (file && errorDict !== undefined) {
+      if (userRosterCount === 0) {
+        // If state has an empty list, back-end found no errors
+        if (errorDict.length > 0) setErrorModalOpen(true);
+        else setPostUpload(true);
+      } else {
+        if (errorDict.length > 0) setErrorModalOpen(true);
+        else setCheckReplaceDataOpen(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, userRosterCount]);
+  }, [file, userRosterCount, errorDict]);
 
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -106,6 +153,18 @@ const Upload: React.FC = () => {
 
   return (
     <div className="grid-container margin-top-4">
+      <ErrorModal
+        isOpen={errorModalOpen}
+        toggleIsOpen={() => setErrorModalOpen((o) => !o)}
+        clearFile={() => {
+          setFile(undefined);
+          setErrorDict(undefined);
+        }}
+        errorDict={errorDict || []}
+        nextFunc={
+          userRosterCount === 0 ? advanceToPostUpload : advanceToCheckReplace
+        }
+      />
       <CheckReplaceData
         isOpen={checkReplaceDataOpen}
         clearFile={() => setFile(undefined)}
@@ -114,23 +173,28 @@ const Upload: React.FC = () => {
         setQueryString={setQueryStringForUpload}
       />
       {error && (
-        <Alert
-          heading={getErrorHeading(error)}
-          text={getErrorText(error)}
-          type="error"
-          actionItem={
-            <div>
-              <p className="margin-bottom-2 text-bold">
-                Download the data collection template
-              </p>
-              <CSVExcelDownloadButton
-                fileType="xlsx"
-                whichDownload="template"
-              />
-              <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
-            </div>
-          }
-        />
+        <div className="margin-bottom-2">
+          <Alert
+            heading={getErrorHeading(error)}
+            text={getErrorText(error)}
+            type="error"
+            actionItem={
+              <div>
+                <p className="margin-bottom-2 text-bold">
+                  Download the data collection template
+                </p>
+                <CSVExcelDownloadButton
+                  fileType="xlsx"
+                  whichDownload="template"
+                />
+                <CSVExcelDownloadButton
+                  fileType="csv"
+                  whichDownload="template"
+                />
+              </div>
+            }
+          />
+        </div>
       )}
       <div className="margin-bottom-2 text-bold">
         <Link className="usa-button usa-button--unstyled" to="/">
@@ -152,7 +216,9 @@ const Upload: React.FC = () => {
       </div>
       <div className="grid-row">
         <form
-          className={cx('usa-form', { 'display-none': checkReplaceDataOpen })}
+          className={cx('usa-form', {
+            'display-none': checkReplaceDataOpen || errorModalOpen,
+          })}
         >
           <FileInput id="report" label="Choose a file" onChange={fileUpload} />
         </form>

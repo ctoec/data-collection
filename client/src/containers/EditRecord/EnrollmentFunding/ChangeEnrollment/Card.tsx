@@ -56,7 +56,10 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
         <h3 className="margin-top-2 margin-bottom-2">New enrollment</h3>
         {error && <Alert type="error" text={error} />}
         <ChangeEnrollmentForm
-          afterSaveSuccess={afterSaveSuccess}
+          afterSaveSuccess={() => {
+            setCloseCard(true);
+            afterSaveSuccess();
+          }}
           afterSaveFailure={(err) => setError(err)}
           child={child}
           currentEnrollment={currentEnrollment}

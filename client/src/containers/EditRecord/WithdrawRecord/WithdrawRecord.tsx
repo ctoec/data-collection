@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Dispatch, SetStateAction } from 'react';
 import {
   Tag,
   Form,
@@ -6,8 +6,14 @@ import {
   FormSubmitButton,
   Alert,
   Modal,
+  AlertProps,
 } from '@ctoec/component-library';
-import { Enrollment } from '../../../shared/models';
+import {
+  Enrollment,
+  Child,
+  Funding,
+  FundingSource,
+} from '../../../shared/models';
 import { apiPost } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { useHistory } from 'react-router-dom';
@@ -17,12 +23,14 @@ import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
 
 type WithdrawProps = {
-  childName: string | undefined;
+  child: Child;
   enrollment: Enrollment;
+  setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
 };
 export const WithdrawRecord: React.FC<WithdrawProps> = ({
-  childName,
+  child,
   enrollment,
+  setAlerts,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
@@ -45,14 +53,14 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
             {
               type: 'success',
               heading: 'Record withdrawn',
-              text: `${childName} has been withdrawn from your program`,
+              text: `${child.firstName} has been withdrawn from your program`,
             },
           ],
         });
       })
       .catch((err) => {
         console.log(err);
-        setError(`Unable to withdraw ${childName}`);
+        setError(`Unable to withdraw ${child.firstName}`);
       })
       .finally(() => setIsSaving(false));
   };
@@ -60,12 +68,29 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
   const activeFunding = (enrollment.fundings || []).find(
     (f) => !f.lastReportingPeriod
   );
+
+  // If record has validation errors, onClick action is to display alert informing the user they cannot withdraw
+  // Otherwise, onClick action is to display the withdraw modal
+  const onClick =
+    child.validationErrors && child.validationErrors.length
+      ? () =>
+          setAlerts((alerts) => [
+            {
+              type: 'error',
+              heading:
+                'Records cannot be withdrawn with missing or incorrect info',
+              text: 'Add required info before withdrawing.',
+            },
+            ...alerts,
+          ])
+      : toggleIsOpen;
+
   return (
     <>
       <Button
         appearance="unstyled"
         text="Withdraw"
-        onClick={() => toggleIsOpen()}
+        onClick={onClick}
         className="margin-right-2"
       />
       <Modal
@@ -74,14 +99,14 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
         header={
           <>
             {!!error && <Alert text={error} type="error" />}
-            <h2 className="margin-bottom-0">Withdraw {childName}</h2>
+            <h2 className="margin-bottom-0">Withdraw {child.firstName}</h2>
           </>
         }
         content={
           <>
             <div className="grid-row">
               <div className="grid-col">
-                <p>{enrollment.site.siteName}</p>
+                <p>{enrollment.site?.siteName}</p>
                 <p>Age: {enrollment.ageGroup}</p>
                 <p>Enrollment date: {enrollment.entry?.format('MM/DD/YYYY')}</p>
               </div>
@@ -89,9 +114,9 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
                 {activeFunding && (
                   <>
                     <p>
-                      <Tag text={activeFunding.fundingSpace.source} />
+                      <Tag text={activeFunding.fundingSpace?.source || ''} />
                     </p>
-                    <p>Contract space: {activeFunding.fundingSpace.time}</p>
+                    <p>Contract space: {activeFunding.fundingSpace?.time}</p>
                     <p>
                       First reporting period:{' '}
                       {activeFunding.firstReportingPeriod?.period.format(
@@ -111,7 +136,9 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               <ExitReasonField />
               {!!activeFunding && (
                 <ReportingPeriodField<Withdraw>
-                  fundingSource={activeFunding.fundingSpace.source}
+                  fundingSource={
+                    activeFunding.fundingSpace?.source as FundingSource
+                  } // Known to have value (modal only displayed when record has no missing info)
                   isLast={true}
                   accessor={(data) =>
                     data.at('funding').at('lastReportingPeriod')

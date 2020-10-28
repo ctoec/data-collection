@@ -8,11 +8,11 @@ import {
 import { AgeGroup, Child, Organization, Site } from '../../shared/models';
 import pluralize from 'pluralize';
 import { RosterSectionHeader } from './RosterSectionHeader';
-import { tableColumns } from './TableColumns';
+import { tableColumns } from './tableColumns';
 import idx from 'idx';
 import { Link } from 'react-router-dom';
 
-export const all = {
+export const ALL = {
   SITES: 'all-sites',
   ORGS: 'all-organizations',
 };
@@ -59,13 +59,11 @@ export function filterChildrenByOrg(
   children?: Child[]
 ): Child[] {
   if (!children) return [];
-  if (!orgId || orgId === all.ORGS) return children;
+  if (!orgId || orgId === ALL.ORGS) return children;
 
   // Coerce siteId to an integer
   const _orgId = +orgId;
-  return children.filter(
-    (c) => c.enrollments?.find((e) => !e.exit)?.site.organization.id === _orgId
-  );
+  return children.filter((c) => c.organization.id === _orgId);
 }
 
 /**
@@ -76,12 +74,12 @@ export function filterChildrenBySite(
   children?: Child[]
 ): Child[] {
   if (!children) return [];
-  if (!siteId || siteId === all.SITES) return children;
+  if (!siteId || siteId === ALL.SITES) return children;
 
   // Coerce siteId to an integer
   const _siteId = +siteId;
   return children.filter(
-    (c) => c.enrollments?.find((e) => !e.exit)?.site.id === _siteId
+    (c) => c.enrollments?.find((e) => !e.exit)?.site?.id === _siteId
   );
 }
 
@@ -99,7 +97,7 @@ export function getSiteItems(sites: Site[]): TabItem[] {
     tabTextFormatter: formatRosterTabText,
   }));
   siteItems.splice(0, 0, {
-    id: all.SITES,
+    id: ALL.SITES,
     tabText: 'All sites',
     firstItem: true,
   });
@@ -118,7 +116,7 @@ export function getOrganizationItems(
     nestedTabs: getSiteItems(sites.filter((s) => s.organizationId === id)),
   }));
   items.splice(0, 0, {
-    id: all.ORGS,
+    id: ALL.ORGS,
     tabText: 'All organizations',
     firstItem: true,
     nestedItemType: 'site',
@@ -137,13 +135,15 @@ export function getChildrenByAgeGroup(
   filteredChildren: Child[]
 ): ChildrenByAgeGroup {
   const childrenByAgeGroup: ChildrenByAgeGroup = {};
-  return filteredChildren.reduce((_byAgeGroup, _child) => {
+  // Filter all children into an object, keyed by age group
+  // with array of children for that agegroup as value
+  filteredChildren.reduce((_byAgeGroup, _child) => {
     const ageGroup = idx(_child, (_) => _.enrollments[0].ageGroup) || undefined;
     if (ageGroup) {
       if (!!!_byAgeGroup[ageGroup]) {
         _byAgeGroup[ageGroup] = [_child];
       } else {
-        // acc[ageGroup] is not _actually_ possibly undefined; checked in above if
+        // _byAgeGroup[ageGroup] is not _actually_ possibly undefined; checked in above if
         _byAgeGroup[ageGroup]?.push(_child);
       }
     } else {
@@ -155,6 +155,22 @@ export function getChildrenByAgeGroup(
     }
     return _byAgeGroup;
   }, childrenByAgeGroup);
+
+  // Sort object to have consistent section ordering, where NoAgeGroup will always
+  // be first if it exists, followed by AgeGroups as they are defined in the enum
+  const sortedByAgeGroup: ChildrenByAgeGroup = {};
+  if (
+    childrenByAgeGroup[NoAgeGroup] &&
+    childrenByAgeGroup[NoAgeGroup]?.length
+  ) {
+    sortedByAgeGroup[NoAgeGroup] = childrenByAgeGroup[NoAgeGroup];
+  }
+  Object.values(AgeGroup).forEach((ageGroup) => {
+    if (childrenByAgeGroup[ageGroup] && childrenByAgeGroup[ageGroup]?.length) {
+      sortedByAgeGroup[ageGroup] = childrenByAgeGroup[ageGroup];
+    }
+  });
+  return sortedByAgeGroup;
 }
 
 export function getAccordionItems(
