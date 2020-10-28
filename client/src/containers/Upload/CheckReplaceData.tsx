@@ -52,6 +52,9 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
         />
       ),
     },
+    // If it's a single-site user of a multi-site provider, user
+    // should already be access-limited to only be able to replace
+    // the one site they have access to
     ...(user?.sites || []).map(
       (site) =>
         ({

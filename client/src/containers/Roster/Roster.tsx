@@ -53,6 +53,7 @@ const Roster: React.FC = () => {
     activeOrgId,
     activeSiteId
   );
+  const isSiteLevelUser = user?.accessType === 'site';
 
   // TODO: should this be all of the children for the whole org or what?
   const numberOfChildrenWithErrors = childrenCache.records.filter(
@@ -81,7 +82,10 @@ const Roster: React.FC = () => {
 
   const childrenByAgeGroup = getChildrenByAgeGroup(filteredChildren);
 
-  const accordionItems = getAccordionItems(childrenByAgeGroup, showOrgInTables);
+  const accordionItems = getAccordionItems(childrenByAgeGroup, {
+    hideCapacity: isSiteLevelUser,
+    showOrgInTables: showOrgInTables,
+  });
 
   // If there's an active org use that, otherwise grab it from the site
   let currentOrgId = activeOrgId;
@@ -140,6 +144,14 @@ const Roster: React.FC = () => {
       nestedActiveId: activeSiteId,
       activeId: activeOrgId,
     };
+  } else if (sites.length > 1) {
+    // User has no organization permissions, is restricted on page
+    tabNavProps = {
+      itemType: 'site',
+      onClick: tabNavOnClick,
+      items: getSiteItems(sites),
+      activeId: activeSiteId,
+    };
   }
 
   return (
@@ -147,13 +159,22 @@ const Roster: React.FC = () => {
       <div className="Roster grid-container">
         {alertElements}
         <h1 className="margin-bottom-0" ref={h1Ref}>
+          {isSiteLevelUser && (
+            <div className="margin-bottom-1 font-body-sm text-base-darker">
+              {organizations[0].providerName}
+            </div>
+          )}
           {h1Content}
         </h1>
         <p className="font-body-xl margin-top-1">
           {/* TODO: should this count be just for the thing showing or for all of them? */}
           {childrenCache.loading
             ? 'Loading...'
-            : `${childrenCache.records.length} children enrolled at ${sites.length} sites`}
+            : `${childrenCache.records.length} children enrolled ${
+                user?.accessType === 'organization' || sites.length > 1
+                  ? `at ${sites.length} sites`
+                  : ''
+              }`}
         </p>
         <div className="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4">
           <AddRecordButton orgs={organizations} />
@@ -182,11 +203,17 @@ const Roster: React.FC = () => {
           appearance="outline"
         />
         {/* TODO: change when we figure out multi-site entity */}
-        <Button
-          text="Send to OEC"
-          onClick={submitToOEC}
-          disabled={!currentOrgId}
-        />
+        {!isSiteLevelUser && (
+          <Button
+            text={
+              isSiteLevelUser
+                ? 'Organization permissions required to submit'
+                : 'Send to OEC'
+            }
+            onClick={submitToOEC}
+            disabled={!currentOrgId}
+          />
+        )}
       </FixedBottomBar>
     </>
   );

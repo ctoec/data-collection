@@ -4,6 +4,7 @@ import { getCurrentFunding } from '../../utils/models';
 
 type RosterSectionHeaderProps = {
   children: Child[];
+  hideCapacity: boolean;
 };
 
 /**
@@ -13,6 +14,7 @@ type RosterSectionHeaderProps = {
  */
 export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
   children,
+  hideCapacity,
 }) => {
   const fundingSpaceCounts: {
     fundingSpace: FundingSpace;
@@ -35,13 +37,16 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
   return (
     <div className="display-flex flex-wrap">
       {fundingSpaceCounts.map(({ fundingSpace, count }) => {
+        let displayStr = `${fundingSpace.source} ${fundingSpace.time} - ${count}`;
+        displayStr += hideCapacity
+          ? ' spaces filled'
+          : `/${fundingSpace.capacity}`;
         return (
           <div
             key={fundingSpace.id}
             className="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
           >
-            {fundingSpace.source} {fundingSpace.time} — {count}/
-            {fundingSpace.capacity}
+            {displayStr}
           </div>
         );
       })}
