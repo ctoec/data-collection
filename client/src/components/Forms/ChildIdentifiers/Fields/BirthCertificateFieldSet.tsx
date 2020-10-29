@@ -34,7 +34,6 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
               id,
               value: certificateType,
               text: certificateType,
-              preprocessForDisplay: data => data === certificateType,
               expansion: certificateType === BirthCertificateType.US && (
                 <>
                   <div className="mobile-lg:grid-col-12">

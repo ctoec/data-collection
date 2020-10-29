@@ -35,12 +35,11 @@ export const TripleBooleanRadio = <T extends {}>({
     getValue: (data) => data.at(field),
     parseOnChangeEvent: (e) => {
       if (e.target.value === unknownOption.id) {
-        return null
+        return null;
       }
       return e.target.value === trueOption.id;
     },
     preprocessForDisplay: (data) => {
-      // TODO: CHANGE THIS EVERYWHERE
       if (data === true) return trueOption.id === id;
       else if (data === false) return falseOption.id === id;
       else return unknownOption.id === id;
