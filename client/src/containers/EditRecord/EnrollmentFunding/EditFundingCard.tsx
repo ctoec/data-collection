@@ -37,6 +37,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   enrollmentId,
   isCurrent,
   expanded,
+  onExpansionChange,
   afterSaveSuccess: _afterSaveSuccess,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
@@ -88,6 +89,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       borderless={true}
       expanded={expanded}
       forceClose={closeCard}
+      onExpansionChange={onExpansionChange}
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">

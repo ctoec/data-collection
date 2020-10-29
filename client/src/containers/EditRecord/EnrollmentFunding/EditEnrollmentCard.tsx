@@ -35,12 +35,12 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   expanded,
   isCurrent = false,
   afterSaveSuccess,
+  onExpansionChange,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
     throw new Error('Edit enrollment rendered without enrollment');
   }
-
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();
@@ -73,6 +73,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
       appearance={isCurrent ? 'primary' : 'secondary'}
       expanded={expandedCard}
       forceClose={closeCard}
+      onExpansionChange={onExpansionChange}
     >
       <div className="display-flex flex-justify">
         <div className="flex-1">
