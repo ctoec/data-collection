@@ -1176,8 +1176,8 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#fix-radio":
-  version "0.0.37"
-  resolved "https://github.com/ctoec/component-library#c077093380dea5c2795e28cac07bfe81c8b04bad"
+  version "0.0.38"
+  resolved "https://github.com/ctoec/component-library#072fa08c298217bc599b68c3e1ecc454ae05951b"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

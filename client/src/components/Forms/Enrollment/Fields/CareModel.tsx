@@ -27,7 +27,7 @@ export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
           text: model,
           id,
           getValue: (data) => enrollmentAccessor(data).at('model'),
-          parseOnChangeEvent: (e) => e.target.value as CareModel,
+          parseOnChangeEvent: (e) => { console.log(e.target.value); return e.target.value },
         };
       })}
       status={(_, dataDriller) =>
