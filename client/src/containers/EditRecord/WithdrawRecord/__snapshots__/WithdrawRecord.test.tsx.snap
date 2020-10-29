@@ -62,7 +62,7 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
       class="usa-form usa-form"
     >
       <fieldset
-        aria-describedby="end-date-hint"
+        aria-labelledby="fieldset-legend-end-date end-date-hint"
         class="usa-fieldset"
         id="end-date"
       >
@@ -77,6 +77,7 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
         </legend>
         <span
           class="usa-hint text-italic"
+          id="end-date-hint"
         >
           For example: 6 21 2008
         </span>

@@ -16,6 +16,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
       novalidate=""
     >
       <fieldset
+        aria-labelledby="fieldset-legend-family-address"
         class="usa-fieldset display-inline-block"
         id="family-address"
       >
@@ -147,11 +148,12 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
         </div>
       </fieldset>
       <fieldset
+        aria-labelledby="fieldset-legend-homelessness-button-group"
         class="usa-fieldset"
-        id="homelessness-button-group-fieldset"
+        id="homelessness-button-group"
       >
         <legend
-          id="fieldset-legend-homelessness-button-group-fieldset"
+          id="fieldset-legend-homelessness-button-group"
         >
           <span
             class="usa-label"
@@ -166,14 +168,14 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
             >
               <input
                 class="usa-radio__input"
-                id="Yes"
+                id="homelessness-yes"
                 name="homelessness"
                 type="radio"
-                value="Yes"
+                value="homelessness-yes"
               />
               <label
                 class="usa-radio__label"
-                for="Yes"
+                for="homelessness-yes"
               >
                 Child is currently experiencing homelessness
               </label>
@@ -185,14 +187,14 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
             >
               <input
                 class="usa-radio__input"
-                id="No"
+                id="homelessness-no"
                 name="homelessness"
                 type="radio"
-                value="No"
+                value="homelessness-no"
               />
               <label
                 class="usa-radio__label"
-                for="No"
+                for="homelessness-no"
               >
                 Child is not currently experiencing homelessness
               </label>
@@ -205,14 +207,14 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
               <input
                 checked=""
                 class="usa-radio__input"
-                id="Unknown"
+                id="homelessness-unknown"
                 name="homelessness"
                 type="radio"
-                value="Unknown"
+                value="homelessness-unknown"
               />
               <label
                 class="usa-radio__label"
-                for="Unknown"
+                for="homelessness-unknown"
               >
                 Unknown/not collected
               </label>
