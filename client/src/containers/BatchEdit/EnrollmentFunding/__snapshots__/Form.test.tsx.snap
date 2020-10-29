@@ -12,13 +12,13 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
     id="batch-edit-enrollment-1"
   >
     <fieldset
-      aria-describedby="status-site"
       aria-invalid="true"
+      aria-labelledby="fieldset-legend-site-radiogroup status-site"
       class="usa-fieldset usa-fieldset--error"
-      id="site-radiogroup-fieldset"
+      id="site-radiogroup"
     >
       <legend
-        id="fieldset-legend-site-radiogroup-fieldset"
+        id="fieldset-legend-site-radiogroup"
       >
         <span
           class="usa-label"

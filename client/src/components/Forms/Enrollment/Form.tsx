@@ -26,9 +26,9 @@ export const doesEnrollmentFormHaveErrors = (
     const enrollment = child?.enrollments?.find((e) => e.id === enrollmentId);
     return enrollment
       ? !!getValidationStatusForFields(
-          enrollment,
-          opts.excludeFundings ? enrollmentFields : enrollmentFundingFields
-        )
+        enrollment,
+        opts.excludeFundings ? enrollmentFields : enrollmentFundingFields
+      )
       : false;
   }
 

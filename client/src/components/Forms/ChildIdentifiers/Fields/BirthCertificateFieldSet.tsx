@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  RadioButtonGroup,
-  RadioButton,
-  RadioOptionRenderProps,
-  RadioButtonGroupProps,
-  FormField,
-} from '@ctoec/component-library';
-import { BirthCertificateIdField } from './BirthCertificateId';
-import { BirthTownField } from './BirthTown';
-import { BirthStateField } from './BirthState';
+import { RadioButtonGroup, RadioOptionInForm } from '@ctoec/component-library';
 import { BirthCertificateType, Child } from '../../../../shared/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { BirthCertificateIdField } from './BirthCertificateId';
+import { BirthStateField } from './BirthState';
+import { BirthTownField } from './BirthTown';
 
 type BirthCertificateFieldsetProps = {
   child: Child;
@@ -25,16 +19,41 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
   child,
 }) => {
   return (
-    <FormField<Child, RadioButtonGroupProps, string>
+    <RadioButtonGroup<Child>
+      inForm
       id="birth-certificate-fields"
-      name="birth-certificate-fields"
       legend="Birth certificate"
+      inputName="birthCertificateType"
       showLegend
-      getValue={(data) => data.at('birthCertificateType')}
-      inputComponent={RadioButtonGroup}
-      status={(data) =>
+      options={[
+        ...Object.values(BirthCertificateType).map(
+          (certificateType): RadioOptionInForm<Child> => {
+            const id = certificateType.replace(/\s/g, '-');
+            return {
+              getValue: (data) => data.at('birthCertificateType'),
+              id,
+              value: certificateType,
+              text: certificateType,
+              expansion: certificateType === BirthCertificateType.US && (
+                <>
+                  <div className="mobile-lg:grid-col-12">
+                    <BirthCertificateIdField />
+                  </div>
+                  <div className="display-flex flex-row flex-align-end grid-row grid-gap">
+                    <BirthTownField child={child} />
+                    <div className="margin-top-2">
+                      <BirthStateField child={child} />
+                    </div>
+                  </div>
+                </>
+              ),
+            };
+          }
+        ),
+      ]}
+      status={(_child) =>
         getValidationStatusForFields(
-          data.value,
+          _child,
           [
             'birthCertificateType',
             'birthCertificateId',
@@ -47,27 +66,6 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
           }
         )
       }
-      options={[
-        ...Object.values(BirthCertificateType).map((certificateType) => ({
-          render: (props: RadioOptionRenderProps) => (
-            <RadioButton {...props} text={certificateType} />
-          ),
-          value: certificateType,
-          expansion: certificateType === BirthCertificateType.US && (
-            <>
-              <div className="mobile-lg:grid-col-12">
-                <BirthCertificateIdField />
-              </div>
-              <div className="display-flex flex-row flex-align-end grid-row grid-gap">
-                <BirthTownField child={child} />
-                <div className="margin-top-2">
-                  <BirthStateField child={child} />
-                </div>
-              </div>
-            </>
-          ),
-        })),
-      ]}
     />
   );
 };
