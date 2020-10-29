@@ -27,7 +27,7 @@ export const SiteField = <T extends Enrollment | ChangeEnrollment>({
         text: site.siteName,
         getValue: (data) => enrollmentAccessor(data).at('site').at('id'),
         parseOnChangeEvent: (e: React.ChangeEvent<any>) =>
-          parseInt(e.target.value) || null,
+          e.target.value || null,
         value: `${site.id}`,
         id: `site-${site.id}`,
       }))}
