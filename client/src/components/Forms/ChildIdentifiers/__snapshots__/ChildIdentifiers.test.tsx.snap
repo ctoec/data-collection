@@ -174,7 +174,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
               max="12"
               min="1"
               type="number"
-              value=""
+              value="6"
             />
           </div>
           <div
@@ -193,7 +193,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
               max="31"
               min="1"
               type="number"
-              value=""
+              value="22"
             />
           </div>
           <div
@@ -212,7 +212,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
               max="2200"
               min="1000"
               type="number"
-              value=""
+              value="2008"
             />
           </div>
           <div
@@ -945,8 +945,8 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
                                   <tr>
                                     <td
                                       aria-disabled="false"
-                                      aria-label="Sunday, June 22, 2008"
-                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                      aria-label="Selected. Sunday, June 22, 2008"
+                                      class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3 CalendarDay__selected CalendarDay__selected_4"
                                       role="button"
                                       style="width: 39px; height: 38px;"
                                       tabindex="-1"
@@ -1441,7 +1441,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
               id="US-birth-certificate"
               name="birthCertificateType"
               type="radio"
-              value="US-birth-certificate"
+              value="US birth certificate"
             />
             <label
               class="usa-radio__label"
@@ -1460,7 +1460,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
               id="Non-US-birth-certificate"
               name="birthCertificateType"
               type="radio"
-              value="Non-US-birth-certificate"
+              value="Non-US birth certificate"
             />
             <label
               class="usa-radio__label"
@@ -1479,7 +1479,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot 1`] = `
               id="Birth-certificate-unavailable"
               name="birthCertificateType"
               type="radio"
-              value="Birth-certificate-unavailable"
+              value="Birth certificate unavailable"
             />
             <label
               class="usa-radio__label"

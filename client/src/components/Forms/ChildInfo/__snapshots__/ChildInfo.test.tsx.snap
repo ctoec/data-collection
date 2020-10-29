@@ -199,6 +199,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
+              checked=""
               class="usa-radio__input"
               id="hispanic-ethnicity-unknown"
               name="hispanicOrLatinxEthnicity"
@@ -325,6 +326,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
+              checked=""
               class="usa-radio__input"
               id="disability-unknown"
               name="receivesDisabilityServices"
@@ -399,6 +401,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
+              checked=""
               class="usa-radio__input"
               id="dual-unknown"
               name="dualLanguageLearner"
@@ -473,6 +476,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
+              checked=""
               class="usa-radio__input"
               id="foster-unknown"
               name="foster"

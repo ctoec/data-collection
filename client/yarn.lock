@@ -1177,7 +1177,7 @@
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#fix-radio":
   version "0.0.38"
-  resolved "https://github.com/ctoec/component-library#597ffd5b8c1720e2c50ab3a73856034098ac8ac9"
+  resolved "https://github.com/ctoec/component-library#1f9e24aafbbbe6e23bef2c1d032fa8faff55b935"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
