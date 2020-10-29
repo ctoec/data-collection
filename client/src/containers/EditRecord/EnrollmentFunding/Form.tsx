@@ -53,11 +53,9 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
           <h3>Current enrollment</h3>
           <EditEnrollmentCard
             key={FormName.EditCurrentEnrollment}
-            expanded={activeCard === FormName.EditCurrentEnrollment}
+            // expanded={activeCard === FormName.EditCurrentEnrollment}
             onExpansionChange={(isActive) =>
-              isActive
-                ? setActiveCard(FormName.EditCurrentEnrollment)
-                : setActiveCard(undefined)
+              isActive ? console.log('active') : console.log('inactive')
             }
             isCurrent={true}
             child={child}
