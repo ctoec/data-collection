@@ -19,100 +19,17 @@ import {
   CareModel,
   BirthCertificateType,
 } from '../../../client/src/shared/models';
+import {
+  getChildToUpdate,
+  getExistingEnrollmentOnChild,
+  getExistingFundingForEnrollment,
+} from './mapUtils';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
 
 export const MISSING_PROVIDER_ERROR =
   'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.';
-
-/**
- * Determine whether a given enrollment report row from an
- * uploaded sheet has demographic/identifier information matching
- * a given child.
- * @param child
- * @param other
- */
-export const isIdentifierMatch = (
-  child: Child | EnrollmentReportRow,
-  other: EnrollmentReportRow
-) => {
-  return (
-    child.firstName === other.firstName &&
-    child.lastName === other.lastName &&
-    child.birthdate.format('MM/DD/YYYY') ===
-      other.birthdate.format('MM/DD/YYYY') &&
-    child.sasid === other.sasid
-  );
-};
-
-/**
- * Determine whether a child with the given identifying
- * information has already been seen, out of all children
- * that have thus far been parsed.
- * @param row
- * @param processedChildren
- */
-export const isChildUpdate = (
-  row: EnrollmentReportRow,
-  processedChildren: Child[]
-) => {
-  for (let i = 0; i < processedChildren.length; i++) {
-    const c = processedChildren[i];
-    if (isIdentifierMatch(c, row)) return c;
-  }
-  return null;
-};
-
-/**
- * Finds an enrollment on the given child object that matches
- * the characteristics of an enrollment report row from an
- * uploaded sheet. Two enrollments match if they have the same
- * dates at the same site.
- * @param row
- * @param child
- */
-export const getExistingEnrollmentOnChild = (
-  row: EnrollmentReportRow,
-  child: Child
-) => {
-  if (!child.enrollments) return null;
-  for (let i = 0; i < child.enrollments.length; i++) {
-    const enrollment = child.enrollments[i];
-    if (
-      enrollment.site.siteName === row.siteName &&
-      enrollment.entry.format('MM/DD/YYYY') === row.entry.format('MM/DD/YYYY')
-    )
-      return enrollment;
-  }
-  return null;
-};
-
-/**
- * Finds a funding for the given enrollment that matches the
- * characteristics of an enrollment report row from an
- * uploaded sheet. Two fundings match if they are from the
- * same source, have the same time, and cover the same dates.
- * @param row
- * @param enrollment
- */
-export const getExistingFundingForEnrollment = (
-  row: EnrollmentReportRow,
-  enrollment: Enrollment
-) => {
-  if (!enrollment || !enrollment.fundings) return null;
-  for (let i = 0; i < enrollment.fundings.length; i++) {
-    const funding = enrollment.fundings[i];
-    if (
-      row.firstFundingPeriod.format('MM/DD/YYYY') ===
-        funding.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
-      row.source === funding.fundingSpace.source &&
-      row.time === funding.fundingSpace.time
-    )
-      return funding;
-  }
-  return null;
-};
 
 /**
  * Can use optional save parameter to decide whether to persist
@@ -181,65 +98,103 @@ const mapRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  let child = isChildUpdate(source, processedChildren);
-  const isVisistedChild = child !== null;
+  let child = getChildToUpdate(source, processedChildren);
+  const isVisistedChild = child !== undefined;
 
   // Case where this row creates a brand new child
   if (!isVisistedChild) {
-    const family = await mapFamily(transaction, source, organization, save);
-    child = await mapChild(transaction, source, organization, family, save);
-    const incomeDetermination = await mapIncomeDetermination(
-      transaction,
-      source,
-      family,
-      save
-    );
-    const enrollment = await mapEnrollment(
-      transaction,
-      source,
-      site,
-      child,
-      save
-    );
-    const funding = await mapFunding(
+    child = await createNewChild(
       transaction,
       source,
       organization,
-      enrollment,
+      site,
+      processedChildren,
       save
     );
-    family.incomeDeterminations = [incomeDetermination];
-    child.family = family;
-    enrollment.fundings = [funding];
-    child.enrollments = [enrollment];
-    // Make sure to log that we've seen this child in our visited set
-    processedChildren.push(child);
     return child;
   }
 
   // If we're here, we're modifying an existing child's
   // enrollment or funding information
-  let enrollment = getExistingEnrollmentOnChild(source, child);
-  const modifyingExistingEnrollment = enrollment !== null;
-  const enrollmentUpdate = await Promise.resolve(
-    mapEnrollment(transaction, source, site, child, enrollment === null)
+  await updateChild(transaction, source, organization, site, child);
+  // Don't return if we just modified an existing, since we'd
+  // get duplicates in the children array in mapRows
+  return null;
+};
+
+export const createNewChild = async (
+  transaction: EntityManager,
+  source: EnrollmentReportRow,
+  organization: Organization,
+  site: Site,
+  processedChildren: Child[],
+  save: boolean
+) => {
+  const family = await mapFamily(transaction, source, organization, save);
+  const child = await mapChild(transaction, source, organization, family, save);
+  const incomeDetermination = await mapIncomeDetermination(
+    transaction,
+    source,
+    family,
+    save
   );
+  const enrollment = await mapEnrollment(
+    transaction,
+    source,
+    site,
+    child,
+    save
+  );
+  const funding = await mapFunding(
+    transaction,
+    source,
+    organization,
+    enrollment,
+    save
+  );
+  family.incomeDeterminations = [incomeDetermination];
+  child.family = family;
+  enrollment.fundings = [funding];
+  child.enrollments = [enrollment];
+
+  // Make sure to log that we've seen this child in our visited set
+  processedChildren.push(child);
+  return child;
+};
+
+export const updateChild = async (
+  transaction: EntityManager,
+  source: EnrollmentReportRow,
+  organization: Organization,
+  site: Site,
+  child: Child
+) => {
+  let enrollment = getExistingEnrollmentOnChild(source, child);
+  console.log('EXISTING ENROLLMENT: ', enrollment);
+  const modifyingExistingEnrollment = enrollment !== undefined;
+  const enrollmentUpdate = await Promise.resolve(
+    mapEnrollment(transaction, source, site, child, enrollment === undefined)
+  );
+
   // Apply any needed enrollment info updates before going to funding
   if (modifyingExistingEnrollment) {
+    console.log('MODIFYING EXISTING ENROLLMENT');
     await transaction.update(Enrollment, enrollment.id, enrollmentUpdate);
   }
 
   let funding = getExistingFundingForEnrollment(source, enrollment);
-  const modifyingExistingFunding = funding !== null;
+  const modifyingExistingFunding = funding !== undefined;
   const fundingUpdate = await Promise.resolve(
     mapFunding(
       transaction,
       source,
       organization,
       enrollmentUpdate,
-      funding === null
+      funding === undefined
     )
   );
+  console.log('PARSED A NEW FUNDING: ', fundingUpdate);
+
   if (modifyingExistingEnrollment) {
     // Either modifying existing funding or attaching brand new funding
     if (modifyingExistingFunding) {
@@ -253,10 +208,6 @@ const mapRow = async (
     if (child.enrollments) child.enrollments.push(enrollmentUpdate);
     else child.enrollments = [enrollmentUpdate];
   }
-
-  // Don't return if we just modified an existing, since we'd
-  // get duplicates in the children array in mapRows
-  return null;
 };
 
 /**
