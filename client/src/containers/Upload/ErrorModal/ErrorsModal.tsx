@@ -1,5 +1,5 @@
 import { Modal, Table } from '@ctoec/component-library';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { Button } from '@ctoec/component-library';
 import { ErrorObjectForTable } from './ErrorObjectForTable';
 import { tableColumns } from './TableColumns';

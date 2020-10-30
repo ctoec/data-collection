@@ -81,7 +81,7 @@ exports[`GettingStarted matches snapshot 1`] = `
             Download the latest batch upload template
           </h2>
           <button
-            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
             type="button"
           >
             <span
@@ -91,7 +91,7 @@ exports[`GettingStarted matches snapshot 1`] = `
             </span>
           </button>
           <button
-            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
             type="button"
           >
             <span
@@ -108,7 +108,7 @@ exports[`GettingStarted matches snapshot 1`] = `
             You can see a completed example template here:
           </p>
           <button
-            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
             type="button"
           >
             <span
@@ -118,7 +118,7 @@ exports[`GettingStarted matches snapshot 1`] = `
             </span>
           </button>
           <button
-            class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
             type="button"
           >
             <span
@@ -127,7 +127,6 @@ exports[`GettingStarted matches snapshot 1`] = `
               Download CSV sample data
             </span>
           </button>
-           
         </div>
       </div>
       <div

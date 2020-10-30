@@ -8,10 +8,16 @@ import { Organization } from '../shared/models';
 import { Link, useHistory } from 'react-router-dom';
 
 type AddRecordButtonProps = {
+  id: string;
   orgs?: Organization[];
+  className?: string;
 };
 
-export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
+export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
+  id, // Needs to be unique to associate with dropdown
+  orgs,
+  className,
+}) => {
   const history = useHistory();
 
   if (!orgs) {
@@ -25,6 +31,7 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
           pathname: '/create-record',
           state: { organization: orgs[0] },
         }}
+        className={className}
       >
         <TextWithIcon Icon={PlusCircle} text="Add a record" />
       </Link>
@@ -33,8 +40,9 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
 
   return (
     <ButtonWithDropdown
+      className={className}
       text={<TextWithIcon Icon={PlusCircle} text="Add a record" />}
-      id="select-organization"
+      id={id}
       appearance="unstyled"
       options={orgs.map((org) => ({
         text: org.providerName,
