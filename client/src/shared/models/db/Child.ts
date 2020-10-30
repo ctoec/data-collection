@@ -5,6 +5,14 @@ import { Moment } from 'moment';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 import { BirthCertificateType } from '../BirthCertificateType';
 
+export const RACE_FIELDS = [
+  'americanIndianOrAlaskaNative',
+  'asian',
+  'blackOrAfricanAmerican',
+  'nativeHawaiianOrPacificIslander',
+  'white',
+];
+
 export interface Child extends ObjectWithValidationErrors {
   id: string;
   sasid?: string;

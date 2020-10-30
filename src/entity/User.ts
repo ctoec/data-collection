@@ -48,4 +48,7 @@ export class User implements UserInterface {
   // via org and community perms
   organizationIds?: Array<number>;
   organizations?: Array<Organization>;
+
+  // [virtual property] type of access level the user has: site or organization
+  accessType?: 'site' | 'organization';
 }
