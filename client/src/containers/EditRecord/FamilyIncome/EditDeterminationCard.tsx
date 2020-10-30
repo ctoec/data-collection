@@ -116,7 +116,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
             setCloseCard(true);
             afterSaveSuccess();
           }}
-          setAlerts={() => { }}
+          setAlerts={() => {}}
         />
       </CardExpansion>
     </Card>
