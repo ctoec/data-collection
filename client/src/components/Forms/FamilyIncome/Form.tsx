@@ -1,17 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { Child, IncomeDetermination } from '../../../shared/models';
-import {
-  getValidationStatusForFields,
-} from '../../../utils/getValidationStatus';
+import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
 import idx from 'idx';
-import {
-  Form,
-  FormSubmitButton,
-  FormFieldSet,
-} from '@ctoec/component-library';
+import { Form, FormSubmitButton, FormFieldSet } from '@ctoec/component-library';
 import {
   HouseholdSizeField,
   AnnualHouseholdIncomeField,
@@ -47,9 +41,9 @@ export const doesFamilyIncomeFormHaveErrors = (
   const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
     ?.length
     ? !!getValidationStatusForFields(
-      child.family.incomeDeterminations,
-      incomeDeterminationFields
-    )
+        child.family.incomeDeterminations,
+        incomeDeterminationFields
+      )
     : false;
 
   return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
@@ -89,10 +83,10 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   const determination = (type === 'edit'
     ? (incomeDeterminationId
-      ? child?.family?.incomeDeterminations?.find(
-        (d) => d.id === incomeDeterminationId
-      )
-      : idx(child, (_) => _.family.incomeDeterminations[0])) || {}
+        ? child?.family?.incomeDeterminations?.find(
+            (d) => d.id === incomeDeterminationId
+          )
+        : idx(child, (_) => _.family.incomeDeterminations[0])) || {}
     : {}) as IncomeDetermination;
 
   const createDetermination = async (updatedData: IncomeDetermination) =>

@@ -1,3 +1,45 @@
+@import './MonthFilter/MonthFilterIndicator.scss';
+
 .Roster {
   margin-bottom: 5rem; // to keep content above fixed button bar
+
+  .buttons-table {
+    width: 100%;
+    vertical-align: baseline;
+    border-collapse: collapse;
+    th,
+    td {
+      border: 1px solid color('base-lighter');
+      padding: 1rem;
+    }
+    th {
+      color: gray;
+      font-weight: 200;
+      text-align: right;
+    }
+    td {
+      width: 90%;
+      div {
+        align-items: center;
+      }
+    }
+  }
+
+  .oec-tab-nav--content {
+    overflow-x: hidden;
+  }
+
+  .break-spaces {
+    white-space: break-spaces;
+  }
+
+  .oec-accordion__content {
+    overflow-x: scroll;
+  }
+
+  @include at-media('desktop-lg') {
+    .oec-accordion__content {
+      overflow-x: auto;
+    }
+  }
 }

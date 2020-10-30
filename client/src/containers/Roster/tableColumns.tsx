@@ -32,7 +32,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
       ),
     },
     {
-      className: tableColumnClassName,
+      className: `${tableColumnClassName} break-spaces`,
       name: 'Missing info',
       width: `${shortColumnWidthPercent}%`,
       sort: (row) =>

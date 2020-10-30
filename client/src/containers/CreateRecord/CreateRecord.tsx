@@ -145,8 +145,8 @@ const CreateRecord: React.FC = () => {
 
   return (
     <div className="grid-container">
-      {alertElements}
       <BackButton />
+      {alertElements}
       <h1 ref={h1Ref}>Add a child record</h1>
       <p className="usa-hint">
         Information is required unless otherwise specified.
