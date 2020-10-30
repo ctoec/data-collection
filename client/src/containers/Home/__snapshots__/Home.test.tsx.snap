@@ -114,7 +114,7 @@ exports[`Home matches snapshot 1`] = `
               Download the data collection template
             </p>
             <button
-              class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+              class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
               type="button"
             >
               <span
@@ -124,7 +124,7 @@ exports[`Home matches snapshot 1`] = `
               </span>
             </button>
             <button
-              class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+              class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
               type="button"
             >
               <span

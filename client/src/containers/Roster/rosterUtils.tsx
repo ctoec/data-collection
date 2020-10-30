@@ -1,4 +1,7 @@
 import React from 'react';
+import pluralize from 'pluralize';
+import idx from 'idx';
+import { Link } from 'react-router-dom';
 import {
   AlertProps,
   InlineIcon,
@@ -6,11 +9,12 @@ import {
   Table,
 } from '@ctoec/component-library';
 import { AgeGroup, Child, Organization, Site } from '../../shared/models';
-import pluralize from 'pluralize';
 import { RosterSectionHeader } from './RosterSectionHeader';
 import { tableColumns } from './tableColumns';
-import idx from 'idx';
-import { Link } from 'react-router-dom';
+import { Moment } from 'moment';
+import { childHasEnrollmentsActiveInMonth } from '../../utils/models/childHasEnrollmentsActiveInMonth';
+import { parse } from 'query-string';
+import moment from 'moment';
 
 export const ALL = {
   SITES: 'all-sites',
@@ -18,6 +22,13 @@ export const ALL = {
 };
 
 const MAX_LENGTH_EXPANDED = 50;
+
+export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
+
+export const getQueryMonthFormat = (month?: Moment) => {
+  if (!month || !month.isValid()) return undefined;
+  return month.format(QUERY_STRING_MONTH_FORMAT);
+};
 
 export function getChildrenWithErrorsAlertProps(
   numberOfChildrenWithErrors: number
@@ -40,15 +51,21 @@ export function getChildrenWithErrorsAlertProps(
 
 export function getFilteredChildren(
   children: Child[],
-  activeOrgId?: any,
-  activeSiteId?: any
+  opts: { activeOrgId?: any; activeSiteId?: any; activeMonth?: Moment }
 ) {
+  let filteredChildren = children;
+  const { activeSiteId, activeOrgId, activeMonth } = opts;
   if (activeSiteId) {
-    return filterChildrenBySite(activeSiteId, children);
+    filteredChildren = filterChildrenBySite(activeSiteId, children);
   } else if (activeOrgId) {
-    return filterChildrenByOrg(activeOrgId, children);
+    filteredChildren = filterChildrenByOrg(activeOrgId, children);
   }
-  return children;
+  if (activeMonth && activeMonth.isValid()) {
+    filteredChildren = filteredChildren.filter((c) =>
+      childHasEnrollmentsActiveInMonth(c, activeMonth)
+    );
+  }
+  return filteredChildren;
 }
 
 /**
@@ -224,4 +241,46 @@ export function getAccordionItems(
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
+}
+
+export function parseQueryParams(searchParams: string, userSites: Site[]) {
+  // Parse query params and filter children
+  const {
+    organization: paramOrgId,
+    site: paramSiteId,
+    month: paramMonth,
+  } = parse(searchParams);
+  // Parse method can return numbers or arrays-- make sure it's the right type
+  const activeSiteId = paramSiteId?.toString();
+  let activeOrgId = paramOrgId?.toString();
+  if (!activeOrgId && activeSiteId) {
+    // If there's an active org use that, otherwise grab it from the site
+    const activeSite = userSites.find((s) => s.id === +activeSiteId);
+    activeOrgId = `${
+      activeSite?.organizationId || activeSite?.organization.id || ''
+    }`;
+  }
+  const activeMonth = paramMonth
+    ? moment.utc(paramMonth, QUERY_STRING_MONTH_FORMAT)
+    : undefined;
+  return {
+    activeMonth,
+    activeSiteId,
+    activeOrgId,
+  };
+}
+
+export function getSubHeaderText(
+  children: Child[],
+  userSites: Site[],
+  activeMonth?: Moment
+) {
+  let returnText = `${children.length} children enrolled`;
+  if (userSites.length > 1) {
+    returnText += ` at ${userSites.length} sites`;
+  }
+  if (activeMonth) {
+    returnText += ` in ${activeMonth.format('MMMM YYYY')}`;
+  }
+  return returnText;
 }
