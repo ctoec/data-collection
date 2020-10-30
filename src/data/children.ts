@@ -50,13 +50,16 @@ const children: Child[] = Array.from({ length: 100 }, (_, i) => {
     firstName: name.firstName(),
     lastName: name.lastName(),
     birthCertificateType: random.arrayElement(possibleBirthCertTypes),
+    birthdate: moment().add(-Math.floor(Math.random() * 60), 'months'),
     organization: org,
     organizationId: org.id,
     updateMetaData: { updatedAt: new Date() },
   };
 });
 
-const possibleGenders = Object.keys(Gender);
+const genderCopy = { ...Gender };
+delete genderCopy.NotSpecified;
+const possibleGenders = Object.keys(genderCopy);
 function makeMiddleNameEdgeCases(num: number) {
   let _name = '';
   for (let i = 0; i < num; i++) {
@@ -70,17 +73,16 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-        birthdate: moment().add(-Math.floor(Math.random() * 60), 'months'),
-        birthTown: address.city(),
-        birthState: address.stateAbbr(),
-        birthCertificateId: '' + random.number(),
-      }
+      birthTown: address.city(),
+      birthState: address.stateAbbr(),
+      birthCertificateId: '' + random.number(),
+    }
     : {};
   const childRace = random.boolean()
     ? { notDisclosed: true }
     : random
-        .arrayElements(RACE_FIELDS, random.number(RACE_FIELDS.length))
-        .reduce((acc, race) => ({ ...acc, [race]: true }), {});
+      .arrayElements(RACE_FIELDS, random.number(RACE_FIELDS.length))
+      .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);
 

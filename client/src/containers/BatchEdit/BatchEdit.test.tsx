@@ -3,7 +3,6 @@ import BatchEdit from './BatchEdit';
 import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 import DataCacheContext, {
   ReadOnlyDataCache,
-  ReadWriteDataCache,
 } from '../../contexts/DataCacheContext/DataCacheContext';
 import {
   Child,

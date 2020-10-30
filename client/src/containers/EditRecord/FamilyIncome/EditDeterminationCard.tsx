@@ -111,12 +111,12 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
         <FamilyIncomeForm
           child={child}
           id={`edit-determination-${determinationId}`}
-          legend={`Edit income determiniation ${determinationId}`}
+          legend="Edit income determiniation"
           afterSaveSuccess={() => {
             setCloseCard(true);
             afterSaveSuccess();
           }}
-          setAlerts={() => {}}
+          setAlerts={() => { }}
         />
       </CardExpansion>
     </Card>
