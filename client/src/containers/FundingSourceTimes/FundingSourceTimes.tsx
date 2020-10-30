@@ -12,47 +12,49 @@ const FundingSourceTimes: React.FC = () => {
    * Structure to hold simplified information needed to show Funding
    * Spaces across columns with proper formatting.
    */
-  type SpaceToFunding = {
-    space: FundingTime;
-    type: string;
-    sources: FundingSource[];
-    format: string;
-    numSpacesInType: number;
-    showSpace: boolean;
+  type ContractSpaceDetails = {
+    contractSpace: FundingTime;
+    fundingType: string;
+    fundingSources: FundingSource[];
+    acceptedInputFormats: string;
+    numContractSpacesInFundingType: number;
+    displaySpace: boolean;
   };
 
   // Only want to display the FundingSpace row header once for each
   // applicable block of contract spaces
-  let setSpaceHeader: boolean;
-  const spaces: SpaceToFunding[] = [];
+  let shouldShowFundingType: boolean;
+  const contractSpaces: ContractSpaceDetails[] = [];
 
   // Need to 'invert' the array of funding_source_times because we
   // want _contract spaces_ to be what defines a row so that the
   // text between spaces and their formats will always match
   FUNDING_SOURCE_TIMES.map((fst) => {
-    setSpaceHeader = false;
+    shouldShowFundingType = false;
     fst.fundingTimes.map((time) => {
-      const spaceFromFST: SpaceToFunding = {
-        space: time.value,
-        type: fst.displayName,
-        sources: fst.fundingSources,
-        format: time.formats.map((format) => '"' + format + '"').join(' or '),
-        numSpacesInType: fst.fundingTimes.length,
-        showSpace: !setSpaceHeader,
+      const spaceFromFST: ContractSpaceDetails = {
+        contractSpace: time.value,
+        fundingType: fst.displayName,
+        fundingSources: fst.fundingSources,
+        acceptedInputFormats: time.formats
+          .map((format) => '"' + format + '"')
+          .join(' or '),
+        numContractSpacesInFundingType: fst.fundingTimes.length,
+        displaySpace: !shouldShowFundingType,
       };
-      spaces.push(spaceFromFST);
-      setSpaceHeader = true;
+      contractSpaces.push(spaceFromFST);
+      shouldShowFundingType = true;
     });
   });
 
-  const columns: Column<SpaceToFunding>[] = [
+  const columns: Column<ContractSpaceDetails>[] = [
     {
       name: 'Funding Type',
       cell: ({ row }) =>
-        row && row.showSpace ? (
-          <th scope="row" rowSpan={row.numSpacesInType}>
-            <div className="text-bold">{row.type}</div>
-            <div>({row.sources.join(' or ')})</div>
+        row && row.displaySpace ? (
+          <th scope="row" rowSpan={row.numContractSpacesInFundingType}>
+            <div className="text-bold">{row.fundingType}</div>
+            <div>({row.fundingSources.join(' or ')})</div>
           </th>
         ) : (
           <></>
@@ -63,7 +65,9 @@ const FundingSourceTimes: React.FC = () => {
       cell: ({ row }) =>
         row ? (
           <td>
-            <div className="margin-top-3 margin-bottom-3">{row.space}</div>
+            <div className="margin-top-3 margin-bottom-3">
+              {row.contractSpace}
+            </div>
           </td>
         ) : (
           <></>
@@ -71,7 +75,7 @@ const FundingSourceTimes: React.FC = () => {
     },
     {
       name: 'Accepted formats',
-      cell: ({ row }) => (row ? <td>{row.format}</td> : <></>),
+      cell: ({ row }) => (row ? <td>{row.acceptedInputFormats}</td> : <></>),
     },
   ];
 
@@ -86,8 +90,8 @@ const FundingSourceTimes: React.FC = () => {
       <div className="margin-top-4">
         <Table
           id="data-requirements-table"
-          data={spaces}
-          rowKey={(row) => (row ? row.format : '')}
+          data={contractSpaces}
+          rowKey={(row) => (row ? row.acceptedInputFormats : '')}
           columns={columns}
           defaultSortColumn={0}
         />
