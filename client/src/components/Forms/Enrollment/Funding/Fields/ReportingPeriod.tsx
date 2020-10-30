@@ -49,7 +49,7 @@ export const ReportingPeriodField = <
   isLast,
   label,
   optional,
-  showStatus,
+  showStatus = true,
 }: ReportingPeriodProps<T>) => {
   const { reportingPeriods } = useContext(DataCacheContext);
 
@@ -77,16 +77,33 @@ export const ReportingPeriodField = <
     setReportingPeriodOptions(_reportingPeriodOptions);
   }, [reportingPeriods, fundingSource, currentReportingPeriod]);
 
-  const statusFunc: FieldStatusFunc<Funding, SelectProps> = (
-    data: TObjectDriller<Funding>,
+  const statusFunc: FieldStatusFunc<T, SelectProps> = (
+    data: TObjectDriller<T>,
     _,
     props
-  ) =>
-    getValidationStatusForField(
-      data as TObjectDriller<Funding>,
-      data.at(isLast ? 'lastReportingPeriod' : 'firstReportingPeriod').path,
+  ) => {
+    let objDriller: TObjectDriller<Funding> = data as TObjectDriller<Funding>;
+
+    //  Properly handle status changes when pertaining directly to enrollments as well
+    if ((data as TObjectDriller<Enrollment>).at('fundings').value) {
+      objDriller = (data as TObjectDriller<Enrollment>).at('fundings').at(0);
+    } else if (
+      (data as TObjectDriller<ChangeEnrollment>)
+        .at('newEnrollment')
+        .at('fundings').value
+    ) {
+      objDriller = (data as TObjectDriller<ChangeEnrollment>)
+        .at('newEnrollment')
+        .at('fundings')
+        .at(0);
+    }
+
+    return getValidationStatusForField(
+      objDriller,
+      isLast ? 'lastReportingPeriod' : 'firstReportingPeriod',
       props
     );
+  };
 
   return (
     <FormField<T, SelectProps, number | null>

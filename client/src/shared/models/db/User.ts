@@ -9,4 +9,5 @@ export interface User {
   suffix?: string;
   sites?: Array<Site>;
   organizations?: Array<Organization>;
+  accessType?: 'site' | 'organization';
 }

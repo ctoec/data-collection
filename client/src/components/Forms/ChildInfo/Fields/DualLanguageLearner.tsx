@@ -1,58 +1,24 @@
 import React from 'react';
-import {
-  FormField,
-  RadioButtonGroupProps,
-  RadioButtonGroup,
-  RadioButton,
-} from '@ctoec/component-library';
-import { Child } from '../../../../shared/models';
-import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 import { UNKNOWN } from '../../../../shared/constants';
+import { Child } from '../../../../shared/models';
+import { TripleBooleanRadio } from '../../../TripleBooleanRadio';
 
 export const DualLanguageLearner: React.FC = () => (
-  <FormField<Child, RadioButtonGroupProps, boolean | null>
+  <TripleBooleanRadio<Child>
+    field="dualLanguageLearner"
     id="duallanguage-button-group"
-    getValue={(data) => data.at('dualLanguageLearner')}
-    preprocessForDisplay={(data) => {
-      if (data === true) return 'dual-yes';
-      else if (data === false) return 'dual-no';
-      else return 'dual-unknown';
-    }}
-    parseOnChangeEvent={(e) => {
-      if (e.target.value !== 'dual-unknown')
-        return e.target.value === 'dual-yes';
-      else return null;
-    }}
-    inputComponent={RadioButtonGroup}
-    name="dualLanguageLearner"
     legend="Dual Language Learner"
-    showLegend
-    options={[
-      {
-        render: (props) => (
-          <div>
-            <RadioButton text="Is a dual language learner" {...props} />
-          </div>
-        ),
-        value: 'dual-yes',
-      },
-      {
-        render: (props) => (
-          <div>
-            <RadioButton text="Is not a dual language learner" {...props} />
-          </div>
-        ),
-        value: 'dual-no',
-      },
-      {
-        render: (props) => (
-          <div>
-            <RadioButton text={UNKNOWN} {...props} />
-          </div>
-        ),
-        value: 'dual-unknown',
-      },
-    ]}
-    status={getValidationStatusForField}
+    trueOption={{
+      id: 'dual-yes',
+      label: 'Is a dual language learner',
+    }}
+    falseOption={{
+      id: 'dual-no',
+      label: 'Is not a dual language learner',
+    }}
+    unknownOption={{
+      id: 'dual-unknown',
+      label: UNKNOWN,
+    }}
   />
 );

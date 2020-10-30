@@ -98,11 +98,7 @@ exports[`EditRecord matches snapshot 1`] = `
             type="button"
           >
             <span>
-              <span
-                class="oec-text-with-icon svg-gold-20v"
-              >
-                Family income
-              </span>
+              Family income
             </span>
           </button>
           <button
@@ -273,7 +269,7 @@ exports[`EditRecord matches snapshot 1`] = `
             </div>
           </div>
           <fieldset
-            aria-describedby="dateOfBirth-picker-hint"
+            aria-labelledby="fieldset-legend-dateOfBirth-picker dateOfBirth-picker-hint"
             class="usa-fieldset"
             id="dateOfBirth-picker"
           >
@@ -288,6 +284,7 @@ exports[`EditRecord matches snapshot 1`] = `
             </legend>
             <span
               class="usa-hint text-italic"
+              id="dateOfBirth-picker-hint"
             >
               For example: 6 21 2008
             </span>
@@ -311,7 +308,7 @@ exports[`EditRecord matches snapshot 1`] = `
                     max="12"
                     min="1"
                     type="number"
-                    value=""
+                    value="6"
                   />
                 </div>
                 <div
@@ -330,7 +327,7 @@ exports[`EditRecord matches snapshot 1`] = `
                     max="31"
                     min="1"
                     type="number"
-                    value=""
+                    value="22"
                   />
                 </div>
                 <div
@@ -349,7 +346,7 @@ exports[`EditRecord matches snapshot 1`] = `
                     max="2200"
                     min="1000"
                     type="number"
-                    value=""
+                    value="2008"
                   />
                 </div>
                 <div
@@ -1082,8 +1079,8 @@ exports[`EditRecord matches snapshot 1`] = `
                                         <tr>
                                           <td
                                             aria-disabled="false"
-                                            aria-label="Sunday, June 22, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            aria-label="Selected. Sunday, June 22, 2008"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3 CalendarDay__selected CalendarDay__selected_4"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1555,11 +1552,12 @@ exports[`EditRecord matches snapshot 1`] = `
             </div>
           </fieldset>
           <fieldset
+            aria-labelledby="fieldset-legend-birth-certificate-fields"
             class="usa-fieldset"
-            id="birth-certificate-fields-fieldset"
+            id="birth-certificate-fields"
           >
             <legend
-              id="fieldset-legend-birth-certificate-fields-fieldset"
+              id="fieldset-legend-birth-certificate-fields"
             >
               <span
                 class="usa-label"
@@ -1574,14 +1572,14 @@ exports[`EditRecord matches snapshot 1`] = `
                 >
                   <input
                     class="usa-radio__input"
-                    id="US birth certificate"
-                    name="birth-certificate-fields"
+                    id="US-birth-certificate"
+                    name="birthCertificateType"
                     type="radio"
                     value="US birth certificate"
                   />
                   <label
                     class="usa-radio__label"
-                    for="US birth certificate"
+                    for="US-birth-certificate"
                   >
                     US birth certificate
                   </label>
@@ -1593,14 +1591,14 @@ exports[`EditRecord matches snapshot 1`] = `
                 >
                   <input
                     class="usa-radio__input"
-                    id="Non-US birth certificate"
-                    name="birth-certificate-fields"
+                    id="Non-US-birth-certificate"
+                    name="birthCertificateType"
                     type="radio"
                     value="Non-US birth certificate"
                   />
                   <label
                     class="usa-radio__label"
-                    for="Non-US birth certificate"
+                    for="Non-US-birth-certificate"
                   >
                     Non-US birth certificate
                   </label>
@@ -1613,14 +1611,14 @@ exports[`EditRecord matches snapshot 1`] = `
                   <input
                     checked=""
                     class="usa-radio__input"
-                    id="Birth certificate unavailable"
-                    name="birth-certificate-fields"
+                    id="Birth-certificate-unavailable"
+                    name="birthCertificateType"
                     type="radio"
                     value="Birth certificate unavailable"
                   />
                   <label
                     class="usa-radio__label"
-                    for="Birth certificate unavailable"
+                    for="Birth-certificate-unavailable"
                   >
                     Birth certificate unavailable
                   </label>

@@ -1,16 +1,23 @@
 import React, { useContext, useState } from 'react';
 import { Child, IncomeDetermination } from '../../../shared/models';
-import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+import {
+  getValidationStatusForFields,
+} from '../../../utils/getValidationStatus';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
 import idx from 'idx';
-import { Form, FormSubmitButton, FormFieldSet } from '@ctoec/component-library';
+import {
+  Form,
+  FormSubmitButton,
+  FormFieldSet,
+} from '@ctoec/component-library';
 import {
   HouseholdSizeField,
   AnnualHouseholdIncomeField,
   DeterminationDateField,
 } from './Fields';
+import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -21,6 +28,10 @@ export const doesFamilyIncomeFormHaveErrors = (
   child?: Child,
   determinationId?: number
 ) => {
+  if (child?.foster) {
+    return false;
+  }
+
   if (determinationId) {
     const determination = child?.family?.incomeDeterminations?.find(
       (f) => f.id === determinationId
@@ -30,12 +41,18 @@ export const doesFamilyIncomeFormHaveErrors = (
       : false;
   }
 
-  return child?.family?.incomeDeterminations?.length
+  const familyHasIncomeDeterminationError = child?.family
+    ? !!getValidationStatusForFields(child.family, ['incomeDeterminations'])
+    : false;
+  const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
+    ?.length
     ? !!getValidationStatusForFields(
-        child.family.incomeDeterminations,
-        incomeDeterminationFields
-      )
-    : true;
+      child.family.incomeDeterminations,
+      incomeDeterminationFields
+    )
+    : false;
+
+  return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
 };
 
 type FamilyIncomeFormProps = {
@@ -55,7 +72,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   type,
   afterSaveSuccess,
   setAlerts,
-  showField = () => true,
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
@@ -64,12 +80,19 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
 
+  if (child?.foster) {
+    // New child is and batch edit both use this form directly
+    // So this alert will show for those two forms
+    // Edit child conditionally shows this form, so this alert is in that container too
+    return <FosterIncomeNotRequiredAlert />;
+  }
+
   const determination = (type === 'edit'
     ? (incomeDeterminationId
-        ? child?.family?.incomeDeterminations?.find(
-            (d) => d.id === incomeDeterminationId
-          )
-        : idx(child, (_) => _.family.incomeDeterminations[0])) || {}
+      ? child?.family?.incomeDeterminations?.find(
+        (d) => d.id === incomeDeterminationId
+      )
+      : idx(child, (_) => _.family.incomeDeterminations[0])) || {}
     : {}) as IncomeDetermination;
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
@@ -106,38 +129,21 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
         id={`${id}-fieldset`}
         legend={legend}
         status={(data) =>
-          getValidationStatusForFields(
-            data,
-            ['numberOfPeople', 'income', 'determinationDate'],
-            { message: 'Income determination is required for OEC reporting.' }
-          )
+          getValidationStatusForFields(data, incomeDeterminationFields, {
+            message: 'Income determination is required for OEC reporting.',
+          })
         }
       >
-        {showField(
-          determination,
-          ['householdSize'],
-          incomeDeterminationFields
-        ) && (
-          <div>
-            <HouseholdSizeField />
-          </div>
-        )}
-        {showField(determination, ['income'], incomeDeterminationFields) && (
-          <div>
-            <AnnualHouseholdIncomeField />
-          </div>
-        )}
-        {showField(
-          determination,
-          ['determinationDate'],
-          incomeDeterminationFields
-        ) && (
-          <div>
-            <DeterminationDateField />
-          </div>
-        )}
+        <div>
+          <HouseholdSizeField />
+        </div>
+        <div>
+          <AnnualHouseholdIncomeField />
+        </div>
+        <div>
+          <DeterminationDateField />
+        </div>
       </FormFieldSet>
-
       {CancelButton}
       <FormSubmitButton text={loading ? 'Saving... ' : 'Save'} />
     </Form>

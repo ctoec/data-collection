@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-import {
-  CheckboxGroup,
-  FormFieldSetProps,
-  CheckboxOption,
-  FormField,
-  CheckboxProps,
-  Checkbox,
-} from '@ctoec/component-library';
+import { CheckboxGroup, CheckboxOptionInForm } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
@@ -51,8 +44,8 @@ export const RaceField: React.FC = () => {
   const [notDisclosed, setNotDisclosed] = useState(true);
 
   return (
-    <CheckboxGroup<FormFieldSetProps<Child>>
-      useFormFieldSet
+    <CheckboxGroup<Child>
+      inForm
       legend="Race"
       hint="As identified by family"
       showLegend
@@ -76,31 +69,25 @@ export const RaceField: React.FC = () => {
  * @param label The text for the Checkbox to display
  * @param field The property name on Child of the race
  */
-const raceOptionFactory: (
+const raceOptionFactory = (
   label: string,
   field: RaceField,
   notDisclosed: boolean,
   setNotDisclosed: any
-) => CheckboxOption = (label, field, notDisclosed, setNotDisclosed) => ({
-  render: ({ id, selected }) => (
-    <FormField<Child, CheckboxProps, boolean>
-      getValue={(data) => {
-        return data.at(field);
-      }}
-      preprocessForDisplay={(data) => {
-        if (field === 'raceNotDisclosed') setNotDisclosed(data);
-        return data;
-      }}
-      parseOnChangeEvent={(e) => {
-        setNotDisclosed(field === 'raceNotDisclosed' && e.target.checked);
-        return e.target.checked;
-      }}
-      defaultValue={selected}
-      inputComponent={Checkbox}
-      id={id}
-      text={label}
-      disabled={field !== 'raceNotDisclosed' && notDisclosed}
-    />
-  ),
+): CheckboxOptionInForm<Child> => ({
+  getValue: (data) => {
+    return data.at(field);
+  },
+  preprocessForDisplay: (data) => {
+    if (field === 'raceNotDisclosed') setNotDisclosed(data);
+    return data;
+  },
+  parseOnChangeEvent: (e) => {
+    setNotDisclosed(field === 'raceNotDisclosed' && e.target.checked);
+    return e.target.checked;
+  },
+  id: field,
+  text: label,
+  disabled: field !== 'raceNotDisclosed' && notDisclosed,
   value: field,
 });

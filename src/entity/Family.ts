@@ -12,7 +12,12 @@ import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
 import { Child } from './Child';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
+import {
+  ArrayMinSize,
+  IsNotEmpty,
+  ValidateIf,
+  ValidateNested,
+} from 'class-validator';
 
 @Entity()
 export class Family implements FamilyInterface {
@@ -42,9 +47,15 @@ export class Family implements FamilyInterface {
   @Column({ nullable: true, default: null })
   homelessness?: boolean;
 
-  // TODO: only validate if child is not a foster child
   @OneToMany(() => IncomeDetermination, (det) => det.family)
   @ValidateNested({ each: true })
+  @ArrayMinSize(1)
+  @ValidateIf((family) => {
+    // This value is set in child validation of family
+    const childIsFoster = family.childIsFoster;
+    delete family.childIsFoster;
+    return !childIsFoster;
+  })
   incomeDeterminations?: Array<IncomeDetermination>;
 
   @OneToMany(() => Child, (child) => child.family)

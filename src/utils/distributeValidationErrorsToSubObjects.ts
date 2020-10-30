@@ -1,13 +1,21 @@
-import { ValidationError } from 'class-validator';
+import { ValidationError, validateSync } from 'class-validator';
 import { ObjectWithValidationErrors } from '../../client/src/shared/models';
 
+export function validateObject<T extends ObjectWithValidationErrors>(
+  object: T
+) {
+  const validationErrors = validateSync(object, {
+    validationError: { value: false, target: false },
+  });
+  return distributeValidationErrorsToSubObjects(object, validationErrors);
+}
 /**
  * Given a parent object with validation errors that include child object
  * validations, adds validationErrors property to each child object
  * that has its own errors.
  * @param parentObject
  */
-export function distributeValidationErrorsToSubObjects<
+function distributeValidationErrorsToSubObjects<
   T extends ObjectWithValidationErrors
 >(parentObject: T, validationErrors: ValidationError[]): T {
   if (!parentObject || !validationErrors.length) return parentObject;

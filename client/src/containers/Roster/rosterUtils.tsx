@@ -8,7 +8,7 @@ import {
 import { AgeGroup, Child, Organization, Site } from '../../shared/models';
 import pluralize from 'pluralize';
 import { RosterSectionHeader } from './RosterSectionHeader';
-import { tableColumns } from './TableColumns';
+import { tableColumns } from './tableColumns';
 import idx from 'idx';
 import { Link } from 'react-router-dom';
 
@@ -175,7 +175,10 @@ export function getChildrenByAgeGroup(
 
 export function getAccordionItems(
   childrenByAgeGroup: ChildrenByAgeGroup,
-  showOrgInTables: boolean
+  opts: { hideCapacity: boolean; showOrgInTables: boolean } = {
+    hideCapacity: false,
+    showOrgInTables: false,
+  }
 ) {
   return Object.entries(childrenByAgeGroup)
     .filter(
@@ -200,7 +203,12 @@ export function getAccordionItems(
           )}
         </>
       ),
-      headerContent: <RosterSectionHeader children={ageGroupChildren} />,
+      headerContent: (
+        <RosterSectionHeader
+          children={ageGroupChildren}
+          hideCapacity={opts.hideCapacity}
+        />
+      ),
       expandText: `Show ${ageGroup} roster`,
       collapseText: `Hide ${ageGroup} roster`,
       content: (
@@ -209,7 +217,7 @@ export function getAccordionItems(
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
           data={ageGroupChildren}
-          columns={tableColumns(showOrgInTables)}
+          columns={tableColumns(opts.showOrgInTables)}
           defaultSortColumn={0}
           defaultSortOrder="ascending"
         />
