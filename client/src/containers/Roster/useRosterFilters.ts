@@ -16,7 +16,7 @@ export const useRosterFilters = ({
   activeSiteId,
   activeMonth,
 }: RosterFilterParams) => {
-  // Children filtered by month and
+  // Children filtered by month
   const [childrenFilteredByMonth, setChildrenFilteredByMonth] = useState<
     Child[]
   >(allChildren);
@@ -39,11 +39,11 @@ export const useRosterFilters = ({
   }, [allChildren, activeOrgId, activeSiteId]);
 
   // There's gotta be a better name for this variable
-  const [completelyFilteredChildren, setCompletelyFilteredChildren] = useState<
-    Child[]
-  >(allChildren);
+  const [childrenFilteredByAll, setChildrenFilteredByAll] = useState<Child[]>(
+    allChildren
+  );
   useEffect(() => {
-    setCompletelyFilteredChildren(
+    setChildrenFilteredByAll(
       getFilteredChildren(allChildren, {
         activeOrgId,
         activeSiteId,
@@ -64,7 +64,7 @@ export const useRosterFilters = ({
   return {
     childrenFilteredByMonth,
     childrenFilteredByLocation,
-    completelyFilteredChildren,
+    childrenFilteredByAll,
     childrenWithErrors,
   };
 };

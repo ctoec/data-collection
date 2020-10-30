@@ -18,7 +18,6 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
   setFilterByMonth,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // Duplicate of month value on roster-- needed bc we want to preserve the value but don't want to trigger the filtering until the user clicks the button
   const toggleModal = () => setIsModalOpen((o) => !o);
   return (
     <table className="oec-table buttons-table margin-top-2 margin-bottom-4">

@@ -56,19 +56,19 @@ const Roster: React.FC = () => {
 
   const updateActiveMonth = (newMonth: Moment) => {
     const month = getQueryMonthFormat(newMonth);
-    history.replace(
-      `/roster?${stringify({
+    history.replace({
+      search: stringify({
         organization: activeOrgId,
         site: activeSiteId,
         month,
-      })}`
-    );
+      }),
+    });
   };
 
   const {
     childrenFilteredByMonth,
     childrenFilteredByLocation,
-    completelyFilteredChildren,
+    childrenFilteredByAll,
     childrenWithErrors,
   } = useRosterFilters({ allChildren, activeOrgId, activeSiteId, activeMonth });
 
@@ -108,18 +108,14 @@ const Roster: React.FC = () => {
   let subHeaderText = '';
 
   if (user && !childrenCache.loading) {
-    if (activeMonth) {
-      subHeaderText = getSubHeaderText(
-        childrenFilteredByMonth,
-        userSites,
-        activeMonth
-      );
-    } else {
-      subHeaderText = getSubHeaderText(allChildren, userSites);
-    }
+    subHeaderText = getSubHeaderText(
+      activeMonth ? childrenFilteredByMonth : allChildren,
+      userSites,
+      activeMonth
+    );
   }
 
-  const childrenByAgeGroup = getChildrenByAgeGroup(completelyFilteredChildren);
+  const childrenByAgeGroup = getChildrenByAgeGroup(childrenFilteredByAll);
   const accordionItems = getAccordionItems(childrenByAgeGroup, {
     hideCapacity: isSiteLevelUser,
     showOrgInTables: userOrganizations.length > 1 || false,
@@ -134,11 +130,11 @@ const Roster: React.FC = () => {
     const month = getQueryMonthFormat(activeMonth);
     if (clickedItem.nestedItemType) {
       // If it has a nested item type then it's an org
-      history.replace(
-        `/roster?${stringify({ organization: clickedId, month })}`
-      );
+      history.replace({
+        search: stringify({ organization: clickedId, month }),
+      });
     } else {
-      history.replace(`/roster?${stringify({ site: clickedId, month })}`);
+      history.replace({ search: stringify({ site: clickedId, month }) });
     }
   };
 
