@@ -94,7 +94,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/dev',
     component:
-      process.env.NODE_ENV === 'development' ? DevUtility : PageNotFound,
+      process.env.NODE_ENV !== 'production' ? DevUtility : PageNotFound,
     unauthorized: true,
   },
   {
