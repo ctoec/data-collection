@@ -170,30 +170,29 @@ export const updateChild = async (
   child: Child
 ) => {
   let enrollment = getExistingEnrollmentOnChild(source, child);
-  console.log('EXISTING ENROLLMENT: ', enrollment);
   const modifyingExistingEnrollment = enrollment !== undefined;
-  const enrollmentUpdate = await Promise.resolve(
-    mapEnrollment(transaction, source, site, child, enrollment === undefined)
+  const enrollmentUpdate = await mapEnrollment(
+    transaction,
+    source,
+    site,
+    child,
+    enrollment === undefined
   );
 
   // Apply any needed enrollment info updates before going to funding
   if (modifyingExistingEnrollment) {
-    console.log('MODIFYING EXISTING ENROLLMENT');
     await transaction.update(Enrollment, enrollment.id, enrollmentUpdate);
   }
 
   let funding = getExistingFundingForEnrollment(source, enrollment);
   const modifyingExistingFunding = funding !== undefined;
-  const fundingUpdate = await Promise.resolve(
-    mapFunding(
-      transaction,
-      source,
-      organization,
-      enrollmentUpdate,
-      funding === undefined
-    )
+  const fundingUpdate = await mapFunding(
+    transaction,
+    source,
+    organization,
+    enrollmentUpdate,
+    funding === undefined
   );
-  console.log('PARSED A NEW FUNDING: ', fundingUpdate);
 
   if (modifyingExistingEnrollment) {
     // Either modifying existing funding or attaching brand new funding
@@ -456,7 +455,7 @@ export const mapFunding = async (
     });
     fundingSpace = fundingSpaces.find((space) => space.time === fundingTime);
 
-    //   // If no direct match on time and source === CDC, look for a split
+    // If no direct match on time and source === CDC, look for a split
     if (!fundingSpace && fundingSource === FundingSource.CDC) {
       fundingSpace = fundingSpaces.find(
         (space) => space.time === FundingTime.SplitTime

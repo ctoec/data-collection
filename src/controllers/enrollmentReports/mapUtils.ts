@@ -48,10 +48,7 @@ export const getExistingEnrollmentOnChild = (
   child: Child
 ) => {
   if (!child.enrollments) return null;
-  console.log('CHILD HAS ENROLLMENTS IN GET EXISTING');
-  console.log('ROW IS ', row);
   return child.enrollments.find((e) => {
-    console.log('COMPARING TO ENROLLMENT ', e);
     return (
       e.site.siteName === row.siteName &&
       e.entry.format('MM/DD/YYYY') === row.entry.format('MM/DD/YYYY')
