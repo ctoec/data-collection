@@ -1,4 +1,4 @@
-import { name, address, random } from 'faker';
+import { seed, name, address, random } from 'faker';
 import {
   Child,
   Funding,
@@ -19,6 +19,11 @@ import { getFakeIncomeDet } from './incomeDeterminations';
 import { makeFakeEnrollment } from './enrollment';
 import { getFakeFunding } from './funding';
 import { getFakeFundingSpaces } from './fundingSpace';
+import { weightedBoolean } from './fakeDataUtils';
+
+
+// So we get consistent results
+seed(123);
 
 const _organizations: Organization[] = organizations.map((o, i) => ({
   ...o,
@@ -42,14 +47,13 @@ _organizations.forEach((o) =>
   })
 );
 
-const possibleBirthCertTypes = Object.values(BirthCertificateType);
 const children: Child[] = Array.from({ length: 100 }, (_, i) => {
   const org = random.arrayElement(_organizations);
   return {
     id: '' + i,
     firstName: name.firstName(),
     lastName: name.lastName(),
-    birthCertificateType: random.arrayElement(possibleBirthCertTypes),
+    birthCertificateType: weightedBoolean(8) ? BirthCertificateType.nonUS : BirthCertificateType.US, // Arbitrary, would be better based on actual frequency in data
     birthdate: moment().add(-Math.floor(Math.random() * 60), 'months'),
     organization: org,
     organizationId: org.id,
@@ -67,6 +71,7 @@ function makeMiddleNameEdgeCases(num: number) {
   }
   return _name;
 }
+const possibleSuffixes = ['Jr, III, IV'];
 const incompleteChildren: Child[] = children.slice(0, 50);
 const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
   const site = random.arrayElement(c.organization.sites);
@@ -74,19 +79,17 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
   const birthCertDetails = isUSBirthCert
     ? {
       birthTown: address.city(),
-      birthState: address.stateAbbr(),
-      birthCertificateId: '' + random.number(),
+      birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
+      birthCertificateId: random.number({ min: 10000000000, max: 99999999999 }) + '',
     }
     : {};
-  const childRace = random.boolean()
-    ? { notDisclosed: true }
-    : random
-      .arrayElements(RACE_FIELDS, random.number(RACE_FIELDS.length))
-      .reduce((acc, race) => ({ ...acc, [race]: true }), {});
+  const childRace = random
+    .arrayElements(RACE_FIELDS, random.number({ min: 1, max: RACE_FIELDS.length }))
+    .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);
 
-  const foster = random.boolean();
+  const foster = weightedBoolean(5);
   const incomeDeterminations: IncomeDetermination[] = foster
     ? []
     : [getFakeIncomeDet(i, family)];
@@ -101,14 +104,14 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
     ...c,
     ...birthCertDetails,
     ...childRace,
-    hispanicOrLatinxEthnicity: random.boolean(),
+    hispanicOrLatinxEthnicity: weightedBoolean(30), // No idea if this is representative
     middleName: makeMiddleNameEdgeCases(random.number(3)),
-    suffix: random.boolean() ? 'Jr' : undefined,
-    sasid: random.boolean() ? random.uuid() : undefined,
+    suffix: weightedBoolean(5) ? random.arrayElement(possibleSuffixes) : undefined,
+    sasid: random.number({ min: 1000000000, max: 9999999999 }) + '',
     gender: random.arrayElement(possibleGenders) as Gender,
-    dualLanguageLearner: random.boolean(),
+    dualLanguageLearner: weightedBoolean(10), // No idea if this is representative
     foster,
-    receivesDisabilityServices: random.boolean(),
+    receivesDisabilityServices: weightedBoolean(5),
     family: {
       ...family,
       incomeDeterminations,
@@ -118,7 +121,7 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
         ...enrollment,
         fundings,
       },
-    ], // TODO
+    ],
   };
 });
 
