@@ -1,8 +1,6 @@
-import { seed, name, address, random } from 'faker';
+import { name, address, random } from 'faker';
 import {
   Child,
-  Funding,
-  IncomeDetermination,
   Organization,
   Site,
 } from '../entity';
@@ -16,8 +14,7 @@ import { sitesByOrgName } from './sites';
 import moment from 'moment';
 import { makeFakeFamily } from './family';
 import { getFakeIncomeDet } from './incomeDeterminations';
-import { makeFakeEnrollment } from './enrollment';
-import { getFakeFunding } from './funding';
+import { makeFakeEnrollments } from './enrollment';
 import { getFakeFundingSpaces } from './fundingSpace';
 import { weightedBoolean } from './fakeDataUtils';
 
@@ -75,11 +72,11 @@ const completeChildren: Child[] = children.map((c, i) => {
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-        birthTown: address.city(),
-        birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
-        birthCertificateId:
-          random.number({ min: 10000000000, max: 99999999999 }) + '',
-      }
+      birthTown: address.city(),
+      birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
+      birthCertificateId:
+        random.number({ min: 10000000000, max: 99999999999 }) + '',
+    }
     : {};
   const childRace = random
     .arrayElements(
@@ -89,17 +86,7 @@ const completeChildren: Child[] = children.map((c, i) => {
     .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);
-
   const foster = weightedBoolean(5);
-  const incomeDeterminations: IncomeDetermination[] = foster
-    ? []
-    : [getFakeIncomeDet(i, family)];
-
-  const enrollment = makeFakeEnrollment(i, c, site);
-
-  const fundings: Funding[] = [
-    getFakeFunding(i, enrollment, site.organization),
-  ];
 
   return {
     ...c,
@@ -119,16 +106,12 @@ const completeChildren: Child[] = children.map((c, i) => {
     receivesDisabilityServices: weightedBoolean(5),
     family: {
       ...family,
-      incomeDeterminations,
+      incomeDeterminations: foster
+        ? []
+        : [getFakeIncomeDet(i, family)],
     },
-    enrollments: [
-      {
-        ...enrollment,
-        fundings,
-      },
-    ],
+    enrollments: makeFakeEnrollments(i, c, site)
   };
 });
 
-// TODO: add a few changed enrollment kids
 export { completeChildren };
