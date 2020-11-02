@@ -72,8 +72,7 @@ function makeMiddleNameEdgeCases(num: number) {
   return _name;
 }
 const possibleSuffixes = ['Jr', 'III', 'IV'];
-const incompleteChildren: Child[] = children.slice(0, 50);
-const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
+const completeChildren: Child[] = children.map((c, i) => {
   const site = random.arrayElement(c.organization.sites);
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
@@ -126,7 +125,4 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
 });
 
 // TODO: add a few changed enrollment kids
-
-const allChildren = [...incompleteChildren, ...completeChildren];
-
-export { incompleteChildren, completeChildren, allChildren };
+export { completeChildren };
