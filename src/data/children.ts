@@ -21,10 +21,6 @@ import { getFakeFunding } from './funding';
 import { getFakeFundingSpaces } from './fundingSpace';
 import { weightedBoolean } from './fakeDataUtils';
 
-
-// So we get consistent results
-seed(123);
-
 const _organizations: Organization[] = organizations.map((o, i) => ({
   ...o,
   id: i,
@@ -53,8 +49,10 @@ const children: Child[] = Array.from({ length: 100 }, (_, i) => {
     id: '' + i,
     firstName: name.firstName(),
     lastName: name.lastName(),
-    birthCertificateType: weightedBoolean(8) ? BirthCertificateType.nonUS : BirthCertificateType.US, // Arbitrary, would be better based on actual frequency in data
-    birthdate: moment().add(-Math.floor(Math.random() * 60), 'months'),
+    birthCertificateType: weightedBoolean(8)
+      ? BirthCertificateType.nonUS
+      : BirthCertificateType.US, // Arbitrary, would be better based on actual frequency in data
+    birthdate: moment().add(-random.number({ min: 6, max: 60 }), 'months'),
     organization: org,
     organizationId: org.id,
     updateMetaData: { updatedAt: new Date() },
@@ -77,13 +75,17 @@ const completeChildren: Child[] = children.map((c, i) => {
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-      birthTown: address.city(),
-      birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
-      birthCertificateId: random.number({ min: 10000000000, max: 99999999999 }) + '',
-    }
+        birthTown: address.city(),
+        birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
+        birthCertificateId:
+          random.number({ min: 10000000000, max: 99999999999 }) + '',
+      }
     : {};
   const childRace = random
-    .arrayElements(RACE_FIELDS, random.number({ min: 1, max: RACE_FIELDS.length - 1 }))
+    .arrayElements(
+      RACE_FIELDS,
+      random.number({ min: 1, max: RACE_FIELDS.length - 1 })
+    )
     .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);
@@ -104,8 +106,12 @@ const completeChildren: Child[] = children.map((c, i) => {
     ...birthCertDetails,
     ...childRace,
     hispanicOrLatinxEthnicity: weightedBoolean(30), // No idea if this is representative
-    middleName: makeMiddleNameEdgeCases(weightedBoolean(10) ? 1 : random.number(3)),
-    suffix: weightedBoolean(5) ? random.arrayElement(possibleSuffixes) : undefined,
+    middleName: makeMiddleNameEdgeCases(
+      weightedBoolean(10) ? 1 : random.number(3)
+    ),
+    suffix: weightedBoolean(5)
+      ? random.arrayElement(possibleSuffixes)
+      : undefined,
     sasid: random.number({ min: 1000000000, max: 9999999999 }) + '',
     gender: random.arrayElement(possibleGenders) as Gender,
     dualLanguageLearner: weightedBoolean(10), // No idea if this is representative

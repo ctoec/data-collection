@@ -16,7 +16,7 @@ export const makeFakeEnrollment = (
     siteId: site.id,
     ageGroup: random.arrayElement(Object.values(AgeGroup)),
     model: random.arrayElement(Object.values(CareModel)),
-    entry: moment(),
+    entry: child.birthdate.add(random.number({ min: 4, max: 12 }), 'months'),
     updateMetaData: { updatedAt: new Date() },
   };
 };

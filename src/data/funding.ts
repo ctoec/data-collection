@@ -10,12 +10,14 @@ export const getFakeFunding = (
   enrollment: Enrollment,
   organization: Organization
 ): Funding => {
-  const fundingSpace = organization?.fundingSpaces.find(
-    (f) => f.ageGroup === enrollment.ageGroup
+  const fundingSpace = random.arrayElement(
+    organization?.fundingSpaces.filter(
+      (f) => f.ageGroup === enrollment.ageGroup
+    ) || []
   );
   return {
     id,
-    enrollment: enrollment,
+    enrollment,
     enrollmentId: enrollment.id,
     fundingSpace,
     firstReportingPeriod: {
