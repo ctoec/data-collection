@@ -104,7 +104,7 @@ const completeChildren: Child[] = children.map((c, i) => {
     ...birthCertDetails,
     ...childRace,
     hispanicOrLatinxEthnicity: weightedBoolean(30), // No idea if this is representative
-    middleName: makeMiddleNameEdgeCases(random.number(3)),
+    middleName: makeMiddleNameEdgeCases(weightedBoolean(10) ? 1 : random.number(3)),
     suffix: weightedBoolean(5) ? random.arrayElement(possibleSuffixes) : undefined,
     sasid: random.number({ min: 1000000000, max: 9999999999 }) + '',
     gender: random.arrayElement(possibleGenders) as Gender,
