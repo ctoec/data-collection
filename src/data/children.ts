@@ -71,7 +71,7 @@ function makeMiddleNameEdgeCases(num: number) {
   }
   return _name;
 }
-const possibleSuffixes = ['Jr, III, IV'];
+const possibleSuffixes = ['Jr', 'III', 'IV'];
 const incompleteChildren: Child[] = children.slice(0, 50);
 const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
   const site = random.arrayElement(c.organization.sites);
@@ -84,7 +84,7 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
     }
     : {};
   const childRace = random
-    .arrayElements(RACE_FIELDS, random.number({ min: 1, max: RACE_FIELDS.length }))
+    .arrayElements(RACE_FIELDS, random.number({ min: 1, max: RACE_FIELDS.length - 1 }))
     .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);
@@ -124,6 +124,8 @@ const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
     ],
   };
 });
+
+// TODO: add a few changed enrollment kids
 
 const allChildren = [...incompleteChildren, ...completeChildren];
 
