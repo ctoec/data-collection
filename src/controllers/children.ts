@@ -1,6 +1,5 @@
 import { getManager, In } from 'typeorm';
 import idx from 'idx';
-import { validate, validateSync } from 'class-validator';
 import {
   ExitReason,
   Enrollment as EnrollmentInterface,
@@ -16,11 +15,7 @@ import {
   FundingSpace,
 } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
-import {
-  BadRequestError,
-  NotFoundError,
-  ApiError,
-} from '../middleware/error/errors';
+import { BadRequestError, NotFoundError } from '../middleware/error/errors';
 import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
 import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
@@ -34,6 +29,37 @@ const FULL_RECORD_RELATIONS = [
   'enrollments.fundings',
   'organization',
 ];
+
+// Sort enrollments by exit date
+const sortEnrollments = (child: Child) => {
+  if (!child.enrollments) return;
+  child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
+    if (enrollmentA.fundings) {
+      // Sort fundings by last reporting period
+      enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
+        propertyDateSorter(
+          fundingA,
+          fundingB,
+          (f) => f.lastReportingPeriod?.period
+        )
+      );
+    }
+
+    return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
+  });
+};
+
+// Sort income determinations by date
+const sortIncomeDeterminations = (child: Child) => {
+  child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
+    (determinationA, determinationB) =>
+      propertyDateSorter(
+        determinationA,
+        determinationB,
+        (d) => d.determinationDate
+      )
+  );
+};
 
 /**
  * Get child by id, with related family and related
@@ -49,32 +75,9 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
   });
 
   if (child) {
-    // Sort enrollments by exit date
-    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
-      if (enrollmentA.fundings) {
-        // Sort fundings by last reporting period
-        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
-          propertyDateSorter(
-            fundingA,
-            fundingB,
-            (f) => f.lastReportingPeriod?.period
-          )
-        );
-      }
-
-      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
-    });
-
+    sortEnrollments(child);
     if (child.family) {
-      // Sort income determinations by date
-      child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
-        (determinationA, determinationB) =>
-          propertyDateSorter(
-            determinationA,
-            determinationB,
-            (d) => d.determinationDate
-          )
-      );
+      sortIncomeDeterminations(child);
     }
   }
 
@@ -86,16 +89,27 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
  */
 export const getChildren = async (
   user: User,
-  organizationIds: number[] | undefined
+  filterOpts: { organizationIds?: string[]; missingInfo?: string }
 ) => {
+  let { organizationIds, missingInfo } = filterOpts;
   if (!organizationIds || !organizationIds.length)
     organizationIds = await getReadAccessibileOrgIds(user);
-  return (
+  let children = (
     await getManager().find(Child, {
       relations: FULL_RECORD_RELATIONS,
-      where: { organization: { id: In(organizationIds) } },
+      where: {
+        organization: { id: In(organizationIds) },
+      },
     })
   ).map(validateObject);
+
+  if (missingInfo === 'true') {
+    children = children.filter(
+      (child) => child.validationErrors && child.validationErrors.length
+    );
+  }
+
+  return children;
 };
 
 /**
@@ -155,7 +169,7 @@ export const createChild = async (_child: Child, user: User) => {
   if (
     !readOrgIds.length ||
     !_child.organization ||
-    !readOrgIds.includes(_child.organization.id)
+    !readOrgIds.includes(`${_child.organization.id}`)
   ) {
     console.error(
       'User does not have permission to create the child row supplied'

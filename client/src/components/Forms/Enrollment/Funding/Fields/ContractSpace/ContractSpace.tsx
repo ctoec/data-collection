@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   SelectProps,
   FormField,
@@ -10,6 +10,7 @@ import {
   Enrollment,
   AgeGroup,
   FundingSource,
+  FundingSpace,
 } from '../../../../../../shared/models';
 import { SingleContractSpaceField } from './SingleContractSpace';
 import {
@@ -17,8 +18,9 @@ import {
   ChangeEnrollment,
 } from '../../../../../../shared/payloads';
 import { fundingSpaceFormatter } from '../../../../../../utils/formatters';
-import DataCacheContext from '../../../../../../contexts/DataCacheContext/DataCacheContext';
 import { getValidationStatusForField } from '../../../../../../utils/getValidationStatus';
+import { useAuthenticatedSWR } from '../../../../../../hooks/useAuthenticatedSWR';
+import { stringify } from 'querystring';
 
 type ContractSpaceProps<T> = {
   ageGroup: AgeGroup | undefined;
@@ -37,13 +39,21 @@ export const ContractSpaceField = <
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
   showStatus,
 }: ContractSpaceProps<T>) => {
-  const { fundingSpaces } = useContext(DataCacheContext);
-  const fundingSpaceOptions = fundingSpaces.records.filter(
-    (fs) =>
-      fs.ageGroup === ageGroup &&
-      fs.source === fundingSource &&
-      fs.organization.id === organizationId
+  const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
+    `funding-spaces?${stringify({ organizationId })}`
   );
+  const [fundingSpaceOptions, setFundingSpaceOptions] = useState<
+    FundingSpace[]
+  >([]);
+
+  useEffect(() => {
+    if (!fundingSpaces) return;
+    setFundingSpaceOptions(
+      fundingSpaces.filter(
+        (fs) => fs.ageGroup === ageGroup && fs.source === fundingSource
+      )
+    );
+  }, [ageGroup, fundingSource, fundingSpaces]);
 
   if (fundingSpaceOptions.length === 1) {
     return (

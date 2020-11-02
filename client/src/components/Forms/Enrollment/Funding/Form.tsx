@@ -136,7 +136,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
     >
       <NewFundingField<Funding>
         getEnrollment={() => enrollment}
-        orgId={child.organization.id}
+        organizationId={child.organization.id}
         isEdit={true}
       />
       {AdditionalButton}

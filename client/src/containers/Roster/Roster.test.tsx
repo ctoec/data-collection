@@ -22,10 +22,6 @@ import {
 
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
-import DataCacheContext, {
-  DataCacheContextType,
-  ReadOnlyDataCache,
-} from '../../contexts/DataCacheContext/DataCacheContext';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const _child = {
@@ -143,56 +139,33 @@ const multiOrgUser = {
   ],
 } as User;
 
-const cacheProps = ({
-  children: {
-    records: children,
-    loading: false,
-    addOrUpdateRecord: jest.fn(),
-    refetch: jest.fn(),
-    removeRecordById: jest.fn(),
-  },
-  fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
-  reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-} as unknown) as DataCacheContextType;
-
 describe('Roster', () => {
   const helperOpts = {
     wrapInRouter: true,
   };
   snapshotTestHelper(
     <UserContext.Provider value={{ user: oneOrgUser, loading: false }}>
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>
+      <Roster />
     </UserContext.Provider>,
     { ...helperOpts, name: 'matches snapshot for user with 1 org' }
   );
 
   snapshotTestHelper(
     <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>
+      <Roster />
     </UserContext.Provider>,
     { ...helperOpts, name: 'matches snapshot for user with >1 org' }
   );
 
   accessibilityTestHelper(
     <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>
+      <Roster />
     </UserContext.Provider>,
     helperOpts
   );
 
   it('correctly separates children by ageGroup', async () => {
-    const renderResult = await renderHelper(
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>,
-      helperOpts
-    );
+    const renderResult = await renderHelper(<Roster />, helperOpts);
 
     // Assert there are two roster sections
     const accordionHeaders = (

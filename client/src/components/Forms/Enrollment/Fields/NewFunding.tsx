@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FundingSource, Funding, Enrollment } from '../../../../shared/models';
+import {
+  FundingSource,
+  Funding,
+  Enrollment,
+  FundingSpace,
+} from '../../../../shared/models';
 import {
   RadioButtonGroup,
   useGenericContext,
@@ -8,14 +13,15 @@ import {
 } from '@ctoec/component-library';
 import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
 import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
-import DataCacheContext from '../../../../contexts/DataCacheContext/DataCacheContext';
+import { stringify } from 'querystring';
+import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 
 const UNFUNDED = 'Unfunded';
 
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
-  orgId: number;
+  organizationId: number;
   isEdit?: boolean;
 };
 
@@ -28,10 +34,12 @@ export const NewFundingField = <
 >({
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
   getEnrollment,
-  orgId,
+  organizationId,
   isEdit,
 }: FundingFieldProps<T>) => {
-  const { fundingSpaces } = useContext(DataCacheContext);
+  const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
+    `funding-spaces?${stringify({ organizationId })}`
+  );
   const { dataDriller } = useGenericContext<T>(FormContext);
   const enrollment = getEnrollment(dataDriller);
 
@@ -43,17 +51,15 @@ export const NewFundingField = <
   // from the funding spaces associated with the given site and agegroup
   // for the enrollment.
   useEffect(() => {
+    if (!fundingSpaces) return;
     const _fundingSourceOptions = new Set(
-      fundingSpaces.records
-        .filter(
-          (fs) =>
-            fs.ageGroup === enrollment.ageGroup && fs.organization.id === orgId
-        )
+      fundingSpaces
+        .filter((fs) => fs.ageGroup === enrollment.ageGroup)
         .map((fs) => fs.source)
     );
 
     setFundingSourceOptions(Array.from(_fundingSourceOptions));
-  }, [enrollment, fundingSpaces]);
+  }, [enrollment, fundingSpaces?.length]);
 
   return (
     <RadioButtonGroup
@@ -86,7 +92,7 @@ export const NewFundingField = <
                   showStatus={!isEdit}
                   ageGroup={enrollment.ageGroup}
                   fundingSource={fundingSource}
-                  organizationId={orgId}
+                  organizationId={organizationId}
                   fundingAccessor={fundingAccessor}
                 />
                 <ReportingPeriodField<T>

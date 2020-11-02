@@ -5,10 +5,9 @@ import {
   BadRequestError,
   ApiError,
 } from '../middleware/error/errors';
-import * as controller from '../controllers/children';
 import { Child } from '../entity';
-import { parseQueryString } from '../utils/parseQueryString';
 import { validate } from 'class-validator';
+import * as controller from '../controllers/children';
 
 export const childrenRouter = express.Router();
 
@@ -40,11 +39,18 @@ childrenRouter.post(
 childrenRouter.get(
   '/',
   passAsyncError(async (req, res) => {
-    const organizationIds = parseQueryString(req, 'organizationId', {
-      post: parseInt,
-      forceArray: true,
-    }) as number[];
-    const children = await controller.getChildren(req.user, organizationIds);
+    const organizationId = req.query['organizationId'];
+    const organizationIds = !organizationId
+      ? undefined
+      : ((Array.isArray(organizationId)
+          ? organizationId
+          : [organizationId]) as string[]);
+
+    const missingInfo = req.query['missing-info'] as string;
+    const children = await controller.getChildren(req.user, {
+      organizationIds,
+      missingInfo,
+    });
 
     const count = req.query['count'] as string;
     if (count && count === 'true') {

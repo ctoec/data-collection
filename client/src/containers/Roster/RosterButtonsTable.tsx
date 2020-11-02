@@ -1,19 +1,17 @@
 import { Button, Calendar, TextWithIcon } from '@ctoec/component-library';
 import { Moment } from 'moment';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
-import { Organization } from '../../shared/models';
 import { MonthFilterModal } from './MonthFilter/MonthFilterModal';
+import UserContext from '../../contexts/UserContext/UserContext';
 
 type RosterButtonsTable = {
-  organizations?: Organization[];
   filterByMonth?: Moment;
   setFilterByMonth: (_: any) => void;
 };
 
 export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
-  organizations,
   filterByMonth,
   setFilterByMonth,
 }) => {
@@ -27,7 +25,6 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
           <td>
             <div className="display-flex">
               <AddRecordButton
-                orgs={organizations}
                 className="margin-right-2"
                 id="add-record-in-actions"
               />

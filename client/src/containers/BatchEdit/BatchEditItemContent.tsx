@@ -8,9 +8,10 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { hasValidationErrorForField } from '../../utils/hasValidationError';
 import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { Link } from 'react-router-dom';
 import { getCurrentEnrollment } from '../../utils/models';
+import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
+import { stringify } from 'querystring';
 
 type BatchEditItemContentProps = {
   childId: string;
@@ -22,9 +23,10 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   moveNextRecord,
 }) => {
   const [child, setChild] = useState<Child>();
-  const {
-    children: { addOrUpdateRecord: updateRecordInCache },
-  } = useContext(DataCacheContext);
+  const { mutate } = useAuthenticatedSWR<Child[]>(
+    `children?${stringify({ 'missing-info': true })}`
+  );
+
   const { setAlerts } = useAlerts();
 
   const [steps, setSteps] = useState<StepProps<RecordFormProps>[]>();
@@ -59,7 +61,14 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     apiGet(`/children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        updateRecordInCache(updatedChild);
+        mutate((children: Child[]) => {
+          if (children) {
+            const idx = children.findIndex((c) => c.id === childId);
+            if (idx > -1) children.splice(idx, 1, updatedChild);
+            return children;
+          }
+          return children;
+        }, false);
         moveNextStep();
       })
       .catch((err) => {

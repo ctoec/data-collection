@@ -1,17 +1,7 @@
 import React from 'react';
 import EditRecord from './EditRecord';
 import { accessibilityTestHelper, snapshotTestHelper } from '../../testHelpers';
-import DataCacheContext, {
-  DataCacheContextType,
-  ReadOnlyDataCache,
-} from '../../contexts/DataCacheContext/DataCacheContext';
-import {
-  FundingSpace,
-  ReportingPeriod,
-  Child,
-  Organization,
-  BirthCertificateType,
-} from '../../shared/models';
+import { Child, Organization, BirthCertificateType } from '../../shared/models';
 
 const child = {
   id: '00000000-0000-0000-0000-000000000000',
@@ -26,19 +16,6 @@ const child = {
   },
 } as Child;
 
-const cache = {
-  children: {
-    records: [child],
-    loading: false,
-    getRecordById: () => child,
-    addOrUpdateRecord: jest.fn(),
-    removeRecordById: jest.fn(),
-    refetch: jest.fn(),
-  },
-  fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
-  reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-} as DataCacheContextType;
-
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { waitFor } from '@testing-library/dom';
@@ -49,17 +26,13 @@ describe('EditRecord', () => {
   beforeEach(() => {
     apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve(child)));
   });
-  snapshotTestHelper(
-    <DataCacheContext.Provider value={cache}>
-      <EditRecord />
-    </DataCacheContext.Provider>,
-    { wrapInRouter: true, before: waitGetChild }
-  );
-  accessibilityTestHelper(
-    <DataCacheContext.Provider value={cache}>
-      <EditRecord />
-    </DataCacheContext.Provider>,
-    { wrapInRouter: true, before: waitGetChild }
-  );
+  snapshotTestHelper(<EditRecord />, {
+    wrapInRouter: true,
+    before: waitGetChild,
+  });
+  accessibilityTestHelper(<EditRecord />, {
+    wrapInRouter: true,
+    before: waitGetChild,
+  });
   afterEach(() => jest.clearAllMocks());
 });

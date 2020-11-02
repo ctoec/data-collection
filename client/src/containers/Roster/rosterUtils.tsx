@@ -1,153 +1,68 @@
 import React from 'react';
 import pluralize from 'pluralize';
 import idx from 'idx';
-import { Link } from 'react-router-dom';
-import {
-  AlertProps,
-  InlineIcon,
-  TabItem,
-  Table,
-} from '@ctoec/component-library';
-import { AgeGroup, Child, Organization, Site } from '../../shared/models';
+import { InlineIcon, Table } from '@ctoec/component-library';
+import { AgeGroup, Child } from '../../shared/models';
 import { RosterSectionHeader } from './RosterSectionHeader';
 import { tableColumns } from './tableColumns';
 import { Moment } from 'moment';
-import { childHasEnrollmentsActiveInMonth } from '../../utils/models/childHasEnrollmentsActiveInMonth';
-import { parse } from 'query-string';
-import moment from 'moment';
-
-export const ALL = {
-  SITES: 'all-sites',
-  ORGS: 'all-organizations',
-};
+import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
+import {
+  getCurrentEnrollment,
+  childHasEnrollmentsActiveInMonth,
+} from '../../utils/models';
 
 const MAX_LENGTH_EXPANDED = 50;
-
 export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
 
+/**
+ * Get month param in query string month format
+ * @param month
+ */
 export const getQueryMonthFormat = (month?: Moment) => {
   if (!month || !month.isValid()) return undefined;
   return month.format(QUERY_STRING_MONTH_FORMAT);
 };
 
-export function getChildrenWithErrorsAlertProps(
-  numberOfChildrenWithErrors: number
-): AlertProps {
-  return {
-    text: (
-      <span>
-        You'll need to add required info for{' '}
-        {pluralize('record', numberOfChildrenWithErrors, true)} before
-        submitting your data to OEC. Update with{' '}
-        <Link className="usa-button usa-button--unstyled" to="/batch-edit">
-          batch editing.
-        </Link>
-      </span>
-    ),
-    heading: 'Update roster before submitting',
-    type: 'warning',
-  };
-}
-
+/**
+ * Does client-side data filtering, by site and/or month
+ * @param allChildren
+ * @param site
+ * @param month
+ */
 export function getFilteredChildren(
-  children: Child[],
-  opts: { activeOrgId?: any; activeSiteId?: any; activeMonth?: Moment }
-) {
-  let filteredChildren = children;
-  const { activeSiteId, activeOrgId, activeMonth } = opts;
-  if (activeSiteId) {
-    filteredChildren = filterChildrenBySite(activeSiteId, children);
-  } else if (activeOrgId) {
-    filteredChildren = filterChildrenByOrg(activeOrgId, children);
-  }
-  if (activeMonth && activeMonth.isValid()) {
-    filteredChildren = filteredChildren.filter((c) =>
-      childHasEnrollmentsActiveInMonth(c, activeMonth)
+  allChildren: Child[],
+  site?: string,
+  month?: Moment
+): Child[] {
+  let filteredChildren: Child[] = allChildren;
+  if (site) {
+    filteredChildren = allChildren.filter(
+      (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
     );
   }
+  if (month) {
+    filteredChildren = allChildren.filter((child) =>
+      childHasEnrollmentsActiveInMonth(child, month)
+    );
+  }
+
   return filteredChildren;
 }
 
 /**
- * Returns children at given org
+ * Helper types for organizing children into sections by ageGroup
  */
-export function filterChildrenByOrg(
-  orgId: number | string,
-  children?: Child[]
-): Child[] {
-  if (!children) return [];
-  if (!orgId || orgId === ALL.ORGS) return children;
-
-  // Coerce siteId to an integer
-  const _orgId = +orgId;
-  return children.filter((c) => c.organization.id === _orgId);
-}
-
-/**
- * Returns children currently enrolled at a given site
- */
-export function filterChildrenBySite(
-  siteId: number | string,
-  children?: Child[]
-): Child[] {
-  if (!children) return [];
-  if (!siteId || siteId === ALL.SITES) return children;
-
-  // Coerce siteId to an integer
-  const _siteId = +siteId;
-  return children.filter(
-    (c) => c.enrollments?.find((e) => !e.exit)?.site?.id === _siteId
-  );
-}
-
-export function formatRosterTabText(text: string) {
-  if (text.length > 20) {
-    return `${text.slice(0, 19)}...`;
-  }
-  return text;
-}
-
-export function getSiteItems(sites: Site[]): TabItem[] {
-  const siteItems: TabItem[] = sites.map(({ id, siteName }) => ({
-    id: `${id}`,
-    tabText: siteName,
-    tabTextFormatter: formatRosterTabText,
-  }));
-  siteItems.splice(0, 0, {
-    id: ALL.SITES,
-    tabText: 'All sites',
-    firstItem: true,
-  });
-  return siteItems;
-}
-
-export function getOrganizationItems(
-  organizations: Organization[],
-  sites: Site[]
-): TabItem[] {
-  const items: TabItem[] = organizations.map(({ id, providerName }) => ({
-    id: `${id}`,
-    tabText: providerName,
-    tabTextFormatter: formatRosterTabText,
-    nestedItemType: 'site',
-    nestedTabs: getSiteItems(sites.filter((s) => s.organizationId === id)),
-  }));
-  items.splice(0, 0, {
-    id: ALL.ORGS,
-    tabText: 'All organizations',
-    firstItem: true,
-    nestedItemType: 'site',
-    nestedTabs: getSiteItems(sites),
-  });
-  return items;
-}
-
 const NoAgeGroup = 'No age group';
 type RosterSections = AgeGroup | typeof NoAgeGroup;
 type ChildrenByAgeGroup = {
   [key in RosterSections]?: Child[];
 };
 
+/**
+ * Returns a dict of filtered children, with age groups as keys.
+ * @param filteredChildren
+ */
 export function getChildrenByAgeGroup(
   filteredChildren: Child[]
 ): ChildrenByAgeGroup {
@@ -190,13 +105,19 @@ export function getChildrenByAgeGroup(
   return sortedByAgeGroup;
 }
 
+/**
+ * Returns array of AccordionItemProps, used to render the roster
+ * age group accordion sections.
+ * @param childrenByAgeGroup
+ * @param opts
+ */
 export function getAccordionItems(
   childrenByAgeGroup: ChildrenByAgeGroup,
   opts: { hideCapacity: boolean; showOrgInTables: boolean } = {
     hideCapacity: false,
     showOrgInTables: false,
   }
-) {
+): AccordionItemProps[] {
   return Object.entries(childrenByAgeGroup)
     .filter(
       ([_, ageGroupChildren]) => ageGroupChildren && ageGroupChildren.length
@@ -241,46 +162,4 @@ export function getAccordionItems(
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
-}
-
-export function parseQueryParams(searchParams: string, userSites: Site[]) {
-  // Parse query params and filter children
-  const {
-    organization: paramOrgId,
-    site: paramSiteId,
-    month: paramMonth,
-  } = parse(searchParams);
-  // Parse method can return numbers or arrays-- make sure it's the right type
-  const activeSiteId = paramSiteId?.toString();
-  let activeOrgId = paramOrgId?.toString();
-  if (!activeOrgId && activeSiteId) {
-    // If there's an active org use that, otherwise grab it from the site
-    const activeSite = userSites.find((s) => s.id === +activeSiteId);
-    activeOrgId = `${
-      activeSite?.organizationId || activeSite?.organization.id || ''
-    }`;
-  }
-  const activeMonth = paramMonth
-    ? moment.utc(paramMonth, QUERY_STRING_MONTH_FORMAT)
-    : undefined;
-  return {
-    activeMonth,
-    activeSiteId,
-    activeOrgId,
-  };
-}
-
-export function getSubHeaderText(
-  children: Child[],
-  userSites: Site[],
-  activeMonth?: Moment
-) {
-  let returnText = `${children.length} children enrolled`;
-  if (userSites.length > 1) {
-    returnText += ` at ${userSites.length} sites`;
-  }
-  if (activeMonth) {
-    returnText += ` in ${activeMonth.format('MMMM YYYY')}`;
-  }
-  return returnText;
 }

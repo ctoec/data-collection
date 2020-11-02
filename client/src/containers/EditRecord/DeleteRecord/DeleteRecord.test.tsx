@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/dom';
-import { DeleteRecord } from '.';
+import { DeleteRecord } from './DeleteRecord';
 import { Child } from '../../../shared/models';
 import { RenderResult, fireEvent } from '@testing-library/react';
 import { renderHelper } from '../../../testHelpers';

@@ -25,13 +25,17 @@ export const newForms = [
 export const listSteps: (_: any) => StepProps<RecordFormProps>[] = (
   history: History
 ) =>
-  formSections.map(({ key, name, hasError: status }) => {
+  formSections.map(({ key, name, hasError }) => {
     const Form = newForms.find((s) => s.key === key)?.form || (() => <></>);
     return {
       key,
       name,
-      status: ({ child }) =>
-        child && status(child) ? 'incomplete' : 'complete',
+      status: ({ child }) => {
+        if (key === SECTION_KEYS.INCOME) {
+          if (child?.foster) return 'exempt';
+        }
+        return child && hasError(child) ? 'incomplete' : 'complete';
+      },
       EditComponent: () => (
         <Button
           appearance="unstyled"

@@ -10,7 +10,8 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { RecordFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
-import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
+import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
+import { stringify } from 'querystring';
 
 type LocationType = Location & {
   state: {
@@ -46,12 +47,23 @@ const CreateRecord: React.FC = () => {
   }, [activeStep, history, steps]);
 
   const [child, setChild] = useState<Child>();
-  const {
-    children: { addOrUpdateRecord: updateRecordInCache },
-  } = useContext(DataCacheContext);
-
-  // TODO how do we choose correct org / site for creating new data
   const organization = locationState?.organization || child?.organization;
+  const { mutate } = useAuthenticatedSWR<Child[]>(
+    organization
+      ? `children?${stringify({ organizationId: organization.id })}`
+      : null
+  );
+  const updateRecordInCache = (updatedChild: Child) => {
+    mutate((children: Child[]) => {
+      if (children)
+        return [
+          ...children.filter((c) => c.id !== updatedChild.id),
+          updatedChild,
+        ];
+      return children;
+    });
+  };
+
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
 
@@ -104,7 +116,6 @@ const CreateRecord: React.FC = () => {
         history.replace({ hash: steps[indexOfCurrentStep + 1].key });
       }
     };
-
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
@@ -113,7 +124,11 @@ const CreateRecord: React.FC = () => {
           child: updatedChild,
         } as RecordFormProps);
 
-        if (currentStepStatus === 'complete') {
+        if (
+          currentStepStatus === 'complete' ||
+          currentStepStatus === 'exempt'
+        ) {
+          console.log('moving next step');
           moveToNextStep();
         }
       })
@@ -153,4 +168,5 @@ const CreateRecord: React.FC = () => {
     </div>
   );
 };
+
 export default CreateRecord;

@@ -13,7 +13,6 @@ import * as serviceWorker from './serviceWorker';
 
 import '@ctoec/component-library/dist/assets/styles/index.scss';
 import './index.scss';
-import { DataCacheProvider } from './contexts/DataCacheContext/DataCacheContext';
 import { apiGet } from './utils/api';
 
 const render = (Component: React.FC) =>
@@ -38,13 +37,11 @@ const render = (Component: React.FC) =>
             <SWRConfig
               value={{
                 fetcher: apiGet,
-                refreshInterval: 0,
+                // refreshInterval: 0,
                 dedupingInterval: 60 * 60 * 100, // assume query results are valid until manually retriggered; set to 100 mins
               }}
             >
-              <DataCacheProvider>
-                <Component />
-              </DataCacheProvider>
+              <Component />
             </SWRConfig>
           </UserProvider>
         </AuthenticationProvider>
