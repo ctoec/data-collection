@@ -46,7 +46,7 @@ enrollmentReportsRouter.get(
 );
 
 /**
- * /enrollment-reports/checkForErrors POST
+ * /enrollment-reports/check POST
  *
  * Ingests an uploaded file, leveraging multer middleware to save it
  * to /tmp/uploads. Then:

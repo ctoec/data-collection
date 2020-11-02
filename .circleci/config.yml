@@ -6,7 +6,10 @@ orbs:
 jobs:
   install:
     docker:
-      - image: circleci/node:12
+      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - checkout
       - node/install-packages:
@@ -28,7 +31,10 @@ jobs:
         description: "The environment to deploy Fawkes to (qa, devsecure, staging)"
         type: string
     docker:
-      - image: circleci/node:12
+      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: .
@@ -47,7 +53,10 @@ jobs:
             - .
   test:
     docker:
-      - image: circleci/node:12
+      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: .
@@ -73,7 +82,10 @@ jobs:
         description: "The environment to deploy Fawkes to (qa, devsecure, staging)"
         type: string
     docker:
-      - image: circleci/node:12
+      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: .

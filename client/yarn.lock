@@ -1175,9 +1175,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#278-logging":
-  version "0.0.38"
-  resolved "https://github.com/ctoec/component-library#b7847b677f249754b759f00e1a5c722e9d392fe4"
+"@ctoec/component-library@https://github.com/ctoec/component-library#278-card-updates":
+  version "1.0.0"
+  resolved "https://github.com/ctoec/component-library#5db5da80c396b1d0694a1231a8016020ef4f4ced"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

@@ -20,6 +20,7 @@ import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer, enumTransformer } from './transformers';
 import { FundingDoesNotOverlap } from './decorators/Enrollment/fundingOverlapValidation';
+import { FundingAgeGroupMatchesEnrollment } from './decorators/Enrollment/fundingAgeGroupValidation';
 
 @Entity()
 export class Enrollment implements EnrollmentInterface {
@@ -74,6 +75,7 @@ export class Enrollment implements EnrollmentInterface {
   })
   @ValidateNested({ each: true })
   @FundingDoesNotOverlap()
+  @FundingAgeGroupMatchesEnrollment()
   @IsNotEmpty()
   fundings?: Array<Funding>;
 

@@ -5,50 +5,113 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
   <div
     class="Roster grid-container"
   >
-    <h1
-      class="margin-bottom-0"
+    <button
+      class="usa-button usa-button--unstyled margin-2 text-bold"
+      type="button"
     >
-      Multiple organizations
-    </h1>
-    <p
-      class="font-body-xl margin-top-1"
-    >
-      3 children enrolled at 2 sites
-    </p>
+      <span
+        class="oec-text-with-icon"
+      >
+        <svg
+          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
+        >
+          arrowRight.svg
+        </svg>
+        Back to getting started
+      </span>
+    </button>
     <div
-      class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"
+      class="grid-row flex-align-center"
     >
       <div
-        class="oec-drop-button"
-        id="select-organization"
+        class="tablet:grid-col-10"
       >
-        <button
-          class="usa-button usa-button--unstyled"
-          type="button"
+        <h1
+          class="margin-bottom-0"
         >
-          <span>
-            <span
-              class="oec-text-with-icon"
-            >
-              Add a record
-            </span>
-            <span>
-               
-            </span>
-          </span>
-        </button>
+          Multiple organizations
+        </h1>
+        <p
+          class="font-body-xl margin-top-1"
+        >
+          3 children enrolled at 2 sites
+        </p>
       </div>
-      <button
-        class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-        type="button"
-      >
-        <span
-          class="oec-text-with-icon text-underline"
-        >
-          Export roster
-        </span>
-      </button>
+      <div
+        class="tablet:grid-col-2"
+      />
     </div>
+    <table
+      class="oec-table buttons-table margin-top-2 margin-bottom-4"
+    >
+      <tbody>
+        <tr>
+          <th
+            scope="row"
+          >
+            Actions
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <div
+                class="oec-drop-button"
+                id="add-record-in-actions"
+              >
+                <button
+                  class="usa-button usa-button--unstyled margin-right-2"
+                  type="button"
+                >
+                  <div
+                    class="button-content display-flex"
+                  >
+                    <span
+                      class="oec-text-with-icon"
+                    >
+                      Add a record
+                    </span>
+                  </div>
+                </button>
+              </div>
+              <button
+                class="usa-button usa-button--unstyled text-bold display-block"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon text-underline"
+                >
+                  Export roster
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Views
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <button
+                class="usa-button usa-button--unstyled"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Past enrollments
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div
       class="oec-tab-nav"
     >
@@ -191,7 +254,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                   </th>
                   <th
                     aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                     role="columnheader"
                     scope="col"
                     style="width: 10%;"
@@ -468,7 +531,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                   </th>
                   <th
                     aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                     role="columnheader"
                     scope="col"
                     style="width: 10%;"
@@ -670,39 +733,104 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
   <div
     class="Roster grid-container"
   >
-    <h1
-      class="margin-bottom-0"
+    <button
+      class="usa-button usa-button--unstyled margin-2 text-bold"
+      type="button"
     >
-      Site1
-    </h1>
-    <p
-      class="font-body-xl margin-top-1"
-    >
-      3 children enrolled 
-    </p>
+      <span
+        class="oec-text-with-icon"
+      >
+        <svg
+          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
+        >
+          arrowRight.svg
+        </svg>
+        Back to getting started
+      </span>
+    </button>
     <div
-      class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"
+      class="grid-row flex-align-center"
     >
-      <a
-        href="/create-record"
+      <div
+        class="tablet:grid-col-10"
       >
-        <span
-          class="oec-text-with-icon"
+        <h1
+          class="margin-bottom-0"
         >
-          Add a record
-        </span>
-      </a>
-      <button
-        class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-        type="button"
-      >
-        <span
-          class="oec-text-with-icon text-underline"
+          Site1
+        </h1>
+        <p
+          class="font-body-xl margin-top-1"
         >
-          Export roster
-        </span>
-      </button>
+          3 children enrolled
+        </p>
+      </div>
+      <div
+        class="tablet:grid-col-2"
+      />
     </div>
+    <table
+      class="oec-table buttons-table margin-top-2 margin-bottom-4"
+    >
+      <tbody>
+        <tr>
+          <th
+            scope="row"
+          >
+            Actions
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <a
+                class="margin-right-2"
+                href="/create-record"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Add a record
+                </span>
+              </a>
+              <button
+                class="usa-button usa-button--unstyled text-bold display-block"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon text-underline"
+                >
+                  Export roster
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Views
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <button
+                class="usa-button usa-button--unstyled"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Past enrollments
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div
       aria-multiselectable="true"
       class="oec-accordion"
@@ -782,7 +910,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
               </th>
               <th
                 aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                 role="columnheader"
                 scope="col"
                 style="width: 10%;"
@@ -1036,7 +1164,7 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
               </th>
               <th
                 aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                 role="columnheader"
                 scope="col"
                 style="width: 10%;"

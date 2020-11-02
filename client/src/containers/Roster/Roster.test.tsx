@@ -1,5 +1,4 @@
 import React from 'react';
-import { waitFor } from '@testing-library/dom';
 import moment from 'moment';
 import {
   snapshotTestHelper,

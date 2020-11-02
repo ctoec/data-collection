@@ -46,16 +46,29 @@ const GettingStarted: React.FC = () => {
           </p>
           <div>
             <h2>Download the latest batch upload template</h2>
-            <CSVExcelDownloadButton fileType="xlsx" whichDownload="template" />
-            <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
+            <CSVExcelDownloadButton
+              fileType="xlsx"
+              whichDownload="template"
+              className="margin-bottom-3"
+            />
+            <CSVExcelDownloadButton
+              fileType="csv"
+              whichDownload="template"
+              className="margin-bottom-3"
+            />
           </div>
           <div className="display-block">
             <p>You can see a completed example template here:</p>
-            <CSVExcelDownloadButton fileType="xlsx" whichDownload="example" />
+            <CSVExcelDownloadButton
+              fileType="xlsx"
+              whichDownload="example"
+              className="margin-bottom-3"
+            />
             <CSVExcelDownloadButton
               fileType="csv"
               whichDownload="example"
-            />{' '}
+              className="margin-bottom-3"
+            />
           </div>
         </div>
         <div className="tablet:grid-col-4" role="presentation">
