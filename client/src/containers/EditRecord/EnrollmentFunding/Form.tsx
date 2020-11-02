@@ -34,6 +34,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   const pastEnrollments: Enrollment[] = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
+
   useEffect(() => {
     console.log('*********');
     console.log(activeCard);
@@ -43,7 +44,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     <>
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentCard
-        key="change-enrollement"
+        key="change-enrollment"
         child={child}
         currentEnrollment={currentEnrollment}
         afterSaveSuccess={afterSaveSuccess}
@@ -56,7 +57,9 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             expanded={activeCard === FormName.EditCurrentEnrollment}
             onExpansionChange={(isActive) =>
               isActive
-                ? setActiveCard(`${FormName.EditCurrentEnrollment}`)
+                ? // ? console.log('active')
+                  // : console.log('inactive')
+                  setActiveCard(`${FormName.EditCurrentEnrollment}`)
                 : setActiveCard(undefined)
             }
             isCurrent={true}

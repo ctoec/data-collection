@@ -44,7 +44,6 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
   const [error, setError] = useState<string>();
-  const [expandedCard, setExpandedCard] = useState(expanded);
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
@@ -66,12 +65,12 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         console.error('Unable to delete enrollment', err);
       });
   }
-
+  console.log('Rendering Edit');
   return (
     <Card
       key={enrollmentId}
       appearance={isCurrent ? 'primary' : 'secondary'}
-      expanded={expandedCard}
+      expanded={expanded}
       forceClose={closeCard}
       onExpansionChange={onExpansionChange}
     >

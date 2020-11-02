@@ -52,7 +52,6 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
 
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
-  const [expandedCard, setExpandedCard] = useState(expanded);
   const [error, setError] = useState<string>();
 
   // Explicitly don't want `closeCard` as a dep, as this
@@ -66,7 +65,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
 
   const afterSaveSuccess = () => {
     setError(undefined);
-    setExpandedCard(false);
+    setCloseCard(false);
     _afterSaveSuccess();
   };
 
