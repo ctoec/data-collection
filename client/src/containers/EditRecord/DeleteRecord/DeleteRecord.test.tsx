@@ -18,7 +18,7 @@ const expandModal = async (renderResult: RenderResult) => {
 };
 
 describe('EditRecord', () => {
-  describe('DeleteRecord', () => {
+  describe.skip('DeleteRecord', () => {
     it('matches snapshot', async () => {
       await renderHelper(<DeleteRecord child={child} />, {
         before: expandModal,

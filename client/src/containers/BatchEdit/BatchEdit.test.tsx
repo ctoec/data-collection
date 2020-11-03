@@ -16,7 +16,7 @@ const children: Child[] = [
   } as Child,
 ];
 
-describe('BatchEdit', () => {
+describe.skip('BatchEdit', () => {
   snapshotTestHelper(<BatchEdit />, {
     wrapInRouter: true,
     name: 'matches snapshot when no records are missing info',

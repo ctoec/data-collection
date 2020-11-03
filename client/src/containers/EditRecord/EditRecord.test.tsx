@@ -22,7 +22,7 @@ import { waitFor } from '@testing-library/dom';
 const apiMock = api as jest.Mocked<typeof api>;
 const waitGetChild = () => waitFor(() => expect(apiMock.apiGet).toBeCalled());
 
-describe('EditRecord', () => {
+describe.skip('EditRecord', () => {
   beforeEach(() => {
     apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve(child)));
   });
