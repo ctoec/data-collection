@@ -101,7 +101,7 @@ export async function streamUploadedChildren(
       // Can just use 0th element of each array as the 'active'/'current'
       // value because controller.getChildById does presorting for us
       childStrings.push(
-        flattenChild(columnMetadatas, child, enrollment, i === 0)
+        flattenChild(columnMetadatas, child, enrollment, i !== 0)
       )
     );
   });
