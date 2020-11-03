@@ -1,10 +1,8 @@
-import { Modal, Table, X } from '@ctoec/component-library';
-import ReactModal from 'react-modal';
+import { Modal, Table } from '@ctoec/component-library';
 import React from 'react';
 import { Button } from '@ctoec/component-library';
 import { ErrorObjectForTable } from './ErrorObjectForTable';
 import { tableColumns } from './TableColumns';
-import cx from 'classnames';
 
 type ErrorModalProps = {
   isOpen: boolean;
