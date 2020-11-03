@@ -132,9 +132,9 @@ function formatStringPush(value: any) {
  *  - dual language learner
  *  - model (of an enrollment/site)
  * @param child
- * @param cols
+ * @param columns
  */
-function flattenChild(child: Child, cols: ColumnMetadata[]) {
+function flattenChild(child: Child, columns: ColumnMetadata[]) {
   const { family, enrollments } = child;
   // Can just use 0th element of each array as the 'active'/'current'
   // value because controller.getChildById does presorting for us
@@ -145,13 +145,15 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
   // Note: There is still some nested depth checking because we store
   // records as nested data structures within a Child object
   // (e.g. to get to a determination: Child -> Family -> Det.)
+
+  // We need to do this for each enrollment instead
   const childString: string[] = [];
-  cols.forEach(column => {
+  columns.forEach(column => {
     const { propertyName } = column;
     if (child.hasOwnProperty(propertyName)) {
       childString.push(formatStringPush(child[propertyName]));
-    } else if (child.family?.hasOwnProperty(propertyName)) {
-      childString.push(formatStringPush(child.family[propertyName]));
+    } else if (family?.hasOwnProperty(propertyName)) {
+      childString.push(formatStringPush(family[propertyName]));
     } else if (
       !!currentDetermination &&
       currentDetermination.hasOwnProperty(propertyName)
@@ -196,9 +198,6 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
         }
       }
     } else {
-      // We shouldn't do this if things are undefined probably??
-      // childString.push('Unrecognized property name: ' + propertyName);
-
       childString.push('');
     }
   })
