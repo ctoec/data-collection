@@ -134,17 +134,27 @@ function flattenChild(child: Child, columns: ColumnMetadata[]) {
   // Can just use 0th element of each array as the 'active'/'current'
   // value because controller.getChildById does presorting for us
   const currentDetermination = family?.incomeDeterminations?.[0];
-  const activeEnrollment = enrollments?.find((e) => !e.exit) || enrollments?.[0];
+  const activeEnrollment =
+    enrollments?.find((e) => !e.exit) || enrollments?.[0];
   const activeFunding = activeEnrollment?.fundings?.[0];
+  // Should we try to get the funding that was active at the time of the specific enrollment for historical enrollments?
 
   // We need to do this for each enrollment instead
   const childString: string[] = [];
-  const objectsToCheck = [child, family, currentDetermination, activeEnrollment, activeEnrollment?.site, activeEnrollment?.site?.organization, activeFunding?.fundingSpace];
-  columns.forEach(column => {
+  const objectsToCheck = [
+    child,
+    family,
+    currentDetermination,
+    activeEnrollment,
+    activeEnrollment?.site,
+    activeEnrollment?.site?.organization,
+    activeFunding?.fundingSpace,
+  ];
+  columns.forEach((column) => {
     const { propertyName } = column;
-    objectsToCheck.some(o => {
+    const valueFound = objectsToCheck.some((o) => {
       if (o && o.hasOwnProperty(propertyName)) {
-        childString.push(formatStringPush(o[propertyName]))
+        childString.push(formatStringPush(o[propertyName]));
         return true;
       } else if (propertyName.toLowerCase().includes('fundingperiod')) {
         if (!!activeFunding && propertyName.toLowerCase().startsWith('first')) {
@@ -161,10 +171,11 @@ function flattenChild(child: Child, columns: ColumnMetadata[]) {
           }
         }
       }
-      childString.push('')
-      return true;
-    })
-  })
-
+      return false;
+    });
+    if (!valueFound) {
+      childString.push('');
+    }
+  });
   return childString;
 }

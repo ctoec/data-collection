@@ -10,13 +10,16 @@ export const makeFakeEnrollments = (
   site: Site
 ): Enrollment[] => {
   const returnEnrollments = [];
-  const currentEnrollmentEntry = moment().add(-random.number({ min: 5, max: 300 }), 'days')
+  const currentEnrollmentEntry = moment().add(
+    -random.number({ min: 5, max: 300 }),
+    'days'
+  );
   const commonEnrollmentAttrs = {
     childId: child.id,
     child,
     site,
     siteId: site.id,
-  }
+  };
   const currentEnrollment: Enrollment = {
     ...commonEnrollmentAttrs,
     id,
@@ -28,7 +31,7 @@ export const makeFakeEnrollments = (
   currentEnrollment.fundings = [
     getFakeFunding(id, currentEnrollment, site.organization),
   ];
-  returnEnrollments.push(currentEnrollment)
+  returnEnrollments.push(currentEnrollment);
   if (currentEnrollment.ageGroup === AgeGroup.SchoolAge) {
     const oldEnrollment: Enrollment = {
       ...commonEnrollmentAttrs,
@@ -39,7 +42,7 @@ export const makeFakeEnrollments = (
       exit: currentEnrollmentEntry.add(-1, 'days'),
       exitReason: 'Aged out',
       updateMetaData: { updatedAt: new Date() },
-    }
+    };
     oldEnrollment.fundings = [
       getFakeFunding(id, currentEnrollment, site.organization),
     ];
