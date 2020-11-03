@@ -8,6 +8,7 @@ import { isMoment } from 'moment';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
 import { streamTabularData } from '../utils/streamTabularData';
 import { SECTIONS } from '../template';
+import { reportingPeriodToString } from './reportingPeriods';
 
 // Make sure to load all nested levels of the Child objects
 // we fetch
@@ -184,13 +185,13 @@ function flattenChild(
             propertyName.toLowerCase().startsWith('first')
           ) {
             childString.push(
-              formatStringPush(activeFunding.firstReportingPeriod.period)
+              reportingPeriodToString(activeFunding.firstReportingPeriod)
             );
             return true;
           } else {
             if (!!activeFunding?.lastReportingPeriod) {
               childString.push(
-                formatStringPush(activeFunding.lastReportingPeriod.period)
+                reportingPeriodToString(activeFunding.lastReportingPeriod)
               );
               return true;
             }

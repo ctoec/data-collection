@@ -18,3 +18,7 @@ export const getReportingPeriods = async () => {
     },
   });
 };
+
+export function reportingPeriodToString(reportingPeriod: ReportingPeriod) {
+  return reportingPeriod.period.format('MM/YYYY');
+}
