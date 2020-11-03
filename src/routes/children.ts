@@ -5,9 +5,8 @@ import {
   BadRequestError,
   ApiError,
 } from '../middleware/error/errors';
-import { Child } from '../entity';
-import { validate } from 'class-validator';
 import * as controller from '../controllers/children';
+import { parseQueryString } from '../utils/parseQueryString';
 
 export const childrenRouter = express.Router();
 
@@ -39,32 +38,24 @@ childrenRouter.post(
 childrenRouter.get(
   '/',
   passAsyncError(async (req, res) => {
-    const organizationId = req.query['organizationId'];
-    const organizationIds = !organizationId
-      ? undefined
-      : ((Array.isArray(organizationId)
-          ? organizationId
-          : [organizationId]) as string[]);
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const count = parseQueryString(req, 'count');
+    const missingInfo = parseQueryString(req, 'missing-info') as string;
 
-    const missingInfo = req.query['missing-info'] as string;
+    if (count && count === 'true') {
+      const count = await controller.getCount(req.user);
+      res.send({ count });
+      return;
+    }
+
     const children = await controller.getChildren(req.user, {
       organizationIds,
       missingInfo,
     });
 
-    const count = req.query['count'] as string;
-    if (count && count === 'true') {
-      res.send({ count: children.length });
-      return;
-    }
-
-    // Augment children with any validation errors in their nested objects
-    const childrenWithErrors: Child[] = await Promise.all(
-      children.map(async (child) => {
-        return { ...child, validationErrors: await validate(child) };
-      })
-    );
-    res.send(childrenWithErrors);
+    res.send(children);
   })
 );
 

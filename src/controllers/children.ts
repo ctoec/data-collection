@@ -16,7 +16,7 @@ import {
 } from '../entity';
 import { ChangeEnrollment } from '../../client/src/shared/payloads';
 import { BadRequestError, NotFoundError } from '../middleware/error/errors';
-import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
+import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
 import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
 
@@ -68,10 +68,10 @@ const sortIncomeDeterminations = (child: Child) => {
  * @param id
  */
 export const getChildById = async (id: string, user: User): Promise<Child> => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const readOrgIds = await getReadAccessibleOrgIds(user);
   const child = await getManager().findOne(Child, id, {
     relations: FULL_RECORD_RELATIONS,
-    where: { organization: { id: In(readOrgIds) } },
+    where: { organizationId: In(readOrgIds) },
   });
 
   if (child) {
@@ -81,28 +81,65 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
     }
   }
 
+  // If site-level user, filter out children not enrolled at allowed sites
+  // TODO: should we filter out enrollments not at allowed sites?
+  if (user.sitePermissions?.length) {
+    if (
+      !idx(child, (_) =>
+        _.enrollments.some((e) => user.siteIds.includes(e.siteId))
+      )
+    ) {
+      return undefined;
+    }
+  }
+
   return validateObject(child);
 };
 
 /**
- * Get all children for organizations the user has access to
+ * Get all children. By default, returns all children for all orgs the user has access to.
+ * Optional filter params:
+ * - organizationIds - a list of organziationIds to pull children for
+ * - missingInfo - a flag to filter out children without any validation errors
  */
 export const getChildren = async (
   user: User,
   filterOpts: { organizationIds?: string[]; missingInfo?: string }
 ) => {
   let { organizationIds, missingInfo } = filterOpts;
-  if (!organizationIds || !organizationIds.length)
-    organizationIds = await getReadAccessibileOrgIds(user);
-  let children = (
-    await getManager().find(Child, {
-      relations: FULL_RECORD_RELATIONS,
-      where: {
-        organization: { id: In(organizationIds) },
-      },
-    })
-  ).map(validateObject);
+  const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
 
+  // Get children for all read-accessible orgs for user if no query values provided
+  if (!organizationIds || !organizationIds.length) {
+    organizationIds = readAccessibleOrgIds;
+  }
+  // Otherwise, use the provided values from query (but filter to only include orgIds the user has access to)
+  else {
+    organizationIds = organizationIds.filter((inputOrgId) =>
+      readAccessibleOrgIds.includes(inputOrgId)
+    );
+  }
+
+  let children = await getManager().find(Child, {
+    relations: FULL_RECORD_RELATIONS,
+    order: { id: 1 },
+    where: {
+      organizationId: In(organizationIds),
+    },
+  });
+
+  // If site-level user, filter out children not enrolled at allowed sites
+  // TODO: should we filter out enrollments not at allowed sites?
+  if (user.sitePermissions?.length) {
+    children = children.filter((c) =>
+      idx(c, (_) => _.enrollments.some((e) => user.siteIds.includes(e.siteId)))
+    );
+  }
+
+  // Apply validations to children that will be returned
+  children.map(validateObject);
+
+  // Filter for only children with errors if missingInfo = true
   if (missingInfo === 'true') {
     children = children.filter(
       (child) => child.validationErrors && child.validationErrors.length
@@ -110,6 +147,29 @@ export const getChildren = async (
   }
 
   return children;
+};
+
+/**
+ * Get count of children the user has access to
+ */
+export const getCount = async (user: User) => {
+  const readOrgIds = await getReadAccessibleOrgIds(user);
+  let children = await getManager().find(Child, {
+    relations: ['enrollments'],
+    where: {
+      organizationId: In(readOrgIds),
+    },
+  });
+
+  // If site level user, filter out children not enrolled at allowed sites
+  // TODO: should we filter out enrollments not at allowed sites?
+  if (user.sitePermissions?.length) {
+    children = children.filter((c) =>
+      idx(c, (_) => _.enrollments.some((e) => user.siteIds.includes(e.siteId)))
+    );
+  }
+
+  return children.length;
 };
 
 /**
@@ -123,7 +183,7 @@ export const updateChild = async (
   user: User,
   update: Partial<Child>
 ) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const readOrgIds = await getReadAccessibleOrgIds(user);
   const child = await getManager().findOne(Child, id, {
     where: { organization: { id: In(readOrgIds) } },
   });
@@ -144,7 +204,7 @@ export const updateChild = async (
  * @param user
  */
 export const deleteChild = async (id: string, user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const readOrgIds = await getReadAccessibleOrgIds(user);
   const child = await getManager().findOne(Child, id, {
     where: { organization: { id: In(readOrgIds) } },
   });
@@ -165,7 +225,7 @@ export const deleteChild = async (id: string, user: User) => {
  * @param _child
  */
 export const createChild = async (_child: Child, user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
+  const readOrgIds = await getReadAccessibleOrgIds(user);
   if (
     !readOrgIds.length ||
     !_child.organization ||

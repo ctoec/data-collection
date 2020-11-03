@@ -7,7 +7,7 @@ import { getManager } from 'typeorm';
  * that they have permissions for.
  * @param user
  */
-export const getReadAccessibileOrgIds = async (
+export const getReadAccessibleOrgIds = async (
   user: User
 ): Promise<string[]> => {
   // get org ids for all permitted sites

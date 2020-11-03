@@ -1,6 +1,6 @@
 import { User, FundingSpace, Site, Organization } from '../entity';
 import { getManager, In } from 'typeorm';
-import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
+import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 
 /**
  * Get all funding spaces a given user has access to,
@@ -14,7 +14,7 @@ export const getFundingSpaces = async (
   organizationIds?: string[]
 ): Promise<FundingSpace[]> => {
   if (!organizationIds || !organizationIds.length)
-    organizationIds = await getReadAccessibileOrgIds(user);
+    organizationIds = await getReadAccessibleOrgIds(user);
 
   return getManager().find(FundingSpace, {
     where: {
