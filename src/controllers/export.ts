@@ -126,11 +126,6 @@ function formatStringPush(value: any) {
  * arranged according to the column format specified by the data
  * templates on the site.
  *
- * TODO: Several fields in the data template are not currently captured
- * by the data model or the child object. We eventually need to
- * reconcile these properties to live somewhere. They include:
- *  - dual language learner
- *  - model (of an enrollment/site)
  * @param child
  * @param columns
  */
@@ -142,64 +137,33 @@ function flattenChild(child: Child, columns: ColumnMetadata[]) {
   const activeEnrollment = enrollments?.find((e) => !e.exit) || enrollments?.[0];
   const activeFunding = activeEnrollment?.fundings?.[0];
 
-  // Note: There is still some nested depth checking because we store
-  // records as nested data structures within a Child object
-  // (e.g. to get to a determination: Child -> Family -> Det.)
-
   // We need to do this for each enrollment instead
   const childString: string[] = [];
+  const objectsToCheck = [child, family, currentDetermination, activeEnrollment, activeEnrollment?.site, activeEnrollment?.site?.organization, activeFunding?.fundingSpace];
   columns.forEach(column => {
     const { propertyName } = column;
-    if (child.hasOwnProperty(propertyName)) {
-      childString.push(formatStringPush(child[propertyName]));
-    } else if (family?.hasOwnProperty(propertyName)) {
-      childString.push(formatStringPush(family[propertyName]));
-    } else if (
-      !!currentDetermination &&
-      currentDetermination.hasOwnProperty(propertyName)
-    ) {
-      childString.push(formatStringPush(currentDetermination[propertyName]));
-    } else if (
-      !!activeEnrollment &&
-      activeEnrollment.hasOwnProperty(propertyName)
-    ) {
-      childString.push(formatStringPush(activeEnrollment[propertyName]));
-    } else if (
-      !!activeEnrollment?.site &&
-      activeEnrollment.site.hasOwnProperty(propertyName)
-    ) {
-      childString.push(formatStringPush(activeEnrollment.site[propertyName]));
-    } else if (
-      !!activeEnrollment?.site?.organization &&
-      activeEnrollment.site.organization.hasOwnProperty(propertyName)
-    ) {
-      childString.push(
-        formatStringPush(activeEnrollment.site.organization[propertyName])
-      );
-    } else if (
-      !!activeFunding &&
-      activeFunding.fundingSpace?.hasOwnProperty(propertyName)
-    ) {
-      childString.push(
-        formatStringPush(activeFunding.fundingSpace[propertyName])
-      );
-    } else if (propertyName.toLowerCase().includes('fundingperiod')) {
-      if (!!activeFunding && propertyName.toLowerCase().startsWith('first')) {
-        childString.push(
-          formatStringPush(activeFunding.firstReportingPeriod.period)
-        );
-      } else {
-        if (!!activeFunding?.lastReportingPeriod) {
+    objectsToCheck.some(o => {
+      if (o && o.hasOwnProperty(propertyName)) {
+        childString.push(formatStringPush(o[propertyName]))
+        return true;
+      } else if (propertyName.toLowerCase().includes('fundingperiod')) {
+        if (!!activeFunding && propertyName.toLowerCase().startsWith('first')) {
           childString.push(
-            formatStringPush(activeFunding.lastReportingPeriod.period)
+            formatStringPush(activeFunding.firstReportingPeriod.period)
           );
+          return true;
         } else {
-          childString.push(' ');
+          if (!!activeFunding?.lastReportingPeriod) {
+            childString.push(
+              formatStringPush(activeFunding.lastReportingPeriod.period)
+            );
+            return true;
+          }
         }
       }
-    } else {
-      childString.push('');
-    }
+      childString.push('')
+      return true;
+    })
   })
 
   return childString;
