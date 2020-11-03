@@ -97,13 +97,17 @@ export async function streamUploadedChildren(
   const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
   const childStrings = [];
   children.forEach((child) => {
-    child.enrollments.forEach((enrollment, i) =>
-      // Can just use 0th element of each array as the 'active'/'current'
-      // value because controller.getChildById does presorting for us
-      childStrings.push(
-        flattenChild(columnMetadatas, child, enrollment, i !== 0)
-      )
-    );
+    if (!child.enrollments) {
+      childStrings.push(flattenChild(columnMetadatas, child));
+    } else {
+      child.enrollments?.forEach((enrollment, i) =>
+        // Can just use 0th element of each array as the 'active'/'current'
+        // value because controller.getChildById does presorting for us
+        childStrings.push(
+          flattenChild(columnMetadatas, child, enrollment, i !== 0)
+        )
+      );
+    }
   });
   streamTabularData(response, format, childStrings);
 }
@@ -141,7 +145,7 @@ function formatStringPush(value: any) {
 function flattenChild(
   columns: ColumnMetadata[],
   child: Child,
-  enrollment: Enrollment,
+  enrollment?: Enrollment,
   skipInfoForPastEnrollments?: boolean
 ) {
   const { family } = child;

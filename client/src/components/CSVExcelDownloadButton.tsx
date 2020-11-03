@@ -63,9 +63,12 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
   const { downloadText: defaultDownloadText, fileName, backendPath } = options;
   const downloadText = specifiedDownloadText || defaultDownloadText;
 
+  console.log(stringify(queryParamsAsObject || {}));
   const download = async () => {
     await downloadStreamToFile(
-      queryParamsAsObject ? `${backendPath}?${stringify(queryParamsAsObject)}` : backendPath,
+      queryParamsAsObject
+        ? `${backendPath}?${stringify(queryParamsAsObject)}`
+        : backendPath,
       fileName,
       accessToken || ''
     ).catch((err) => console.error(err));
