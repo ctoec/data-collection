@@ -59,7 +59,6 @@ type FamilyIncomeFormProps = {
   legend?: string;
   incomeDeterminationId?: number;
   CancelButton?: JSX.Element;
-  type?: 'edit' | 'redetermination';
 } & RecordFormProps;
 
 export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
@@ -68,7 +67,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   child,
   incomeDeterminationId,
   CancelButton,
-  type,
   afterSaveSuccess,
   setAlerts,
 }) => {
@@ -95,13 +93,12 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
   }
 
-  const determination = (type === 'edit'
-    ? (incomeDeterminationId
-        ? child?.family?.incomeDeterminations?.find(
-            (d) => d.id === incomeDeterminationId
-          )
-        : idx(child, (_) => _.family.incomeDeterminations[0])) || {}
-    : {}) as IncomeDetermination;
+  const determination =
+    child?.family?.incomeDeterminations?.find(
+      (d) => d.id === incomeDeterminationId
+    ) ||
+    idx(child, (_) => _.family.incomeDeterminations[0]) ||
+    ({} as IncomeDetermination);
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
     apiPost(
