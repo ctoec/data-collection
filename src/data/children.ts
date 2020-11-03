@@ -108,11 +108,15 @@ const completeChildren: Child[] = children.map((c, i) => {
 
 // Iterate through, delete keys arbitrarily
 const missingSomeInfo = completeChildren.map(c => {
-  const randomKey = random.arrayElement(Object.keys(c));
-  return { ...c, [randomKey]: undefined }
+  if (random.boolean()) {
+    const randomKey = random.arrayElement(Object.keys(c));
+    return { ...c, [randomKey]: undefined }
+  }
+  return c;
 });
 
 // Delete one key from all children
+// TODO: make this a func that takes a param for which key
 const allMissingOneField = completeChildren.map(c => {
   return { ...c, firstName: undefined }
 });;
