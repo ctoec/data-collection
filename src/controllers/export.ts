@@ -7,6 +7,7 @@ import { Response } from 'express';
 import { isMoment } from 'moment';
 import { propertyDateSorter } from '../utils/propertyDateSorter';
 import { streamTabularData } from '../utils/streamTabularData';
+import { SECTIONS } from '../template';
 
 // Make sure to load all nested levels of the Child objects
 // we fetch
@@ -145,7 +146,7 @@ function flattenChild(
   const { family } = child;
   const { fundings, site } = enrollment || {};
   const activeFunding = fundings?.[0];
-  const fundingSpace = activeFunding || {};
+  const { fundingSpace } = activeFunding || {};
   const { organization } = site || {};
   // Can just use 0th element of each array as the 'active'/'current'
   // value because controller.getChildById does presorting for us
@@ -167,34 +168,39 @@ function flattenChild(
     const { propertyName, section } = column;
     if (
       skipInfoForPastEnrollments &&
-      section !== 'child' &&
-      section !== 'enrollment'
+      section !== SECTIONS.CHILD_IDENTIFIER &&
+      section !== SECTIONS.ENROLLMENT_FUNDING
     ) {
       childString.push('');
-    }
-    const valueFound = objectsToCheck.some((o) => {
-      if (o && o.hasOwnProperty(propertyName)) {
-        childString.push(formatStringPush(o[propertyName]));
-        return true;
-      } else if (propertyName.toLowerCase().includes('fundingperiod')) {
-        if (!!activeFunding && propertyName.toLowerCase().startsWith('first')) {
-          childString.push(
-            formatStringPush(activeFunding.firstReportingPeriod.period)
-          );
+      return;
+    } else {
+      const valueFound = objectsToCheck.some((o) => {
+        if (o && o.hasOwnProperty(propertyName)) {
+          childString.push(formatStringPush(o[propertyName]));
           return true;
-        } else {
-          if (!!activeFunding?.lastReportingPeriod) {
+        } else if (propertyName.toLowerCase().includes('fundingperiod')) {
+          if (
+            !!activeFunding &&
+            propertyName.toLowerCase().startsWith('first')
+          ) {
             childString.push(
-              formatStringPush(activeFunding.lastReportingPeriod.period)
+              formatStringPush(activeFunding.firstReportingPeriod.period)
             );
             return true;
+          } else {
+            if (!!activeFunding?.lastReportingPeriod) {
+              childString.push(
+                formatStringPush(activeFunding.lastReportingPeriod.period)
+              );
+              return true;
+            }
           }
         }
+        return false;
+      });
+      if (!valueFound) {
+        childString.push('');
       }
-      return false;
-    });
-    if (!valueFound) {
-      childString.push('');
     }
   });
   return childString;
