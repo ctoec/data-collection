@@ -4,7 +4,6 @@ import {
   PlusCircle,
   TextWithIcon,
 } from '@ctoec/component-library';
-import { Organization } from '../shared/models';
 import { Link, useHistory } from 'react-router-dom';
 import UserContext from '../contexts/UserContext/UserContext';
 

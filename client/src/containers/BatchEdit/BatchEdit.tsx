@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import {
   SideNav,
@@ -38,8 +38,6 @@ const BatchEdit: React.FC = () => {
   const fixedRecordsForDisplay = fixedRecordsForDisplayIds.map((id) =>
     (children || []).find((c) => c.id === id)
   ) as Child[];
-  console.log('ids', fixedRecordsForDisplayIds);
-  console.log('records', fixedRecordsForDisplay);
   const currentlyMissingInfoCount = fixedRecordsForDisplay.filter(
     hasValidationError
   ).length;

@@ -1,7 +1,6 @@
 import { Alert } from '@ctoec/component-library';
 import React from 'react';
 import { AddRecordButton } from '../../components/AddRecordButton';
-import { Organization } from '../../shared/models';
 
 export const NoRecordsAlert: React.FC = () => (
   <Alert

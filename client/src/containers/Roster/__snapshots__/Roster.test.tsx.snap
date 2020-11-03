@@ -126,17 +126,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
           <button
             aria-selected="true"
             class="oec-tab-nav--tab oec-tab-nav--tab__active"
-            id="all-organizations"
-            role="tab"
-            type="button"
-          >
-            <span>
-              All organizations
-            </span>
-          </button>
-          <button
-            aria-selected="false"
-            class="oec-tab-nav--tab"
             id="1"
             role="tab"
             type="button"
@@ -308,13 +297,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
+                    style="width: 10%;"
                   >
                     <button
-                      aria-label="Sort table by Organization in ascending order"
+                      aria-label="Sort table by Contract space in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Organization
+                      Contract space
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -325,13 +314,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 10%;"
+                    style="width: 20%;"
                   >
                     <button
-                      aria-label="Sort table by Contract space in ascending order"
+                      aria-label="Sort table by Organization in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Contract space
+                      Organization
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -400,13 +389,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     CDC - Child Day Care
                   </td>
                   <td
-                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                  />
-                  <td
                     class="font-body-2xs"
                   >
                     Full-day
                   </td>
+                  <td
+                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                  />
                   <td
                     class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                   >
@@ -442,13 +431,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     PSR - Priority School Readiness
                   </td>
                   <td
-                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                  />
-                  <td
                     class="font-body-2xs"
                   >
                     Full-time
                   </td>
+                  <td
+                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                  />
                   <td
                     class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                   >
@@ -585,13 +574,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
+                    style="width: 10%;"
                   >
                     <button
-                      aria-label="Sort table by Organization in ascending order"
+                      aria-label="Sort table by Contract space in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Organization
+                      Contract space
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -602,13 +591,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 10%;"
+                    style="width: 20%;"
                   >
                     <button
-                      aria-label="Sort table by Contract space in ascending order"
+                      aria-label="Sort table by Organization in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Contract space
+                      Organization
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -677,13 +666,13 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     CDC - Child Day Care
                   </td>
                   <td
-                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                  />
-                  <td
                     class="font-body-2xs"
                   >
                     Extended-day
                   </td>
+                  <td
+                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                  />
                   <td
                     class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                   >
@@ -717,7 +706,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
         </a>
         <button
           class="usa-button"
-          disabled=""
           type="button"
         >
           Send to OEC
@@ -1328,7 +1316,6 @@ exports[`Roster matches snapshot for user with 1 org 1`] = `
         </a>
         <button
           class="usa-button"
-          disabled=""
           type="button"
         >
           Send to OEC

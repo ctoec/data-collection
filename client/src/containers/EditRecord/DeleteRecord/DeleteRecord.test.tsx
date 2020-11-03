@@ -10,6 +10,7 @@ const child = {
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'First',
   lastName: 'Last',
+  organization: { id: 1 },
 } as Child;
 
 const expandModal = async (renderResult: RenderResult) => {
@@ -18,7 +19,7 @@ const expandModal = async (renderResult: RenderResult) => {
 };
 
 describe('EditRecord', () => {
-  describe.skip('DeleteRecord', () => {
+  describe('DeleteRecord', () => {
     it('matches snapshot', async () => {
       await renderHelper(<DeleteRecord child={child} />, {
         before: expandModal,

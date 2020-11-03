@@ -4,6 +4,7 @@ import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 import { Child, Family } from '../../shared/models';
 import moment from 'moment';
 import { ValidationError } from 'class-validator';
+import { waitFor } from '@testing-library/dom';
 
 const children: Child[] = [
   {
@@ -16,16 +17,39 @@ const children: Child[] = [
   } as Child,
 ];
 
-describe.skip('BatchEdit', () => {
+jest.mock('../../utils/api');
+import * as api from '../../utils/api';
+import { cache } from 'swr';
+const apiMock = api as jest.Mocked<typeof api>;
+const waitGetChild = () => waitFor(() => expect(apiMock.apiGet).toBeCalled());
+
+describe('BatchEdit', () => {
   snapshotTestHelper(<BatchEdit />, {
+    before: async () => {
+      apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([])));
+      return waitGetChild();
+    },
     wrapInRouter: true,
+    wrapInSWRConfig: true,
     name: 'matches snapshot when no records are missing info',
   });
 
   snapshotTestHelper(<BatchEdit />, {
+    before: async () => {
+      apiMock.apiGet.mockReturnValue(
+        new Promise((resolve) => resolve(children))
+      );
+      return waitGetChild();
+    },
     wrapInRouter: true,
+    wrapInSWRConfig: true,
     name: 'matches snapshot when >0 records are missing info',
   });
 
   accessibilityTestHelper(<BatchEdit />, { wrapInRouter: true });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+    cache.clear();
+  });
 });

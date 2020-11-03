@@ -30,7 +30,7 @@ export const getQueryMonthFormat = (month?: Moment) => {
  * @param site
  * @param month
  */
-export function getFilteredChildren(
+export function applyClientSideFilters(
   allChildren: Child[],
   site?: string,
   month?: Moment

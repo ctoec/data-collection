@@ -4,8 +4,8 @@ import useSWR, { responseInterface } from 'swr';
 
 /**
  * Wrapper around useSWR hook that handles retrieving access token,
- * and providing it as part of the swr key param, along with the `path`
- * Additionally, enables typing of the response data from useSWR.
+ * and providing it as part of the swr key param, along with the `path`.
+ * Additionally, enables typing casting of the response data from useSWR.
  * @param path
  */
 export function useAuthenticatedSWR<T>(path: string | null) {

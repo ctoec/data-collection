@@ -7,7 +7,6 @@ import {
   HeadingLevel,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
-import useSWR from 'swr';
 import moment from 'moment';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
@@ -20,7 +19,7 @@ import {
   getChildrenByAgeGroup,
   getQueryMonthFormat,
   QUERY_STRING_MONTH_FORMAT,
-  getFilteredChildren,
+  applyClientSideFilters,
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
@@ -51,6 +50,7 @@ const Roster: React.FC = () => {
     site?: string;
     month?: string;
   };
+
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
@@ -66,7 +66,7 @@ const Roster: React.FC = () => {
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
   // site is requested
-  const browserSideFilteredChildren = getFilteredChildren(
+  const browserSideFilteredChildren = applyClientSideFilters(
     children || [],
     query.site,
     queryMonth

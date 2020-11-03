@@ -8,11 +8,9 @@ import { FundingSource } from '../../client/src/shared/models';
  * and less than 3 years in the future
  */
 export const getReportingPeriods = async (shortFundingSource?: string) => {
-  console.log('fundingSource', shortFundingSource);
   const fundingSource = Object.values(FundingSource).find((fs) =>
     fs.startsWith(shortFundingSource)
   );
-  console.log('looke dup', fundingSource);
   const threeYearsAgo = moment().add(-3, 'years').format('YYYY-MM-DD');
   const threeYearsAhead = moment().add(3, 'years').format('YYYY-MM-DD');
   return getManager().find(ReportingPeriod, {

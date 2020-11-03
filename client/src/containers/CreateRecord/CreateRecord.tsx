@@ -128,7 +128,6 @@ const CreateRecord: React.FC = () => {
           currentStepStatus === 'complete' ||
           currentStepStatus === 'exempt'
         ) {
-          console.log('moving next step');
           moveToNextStep();
         }
       })

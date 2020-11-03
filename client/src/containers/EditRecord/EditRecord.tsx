@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { AlertProps, TabNav, TabItem } from '@ctoec/component-library';
+import { AlertProps, TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
@@ -15,7 +15,6 @@ import {
   formSections,
 } from '../../components/Forms/formSections';
 import { Child } from '../../shared/models';
-import useSWR from 'swr';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 

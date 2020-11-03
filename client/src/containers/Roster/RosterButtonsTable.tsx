@@ -1,10 +1,9 @@
 import { Button, Calendar, TextWithIcon } from '@ctoec/component-library';
 import { Moment } from 'moment';
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { MonthFilterModal } from './MonthFilter/MonthFilterModal';
-import UserContext from '../../contexts/UserContext/UserContext';
 
 type RosterButtonsTable = {
   filterByMonth?: Moment;
