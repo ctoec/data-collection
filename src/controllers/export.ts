@@ -104,7 +104,10 @@ export async function streamUploadedChildren(
         // Can just use 0th element of each array as the 'active'/'current'
         // value because controller.getChildById does presorting for us
         childStrings.push(
-          flattenChild(columnMetadatas, child, enrollment, i !== 0)
+          flattenChild(columnMetadatas, child, {
+            enrollment,
+            skipInfoForPastEnrollments: i !== 0,
+          })
         )
       );
     }
@@ -145,10 +148,13 @@ function formatStringPush(value: any) {
 function flattenChild(
   columns: ColumnMetadata[],
   child: Child,
-  enrollment?: Enrollment,
-  skipInfoForPastEnrollments?: boolean
+  opts?: {
+    enrollment?: Enrollment;
+    skipInfoForPastEnrollments?: boolean;
+  }
 ) {
   const { family } = child;
+  const { enrollment, skipInfoForPastEnrollments } = opts || {};
   const { fundings, site } = enrollment || {};
   const activeFunding = fundings?.[0];
   const { fundingSpace } = activeFunding || {};
