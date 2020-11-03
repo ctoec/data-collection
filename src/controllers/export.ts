@@ -85,17 +85,24 @@ export async function getChildrenBySites(sites: Site[]) {
  * to the router for handing to the client as a buffered
  * stream of information.
  * @param response
- * @param childrenToMap
+ * @param children
  */
 export async function streamUploadedChildren(
   response: Response,
-  childrenToMap: Child[],
+  children: Child[],
   format: BookType = 'csv'
 ) {
   const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
-  const childStrings = childrenToMap.map((c) =>
-    flattenChild(c, columnMetadatas)
-  );
+  const childStrings = [];
+  children.forEach((child) => {
+    child.enrollments.forEach((enrollment, i) =>
+      // Can just use 0th element of each array as the 'active'/'current'
+      // value because controller.getChildById does presorting for us
+      childStrings.push(
+        flattenChild(columnMetadatas, child, enrollment, i === 0)
+      )
+    );
+  });
   streamTabularData(response, format, childStrings);
 }
 
@@ -129,29 +136,42 @@ function formatStringPush(value: any) {
  * @param child
  * @param columns
  */
-function flattenChild(child: Child, columns: ColumnMetadata[]) {
-  const { family, enrollments } = child;
+function flattenChild(
+  columns: ColumnMetadata[],
+  child: Child,
+  enrollment: Enrollment,
+  skipInfoForPastEnrollments?: boolean
+) {
+  const { family } = child;
+  const { fundings, site } = enrollment || {};
+  const activeFunding = fundings?.[0];
+  const fundingSpace = activeFunding || {};
+  const { organization } = site || {};
   // Can just use 0th element of each array as the 'active'/'current'
   // value because controller.getChildById does presorting for us
-  const currentDetermination = family?.incomeDeterminations?.[0];
-  const activeEnrollment =
-    enrollments?.find((e) => !e.exit) || enrollments?.[0];
-  const activeFunding = activeEnrollment?.fundings?.[0];
-  // Should we try to get the funding that was active at the time of the specific enrollment for historical enrollments?
 
-  // We need to do this for each enrollment instead
+  const { incomeDeterminations } = family || {};
+  const currentDetermination = incomeDeterminations?.[0];
+
   const childString: string[] = [];
   const objectsToCheck = [
     child,
     family,
     currentDetermination,
-    activeEnrollment,
-    activeEnrollment?.site,
-    activeEnrollment?.site?.organization,
-    activeFunding?.fundingSpace,
+    enrollment,
+    site,
+    organization,
+    fundingSpace,
   ];
   columns.forEach((column) => {
-    const { propertyName } = column;
+    const { propertyName, section } = column;
+    if (
+      skipInfoForPastEnrollments &&
+      section !== 'child' &&
+      section !== 'enrollment'
+    ) {
+      childString.push('');
+    }
     const valueFound = objectsToCheck.some((o) => {
       if (o && o.hasOwnProperty(propertyName)) {
         childString.push(formatStringPush(o[propertyName]));
