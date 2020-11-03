@@ -44,7 +44,7 @@ export const makeFakeEnrollments = (
       updateMetaData: { updatedAt: new Date() },
     };
     oldEnrollment.fundings = [
-      getFakeFunding(id, currentEnrollment, site.organization),
+      getFakeFunding(id, currentEnrollment, site.organization, true),
     ];
     returnEnrollments.push(oldEnrollment);
   }

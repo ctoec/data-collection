@@ -1,4 +1,4 @@
-import { getManager, LessThan, Raw } from 'typeorm';
+import { getManager, Raw } from 'typeorm';
 import { ReportingPeriod } from '../entity';
 import moment from 'moment';
 
