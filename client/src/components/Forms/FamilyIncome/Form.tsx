@@ -5,7 +5,12 @@ import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
 import idx from 'idx';
-import { Form, FormSubmitButton, FormFieldSet } from '@ctoec/component-library';
+import {
+  Form,
+  FormSubmitButton,
+  FormFieldSet,
+  Button,
+} from '@ctoec/component-library';
 import {
   HouseholdSizeField,
   AnnualHouseholdIncomeField,
@@ -78,7 +83,16 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     // New child is and batch edit both use this form directly
     // So this alert will show for those two forms
     // Edit child conditionally shows this form, so this alert is in that container too
-    return <FosterIncomeNotRequiredAlert />;
+    return (
+      <div>
+        <FosterIncomeNotRequiredAlert />
+        <Button
+          text="Next"
+          onClick={afterSaveSuccess}
+          className="margin-top-3"
+        />
+      </div>
+    );
   }
 
   const determination = (type === 'edit'
