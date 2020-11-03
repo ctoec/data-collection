@@ -1,13 +1,9 @@
 import express from 'express';
 import { getManager } from 'typeorm';
-import { format } from '@fast-csv/format';
-import fs from 'fs';
-import { v4 as uuid } from 'uuid';
 import multer from 'multer';
 
 import { Child, EnrollmentReport } from '../entity';
 import {
-  NotFoundError,
   BadRequestError,
   ApiError,
   InternalServerError,
@@ -18,32 +14,6 @@ import { parseQueryString } from '../utils/parseQueryString';
 import { validate } from 'class-validator';
 
 export const enrollmentReportsRouter = express.Router();
-
-/**
- * /enrollment-reports/:reportId GET
- *
- * Returns the parsed data from the given EnrollmentReport,
- * as nested data object with Child as root.
- */
-enrollmentReportsRouter.get(
-  '/:reportId',
-  passAsyncError(async (req, res) => {
-    const id = parseInt(req.params['reportId']) || 0;
-    const report = await getManager().findOne(EnrollmentReport, id, {
-      relations: [
-        'children',
-        'children.enrollments',
-        'children.enrollments.fundings',
-        'children.enrollments.site',
-        'children.enrollments.site.organization',
-      ],
-    });
-
-    if (!report) throw new NotFoundError();
-
-    res.send(report);
-  })
-);
 
 /**
  * /enrollment-reports/check POST
@@ -159,36 +129,5 @@ enrollmentReportsRouter.post(
         );
       }
     });
-  })
-);
-
-/**
- * /enrollment-reports/download/:reportId GET
- *
- * Returns the given EnrollmentReport as a CSV
- */
-enrollmentReportsRouter.get(
-  '/download/:reportId',
-  passAsyncError(async (req, res) => {
-    const id = parseInt(req.params.reportId) || 0;
-    const report = await getManager().findOne(EnrollmentReport, id);
-    if (!report) throw new NotFoundError();
-
-    const children = report.children;
-    const stream = format();
-
-    const randomString = uuid();
-    const filename = `/tmp/downloads/${randomString}.csv`;
-
-    const fileStream = fs.createWriteStream(filename);
-    fileStream.on('finish', () => res.download(filename));
-    stream.pipe(fileStream);
-
-    // TODO
-    // stream.write(Object.keys(children[0])); // TODO: Use generated headers
-    // children.forEach((enrollment) =>
-    //   stream.write(Object.values(enrollment))
-    // );
-    stream.end();
   })
 );

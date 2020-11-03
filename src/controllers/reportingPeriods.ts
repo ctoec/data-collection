@@ -1,4 +1,4 @@
-import { getManager, LessThan, Raw } from 'typeorm';
+import { getManager, Raw } from 'typeorm';
 import { ReportingPeriod } from '../entity';
 import moment from 'moment';
 
@@ -18,3 +18,7 @@ export const getReportingPeriods = async () => {
     },
   });
 };
+
+export function reportingPeriodToString(reportingPeriod: ReportingPeriod) {
+  return reportingPeriod.period.format('MM/YYYY');
+}

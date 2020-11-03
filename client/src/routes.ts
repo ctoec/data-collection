@@ -12,6 +12,7 @@ import AddRecord from './containers/CreateRecord/CreateRecord';
 import FundingSourceTimes from './containers/FundingSourceTimes/FundingSourceTimes';
 import Roster from './containers/Roster/Roster';
 import BatchEdit from './containers/BatchEdit/BatchEdit';
+import DevUtility from './containers/DevUtility/DevUtility';
 
 export type RouteConfig = {
   path: string;
@@ -89,6 +90,13 @@ export const routes: RouteConfig[] = [
     path: '/batch-edit/:childId?',
     component: BatchEdit,
     unauthorized: false,
+  },
+  {
+    path: '/dev',
+    component:
+      process.env.REACT_APP_STAGE !== 'production' ? DevUtility : PageNotFound,
+    // TODO: make sure prod is actually called production or change this
+    unauthorized: true,
   },
   {
     path: '/:unknown',
