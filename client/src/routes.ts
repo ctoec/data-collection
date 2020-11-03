@@ -94,7 +94,8 @@ export const routes: RouteConfig[] = [
   {
     path: '/dev',
     component:
-      process.env.NODE_ENV !== 'production' ? DevUtility : PageNotFound,
+      process.env.REACT_APP_STAGE !== 'production' ? DevUtility : PageNotFound,
+    // TODO: make sure prod is actually called production or change this
     unauthorized: true,
   },
   {
