@@ -135,65 +135,54 @@ function formatStringPush(value: any) {
  * @param cols
  */
 function flattenChild(child: Child, cols: ColumnMetadata[]) {
+  const { family, enrollments } = child;
   // Can just use 0th element of each array as the 'active'/'current'
   // value because controller.getChildById does presorting for us
-  const determinations = child.family.incomeDeterminations || [];
-  const currentDetermination =
-    determinations.length > 0 ? determinations[0] : null;
-  const workingEnrollment = (child.enrollments || []).find((e) => !e.exit);
-  const activeEnrollment =
-    workingEnrollment == undefined
-      ? child.enrollments == undefined
-        ? undefined
-        : child.enrollments[0]
-      : workingEnrollment;
-  const fundings =
-    activeEnrollment == undefined ? undefined : activeEnrollment.fundings || [];
-
-  const activeFunding =
-    fundings && fundings.length > 0 ? fundings[0] : undefined;
+  const currentDetermination = family?.incomeDeterminations?.[0];
+  const activeEnrollment = enrollments?.find((e) => !e.exit) || enrollments?.[0];
+  const activeFunding = activeEnrollment?.fundings?.[0];
 
   // Note: There is still some nested depth checking because we store
   // records as nested data structures within a Child object
   // (e.g. to get to a determination: Child -> Family -> Det.)
-  var childString: string[] = [];
-  for (let i = 0; i < cols.length; i++) {
-    const c = cols[i];
-    if (child.hasOwnProperty(c.propertyName)) {
-      childString.push(formatStringPush(child[c.propertyName]));
-    } else if (child.family?.hasOwnProperty(c.propertyName)) {
-      childString.push(formatStringPush(child.family[c.propertyName]));
+  const childString: string[] = [];
+  cols.forEach(column => {
+    const { propertyName } = column;
+    if (child.hasOwnProperty(propertyName)) {
+      childString.push(formatStringPush(child[propertyName]));
+    } else if (child.family?.hasOwnProperty(propertyName)) {
+      childString.push(formatStringPush(child.family[propertyName]));
     } else if (
       !!currentDetermination &&
-      currentDetermination.hasOwnProperty(c.propertyName)
+      currentDetermination.hasOwnProperty(propertyName)
     ) {
-      childString.push(formatStringPush(currentDetermination[c.propertyName]));
+      childString.push(formatStringPush(currentDetermination[propertyName]));
     } else if (
       !!activeEnrollment &&
-      activeEnrollment.hasOwnProperty(c.propertyName)
+      activeEnrollment.hasOwnProperty(propertyName)
     ) {
-      childString.push(formatStringPush(activeEnrollment[c.propertyName]));
+      childString.push(formatStringPush(activeEnrollment[propertyName]));
     } else if (
       !!activeEnrollment?.site &&
-      activeEnrollment.site.hasOwnProperty(c.propertyName)
+      activeEnrollment.site.hasOwnProperty(propertyName)
     ) {
-      childString.push(formatStringPush(activeEnrollment.site[c.propertyName]));
+      childString.push(formatStringPush(activeEnrollment.site[propertyName]));
     } else if (
       !!activeEnrollment?.site?.organization &&
-      activeEnrollment.site.organization.hasOwnProperty(c.propertyName)
+      activeEnrollment.site.organization.hasOwnProperty(propertyName)
     ) {
       childString.push(
-        formatStringPush(activeEnrollment.site.organization[c.propertyName])
+        formatStringPush(activeEnrollment.site.organization[propertyName])
       );
     } else if (
       !!activeFunding &&
-      activeFunding.fundingSpace?.hasOwnProperty(c.propertyName)
+      activeFunding.fundingSpace?.hasOwnProperty(propertyName)
     ) {
       childString.push(
-        formatStringPush(activeFunding.fundingSpace[c.propertyName])
+        formatStringPush(activeFunding.fundingSpace[propertyName])
       );
-    } else if (c.propertyName.toLowerCase().includes('fundingperiod')) {
-      if (!!activeFunding && c.propertyName.toLowerCase().startsWith('first')) {
+    } else if (propertyName.toLowerCase().includes('fundingperiod')) {
+      if (!!activeFunding && propertyName.toLowerCase().startsWith('first')) {
         childString.push(
           formatStringPush(activeFunding.firstReportingPeriod.period)
         );
@@ -208,10 +197,11 @@ function flattenChild(child: Child, cols: ColumnMetadata[]) {
       }
     } else {
       // We shouldn't do this if things are undefined probably??
-      // childString.push('Unrecognized property name: ' + c.propertyName);
+      // childString.push('Unrecognized property name: ' + propertyName);
 
       childString.push('');
     }
-  }
+  })
+
   return childString;
 }
