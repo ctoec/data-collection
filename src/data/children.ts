@@ -54,7 +54,7 @@ const children: Child[] = Array.from({ length: 100 }, (_, i) => {
 
 const genderCopy = { ...Gender };
 delete genderCopy.NotSpecified;
-const possibleGenders = Object.keys(genderCopy);
+const possibleGenders = Object.values(genderCopy);
 function makeMiddleNameEdgeCases(num: number) {
   let _name = '';
   for (let i = 0; i < num; i++) {
@@ -68,11 +68,11 @@ const completeChildren: Child[] = children.map((c, i) => {
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-        birthTown: address.city(),
-        birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
-        birthCertificateId:
-          random.number({ min: 10000000000, max: 99999999999 }) + '',
-      }
+      birthTown: address.city(),
+      birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
+      birthCertificateId:
+        random.number({ min: 10000000000, max: 99999999999 }) + '',
+    }
     : {};
   const childRace = random
     .arrayElements(
