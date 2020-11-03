@@ -47,7 +47,7 @@ export const getExistingEnrollmentOnChild = (
   row: EnrollmentReportRow,
   child: Child
 ) => {
-  if (!child.enrollments) return null;
+  if (!child.enrollments) return undefined;
   return child.enrollments.find((e) => {
     return (
       e.site.siteName === row.siteName &&
@@ -68,7 +68,7 @@ export const getExistingFundingForEnrollment = (
   row: EnrollmentReportRow,
   enrollment: Enrollment
 ) => {
-  if (!enrollment || !enrollment.fundings) return null;
+  if (!enrollment || !enrollment.fundings) return undefined;
   return enrollment.fundings.find((f) => {
     return (
       row.firstFundingPeriod.format('MM/DD/YYYY') ===

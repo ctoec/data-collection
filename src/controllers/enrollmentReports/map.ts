@@ -370,7 +370,9 @@ const mapIncomeDetermination = (
     let incomeDetermination = {
       // Cast empty strings to undefined to avoid DB write failures
       numberOfPeople: source.numberOfPeople || undefined,
-      income: source.income || undefined,
+      // Need to accept 0 as valid income, so use forcible number conversion
+      // to check if the result is a valid number
+      income: isNaN(source.income) ? undefined : source.income,
       determinationDate: source.determinationDate,
       familyId: family.id,
     } as IncomeDetermination;
