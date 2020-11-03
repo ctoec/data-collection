@@ -66,11 +66,11 @@ const completeChildren: Child[] = children.map((c, i) => {
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-        birthTown: address.city(),
-        birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
-        birthCertificateId:
-          random.number({ min: 10000000000, max: 99999999999 }) + '',
-      }
+      birthTown: address.city(),
+      birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
+      birthCertificateId:
+        random.number({ min: 10000000000, max: 99999999999 }) + '',
+    }
     : {};
   const childRace = random
     .arrayElements(
@@ -106,4 +106,15 @@ const completeChildren: Child[] = children.map((c, i) => {
   };
 });
 
-export { completeChildren };
+// Iterate through, delete keys arbitrarily
+const missingSomeInfo = completeChildren.map(c => {
+  const randomKey = random.arrayElement(Object.keys(c));
+  return { ...c, [randomKey]: undefined }
+});
+
+// Delete one key from all children
+const allMissingOneField = completeChildren.map(c => {
+  return { ...c, firstName: undefined }
+});;
+
+export { completeChildren, missingSomeInfo, allMissingOneField };
