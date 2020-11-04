@@ -286,13 +286,13 @@ describe('controllers', () => {
 
     describe('mapFunding', () => {
       it.each([
-        [{ source: 'CDC' }, true],
+        [{ fundingSpace: 'CDC' }, true],
         [{ time: 'Full-time' }, true],
-        [{ firstFundingPeriod: moment('10/2020', 'MM/YYYY') }, true],
-        [{ lastFundingPeriod: moment('10/2020', 'MM/YYYY') }, true],
+        [{ firstReportingPeriod: moment('10/2020', 'MM/YYYY') }, true],
+        [{ lastReportingPeriod: moment('10/2020', 'MM/YYYY') }, true],
         [{}, false],
       ])(
-        'creates a funding if source contains source, time, firstFundingPeriod, or lastFundingPeriod',
+        'creates a funding if source contains source, time, firstReportingPeriod, or lastReportingPeriod',
         async (source, doesCreateFunding) => {
           const transaction = {} as jest.Mocked<EntityManager>;
           transaction.findOne = jest.fn();

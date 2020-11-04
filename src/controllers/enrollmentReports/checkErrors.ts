@@ -33,10 +33,6 @@ const processErrorsInFields = (error: ValidationError, errorDict: Object) => {
  */
 export const checkErrorsInChildren = async (children: Child[]) => {
   const cols: ColumnMetadata[] = getAllColumnMetadata();
-
-  // Need to start the tracking dicts off with a few mappings because
-  // our variable names on nested entities don't perfectly match
-  // the property names in column metadata
   const propertyNameToFormattedName = {};
   let errorDict = {};
 
