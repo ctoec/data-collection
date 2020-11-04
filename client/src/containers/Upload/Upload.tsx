@@ -142,6 +142,7 @@ const Upload: React.FC = () => {
       return setError('No file selected for upload');
     }
     setFile(file);
+    setError(undefined);
 
     // set target.files = null to ensure change event is properly triggered
     // even if file with same name is re-uploaded
@@ -177,16 +178,18 @@ const Upload: React.FC = () => {
             type="error"
             actionItem={
               <div>
-                <p className="margin-bottom-2 text-bold">
+                <p className="margin-bottom-1 text-bold">
                   Download the data collection template
                 </p>
                 <CSVExcelDownloadButton
                   fileType="xlsx"
                   whichDownload="template"
+                  className="margin-bottom-1"
                 />
                 <CSVExcelDownloadButton
                   fileType="csv"
                   whichDownload="template"
+                  className="margin-bottom-1"
                 />
               </div>
             }
