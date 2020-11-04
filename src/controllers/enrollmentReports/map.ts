@@ -243,11 +243,11 @@ export const lookUpSite = (
   organizationId: number,
   sites: Site[]
 ) => {
-  if (!source.siteName) return;
+  if (!source.site) return;
 
   return sites.find(
     (site) =>
-      site.siteName.toLowerCase() === source.siteName.toLowerCase() &&
+      site.siteName.toLowerCase() === source.site.toLowerCase() &&
       site.organizationId === organizationId
   );
 };
@@ -439,9 +439,13 @@ export const mapFunding = async (
   enrollment: Enrollment,
   save: boolean
 ) => {
-  const fundingSource: FundingSource = mapEnum(FundingSource, source.source, {
-    isFundingSource: true,
-  });
+  const fundingSource: FundingSource = mapEnum(
+    FundingSource,
+    source.fundingSpace,
+    {
+      isFundingSource: true,
+    }
+  );
   const fundingTime: FundingTime = mapFundingTime(source.time, fundingSource);
 
   let fundingSpace: FundingSpace;
@@ -468,23 +472,23 @@ export const mapFunding = async (
   // TODO: Cache ReportingPeriods, as they'll be reused a lot
   let firstReportingPeriod: ReportingPeriod,
     lastReportingPeriod: ReportingPeriod;
-  if (source.firstFundingPeriod) {
+  if (source.firstReportingPeriod) {
     firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.firstFundingPeriod },
+      where: { type: fundingSource, period: source.firstReportingPeriod },
     });
   }
-  if (source.lastFundingPeriod) {
+  if (source.lastReportingPeriod) {
     lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.lastFundingPeriod },
+      where: { type: fundingSource, period: source.lastReportingPeriod },
     });
   }
 
   // If the user supplied _any_ funding-related fields, create the funding.
   if (
-    source.source ||
+    source.fundingSpace ||
     source.time ||
-    source.firstFundingPeriod ||
-    source.lastFundingPeriod
+    source.firstReportingPeriod ||
+    source.lastReportingPeriod
   ) {
     let funding = {
       firstReportingPeriod,

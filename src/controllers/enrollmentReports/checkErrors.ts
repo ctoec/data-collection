@@ -37,18 +37,8 @@ export const checkErrorsInChildren = async (children: Child[]) => {
   // Need to start the tracking dicts off with a few mappings because
   // our variable names on nested entities don't perfectly match
   // the property names in column metadata
-  const propertyNameToFormattedName = {
-    site: 'Site',
-    fundingSpace: 'Funding Type',
-    firstReportingPeriod: 'First Funding Period',
-    lastReportingPeriod: 'Last Funding Period',
-  };
-  let errorDict = {
-    site: 0,
-    fundingSpace: 0,
-    firstReportingPeriod: 0,
-    lastReportingPeriod: 0,
-  };
+  const propertyNameToFormattedName = {};
+  let errorDict = {};
 
   // Start the count of each type of error at 0 overall
   cols.map((c) => {

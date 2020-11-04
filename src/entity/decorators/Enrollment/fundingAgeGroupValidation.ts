@@ -19,7 +19,7 @@ export function FundingAgeGroupMatchesEnrollment(
           const enrollmentAgeGroup = (enrollment as Enrollment).ageGroup;
           const allFundings = (enrollment as Enrollment).fundings;
           return allFundings.every(
-            (f) => f.fundingSpace.ageGroup === enrollmentAgeGroup
+            (f) => f?.fundingSpace?.ageGroup === enrollmentAgeGroup
           );
         },
       },

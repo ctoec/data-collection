@@ -50,7 +50,7 @@ export const getExistingEnrollmentOnChild = (
   if (!child.enrollments) return undefined;
   return child.enrollments.find((e) => {
     return (
-      e.site.siteName === row.siteName &&
+      e.site.siteName === row.site &&
       e.entry.format('MM/DD/YYYY') === row.entry.format('MM/DD/YYYY')
     );
   });
@@ -71,9 +71,9 @@ export const getExistingFundingForEnrollment = (
   if (!enrollment || !enrollment.fundings) return undefined;
   return enrollment.fundings.find((f) => {
     return (
-      row.firstFundingPeriod.format('MM/DD/YYYY') ===
+      row.firstReportingPeriod.format('MM/DD/YYYY') ===
         f.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
-      row.source === f.fundingSpace.source &&
+      row.fundingSpace === f.fundingSpace.source &&
       row.time === f.fundingSpace.time
     );
   });

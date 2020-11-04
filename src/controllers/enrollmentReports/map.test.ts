@@ -72,7 +72,7 @@ describe('controllers', () => {
             { siteName: 'site1', organizationId: 1 },
             { siteName: 'site2', organizationId: 2 },
           ] as Site[];
-          const source = { siteName: sourceSiteName } as EnrollmentReportRow;
+          const source = { site: sourceSiteName } as EnrollmentReportRow;
 
           const site = lookUpSite(source, inputOrgId, inputSites);
           expect(site?.siteName).toEqual(resultSiteName);
