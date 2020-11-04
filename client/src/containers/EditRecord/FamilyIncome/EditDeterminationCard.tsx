@@ -112,6 +112,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
           child={child}
           id={`edit-determination-${determinationId}`}
           legend="Edit income determiniation"
+          incomeDeterminationId={determinationId}
           afterSaveSuccess={() => {
             setCloseCard(true);
             afterSaveSuccess();
