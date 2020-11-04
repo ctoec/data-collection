@@ -11,7 +11,7 @@ import moment from 'moment';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
@@ -43,19 +43,25 @@ const Roster: React.FC = () => {
   const history = useHistory();
 
   // Parse query params, and update if missing (i.e. initial load) or invalid
-  const location = useLocation();
-  const query = parse(location.search) as {
+  useUpdateRosterParams();
+  const query = parse(history.location.search) as {
     organization?: string;
     site?: string;
     month?: string;
   };
-
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
-  useUpdateRosterParams();
 
-  const { children, stillFetching } = usePaginatedChildData(query.organization);
+  const { children } = usePaginatedChildData(query.organization);
+  // Get alerts for page, including alert for children with errors
+  // (which includes count of ALL children with errors for the active org)
+  const { alertElements } = useChildrenWithErrorsAlert(
+    !children,
+    (children || []).filter(
+      (child) => child.validationErrors && child.validationErrors.length
+    ).length
+  );
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
@@ -65,6 +71,7 @@ const Roster: React.FC = () => {
     query.site,
     queryMonth
   );
+
   const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
   const accordionProps = {
     items: getAccordionItems(childrenByAgeGroup, {
@@ -74,13 +81,6 @@ const Roster: React.FC = () => {
     titleHeadingLevel: 'h2' as HeadingLevel,
   };
 
-  // Get alerts for page, including alert for children with errors
-  const { alertElements } = useChildrenWithErrorsAlert(
-    !children,
-    clientSideFilteredChildren.filter(
-      (child) => child.validationErrors && child.validationErrors.length
-    ).length
-  );
   // Get props for tabNav, h1Text, and subHeaderText based on user access (i.e. user's sites and org permissions)
   const { tabNavProps, h1Text, subHeaderText } = useGenerateUserSpecificProps(
     !children,

@@ -1,11 +1,13 @@
 import { TabNav, TabItem } from '@ctoec/component-library';
-import { stringify, parse } from 'querystring';
+import { stringify, parse } from 'query-string';
 import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils';
 import { useHistory } from 'react-router-dom';
 import { useContext } from 'react';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { Site, Organization } from '../../../shared/models';
 import moment from 'moment';
+
+const ALL_SITES = 'all-sites';
 
 export const useGenerateUserSpecificProps = (
   isLoading: boolean,
@@ -17,9 +19,31 @@ export const useGenerateUserSpecificProps = (
 
   const history = useHistory();
   const query = parse(history.location.search) as {
-    organization: string;
-    site: string;
-    month: string;
+    organization?: string;
+    site?: string;
+    month?: string;
+  };
+
+  // Function to update search query when user clicks on tab nav
+  const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
+    if (clickedItem.nestedItemType) {
+      // If it has a nested item type then it's an org
+      history.push({
+        search: stringify({ ...query, organization: clickedId }),
+      });
+    } else {
+      // Push a specific site id if specific site clicked
+      if (clickedId !== ALL_SITES) {
+        history.push({
+          search: stringify({ ...query, site: clickedId }),
+        });
+      }
+      // Or remove site param from search if 'All sites' clicked
+      else {
+        delete query.site;
+        history.push({ search: stringify(query) });
+      }
+    }
   };
 
   // Base case: single-site user:
@@ -28,27 +52,17 @@ export const useGenerateUserSpecificProps = (
   // - does not include site count in subHeaderText
   const props = {
     tabNavProps: undefined as TabNav | undefined,
-    h1Text: isLoading ? 'Loading...' : sites.length ? sites[0].siteName : '',
+    h1Text: isLoading ? 'Loading...' : sites[0].siteName,
     subHeaderText: isLoading ? '' : `${childCount} children enrolled`,
   };
 
-  const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
-    if (clickedItem.nestedItemType) {
-      // If it has a nested item type then it's an org
-      history.push({
-        search: stringify({ organization: clickedId, month: query.month }),
-      });
-    } else {
-      history.push({
-        search: stringify({ site: clickedId, month: query.month }),
-      });
-    }
-  };
-
-  // Multi-org user
+  // Multi-org user gets nested tabs (for orgs and sites)
   if (organizations.length > 1) {
-    // show all orgs in tabs, and placeholder the h1
-    props.h1Text = 'Multiple organizations';
+    // H1 text = selected org Id
+    props.h1Text =
+      organizations.find((o) => `${o.id}` === query.organization)
+        ?.providerName || '';
+    props.subHeaderText = getSubHeaderText(childCount, sites, true, query);
     props.tabNavProps = {
       itemType: 'organization',
       items: getOrganizationTabItems(organizations, sites),
@@ -57,8 +71,11 @@ export const useGenerateUserSpecificProps = (
       activeId: query.organization,
     };
   } else if (sites.length > 1) {
-    // If user has multiple orgs, show them all and placeholder the h1
-    props.h1Text = organizations[0].providerName;
+    // Assume users with multi-site access are all under the same org
+    props.h1Text = query.site
+      ? sites.find((s) => `${s.id}` === query.site)?.siteName || ''
+      : 'All sites';
+    props.subHeaderText = getSubHeaderText(childCount, sites, false, query);
     props.tabNavProps = {
       itemType: 'site',
       onClick: tabNavOnClick,
@@ -67,7 +84,6 @@ export const useGenerateUserSpecificProps = (
     };
   }
 
-  props.subHeaderText = getSubHeaderText(childCount, sites, query.month);
   return props;
 };
 
@@ -75,15 +91,34 @@ export const useGenerateUserSpecificProps = (
 function getSubHeaderText(
   childCount: number,
   userSites: Site[],
-  activeMonth?: string
-) {
-  let returnText = `${childCount} children enrolled`;
-  if (userSites.length > 1) {
-    returnText += ` at ${userSites.length} sites`;
+  isMultiOrg: boolean,
+  query: {
+    organization?: string;
+    month?: string;
+    site?: string;
   }
-  if (activeMonth) {
+) {
+  const { organization, month, site } = query;
+
+  // Base case
+  let returnText = `${childCount} children enrolled`;
+
+  // If multi-site + user is not looking at a single site
+  // then include the count of all sites in the sub header
+  if (userSites.length > 1 && !site) {
+    returnText += ` at ${
+      userSites.filter((s) => `${s.organizationId}` === organization).length
+    } sites`;
+  }
+  // If multi-org + user is looking at single site
+  // Then include the site name in the sub header
+  else if (isMultiOrg && site) {
+    returnText += ` at ${userSites.find((s) => `${s.id}` === site)?.siteName}`;
+  }
+
+  if (month) {
     returnText += ` in ${moment
-      .utc(activeMonth, QUERY_STRING_MONTH_FORMAT)
+      .utc(month, QUERY_STRING_MONTH_FORMAT)
       .format('MMMM YYYY')}`;
   }
   return returnText;
@@ -96,7 +131,7 @@ function getSiteTabItems(sites: Site[]): TabItem[] {
     tabTextFormatter: formatTabItemText,
   }));
   siteItems.splice(0, 0, {
-    id: 'all-sites',
+    id: ALL_SITES,
     tabText: 'All sites',
     firstItem: true,
   });

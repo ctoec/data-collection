@@ -22,7 +22,7 @@ export const useChildrenWithErrorsAlert = (
 
     // set alert if:
     // - no existing matching alert OR
-    // - existing matching alert has different number (i.e. was displaying content for a differently filtered roster)
+    // - existing matching alert has different number (i.e. was displaying content for a different organization)
     const existingAlert = alerts.find(
       (a) => a.heading === childrenWithErrorsAlert.heading
     );
