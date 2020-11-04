@@ -42,11 +42,13 @@ export const checkErrorsInChildren = async (children: Child[]) => {
     propertyNameToFormattedName[c.propertyName] = c.formattedName;
   });
 
-  children.forEach(async (child) => {
-    // Accumulate counts across all children (don't need to
-    // differentiate errors by individual child)
-    child.validationErrors.map((e) => processErrorsInFields(e, errorDict));
-  });
+  await Promise.all(
+    children.map(async (child) => {
+      // Accumulate counts across all children (don't need to
+      // differentiate errors by individual child)
+      child.validationErrors.map((e) => processErrorsInFields(e, errorDict));
+    })
+  );
 
   // Only need fields with error counts; send back a formated
   // object for tabular display
