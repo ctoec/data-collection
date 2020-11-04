@@ -46,7 +46,6 @@ export const getChildren = async (
   opts.take = take;
 
   let children = await getManager().find(Child, opts);
-
   children.map(validateObject);
 
   if (missingInfo === 'true') {

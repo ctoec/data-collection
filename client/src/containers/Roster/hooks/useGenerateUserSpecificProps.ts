@@ -28,8 +28,8 @@ export const useGenerateUserSpecificProps = (
   // - does not include site count in subHeaderText
   const props = {
     tabNavProps: undefined as TabNav | undefined,
-    h1Text: !isLoading && sites.length ? sites[0].siteName : 'Loading...',
-    subHeaderText: `${childCount} children enrolled`,
+    h1Text: isLoading ? 'Loading...' : sites.length ? sites[0].siteName : '',
+    subHeaderText: isLoading ? '' : `${childCount} children enrolled`,
   };
 
   const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {

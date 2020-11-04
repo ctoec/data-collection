@@ -24,14 +24,13 @@ import {
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
 import { MonthFilterIndicator } from './MonthFilter/MonthFilterIndicator';
-import { Child } from '../../shared/models';
 import { NoRecordsAlert } from './NoRecordsAlert';
 import {
   useUpdateRosterParams,
   useGenerateUserSpecificProps,
   useChildrenWithErrorsAlert,
+  usePaginatedChildData,
 } from './hooks';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -56,22 +55,17 @@ const Roster: React.FC = () => {
     : undefined;
   useUpdateRosterParams();
 
-  // Fetch child data, filtered by organization and month
-  const { data: children, isValidating } = useAuthenticatedSWR<Child[]>(
-    query.organization
-      ? `/children?${stringify({ organizationId: query.organization })}`
-      : null
-  );
+  const { children, stillFetching } = usePaginatedChildData(query.organization);
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
   // site is requested
-  const browserSideFilteredChildren = applyClientSideFilters(
+  const clientSideFilteredChildren = applyClientSideFilters(
     children || [],
     query.site,
     queryMonth
   );
-  const childrenByAgeGroup = getChildrenByAgeGroup(browserSideFilteredChildren);
+  const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
   const accordionProps = {
     items: getAccordionItems(childrenByAgeGroup, {
       hideCapacity: isSiteLevelUser,
@@ -82,15 +76,15 @@ const Roster: React.FC = () => {
 
   // Get alerts for page, including alert for children with errors
   const { alertElements } = useChildrenWithErrorsAlert(
-    isValidating,
-    browserSideFilteredChildren.filter(
+    !children,
+    clientSideFilteredChildren.filter(
       (child) => child.validationErrors && child.validationErrors.length
     ).length
   );
   // Get props for tabNav, h1Text, and subHeaderText based on user access (i.e. user's sites and org permissions)
   const { tabNavProps, h1Text, subHeaderText } = useGenerateUserSpecificProps(
-    isValidating,
-    browserSideFilteredChildren.length
+    !children,
+    clientSideFilteredChildren.length
   );
 
   // Function to submit data to OEC, to pass down into submit button
@@ -148,9 +142,9 @@ const Roster: React.FC = () => {
           filterByMonth={queryMonth}
           setFilterByMonth={updateActiveMonth}
         />
-        {isValidating ? (
+        {!children ? (
           <></>
-        ) : !(children || []).length ? (
+        ) : !children.length ? (
           <NoRecordsAlert />
         ) : tabNavProps ? (
           <TabNav {...tabNavProps}>
