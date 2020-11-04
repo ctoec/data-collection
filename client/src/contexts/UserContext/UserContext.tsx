@@ -30,7 +30,7 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
   useEffect(() => {
     if (accessToken) {
       setUserLoading(true);
-      apiGet('users/current', { accessToken })
+      apiGet('users/current', accessToken)
         .then((data) => {
           setUser(data);
         })

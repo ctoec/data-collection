@@ -7,7 +7,16 @@ export const fundingSpacesRouter = express.Router();
 fundingSpacesRouter.get(
   '/',
   passAsyncError(async (req, res) => {
-    const fundingSpaces = await controller.getFundingSpaces(req.user);
+    const organizationId = req.query['organizationId'];
+    const organizationIds = !organizationId
+      ? undefined
+      : ((Array.isArray(organizationId)
+          ? organizationId
+          : [organizationId]) as string[]);
+    const fundingSpaces = await controller.getFundingSpaces(
+      req.user,
+      organizationIds
+    );
     res.send(fundingSpaces);
   })
 );

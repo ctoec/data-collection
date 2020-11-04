@@ -1,11 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { AlertProps, TabNav, TabItem } from '@ctoec/component-library';
+import { AlertProps, TabNav } from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
 import { WithdrawRecord } from './WithdrawRecord/WithdrawRecord';
-import { DeleteRecord } from './DeleteRecord';
+import { DeleteRecord } from './DeleteRecord/DeleteRecord';
 import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
@@ -14,18 +14,22 @@ import {
   SECTION_KEYS,
   formSections,
 } from '../../components/Forms/formSections';
-import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { Child } from '../../shared/models';
+import { stringify } from 'querystring';
+import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
-  const { childId } = useParams() as { childId: string };
+  const { childId, organizationId } = useParams() as {
+    childId: string;
+    organizationId: string;
+  };
   const { accessToken } = useContext(AuthenticationContext);
   const { alertElements, setAlerts } = useAlerts();
-  const {
-    children: { addOrUpdateRecord: updateRecordInCache },
-  } = useContext(DataCacheContext);
   const [child, setChild] = useState<Child>();
+  const { mutate } = useAuthenticatedSWR(
+    organizationId ? `children?${stringify({ organizationId })}` : null
+  );
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -47,11 +51,12 @@ const EditRecord: React.FC = () => {
   // Child re-fetch
   const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
-    apiGet(`children/${childId}`, {
-      accessToken,
-    }).then((updatedChild) => {
+    apiGet(`children/${childId}`, accessToken).then((updatedChild) => {
       setChild(updatedChild);
-      updateRecordInCache(updatedChild);
+      mutate((children: Child[]) => {
+        if (children)
+          return [...children.filter((c) => c.id === childId), updatedChild];
+      }, false);
 
       // On initial fetch, refetch = 0 AND we do not want to create alerts
       if (triggerRefetchCounter > 0) {

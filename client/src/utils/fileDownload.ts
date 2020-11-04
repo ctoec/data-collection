@@ -13,9 +13,8 @@ export async function downloadStreamToFile(
   accessToken?: string
 ) {
   let res: Response;
-  res = await apiGet(route, {
+  res = await apiGet(route, accessToken, {
     jsonParse: false,
-    accessToken: accessToken,
   });
 
   const fileBlob = new Blob([await res.arrayBuffer()], {

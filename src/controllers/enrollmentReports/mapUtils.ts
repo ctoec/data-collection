@@ -15,8 +15,9 @@ export const isIdentifierMatch = (
   return (
     child.firstName === other.firstName &&
     child.lastName === other.lastName &&
+    child.birthdate &&
     child.birthdate.format('MM/DD/YYYY') ===
-      other.birthdate.format('MM/DD/YYYY') &&
+      other.birthdate?.format('MM/DD/YYYY') &&
     child.sasid === other.sasid
   );
 };

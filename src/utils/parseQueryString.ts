@@ -3,23 +3,27 @@ import { Request } from 'express';
 export const parseQueryString = <T = string>(
   req: Request,
   name: string,
-  opts?: { post?: (_: string) => T; forceArray?: boolean }
+  opts?: { post?: (_: any) => T; forceArray?: boolean }
 ) => {
-  opts = opts || {};
+  const { post, forceArray } = opts || {};
   const values = req.query[name];
 
   if (Array.isArray(values)) {
-    if (opts.post) {
-      return (values as string[]).map((v) => opts.post(v));
+    if (post) {
+      return (values as string[]).map((v) => post(v));
     }
-
     return (values as any[]) as T[];
   }
 
   let value: T;
-  if (opts.post && values) {
-    value = opts.post(values as string);
+  if (post && values) {
+    value = post(values);
+  } else {
+    value = (values as any) as T;
   }
 
-  return opts.forceArray ? ((value ? [value] : []) as T[]) : (value as T);
+  if (forceArray) {
+    return (value ? [value] : []) as T[];
+  }
+  return value;
 };

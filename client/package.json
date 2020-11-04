@@ -35,6 +35,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.4",
     "sass": "^1.27.0",
+    "swr": "^0.3.6",
     "typescript": "^3.9.5",
     "uswds": "^2.8.0"
   },
