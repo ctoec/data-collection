@@ -122,6 +122,15 @@ export async function streamUploadedChildren(
  * @param value
  */
 function formatStringPush(value: any) {
+  // Check for absent values before invoking type check
+  if (value === null || value === undefined) return '';
+  // Name matching means some values are nested one more level
+  if (value.constructor.name === 'ReportingPeriod') {
+    return formatStringPush(value.period);
+  }
+  if (value.constructor.name === 'FundingSpace') {
+    return formatStringPush(value.source);
+  }
   if (typeof value == 'boolean') {
     return value ? 'Yes' : 'No';
   }
@@ -174,6 +183,7 @@ function flattenChild(
     site,
     organization,
     fundingSpace,
+    activeFunding,
   ];
   columns.forEach((column) => {
     const { propertyName, section } = column;
@@ -189,23 +199,6 @@ function flattenChild(
         if (o && o.hasOwnProperty(propertyName)) {
           childString.push(formatStringPush(o[propertyName]));
           return true;
-        } else if (propertyName.toLowerCase().includes('fundingperiod')) {
-          if (
-            !!activeFunding &&
-            propertyName.toLowerCase().startsWith('first')
-          ) {
-            childString.push(
-              reportingPeriodToString(activeFunding.firstReportingPeriod)
-            );
-            return true;
-          } else {
-            if (!!activeFunding?.lastReportingPeriod) {
-              childString.push(
-                reportingPeriodToString(activeFunding.lastReportingPeriod)
-              );
-              return true;
-            }
-          }
         }
         return false;
       });
