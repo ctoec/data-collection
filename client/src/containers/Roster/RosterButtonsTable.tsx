@@ -3,7 +3,7 @@ import { Moment } from 'moment';
 import React, { useState } from 'react';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
-import { MonthFilterModal } from './MonthFilter/MonthFilterModal';
+import { MonthFilterModal } from './MonthFilterModal';
 
 type RosterButtonsTable = {
   filterByMonth?: Moment;

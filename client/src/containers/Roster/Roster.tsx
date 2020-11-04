@@ -24,7 +24,7 @@ import {
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
-import { MonthFilterIndicator } from './MonthFilter/MonthFilterIndicator';
+import { Child } from '../../shared/models';
 import { NoRecordsAlert } from './NoRecordsAlert';
 import {
   useUpdateRosterParams,
@@ -32,6 +32,8 @@ import {
   useChildrenWithErrorsAlert,
   usePaginatedChildData,
 } from './hooks';
+import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
+import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -108,7 +110,7 @@ const Roster: React.FC = () => {
   }
 
   // Function to update active month, to pass down into month filter buttons
-  const updateActiveMonth = (newMonth: Moment) => {
+  const updateActiveMonth = (newMonth?: Moment) => {
     const month = getQueryMonthFormat(newMonth);
     history.push({
       search: stringify({
@@ -146,10 +148,10 @@ const Roster: React.FC = () => {
             <p className="font-body-xl margin-top-1">{subHeaderText}</p>
           </div>
           <div className="tablet:grid-col-2">
-            <MonthFilterIndicator
-              filterByMonth={queryMonth}
-              setFilterByMonth={updateActiveMonth}
-            />
+            {queryMonth && <RosterFilterIndicator
+              filterTitleText={queryMonth.format('MMMM YYYY')}
+              reset={() => updateActiveMonth(undefined)}
+            />}
           </div>
         </div>
         <RosterButtonsTable
@@ -157,27 +159,45 @@ const Roster: React.FC = () => {
           setFilterByMonth={updateActiveMonth}
         />
         <LoadingWrapper text="Loading your roster..." loading={loading}>
+<<<<<<< HEAD
           {rosterContent}
+=======
+          {!(children || []).length ? (
+          <NoRecordsAlert />
+        ) : tabNavProps ? (
+          <TabNav {...tabNavProps}>
+            {accordionProps.items.length ? (
+              <Accordion {...accordionProps} />
+            ) : (
+                <NoRecordsAlert />
+              )}
+          </TabNav>
+        ) : accordionProps.items.length ? (
+          <Accordion {...accordionProps} />
+        ) : (
+                <NoRecordsAlert />
+              )}
+>>>>>>> fb93ca07 (Make roster filter indicator)
         </LoadingWrapper>
-      </div>
-      <FixedBottomBar>
+    </div>
+    <FixedBottomBar>
+      <Button
+        text="Back to getting started"
+        href="/getting-started"
+        appearance="outline"
+      />
+      {!isSiteLevelUser && (
         <Button
-          text="Back to getting started"
-          href="/getting-started"
-          appearance="outline"
+          text={
+            isSiteLevelUser
+              ? 'Organization permissions required to submit'
+              : 'Send to OEC'
+          }
+          onClick={submitToOEC}
+          disabled={!query.organization}
         />
-        {!isSiteLevelUser && (
-          <Button
-            text={
-              isSiteLevelUser
-                ? 'Organization permissions required to submit'
-                : 'Send to OEC'
-            }
-            onClick={submitToOEC}
-            disabled={!query.organization}
-          />
-        )}
-      </FixedBottomBar>
+      )}
+    </FixedBottomBar>
     </>
   );
 };
