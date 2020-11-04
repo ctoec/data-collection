@@ -1,5 +1,5 @@
 import { TabNav, TabItem } from '@ctoec/component-library';
-import { stringify, parse } from 'querystring';
+import { stringify, parse } from 'query-string';
 import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils';
 import { useHistory } from 'react-router-dom';
 import { useContext } from 'react';
@@ -7,19 +7,42 @@ import UserContext from '../../../contexts/UserContext/UserContext';
 import { Site, Organization } from '../../../shared/models';
 import moment from 'moment';
 
-export const useGenerateUserSpecificProps = (
-  isLoading: boolean,
-  childCount: number
-) => {
+const ALL_SITES = 'all-sites';
+
+export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
   const { user } = useContext(UserContext);
   const organizations = user?.organizations || [];
   const sites = user?.sites || [];
 
   const history = useHistory();
   const query = parse(history.location.search) as {
-    organization: string;
-    site: string;
-    month: string;
+    organization?: string;
+    site?: string;
+    month?: string;
+  };
+
+  // Function to update search query when user clicks on tab nav
+  const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
+    // If it has a nested item type then it's an org
+    if (clickedItem.nestedItemType) {
+      // Remove site param if clickedId !== current orgId
+      if (clickedId !== query.organization) delete query.site;
+      history.push({
+        search: stringify({ ...query, organization: clickedId }),
+      });
+    } else {
+      // Push a specific site id if specific site clicked
+      if (clickedId !== ALL_SITES) {
+        history.push({
+          search: stringify({ ...query, site: clickedId }),
+        });
+      }
+      // Or remove site param from search if 'All sites' clicked
+      else {
+        delete query.site;
+        history.push({ search: stringify(query) });
+      }
+    }
   };
 
   // Base case: single-site user:
@@ -28,30 +51,27 @@ export const useGenerateUserSpecificProps = (
   // - does not include site count in subHeaderText
   const props = {
     tabNavProps: undefined as TabNav | undefined,
-    h1Text: !isLoading && sites.length ? sites[0].siteName : 'Loading...',
-    subHeaderText: getSubHeaderText(childCount, sites, {
-      activeMonth: query.month,
-      loading: isLoading,
-    }),
+    h1Text: isLoading ? 'Loading...' : sites[0].siteName,
+    subHeaderText: getSubHeaderText(isLoading, childCount, sites, query.month),
+    superHeaderText: organizations[0].providerName,
   };
 
-  const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
-    if (clickedItem.nestedItemType) {
-      // If it has a nested item type then it's an org
-      history.push({
-        search: stringify({ organization: clickedId, month: query.month }),
-      });
-    } else {
-      history.push({
-        search: stringify({ site: clickedId, month: query.month }),
-      });
-    }
-  };
-
-  // Multi-org user
+  // Multi-org user gets 'Multiple organizations' h1,
+  //nested tabs (for orgs and sites),
+  // sub header with only sites for the currently selected org,
+  // and no super header
   if (organizations.length > 1) {
-    // show all orgs in tabs, and placeholder the h1
     props.h1Text = 'Multiple organizations';
+    const orgSites = sites.filter(
+      (s) => `${s.organizationId}` === query.organization
+    );
+    props.subHeaderText = getSubHeaderText(
+      isLoading,
+      childCount,
+      orgSites,
+      query.month
+    );
+    props.superHeaderText = '';
     props.tabNavProps = {
       itemType: 'organization',
       items: getOrganizationTabItems(organizations, sites),
@@ -59,9 +79,14 @@ export const useGenerateUserSpecificProps = (
       nestedActiveId: query.site,
       activeId: query.organization,
     };
-  } else if (sites.length > 1) {
-    // If user has multiple orgs, show them all and placeholder the h1
+  }
+  // Multi-site user gets org name as h1
+  // single level of tabs (for sites)
+  // and no super header
+  else if (sites.length > 1) {
+    // Assume users with multi-site access are all under the same org
     props.h1Text = organizations[0].providerName;
+    props.superHeaderText = '';
     props.tabNavProps = {
       itemType: 'site',
       onClick: tabNavOnClick,
@@ -75,19 +100,25 @@ export const useGenerateUserSpecificProps = (
 
 /****************** HELPER FUNCTIONS  ***********************/
 function getSubHeaderText(
+  loading: boolean,
   childCount: number,
-  userSites: Site[],
-  opts?: { activeMonth?: string; loading?: boolean }
+  userSites?: Site[],
+  month?: string
 ) {
-  const { activeMonth, loading } = opts || {};
   if (loading) return '';
+
+  // Base case
   let returnText = `${childCount} children enrolled`;
-  if (userSites.length > 1) {
+
+  // If multi-site + user is not looking at a single site
+  // then include the count of all sites in the sub header
+  if (userSites && userSites.length > 1) {
     returnText += ` at ${userSites.length} sites`;
   }
-  if (activeMonth) {
+
+  if (month) {
     returnText += ` in ${moment
-      .utc(activeMonth, QUERY_STRING_MONTH_FORMAT)
+      .utc(month, QUERY_STRING_MONTH_FORMAT)
       .format('MMMM YYYY')}`;
   }
   return returnText;
@@ -100,7 +131,7 @@ function getSiteTabItems(sites: Site[]): TabItem[] {
     tabTextFormatter: formatTabItemText,
   }));
   siteItems.splice(0, 0, {
-    id: 'all-sites',
+    id: ALL_SITES,
     tabText: 'All sites',
     firstItem: true,
   });
