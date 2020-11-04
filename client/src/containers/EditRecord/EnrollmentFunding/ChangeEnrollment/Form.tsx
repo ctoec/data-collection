@@ -94,7 +94,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
           data.at('newEnrollment').at('fundings').at(0)
         }
         getEnrollment={(data) => data.at('newEnrollment').value}
-        orgId={child.organization.id}
+        organizationId={child.organization.id}
       />
 
       {!!currentEnrollment && activeFunding && (

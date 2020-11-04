@@ -9,9 +9,8 @@ import {
   InternalServerError,
 } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import * as controller from '../controllers/enrollmentReports/index';
-import { parseQueryString } from '../utils/parseQueryString';
 import { validate } from 'class-validator';
+import * as controller from '../controllers/enrollmentReports/index';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -92,11 +91,12 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (tManager) => {
       // Prepare for ingestion by removing any existing data
       try {
-        const siteIdsToReplace = parseQueryString(req, 'overwriteSites', {
-          post: parseInt,
-          forceArray: true,
-        }) as number[];
-
+        const siteIdToReplace = req.query['overwriteSites'];
+        const siteIdsToReplace = !siteIdToReplace
+          ? undefined
+          : ((Array.isArray(siteIdToReplace)
+              ? siteIdToReplace
+              : [siteIdToReplace]) as string[]);
         await controller.removeExistingEnrollmentDataForUser(
           tManager,
           req.user,

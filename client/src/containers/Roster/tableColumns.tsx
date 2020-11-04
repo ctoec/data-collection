@@ -111,7 +111,7 @@ export const tableColumns: (_?: boolean) => Column<Child>[] = (
   ];
 
   if (includeOrg)
-    columns.splice(4, 0, {
+    columns.splice(5, 0, {
       className: tableColumnClassName,
       name: 'Organization',
       sort: (row) =>

@@ -18,8 +18,12 @@ export const parseQueryString = <T = string>(
   let value: T;
   if (post && values) {
     value = post(values);
-    return forceArray ? ((value ? [value] : []) as T[]) : (value as T);
+  } else {
+    value = (values as any) as T;
   }
 
-  return values;
+  if (forceArray) {
+    return (value ? [value] : []) as T[];
+  }
+  return value;
 };
