@@ -73,7 +73,8 @@ enrollmentsRouter.delete(
   passAsyncError(async (req: Request, res: Response) => {
     const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      await getManager().delete(Enrollment, { id: enrollmentId });
+      await getManager().softDelete(Enrollment, { id: enrollmentId });
+      // await getManager().delete(Enrollment, { id: enrollmentId });
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -109,7 +110,8 @@ enrollmentsRouter.delete(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const fundingId = parseInt(req.params['fundingId']);
-      await getManager().delete(Funding, { id: fundingId });
+      await getManager().softDelete(Funding, { id: fundingId });
+      // await getManager().delete(Funding, { id: fundingId });
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;

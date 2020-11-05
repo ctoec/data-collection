@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  DeleteDateColumn,
+} from 'typeorm';
 
 import { IncomeDetermination as IncomeDeterminationInterface } from '../../client/src/shared/models';
 
@@ -33,4 +39,7 @@ export class IncomeDetermination implements IncomeDeterminationInterface {
 
   @Column((type) => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
+
+  @DeleteDateColumn()
+  deletedDate: Date;
 }
