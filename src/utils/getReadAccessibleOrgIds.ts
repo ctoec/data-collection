@@ -7,14 +7,16 @@ import { getManager } from 'typeorm';
  * that they have permissions for.
  * @param user
  */
-export const getReadAccessibileOrgIds = async (
+export const getReadAccessibleOrgIds = async (
   user: User
-): Promise<number[]> => {
+): Promise<string[]> => {
   // get org ids for all permitted sites
   const siteOrgIds = (
     await getManager().findByIds(Site, user.siteIds || [])
   ).map((site) => site.organizationId);
 
   // combine and deduplicate site org Ids + org Ids
-  return Array.from(new Set([...siteOrgIds, ...user.organizationIds]));
+  return Array.from(new Set([...siteOrgIds, ...user.organizationIds])).map(
+    (id) => `${id}`
+  );
 };

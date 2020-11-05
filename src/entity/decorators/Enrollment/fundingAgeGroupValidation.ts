@@ -15,10 +15,11 @@ export function FundingAgeGroupMatchesEnrollment(
       options: { message: ageGroupsMustAgree, ...validationOptions },
       validator: {
         validate(_, { object: enrollment }) {
+          if (!enrollment) return true;
           const enrollmentAgeGroup = (enrollment as Enrollment).ageGroup;
           const allFundings = (enrollment as Enrollment).fundings;
           return allFundings.every(
-            (f) => f.fundingSpace.ageGroup === enrollmentAgeGroup
+            (f) => f?.fundingSpace?.ageGroup === enrollmentAgeGroup
           );
         },
       },

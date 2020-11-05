@@ -15,8 +15,9 @@ export const isIdentifierMatch = (
   return (
     child.firstName === other.firstName &&
     child.lastName === other.lastName &&
+    child.birthdate &&
     child.birthdate.format('MM/DD/YYYY') ===
-      other.birthdate.format('MM/DD/YYYY') &&
+      other.birthdate?.format('MM/DD/YYYY') &&
     child.sasid === other.sasid
   );
 };
@@ -47,10 +48,10 @@ export const getExistingEnrollmentOnChild = (
   row: EnrollmentReportRow,
   child: Child
 ) => {
-  if (!child.enrollments) return null;
+  if (!child.enrollments) return undefined;
   return child.enrollments.find((e) => {
     return (
-      e.site.siteName === row.siteName &&
+      e.site.siteName === row.site &&
       e.entry.format('MM/DD/YYYY') === row.entry.format('MM/DD/YYYY')
     );
   });
@@ -68,12 +69,12 @@ export const getExistingFundingForEnrollment = (
   row: EnrollmentReportRow,
   enrollment: Enrollment
 ) => {
-  if (!enrollment || !enrollment.fundings) return null;
+  if (!enrollment || !enrollment.fundings) return undefined;
   return enrollment.fundings.find((f) => {
     return (
-      row.firstFundingPeriod.format('MM/DD/YYYY') ===
+      row.firstReportingPeriod.format('MM/DD/YYYY') ===
         f.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
-      row.source === f.fundingSpace.source &&
+      row.fundingSpace === f.fundingSpace.source &&
       row.time === f.fundingSpace.time
     );
   });

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import {
   SideNav,
@@ -7,7 +7,6 @@ import {
   InlineIcon,
 } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
-import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
@@ -15,25 +14,29 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
 import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
+import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
+import { stringify } from 'querystring';
 
 const BatchEdit: React.FC = () => {
   const { childId } = useParams() as { childId: string };
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
-  const { children } = useContext(DataCacheContext);
+  const { data: children, isValidating } = useAuthenticatedSWR<Child[]>(
+    `children?${stringify({ 'missing-info': true })}`
+  );
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
   >([]);
   useEffect(() => {
-    if (!children.loading) {
+    if (!isValidating && !!children) {
       setFixedRecordsForDisplayIds(
-        children.records.filter(hasValidationError).map((child) => child.id)
+        children.filter(hasValidationError).map((child) => child.id)
       );
     }
-  }, [children.loading]);
+  }, [isValidating, !!children]);
 
   const fixedRecordsForDisplay = fixedRecordsForDisplayIds.map((id) =>
-    children.getRecordById(id)
+    (children || []).find((c) => c.id === id)
   ) as Child[];
   const currentlyMissingInfoCount = fixedRecordsForDisplay.filter(
     hasValidationError
@@ -86,7 +89,7 @@ const BatchEdit: React.FC = () => {
       <h1 ref={h1Ref} className="margin-bottom-1">
         Add needed information
       </h1>
-      {children.loading ? (
+      {isValidating ? (
         <>Loading</>
       ) : (
         <>

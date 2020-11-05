@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { stringify } from 'query-string';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
@@ -13,7 +14,9 @@ const fileTypeName = {
 type CSVExcelDownloadButtonProps = {
   whichDownload: 'roster' | 'template' | 'example';
   fileType?: FileTypeOpts;
+  queryParamsAsObject?: { [key: string]: any };
   className?: string;
+  downloadText?: string;
 };
 
 type DownloadOptionsType = {
@@ -44,7 +47,9 @@ const getExampleProps = (fileType: FileTypeOpts): DownloadOptionsType => ({
 export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
   whichDownload,
   fileType = 'csv',
+  queryParamsAsObject,
   className,
+  downloadText: specifiedDownloadText,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
 
@@ -55,11 +60,14 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
     options = getTemplateProps(fileType);
   }
 
-  const { downloadText, fileName, backendPath } = options;
+  const { downloadText: defaultDownloadText, fileName, backendPath } = options;
+  const downloadText = specifiedDownloadText || defaultDownloadText;
 
   const download = async () => {
     await downloadStreamToFile(
-      backendPath,
+      queryParamsAsObject
+        ? `${backendPath}?${stringify(queryParamsAsObject)}`
+        : backendPath,
       fileName,
       accessToken || ''
     ).catch((err) => console.error(err));

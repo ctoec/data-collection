@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ReportingPeriod,
   Funding,
@@ -12,7 +12,6 @@ import {
   FormField,
   Select,
   TObjectDriller,
-  FormStatusProps,
 } from '@ctoec/component-library';
 import moment from 'moment';
 import {
@@ -21,9 +20,11 @@ import {
   Withdraw,
 } from '../../../../../shared/payloads';
 import { reportingPeriodFormatter } from '../../../../../utils/formatters';
-import DataCacheContext from '../../../../../contexts/DataCacheContext/DataCacheContext';
 import { getValidationStatusForField } from '../../../../../utils/getValidationStatus';
 import { FieldStatusFunc } from '@ctoec/component-library/dist/components/Form/FormStatusFunc';
+import { useAuthenticatedSWR } from '../../../../../hooks/useAuthenticatedSWR';
+import { stringify } from 'query-string';
+import { getShortFundingSourceName } from '../../../../../utils/models';
 
 type ReportingPeriodProps<T> = {
   accessor: (_: TObjectDriller<T>) => TObjectDriller<ReportingPeriod>;
@@ -51,7 +52,11 @@ export const ReportingPeriodField = <
   optional,
   showStatus = true,
 }: ReportingPeriodProps<T>) => {
-  const { reportingPeriods } = useContext(DataCacheContext);
+  const { data: reportingPeriods } = useAuthenticatedSWR<ReportingPeriod[]>(
+    `reporting-periods?${stringify({
+      source: getShortFundingSourceName(fundingSource),
+    })}`
+  );
 
   const { dataDriller } = useGenericContext<T>(FormContext);
   const [reportingPeriodOptions, setReportingPeriodOptions] = useState<
@@ -60,6 +65,7 @@ export const ReportingPeriodField = <
 
   const currentReportingPeriod = accessor(dataDriller).value;
   useEffect(() => {
+    if (!reportingPeriods) return;
     // Only display 5 options, centered around existing value or today
     // No need to account for "isChangeFunding", because in that situation
     // a reporting period value will never exist
@@ -67,7 +73,7 @@ export const ReportingPeriodField = <
       currentReportingPeriod?.period || moment.utc().startOf('month');
     const twoMonthsPrior = existingValueOrThisMonth.clone().add(-2, 'months');
     const twoMonthsAfter = existingValueOrThisMonth.clone().add(2, 'months');
-    const _reportingPeriodOptions = reportingPeriods.records.filter(
+    const _reportingPeriodOptions = reportingPeriods.filter(
       (rp) =>
         rp.type === fundingSource &&
         rp.period.isSameOrAfter(twoMonthsPrior) &&

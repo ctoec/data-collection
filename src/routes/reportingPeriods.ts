@@ -7,7 +7,7 @@ export const reportingPeriodsRouter = express.Router();
 reportingPeriodsRouter.get(
   '/',
   passAsyncError(async (req: Request, res: Response) => {
-    controller.getReportingPeriods();
-    res.send(await controller.getReportingPeriods());
+    const shortFundingSource = req.query['source'] as string;
+    res.send(await controller.getReportingPeriods(shortFundingSource));
   })
 );

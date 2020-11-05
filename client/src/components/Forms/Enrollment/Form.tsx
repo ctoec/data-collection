@@ -121,7 +121,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
         <NewFundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
-          orgId={child.organization.id}
+          organizationId={child.organization.id}
         />
       )}
       {AdditionalButton}

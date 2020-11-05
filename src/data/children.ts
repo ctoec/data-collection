@@ -1,11 +1,5 @@
 import { name, address, random } from 'faker';
-import {
-  Child,
-  Funding,
-  IncomeDetermination,
-  Organization,
-  Site,
-} from '../entity';
+import { Child, Organization, Site } from '../entity';
 import {
   BirthCertificateType,
   Gender,
@@ -16,9 +10,9 @@ import { sitesByOrgName } from './sites';
 import moment from 'moment';
 import { makeFakeFamily } from './family';
 import { getFakeIncomeDet } from './incomeDeterminations';
-import { makeFakeEnrollment } from './enrollment';
-import { getFakeFunding } from './funding';
+import { makeFakeEnrollments } from './enrollment';
 import { getFakeFundingSpaces } from './fundingSpace';
+import { weightedBoolean } from './fakeDataUtils';
 
 const _organizations: Organization[] = organizations.map((o, i) => ({
   ...o,
@@ -42,21 +36,23 @@ _organizations.forEach((o) =>
   })
 );
 
-const possibleBirthCertTypes = Object.values(BirthCertificateType);
 const children: Child[] = Array.from({ length: 100 }, (_, i) => {
   const org = random.arrayElement(_organizations);
   return {
     id: '' + i,
     firstName: name.firstName(),
     lastName: name.lastName(),
-    birthCertificateType: random.arrayElement(possibleBirthCertTypes),
+    birthCertificateType: weightedBoolean(8)
+      ? BirthCertificateType.nonUS
+      : BirthCertificateType.US, // Arbitrary, would be better based on actual frequency in data
+    birthdate: moment().add(-random.number({ min: 6, max: 60 }), 'months'),
     organization: org,
     organizationId: org.id,
     updateMetaData: { updatedAt: new Date() },
   };
 });
 
-const possibleGenders = Object.keys(Gender);
+const possibleGenders = [Gender.Female, Gender.Male, Gender.Nonbinary];
 function makeMiddleNameEdgeCases(num: number) {
   let _name = '';
   for (let i = 0; i < num; i++) {
@@ -64,62 +60,69 @@ function makeMiddleNameEdgeCases(num: number) {
   }
   return _name;
 }
-const incompleteChildren: Child[] = children.slice(0, 50);
-const completeChildren: Child[] = children.slice(50, 100).map((c, i) => {
+const possibleSuffixes = ['Jr', 'III', 'IV'];
+const completeChildren: Child[] = children.map((c, i) => {
   const site = random.arrayElement(c.organization.sites);
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-        birthdate: moment().add(-Math.floor(Math.random() * 60), 'months'),
         birthTown: address.city(),
-        birthState: address.stateAbbr(),
-        birthCertificateId: '' + random.number(),
+        birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
+        birthCertificateId:
+          random.number({ min: 10000000000, max: 99999999999 }) + '',
       }
     : {};
-  const childRace = random.boolean()
-    ? { notDisclosed: true }
-    : random
-        .arrayElements(RACE_FIELDS, random.number(RACE_FIELDS.length))
-        .reduce((acc, race) => ({ ...acc, [race]: true }), {});
+  const childRace = random
+    .arrayElements(
+      RACE_FIELDS,
+      random.number({ min: 1, max: RACE_FIELDS.length - 1 })
+    )
+    .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);
-
-  const foster = random.boolean();
-  const incomeDeterminations: IncomeDetermination[] = foster
-    ? []
-    : [getFakeIncomeDet(i, family)];
-
-  const enrollment = makeFakeEnrollment(i, c, site);
-
-  const fundings: Funding[] = [
-    getFakeFunding(i, enrollment, site.organization),
-  ];
+  const foster = weightedBoolean(5);
 
   return {
     ...c,
     ...birthCertDetails,
     ...childRace,
-    hispanicOrLatinxEthnicity: random.boolean(),
-    middleName: makeMiddleNameEdgeCases(random.number(3)),
-    suffix: random.boolean() ? 'Jr' : undefined,
-    sasid: random.boolean() ? random.uuid() : undefined,
-    gender: random.arrayElement(possibleGenders) as Gender,
-    dualLanguageLearner: random.boolean(),
+    hispanicOrLatinxEthnicity: weightedBoolean(30), // No idea if this is representative
+    middleName: makeMiddleNameEdgeCases(
+      weightedBoolean(10) ? 1 : random.number(3)
+    ),
+    suffix: weightedBoolean(5)
+      ? random.arrayElement(possibleSuffixes)
+      : undefined,
+    sasid: random.number({ min: 1000000000, max: 9999999999 }) + '',
+    gender: random.arrayElement(possibleGenders),
+    dualLanguageLearner: weightedBoolean(10), // No idea if this is representative
     foster,
-    receivesDisabilityServices: random.boolean(),
+    receivesDisabilityServices: weightedBoolean(5),
     family: {
       ...family,
-      incomeDeterminations,
+      incomeDeterminations: foster ? [] : [getFakeIncomeDet(i, family)],
     },
-    enrollments: [
-      {
-        ...enrollment,
-        fundings,
-      },
-    ], // TODO
+    enrollments: makeFakeEnrollments(i, c, site),
   };
 });
 
-const allChildren = [...incompleteChildren, ...completeChildren];
+// Iterate through, delete keys arbitrarily
+const childrenMissingSomeInfo = completeChildren.map((c) => {
+  if (random.boolean()) {
+    const randomKey = random.arrayElement(Object.keys(c));
+    return { ...c, [randomKey]: undefined };
+  }
+  return c;
+});
 
-export { incompleteChildren, completeChildren, allChildren };
+// Delete one key from all children
+// TODO: make this a func that takes a param for which key
+const childrenAllMissingOneField = completeChildren.map((c) => {
+  return { ...c, firstName: undefined };
+});
+
+export {
+  completeChildren,
+  childrenMissingSomeInfo,
+  childrenAllMissingOneField,
+};
