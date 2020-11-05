@@ -150,10 +150,7 @@ const Roster: React.FC = () => {
           filterByMonth={queryMonth}
           setFilterByMonth={updateActiveMonth}
         />
-        <LoadingWrapper
-          text="Loading your roster..."
-          loading={loading}
-        >
+        <LoadingWrapper text="Loading your roster..." loading={loading}>
           {!(children || []).length ? (
             <NoRecordsAlert />
           ) : tabNavProps ? (
@@ -161,14 +158,14 @@ const Roster: React.FC = () => {
               {accordionProps.items.length ? (
                 <Accordion {...accordionProps} />
               ) : (
-                  <NoRecordsAlert />
-                )}
+                <NoRecordsAlert />
+              )}
             </TabNav>
           ) : accordionProps.items.length ? (
             <Accordion {...accordionProps} />
           ) : (
-                  <NoRecordsAlert />
-                )}
+            <NoRecordsAlert />
+          )}
         </LoadingWrapper>
       </div>
       <FixedBottomBar>
