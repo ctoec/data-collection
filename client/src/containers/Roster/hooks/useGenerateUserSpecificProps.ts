@@ -29,7 +29,10 @@ export const useGenerateUserSpecificProps = (
   const props = {
     tabNavProps: undefined as TabNav | undefined,
     h1Text: !isLoading && sites.length ? sites[0].siteName : 'Loading...',
-    subHeaderText: `${childCount} children enrolled`,
+    subHeaderText: getSubHeaderText(childCount, sites, {
+      activeMonth: query.month,
+      loading: isLoading,
+    }),
   };
 
   const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
@@ -67,7 +70,6 @@ export const useGenerateUserSpecificProps = (
     };
   }
 
-  props.subHeaderText = getSubHeaderText(childCount, sites, query.month);
   return props;
 };
 
@@ -75,8 +77,10 @@ export const useGenerateUserSpecificProps = (
 function getSubHeaderText(
   childCount: number,
   userSites: Site[],
-  activeMonth?: string
+  opts?: { activeMonth?: string; loading?: boolean }
 ) {
+  const { activeMonth, loading } = opts || {};
+  if (loading) return '';
   let returnText = `${childCount} children enrolled`;
   if (userSites.length > 1) {
     returnText += ` at ${userSites.length} sites`;
