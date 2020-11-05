@@ -1,173 +1,21 @@
-import { getManager, In } from 'typeorm';
+import { getManager, EntityManager } from 'typeorm';
 import idx from 'idx';
-import { validate, validateSync } from 'class-validator';
+import { ChangeEnrollment } from '../../../client/src/shared/payloads';
 import {
   ExitReason,
   Enrollment as EnrollmentInterface,
-} from '../../client/src/shared/models';
+} from '../../../client/src/shared/models';
+import { getChildById } from './get';
+import { NotFoundError, BadRequestError } from '../../middleware/error/errors';
 import {
-  Child,
-  ReportingPeriod,
-  Enrollment,
-  Funding,
   User,
-  Family,
+  ReportingPeriod,
+  Funding,
+  Enrollment,
   Site,
   FundingSpace,
-} from '../entity';
-import { ChangeEnrollment } from '../../client/src/shared/payloads';
-import { BadRequestError, NotFoundError } from '../middleware/error/errors';
-import { getReadAccessibileOrgIds } from '../utils/getReadAccessibleOrgIds';
-import { propertyDateSorter } from '../utils/propertyDateSorter';
-import { validateObject } from '../utils/distributeValidationErrorsToSubObjects';
-
-const FULL_RECORD_RELATIONS = [
-  'family',
-  'family.incomeDeterminations',
-  'enrollments',
-  'enrollments.site',
-  'enrollments.site.organization',
-  'enrollments.fundings',
-  'organization',
-];
-
-/**
- * Get child by id, with related family and related
- * family income determinations, and enrollments and
- * related fundings
- * @param id
- */
-export const getChildById = async (id: string, user: User): Promise<Child> => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
-    relations: FULL_RECORD_RELATIONS,
-    where: { organization: { id: In(readOrgIds) } },
-  });
-
-  if (child) {
-    // Sort enrollments by exit date
-    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
-      if (enrollmentA.fundings) {
-        // Sort fundings by last reporting period
-        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
-          propertyDateSorter(
-            fundingA,
-            fundingB,
-            (f) => f.lastReportingPeriod?.period
-          )
-        );
-      }
-
-      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
-    });
-
-    if (child.family) {
-      // Sort income determinations by date
-      child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
-        (determinationA, determinationB) =>
-          propertyDateSorter(
-            determinationA,
-            determinationB,
-            (d) => d.determinationDate
-          )
-      );
-    }
-  }
-
-  return validateObject(child);
-};
-
-/**
- * Get all children for organizations the user has access to
- */
-export const getChildren = async (user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  return (
-    await getManager().find(Child, {
-      relations: FULL_RECORD_RELATIONS,
-      where: { organization: { id: In(readOrgIds) } },
-    })
-  ).map(validateObject);
-};
-
-/**
- * Update child record, if user has access
- * @param id
- * @param user
- * @param update
- */
-export const updateChild = async (
-  id: string,
-  user: User,
-  update: Partial<Child>
-) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
-    where: { organization: { id: In(readOrgIds) } },
-  });
-
-  if (!child) {
-    console.warn(
-      'Child either does not exist, or user does not have permission to modify'
-    );
-    throw new NotFoundError();
-  }
-
-  await getManager().save(getManager().merge(Child, child, update));
-};
-
-/**
- * Delete child record, if user has access
- * @param id
- * @param user
- */
-export const deleteChild = async (id: string, user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
-    where: { organization: { id: In(readOrgIds) } },
-  });
-
-  if (!child) {
-    console.warn(
-      'Child either does not exist, or user does not have permission to modify'
-    );
-    throw new NotFoundError();
-  }
-
-  await getManager().delete(Child, { id });
-};
-
-/**
- * Creates a child from a POST request body.
- * Also, creates a family if one does not exist.
- * @param _child
- */
-export const createChild = async (_child: Child, user: User) => {
-  const readOrgIds = await getReadAccessibileOrgIds(user);
-  if (
-    !readOrgIds.length ||
-    !_child.organization ||
-    !readOrgIds.includes(_child.organization.id)
-  ) {
-    console.error(
-      'User does not have permission to create the child row supplied'
-    );
-    throw new Error('Child creation request denied');
-  }
-
-  // TODO: make family optional on the child
-  // (to enable family lookup when adding new child)
-  // and stop creating it here
-  if (!_child.family) {
-    const organization = _child.organization;
-    const family = await getManager().save(
-      getManager().create(Family, { organization })
-    );
-    _child.family = family;
-  }
-
-  return getManager().save(getManager().create(Child, _child));
-};
+  Child,
+} from '../../entity';
 
 /**
  * Attempts to create a new enrollment, and optionally funding,
@@ -247,7 +95,10 @@ export const changeEnrollment = async (
 
         // Update current funding lastReportinPeriod
         currentFunding.lastReportingPeriod = lastReportingPeriod;
-        await tManager.save(Funding, currentFunding);
+        await tManager.save(Funding, {
+          ...currentFunding,
+          updateMetaData: { author: user },
+        });
       }
 
       // Update current enrollment exitReason
@@ -263,13 +114,17 @@ export const changeEnrollment = async (
       currentEnrollment.exit =
         oldEnrollmentExit || newEnrollmentStart.clone().add(-1, 'day');
 
-      await tManager.save(Enrollment, currentEnrollment);
+      await tManager.save(Enrollment, {
+        ...currentEnrollment,
+        updateMetaData: { author: user },
+      });
     }
 
     await createNewEnrollment(
       changeEnrollmentData.newEnrollment,
       child,
-      tManager
+      tManager,
+      user
     );
   });
 };
@@ -277,7 +132,8 @@ export const changeEnrollment = async (
 async function createNewEnrollment(
   newEnrollment: EnrollmentInterface,
   child: Child,
-  tManager
+  tManager: EntityManager,
+  user: User
 ): Promise<void> {
   if (newEnrollment.site) {
     const matchingSite = await tManager.findOne(Site, newEnrollment.site.id);
@@ -294,7 +150,10 @@ async function createNewEnrollment(
     ...newEnrollment,
     child,
   });
-  await tManager.save(Enrollment, enrollment);
+  await tManager.save(Enrollment, {
+    ...enrollment,
+    updateMetaData: { author: user },
+  });
 
   // Create new funding, if exists
   if (newEnrollment.fundings && newEnrollment.fundings.length) {
@@ -321,6 +180,9 @@ async function createNewEnrollment(
         (_) => _.fundings[0].firstReportingPeriod
       ),
     });
-    await tManager.save(Funding, funding);
+    await tManager.save(Funding, {
+      ...funding,
+      updateMetaData: { author: user },
+    });
   }
 }

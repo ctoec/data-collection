@@ -1,11 +1,11 @@
 import React from 'react';
-import { waitFor } from '@testing-library/dom';
 import moment from 'moment';
 import {
   snapshotTestHelper,
   accessibilityTestHelper,
   renderHelper,
 } from '../../testHelpers';
+import { cache } from 'swr';
 import Roster from './Roster';
 import UserContext from '../../contexts/UserContext/UserContext';
 import {
@@ -18,16 +18,8 @@ import {
   ReportingPeriod,
   Funding,
   User,
-  Organization,
+  FundingTime,
 } from '../../shared/models';
-
-jest.mock('../../utils/api');
-import * as api from '../../utils/api';
-import DataCacheContext, {
-  DataCacheContextType,
-  ReadOnlyDataCache,
-} from '../../contexts/DataCacheContext/DataCacheContext';
-const apiMock = api as jest.Mocked<typeof api>;
 
 const _child = {
   firstName: '',
@@ -40,6 +32,7 @@ const INFANT_TODDLER_CDC = {
   source: FundingSource.CDC,
   ageGroup: AgeGroup.InfantToddler,
   capacity: 3,
+  time: FundingTime.FullDay,
 } as FundingSpace;
 
 const INFANT_TODDLER_PSR = {
@@ -47,14 +40,16 @@ const INFANT_TODDLER_PSR = {
   source: FundingSource.PSR,
   ageGroup: AgeGroup.InfantToddler,
   capacity: 5,
-};
+  time: FundingTime.FullTime,
+} as FundingSpace;
 
 const PRESCHOOL_CDC = {
   id: 3,
   source: FundingSource.CDC,
   ageGroup: AgeGroup.Preschool,
   capacity: 10,
-};
+  time: FundingTime.ExtendedDay,
+} as FundingSpace;
 
 const children: Child[] = [
   {
@@ -141,56 +136,65 @@ const multiOrgUser = {
   ],
 } as User;
 
-const cacheProps = {
-  children: {
-    records: children,
-    loading: false,
-    addOrUpdateRecord: jest.fn(),
-    refetch: jest.fn(),
-    removeRecordById: jest.fn(),
-  },
-  fundingSpaces: {} as ReadOnlyDataCache<FundingSpace>,
-  reportingPeriods: {} as ReadOnlyDataCache<ReportingPeriod>,
-} as DataCacheContextType;
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useLocation: () => ({
+    search: '?organization=1',
+  }),
+}));
+
+jest.mock('../../utils/api');
+import * as api from '../../utils/api';
+const apiMock = api as jest.Mocked<typeof api>;
+
+// For reasons I cannot explain, we don't need to force the wait for the
+// apiGet to happen in these tests. In fact it allegedly never gets called,
+// but if I don't mock the return value, then the roster has no items in it.
+// Maybe a cache cache-ing thing, but I don't understand.
+// const waitGetChildren = () => waitFor(() => expect(apiMock.apiGet).toBeCalled());
 
 describe('Roster', () => {
-  const helperOpts = {
-    wrapInRouter: true,
-  };
+  beforeEach(() => {
+    apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve(children)));
+  });
+
   snapshotTestHelper(
     <UserContext.Provider value={{ user: oneOrgUser, loading: false }}>
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>
+      <Roster />
     </UserContext.Provider>,
-    { ...helperOpts, name: 'matches snapshot for user with 1 org' }
+    {
+      wrapInRouter: true,
+      wrapInSWRConfig: true,
+      name: 'matches snapshot for user with 1 org',
+    }
   );
 
   snapshotTestHelper(
     <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>
+      <Roster />
     </UserContext.Provider>,
-    { ...helperOpts, name: 'matches snapshot for user with >1 org' }
+    {
+      wrapInRouter: true,
+      wrapInSWRConfig: true,
+      name: 'matches snapshot for user with >1 org',
+    }
   );
 
   accessibilityTestHelper(
     <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>
+      <Roster />
     </UserContext.Provider>,
-    helperOpts
+    {
+      wrapInSWRConfig: true,
+      wrapInRouter: true,
+    }
   );
 
   it('correctly separates children by ageGroup', async () => {
-    const renderResult = await renderHelper(
-      <DataCacheContext.Provider value={cacheProps}>
-        <Roster />
-      </DataCacheContext.Provider>,
-      helperOpts
-    );
+    const renderResult = await renderHelper(<Roster />, {
+      wrapInRouter: true,
+      wrapInSWRConfig: true,
+    });
 
     // Assert there are two roster sections
     const accordionHeaders = (
@@ -211,5 +215,5 @@ describe('Roster', () => {
     expect(preschoolHeader).toContainHTML('1 child');
   });
 
-  afterAll(() => jest.clearAllMocks());
+  afterEach(() => jest.clearAllMocks());
 });

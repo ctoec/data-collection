@@ -12,7 +12,7 @@ import { EntityManager, In } from 'typeorm';
 export const removeExistingEnrollmentDataForUser = async (
   transaction: EntityManager,
   user: User,
-  siteIdsToReplace: number[]
+  siteIdsToReplace?: string[]
 ) => {
   const allChildren = await transaction.find(Child, {
     relations: ['enrollments'],
@@ -20,14 +20,17 @@ export const removeExistingEnrollmentDataForUser = async (
   });
   if (!allChildren || !allChildren.length) return;
 
-  const childrenToDelete = siteIdsToReplace.length
-    ? allChildren.filter(
-        (child) =>
-          !child.enrollments ||
-          !child.enrollments.length ||
-          child.enrollments.some((e) => siteIdsToReplace.includes(e.siteId))
-      )
-    : allChildren;
+  const childrenToDelete =
+    siteIdsToReplace && siteIdsToReplace.length
+      ? allChildren.filter(
+          (child) =>
+            !child.enrollments ||
+            !child.enrollments.length ||
+            child.enrollments.some((e) =>
+              siteIdsToReplace.includes(`${e.siteId}`)
+            )
+        )
+      : allChildren;
 
   await transaction.delete(Child, childrenToDelete);
 };

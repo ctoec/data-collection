@@ -393,7 +393,7 @@ export class EnrollmentReportRow {
     example: "Children's Center of Connecticut at Hartford",
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  siteName?: string = undefined;
+  site?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Care Model',
@@ -463,7 +463,7 @@ export class EnrollmentReportRow {
     example: 'SR',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  source?: string = undefined;
+  fundingSpace?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Space type',
@@ -487,7 +487,7 @@ export class EnrollmentReportRow {
     example: '10/2016',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  firstFundingPeriod?: Moment = moment.invalid();
+  firstReportingPeriod?: Moment = moment.invalid();
 
   @ColumnMetadata({
     formattedName: 'Last funding period',
@@ -499,5 +499,5 @@ export class EnrollmentReportRow {
     example: '08/2017',
     section: SECTIONS.ENROLLMENT_FUNDING,
   })
-  lastFundingPeriod?: Moment = moment.invalid();
+  lastReportingPeriod?: Moment = moment.invalid();
 }

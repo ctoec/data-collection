@@ -1,6 +1,29 @@
 import { Child } from '../../entity';
 import { ColumnMetadata } from '../../../client/src/shared/models';
 import { getAllColumnMetadata } from '../../template';
+import { ValidationError } from 'class-validator';
+
+/**
+ * Function that recursively determines the lowest level from
+ * which a validation error came. If there's no error children,
+ * it was directly on the child. If there are children errors,
+ * the error came from a nested field of the child (like family,
+ * enrollment, etc.), so process down to get the right property
+ * name.
+ * @param error
+ * @param errorDict
+ */
+const processErrorsInFields = (error: ValidationError, errorDict: Object) => {
+  // Base case: error is not in a nested field
+  if (error.children.length === 0) {
+    errorDict[error.property] += 1;
+  }
+  // Recursive case: validation errors live on children
+  // of initial error
+  else {
+    error.children.map((e) => processErrorsInFields(e, errorDict));
+  }
+};
 
 /**
  * Receives an array of child objects created with a DB manager
@@ -19,13 +42,13 @@ export const checkErrorsInChildren = async (children: Child[]) => {
     propertyNameToFormattedName[c.propertyName] = c.formattedName;
   });
 
-  children.forEach((child) => {
-    // Accumulate counts across all children (don't need to
-    // differentiate errors by individual child)
-    child.validationErrors.map((e) => {
-      errorDict[e.property] += 1;
-    });
-  });
+  await Promise.all(
+    children.map(async (child) => {
+      // Accumulate counts across all children (don't need to
+      // differentiate errors by individual child)
+      child.validationErrors.map((e) => processErrorsInFields(e, errorDict));
+    })
+  );
 
   // Only need fields with error counts; send back a formated
   // object for tabular display

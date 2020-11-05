@@ -2,71 +2,76 @@ import express, { json } from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
 import moment from 'moment';
-import { createConnection } from 'typeorm';
+import { createConnection, getConnectionOptions } from 'typeorm';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';
 import { router as apiRouter } from './routes';
 import { initialize } from './data/initialize';
+import { QueryLogger } from './loggers/QueryLogger';
+import { isProdLike } from './utils/isProdLike';
 
-createConnection()
-  .then(async () => {
-    console.log('Successfully established TypeORM DB connection');
+getConnectionOptions().then((connectionOptions) => {
+  createConnection(
+    Object.assign(connectionOptions, {
+      logger: new QueryLogger(connectionOptions.logging),
+    })
+  )
+    .then(async () => {
+      console.log('Successfully established TypeORM DB connection');
 
-    if (
-      process.env.NODE_ENV !== 'devsecure' &&
-      process.env.NODE_ENV !== 'prod'
-    ) {
-      console.log('Seeding application data...');
-      await initialize();
-    }
-
-    // Instantiate the application server
-    const app = express();
-
-    // Register pre-processing middlewares
-    const dateReviver = (_: any, value: string) => {
-      if (typeof value === 'string') {
-        const parsedDate = moment.utc(value, undefined, true);
-        if (parsedDate.isValid()) return parsedDate;
+      if (!isProdLike()) {
+        console.log('Seeding application data...');
+        await initialize();
       }
-      return value;
-    };
-    app.use(json({ reviver: dateReviver }));
 
-    // Register business logic routes
-    app.use('/api', apiRouter);
+      // Instantiate the application server
+      const app = express();
 
-    // Handle errors
-    app.use('/api', handleError);
+      // Register pre-processing middlewares
+      const dateReviver = (_: any, value: string) => {
+        if (typeof value === 'string') {
+          const parsedDate = moment.utc(value, undefined, true);
+          if (parsedDate.isValid()) return parsedDate;
+        }
+        return value;
+      };
+      app.use(json({ reviver: dateReviver }));
 
-    // Handle non-existant API routes
-    app.use('/api', (_, res) => res.sendStatus(400));
+      // Register business logic routes
+      app.use('/api', apiRouter);
 
-    const pathToReactApp = isDevelopment()
-      ? path.join(__dirname, '../client/build')
-      : path.join(__dirname, '../../client/build');
+      // Handle errors
+      app.use('/api', handleError);
 
-    /* Register SPA-serving middlewares */
-    // Serve the static files from the React app
-    app.use(express.static(pathToReactApp));
+      // Handle non-existant API routes
+      app.use('/api', (_, res) => res.sendStatus(400));
 
-    // Handles any requests that don't match the ones above
-    if (!isDevelopment()) {
-      // Register the fallback route to index.html
-      app.get('*', (_, res) =>
-        res.sendFile(path.join(pathToReactApp, '/index.html'))
-      );
-    } else {
-      // When in development, proxy requests to the docker container for the client
-      const proxy = httpProxy.createProxy({
-        target: process.env.CLIENT_URL || 'http://client:3000',
-      });
-      app.get('*', (req, res) => proxy.web(req, res));
-    }
+      const pathToReactApp = isDevelopment()
+        ? path.join(__dirname, '../client/build')
+        : path.join(__dirname, '../../client/build');
 
-    const port = process.env.PORT || 3000;
-    app.listen(port);
+      /* Register SPA-serving middlewares */
+      // Serve the static files from the React app
+      app.use(express.static(pathToReactApp));
 
-    console.log('App is listening on port ' + port);
-  })
-  .catch((err) => console.error('error connecting to DB with typeorm', err));
+      // Handles any requests that don't match the ones above
+      if (!isDevelopment()) {
+        // Register the fallback route to index.html
+        app.get('*', (_, res) =>
+          res.sendFile(path.join(pathToReactApp, '/index.html'))
+        );
+      } else {
+        // When in development, proxy requests to the docker container for the client
+        const proxy = httpProxy.createProxy({
+          target: process.env.CLIENT_URL || 'http://client:3000',
+        });
+        app.get('*', (req, res) => proxy.web(req, res));
+      }
+
+      const port = process.env.PORT || 3000;
+      app.listen(port);
+
+      console.log('App is listening on port ' + port);
+    })
+    .catch((err) => console.error('error connecting to DB with typeorm', err));
+});

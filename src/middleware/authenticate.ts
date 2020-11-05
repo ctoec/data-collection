@@ -73,35 +73,23 @@ const addUser = passAsyncError(
  */
 const getUser = async (wingedKeysId: string) => {
   const user = await getManager().findOne(User, {
+    relations: ['orgPermissions', 'sitePermissions'],
     where: { wingedKeysId },
-    relations: ['orgPermissions', 'sitePermissions', 'communityPermissions'],
   });
 
   if (!user) return;
 
-  // Get all orgs associated with communities user has permissions for
-  const orgsFromCommunities = (user.communityPermissions || []).length
-    ? await getManager().find(Organization, {
-        where: {
-          communityId: In(
-            user.communityPermissions.map((perm) => perm.communityId)
-          ),
-        },
-      })
-    : [];
-
   // Create list of distinct organization ids the user can access
-  const allOrgIds = Array.from(
-    new Set([
-      ...(user.orgPermissions || []).map((perm) => perm.organizationId),
-      ...orgsFromCommunities.map((org) => org.id),
-    ])
+  const allOrgIds = (user.orgPermissions || []).map(
+    (perm) => perm.organizationId
   );
 
   // Get all sites associated with all organizations user has permissions for
-  const sitesFromAllOrgs = await getManager().find(Site, {
-    where: { organizationId: In(allOrgIds) },
-  });
+  const sitesFromAllOrgs = allOrgIds.length
+    ? await getManager().find(Site, {
+        where: { organizationId: In(allOrgIds) },
+      })
+    : [];
 
   // Create list of distinct site ids the user can access
   const allSiteIds = Array.from(
@@ -110,6 +98,10 @@ const getUser = async (wingedKeysId: string) => {
       ...sitesFromAllOrgs.map((site) => site.id),
     ])
   );
+
+  // Determine access pattern level of the user
+  user.accessType =
+    (user.orgPermissions || []).length === 0 ? 'site' : 'organization';
 
   // Add values to the user object
   user.organizationIds = allOrgIds;

@@ -8,23 +8,29 @@ import {
 export const getFakeFunding = (
   id,
   enrollment: Enrollment,
-  organization: Organization
+  organization: Organization,
+  includeLastReportingPeriod?: boolean
 ): Funding => {
-  const fundingSpace = organization?.fundingSpaces.find(
-    (f) => f.ageGroup === enrollment.ageGroup
+  const fundingSpace = random.arrayElement(
+    organization?.fundingSpaces.filter(
+      (f) => f.ageGroup === enrollment.ageGroup
+    ) || []
   );
+  const firstAndLastReportingPeriods = random
+    .arrayElements(reportingPeriods, 2)
+    .map((r) => ({
+      id,
+      ...getReportingPeriodFromDates(fundingSpace.source, r),
+    }));
   return {
     id,
-    enrollment: enrollment,
+    enrollment,
     enrollmentId: enrollment.id,
     fundingSpace,
-    firstReportingPeriod: {
-      id,
-      ...getReportingPeriodFromDates(
-        fundingSpace.source,
-        random.arrayElement(reportingPeriods)
-      ),
-    },
+    firstReportingPeriod: firstAndLastReportingPeriods[0],
+    lastReportingPeriod: includeLastReportingPeriod
+      ? firstAndLastReportingPeriods[1]
+      : undefined,
     updateMetaData: { updatedAt: new Date() },
   };
 };

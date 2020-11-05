@@ -14,7 +14,7 @@ export function useSites(organizationId?: number) {
       path += `?organizationId=${organizationId}`;
     }
 
-    apiGet(path, { accessToken }).then((_sites) => setSites(_sites));
+    apiGet(path, accessToken).then((_sites) => setSites(_sites));
   }, [accessToken]);
 
   return { sites };

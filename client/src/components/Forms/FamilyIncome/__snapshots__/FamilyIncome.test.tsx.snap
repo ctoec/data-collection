@@ -7,6 +7,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
     id="new-income-determination"
   >
     <fieldset
+      aria-labelledby="fieldset-legend-new-income-determination-fieldset"
       class="usa-fieldset"
       id="new-income-determination-fieldset"
     >
@@ -35,7 +36,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
               class="usa-input usa-input--small"
               id="number-of-people"
               type="text"
-              value=""
+              value="3"
             />
           </div>
         </div>
@@ -54,13 +55,13 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
               class="usa-input"
               id="income-determination"
               type="text"
-              value=""
+              value="50000"
             />
           </div>
         </div>
         <div>
           <fieldset
-            aria-describedby="determination-date--hint"
+            aria-labelledby="fieldset-legend-determination-date- determination-date--hint"
             class="usa-fieldset"
             id="determination-date-"
           >
@@ -75,6 +76,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
             </legend>
             <span
               class="usa-hint text-italic"
+              id="determination-date--hint"
             >
               For example: 6 21 2008
             </span>
@@ -98,7 +100,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                     max="12"
                     min="1"
                     type="number"
-                    value=""
+                    value="6"
                   />
                 </div>
                 <div
@@ -117,7 +119,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                     max="31"
                     min="1"
                     type="number"
-                    value=""
+                    value="22"
                   />
                 </div>
                 <div
@@ -136,7 +138,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                     max="2200"
                     min="1000"
                     type="number"
-                    value=""
+                    value="2007"
                   />
                 </div>
                 <div
@@ -330,7 +332,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, May 3, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -342,7 +344,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, May 4, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -402,7 +404,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, May 10, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -414,7 +416,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, May 11, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -474,7 +476,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, May 17, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -486,7 +488,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, May 18, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -546,7 +548,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, May 24, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -558,7 +560,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, May 25, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -618,7 +620,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, May 31, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -654,7 +656,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, June 1, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -714,7 +716,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, June 7, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -726,7 +728,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, June 8, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -786,7 +788,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, June 14, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -798,7 +800,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, June 15, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -858,7 +860,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, June 21, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__today CalendarDay__today_3 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_4"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -870,7 +872,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, June 22, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -930,7 +932,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, June 28, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -942,7 +944,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, June 29, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1035,7 +1037,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, July 5, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1047,7 +1049,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, July 6, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1107,7 +1109,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, July 12, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1119,7 +1121,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, July 13, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1179,7 +1181,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, July 19, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1191,7 +1193,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, July 20, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1251,7 +1253,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Saturday, July 26, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__lastDayOfWeek CalendarDay__lastDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"
@@ -1263,7 +1265,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                                           <td
                                             aria-disabled="false"
                                             aria-label="Sunday, July 27, 2008"
-                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                            class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2"
                                             role="button"
                                             style="width: 39px; height: 38px;"
                                             tabindex="-1"

@@ -5,112 +5,862 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
   <div
     class="Roster grid-container"
   >
-    <h1
-      class="margin-bottom-0"
+    <button
+      class="usa-button usa-button--unstyled margin-2 text-bold"
+      type="button"
     >
-      Multiple organizations
-    </h1>
-    <p
-      class="font-body-xl margin-top-1"
-    >
-      3 children enrolled at 2 sites
-    </p>
+      <span
+        class="oec-text-with-icon"
+      >
+        <svg
+          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
+        >
+          arrowRight.svg
+        </svg>
+        Back to getting started
+      </span>
+    </button>
     <div
-      class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"
+      class="grid-row flex-align-center"
     >
       <div
-        class="oec-drop-button"
-        id="select-organization"
+        class="tablet:grid-col-10"
       >
-        <button
-          class="usa-button usa-button--unstyled"
-          type="button"
+        <h1
+          class="margin-bottom-0"
         >
-          <span>
-            <span
-              class="oec-text-with-icon"
-            >
-              Add a record
-            </span>
-            <span>
-               
-            </span>
-          </span>
-        </button>
+          Multiple organizations
+        </h1>
+        <p
+          class="font-body-xl margin-top-1"
+        >
+          3 children enrolled at 2 sites
+        </p>
       </div>
-      <button
-        class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-        type="button"
-      >
-        <span
-          class="oec-text-with-icon text-underline"
-        >
-          Export roster
-        </span>
-      </button>
+      <div
+        class="tablet:grid-col-2"
+      />
     </div>
+    <table
+      class="oec-table buttons-table margin-top-2 margin-bottom-4"
+    >
+      <tbody>
+        <tr>
+          <th
+            scope="row"
+          >
+            Actions
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <div
+                class="oec-drop-button"
+                id="add-record-in-actions"
+              >
+                <button
+                  class="usa-button usa-button--unstyled margin-right-2"
+                  type="button"
+                >
+                  <div
+                    class="button-content display-flex"
+                  >
+                    <span
+                      class="oec-text-with-icon"
+                    >
+                      Add a record
+                    </span>
+                  </div>
+                </button>
+              </div>
+              <button
+                class="usa-button usa-button--unstyled text-bold display-block"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon text-underline"
+                >
+                  Export roster
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Views
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <button
+                class="usa-button usa-button--unstyled"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Past enrollments
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     <div
-      class="oec-tab-nav"
+      class="oec-loading-wrapper"
     >
       <div
-        class="oec-tab-nav--header"
+        aria-hidden="false"
+        class=""
       >
         <div
-          aria-orientation="horizontal"
-          class="grid-row oec-tab-nav--tab-container"
-          role="tablist"
+          class="oec-tab-nav"
         >
-          <button
-            aria-selected="true"
-            class="oec-tab-nav--tab oec-tab-nav--tab__active"
-            id="all-organizations"
-            role="tab"
-            type="button"
-          >
-            <span>
-              All organizations
-            </span>
-          </button>
-          <button
-            aria-selected="false"
-            class="oec-tab-nav--tab"
-            id="1"
-            role="tab"
-            type="button"
-          >
-            <span>
-              Organization
-            </span>
-          </button>
-          <button
-            aria-selected="false"
-            class="oec-tab-nav--tab"
-            id="2"
-            role="tab"
-            type="button"
-          >
-            <span>
-              Org 2
-            </span>
-          </button>
           <div
-            class="oec-tab-nav--dropdown opacity-0"
+            class="oec-tab-nav--header"
           >
-            <button
-              aria-expanded="false"
-              aria-haspopup="false"
-              aria-hidden="true"
-              class="oec-tab-nav--tab"
-              disabled=""
+            <div
+              aria-orientation="horizontal"
+              class="grid-row oec-tab-nav--tab-container"
+              role="tablist"
             >
-              +0 organizations
-            </button>
+              <button
+                aria-selected="true"
+                class="oec-tab-nav--tab oec-tab-nav--tab__active"
+                id="1"
+                role="tab"
+                type="button"
+              >
+                <span>
+                  Organization
+                </span>
+              </button>
+              <button
+                aria-selected="false"
+                class="oec-tab-nav--tab"
+                id="2"
+                role="tab"
+                type="button"
+              >
+                <span>
+                  Org 2
+                </span>
+              </button>
+              <div
+                class="oec-tab-nav--dropdown opacity-0"
+              >
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="false"
+                  aria-hidden="true"
+                  class="oec-tab-nav--tab"
+                  disabled=""
+                >
+                  +0 organizations
+                </button>
+              </div>
+            </div>
+          </div>
+          <div
+            class="oec-tab-nav--content"
+            role="tabpanel"
+          >
+            <div
+              aria-multiselectable="true"
+              class="oec-accordion"
+            >
+              <div
+                class="oec-accordion__heading"
+              >
+                <button
+                  aria-controls="Infant/toddler"
+                  aria-expanded="true"
+                  class="oec-accordion__button"
+                >
+                  <div
+                    class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
+                  >
+                    <div>
+                      <h2
+                        class="oec-accordion__heading-title"
+                      >
+                        Infant/toddler 
+                        <span
+                          class="text-normal"
+                        >
+                          2 children 
+                        </span>
+                      </h2>
+                      <div
+                        class="display-flex flex-wrap"
+                      >
+                        <div
+                          class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
+                        >
+                          CDC - Child Day Care Full-day - 1/3
+                        </div>
+                        <div
+                          class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
+                        >
+                          PSR - Priority School Readiness Full-time - 1/5
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="oec-accordion__heading-expand"
+                    >
+                      Hide Infant/toddler roster
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                aria-hidden="false"
+                class="oec-accordion__content"
+                id="Infant/toddler"
+              >
+                <table
+                  class="oec-table margin-bottom-4"
+                  id="roster-table-Infant/toddler"
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Name in descending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Name
+                          <div
+                            class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Missing info in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Missing info
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Birth Date in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Birth Date
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Funding type in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Funding type
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Contract space in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Contract space
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Organization in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Organization
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Site in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Site
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Enrollment date in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Enrollment date
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th
+                        class="font-body-2xs"
+                        scope="row"
+                      >
+                        <a
+                          class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
+                          href="/edit-record/0000000-0000-0000-0000-0000000000000"
+                        >
+                          Toddler, First 
+                        </a>
+                      </th>
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      >
+                        06/01/2019
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      >
+                        CDC - Child Day Care
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      >
+                        Full-day
+                      </td>
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      >
+                        Site
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      />
+                    </tr>
+                    <tr>
+                      <th
+                        class="font-body-2xs"
+                        scope="row"
+                      >
+                        <a
+                          class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
+                          href="/edit-record/11111111-0000-0000-0000-0000000000000"
+                        >
+                          Toddler, Second 
+                        </a>
+                      </th>
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      >
+                        11/01/2018
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      >
+                        PSR - Priority School Readiness
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      >
+                        Full-time
+                      </td>
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      >
+                        Site
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      />
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div
+                class="oec-accordion__heading"
+              >
+                <button
+                  aria-controls="Preschool"
+                  aria-expanded="true"
+                  class="oec-accordion__button"
+                >
+                  <div
+                    class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
+                  >
+                    <div>
+                      <h2
+                        class="oec-accordion__heading-title"
+                      >
+                        Preschool 
+                        <span
+                          class="text-normal"
+                        >
+                          1 child 
+                        </span>
+                      </h2>
+                      <div
+                        class="display-flex flex-wrap"
+                      >
+                        <div
+                          class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
+                        >
+                          CDC - Child Day Care Extended-day - 1/10
+                        </div>
+                      </div>
+                    </div>
+                    <div
+                      class="oec-accordion__heading-expand"
+                    >
+                      Hide Preschool roster
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                aria-hidden="false"
+                class="oec-accordion__content"
+                id="Preschool"
+              >
+                <table
+                  class="oec-table margin-bottom-4"
+                  id="roster-table-Preschool"
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Name in descending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Name
+                          <div
+                            class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Missing info in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Missing info
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Birth Date in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Birth Date
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Funding type in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Funding type
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Contract space in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Contract space
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Organization in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Organization
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Site in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Site
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Enrollment date in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Enrollment date
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th
+                        class="font-body-2xs"
+                        scope="row"
+                      >
+                        <a
+                          class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
+                          href="/edit-record/22222222-0000-0000-0000-0000000000000"
+                        >
+                          Preschool, First 
+                        </a>
+                      </th>
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      >
+                        01/01/2016
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      >
+                        CDC - Child Day Care
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      >
+                        Extended-day
+                      </td>
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      >
+                        Site
+                      </td>
+                      <td
+                        class="font-body-2xs"
+                      />
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div
-        class="oec-tab-nav--content"
-        role="tabpanel"
+        class="oec-loading-wrapper__indicator bg-white"
+        hidden=""
+      >
+        <div
+          class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+          role="progressbar"
+          style="width: 40px; height: 40px;"
+        >
+          <svg
+            class="MuiCircularProgress-svg"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
+        </div>
+        <div>
+          Loading your roster...
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="fixed-bottom-bar"
+  >
+    <div
+      class="shadow-box"
+    >
+      <div
+        class="grid-container"
+      >
+        <a
+          class="usa-button usa-button--outline"
+          href="/getting-started"
+        >
+          Back to getting started
+        </a>
+        <button
+          class="usa-button"
+          type="button"
+        >
+          Send to OEC
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Roster matches snapshot for user with 1 org 1`] = `
+<DocumentFragment>
+  <div
+    class="Roster grid-container"
+  >
+    <button
+      class="usa-button usa-button--unstyled margin-2 text-bold"
+      type="button"
+    >
+      <span
+        class="oec-text-with-icon"
+      >
+        <svg
+          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
+        >
+          arrowRight.svg
+        </svg>
+        Back to getting started
+      </span>
+    </button>
+    <div
+      class="grid-row flex-align-center"
+    >
+      <div
+        class="tablet:grid-col-10"
+      >
+        <h1
+          class="margin-bottom-0"
+        >
+          Site1
+        </h1>
+        <p
+          class="font-body-xl margin-top-1"
+        >
+          3 children enrolled
+        </p>
+      </div>
+      <div
+        class="tablet:grid-col-2"
+      />
+    </div>
+    <table
+      class="oec-table buttons-table margin-top-2 margin-bottom-4"
+    >
+      <tbody>
+        <tr>
+          <th
+            scope="row"
+          >
+            Actions
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <a
+                class="margin-right-2"
+                href="/create-record"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Add a record
+                </span>
+              </a>
+              <button
+                class="usa-button usa-button--unstyled text-bold display-block"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon text-underline"
+                >
+                  Export roster
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th
+            scope="row"
+          >
+            Views
+          </th>
+          <td>
+            <div
+              class="display-flex"
+            >
+              <button
+                class="usa-button usa-button--unstyled"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Past enrollments
+                </span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div
+      class="oec-loading-wrapper"
+    >
+      <div
+        aria-hidden="false"
+        class=""
       >
         <div
           aria-multiselectable="true"
@@ -144,12 +894,12 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      CDC - Child Day Care  — 1/3
+                      CDC - Child Day Care Full-day - 1/3
                     </div>
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      PSR - Priority School Readiness  — 1/5
+                      PSR - Priority School Readiness Full-time - 1/5
                     </div>
                   </div>
                 </div>
@@ -177,7 +927,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
+                    style="width: 25%;"
                   >
                     <button
                       aria-label="Sort table by Name in descending order"
@@ -191,7 +941,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                   </th>
                   <th
                     aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                     role="columnheader"
                     scope="col"
                     style="width: 10%;"
@@ -245,23 +995,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
-                  >
-                    <button
-                      aria-label="Sort table by Organization in ascending order"
-                      class="oec-table__column-title usa-button--unstyled width-full"
-                    >
-                      Organization
-                      <div
-                        class="oec-table__sort-controls"
-                      />
-                    </button>
-                  </th>
-                  <th
-                    aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                    role="columnheader"
-                    scope="col"
                     style="width: 10%;"
                   >
                     <button
@@ -279,7 +1012,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
+                    style="width: 25%;"
                   >
                     <button
                       aria-label="Sort table by Site in ascending order"
@@ -337,11 +1070,10 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     CDC - Child Day Care
                   </td>
                   <td
-                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                  />
-                  <td
                     class="font-body-2xs"
-                  />
+                  >
+                    Full-day
+                  </td>
                   <td
                     class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                   >
@@ -377,11 +1109,10 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     PSR - Priority School Readiness
                   </td>
                   <td
-                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                  />
-                  <td
                     class="font-body-2xs"
-                  />
+                  >
+                    Full-time
+                  </td>
                   <td
                     class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                   >
@@ -422,7 +1153,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      CDC - Child Day Care  — 1/10
+                      CDC - Child Day Care Extended-day - 1/10
                     </div>
                   </div>
                 </div>
@@ -450,7 +1181,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
+                    style="width: 25%;"
                   >
                     <button
                       aria-label="Sort table by Name in descending order"
@@ -464,7 +1195,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                   </th>
                   <th
                     aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                     role="columnheader"
                     scope="col"
                     style="width: 10%;"
@@ -518,23 +1249,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
-                  >
-                    <button
-                      aria-label="Sort table by Organization in ascending order"
-                      class="oec-table__column-title usa-button--unstyled width-full"
-                    >
-                      Organization
-                      <div
-                        class="oec-table__sort-controls"
-                      />
-                    </button>
-                  </th>
-                  <th
-                    aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                    role="columnheader"
-                    scope="col"
                     style="width: 10%;"
                   >
                     <button
@@ -552,7 +1266,7 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
                     role="columnheader"
                     scope="col"
-                    style="width: 20%;"
+                    style="width: 25%;"
                   >
                     <button
                       aria-label="Sort table by Site in ascending order"
@@ -610,11 +1324,10 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
                     CDC - Child Day Care
                   </td>
                   <td
-                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                  />
-                  <td
                     class="font-body-2xs"
-                  />
+                  >
+                    Extended-day
+                  </td>
                   <td
                     class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                   >
@@ -627,6 +1340,33 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+      <div
+        class="oec-loading-wrapper__indicator bg-white"
+        hidden=""
+      >
+        <div
+          class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+          role="progressbar"
+          style="width: 40px; height: 40px;"
+        >
+          <svg
+            class="MuiCircularProgress-svg"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
+        </div>
+        <div>
+          Loading your roster...
         </div>
       </div>
     </div>
@@ -648,547 +1388,6 @@ exports[`Roster matches snapshot for user with >1 org 1`] = `
         </a>
         <button
           class="usa-button"
-          disabled=""
-          type="button"
-        >
-          Send to OEC
-        </button>
-      </div>
-    </div>
-  </div>
-</DocumentFragment>
-`;
-
-exports[`Roster matches snapshot for user with 1 org 1`] = `
-<DocumentFragment>
-  <div
-    class="Roster grid-container"
-  >
-    <h1
-      class="margin-bottom-0"
-    >
-      Site1
-    </h1>
-    <p
-      class="font-body-xl margin-top-1"
-    >
-      3 children enrolled at 1 sites
-    </p>
-    <div
-      class="display-flex flex-col flex-align center flex-justify-start margin-top-2 margin-bottom-4"
-    >
-      <a
-        href="/create-record"
-      >
-        <span
-          class="oec-text-with-icon"
-        >
-          Add a record
-        </span>
-      </a>
-      <button
-        class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-        type="button"
-      >
-        <span
-          class="oec-text-with-icon text-underline"
-        >
-          Export roster
-        </span>
-      </button>
-    </div>
-    <div
-      aria-multiselectable="true"
-      class="oec-accordion"
-    >
-      <div
-        class="oec-accordion__heading"
-      >
-        <button
-          aria-controls="Infant/toddler"
-          aria-expanded="true"
-          class="oec-accordion__button"
-        >
-          <div
-            class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
-          >
-            <div>
-              <h2
-                class="oec-accordion__heading-title"
-              >
-                Infant/toddler 
-                <span
-                  class="text-normal"
-                >
-                  2 children 
-                </span>
-              </h2>
-              <div
-                class="display-flex flex-wrap"
-              >
-                <div
-                  class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                >
-                  CDC - Child Day Care  — 1/3
-                </div>
-                <div
-                  class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                >
-                  PSR - Priority School Readiness  — 1/5
-                </div>
-              </div>
-            </div>
-            <div
-              class="oec-accordion__heading-expand"
-            >
-              Hide Infant/toddler roster
-            </div>
-          </div>
-        </button>
-      </div>
-      <div
-        aria-hidden="false"
-        class="oec-accordion__content"
-        id="Infant/toddler"
-      >
-        <table
-          class="oec-table margin-bottom-4"
-          id="roster-table-Infant/toddler"
-        >
-          <thead>
-            <tr>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 25%;"
-              >
-                <button
-                  aria-label="Sort table by Name in descending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Name
-                  <div
-                    class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Missing info in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Missing info
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Birth Date in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Birth Date
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Funding type in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Funding type
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Contract space in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Contract space
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 25%;"
-              >
-                <button
-                  aria-label="Sort table by Site in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Site
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Enrollment date in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Enrollment date
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th
-                class="font-body-2xs"
-                scope="row"
-              >
-                <a
-                  class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
-                  href="/edit-record/0000000-0000-0000-0000-0000000000000"
-                >
-                  Toddler, First 
-                </a>
-              </th>
-              <td
-                class="font-body-2xs"
-              />
-              <td
-                class="font-body-2xs"
-              >
-                06/01/2019
-              </td>
-              <td
-                class="font-body-2xs"
-              >
-                CDC - Child Day Care
-              </td>
-              <td
-                class="font-body-2xs"
-              />
-              <td
-                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-              >
-                Site
-              </td>
-              <td
-                class="font-body-2xs"
-              />
-            </tr>
-            <tr>
-              <th
-                class="font-body-2xs"
-                scope="row"
-              >
-                <a
-                  class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
-                  href="/edit-record/11111111-0000-0000-0000-0000000000000"
-                >
-                  Toddler, Second 
-                </a>
-              </th>
-              <td
-                class="font-body-2xs"
-              />
-              <td
-                class="font-body-2xs"
-              >
-                11/01/2018
-              </td>
-              <td
-                class="font-body-2xs"
-              >
-                PSR - Priority School Readiness
-              </td>
-              <td
-                class="font-body-2xs"
-              />
-              <td
-                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-              >
-                Site
-              </td>
-              <td
-                class="font-body-2xs"
-              />
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div
-        class="oec-accordion__heading"
-      >
-        <button
-          aria-controls="Preschool"
-          aria-expanded="true"
-          class="oec-accordion__button"
-        >
-          <div
-            class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
-          >
-            <div>
-              <h2
-                class="oec-accordion__heading-title"
-              >
-                Preschool 
-                <span
-                  class="text-normal"
-                >
-                  1 child 
-                </span>
-              </h2>
-              <div
-                class="display-flex flex-wrap"
-              >
-                <div
-                  class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                >
-                  CDC - Child Day Care  — 1/10
-                </div>
-              </div>
-            </div>
-            <div
-              class="oec-accordion__heading-expand"
-            >
-              Hide Preschool roster
-            </div>
-          </div>
-        </button>
-      </div>
-      <div
-        aria-hidden="false"
-        class="oec-accordion__content"
-        id="Preschool"
-      >
-        <table
-          class="oec-table margin-bottom-4"
-          id="roster-table-Preschool"
-        >
-          <thead>
-            <tr>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 25%;"
-              >
-                <button
-                  aria-label="Sort table by Name in descending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Name
-                  <div
-                    class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Missing info in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Missing info
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Birth Date in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Birth Date
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Funding type in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Funding type
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Contract space in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Contract space
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 25%;"
-              >
-                <button
-                  aria-label="Sort table by Site in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Site
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-              <th
-                aria-sort="ascending"
-                class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                role="columnheader"
-                scope="col"
-                style="width: 10%;"
-              >
-                <button
-                  aria-label="Sort table by Enrollment date in ascending order"
-                  class="oec-table__column-title usa-button--unstyled width-full"
-                >
-                  Enrollment date
-                  <div
-                    class="oec-table__sort-controls"
-                  />
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th
-                class="font-body-2xs"
-                scope="row"
-              >
-                <a
-                  class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
-                  href="/edit-record/22222222-0000-0000-0000-0000000000000"
-                >
-                  Preschool, First 
-                </a>
-              </th>
-              <td
-                class="font-body-2xs"
-              />
-              <td
-                class="font-body-2xs"
-              >
-                01/01/2016
-              </td>
-              <td
-                class="font-body-2xs"
-              >
-                CDC - Child Day Care
-              </td>
-              <td
-                class="font-body-2xs"
-              />
-              <td
-                class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-              >
-                Site
-              </td>
-              <td
-                class="font-body-2xs"
-              />
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div
-    class="fixed-bottom-bar"
-  >
-    <div
-      class="shadow-box"
-    >
-      <div
-        class="grid-container"
-      >
-        <a
-          class="usa-button usa-button--outline"
-          href="/getting-started"
-        >
-          Back to getting started
-        </a>
-        <button
-          class="usa-button"
-          disabled=""
           type="button"
         >
           Send to OEC

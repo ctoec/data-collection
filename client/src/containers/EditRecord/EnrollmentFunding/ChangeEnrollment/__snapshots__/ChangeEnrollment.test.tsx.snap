@@ -40,11 +40,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
         id="change-enrollment-form"
       >
         <fieldset
+          aria-labelledby="fieldset-legend-site-radiogroup"
           class="usa-fieldset"
-          id="site-radiogroup-fieldset"
+          id="site-radiogroup"
         >
           <legend
-            id="fieldset-legend-site-radiogroup-fieldset"
+            id="fieldset-legend-site-radiogroup"
           >
             <span
               class="usa-label"
@@ -55,7 +56,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           <div />
         </fieldset>
         <fieldset
-          aria-describedby="start-date-hint"
+          aria-labelledby="fieldset-legend-start-date start-date-hint"
           class="usa-fieldset"
           id="start-date"
         >
@@ -70,6 +71,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </legend>
           <span
             class="usa-hint text-italic"
+            id="start-date-hint"
           >
             For example: 6 21 2008
           </span>
@@ -93,7 +95,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   max="12"
                   min="1"
                   type="number"
-                  value=""
+                  value="6"
                 />
               </div>
               <div
@@ -112,7 +114,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   max="31"
                   min="1"
                   type="number"
-                  value=""
+                  value="22"
                 />
               </div>
               <div
@@ -131,7 +133,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   max="2200"
                   min="1000"
                   type="number"
-                  value=""
+                  value="2008"
                 />
               </div>
               <div
@@ -864,8 +866,8 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                                       <tr>
                                         <td
                                           aria-disabled="false"
-                                          aria-label="Sunday, June 22, 2008"
-                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
+                                          aria-label="Selected. Sunday, June 22, 2008"
+                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3 CalendarDay__selected CalendarDay__selected_4"
                                           role="button"
                                           style="width: 39px; height: 38px;"
                                           tabindex="-1"
@@ -1337,11 +1339,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
+          aria-labelledby="fieldset-legend-care-model-radiogroup"
           class="usa-fieldset"
-          id="care-model-radiogroup-fieldset"
+          id="care-model-radiogroup"
         >
           <legend
-            id="fieldset-legend-care-model-radiogroup-fieldset"
+            id="fieldset-legend-care-model-radiogroup"
           >
             <span
               class="usa-label"
@@ -1357,7 +1360,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 <input
                   class="usa-radio__input"
                   id="In-person"
-                  name="care-model"
+                  name="model"
                   type="radio"
                   value="In-person"
                 />
@@ -1376,7 +1379,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 <input
                   class="usa-radio__input"
                   id="Hybrid"
-                  name="care-model"
+                  name="model"
                   type="radio"
                   value="Hybrid"
                 />
@@ -1395,7 +1398,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 <input
                   class="usa-radio__input"
                   id="Distance"
-                  name="care-model"
+                  name="model"
                   type="radio"
                   value="Distance"
                 />
@@ -1414,7 +1417,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 <input
                   class="usa-radio__input"
                   id="Unknown"
-                  name="care-model"
+                  name="model"
                   type="radio"
                   value="Unknown"
                 />
@@ -1429,11 +1432,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
+          aria-labelledby="fieldset-legend-age-group-radiogroup"
           class="usa-fieldset"
-          id="age-group-radiogroup-fieldset"
+          id="age-group-radiogroup"
         >
           <legend
-            id="fieldset-legend-age-group-radiogroup-fieldset"
+            id="fieldset-legend-age-group-radiogroup"
           >
             <span
               class="usa-label"
@@ -1449,7 +1453,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 <input
                   class="usa-radio__input"
                   id="Infant/toddler"
-                  name="age-group"
+                  name="ageGroup"
                   type="radio"
                   value="Infant/toddler"
                 />
@@ -1468,7 +1472,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 <input
                   class="usa-radio__input"
                   id="Preschool"
-                  name="age-group"
+                  name="ageGroup"
                   type="radio"
                   value="Preschool"
                 />
@@ -1486,14 +1490,14 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
               >
                 <input
                   class="usa-radio__input"
-                  id="School aged"
-                  name="age-group"
+                  id="School-aged"
+                  name="ageGroup"
                   type="radio"
-                  value="School aged"
+                  value="School-aged"
                 />
                 <label
                   class="usa-radio__label"
-                  for="School aged"
+                  for="School-aged"
                 >
                   School aged
                 </label>
@@ -1502,11 +1506,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
+          aria-labelledby="fieldset-legend-funding-source"
           class="usa-fieldset"
-          id="funding-source-fieldset"
+          id="funding-source"
         >
           <legend
-            id="fieldset-legend-funding-source-fieldset"
+            id="fieldset-legend-funding-source"
           >
             <span
               class="usa-label"
@@ -1523,7 +1528,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   checked=""
                   class="usa-radio__input"
                   id="Unfunded"
-                  name="funding-source"
+                  name="fundingSource"
                   type="radio"
                   value="Unfunded"
                 />

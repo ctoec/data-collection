@@ -19,6 +19,11 @@ import {
   CareModel,
   BirthCertificateType,
 } from '../../../client/src/shared/models';
+import {
+  getChildToUpdate,
+  getExistingEnrollmentOnChild,
+  getExistingFundingForEnrollment,
+} from './mapUtils';
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
@@ -43,7 +48,10 @@ export const mapRows = async (
     transaction.findByIds(Site, user.siteIds),
   ]);
 
-  const children = [];
+  // Need to track the unique children we've seen and parsed
+  // so that we can update them if there are change rows
+  const processedChildren: Child[] = [];
+  const children: Child[] = [];
   for (let i = 0; i < rows.length; i++) {
     try {
       const child = await mapRow(
@@ -51,12 +59,13 @@ export const mapRows = async (
         rows[i],
         organizations,
         sites,
+        processedChildren,
         opts.save
       );
-      children.push(child);
+      if (child) children.push(child);
     } catch (err) {
       if (err instanceof ApiError) throw err;
-      console.error('Error occured while parsing row', err);
+      console.error('Error occured while parsing row: ', err);
     }
   }
 
@@ -74,6 +83,7 @@ const mapRow = async (
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
+  processedChildren: Child[],
   save: boolean
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
@@ -88,6 +98,38 @@ const mapRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
+  let child = getChildToUpdate(source, processedChildren);
+  const isVisistedChild = child !== undefined;
+
+  // Case where this row creates a brand new child
+  if (!isVisistedChild) {
+    child = await createNewChild(
+      transaction,
+      source,
+      organization,
+      site,
+      processedChildren,
+      save
+    );
+    return child;
+  }
+
+  // If we're here, we're modifying an existing child's
+  // enrollment or funding information
+  await updateChild(transaction, source, organization, site, child);
+  // Don't return if we just modified an existing, since we'd
+  // get duplicates in the children array in mapRows
+  return null;
+};
+
+export const createNewChild = async (
+  transaction: EntityManager,
+  source: EnrollmentReportRow,
+  organization: Organization,
+  site: Site,
+  processedChildren: Child[],
+  save: boolean
+) => {
   const family = await mapFamily(transaction, source, organization, save);
   const child = await mapChild(transaction, source, organization, family, save);
   const incomeDetermination = await mapIncomeDetermination(
@@ -103,7 +145,6 @@ const mapRow = async (
     child,
     save
   );
-
   const funding = await mapFunding(
     transaction,
     source,
@@ -111,13 +152,61 @@ const mapRow = async (
     enrollment,
     save
   );
-
   family.incomeDeterminations = [incomeDetermination];
   child.family = family;
   enrollment.fundings = [funding];
   child.enrollments = [enrollment];
 
+  // Make sure to log that we've seen this child in our visited set
+  processedChildren.push(child);
   return child;
+};
+
+export const updateChild = async (
+  transaction: EntityManager,
+  source: EnrollmentReportRow,
+  organization: Organization,
+  site: Site,
+  child: Child
+) => {
+  let enrollment = getExistingEnrollmentOnChild(source, child);
+  const modifyingExistingEnrollment = enrollment !== undefined;
+  const enrollmentUpdate = await mapEnrollment(
+    transaction,
+    source,
+    site,
+    child,
+    enrollment === undefined
+  );
+
+  // Apply any needed enrollment info updates before going to funding
+  if (modifyingExistingEnrollment) {
+    await transaction.update(Enrollment, enrollment.id, enrollmentUpdate);
+  }
+
+  let funding = getExistingFundingForEnrollment(source, enrollment);
+  const modifyingExistingFunding = funding !== undefined;
+  const fundingUpdate = await mapFunding(
+    transaction,
+    source,
+    organization,
+    enrollmentUpdate,
+    funding === undefined
+  );
+
+  if (modifyingExistingEnrollment) {
+    // Either modifying existing funding or attaching brand new funding
+    if (modifyingExistingFunding) {
+      await transaction.update(Funding, funding.id, fundingUpdate);
+    } else {
+      enrollment.fundings.push(fundingUpdate);
+    }
+  } else {
+    // Create new enrollment altogether
+    enrollmentUpdate.fundings = [fundingUpdate];
+    if (child.enrollments) child.enrollments.push(enrollmentUpdate);
+    else child.enrollments = [enrollmentUpdate];
+  }
 };
 
 /**
@@ -154,11 +243,11 @@ export const lookUpSite = (
   organizationId: number,
   sites: Site[]
 ) => {
-  if (!source.siteName) return;
+  if (!source.site) return;
 
   return sites.find(
     (site) =>
-      site.siteName.toLowerCase() === source.siteName.toLowerCase() &&
+      site.siteName.toLowerCase() === source.site.toLowerCase() &&
       site.organizationId === organizationId
   );
 };
@@ -281,7 +370,9 @@ const mapIncomeDetermination = (
     let incomeDetermination = {
       // Cast empty strings to undefined to avoid DB write failures
       numberOfPeople: source.numberOfPeople || undefined,
-      income: source.income || undefined,
+      // Need to accept 0 as valid income, so use forcible number conversion
+      // to check if the result is a valid number
+      income: isNaN(source.income) ? undefined : source.income,
       determinationDate: source.determinationDate,
       familyId: family.id,
     } as IncomeDetermination;
@@ -324,8 +415,8 @@ const mapEnrollment = (
     exitReason: source.exitReason,
   } as Enrollment;
 
+  enrollment = transaction.create(Enrollment, enrollment);
   if (save) {
-    enrollment = transaction.create(Enrollment, enrollment);
     return transaction.save(enrollment);
   }
 
@@ -348,9 +439,13 @@ export const mapFunding = async (
   enrollment: Enrollment,
   save: boolean
 ) => {
-  const fundingSource: FundingSource = mapEnum(FundingSource, source.source, {
-    isFundingSource: true,
-  });
+  const fundingSource: FundingSource = mapEnum(
+    FundingSource,
+    source.fundingSpace,
+    {
+      isFundingSource: true,
+    }
+  );
   const fundingTime: FundingTime = mapFundingTime(source.time, fundingSource);
 
   let fundingSpace: FundingSpace;
@@ -377,22 +472,23 @@ export const mapFunding = async (
   // TODO: Cache ReportingPeriods, as they'll be reused a lot
   let firstReportingPeriod: ReportingPeriod,
     lastReportingPeriod: ReportingPeriod;
-  if (source.firstFundingPeriod) {
+  if (source.firstReportingPeriod) {
     firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.firstFundingPeriod },
+      where: { type: fundingSource, period: source.firstReportingPeriod },
     });
   }
-  if (source.lastFundingPeriod) {
+  if (source.lastReportingPeriod) {
     lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.lastFundingPeriod },
+      where: { type: fundingSource, period: source.lastReportingPeriod },
     });
   }
+
   // If the user supplied _any_ funding-related fields, create the funding.
   if (
-    source.source ||
+    source.fundingSpace ||
     source.time ||
-    source.firstFundingPeriod ||
-    source.lastFundingPeriod
+    source.firstReportingPeriod ||
+    source.lastReportingPeriod
   ) {
     let funding = {
       firstReportingPeriod,
@@ -400,14 +496,9 @@ export const mapFunding = async (
       fundingSpace,
       enrollmentId: enrollment.id,
     } as Funding;
-    if (save) {
-      funding = transaction.create(Funding, {
-        firstReportingPeriod,
-        lastReportingPeriod,
-        fundingSpace,
-        enrollmentId: enrollment.id,
-      });
 
+    funding = transaction.create(Funding, funding);
+    if (save) {
       return transaction.save(funding);
     }
     return funding;

@@ -108,8 +108,13 @@ const Home: React.FC = () => {
               <CSVExcelDownloadButton
                 fileType="xlsx"
                 whichDownload="template"
+                className="margin-bottom-3"
               />
-              <CSVExcelDownloadButton fileType="csv" whichDownload="template" />
+              <CSVExcelDownloadButton
+                fileType="csv"
+                whichDownload="template"
+                className="margin-bottom-3"
+              />
             </div>
           </div>
         </div>

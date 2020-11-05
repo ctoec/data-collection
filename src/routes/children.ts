@@ -6,29 +6,9 @@ import {
   ApiError,
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
-import { Child } from '../entity';
-import { validate } from 'class-validator';
+import { parseQueryString } from '../utils/parseQueryString';
 
 export const childrenRouter = express.Router();
-
-/**
- * /children POST
- *
- * Creates a new child
- */
-childrenRouter.post(
-  '/',
-  passAsyncError(async (req, res) => {
-    try {
-      const child = await controller.createChild(req.body, req.user);
-      res.status(201).send({ id: child.id });
-    } catch (err) {
-      if (err instanceof ApiError) throw err;
-      console.error('Error creating child: ', err);
-      throw new BadRequestError('Child information not saved.');
-    }
-  })
-);
 
 /**
  * /children GET
@@ -39,21 +19,28 @@ childrenRouter.post(
 childrenRouter.get(
   '/',
   passAsyncError(async (req, res) => {
-    const children = await controller.getChildren(req.user);
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const count = parseQueryString(req, 'count');
+    const missingInfo = parseQueryString(req, 'missing-info') as string;
+    const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
+    const take = parseQueryString(req, 'take', { post: parseInt }) as number;
 
-    const count = req.query['count'];
     if (count && count === 'true') {
-      res.send({ count: children.length });
+      const count = await controller.getCount(req.user);
+      res.send({ count });
       return;
     }
 
-    // Augment children with any validation errors in their nested objects
-    const childrenWithErrors: Child[] = await Promise.all(
-      children.map(async (child) => {
-        return { ...child, validationErrors: await validate(child) };
-      })
-    );
-    res.send(childrenWithErrors);
+    const children = await controller.getChildren(req.user, {
+      organizationIds,
+      missingInfo,
+      skip,
+      take,
+    });
+
+    res.send(children);
   })
 );
 
@@ -99,6 +86,25 @@ childrenRouter.put(
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error saving changes to child: ', err);
+      throw new BadRequestError('Child information not saved.');
+    }
+  })
+);
+
+/**
+ * /children POST
+ *
+ * Creates a new child
+ */
+childrenRouter.post(
+  '/',
+  passAsyncError(async (req, res) => {
+    try {
+      const child = await controller.createChild(req.body, req.user);
+      res.status(201).send({ id: child.id });
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error('Error creating child: ', err);
       throw new BadRequestError('Child information not saved.');
     }
   })

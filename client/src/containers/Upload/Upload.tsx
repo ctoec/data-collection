@@ -1,15 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import cx from 'classnames';
 import { Link, useHistory } from 'react-router-dom';
+import { cache } from 'swr';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { FileInput, TextWithIcon, Alert } from '@ctoec/component-library';
+import {
+  FileInput,
+  TextWithIcon,
+  Alert,
+  LoadingWrapper,
+} from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost, apiGet } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { CheckReplaceData } from './CheckReplaceData';
-import DataCacheContext from '../../contexts/DataCacheContext/DataCacheContext';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
@@ -31,30 +36,26 @@ const Upload: React.FC = () => {
 
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
+  const history = useHistory();
 
+  // Count how many children are in the roster so we can determine if we're writing over that data
   const [userRosterCount, setUserRosterCount] = useState(undefined);
-  const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
-  const [errorDict, setErrorDict] = useState<ErrorObjectForTable[]>();
-  const [errorModalOpen, setErrorModalOpen] = useState(false);
   useEffect(() => {
-    apiGet('children?count=true', { accessToken }).then((res) =>
+    apiGet('children?count=true', accessToken).then((res) =>
       setUserRosterCount(res.count)
     );
   }, [accessToken]);
 
   const [error, setError] = useState<string>();
+  const [loading, setLoading] = useState(false);
+
+  // Check the file for errors if there is a file
   const [file, setFile] = useState<File>();
-  const history = useHistory();
-  const {
-    children: { refetch: refetchChildren },
-  } = useContext(DataCacheContext);
-
-  const [queryStringForUpload, setQueryStringForUpload] = useState('');
-  const [postUpload, setPostUpload] = useState(false);
-
+  const [errorDict, setErrorDict] = useState<ErrorObjectForTable[]>();
   useEffect(() => {
     // Haven't yet determined how many errors of each type there are
     if (file && errorDict === undefined) {
+      setLoading(true);
       const formData = new FormData();
       formData.set('file', file);
       apiPost(`enrollment-reports/check`, formData, {
@@ -71,14 +72,18 @@ const Upload: React.FC = () => {
             setFile(undefined);
             setErrorDict(undefined);
           })
-        );
+        )
+        .finally(() => setLoading(false));
     }
   }, [file, errorDict]);
 
+  // If the file exists and the upload should be posted,
+  // then trigger the API request
+  const [postUpload, setPostUpload] = useState(false);
+  const [queryStringForUpload, setQueryStringForUpload] = useState('');
   useEffect(() => {
-    // If the file exists and the upload should be posted,
-    // then trigger the API request
     if (file && postUpload) {
+      setLoading(true);
       const formData = new FormData();
       formData.set('file', file);
       apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
@@ -86,7 +91,7 @@ const Upload: React.FC = () => {
         rawBody: true,
       })
         .then(() => {
-          refetchChildren();
+          cache.clear();
           history.push(`/roster`);
         })
         .catch(
@@ -96,13 +101,17 @@ const Upload: React.FC = () => {
           })
         )
         // Reset this flag to false so the upload can be subsequently re-triggered
-        .finally(() => setPostUpload(false));
+        .finally(() => {
+          setPostUpload(false);
+          setLoading(false);
+        });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postUpload]);
 
   // Case where the user doesn't already have a roster so we
   // don't need to go to CheckReplace: next step is confirm upload
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
   const advanceToPostUpload = () => {
     setPostUpload(true);
     setErrorModalOpen(false);
@@ -110,6 +119,7 @@ const Upload: React.FC = () => {
 
   // Case where the user does have an existing roster; need to
   // open the CheckReplace modal as a next step
+  const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
   const advanceToCheckReplace = () => {
     setErrorModalOpen(false);
     setCheckReplaceDataOpen(true);
@@ -137,14 +147,12 @@ const Upload: React.FC = () => {
 
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (!e.target.files) {
-      return setError('No file selected for upload');
-    }
-    const file = e.target.files[0];
+    const file = e?.target?.files?.[0];
     if (!file) {
       return setError('No file selected for upload');
     }
     setFile(file);
+    setError(undefined);
 
     // set target.files = null to ensure change event is properly triggered
     // even if file with same name is re-uploaded
@@ -180,16 +188,18 @@ const Upload: React.FC = () => {
             type="error"
             actionItem={
               <div>
-                <p className="margin-bottom-2 text-bold">
+                <p className="margin-bottom-1 text-bold">
                   Download the data collection template
                 </p>
                 <CSVExcelDownloadButton
                   fileType="xlsx"
                   whichDownload="template"
+                  className="margin-bottom-1"
                 />
                 <CSVExcelDownloadButton
                   fileType="csv"
                   whichDownload="template"
+                  className="margin-bottom-1"
                 />
               </div>
             }
@@ -220,7 +230,13 @@ const Upload: React.FC = () => {
             'display-none': checkReplaceDataOpen || errorModalOpen,
           })}
         >
-          <FileInput id="report" label="Choose a file" onChange={fileUpload} />
+          <LoadingWrapper text="Uploading your file..." loading={loading}>
+            <FileInput
+              id="report"
+              label="Choose a file"
+              onChange={fileUpload}
+            />
+          </LoadingWrapper>
         </form>
       </div>
     </div>

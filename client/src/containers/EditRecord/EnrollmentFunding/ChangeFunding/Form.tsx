@@ -64,7 +64,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
         <NewFundingField<ChangeFunding>
           fundingAccessor={(data) => data.at('newFunding')}
           getEnrollment={() => enrollment}
-          orgId={orgId}
+          organizationId={orgId}
         />
       )}
       {!!activeFunding && (

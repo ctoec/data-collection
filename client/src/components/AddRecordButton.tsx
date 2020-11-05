@@ -1,30 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   ButtonWithDropdown,
   PlusCircle,
   TextWithIcon,
 } from '@ctoec/component-library';
-import { Organization } from '../shared/models';
 import { Link, useHistory } from 'react-router-dom';
+import UserContext from '../contexts/UserContext/UserContext';
 
 type AddRecordButtonProps = {
-  orgs?: Organization[];
+  id: string;
+  className?: string;
 };
 
-export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
+export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
+  id, // Needs to be unique to associate with dropdown
+  className,
+}) => {
   const history = useHistory();
-
-  if (!orgs) {
+  const { user } = useContext(UserContext);
+  const organizations = user?.organizations;
+  if (!organizations || !organizations.length) {
     return <></>;
   }
 
-  if (orgs.length === 1) {
+  if (organizations.length === 1) {
     return (
       <Link
         to={{
           pathname: '/create-record',
-          state: { organization: orgs[0] },
+          state: { organization: organizations[0] },
         }}
+        className={className}
       >
         <TextWithIcon Icon={PlusCircle} text="Add a record" />
       </Link>
@@ -33,10 +39,11 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({ orgs }) => {
 
   return (
     <ButtonWithDropdown
+      className={className}
       text={<TextWithIcon Icon={PlusCircle} text="Add a record" />}
-      id="select-organization"
+      id={id}
       appearance="unstyled"
-      options={orgs.map((org) => ({
+      options={organizations.map((org) => ({
         text: org.providerName,
         href: '/create-record',
         onClick: (e: any) => {
