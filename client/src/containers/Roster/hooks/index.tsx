@@ -1,4 +1,4 @@
 export * from './useChildrenWithErrorsAlert';
-export * from './useGenerateUserSpecificProps';
+export * from './useOrgSiteProps';
 export * from './useUpdateRosterParams';
 export * from './usePaginatedChildData';

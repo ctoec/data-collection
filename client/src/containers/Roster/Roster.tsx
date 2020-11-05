@@ -27,7 +27,7 @@ import { MonthFilterIndicator } from './MonthFilter/MonthFilterIndicator';
 import { NoRecordsAlert } from './NoRecordsAlert';
 import {
   useUpdateRosterParams,
-  useGenerateUserSpecificProps,
+  useOrgSiteProps,
   useChildrenWithErrorsAlert,
   usePaginatedChildData,
 } from './hooks';
@@ -82,8 +82,13 @@ const Roster: React.FC = () => {
   };
 
   // Get props for tabNav, h1Text, and subHeaderText based on user access (i.e. user's sites and org permissions)
-  const { tabNavProps, h1Text, subHeaderText } = useGenerateUserSpecificProps(
-    !children,
+  const {
+    tabNavProps,
+    h1Text,
+    subHeaderText,
+    superHeaderText,
+  } = useOrgSiteProps(
+    !children || !query.organization,
     clientSideFilteredChildren.length
   );
 
@@ -122,9 +127,9 @@ const Roster: React.FC = () => {
         <div className="grid-row flex-align-center">
           <div className="tablet:grid-col-10">
             <h1 className="margin-bottom-0" ref={h1Ref}>
-              {isSiteLevelUser && (
+              {superHeaderText && (
                 <div className="margin-bottom-1 font-body-sm text-base-darker">
-                  {userOrganizations[0].providerName}
+                  {superHeaderText}
                 </div>
               )}
               {h1Text}

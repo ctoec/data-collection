@@ -9,10 +9,7 @@ import moment from 'moment';
 
 const ALL_SITES = 'all-sites';
 
-export const useGenerateUserSpecificProps = (
-  isLoading: boolean,
-  childCount: number
-) => {
+export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
   const { user } = useContext(UserContext);
   const organizations = user?.organizations || [];
   const sites = user?.sites || [];
@@ -53,16 +50,23 @@ export const useGenerateUserSpecificProps = (
   const props = {
     tabNavProps: undefined as TabNav | undefined,
     h1Text: isLoading ? 'Loading...' : sites[0].siteName,
-    subHeaderText: isLoading ? '' : `${childCount} children enrolled`,
+    subHeaderText: getSubHeaderText(isLoading, childCount),
+    superHeaderText: organizations[0].providerName,
   };
 
   // Multi-org user gets nested tabs (for orgs and sites)
   if (organizations.length > 1) {
-    // H1 text = selected org Id
-    props.h1Text =
-      organizations.find((o) => `${o.id}` === query.organization)
-        ?.providerName || '';
-    props.subHeaderText = getSubHeaderText(childCount, sites, true, query);
+    props.h1Text = 'Multiple organizations';
+    const orgSites = sites.filter(
+      (s) => `${s.organizationId}` === query.organization
+    );
+    props.subHeaderText = getSubHeaderText(
+      isLoading,
+      childCount,
+      orgSites,
+      query.month
+    );
+    props.superHeaderText = '';
     props.tabNavProps = {
       itemType: 'organization',
       items: getOrganizationTabItems(organizations, sites),
@@ -72,10 +76,14 @@ export const useGenerateUserSpecificProps = (
     };
   } else if (sites.length > 1) {
     // Assume users with multi-site access are all under the same org
-    props.h1Text = query.site
-      ? sites.find((s) => `${s.id}` === query.site)?.siteName || ''
-      : 'All sites';
-    props.subHeaderText = getSubHeaderText(childCount, sites, false, query);
+    props.h1Text = organizations[0].providerName;
+    props.subHeaderText = getSubHeaderText(
+      isLoading,
+      childCount,
+      sites,
+      query.month
+    );
+    props.superHeaderText = '';
     props.tabNavProps = {
       itemType: 'site',
       onClick: tabNavOnClick,
@@ -89,31 +97,18 @@ export const useGenerateUserSpecificProps = (
 
 /****************** HELPER FUNCTIONS  ***********************/
 function getSubHeaderText(
+  loading: boolean,
   childCount: number,
-  userSites: Site[],
-  isMultiOrg: boolean,
-  query: {
-    organization?: string;
-    month?: string;
-    site?: string;
-  }
+  userSites?: Site[],
+  month?: string
 ) {
-  const { organization, month, site } = query;
-
   // Base case
   let returnText = `${childCount} children enrolled`;
 
   // If multi-site + user is not looking at a single site
   // then include the count of all sites in the sub header
-  if (userSites.length > 1 && !site) {
-    returnText += ` at ${
-      userSites.filter((s) => `${s.organizationId}` === organization).length
-    } sites`;
-  }
-  // If multi-org + user is looking at single site
-  // Then include the site name in the sub header
-  else if (isMultiOrg && site) {
-    returnText += ` at ${userSites.find((s) => `${s.id}` === site)?.siteName}`;
+  if (userSites && userSites.length > 1) {
+    returnText += ` at ${userSites.length} sites`;
   }
 
   if (month) {
