@@ -167,3 +167,22 @@ workflows:
           env: devsecure
           requires:
             - build
+  deploy-to-prod:
+    jobs:
+      - hold:
+          type: approval
+      - install:
+          requires: 
+            - hold
+      - build:
+          env: prod
+          requires:
+            - install
+      - prod-check:
+          type: approval
+          requires:
+            - build
+      - deploy:
+          env: prod
+          requires:
+            - prod-check

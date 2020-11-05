@@ -5,6 +5,7 @@ import {
   Button,
   TabNav,
   HeadingLevel,
+  LoadingWrapper,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
@@ -57,11 +58,12 @@ const Roster: React.FC = () => {
   useUpdateRosterParams();
 
   // Fetch child data, filtered by organization and month
-  const { data: children, isValidating } = useAuthenticatedSWR<Child[]>(
+  const { data: children, isValidating, error } = useAuthenticatedSWR<Child[]>(
     query.organization
       ? `/children?${stringify({ organizationId: query.organization })}`
       : null
   );
+  const loading = !children && !error;
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
@@ -82,14 +84,14 @@ const Roster: React.FC = () => {
 
   // Get alerts for page, including alert for children with errors
   const { alertElements } = useChildrenWithErrorsAlert(
-    isValidating,
+    loading,
     browserSideFilteredChildren.filter(
       (child) => child.validationErrors && child.validationErrors.length
     ).length
   );
   // Get props for tabNav, h1Text, and subHeaderText based on user access (i.e. user's sites and org permissions)
   const { tabNavProps, h1Text, subHeaderText } = useGenerateUserSpecificProps(
-    isValidating,
+    !children && !error,
     browserSideFilteredChildren.length
   );
 
@@ -148,25 +150,24 @@ const Roster: React.FC = () => {
           filterByMonth={queryMonth}
           setFilterByMonth={updateActiveMonth}
         />
-        {isValidating ? (
-          <></>
-        ) : !(children || []).length ? (
-          <NoRecordsAlert />
-        ) : tabNavProps ? (
-          <TabNav {...tabNavProps}>
-            {accordionProps.items.length ? (
-              <Accordion {...accordionProps} />
-            ) : (
-              <NoRecordsAlert />
-            )}
-          </TabNav>
-        ) : accordionProps.items.length ? (
-          <Accordion {...accordionProps} />
-        ) : (
-          <NoRecordsAlert />
-        )}
+        <LoadingWrapper text="Loading your roster..." loading={loading}>
+          {!(children || []).length ? (
+            <NoRecordsAlert />
+          ) : tabNavProps ? (
+            <TabNav {...tabNavProps}>
+              {accordionProps.items.length ? (
+                <Accordion {...accordionProps} />
+              ) : (
+                <NoRecordsAlert />
+              )}
+            </TabNav>
+          ) : accordionProps.items.length ? (
+            <Accordion {...accordionProps} />
+          ) : (
+            <NoRecordsAlert />
+          )}
+        </LoadingWrapper>
       </div>
-
       <FixedBottomBar>
         <Button
           text="Back to getting started"
