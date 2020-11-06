@@ -10,8 +10,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { RecordFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import { stringify } from 'querystring';
 
 type LocationType = Location & {
   state: {
@@ -48,21 +46,6 @@ const CreateRecord: React.FC = () => {
 
   const [child, setChild] = useState<Child>();
   const organization = locationState?.organization || child?.organization;
-  const { mutate } = useAuthenticatedSWR<Child[]>(
-    organization
-      ? `children?${stringify({ organizationId: organization.id })}`
-      : null
-  );
-  const updateRecordInCache = (updatedChild: Child) => {
-    mutate((children: Child[]) => {
-      if (children)
-        return [
-          ...children.filter((c) => c.id !== updatedChild.id),
-          updatedChild,
-        ];
-      return children;
-    });
-  };
 
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
@@ -83,7 +66,6 @@ const CreateRecord: React.FC = () => {
     })
       .then((res) => {
         setChild(res);
-        updateRecordInCache(res);
         history.replace({ pathname: `/create-record/${res.id}` });
       })
       .catch((err) => {
@@ -119,7 +101,6 @@ const CreateRecord: React.FC = () => {
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        updateRecordInCache(updatedChild);
         const currentStepStatus = steps[indexOfCurrentStep].status({
           child: updatedChild,
         } as RecordFormProps);

@@ -15,7 +15,7 @@ import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
  * @param id
  */
 export const getChildById = async (id: string, user: User): Promise<Child> => {
-  const opts = await getFindOpts(user);
+  const opts = await getFindOpts(user, { id });
   const child = await getManager().findOne(Child, opts);
 
   return validateObject(child);
@@ -41,14 +41,13 @@ export const getChildren = async (
 ) => {
   let { organizationIds, missingInfo, skip, take } = filterOpts;
 
-  const opts = (await getFindOpts(user, organizationIds)) as FindManyOptions<
-    Child
-  >;
+  const opts = (await getFindOpts(user, {
+    organizationIds,
+  })) as FindManyOptions<Child>;
   opts.skip = skip;
   opts.take = take;
 
   let children = await getManager().find(Child, opts);
-
   children.map(validateObject);
 
   if (missingInfo === 'true') {
@@ -76,7 +75,11 @@ export const getCount = async (user: User) => {
  * @param user
  * @param organizationIds
  */
-const getFindOpts = async (user: User, organizationIds?: string[]) => {
+const getFindOpts = async (
+  user: User,
+  filterOpts: { id?: string; organizationIds?: string[] } = {}
+) => {
+  const { id, organizationIds } = filterOpts;
   const readOrgIds = await getReadAccessibleOrgIds(user);
   const filterOrgIds =
     organizationIds?.filter((orgId) => readOrgIds.includes(orgId)) ||
@@ -96,6 +99,11 @@ const getFindOpts = async (user: User, organizationIds?: string[]) => {
       qb.where('Child.organizationId IN (:...orgIds)', {
         orgIds: filterOrgIds,
       });
+
+      if (id) {
+        qb.andWhere('Child.id = :id', { id });
+      }
+
       // On deck for typeORM to implement where for nested relations in find
       // https://github.com/typeorm/typeorm/issues/2707
       // Until then, use the generated aliases to do nested filtering

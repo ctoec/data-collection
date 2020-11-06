@@ -18,6 +18,7 @@ export function FundingAgeGroupMatchesEnrollment(
           if (!enrollment) return true;
           const enrollmentAgeGroup = (enrollment as Enrollment).ageGroup;
           const allFundings = (enrollment as Enrollment).fundings;
+          if (!allFundings) return true;
           return allFundings.every(
             (f) => f?.fundingSpace?.ageGroup === enrollmentAgeGroup
           );
