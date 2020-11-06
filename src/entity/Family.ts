@@ -5,6 +5,8 @@ import {
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
+  AfterUpdate,
+  getManager,
 } from 'typeorm';
 
 import { Family as FamilyInterface } from '../../client/src/shared/models';
@@ -70,4 +72,15 @@ export class Family implements FamilyInterface {
 
   @DeleteDateColumn()
   deletedDate: Date;
+
+  @AfterUpdate()
+  async cascadeDeleteDets() {
+    if (this.deletedDate !== null) {
+      await Promise.all(
+        this.incomeDeterminations.map((d) =>
+          getManager().softRemove(IncomeDetermination, d)
+        )
+      );
+    }
+  }
 }

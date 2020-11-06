@@ -5,6 +5,8 @@ import {
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
+  AfterUpdate,
+  getManager,
 } from 'typeorm';
 import moment, { Moment } from 'moment';
 import {
@@ -158,6 +160,15 @@ export class Child implements ChildInterface {
 
   @DeleteDateColumn()
   deletedDate: Date;
+
+  @AfterUpdate()
+  async cascadeDeleteEnrollments() {
+    if (this.deletedDate !== null) {
+      await Promise.all(
+        this.enrollments.map((e) => getManager().softRemove(Enrollment, e))
+      );
+    }
+  }
 
   validationErrors?: ValidationError[];
 }

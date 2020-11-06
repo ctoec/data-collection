@@ -5,6 +5,8 @@ import {
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
+  AfterUpdate,
+  getManager,
 } from 'typeorm';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
@@ -85,4 +87,13 @@ export class Enrollment implements EnrollmentInterface {
 
   @DeleteDateColumn()
   deletedDate: Date;
+
+  @AfterUpdate()
+  async cascadeDeleteFundings() {
+    if (this.deletedDate !== null) {
+      await Promise.all(
+        this.fundings.map((f) => getManager().softRemove(Funding, f))
+      );
+    }
+  }
 }
