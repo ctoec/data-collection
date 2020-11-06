@@ -36,14 +36,15 @@ export function applyClientSideFilters(
   month?: Moment
 ): Child[] {
   let filteredChildren: Child[] = allChildren;
-  if (site) {
-    filteredChildren = allChildren.filter(
-      (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
-    );
-  }
   if (month) {
-    filteredChildren = allChildren.filter((child) =>
-      childHasEnrollmentsActiveInMonth(child, month)
+    filteredChildren = filteredChildren.filter((child) => {
+      return childHasEnrollmentsActiveInMonth(child, month);
+    });
+  }
+
+  if (site) {
+    filteredChildren = filteredChildren.filter(
+      (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
     );
   }
 

@@ -15,21 +15,15 @@ import {
   formSections,
 } from '../../components/Forms/formSections';
 import { Child } from '../../shared/models';
-import { stringify } from 'querystring';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
-  const { childId, organizationId } = useParams() as {
+  const { childId } = useParams() as {
     childId: string;
-    organizationId: string;
   };
   const { accessToken } = useContext(AuthenticationContext);
   const { alertElements, setAlerts } = useAlerts();
   const [child, setChild] = useState<Child>();
-  const { mutate } = useAuthenticatedSWR(
-    organizationId ? `children?${stringify({ organizationId })}` : null
-  );
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
@@ -53,10 +47,6 @@ const EditRecord: React.FC = () => {
   useEffect(() => {
     apiGet(`children/${childId}`, accessToken).then((updatedChild) => {
       setChild(updatedChild);
-      mutate((children: Child[]) => {
-        if (children)
-          return [...children.filter((c) => c.id === childId), updatedChild];
-      }, false);
 
       // On initial fetch, refetch = 0 AND we do not want to create alerts
       if (triggerRefetchCounter > 0) {

@@ -19,6 +19,7 @@ export function FundingDoesNotOverlap(
       validator: {
         validate(validatingFunding, { object: enrollment }) {
           const allFundings = (enrollment as Enrollment).fundings;
+          if (!validatingFunding) return true;
           const {
             firstReportingPeriod: validatingFirstPeriod,
             lastReportingPeriod: validatingLastPeriod,
