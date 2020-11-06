@@ -28,6 +28,7 @@ export const makeFakeEnrollments = (
     entry: currentEnrollmentEntry,
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
+    cascadeDeleteFundings: null,
   };
   currentEnrollment.fundings = [
     getFakeFunding(id, currentEnrollment, site.organization),
@@ -44,6 +45,7 @@ export const makeFakeEnrollments = (
       exitReason: 'Aged out',
       updateMetaData: { updatedAt: new Date() },
       deletedDate: null,
+      cascadeDeleteFundings: null,
     };
     oldEnrollment.fundings = [
       getFakeFunding(id, currentEnrollment, site.organization, true),

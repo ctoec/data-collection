@@ -50,6 +50,7 @@ const children: Child[] = Array.from({ length: 100 }, (_, i) => {
     organizationId: org.id,
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
+    cascadeDeleteEnrollments: null,
   };
 });
 
@@ -104,7 +105,7 @@ const completeChildren: Child[] = children.map((c, i) => {
       incomeDeterminations: foster ? [] : [getFakeIncomeDet(i, family)],
     },
     enrollments: makeFakeEnrollments(i, c, site),
-  };
+  } as Child;
 });
 
 // Iterate through, delete keys arbitrarily

@@ -18,5 +18,6 @@ export const makeFakeFamily = (id): Family => {
     homelessness,
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
+    cascadeDeleteDets: null,
   };
 };
