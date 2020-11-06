@@ -1,3 +1,6 @@
+# Reinstall all dependencies and rebuild both client and server
+# applications, specifically for local development
+
 echo "Clearing out all old dependencies..."
 rm -rf node_modules
 rm -rf dist
