@@ -53,7 +53,7 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
     tabNavProps: undefined as TabNav | undefined,
     h1Text: isLoading ? 'Loading...' : sites[0].siteName,
     subHeaderText: getSubHeaderText(isLoading, childCount, sites, query.month),
-    superHeaderText: organizations[0].providerName,
+    superHeaderText: organizations?.[0]?.providerName,
   };
 
   // Multi-org user gets 'Multiple organizations' h1,

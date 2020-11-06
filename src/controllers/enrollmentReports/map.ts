@@ -440,6 +440,12 @@ export const mapFunding = async (
   enrollment: Enrollment,
   save: boolean
 ) => {
+  if (!(source.fundingSpace ||
+    source.time ||
+    source.firstReportingPeriod ||
+    source.lastReportingPeriod)) {
+    return;
+  }
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
     source.fundingSpace,
