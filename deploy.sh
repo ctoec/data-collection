@@ -29,8 +29,10 @@ fi
 
 echo "Clearing out all old dependencies..."
 rm -rf node_modules
+rm -rf dist
 cd client
 rm -rf node_modules
+rm -rf build
 
 echo "Installing client dependencies..."
 yarn install --frozen-lockfile --network-concurrency 1
