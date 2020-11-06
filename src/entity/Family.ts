@@ -77,8 +77,8 @@ export class Family implements FamilyInterface {
   async cascadeDeleteDets() {
     if (this.deletedDate !== null) {
       await Promise.all(
-        this.incomeDeterminations.map((d) =>
-          getManager().softRemove(IncomeDetermination, d)
+        this.incomeDeterminations.map(
+          async (d) => await getManager().softRemove(IncomeDetermination, d)
         )
       );
     }

@@ -92,7 +92,9 @@ export class Enrollment implements EnrollmentInterface {
   async cascadeDeleteFundings() {
     if (this.deletedDate !== null) {
       await Promise.all(
-        this.fundings.map((f) => getManager().softRemove(Funding, f))
+        this.fundings.map(
+          async (f) => await getManager().softRemove(Funding, f)
+        )
       );
     }
   }

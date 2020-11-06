@@ -165,7 +165,9 @@ export class Child implements ChildInterface {
   async cascadeDeleteEnrollments() {
     if (this.deletedDate !== null) {
       await Promise.all(
-        this.enrollments.map((e) => getManager().softRemove(Enrollment, e))
+        this.enrollments.map(
+          async (e) => await getManager().softRemove(Enrollment, e)
+        )
       );
     }
   }
