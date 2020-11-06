@@ -95,7 +95,8 @@ familyRouter.delete(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const detId = parseInt(req.params['determinationId']);
-      await getManager().delete(IncomeDetermination, { id: detId });
+      const det = await getManager().find(IncomeDetermination, { id: detId });
+      await getManager().softRemove(det);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;

@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 import moment, { Moment } from 'moment';
 import {
@@ -154,6 +155,9 @@ export class Child implements ChildInterface {
 
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
+
+  @DeleteDateColumn()
+  deletedDate: Date;
 
   validationErrors?: ValidationError[];
 }

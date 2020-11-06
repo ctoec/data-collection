@@ -7,4 +7,5 @@ export interface Funding extends ObjectWithValidationErrors {
   fundingSpace?: FundingSpace;
   firstReportingPeriod?: ReportingPeriod;
   lastReportingPeriod?: ReportingPeriod;
+  deletedDate: Date;
 }

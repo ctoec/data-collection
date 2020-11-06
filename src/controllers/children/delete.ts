@@ -2,6 +2,7 @@ import { getManager, In } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { User, Child } from '../../entity';
 import { NotFoundError } from '../../middleware/error/errors';
+import { completeFilterChild } from '../../utils/filterSoftRemoved';
 
 /**
  * Delete child record, if user has access
@@ -10,9 +11,10 @@ import { NotFoundError } from '../../middleware/error/errors';
  */
 export const deleteChild = async (id: string, user: User) => {
   const readOrgIds = await getReadAccessibleOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
+  let child = await getManager().findOne(Child, id, {
     where: { organization: { id: In(readOrgIds) } },
   });
+  child = completeFilterChild(child);
 
   if (!child) {
     console.warn(
@@ -21,5 +23,5 @@ export const deleteChild = async (id: string, user: User) => {
     throw new NotFoundError();
   }
 
-  await getManager().delete(Child, { id });
+  await getManager().softRemove(child);
 };

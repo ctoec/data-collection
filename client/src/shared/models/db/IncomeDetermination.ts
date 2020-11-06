@@ -8,4 +8,5 @@ export interface IncomeDetermination extends ObjectWithValidationErrors {
   income?: number;
   determinationDate?: Moment;
   family: Family;
+  deletedDate: Date;
 }

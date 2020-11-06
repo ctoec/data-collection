@@ -27,6 +27,7 @@ export const makeFakeEnrollments = (
     model: random.arrayElement(Object.values(CareModel)),
     entry: currentEnrollmentEntry,
     updateMetaData: { updatedAt: new Date() },
+    deletedDate: null,
   };
   currentEnrollment.fundings = [
     getFakeFunding(id, currentEnrollment, site.organization),
@@ -42,6 +43,7 @@ export const makeFakeEnrollments = (
       exit: currentEnrollmentEntry.add(-1, 'days'),
       exitReason: 'Aged out',
       updateMetaData: { updatedAt: new Date() },
+      deletedDate: null,
     };
     oldEnrollment.fundings = [
       getFakeFunding(id, currentEnrollment, site.organization, true),

@@ -32,5 +32,6 @@ export const getFakeFunding = (
       ? firstAndLastReportingPeriods[1]
       : undefined,
     updateMetaData: { updatedAt: new Date() },
+    deletedDate: null,
   };
 };

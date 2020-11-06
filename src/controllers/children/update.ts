@@ -2,6 +2,7 @@ import { getManager, In } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Child, User } from '../../entity';
 import { NotFoundError } from '../../middleware/error/errors';
+import { completeFilterChild } from '../../utils/filterSoftRemoved';
 
 /**
  * Update child record, if user has access
@@ -15,9 +16,10 @@ export const updateChild = async (
   update: Partial<Child>
 ) => {
   const readOrgIds = await getReadAccessibleOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
+  let child = await getManager().findOne(Child, id, {
     where: { organization: { id: In(readOrgIds) } },
   });
+  child = completeFilterChild(child);
 
   if (!child) {
     console.warn(

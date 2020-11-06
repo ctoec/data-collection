@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 
 import { Family as FamilyInterface } from '../../client/src/shared/models';
@@ -66,4 +67,7 @@ export class Family implements FamilyInterface {
 
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
+
+  @DeleteDateColumn()
+  deletedDate: Date;
 }

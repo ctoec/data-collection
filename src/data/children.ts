@@ -49,6 +49,7 @@ const children: Child[] = Array.from({ length: 100 }, (_, i) => {
     organization: org,
     organizationId: org.id,
     updateMetaData: { updatedAt: new Date() },
+    deletedDate: null,
   };
 });
 

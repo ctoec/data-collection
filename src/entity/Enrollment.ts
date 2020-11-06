@@ -4,6 +4,7 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  DeleteDateColumn,
 } from 'typeorm';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
@@ -81,4 +82,7 @@ export class Enrollment implements EnrollmentInterface {
 
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
+
+  @DeleteDateColumn()
+  deletedDate: Date;
 }
