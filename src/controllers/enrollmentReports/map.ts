@@ -99,10 +99,10 @@ const mapRow = async (
 
   const site = lookUpSite(source, organization.id, userSites);
   let child = getChildToUpdate(source, processedChildren);
-  const isVisistedChild = child !== undefined;
+  const childAlreadyExists = child !== undefined;
 
   // Case where this row creates a brand new child
-  if (!isVisistedChild) {
+  if (!childAlreadyExists) {
     child = await createNewChild(
       transaction,
       source,
@@ -433,6 +433,7 @@ const mapEnrollment = (
  * @param enrollment
  */
 export const mapFunding = async (
+  // TODO: FIX
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
