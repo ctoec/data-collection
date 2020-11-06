@@ -27,16 +27,25 @@ then
    exit 1
 fi
 
-echo "Installing yarn dependencies..."
-yarn install --frozen-lockfile
-cd client && yarn install --frozen-lockfile --network-concurrency 1
+echo "Clearing out all old dependencies..."
+rm -rf node_modules
+rm -rf dist
+cd client
+rm -rf node_modules
+rm -rf build
 
-# Build the React app and Express server
+echo "Installing client dependencies..."
+yarn install --frozen-lockfile --network-concurrency 1
+
 echo "Building the React app..."
 REACT_APP_STAGE="$1" yarn build
 
+echo "Installing server dependencies..."
+cd ../
+yarn install --frozen-lockfile
+
 echo "Building the Express server..."
-cd ../ && yarn build
+yarn build
 
 # Now just init and deploy!
 echo "Initializing and deploying to Elastic Beanstalk..."
