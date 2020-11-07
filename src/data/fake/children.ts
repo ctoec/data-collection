@@ -1,5 +1,5 @@
 import { name, address, random } from 'faker';
-import { Child, Organization, Site } from '../entity';
+import { Child, Organization, Site } from '../../entity';
 import {
   BirthCertificateType,
   Gender,

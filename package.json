@@ -63,6 +63,8 @@
     "watch-ts": "tsc -w"
   },
   "devDependencies": {
+    "@types/command-line-args": "^5.0.0",
+    "command-line-args": "^5.1.1",
     "husky": "^4.3.0",
     "prettier": "^2.0.5"
   },

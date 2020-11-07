@@ -1,6 +1,6 @@
 import moment from 'moment';
-import { FundingSource } from '../../client/src/shared/models';
-import { ReportingPeriod } from '../entity';
+import { FundingSource } from '../../../client/src/shared/models';
+import { ReportingPeriod } from '../../entity';
 
 export const reportingPeriods = [
   ['2020-07-01', '2020-06-29', '2020-08-02', '2020-08-21'],

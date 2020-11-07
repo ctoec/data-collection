@@ -1,6 +1,6 @@
 import { random } from 'faker';
-import { Child, Enrollment, Site } from '../entity';
-import { AgeGroup, CareModel } from '../../client/src/shared/models';
+import { Child, Enrollment, Site } from '../../entity';
+import { AgeGroup, CareModel } from '../../../client/src/shared/models';
 import moment from 'moment';
 import { getFakeFunding } from './funding';
 
