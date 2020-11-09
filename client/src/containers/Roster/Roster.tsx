@@ -61,7 +61,8 @@ const Roster: React.FC = () => {
     !children,
     (children || []).filter(
       (child) => child.validationErrors && child.validationErrors.length
-    ).length
+    ).length,
+    query.organization
   );
   const loading = !children && !error;
 

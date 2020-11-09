@@ -1,6 +1,7 @@
 import { stringify } from 'query-string';
 import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR';
 import { Child } from '../../../shared/models';
+import { cache } from 'swr';
 
 const PAGE_SIZE = 100;
 
@@ -14,6 +15,7 @@ export const usePaginatedChildData = (organization: string | undefined) => {
   // Fetch child data, filtered by organization and month
   const {
     data: childrenArrays,
+    mutate,
     size,
     setSize,
     error,
@@ -26,7 +28,7 @@ export const usePaginatedChildData = (organization: string | undefined) => {
 
     // Paginated api query (but only once we have organizationId param)
     return organization
-      ? `/children?${stringify({
+      ? `children?${stringify({
           organizationId: organization,
           skip: index * PAGE_SIZE,
           take: PAGE_SIZE,
@@ -48,7 +50,27 @@ export const usePaginatedChildData = (organization: string | undefined) => {
 
   return {
     children: childrenArrays ? childrenArrays.flat() : childrenArrays,
+    mutate,
     stillFetching,
     error,
   };
 };
+
+/**
+ * Clear caches for `children` queries. If organizationId is supplied,
+ * then only clear caches for queries made with that id as a query param,
+ * otherwise clear all child caches
+ *
+ * @param organizationId
+ */
+export const clearChildrenCaches = (organizationId?: string) =>
+  cache
+    .keys()
+    .filter(
+      (key) =>
+        key.includes('children') &&
+        (organizationId
+          ? key.includes(`organizationId=${organizationId}`)
+          : true)
+    )
+    .forEach((childrenCacheKey) => cache.delete(childrenCacheKey));

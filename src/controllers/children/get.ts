@@ -97,7 +97,9 @@ const getFindOpts = async (
     ],
     where: (qb: SelectQueryBuilder<Child>) => {
       qb.where('Child.organizationId IN (:...orgIds)', {
-        orgIds: filterOrgIds,
+        // SQLServer doesn't like queries like "IN ()", so supply
+        // an impossible value for empty arrays
+        orgIds: filterOrgIds.length ? filterOrgIds : ['NULL'],
       });
 
       if (id) {
