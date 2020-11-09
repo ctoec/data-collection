@@ -143,7 +143,10 @@ function formatStringPush(value: any, propertyName: string) {
   if (propertyName === 'site') {
     return value.siteName;
   }
-  if (propertyName === 'firstReportingPeriod' || propertyName === 'lastReportingPeriod') {
+  if (
+    propertyName === 'firstReportingPeriod' ||
+    propertyName === 'lastReportingPeriod'
+  ) {
     return reportingPeriodToString(value);
   }
 }
