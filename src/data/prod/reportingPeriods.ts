@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { WorkSheet } from 'xlsx';
 import { FundingSource } from '../../../client/src/shared/models';
 import { parse } from './utils';
