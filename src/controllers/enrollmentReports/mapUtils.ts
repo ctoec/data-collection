@@ -12,12 +12,13 @@ export const isIdentifierMatch = (
   child: Child | EnrollmentReportRow,
   other: EnrollmentReportRow
 ) => {
+  console.log(child.birthdate, other.birthdate)
   return (
     child.firstName === other.firstName &&
     child.lastName === other.lastName &&
     child.birthdate &&
-    child.birthdate.format('MM/DD/YYYY') ===
-      other.birthdate?.format('MM/DD/YYYY') &&
+    child.birthdate?.format('MM/DD/YYYY') ===
+    other.birthdate?.format('MM/DD/YYYY') &&
     child.sasid === other.sasid
   );
 };
@@ -73,7 +74,7 @@ export const getExistingFundingForEnrollment = (
   return enrollment.fundings.find((f) => {
     return (
       row.firstReportingPeriod.format('MM/DD/YYYY') ===
-        f.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
+      f.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
       row.fundingSpace === f.fundingSpace.source &&
       row.time === f.fundingSpace.time
     );

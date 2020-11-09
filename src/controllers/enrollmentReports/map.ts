@@ -101,6 +101,8 @@ const mapRow = async (
   let child = getChildToUpdate(source, processedChildren);
   const childAlreadyExists = child !== undefined;
 
+  console.log({ childAlreadyExists })
+
   // Case where this row creates a brand new child
   if (!childAlreadyExists) {
     child = await createNewChild(
@@ -574,7 +576,6 @@ export const mapEnum = <T>(
   // Iterate through all enum values and check if any match
   Object.values(referenceEnum).forEach((ref: T) => {
     const refString = (ref as unknown) as string;
-    console.log(ref)
 
     // Base case for all other enums -- compare the normalized enum values
     // to the normalized input value
