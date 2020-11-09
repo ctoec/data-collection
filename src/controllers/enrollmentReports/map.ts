@@ -440,12 +440,12 @@ export const mapFunding = async (
   enrollment: Enrollment,
   save: boolean
 ) => {
-  if (!(source.fundingSpace ||
-    source.time ||
-    source.firstReportingPeriod ||
-    source.lastReportingPeriod)) {
-    return;
-  }
+  // if (!(source.fundingSpace ||
+  //   source.time ||
+  //   source.firstReportingPeriod ||
+  //   source.lastReportingPeriod)) {
+  //   return;
+  // }
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
     source.fundingSpace,
@@ -481,12 +481,12 @@ export const mapFunding = async (
     lastReportingPeriod: ReportingPeriod;
   if (source.firstReportingPeriod) {
     firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.firstReportingPeriod },
+      where: { type: fundingSource, period: p => p.format('MM/YYYY') === source.firstReportingPeriod.format('MM/YYYY') },
     });
   }
   if (source.lastReportingPeriod) {
     lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.lastReportingPeriod },
+      where: { type: fundingSource, period: p => p.format('MM/YYYY') === source.lastReportingPeriod.format('MM/YYYY') },
     });
   }
 
@@ -574,11 +574,24 @@ export const mapEnum = <T>(
   // Iterate through all enum values and check if any match
   Object.values(referenceEnum).forEach((ref: T) => {
     const refString = (ref as unknown) as string;
+    console.log(ref)
 
+    // Base case for all other enums -- compare the normalized enum values
+    // to the normalized input value
+    const normalizedReference = refString
+      .trim()
+      .replace(stripRegex, '')
+      .toLowerCase();
+    if (
+      normalizedReference.startsWith(normalizedInput) ||
+      normalizedInput.startsWith(normalizedReference)
+    ) {
+      ret = ref;
+    }
     // Special case for mapping FundingSource, to check for
     // the acronym (i.e. CDC), full name (i.e. Child day care)
     // or full combined (i.e. CDC - Child day care) version
-    if (opts.isFundingSource) {
+    if (!ret && opts.isFundingSource) {
       const normalizedReferences = refString
         .split('-')
         .map((r) => r.trim().replace(stripRegex, '').toLowerCase());
@@ -587,20 +600,6 @@ export const mapEnum = <T>(
           ret = ref;
         }
       });
-    }
-    // Base case for all other enums -- compare the normalized enum values
-    // to the normalized input value
-    else {
-      const normalizedReference = refString
-        .trim()
-        .replace(stripRegex, '')
-        .toLowerCase();
-      if (
-        normalizedReference.startsWith(normalizedInput) ||
-        normalizedInput.startsWith(normalizedReference)
-      ) {
-        ret = ref;
-      }
     }
   });
 
