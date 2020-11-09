@@ -12,7 +12,7 @@ export const isIdentifierMatch = (
   child: Child | EnrollmentReportRow,
   other: EnrollmentReportRow
 ) => {
-  console.log(child.birthdate, other.birthdate)
+  console.log('identifier match', child.birthdate, other.birthdate)
   return (
     child.firstName === other.firstName &&
     child.lastName === other.lastName &&

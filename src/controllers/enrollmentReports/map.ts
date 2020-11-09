@@ -435,19 +435,12 @@ const mapEnrollment = (
  * @param enrollment
  */
 export const mapFunding = async (
-  // TODO: FIX
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
   enrollment: Enrollment,
   save: boolean
 ) => {
-  // if (!(source.fundingSpace ||
-  //   source.time ||
-  //   source.firstReportingPeriod ||
-  //   source.lastReportingPeriod)) {
-  //   return;
-  // }
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
     source.fundingSpace,
@@ -483,12 +476,13 @@ export const mapFunding = async (
     lastReportingPeriod: ReportingPeriod;
   if (source.firstReportingPeriod) {
     firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: p => p.format('MM/YYYY') === source.firstReportingPeriod.format('MM/YYYY') },
+      // TODO: this comparison doesn't work-- need fuzzier matching
+      where: { type: fundingSource, period: source.firstReportingPeriod },
     });
   }
   if (source.lastReportingPeriod) {
     lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: p => p.format('MM/YYYY') === source.lastReportingPeriod.format('MM/YYYY') },
+      where: { type: fundingSource, period: source.lastReportingPeriod },
     });
   }
 
