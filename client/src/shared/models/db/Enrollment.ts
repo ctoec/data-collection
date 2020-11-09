@@ -16,5 +16,4 @@ export interface Enrollment extends ObjectWithValidationErrors {
   exit?: Moment;
   exitReason?: string;
   fundings?: Array<Funding>;
-  deletedDate: Date;
 }

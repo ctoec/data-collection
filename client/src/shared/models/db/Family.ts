@@ -11,5 +11,4 @@ export interface Family extends ObjectWithValidationErrors {
   incomeDeterminations?: Array<IncomeDetermination>;
   children?: Array<Child>;
   organization?: Organization;
-  deletedDate: Date;
 }
