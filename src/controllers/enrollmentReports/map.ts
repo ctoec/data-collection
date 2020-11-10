@@ -44,6 +44,7 @@ export const mapRows = async (
       if (!childToUpdate) {
         children.push(child);
       }
+      console.log(childToUpdate, child, children)
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error occured while parsing row: ', err);
