@@ -35,6 +35,13 @@ import {
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 
+export type RosterQueryParams = {
+  organization?: string;
+  site?: string;
+  month?: string;
+  withdrawn?: boolean;
+}
+
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
@@ -47,14 +54,11 @@ const Roster: React.FC = () => {
 
   // Parse query params, and update if missing (i.e. initial load) or invalid
   useUpdateRosterParams();
-  const query = parse(history.location.search) as {
-    organization?: string;
-    site?: string;
-    month?: string;
-  };
+  const query = parse(history.location.search) as RosterQueryParams;
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
+  const { withdrawn: showOnlyWithdrawnEnrollments } = query;
 
   const { children, error } = usePaginatedChildData(query.organization);
   // Get alerts for page, including alert for children with errors
@@ -73,8 +77,10 @@ const Roster: React.FC = () => {
   // site is requested
   const clientSideFilteredChildren = applyClientSideFilters(
     children || [],
+    // TODO: MAKE INTO OPTS
     query.site,
-    queryMonth
+    queryMonth,
+    showOnlyWithdrawnEnrollments
   );
 
   const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
@@ -114,9 +120,20 @@ const Roster: React.FC = () => {
     const month = getQueryMonthFormat(newMonth);
     history.push({
       search: stringify({
-        organization: query.organization,
-        site: query.site,
+        ...query,
+        withdrawn: undefined,
         month,
+      }),
+    });
+  };
+
+  // Function to update whether we're only showing withdrawn enrollments
+  const updateWithdrawnOnly = (showOnlyWithdrawn: boolean) => {
+    history.push({
+      search: stringify({
+        ...query,
+        month: undefined,
+        withdrawn: showOnlyWithdrawn || undefined, // Can't have both filters active
       }),
     });
   };
@@ -152,11 +169,18 @@ const Roster: React.FC = () => {
               filterTitleText={queryMonth.format('MMMM YYYY')}
               reset={() => updateActiveMonth(undefined)}
             />}
+            {showOnlyWithdrawnEnrollments && (
+              <RosterFilterIndicator
+                filterTitleText="Withdrawn enrollments"
+                reset={() => updateWithdrawnOnly(false)}
+              />
+            )}
           </div>
         </div>
         <RosterButtonsTable
           filterByMonth={queryMonth}
           setFilterByMonth={updateActiveMonth}
+          updateWithdrawnOnly={updateWithdrawnOnly}
         />
         <LoadingWrapper text="Loading your roster..." loading={loading}>
           {rosterContent}

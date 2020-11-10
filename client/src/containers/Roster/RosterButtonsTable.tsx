@@ -8,11 +8,13 @@ import { MonthFilterModal } from './MonthFilterModal';
 type RosterButtonsTable = {
   filterByMonth?: Moment;
   setFilterByMonth: (_: any) => void;
+  updateWithdrawnOnly: (_: any) => void;
 };
 
 export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
   filterByMonth,
   setFilterByMonth,
+  updateWithdrawnOnly
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen((o) => !o);
@@ -35,6 +37,13 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
           <th scope="row">Views</th>
           <td>
             <div className="display-flex">
+              {/* TODO: CHANGE ICON */}
+              <Button
+                text={<TextWithIcon Icon={Calendar} text="Withdrawn records" />}
+                appearance="unstyled"
+                onClick={() => updateWithdrawnOnly(true)}
+                className="margin-right-2"
+              />
               <Button
                 text={<TextWithIcon Icon={Calendar} text="Past enrollments" />}
                 appearance="unstyled"

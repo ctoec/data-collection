@@ -2,6 +2,7 @@ import { useHistory } from 'react-router-dom';
 import { useEffect, useContext } from 'react';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { parse, stringify } from 'querystring';
+import { RosterQueryParams } from '../Roster';
 
 export const useUpdateRosterParams = () => {
   const { user } = useContext(UserContext);
@@ -10,11 +11,7 @@ export const useUpdateRosterParams = () => {
   const isMultiOrgUser = user?.organizations || [];
 
   const history = useHistory();
-  const query = parse(history.location.search.slice(1)) as {
-    organization: string;
-    site: string;
-    month: string;
-  };
+  const query = parse(history.location.search.slice(1)) as RosterQueryParams
 
   useEffect(() => {
     // Wait until user exists
