@@ -227,9 +227,9 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
       <div
         class="margin-top-4"
       >
-        <h2>
+        <h3>
           Section one
-        </h2>
+        </h3>
         <p
           class="text-pre-line"
         />
@@ -340,9 +340,9 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
       <div
         class="margin-top-4"
       >
-        <h2>
+        <h3>
           Section two
-        </h2>
+        </h3>
         <p
           class="text-pre-line"
         />
