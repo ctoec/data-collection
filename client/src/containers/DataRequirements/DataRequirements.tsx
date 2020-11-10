@@ -2,7 +2,7 @@ import React from 'react';
 import { BackButton } from '../../components/BackButton';
 import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import DataDefTable from '../../components/dataDefinitionsTable';
+import DataDefinitionsTable from '../../components/DataDefinitionsTable';
 
 const DataRequirements: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -16,7 +16,7 @@ const DataRequirements: React.FC = () => {
         <br />
         See <Link to="/funding-space-types">funding space types</Link>.
       </p>
-      <DataDefTable />
+      <DataDefinitionsTable headerLevel="h2" />
     </div>
   );
 };

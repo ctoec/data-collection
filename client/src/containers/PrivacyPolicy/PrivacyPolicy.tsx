@@ -2,7 +2,7 @@ import React from 'react';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { BackButton } from '../../components/BackButton';
 import { Link } from 'react-router-dom';
-import DataDefTable from '../../components/dataDefinitionsTable';
+import DataDefinitionsTable from '../../components/DataDefinitionsTable';
 
 const PrivacyPolicy: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -222,7 +222,7 @@ const PrivacyPolicy: React.FC = () => {
         or at Rachel.Leventhal-Weiner@ct.gov.
       </p>
       <h2>Schedule A: Dictionary of Collected Data</h2>
-      <DataDefTable />
+      <DataDefinitionsTable headerLevel="h3" />
     </div>
   );
 };

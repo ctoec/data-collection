@@ -2,10 +2,17 @@ import React, { useState, useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { ColumnMetadata } from '../shared/models';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
-import { Table, Column } from '@ctoec/component-library';
+import { Table, Column, HeadingLevel } from '@ctoec/component-library';
 import { apiGet } from '../utils/api';
 
-const DataDefTable: React.FC = () => {
+type DataDefinitionsTableProps = {
+  headerLevel: HeadingLevel;
+}
+
+const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
+  headerLevel,
+}) => {
+  const Heading = headerLevel;
   const { accessToken } = useContext(AuthenticationContext);
   const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>([]);
 
@@ -76,7 +83,7 @@ const DataDefTable: React.FC = () => {
       {Object.entries(columnMetadataBySection).map(
         ([sectionName, sectionData]) => (
           <div key={sectionName} className="margin-top-4">
-            <h2>{sectionName}</h2>
+            <Heading>{sectionName}</Heading>
             <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
             <Table
               id="data-requirements-table"
@@ -104,4 +111,4 @@ const getSectionCopy = (section: string) => {
   if (section.toLowerCase().includes('enrollment'))
     return 'Enrollment: A period of time during which a child recieved ECE services.\nFunding: A period of time during which an enrollment was subsidized by a state-funded contract space.';
 };
-export default DataDefTable;
+export default DataDefinitionsTable;
