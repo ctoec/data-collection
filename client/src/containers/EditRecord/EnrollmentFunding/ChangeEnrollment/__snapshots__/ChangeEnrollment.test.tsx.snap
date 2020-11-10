@@ -1567,7 +1567,6 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
             </option>
           </select>
         </div>
-        )
         <button
           class="usa-button usa-button--outline"
           type="button"
