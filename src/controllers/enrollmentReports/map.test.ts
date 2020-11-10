@@ -21,7 +21,7 @@ import {
   mapFunding,
   mapFundingTime,
   MISSING_PROVIDER_ERROR,
-} from '.';
+} from './mapUtils';
 
 describe('controllers', () => {
   describe('enrollmentReports', () => {
