@@ -1,4 +1,4 @@
-import { completeFilterChild } from '../../utils/filterSoftRemoved';
+import { removedDeletedEntitiesFromChild } from '../../utils/filterSoftRemoved';
 import {
   getManager,
   FindManyOptions,
@@ -18,7 +18,7 @@ import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 export const getChildById = async (id: string, user: User): Promise<Child> => {
   const opts = await getFindOpts(user, { id });
   let child = await getManager().findOne(Child, opts);
-  child = completeFilterChild(child);
+  child = removedDeletedEntitiesFromChild(child);
 
   return validateObject(child);
 };
@@ -50,7 +50,7 @@ export const getChildren = async (
   opts.take = take;
 
   let children = await getManager().find(Child, opts);
-  children = children.map((c) => completeFilterChild(c));
+  children = children.map((c) => removedDeletedEntitiesFromChild(c));
   children.map(validateObject);
 
   if (missingInfo === 'true') {

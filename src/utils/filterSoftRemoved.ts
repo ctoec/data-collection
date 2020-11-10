@@ -18,7 +18,7 @@ export const removeDeletedElements = (rows: any[]) => {
  * all remaining enrollments.
  * @param child
  */
-export const completeFilterChild = (child: Child) => {
+export const removedDeletedEntitiesFromChild = (child: Child) => {
   if (!child) return undefined;
   child.family.incomeDeterminations = removeDeletedElements(
     child.family.incomeDeterminations || []
