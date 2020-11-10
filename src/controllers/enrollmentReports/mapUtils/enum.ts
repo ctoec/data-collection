@@ -33,8 +33,6 @@ export const mapEnum = <T>(
   } = {}
 ) => {
   if (!value) return;
-
-  const stripRegex = /[-\/\s]+/;
   const normalizedInput = normalizeString(value);
   let ret: T;
 
@@ -52,7 +50,7 @@ export const mapEnum = <T>(
     // the acronym (i.e. CDC), full name (i.e. Child day care)
     // or full combined (i.e. CDC - Child day care) version
     if (!ret && opts.isFundingSource) {
-      let normalizedReferences = normalizeString(refString);
+      let normalizedReferences = normalizeString(refString, true);
       if (!Array.isArray(normalizedReferences)) {
         // Make typescript happy
         normalizedReferences = [normalizedReferences];
@@ -64,6 +62,9 @@ export const mapEnum = <T>(
       });
     }
   });
+  if (!ret) {
+    console.log(value);
+  }
   return ret;
 };
 
@@ -74,15 +75,17 @@ function processedStringsMatch(str1, str2) {
   return false;
 }
 
+const stripRegex = /[-\/\s/]+/;
 function normalizeString(
   inputString: string,
   isFundingSource?: boolean
 ): string | string[] {
-  const stripRegex = /[-\/\s]+/;
+  // Non destructive
+  let _inputString = inputString.slice();
   if (isFundingSource) {
-    return inputString
+    return _inputString
       .split('-')
       .map((s) => s.trim().replace(stripRegex, '').toLowerCase());
   }
-  return inputString.toString().trim().replace(stripRegex, '').toLowerCase();
+  return _inputString.toString().trim().replace(stripRegex, '').toLowerCase();
 }
