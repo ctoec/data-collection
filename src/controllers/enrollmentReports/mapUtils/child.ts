@@ -26,7 +26,6 @@ export const createNewChild = async (
   source: EnrollmentReportRow,
   organization: Organization,
   site: Site,
-  processedChildren: Child[],
   save: boolean
 ) => {
   const family = await mapFamily(transaction, source, organization, save);
@@ -56,8 +55,6 @@ export const createNewChild = async (
   enrollment.fundings = [funding];
   child.enrollments = [enrollment];
 
-  // Make sure to log that we've seen this child in our visited set
-  processedChildren.push(child);
   return child;
 };
 
@@ -80,7 +77,6 @@ export const updateChild = async (
 
   // Apply any needed enrollment info updates before going to funding
   if (modifyingExistingEnrollment) {
-    console.log('modifying', { enrollmentUpdate }, { child });
     await transaction.update(Enrollment, enrollment.id, enrollmentUpdate);
   }
 
@@ -107,6 +103,7 @@ export const updateChild = async (
     if (child.enrollments) child.enrollments.push(enrollmentUpdate);
     else child.enrollments = [enrollmentUpdate];
   }
+  return child;
 };
 
 /**
@@ -233,7 +230,7 @@ export const isIdentifierMatch = (
     child.lastName === other.lastName &&
     child.birthdate &&
     child.birthdate?.format('MM/DD/YYYY') ===
-      other.birthdate?.format('MM/DD/YYYY') &&
+    other.birthdate?.format('MM/DD/YYYY') &&
     child.sasid === other.sasid;
   return match;
 };

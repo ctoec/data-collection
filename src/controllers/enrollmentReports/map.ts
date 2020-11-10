@@ -29,25 +29,26 @@ export const mapRows = async (
 
   // Need to track the unique children we've seen and parsed
   // so that we can update them if there are change rows
-  const processedChildren: Child[] = [];
   const children: Child[] = [];
-  await Promise.all(
-    rows.map(async (row) => {
-      try {
-        return await mapRow(
-          transaction,
-          row,
-          organizations,
-          sites,
-          processedChildren,
-          opts.save
-        );
-      } catch (err) {
-        if (err instanceof ApiError) throw err;
-        console.error('Error occured while parsing row: ', err);
+  for (const row of rows) {
+    try {
+      const childToUpdate = getChildToUpdate(row, children);
+      const child = await mapRow(
+        transaction,
+        row,
+        organizations,
+        sites,
+        opts.save,
+        childToUpdate
+      );
+      if (!childToUpdate) {
+        children.push(child);
       }
-    })
-  );
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error('Error occured while parsing row: ', err);
+    }
+  }
   return children;
 };
 
@@ -62,8 +63,8 @@ const mapRow = async (
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
-  processedChildren: Child[],
-  save: boolean
+  save: boolean,
+  childToUpdate?: Child,
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -77,7 +78,7 @@ const mapRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  let child = getChildToUpdate(source, processedChildren);
+  let child = childToUpdate;
   const childAlreadyExists = child !== undefined;
 
   // Case where this row creates a brand new child
@@ -87,7 +88,6 @@ const mapRow = async (
       source,
       organization,
       site,
-      processedChildren,
       save
     );
     return child;
@@ -95,8 +95,5 @@ const mapRow = async (
 
   // If we're here, we're modifying an existing child's
   // enrollment or funding information
-  await updateChild(transaction, source, organization, site, child);
-  // Don't return if we just modified an existing, since we'd
-  // get duplicates in the children array in mapRows
-  return null;
+  return await updateChild(transaction, source, organization, site, child);
 };
