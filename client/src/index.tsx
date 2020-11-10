@@ -37,8 +37,6 @@ const render = (Component: React.FC) =>
             <SWRConfig
               value={{
                 fetcher: apiGet,
-                // refreshInterval: 0,
-                dedupingInterval: 60 * 60 * 100, // assume query results are valid until manually retriggered; set to 100 mins
               }}
             >
               <Component />

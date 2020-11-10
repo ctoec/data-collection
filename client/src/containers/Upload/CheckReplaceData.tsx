@@ -39,7 +39,7 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
       id: 'all-sites',
       text: 'All sites',
       value: 'all',
-      defaultValue: siteIdsToReplace.length === 0,
+      checked: siteIdsToReplace.length === 0,
       onChange: (e) => {
         if (e.target.checked) {
           setSiteIdsToReplace([]);
@@ -52,7 +52,7 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
     ...(user?.sites || []).map(
       (site): CheckboxInGroup => ({
         value: `${site.id}`,
-        defaultValue: siteIdsToReplace.includes(site.id),
+        checked: siteIdsToReplace.includes(site.id),
         id: `site-${site.id}`,
         text: site.siteName,
         onChange: (e) => {
