@@ -1,6 +1,6 @@
 import { User, Child } from '../../entity';
 import { EntityManager, In } from 'typeorm';
-import { filterXFromY } from '../../utils/filterSoftRemoved';
+import { removeDeletedElements } from '../../utils/filterSoftRemoved';
 
 /**
  * Removes existing child records for the given user, to prepare for uploading a new
@@ -19,7 +19,9 @@ export const removeExistingEnrollmentDataForUser = async (
     relations: ['enrollments'],
     where: { organization: { id: In(user.organizationIds) } },
   });
-  allChildren = allChildren.map((c) => filterXFromY(c, 'enrollments') as Child);
+  allChildren.forEach((c) => {
+    c.enrollments = removeDeletedElements(c.enrollments || []);
+  });
   if (!allChildren || !allChildren.length) return;
 
   const childrenToDelete =

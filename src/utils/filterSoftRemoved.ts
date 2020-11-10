@@ -1,21 +1,14 @@
 import { Child, Enrollment, Family } from '../entity';
 
 /**
- * Given an entity and an object property on that entity, filter
- * out all instances of the property in the entity's array that
- * have a soft-deleted date set in the system.
+ * Given an array of 'rows' (assumed to be a property of some
+ * entity), filter out any objects in those rows that have been
+ * soft-deleted.
  * @param entity
  * @param property
  */
-export const filterXFromY = (entity: Object, property: string) => {
-  if (!entity || !property || !entity.hasOwnProperty(property))
-    return undefined;
-  if (!entity[property]) return entity;
-  const filteredProp = entity[property].filter(
-    (elt: any) => elt.deletedDate === null
-  );
-  entity[property] = filteredProp;
-  return entity;
+export const removeDeletedElements = (rows: any[]) => {
+  return rows.filter((row: any) => !row.deletedDate);
 };
 
 /**
@@ -27,10 +20,12 @@ export const filterXFromY = (entity: Object, property: string) => {
  */
 export const completeFilterChild = (child: Child) => {
   if (!child) return undefined;
-  child.family = filterXFromY(child.family, 'incomeDeterminations') as Family;
-  child = filterXFromY(child, 'enrollments') as Child;
-  child.enrollments = child.enrollments.map(
-    (e) => filterXFromY(e, 'fundings') as Enrollment
+  child.family.incomeDeterminations = removeDeletedElements(
+    child.family.incomeDeterminations || []
   );
+  child.enrollments = removeDeletedElements(child.enrollments || []);
+  child.enrollments.forEach((e: Enrollment) => {
+    e.fundings = removeDeletedElements(e.fundings || []);
+  });
   return child;
 };

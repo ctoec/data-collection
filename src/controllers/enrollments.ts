@@ -1,4 +1,4 @@
-import { filterXFromY } from '../utils/filterSoftRemoved';
+import { removeDeletedElements } from '../utils/filterSoftRemoved';
 import { getManager } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding } from '../entity';
@@ -11,7 +11,7 @@ export const changeFunding = async (
   let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
   });
-  enrollment = filterXFromY(enrollment, 'fundings') as Enrollment;
+  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
   if (!enrollment) throw new NotFoundError();
 
@@ -78,7 +78,7 @@ export const withdraw = async (id: number, withdrawData: Withdraw) => {
   let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
   });
-  enrollment = filterXFromY(enrollment, 'fundings') as Enrollment;
+  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
   if (!enrollment) throw new NotFoundError();
 
