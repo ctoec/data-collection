@@ -44,7 +44,6 @@ export const mapRows = async (
       if (!childToUpdate) {
         children.push(child);
       }
-      console.log(childToUpdate, child, children)
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error occured while parsing row: ', err);
@@ -79,22 +78,19 @@ const mapRow = async (
   }
 
   const site = lookUpSite(source, organization.id, userSites);
-  let child = childToUpdate;
-  const childAlreadyExists = child !== undefined;
 
   // Case where this row creates a brand new child
-  if (!childAlreadyExists) {
-    child = await createNewChild(
+  if (!childToUpdate) {
+    return await createNewChild(
       transaction,
       source,
       organization,
       site,
       save
     );
-    return child;
   }
 
   // If we're here, we're modifying an existing child's
   // enrollment or funding information
-  return await updateChild(transaction, source, organization, site, child);
+  return await updateChild(transaction, source, organization, site, childToUpdate);
 };

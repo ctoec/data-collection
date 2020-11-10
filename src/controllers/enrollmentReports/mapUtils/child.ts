@@ -76,6 +76,7 @@ export const updateChild = async (
   );
 
   // Apply any needed enrollment info updates before going to funding
+  // TODO: this pattern is unnecessary because save updates an entity if it existed before-- we should refactor to just save
   if (modifyingExistingEnrollment) {
     await transaction.update(Enrollment, enrollment.id, enrollmentUpdate);
   }

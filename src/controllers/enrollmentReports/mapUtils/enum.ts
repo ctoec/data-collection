@@ -35,11 +35,7 @@ export const mapEnum = <T>(
   if (!value) return;
 
   const stripRegex = /[-\/\s]+/;
-  const normalizedInput = value
-    .toString()
-    .trim()
-    .replace(stripRegex, '')
-    .toLowerCase();
+  const normalizedInput = normalizeString(value);
   let ret: T;
 
   // Iterate through all enum values and check if any match
@@ -48,13 +44,9 @@ export const mapEnum = <T>(
 
     // Base case for all other enums -- compare the normalized enum values
     // to the normalized input value
-    const normalizedReference = refString
-      .trim()
-      .replace(stripRegex, '')
-      .toLowerCase();
+    const normalizedReference = normalizeString(refString);
     if (
-      normalizedReference.startsWith(normalizedInput) ||
-      normalizedInput.startsWith(normalizedReference)
+      processedStringsMatch(normalizedInput, normalizedReference)
     ) {
       ret = ref;
     }
@@ -62,16 +54,47 @@ export const mapEnum = <T>(
     // the acronym (i.e. CDC), full name (i.e. Child day care)
     // or full combined (i.e. CDC - Child day care) version
     if (!ret && opts.isFundingSource) {
-      const normalizedReferences = refString
-        .split('-')
-        .map((r) => r.trim().replace(stripRegex, '').toLowerCase());
-      normalizedReferences.forEach((normalizedReference) => {
-        if (normalizedInput.startsWith(normalizedReference)) {
+      let normalizedReferences = normalizeString(refString);
+      if (!Array.isArray(normalizedReferences)) {
+        // Make typescript happy
+        normalizedReferences = [normalizedReferences]
+      }
+      normalizedReferences.forEach((_normalizedReference) => {
+        if (processedStringsMatch(normalizedInput, _normalizedReference)
+        ) {
           ret = ref;
         }
       });
     }
   });
-
   return ret;
 };
+
+
+function processedStringsMatch(str1, str2) {
+  if (
+    str1.startsWith(str2) ||
+    str2.startsWith(str1)
+  ) {
+    return true;
+  }
+  return false;
+}
+
+function normalizeString(inputString: string, isFundingSource?: boolean): string | string[] {
+  const stripRegex = /[-\/\s]+/;
+  if (isFundingSource) {
+    return inputString
+      .split('-')
+      .map(s =>
+        s.trim()
+          .replace(stripRegex, '')
+          .toLowerCase()
+      )
+  }
+  return inputString.toString()
+    .trim()
+    .replace(stripRegex, '')
+    .toLowerCase();
+
+}
