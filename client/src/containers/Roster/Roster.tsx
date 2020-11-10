@@ -159,45 +159,27 @@ const Roster: React.FC = () => {
           setFilterByMonth={updateActiveMonth}
         />
         <LoadingWrapper text="Loading your roster..." loading={loading}>
-<<<<<<< HEAD
           {rosterContent}
-=======
-          {!(children || []).length ? (
-          <NoRecordsAlert />
-        ) : tabNavProps ? (
-          <TabNav {...tabNavProps}>
-            {accordionProps.items.length ? (
-              <Accordion {...accordionProps} />
-            ) : (
-                <NoRecordsAlert />
-              )}
-          </TabNav>
-        ) : accordionProps.items.length ? (
-          <Accordion {...accordionProps} />
-        ) : (
-                <NoRecordsAlert />
-              )}
->>>>>>> fb93ca07 (Make roster filter indicator)
         </LoadingWrapper>
-    </div>
-    <FixedBottomBar>
-      <Button
-        text="Back to getting started"
-        href="/getting-started"
-        appearance="outline"
-      />
-      {!isSiteLevelUser && (
+      </div>
+      <FixedBottomBar>
         <Button
-          text={
-            isSiteLevelUser
-              ? 'Organization permissions required to submit'
-              : 'Send to OEC'
-          }
-          onClick={submitToOEC}
-          disabled={!query.organization}
+          text="Back to getting started"
+          href="/getting-started"
+          appearance="outline"
         />
-      )}
-    </FixedBottomBar>
+        {!isSiteLevelUser && (
+          <Button
+            text={
+              isSiteLevelUser
+                ? 'Organization permissions required to submit'
+                : 'Send to OEC'
+            }
+            onClick={submitToOEC}
+            disabled={!query.organization}
+          />
+        )}
+      </FixedBottomBar>
     </>
   );
 };
