@@ -1,3 +1,4 @@
+import { normalizeString, processedStringsMatch } from '.';
 import {
   Gender,
   AgeGroup,
@@ -67,25 +68,3 @@ export const mapEnum = <T>(
   }
   return ret;
 };
-
-function processedStringsMatch(str1, str2) {
-  if (str1.startsWith(str2) || str2.startsWith(str1)) {
-    return true;
-  }
-  return false;
-}
-
-const stripRegex = /[-\/\s/]+/;
-function normalizeString(
-  inputString: string,
-  isFundingSource?: boolean
-): string | string[] {
-  // Non destructive
-  let _inputString = inputString.slice();
-  if (isFundingSource) {
-    return _inputString
-      .split('-')
-      .map((s) => s.trim().replace(stripRegex, '').toLowerCase());
-  }
-  return _inputString.toString().trim().replace(stripRegex, '').toLowerCase();
-}

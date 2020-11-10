@@ -1,5 +1,6 @@
 import { FundingSource } from '../../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
+import { normalizeString } from './shared';
 
 /**
  * Leverage funding source -> time -> format mappings from FUNDING_SOURCE_TIMES
@@ -17,9 +18,8 @@ export const mapFundingTime = (
   const sourceTimes = FUNDING_SOURCE_TIMES.find((fst) =>
     fst.fundingSources.includes(fundingSource)
   );
+  const normalizedValue = normalizeString(value);
   return sourceTimes.fundingTimes.find((time) =>
-    time.formats.some(
-      (format) => format.toLowerCase() === value.toString().trim().toLowerCase()
-    )
+    time.formats.some((format) => normalizeString(format) === normalizedValue)
   )?.value;
 };

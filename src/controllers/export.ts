@@ -121,24 +121,12 @@ export async function streamUploadedChildren(
  * in cells of the CSV to export.
  * @param value
  */
-function formatStringPush(value: any, propertyName: string) {
+function formatProperty(value: any, propertyName: string) {
   // Check for absent values before invoking type check
   if (value === null || value === undefined) return '';
-  // Name matching means some values are nested one more level
+  // Check for specific property names
   if (propertyName === 'fundingSpace') {
     return value.source;
-  }
-  if (typeof value == 'boolean') {
-    return value ? 'Yes' : 'No';
-  }
-  if (isMoment(value)) {
-    return value.format('MM/DD/YYYY');
-  }
-  if (typeof value === 'string') {
-    return value || '';
-  }
-  if (typeof value === 'number') {
-    return value.toString();
   }
   if (propertyName === 'site') {
     return value.siteName;
@@ -148,6 +136,19 @@ function formatStringPush(value: any, propertyName: string) {
     propertyName === 'lastReportingPeriod'
   ) {
     return reportingPeriodToString(value);
+  }
+  // Name matching means some values are nested one more level
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  if (typeof value === 'string') {
+    return value || '';
+  }
+  if (typeof value === 'number') {
+    return value.toString();
+  }
+  if (isMoment(value)) {
+    return value.format('MM/DD/YYYY');
   }
 }
 
@@ -203,7 +204,7 @@ function flattenChild(
     } else {
       const valueFound = objectsToCheck.some((o) => {
         if (o && o.hasOwnProperty(propertyName)) {
-          childString.push(formatStringPush(o[propertyName], propertyName));
+          childString.push(formatProperty(o[propertyName], propertyName));
           return true;
         }
         return false;
