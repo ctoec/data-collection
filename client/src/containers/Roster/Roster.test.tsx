@@ -3,9 +3,7 @@ import moment from 'moment';
 import {
   snapshotTestHelper,
   accessibilityTestHelper,
-  renderHelper,
 } from '../../testHelpers';
-import { cache } from 'swr';
 import Roster from './Roster';
 import UserContext from '../../contexts/UserContext/UserContext';
 import {

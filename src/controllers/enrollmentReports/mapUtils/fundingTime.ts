@@ -19,7 +19,10 @@ export const mapFundingTime = (
     fst.fundingSources.includes(fundingSource)
   );
   const normalizedValue = normalizeString(value);
-  return sourceTimes.fundingTimes.find((time) =>
-    time.formats.some((format) => normalizeString(format) === normalizedValue)
-  )?.value;
+  const matchingFundingTime = sourceTimes.fundingTimes.find((time) =>
+    time.formats.some((format) => {
+      return normalizeString(format) === normalizedValue;
+    })
+  );
+  return matchingFundingTime?.value;
 };
