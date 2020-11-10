@@ -64,7 +64,7 @@ const mapRow = async (
   userOrganizations: Organization[],
   userSites: Site[],
   save: boolean,
-  childToUpdate?: Child,
+  childToUpdate?: Child
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -81,16 +81,16 @@ const mapRow = async (
 
   // Case where this row creates a brand new child
   if (!childToUpdate) {
-    return await createNewChild(
-      transaction,
-      source,
-      organization,
-      site,
-      save
-    );
+    return await createNewChild(transaction, source, organization, site, save);
   }
 
   // If we're here, we're modifying an existing child's
   // enrollment or funding information
-  return await updateChild(transaction, source, organization, site, childToUpdate);
+  return await updateChild(
+    transaction,
+    source,
+    organization,
+    site,
+    childToUpdate
+  );
 };

@@ -112,7 +112,7 @@ export const getExistingFundingForEnrollment = (
   return enrollment.fundings.find((f) => {
     return (
       row.firstReportingPeriod.format('MM/DD/YYYY') ===
-      f.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
+        f.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
       row.fundingSpace === f.fundingSpace.source &&
       row.time === f.fundingSpace.time
     );

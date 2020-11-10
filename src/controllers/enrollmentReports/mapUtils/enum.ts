@@ -45,9 +45,7 @@ export const mapEnum = <T>(
     // Base case for all other enums -- compare the normalized enum values
     // to the normalized input value
     const normalizedReference = normalizeString(refString);
-    if (
-      processedStringsMatch(normalizedInput, normalizedReference)
-    ) {
+    if (processedStringsMatch(normalizedInput, normalizedReference)) {
       ret = ref;
     }
     // Special case for mapping FundingSource, to check for
@@ -57,11 +55,10 @@ export const mapEnum = <T>(
       let normalizedReferences = normalizeString(refString);
       if (!Array.isArray(normalizedReferences)) {
         // Make typescript happy
-        normalizedReferences = [normalizedReferences]
+        normalizedReferences = [normalizedReferences];
       }
       normalizedReferences.forEach((_normalizedReference) => {
-        if (processedStringsMatch(normalizedInput, _normalizedReference)
-        ) {
+        if (processedStringsMatch(normalizedInput, _normalizedReference)) {
           ret = ref;
         }
       });
@@ -70,31 +67,22 @@ export const mapEnum = <T>(
   return ret;
 };
 
-
 function processedStringsMatch(str1, str2) {
-  if (
-    str1.startsWith(str2) ||
-    str2.startsWith(str1)
-  ) {
+  if (str1.startsWith(str2) || str2.startsWith(str1)) {
     return true;
   }
   return false;
 }
 
-function normalizeString(inputString: string, isFundingSource?: boolean): string | string[] {
+function normalizeString(
+  inputString: string,
+  isFundingSource?: boolean
+): string | string[] {
   const stripRegex = /[-\/\s]+/;
   if (isFundingSource) {
     return inputString
       .split('-')
-      .map(s =>
-        s.trim()
-          .replace(stripRegex, '')
-          .toLowerCase()
-      )
+      .map((s) => s.trim().replace(stripRegex, '').toLowerCase());
   }
-  return inputString.toString()
-    .trim()
-    .replace(stripRegex, '')
-    .toLowerCase();
-
+  return inputString.toString().trim().replace(stripRegex, '').toLowerCase();
 }

@@ -13,7 +13,15 @@ import {
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import moment from 'moment';
 import { EntityManager } from 'typeorm';
-import { getRaceIndicated, lookUpOrganization, lookUpSite, mapEnum, mapFunding, mapFundingTime, MISSING_PROVIDER_ERROR } from '.';
+import {
+  getRaceIndicated,
+  lookUpOrganization,
+  lookUpSite,
+  mapEnum,
+  mapFunding,
+  mapFundingTime,
+  MISSING_PROVIDER_ERROR,
+} from '.';
 
 describe('controllers', () => {
   describe('enrollmentReports', () => {
