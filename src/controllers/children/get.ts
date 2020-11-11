@@ -57,14 +57,10 @@ export const getChildren = async (
 
   if (withdrawnOnly) {
     // Do not return any children with active enrollments
-    children = children.filter(
-      (c) => c.enrollments?.every((e) => !!e.exit)
-    )
+    children = children.filter((c) => c.enrollments?.every((e) => !!e.exit));
   } else {
     // Default is to return all children with any active enrollments
-    children = children.filter(
-      (c) => c.enrollments?.some((e) => !e.exit)
-    )
+    children = children.filter((c) => c.enrollments?.some((e) => !e.exit));
   }
 
   if (missingInfo === 'true') {

@@ -39,7 +39,7 @@ childrenRouter.get(
       missingInfo,
       skip,
       take,
-      withdrawnOnly
+      withdrawnOnly,
     });
 
     res.send(children);
