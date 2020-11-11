@@ -4,7 +4,7 @@ import idx from 'idx';
 import { InlineIcon, Table } from '@ctoec/component-library';
 import { AgeGroup, Child } from '../../shared/models';
 import { RosterSectionHeader } from './RosterSectionHeader';
-import { tableColumns } from './tableColumns';
+import { tableColumns } from './TableColumns/tableColumns';
 import { Moment } from 'moment';
 import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
 import {
@@ -160,7 +160,7 @@ export function getAccordionItems(
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
           data={ageGroupChildren}
-          columns={tableColumns(opts.showOrgInTables)}
+          columns={tableColumns({ includeOrg: opts.showOrgInTables })}
           defaultSortColumn={0}
           defaultSortOrder="ascending"
         />

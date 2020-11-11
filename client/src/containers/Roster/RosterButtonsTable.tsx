@@ -1,4 +1,4 @@
-import { Button, Calendar, TextWithIcon } from '@ctoec/component-library';
+import { Button, Calendar, History, TextWithIcon } from '@ctoec/component-library';
 import { Moment } from 'moment';
 import React, { useState } from 'react';
 import { AddRecordButton } from '../../components/AddRecordButton';
@@ -37,9 +37,8 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
           <th scope="row">Views</th>
           <td>
             <div className="display-flex">
-              {/* TODO: CHANGE ICON */}
               <Button
-                text={<TextWithIcon Icon={Calendar} text="Withdrawn records" />}
+                text={<TextWithIcon Icon={History} text="Withdrawn records" />}
                 appearance="unstyled"
                 onClick={() => updateWithdrawnOnly(true)}
                 className="margin-right-2"

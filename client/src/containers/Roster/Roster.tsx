@@ -24,7 +24,6 @@ import {
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
-import { Child } from '../../shared/models';
 import { NoRecordsAlert } from './NoRecordsAlert';
 import {
   useUpdateRosterParams,
@@ -32,7 +31,6 @@ import {
   useChildrenWithErrorsAlert,
   usePaginatedChildData,
 } from './hooks';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 
 export type RosterQueryParams = {
@@ -168,11 +166,13 @@ const Roster: React.FC = () => {
             {queryMonth && <RosterFilterIndicator
               filterTitleText={queryMonth.format('MMMM YYYY')}
               reset={() => updateActiveMonth(undefined)}
+              icon="calendar"
             />}
             {showOnlyWithdrawnEnrollments && (
               <RosterFilterIndicator
                 filterTitleText="Withdrawn enrollments"
                 reset={() => updateWithdrawnOnly(false)}
+                icon="history"
               />
             )}
           </div>
