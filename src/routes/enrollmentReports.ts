@@ -49,7 +49,11 @@ enrollmentReportsRouter.post(
         );
         const childrenWithErrors = await Promise.all(
           schemaChildren.map(async (child) => {
-            return { ...child, validationErrors: await validate(child) };
+            return {
+              ...child,
+              validationErrors: await validate(child),
+              cascadeDeleteEnrollments: null,
+            };
           })
         );
         const errorDict = await controller.checkErrorsInChildren(

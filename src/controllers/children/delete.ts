@@ -10,7 +10,7 @@ import { NotFoundError } from '../../middleware/error/errors';
  */
 export const deleteChild = async (id: string, user: User) => {
   const readOrgIds = await getReadAccessibleOrgIds(user);
-  const child = await getManager().findOne(Child, id, {
+  let child = await getManager().findOne(Child, id, {
     where: { organization: { id: In(readOrgIds) } },
   });
 
@@ -21,5 +21,5 @@ export const deleteChild = async (id: string, user: User) => {
     throw new NotFoundError();
   }
 
-  await getManager().delete(Child, { id });
+  await getManager().softRemove(child);
 };

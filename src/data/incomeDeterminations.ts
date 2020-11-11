@@ -11,5 +11,6 @@ export const getFakeIncomeDet = (id, family): IncomeDetermination => {
     familyId: family.id,
     family,
     updateMetaData: { updatedAt: new Date() },
+    deletedDate: null,
   };
 };

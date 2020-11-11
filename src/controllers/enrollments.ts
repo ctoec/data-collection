@@ -1,3 +1,4 @@
+import { removeDeletedElements } from '../utils/filterSoftRemoved';
 import { getManager } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding } from '../entity';
@@ -7,9 +8,10 @@ export const changeFunding = async (
   id: number,
   changeFundingData: ChangeFunding
 ) => {
-  const enrollment = await getManager().findOne(Enrollment, id, {
+  let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
   });
+  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
   if (!enrollment) throw new NotFoundError();
 
@@ -73,9 +75,10 @@ export const changeFunding = async (
 };
 
 export const withdraw = async (id: number, withdrawData: Withdraw) => {
-  const enrollment = await getManager().findOne(Enrollment, id, {
+  let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
   });
+  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
   if (!enrollment) throw new NotFoundError();
 
