@@ -137,7 +137,6 @@ function formatProperty(value: any, propertyName: string) {
   ) {
     return reportingPeriodToString(value);
   }
-  // Name matching means some values are nested one more level
   if (typeof value === 'boolean') {
     return value ? 'Yes' : 'No';
   }
