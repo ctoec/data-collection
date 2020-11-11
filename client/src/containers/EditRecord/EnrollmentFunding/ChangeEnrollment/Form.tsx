@@ -109,7 +109,6 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
             optional={true}
             label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
           />
-          )
         </>
       )}
 

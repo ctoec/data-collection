@@ -13,6 +13,7 @@ import FundingSourceTimes from './containers/FundingSourceTimes/FundingSourceTim
 import Roster from './containers/Roster/Roster';
 import BatchEdit from './containers/BatchEdit/BatchEdit';
 import DevUtility from './containers/DevUtility/DevUtility';
+import PrivacyPolicy from './containers/PrivacyPolicy/PrivacyPolicy';
 
 export type RouteConfig = {
   path: string;
@@ -54,6 +55,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/data-requirements',
     component: DataRequirements,
+    unauthorized: true,
+  },
+  {
+    path: '/privacy',
+    component: PrivacyPolicy,
     unauthorized: true,
   },
   {

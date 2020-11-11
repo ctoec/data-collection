@@ -16,6 +16,7 @@ import {
   FundingSpace,
   Child,
 } from '../../entity';
+import { UpdateMetaData } from '../../entity/embeddedColumns/UpdateMetaData';
 
 /**
  * Attempts to create a new enrollment, and optionally funding,
@@ -146,26 +147,24 @@ async function createNewEnrollment(
     }
   }
 
-  const enrollment = tManager.create(Enrollment, {
+  let enrollment = tManager.create(Enrollment, {
     ...newEnrollment,
     child,
   });
-  await tManager.save(Enrollment, {
+  enrollment = await tManager.save(Enrollment, {
     ...enrollment,
-    updateMetaData: { author: user },
+    updateMetaData: { author: user } as UpdateMetaData,
   });
 
   // Create new funding, if exists
   if (newEnrollment.fundings && newEnrollment.fundings.length) {
     const matchingFundingSpace: FundingSpace = await tManager.findOne(
       FundingSpace,
-      newEnrollment.fundings[0].fundingSpace.id
+      newEnrollment.fundings[0].fundingSpace.id,
+      { where: { organizationId: child.organizationId } }
     );
 
-    if (
-      !matchingFundingSpace ||
-      matchingFundingSpace.organizationId !== child.organizationId
-    ) {
+    if (!matchingFundingSpace) {
       console.error(
         'User either provided an unknown funding space or a funding space this childs org does not have permission for'
       );
