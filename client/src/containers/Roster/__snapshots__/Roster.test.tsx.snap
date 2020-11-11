@@ -24,7 +24,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
       class="grid-row flex-align-center"
     >
       <div
-        class="tablet:grid-col-10"
+        class="tablet:grid-col-9"
       >
         <h1
           class="margin-bottom-0"
@@ -38,7 +38,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
         </p>
       </div>
       <div
-        class="tablet:grid-col-2"
+        class="tablet:grid-col-3"
       />
     </div>
     <table
@@ -97,6 +97,16 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             <div
               class="display-flex"
             >
+              <button
+                class="usa-button usa-button--unstyled margin-right-2"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Withdrawn records
+                </span>
+              </button>
               <button
                 class="usa-button usa-button--unstyled"
                 type="button"
@@ -274,10 +284,10 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Birth Date in ascending order"
+                          aria-label="Sort table by Birthdate in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Birth Date
+                          Birthdate
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -308,27 +318,10 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Contract space in ascending order"
+                          aria-label="Sort table by Space type in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Contract space
-                          <div
-                            class="oec-table__sort-controls"
-                          />
-                        </button>
-                      </th>
-                      <th
-                        aria-sort="ascending"
-                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                        role="columnheader"
-                        scope="col"
-                        style="width: 20%;"
-                      >
-                        <button
-                          aria-label="Sort table by Organization in ascending order"
-                          class="oec-table__column-title usa-button--unstyled width-full"
-                        >
-                          Organization
+                          Space type
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -354,6 +347,23 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <th
                         aria-sort="ascending"
                         class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Organization in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Organization
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                         role="columnheader"
                         scope="col"
                         style="width: 10%;"
@@ -403,12 +413,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       </td>
                       <td
                         class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                      />
-                      <td
-                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                       >
                         Site
                       </td>
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
                       <td
                         class="font-body-2xs"
                       />
@@ -445,12 +455,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       </td>
                       <td
                         class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                      />
-                      <td
-                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                       >
                         Site
                       </td>
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
                       <td
                         class="font-body-2xs"
                       />
@@ -551,10 +561,10 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Birth Date in ascending order"
+                          aria-label="Sort table by Birthdate in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Birth Date
+                          Birthdate
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -585,27 +595,10 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Contract space in ascending order"
+                          aria-label="Sort table by Space type in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Contract space
-                          <div
-                            class="oec-table__sort-controls"
-                          />
-                        </button>
-                      </th>
-                      <th
-                        aria-sort="ascending"
-                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
-                        role="columnheader"
-                        scope="col"
-                        style="width: 20%;"
-                      >
-                        <button
-                          aria-label="Sort table by Organization in ascending order"
-                          class="oec-table__column-title usa-button--unstyled width-full"
-                        >
-                          Organization
+                          Space type
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -631,6 +624,23 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <th
                         aria-sort="ascending"
                         class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Organization in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Organization
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                         role="columnheader"
                         scope="col"
                         style="width: 10%;"
@@ -680,12 +690,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       </td>
                       <td
                         class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
-                      />
-                      <td
-                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
                       >
                         Site
                       </td>
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
                       <td
                         class="font-body-2xs"
                       />
@@ -777,7 +787,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
       class="grid-row flex-align-center"
     >
       <div
-        class="tablet:grid-col-10"
+        class="tablet:grid-col-9"
       >
         <h1
           class="margin-bottom-0"
@@ -791,7 +801,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
         </p>
       </div>
       <div
-        class="tablet:grid-col-2"
+        class="tablet:grid-col-3"
       />
     </div>
     <table
@@ -841,6 +851,16 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             <div
               class="display-flex"
             >
+              <button
+                class="usa-button usa-button--unstyled margin-right-2"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Withdrawn records
+                </span>
+              </button>
               <button
                 class="usa-button usa-button--unstyled"
                 type="button"
@@ -1028,10 +1048,10 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Birth Date in ascending order"
+                          aria-label="Sort table by Birthdate in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Birth Date
+                          Birthdate
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -1062,10 +1082,10 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Contract space in ascending order"
+                          aria-label="Sort table by Space type in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Contract space
+                          Space type
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -1090,7 +1110,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       </th>
                       <th
                         aria-sort="ascending"
-                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                         role="columnheader"
                         scope="col"
                         style="width: 10%;"
@@ -1282,10 +1302,10 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Birth Date in ascending order"
+                          aria-label="Sort table by Birthdate in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Birth Date
+                          Birthdate
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -1316,10 +1336,10 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         style="width: 10%;"
                       >
                         <button
-                          aria-label="Sort table by Contract space in ascending order"
+                          aria-label="Sort table by Space type in ascending order"
                           class="oec-table__column-title usa-button--unstyled width-full"
                         >
-                          Contract space
+                          Space type
                           <div
                             class="oec-table__sort-controls"
                           />
@@ -1344,7 +1364,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       </th>
                       <th
                         aria-sort="ascending"
-                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                         role="columnheader"
                         scope="col"
                         style="width: 10%;"
@@ -1488,7 +1508,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
       class="grid-row flex-align-center"
     >
       <div
-        class="tablet:grid-col-10"
+        class="tablet:grid-col-9"
       >
         <h1
           class="margin-bottom-0"
@@ -1507,7 +1527,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         </p>
       </div>
       <div
-        class="tablet:grid-col-2"
+        class="tablet:grid-col-3"
       />
     </div>
     <table
@@ -1557,6 +1577,16 @@ exports[`Roster matches snapshot for site level user 1`] = `
             <div
               class="display-flex"
             >
+              <button
+                class="usa-button usa-button--unstyled margin-right-2"
+                type="button"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Withdrawn records
+                </span>
+              </button>
               <button
                 class="usa-button usa-button--unstyled"
                 type="button"
@@ -1681,10 +1711,10 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     style="width: 10%;"
                   >
                     <button
-                      aria-label="Sort table by Birth Date in ascending order"
+                      aria-label="Sort table by Birthdate in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Birth Date
+                      Birthdate
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -1715,10 +1745,10 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     style="width: 10%;"
                   >
                     <button
-                      aria-label="Sort table by Contract space in ascending order"
+                      aria-label="Sort table by Space type in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Contract space
+                      Space type
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -1743,7 +1773,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   </th>
                   <th
                     aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                     role="columnheader"
                     scope="col"
                     style="width: 10%;"
@@ -1935,10 +1965,10 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     style="width: 10%;"
                   >
                     <button
-                      aria-label="Sort table by Birth Date in ascending order"
+                      aria-label="Sort table by Birthdate in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Birth Date
+                      Birthdate
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -1969,10 +1999,10 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     style="width: 10%;"
                   >
                     <button
-                      aria-label="Sort table by Contract space in ascending order"
+                      aria-label="Sort table by Space type in ascending order"
                       class="oec-table__column-title usa-button--unstyled width-full"
                     >
-                      Contract space
+                      Space type
                       <div
                         class="oec-table__sort-controls"
                       />
@@ -1997,7 +2027,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   </th>
                   <th
                     aria-sort="ascending"
-                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
                     role="columnheader"
                     scope="col"
                     style="width: 10%;"
