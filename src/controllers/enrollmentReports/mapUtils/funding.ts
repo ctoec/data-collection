@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, Like } from 'typeorm';
 import {
   Enrollment,
   Funding,
@@ -62,15 +62,29 @@ export const mapFunding = async (
   // TODO: Cache ReportingPeriods, as they'll be reused a lot
   let firstReportingPeriod: ReportingPeriod,
     lastReportingPeriod: ReportingPeriod;
+
+  // Use some string information from the relevant moments to perform
+  // "fuzzy" matching based on SQL's `LIKE` expression (match a pattern)
+  // In this case, pure moments are stored as `Moment<YYYY-MM-DD>`
   if (source.firstReportingPeriod) {
+    // .month() counts January as 0, so increment by 1
+    let monthString = (source.firstReportingPeriod.month() + 1).toString();
+    monthString = monthString.length === 1 ? '0' + monthString : monthString;
     firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      // TODO: this comparison doesn't work-- need fuzzier matching
-      where: { type: fundingSource, period: source.firstReportingPeriod },
+      where: {
+        type: fundingSource,
+        period: Like(`%${source.firstReportingPeriod.year()}_${monthString}%`),
+      },
     });
   }
   if (source.lastReportingPeriod) {
+    let monthString = (source.lastReportingPeriod.month() + 1).toString();
+    monthString = monthString.length === 1 ? '0' + monthString : monthString;
     lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.lastReportingPeriod },
+      where: {
+        type: fundingSource,
+        period: Like(`%${source.lastReportingPeriod.year()}_${monthString}%`),
+      },
     });
   }
 

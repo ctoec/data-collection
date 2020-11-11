@@ -9,6 +9,12 @@ export const DATE_FORMATS = [
   'MM/DD/YY',
   'MM-DD-YY',
   'YYYY-MM-DD',
+  'MM-YYYY',
+  'MM/YYYY',
+  'MMM-YYYY',
+  'MMM-YY',
+  'MM/YYYY',
+  'MMM/YY',
 ];
 export const DATE_FORMAT = DATE_FORMATS.join(', ');
 export const REPORTING_PERIOD_FORMATS = [
