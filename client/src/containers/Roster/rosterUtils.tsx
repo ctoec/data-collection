@@ -34,7 +34,6 @@ export function applyClientSideFilters(
   allChildren: Child[],
   site?: string,
   month?: Moment,
-  showOnlyWithdrawnEnrollments?: boolean
 ): Child[] {
   let filteredChildren: Child[] = allChildren;
   if (month) {
@@ -45,11 +44,6 @@ export function applyClientSideFilters(
   if (site) {
     filteredChildren = filteredChildren.filter(
       (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
-    );
-  }
-  if (showOnlyWithdrawnEnrollments) {
-    filteredChildren = filteredChildren.filter(
-      (c) => c.enrollments?.findIndex((e) => !e.exit) === -1
     );
   }
   return filteredChildren;

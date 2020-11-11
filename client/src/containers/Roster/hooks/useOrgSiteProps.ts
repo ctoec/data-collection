@@ -28,7 +28,6 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
         search: stringify({
           ...query,
           organization: clickedId,
-          site: undefined,
         }),
       });
     } else {
