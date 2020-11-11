@@ -3,6 +3,7 @@ import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Child, Family, User } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getAllColumnMetadata, SECTIONS } from '../../template';
+import { BadRequestError } from '../../middleware/error/errors';
 
 /**
  * Creates a child from a POST request body.
@@ -38,7 +39,11 @@ export const createChild = async (_child: Child, user: User) => {
   );
   if (saveBlockingErrors) {
     // Return without saving
-    return validatedChild;
+    console.error('Missing child identifier data.');
+    throw new BadRequestError(
+      'Cannot create child without identifier information.',
+      validatedChild
+    );
   }
 
   // TODO: create family in family address section instead

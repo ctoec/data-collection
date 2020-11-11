@@ -72,14 +72,14 @@ export const ChildIdentifiersForm = ({
         accessToken,
       })
         .then((res) => {
-          if (res.id) {
-            history.replace({ pathname: `/create-record/${res.id}` });
-            afterSaveSuccess();
-          } else {
-            updateLocalChild(res);
-          }
+          history.replace({ pathname: `/create-record/${res.id}` });
+          afterSaveSuccess();
         })
         .catch((err) => {
+          console.log(err);
+          if (err.data) {
+            updateLocalChild(err.data);
+          }
           console.error(err);
         })
         .finally(onFinally);
