@@ -91,7 +91,10 @@ const Upload: React.FC = () => {
         rawBody: true,
       })
         .then(() => {
-          cache.clear();
+					// Clear all children records from data cache
+					cache.keys()
+						.filter((key) => key.includes('children'))
+						.forEach((childrenCacheKey) => cache.delete(childrenCacheKey));
           history.push(`/roster`);
         })
         .catch(
