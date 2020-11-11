@@ -9,6 +9,7 @@ import { propertyDateSorter } from '../utils/propertyDateSorter';
 import { streamTabularData } from '../utils/streamTabularData';
 import { SECTIONS } from '../template';
 import { reportingPeriodToString } from './reportingPeriods';
+import { removedDeletedEntitiesFromChild } from '../utils/filterSoftRemoved';
 
 // Make sure to load all nested levels of the Child objects
 // we fetch
@@ -67,11 +68,12 @@ export async function getChildrenBySites(sites: Site[]) {
       ];
       const childrenHavingEnrollments = await Promise.all(
         childIds.map(async (id) => {
-          const child = await tManager.findOne(
+          let child = await tManager.findOne(
             Child,
             { id: id },
             { relations: CHILD_RELATIONS }
           );
+          child = removedDeletedEntitiesFromChild(child);
           return childSorter(child);
         })
       );

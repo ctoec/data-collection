@@ -16,7 +16,7 @@ enrollmentsRouter.put(
   passAsyncError(async (req, res) => {
     try {
       const id = req.params['enrollmentId'];
-      const enrollment = await getManager().findOne(Enrollment, id);
+      let enrollment = await getManager().findOne(Enrollment, id);
 
       if (!enrollment) throw new NotFoundError();
 
@@ -73,7 +73,10 @@ enrollmentsRouter.delete(
   passAsyncError(async (req: Request, res: Response) => {
     const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      await getManager().delete(Enrollment, { id: enrollmentId });
+      const enrollment = await getManager().find(Enrollment, {
+        id: enrollmentId,
+      });
+      await getManager().softRemove(enrollment);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -109,7 +112,8 @@ enrollmentsRouter.delete(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const fundingId = parseInt(req.params['fundingId']);
-      await getManager().delete(Funding, { id: fundingId });
+      const funding = await getManager().find(Funding, { id: fundingId });
+      await getManager().softRemove(funding);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
