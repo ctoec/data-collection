@@ -1,6 +1,6 @@
 import { getManager } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
-import { Family, Child, User } from '../../entity';
+import { Child, Family, User } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getAllColumnMetadata, SECTIONS } from '../../template';
 
@@ -22,17 +22,6 @@ export const createChild = async (_child: Child, user: User) => {
     throw new Error('Child creation request denied');
   }
 
-  // TODO: make sure this is not needed
-  // (to enable family lookup when adding new child)
-  // and stop creating it here
-  // if (!_child.family) {
-  //   const organization = _child.organization;
-  //   const family = await getManager().save(
-  //     getManager().create(Family, { organization })
-  //   );
-  //   _child.family = family;
-  // }
-
   const newChild = getManager().create(Child, {
     ..._child,
     updateMetaData: {
@@ -50,6 +39,17 @@ export const createChild = async (_child: Child, user: User) => {
   if (saveBlockingErrors) {
     // Return without saving
     return validatedChild;
+  }
+
+  // TODO: create family in family address section instead
+  // (to enable family lookup when adding new child)
+  // and stop creating it here
+  if (!_child.family) {
+    const organization = _child.organization;
+    const family = await getManager().save(
+      getManager().create(Family, { organization })
+    );
+    _child.family = family;
   }
 
   return await getManager().save(newChild);

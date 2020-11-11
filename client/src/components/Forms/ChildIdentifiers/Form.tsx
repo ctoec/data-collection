@@ -74,13 +74,13 @@ export const ChildIdentifiersForm = ({
         .then((res) => {
           if (res.id) {
             history.replace({ pathname: `/create-record/${res.id}` });
+            afterSaveSuccess();
           } else {
             updateLocalChild(res);
           }
         })
         .catch((err) => {
           console.error(err);
-          setErrorsHidden(false);
         })
         .finally(onFinally);
     } else {
@@ -88,7 +88,6 @@ export const ChildIdentifiersForm = ({
         .then(afterSaveSuccess)
         .catch((err) => {
           console.error(err);
-          setErrorsHidden(false);
         })
         .finally(onFinally);
     }
