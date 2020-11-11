@@ -7,7 +7,7 @@ import { apiGet } from '../utils/api';
 
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
-}
+};
 
 const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   headerLevel,

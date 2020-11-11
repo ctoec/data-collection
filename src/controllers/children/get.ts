@@ -6,7 +6,7 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { User, Child } from '../../entity';
-import { validateObject } from '../../utils/distributeValidationErrorsToSubObjects';
+import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 
 /**
@@ -20,7 +20,7 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
   let child = await getManager().findOne(Child, opts);
   child = removedDeletedEntitiesFromChild(child);
 
-  return validateObject(child);
+  return await validateObject(child);
 };
 
 /**
@@ -51,7 +51,7 @@ export const getChildren = async (
 
   let children = await getManager().find(Child, opts);
   children = children.map((c) => removedDeletedEntitiesFromChild(c));
-  children.map(validateObject);
+  children = await Promise.all(children.map(validateObject));
 
   if (missingInfo === 'true') {
     children = children.filter(

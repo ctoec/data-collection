@@ -31,10 +31,12 @@ export class NotFoundError extends ApiError {
  * Custom error class for 400 Bad Request
  */
 export class BadRequestError extends ApiError {
-  constructor(message: string) {
+  data?: object;
+  constructor(message: string, data?: object) {
     super(message);
     this.name = 'BadRequestError';
     this.status = 400;
+    this.data = data;
   }
 }
 

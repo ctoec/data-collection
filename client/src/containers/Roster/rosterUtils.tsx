@@ -54,7 +54,7 @@ export function applyClientSideFilters(
 /**
  * Helper types for organizing children into sections by ageGroup
  */
-const NoAgeGroup = 'No age group';
+const NoAgeGroup = 'Incomplete enrollments';
 type RosterSections = AgeGroup | typeof NoAgeGroup;
 type ChildrenByAgeGroup = {
   [key in RosterSections]?: Child[];

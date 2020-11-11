@@ -1,10 +1,10 @@
-import { ValidationError, validateSync } from 'class-validator';
+import { ValidationError, validate } from 'class-validator';
 import { ObjectWithValidationErrors } from '../../client/src/shared/models';
 
-export function validateObject<T extends ObjectWithValidationErrors>(
+export async function validateObject<T extends ObjectWithValidationErrors>(
   object: T
 ) {
-  const validationErrors = validateSync(object, {
+  const validationErrors = await validate(object, {
     validationError: { value: false, target: false },
   });
   return distributeValidationErrorsToSubObjects(object, validationErrors);

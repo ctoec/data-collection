@@ -1,9 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import {
-  snapshotTestHelper,
-  accessibilityTestHelper,
-} from '../../testHelpers';
+import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 import Roster from './Roster';
 import UserContext from '../../contexts/UserContext/UserContext';
 import {
