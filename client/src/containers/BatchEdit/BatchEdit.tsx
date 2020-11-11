@@ -10,19 +10,25 @@ import { BackButton } from '../../components/BackButton';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
 import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import { stringify } from 'querystring';
+import { stringify, parse } from 'query-string';
 
 const BatchEdit: React.FC = () => {
   const { childId } = useParams() as { childId: string };
+  const { organizationId } = parse(useLocation().search) as {
+    organizationId: string;
+  };
+
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
   const { data: children, isValidating } = useAuthenticatedSWR<Child[]>(
-    `children?${stringify({ 'missing-info': true })}`
+    childId
+      ? null // no need to fetch all children for single record batch edit
+      : `children?${stringify({ organizationId, 'missing-info': true })}`
   );
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
@@ -49,27 +55,25 @@ const BatchEdit: React.FC = () => {
   }, [fixedRecordsForDisplayIds.length]);
 
   const moveNextRecord = () => {
-    // If active record is last record in the list
     const activeRecordIdx = fixedRecordsForDisplayIds.findIndex(
       (id) => id === activeRecordId
     );
+
+    // If active record is last record in the list
     if (activeRecordIdx === fixedRecordsForDisplayIds.length - 1) {
       // Then look for the first record that is still missing info
       const firstStillMissingInformationRecord = fixedRecordsForDisplay.find(
         hasValidationError
       );
 
-      setActiveRecordId(
-        // If a no records are missing info, then set active record to none
-        !firstStillMissingInformationRecord
-          ? undefined
-          : // otherwise set active record to first that is still missing info
-            firstStillMissingInformationRecord.id
-      );
+      // And set the active record id to that record, if it exists
+      // otherwise to undefined, which indicates the complete state
+      setActiveRecordId(firstStillMissingInformationRecord?.id);
     }
-
     // otherwise, move to next record in the list
-    setActiveRecordId(fixedRecordsForDisplayIds[activeRecordIdx + 1]);
+    else {
+      setActiveRecordId(fixedRecordsForDisplayIds[activeRecordIdx + 1]);
+    }
   };
 
   if (childId) {
@@ -131,6 +135,7 @@ const BatchEdit: React.FC = () => {
               <BatchEditItemContent
                 childId={activeRecordId}
                 moveNextRecord={moveNextRecord}
+                organizationId={organizationId}
               />
             ) : (
               <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">

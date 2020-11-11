@@ -11,20 +11,24 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { Link } from 'react-router-dom';
 import { getCurrentEnrollment } from '../../utils/models';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import { stringify } from 'querystring';
+import { stringify } from 'query-string';
 
 type BatchEditItemContentProps = {
   childId: string;
+  organizationId?: string;
   moveNextRecord: () => void;
 };
 
 export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   childId,
+  organizationId,
   moveNextRecord,
 }) => {
   const [child, setChild] = useState<Child>();
   const { mutate } = useAuthenticatedSWR<Child[]>(
-    `children?${stringify({ 'missing-info': true })}`
+    organizationId
+      ? `children?${stringify({ organizationId, 'missing-info': true })}`
+      : null // no organizationId means this is single-record batch edit, so no need to update cache
   );
 
   const { setAlerts } = useAlerts();
@@ -42,6 +46,18 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     setSteps(undefined);
   }, [childId]);
 
+  // Generate steps for the current child
+  // after state is set (child has been fetched)
+  useEffect(() => {
+    if (child) {
+      const _steps = listSteps(child);
+      setSteps(_steps);
+      if (_steps.length) {
+        setActiveStep(_steps[0].key);
+      }
+    }
+  }, [child?.id]);
+
   // Function to progress to next step
   const moveNextStep = () => {
     if (!activeStepKey || !steps) return;
@@ -55,38 +71,31 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   };
 
   // Fetch child record
-  // and if fetch is re-fetch,
-  // then progress to next step if step is complete
+  // and if fetch is re-fetch (triggerRefetchCount > 0)
+  // then progress to next step
   useEffect(() => {
-    apiGet(`/children/${childId}`, accessToken)
+    apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        mutate((children: Child[]) => {
-          if (children) {
-            const idx = children.findIndex((c) => c.id === childId);
-            if (idx > -1) children.splice(idx, 1, updatedChild);
+        // Presence of orgId indicates multi-record batch edit
+        // so cache must be updated
+        if (organizationId) {
+          mutate((children: Child[]) => {
+            if (children) {
+              const idx = children.findIndex((c) => c.id === childId);
+              if (idx > -1) children.splice(idx, 1, updatedChild);
+              return children;
+            }
             return children;
-          }
-          return children;
-        }, false);
-        moveNextStep();
+          }, false);
+        }
+
+        if (triggerRefetchCount) moveNextStep();
       })
       .catch((err) => {
         console.log(err);
       });
   }, [accessToken, triggerRefetchCount, !!child]);
-
-  // Generate steps for the current record
-  // after fetching a new one
-  useEffect(() => {
-    if (child) {
-      const _steps = listSteps(child);
-      setSteps(_steps);
-      if (_steps.length) {
-        setActiveStep(_steps[0].key);
-      }
-    }
-  }, [child?.id]);
 
   const props: RecordFormProps = {
     child,

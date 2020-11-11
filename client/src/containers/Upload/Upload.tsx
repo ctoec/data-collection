@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import cx from 'classnames';
 import { Link, useHistory } from 'react-router-dom';
-import { cache } from 'swr';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   FileInput,
@@ -18,6 +17,7 @@ import { CheckReplaceData } from './CheckReplaceData';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
+import { clearChildrenCaches } from '../Roster/hooks';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -91,10 +91,8 @@ const Upload: React.FC = () => {
         rawBody: true,
       })
         .then(() => {
-					// Clear all children records from data cache
-					cache.keys()
-						.filter((key) => key.includes('children'))
-						.forEach((childrenCacheKey) => cache.delete(childrenCacheKey));
+          // Clear all children records from data cache
+          clearChildrenCaches();
           history.push(`/roster`);
         })
         .catch(
