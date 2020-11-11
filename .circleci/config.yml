@@ -28,7 +28,7 @@ jobs:
   build:
     parameters:
       env:
-        description: "The environment to deploy Fawkes to (qa, devsecure, staging)"
+        description: 'The environment to deploy Fawkes to (qa, devsecure, staging)'
         type: string
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
@@ -76,10 +76,10 @@ jobs:
           command: SKIP_PREFLIGHT_CHECK=true yarn run test
 
   deploy:
-    description: "Job for deploying Fawkes to the specified environment"
+    description: 'Job for deploying Fawkes to the specified environment'
     parameters:
       env:
-        description: "The environment to deploy Fawkes to (qa, devsecure, staging)"
+        description: 'The environment to deploy Fawkes to (qa, devsecure, staging)'
         type: string
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
@@ -96,13 +96,31 @@ jobs:
             sudo apt-get -y -qq update
             sudo apt-get install python3-pip python3-dev build-essential
             sudo pip3 install awsebcli
-      - run: 
+      - run:
           name: Initialize Elastic Beanstalk
           command: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
-      - run: 
+      - run:
           name: Deploy to Elastic Beanstalk environment
           command: eb deploy ece-fawkes-<< parameters.env >>-env
 
+  e2e_test:
+    description: 'Run e2e tests against staging after deployment is complete'
+    docker:
+      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          working_directory: e2e-tests
+          name: Install e2e test dependencies
+          command: yarn
+      - run:
+          working_directory: e2e-tests
+          name: Run e2e tests
+          command: yarn test
 
 workflows:
   build-and-test:
@@ -127,7 +145,7 @@ workflows:
       - hold:
           type: approval
       - install:
-          requires: 
+          requires:
             - hold
       - build:
           env: staging
@@ -142,7 +160,7 @@ workflows:
       - hold:
           type: approval
       - install:
-          requires: 
+          requires:
             - hold
       - build:
           env: qa
@@ -157,7 +175,7 @@ workflows:
       - hold:
           type: approval
       - install:
-          requires: 
+          requires:
             - hold
       - build:
           env: devsecure
@@ -172,7 +190,7 @@ workflows:
       - hold:
           type: approval
       - install:
-          requires: 
+          requires:
             - hold
       - build:
           env: prod
