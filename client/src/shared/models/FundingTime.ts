@@ -9,6 +9,6 @@ export enum FundingTime {
   ExtendedDayYear = 'Extended day/year',
   School = 'School-day/School-year',
   AdditionalFull = 'Additional full-day/full-year',
-  AdditionalSchool = 'Additional school-day/school-year ',
+  AdditionalSchool = 'Additional school-day/school-year',
   AdditionalExtendedSchool = 'Additional school-day/school-year/extended-year',
 }

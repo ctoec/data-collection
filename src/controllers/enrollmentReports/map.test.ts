@@ -1,12 +1,3 @@
-import {
-  lookUpOrganization,
-  MISSING_PROVIDER_ERROR,
-  lookUpSite,
-  getRaceIndicated,
-  mapEnum,
-  mapFunding,
-  mapFundingTime,
-} from './map';
 import { EnrollmentReportRow } from '../../template';
 import { Organization, Site, Enrollment } from '../../entity';
 import { BadRequestError } from '../../middleware/error/errors';
@@ -22,6 +13,15 @@ import {
 import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 import moment from 'moment';
 import { EntityManager } from 'typeorm';
+import {
+  getRaceIndicated,
+  lookUpOrganization,
+  lookUpSite,
+  mapEnum,
+  mapFunding,
+  mapFundingTime,
+  MISSING_PROVIDER_ERROR,
+} from './mapUtils';
 
 describe('controllers', () => {
   describe('enrollmentReports', () => {

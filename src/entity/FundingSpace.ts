@@ -54,7 +54,7 @@ export class FundingSpace implements FundingSpaceInterface {
 
   @Column({
     type: 'varchar',
-    length: 20,
+    length: 50,
     transformer: enumTransformer(FundingTime),
   })
   time: FundingTime;

@@ -16,10 +16,10 @@ export const getFakeFundingSpaces = (
           fundingSpaces.push({
             id: fundingSpaces.length + 1,
             capacity: random.number(50),
-            ageGroup,
-            source,
-            time: fundingTime.value,
             organization,
+            source,
+            ageGroup,
+            time: fundingTime.value,
             organizationId: organization.id,
           })
         );
