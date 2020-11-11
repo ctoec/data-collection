@@ -1,7 +1,7 @@
 import { random } from 'faker';
-import { FundingSpace, Organization } from '../entity';
-import { AgeGroup, FundingSource } from '../../client/src/shared/models';
-import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
+import { FundingSpace, Organization } from '../../entity';
+import { AgeGroup, FundingSource } from '../../../client/src/shared/models';
+import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
 
 export const getFakeFundingSpaces = (
   organization: Organization

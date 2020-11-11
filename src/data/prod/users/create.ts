@@ -1,36 +1,58 @@
 import { WorkSheet } from 'xlsx';
 import { getManager } from 'typeorm';
+import { ConnectionPool } from 'mssql';
 import {
   User,
   OrganizationPermission,
   SitePermission,
   Organization,
   Site,
-} from '../../entity';
-import { parse } from './utils';
+} from '../../../entity';
+import { parse } from '../utils';
+import { createWingedKeysUsers } from './wingedKeys';
 
 export class UserRow {
   parentOrgNames: string = '';
   userName: string = '';
   email: string = '';
   siteNames: string = '';
-  uuid: string = '';
 }
 
 export const USER_ROW_PROPS = Object.keys(new UserRow());
 
-export const createUserData = async (sheetData: WorkSheet) => {
+export type SiteConnectionOpts = {
+  url: string;
+  user: string;
+  password: string;
+};
+
+export type DBConnectionOpts = {
+  server: string;
+  port: number;
+  user: string;
+  password: string;
+};
+
+export const createUserData = async (
+  sheetData: WorkSheet,
+  wingedkeysSiteConnectionOpts: SiteConnectionOpts,
+  wingedkeysDbConnectionOpts: DBConnectionOpts
+) => {
   const parsedData = parse<UserRow>(sheetData, USER_ROW_PROPS);
 
-  console.log(`Attempting to create ${parsedData.length} users...`);
   let createdCount = 0;
 
+  console.log(`Attempting to create ${parsedData.length} winged-keys users...`);
+  await createWingedKeysUsers(parsedData, wingedkeysSiteConnectionOpts);
+  const UUIDs = await getWingedKeysIds(wingedkeysDbConnectionOpts);
+
+  console.log(`Attempting to create ${parsedData.length} application users...`);
   for (const row of parsedData) {
     try {
       const user = getManager('script').create(User, {
         firstName: row.userName.split(' ')[0],
         lastName: row.userName.split(' ')[1],
-        wingedKeysId: row.uuid,
+        wingedKeysId: UUIDs[row.email],
       });
 
       const { id, firstName, lastName } = await getManager('script').save(user);
@@ -56,6 +78,30 @@ export const createUserData = async (sheetData: WorkSheet) => {
 
   console.log(`Successfully created ${createdCount} users`);
 };
+
+async function getWingedKeysIds(connectionOpts: DBConnectionOpts) {
+  try {
+    const pool = await new ConnectionPool({
+      ...connectionOpts,
+      database: 'wingedkeys',
+    }).connect();
+
+    const res = await pool.query(`SELECT username, id FROM AspNetUsers`);
+
+    await pool.close();
+
+    const dict = res.recordset.reduce(
+      (acc, { username, id }: { username: string; id: string }) => {
+        acc[username] = id;
+        return acc;
+      },
+      {}
+    );
+    console.log('dict', dict);
+  } catch (err) {
+    console.error('Error fetching ids from wingedkeys', err);
+  }
+}
 
 async function createOrgOrSitePermissions(
   user: User,

@@ -1,7 +1,6 @@
 import { getConnectionOptions, getConnectionManager } from 'typeorm';
 import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerConnectionOptions';
 import commandLineArgs from 'command-line-args';
-import readline from 'readline';
 import {
   Organization,
   FundingSpace,
@@ -22,71 +21,101 @@ import {
 import { read } from './utils';
 import { createOrganizationData } from './organizations';
 import { createSiteData } from './sites';
-import { createUserData } from './users';
+import {
+  createUserData,
+  DBConnectionOpts,
+  SiteConnectionOpts,
+} from './users/create';
 import { createReportingPeriodData } from './reportingPeriods';
+import fs from 'fs';
 
-const optionDefns = [
-  { name: 'dbhost', type: String },
-  { name: 'dbuser', type: String },
-  { name: 'dbpassword', type: String },
-  { name: 'dbport', type: Number },
-  { name: 'orgfile', type: String },
-  { name: 'sitefile', type: String },
-  { name: 'userfile', type: String },
-  { name: 'reportingperiodfile', type: String },
-];
+const optionDefns = [{ name: 'config', type: String }];
 const options = commandLineArgs(optionDefns);
 
-const {
-  dbhost,
-  dbuser,
-  dbpassword,
-  dbport,
-  orgfile,
-  sitefile,
-  userfile,
-  reportingperiodfile,
-} = options;
+type Config = {
+  app: {
+    db: {
+      user: string;
+      password: string;
+      server: string;
+      port: number;
+    };
+  };
 
-if (!orgfile && !sitefile && !userfile && !reportingperiodfile) {
+  wingedKeys: {
+    db: {
+      user: string;
+      password: string;
+      server: string;
+      port: number;
+    };
+    site: {
+      url: string;
+      user: string;
+      password: string;
+    };
+  };
+
+  orgFile: string;
+  siteFile: string;
+  userFile: string;
+  reportingPeriodFile: string;
+};
+
+const configPath = options.config as string;
+if (!configPath || !configPath.startsWith('/')) {
+  console.error(
+    '--config option is required, and must be absolute path to config file'
+  );
+  process.exit(1);
+}
+const config: Config = require(configPath);
+
+const { orgFile, siteFile, userFile, reportingPeriodFile } = config;
+
+if (!orgFile && !siteFile && !userFile && !reportingPeriodFile) {
   console.error('At least one file option must be supplied');
   process.exit(1);
 }
 
-(async () => {
-  if (userfile) {
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
+let wingedKeysDBConnOpts: DBConnectionOpts;
+let wingedKeysSiteConnOpts: SiteConnectionOpts;
 
-    const answer: string = await new Promise((resolve) =>
-      rl.question(
-        'Did you already create users in winged-keys in target env and add their UUIDs to user data? [Y/N]\n',
-        resolve
-      )
-    );
+if (userFile) {
+  wingedKeysDBConnOpts = config.wingedKeys.db;
+  wingedKeysSiteConnOpts = config.wingedKeys.site;
 
-    switch (answer.toLowerCase()) {
-      case 'y':
-        break;
-      case 'n':
-      default:
-        console.error(
-          'User data cannot be created without first creating users in winged-keys, and pulling their ids'
-        );
-        process.exit(1);
-    }
+  if (
+    !wingedKeysDBConnOpts ||
+    !Object.keys(wingedKeysDBConnOpts).length ||
+    Object.values(wingedKeysDBConnOpts).some((val) => !val)
+  ) {
+    console.error('All wingedkeys db config values are required');
+    process.exit(1);
   }
 
+  if (
+    !wingedKeysSiteConnOpts ||
+    !Object.keys(wingedKeysSiteConnOpts).length ||
+    Object.values(wingedKeysSiteConnOpts).some((val) => !val)
+  ) {
+    console.error('All wingedkeys site config values are required');
+    process.exit(1);
+  }
+}
+
+const appDBConnOpts = config.app.db;
+create();
+
+async function create() {
   try {
     const connectionOptions = (await getConnectionOptions()) as SqlServerConnectionOptions;
     const connection = getConnectionManager().create({
       ...connectionOptions,
-      host: dbhost || connectionOptions.host,
-      port: dbport || connectionOptions.port,
-      username: dbuser || connectionOptions.username,
-      password: dbpassword || connectionOptions.password,
+      host: appDBConnOpts.server || connectionOptions.host,
+      port: appDBConnOpts.port || connectionOptions.port,
+      username: appDBConnOpts.user || connectionOptions.username,
+      password: appDBConnOpts.password || connectionOptions.password,
       name: 'script',
       logging: false,
       migrationsRun: false,
@@ -111,24 +140,28 @@ if (!orgfile && !sitefile && !userfile && !reportingperiodfile) {
     });
     await connection.connect();
 
-    if (orgfile) {
-      const rawOrgs = read(orgfile);
+    if (reportingPeriodFile) {
+      const rawReportingPeriods = read(reportingPeriodFile);
+      await createReportingPeriodData(rawReportingPeriods);
+    }
+
+    if (orgFile) {
+      const rawOrgs = read(orgFile);
       await createOrganizationData(rawOrgs);
     }
 
-    if (sitefile) {
-      const rawSites = read(sitefile);
+    if (siteFile) {
+      const rawSites = read(siteFile);
       await createSiteData(rawSites);
     }
 
-    if (userfile) {
-      const rawUsers = read(userfile);
-      await createUserData(rawUsers);
-    }
-
-    if (reportingperiodfile) {
-      const rawReportingPeriods = read(reportingperiodfile);
-      await createReportingPeriodData(rawReportingPeriods);
+    if (userFile && wingedKeysSiteConnOpts && wingedKeysDBConnOpts) {
+      const rawUsers = read(userFile);
+      await createUserData(
+        rawUsers,
+        wingedKeysSiteConnOpts,
+        wingedKeysDBConnOpts
+      );
     }
 
     await connection.close();
@@ -137,4 +170,4 @@ if (!orgfile && !sitefile && !userfile && !reportingperiodfile) {
     console.error('Failed to create data', err);
     process.exit(1);
   }
-})();
+}

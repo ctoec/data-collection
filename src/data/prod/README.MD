@@ -6,21 +6,52 @@ From csv data with formats defined [here](https://docs.google.com/spreadsheets/d
 - Users and their permissions
 - Reporting periods
 
+## Configuration
+Configuration is supplied as a JSON file like:
+```
+{
+  "app": {
+    "db": {
+      "user": "",
+      "password": "",
+      "server": "",
+      "port": 0
+    }
+  },
+
+  "wingedKeys": {
+    "db": {
+      "user": "",
+      "password": "",
+      "server": "",
+      "port": 0
+    },
+    "site": {
+      "url": "",
+      "user": "",
+      "password": ""
+    }
+  },
+
+  "orgFile": "",
+  "siteFile": "",
+  "userFile": "",
+  "reportingPeriodFile": ""
+}
+```
+**NOTE**: If `userFile` config value is suppled, then all `wingedkeys` configs (both site and db) must also be supplied.
+**NOTE**: instead of passing app db overrides, you can just update your local ormconfig but DON'T FORGET TO CHANGE IT BACK.
+**NOTE**: At least one file param must be supplied.
+
 ## Usage
 ```
-$ yarn ts-node src/data/prod/create.ts [OPTIONS]
+$ yarn ts-node src/data/prod/create.ts --config [CONFIG_FILE_PATH]
 ```
-where options are:
-- dbuser (optional): db username to override local ormconfig value
-- dbpassword (optional): db password to override local ormconfig value
-- dbhost (optional): db host to override local ormconfig value
-- dbport (optional): db port to override local ormconfig value
-- orgfile (optional): path to file containing organization data
-- sitefile (optional): path to file containing site data
-- userfile (optional): path to file containing user data
+where `CONFIG_FILE_PATH` is an absolute path to the config file
 
-  NOTE: Users must first be created in IdentityServer instance, and UUIDs queried and added to application user data
-- reportingperiodfile (optional: path to file containing reporting period data
-
-**NOTE**: instead of passing db overrides, you can just update your local ormconfig but DON'T FORGET TO CHANGE IT BACK.
-**NOTE**: At least one file param must be supplied.
+example:
+```
+$ cp src/data/prod/config.example.json ./config.json
+$ vim config.json // edit config to contain real values!
+$ yarn ts-node src/data/prod/create.ts --config `pwd`/config.json
+```

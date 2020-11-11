@@ -1,0 +1,29 @@
+{
+  "app": {
+    "db": {
+      "user": "",
+      "password": "",
+      "server": "",
+      "port": 0
+    }
+  },
+
+  "wingedKeys": {
+    "db": {
+      "user": "",
+      "password": "",
+      "server": "",
+      "port": 0
+    },
+    "site": {
+      "url": "",
+      "user": "",
+      "password": ""
+    }
+  },
+
+  "orgFile": "",
+  "siteFile": "",
+  "userFile": "",
+  "reportingPeriodFile": ""
+}
