@@ -1,4 +1,9 @@
-import { Button, Calendar, History, TextWithIcon } from '@ctoec/component-library';
+import {
+  Button,
+  Calendar,
+  History,
+  TextWithIcon,
+} from '@ctoec/component-library';
 import { Moment } from 'moment';
 import React, { useState } from 'react';
 import { AddRecordButton } from '../../components/AddRecordButton';
@@ -14,7 +19,7 @@ type RosterButtonsTable = {
 export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
   filterByMonth,
   setFilterByMonth,
-  updateWithdrawnOnly
+  updateWithdrawnOnly,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen((o) => !o);

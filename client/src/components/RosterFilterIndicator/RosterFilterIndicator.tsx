@@ -12,13 +12,14 @@ type RosterFilterIndicatorProps = {
 export const RosterFilterIndicator: React.FC<RosterFilterIndicatorProps> = ({
   filterTitleText,
   reset,
-  icon
-}) =>
+  icon,
+}) => (
   <div className="roster-filter-indicator">
-    {icon === 'calendar' ?
+    {icon === 'calendar' ? (
       <Calendar className="height-5" />
-      : <History className="height-5" />
-    }
+    ) : (
+      <History className="height-5" />
+    )}
     <div className="roster-filter-indicator__title">{filterTitleText}</div>
     <Button
       appearance="unstyled"
@@ -26,3 +27,4 @@ export const RosterFilterIndicator: React.FC<RosterFilterIndicatorProps> = ({
       text="Return to current roster"
     />
   </div>
+);

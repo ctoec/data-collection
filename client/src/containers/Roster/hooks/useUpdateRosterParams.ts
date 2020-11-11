@@ -11,7 +11,7 @@ export const useUpdateRosterParams = () => {
   const isMultiOrgUser = user?.organizations || [];
 
   const history = useHistory();
-  const query = parse(history.location.search.slice(1)) as RosterQueryParams
+  const query = parse(history.location.search.slice(1)) as RosterQueryParams;
 
   useEffect(() => {
     // Wait until user exists

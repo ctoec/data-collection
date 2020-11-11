@@ -16,7 +16,7 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
   const sites = user?.sites || [];
 
   const history = useHistory();
-  const query = parse(history.location.search) as RosterQueryParams
+  const query = parse(history.location.search) as RosterQueryParams;
 
   // Function to update search query when user clicks on tab nav
   const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
@@ -25,7 +25,11 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
       // Remove site param if clickedId !== current orgId
       if (clickedId !== query.organization) delete query.site;
       history.push({
-        search: stringify({ ...query, organization: clickedId, site: undefined }),
+        search: stringify({
+          ...query,
+          organization: clickedId,
+          site: undefined,
+        }),
       });
     } else {
       // Push a specific site id if specific site clicked

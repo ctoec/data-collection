@@ -32,13 +32,14 @@ import {
   usePaginatedChildData,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
+import { ColumnNames } from './tableColumns';
 
 export type RosterQueryParams = {
   organization?: string;
   site?: string;
   month?: string;
   withdrawn?: boolean;
-}
+};
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -82,10 +83,19 @@ const Roster: React.FC = () => {
   );
 
   const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
+  let columnsToHide = [];
+  if (!isMultiOrgUser) {
+    columnsToHide.push(ColumnNames.ORGANIZATION);
+  }
+  if (showOnlyWithdrawnEnrollments) {
+    columnsToHide.push(ColumnNames.MISSING);
+  } else {
+    columnsToHide.push(ColumnNames.EXIT);
+  }
   const accordionProps = {
     items: getAccordionItems(childrenByAgeGroup, {
       hideCapacity: isSiteLevelUser,
-      showOrgInTables: isMultiOrgUser,
+      excludeColumns: columnsToHide,
     }),
     titleHeadingLevel: 'h2' as HeadingLevel,
   };
@@ -163,11 +173,13 @@ const Roster: React.FC = () => {
             <p className="font-body-xl margin-top-1">{subHeaderText}</p>
           </div>
           <div className="tablet:grid-col-2">
-            {queryMonth && <RosterFilterIndicator
-              filterTitleText={queryMonth.format('MMMM YYYY')}
-              reset={() => updateActiveMonth(undefined)}
-              icon="calendar"
-            />}
+            {queryMonth && (
+              <RosterFilterIndicator
+                filterTitleText={queryMonth.format('MMMM YYYY')}
+                reset={() => updateActiveMonth(undefined)}
+                icon="calendar"
+              />
+            )}
             {showOnlyWithdrawnEnrollments && (
               <RosterFilterIndicator
                 filterTitleText="Withdrawn enrollments"
