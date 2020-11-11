@@ -1,5 +1,6 @@
 import React from 'react';
 import idx from 'idx';
+import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import { Column, InlineIcon } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
@@ -9,7 +10,7 @@ export enum ColumnNames {
   MISSING = 'Missing info',
   BIRTHDATE = 'Birthdate',
   FUNDING_SOURCE = 'Funding type',
-  FUNDING_TIME = 'Contract space',
+  FUNDING_TIME = 'Space type',
   SITE = 'Site',
   ORGANIZATION = 'Organization',
   ENTRY = 'Enrollment date',
@@ -46,7 +47,7 @@ export const tableColumns: (
       ),
     },
     {
-      className: `${tableColumnClassName} break-spaces`,
+      className: cx(tableColumnClassName, 'break-spaces'),
       name: ColumnNames.MISSING,
       width: `${shortColumnWidthPercent}%`,
       sort: (row) =>
@@ -126,7 +127,7 @@ export const tableColumns: (
       ),
     },
     {
-      className: tableColumnClassName,
+      className: cx(tableColumnClassName, 'break-spaces'),
       name: ColumnNames.ENTRY,
       sort: (row) => idx(row, (_) => _.enrollments[0].entry.unix()) || 0,
       width: `${shortColumnWidthPercent}%`,
@@ -137,7 +138,7 @@ export const tableColumns: (
       ),
     },
     {
-      className: tableColumnClassName,
+      className: cx(tableColumnClassName, 'break-spaces'),
       name: ColumnNames.EXIT,
       sort: (row) => idx(row, (_) => _.enrollments[0].exit.unix()) || 0,
       width: `${shortColumnWidthPercent}%`,

@@ -161,7 +161,7 @@ const Roster: React.FC = () => {
         />
         {alertElements}
         <div className="grid-row flex-align-center">
-          <div className="tablet:grid-col-10">
+          <div className="tablet:grid-col-9">
             <h1 className="margin-bottom-0" ref={h1Ref}>
               {superHeaderText && (
                 <div className="margin-bottom-1 font-body-sm text-base-darker">
@@ -172,7 +172,7 @@ const Roster: React.FC = () => {
             </h1>
             <p className="font-body-xl margin-top-1">{subHeaderText}</p>
           </div>
-          <div className="tablet:grid-col-2">
+          <div className="tablet:grid-col-3">
             {queryMonth && (
               <RosterFilterIndicator
                 filterTitleText={queryMonth.format('MMMM YYYY')}
@@ -189,11 +189,13 @@ const Roster: React.FC = () => {
             )}
           </div>
         </div>
-        <RosterButtonsTable
-          filterByMonth={queryMonth}
-          setFilterByMonth={updateActiveMonth}
-          updateWithdrawnOnly={updateWithdrawnOnly}
-        />
+        {!showOnlyWithdrawnEnrollments && (
+          <RosterButtonsTable
+            filterByMonth={queryMonth}
+            setFilterByMonth={updateActiveMonth}
+            updateWithdrawnOnly={updateWithdrawnOnly}
+          />
+        )}
         <LoadingWrapper text="Loading your roster..." loading={loading}>
           {rosterContent}
         </LoadingWrapper>

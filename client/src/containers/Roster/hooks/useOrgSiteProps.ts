@@ -53,7 +53,7 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
   const props = {
     tabNavProps: undefined as TabNav | undefined,
     h1Text: isLoading ? 'Loading...' : sites[0].siteName,
-    subHeaderText: getSubHeaderText(isLoading, childCount, sites, query.month),
+    subHeaderText: getSubHeaderText(isLoading, childCount, sites, query),
     superHeaderText: organizations?.[0]?.providerName,
   };
 
@@ -70,7 +70,7 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
       isLoading,
       childCount,
       orgSites,
-      query.month
+      query
     );
     props.superHeaderText = '';
     props.tabNavProps = {
@@ -96,6 +96,10 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
     };
   }
 
+  if (query.withdrawn) {
+    props.h1Text = 'Withdrawn enrollments';
+  }
+
   return props;
 };
 
@@ -104,9 +108,12 @@ function getSubHeaderText(
   loading: boolean,
   childCount: number,
   userSites?: Site[],
-  month?: string
+  query?: RosterQueryParams
 ) {
   if (loading) return '';
+  if (query?.withdrawn) {
+    return 'Showing age group at time of withdrawal';
+  }
 
   // Base case
   let returnText = `${childCount} children enrolled`;
@@ -117,9 +124,9 @@ function getSubHeaderText(
     returnText += ` at ${userSites.length} sites`;
   }
 
-  if (month) {
+  if (query?.month) {
     returnText += ` in ${moment
-      .utc(month, QUERY_STRING_MONTH_FORMAT)
+      .utc(query.month, QUERY_STRING_MONTH_FORMAT)
       .format('MMMM YYYY')}`;
   }
   return returnText;

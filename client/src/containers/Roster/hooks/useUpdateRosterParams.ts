@@ -24,9 +24,9 @@ export const useUpdateRosterParams = () => {
     if (isMultiOrgUser) {
       if (
         !query.organization ||
-        !organizations.find((o) => o.id.toString() === query.organization)
+        !organizations.find((o) => o?.id?.toString() === query.organization)
       ) {
-        updatedQuery.organization = organizations[0].id.toString();
+        updatedQuery.organization = organizations[0]?.id.toString();
       }
     }
     // Add site id if user has site access AND
