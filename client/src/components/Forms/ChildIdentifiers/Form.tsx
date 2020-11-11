@@ -76,7 +76,6 @@ export const ChildIdentifiersForm = ({
           afterSaveSuccess();
         })
         .catch((err) => {
-          console.log(err);
           if (err.data) {
             updateLocalChild(err.data);
           }
