@@ -24,7 +24,6 @@ import {
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
-import { MonthFilterIndicator } from './MonthFilter/MonthFilterIndicator';
 import { NoRecordsAlert } from './NoRecordsAlert';
 import {
   useUpdateRosterParams,
@@ -32,6 +31,15 @@ import {
   useChildrenWithErrorsAlert,
   usePaginatedChildData,
 } from './hooks';
+import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
+import { ColumnNames } from './tableColumns';
+
+export type RosterQueryParams = {
+  organization?: string;
+  site?: string;
+  month?: string;
+  withdrawn?: boolean;
+};
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -45,16 +53,16 @@ const Roster: React.FC = () => {
 
   // Parse query params, and update if missing (i.e. initial load) or invalid
   useUpdateRosterParams();
-  const query = parse(history.location.search) as {
-    organization?: string;
-    site?: string;
-    month?: string;
-  };
+  const query = parse(history.location.search) as RosterQueryParams;
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
+  const { withdrawn: showOnlyWithdrawnEnrollments } = query;
 
-  const { children, error } = usePaginatedChildData(query.organization);
+  const { children, error } = usePaginatedChildData(
+    query.organization,
+    showOnlyWithdrawnEnrollments
+  );
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const { alertElements } = useChildrenWithErrorsAlert(
@@ -71,15 +79,23 @@ const Roster: React.FC = () => {
   // site is requested
   const clientSideFilteredChildren = applyClientSideFilters(
     children || [],
+    // TODO: MAKE INTO OPTS
     query.site,
     queryMonth
   );
 
   const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
+  let columnsToHide = [];
+  if (!isMultiOrgUser) {
+    columnsToHide.push(ColumnNames.ORGANIZATION);
+  }
+  if (!showOnlyWithdrawnEnrollments) {
+    columnsToHide.push(ColumnNames.EXIT);
+  }
   const accordionProps = {
     items: getAccordionItems(childrenByAgeGroup, {
       hideCapacity: isSiteLevelUser,
-      showOrgInTables: isMultiOrgUser,
+      excludeColumns: columnsToHide,
     }),
     titleHeadingLevel: 'h2' as HeadingLevel,
   };
@@ -108,13 +124,24 @@ const Roster: React.FC = () => {
   }
 
   // Function to update active month, to pass down into month filter buttons
-  const updateActiveMonth = (newMonth: Moment) => {
+  const updateActiveMonth = (newMonth?: Moment) => {
     const month = getQueryMonthFormat(newMonth);
     history.push({
       search: stringify({
-        organization: query.organization,
-        site: query.site,
+        ...query,
+        withdrawn: undefined,
         month,
+      }),
+    });
+  };
+
+  // Function to update whether we're only showing withdrawn enrollments
+  const updateWithdrawnOnly = (showOnlyWithdrawn: boolean) => {
+    history.push({
+      search: stringify({
+        ...query,
+        month: undefined,
+        withdrawn: showOnlyWithdrawn || undefined, // Can't have both filters active
       }),
     });
   };
@@ -134,7 +161,7 @@ const Roster: React.FC = () => {
         />
         {alertElements}
         <div className="grid-row flex-align-center">
-          <div className="tablet:grid-col-10">
+          <div className="tablet:grid-col-9">
             <h1 className="margin-bottom-0" ref={h1Ref}>
               {superHeaderText && (
                 <div className="margin-bottom-1 font-body-sm text-base-darker">
@@ -145,17 +172,30 @@ const Roster: React.FC = () => {
             </h1>
             <p className="font-body-xl margin-top-1">{subHeaderText}</p>
           </div>
-          <div className="tablet:grid-col-2">
-            <MonthFilterIndicator
-              filterByMonth={queryMonth}
-              setFilterByMonth={updateActiveMonth}
-            />
+          <div className="tablet:grid-col-3">
+            {queryMonth && (
+              <RosterFilterIndicator
+                filterTitleText={queryMonth.format('MMMM YYYY')}
+                reset={() => updateActiveMonth(undefined)}
+                icon="calendar"
+              />
+            )}
+            {showOnlyWithdrawnEnrollments && (
+              <RosterFilterIndicator
+                filterTitleText="Withdrawn enrollments"
+                reset={() => updateWithdrawnOnly(false)}
+                icon="history"
+              />
+            )}
           </div>
         </div>
-        <RosterButtonsTable
-          filterByMonth={queryMonth}
-          setFilterByMonth={updateActiveMonth}
-        />
+        {!showOnlyWithdrawnEnrollments && (
+          <RosterButtonsTable
+            filterByMonth={queryMonth}
+            setFilterByMonth={updateActiveMonth}
+            updateWithdrawnOnly={updateWithdrawnOnly}
+          />
+        )}
         <LoadingWrapper text="Loading your roster..." loading={loading}>
           {rosterContent}
         </LoadingWrapper>

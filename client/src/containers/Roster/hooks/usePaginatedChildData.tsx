@@ -10,7 +10,10 @@ const PAGE_SIZE = 100;
  * automatically requesting the next page of data while it exists
  * by incrementing useSWRInfinite "page size".
  */
-export const usePaginatedChildData = (organization: string | undefined) => {
+export const usePaginatedChildData = (
+  organization: string | undefined,
+  withdrawnEnrollmentsOnly?: boolean
+) => {
   let stillFetching = true;
   // Fetch child data, filtered by organization and month
   const {
@@ -28,10 +31,11 @@ export const usePaginatedChildData = (organization: string | undefined) => {
 
     // Paginated api query (but only once we have organizationId param)
     return organization
-      ? `children?${stringify({
+      ? `/children?${stringify({
           organizationId: organization,
           skip: index * PAGE_SIZE,
           take: PAGE_SIZE,
+          withdrawn: withdrawnEnrollmentsOnly,
         })}`
       : null;
   });

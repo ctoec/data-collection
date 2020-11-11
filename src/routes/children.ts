@@ -24,6 +24,7 @@ childrenRouter.get(
     }) as string[];
     const count = parseQueryString(req, 'count');
     const missingInfo = parseQueryString(req, 'missing-info') as string;
+    const withdrawnOnly = parseQueryString(req, 'withdrawn') as string;
     const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
     const take = parseQueryString(req, 'take', { post: parseInt }) as number;
 
@@ -38,6 +39,7 @@ childrenRouter.get(
       missingInfo,
       skip,
       take,
+      withdrawnOnly,
     });
 
     res.send(children);
