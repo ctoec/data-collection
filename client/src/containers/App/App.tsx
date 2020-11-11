@@ -37,6 +37,11 @@ const App: React.FC = () => {
             path: '/upload',
           },
           {
+            text: 'Privacy policy',
+            type: 'secondary',
+            path: '/privacy',
+          },
+          {
             text: 'Data template',
             type: 'secondary',
             path: '/template',

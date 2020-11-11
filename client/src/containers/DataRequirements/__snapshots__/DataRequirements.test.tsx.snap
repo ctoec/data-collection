@@ -36,231 +36,233 @@ exports[`DataRequirements matches snapshot 1`] = `
       </a>
       .
     </p>
-    <div
-      class="margin-top-4"
-    >
-      <h2>
-        Section one
-      </h2>
-      <p
-        class="text-pre-line"
-      />
-      <table
-        class="oec-table"
-        id="data-requirements-table"
+    <div>
+      <div
+        class="margin-top-4"
       >
-        <thead>
-          <tr>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-sorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+        <h2>
+          Section one
+        </h2>
+        <p
+          class="text-pre-line"
+        />
+        <table
+          class="oec-table"
+          id="data-requirements-table"
+        >
+          <thead>
+            <tr>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-sorted"
+                role="columnheader"
+                scope="col"
               >
-                Field name
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Field name
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Required/ Optional
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Required/ Optional
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Definition
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Definition
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Reason for collecting
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Reason for collecting
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Format
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th
-              scope="row"
-            >
-              <span
-                class="text-bold"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Format
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th
+                scope="row"
               >
-                Favorite color
-              </span>
-            </th>
-            <td>
-               Optional 
-            </td>
-            <td>
-              <p>
-                The color you like the most
-              </p>
-            </td>
-            <td>
-               So we know your favorite color 
-            </td>
-            <td>
-              <div>
-                string
-              </div>
-              <div
-                class="margin-top-1"
-              >
-                Ex: Blue
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div
-      class="margin-top-4"
-    >
-      <h2>
-        Section two
-      </h2>
-      <p
-        class="text-pre-line"
-      />
-      <table
-        class="oec-table"
-        id="data-requirements-table"
+                <span
+                  class="text-bold"
+                >
+                  Favorite color
+                </span>
+              </th>
+              <td>
+                 Optional 
+              </td>
+              <td>
+                <p>
+                  The color you like the most
+                </p>
+              </td>
+              <td>
+                 So we know your favorite color 
+              </td>
+              <td>
+                <div>
+                  string
+                </div>
+                <div
+                  class="margin-top-1"
+                >
+                  Ex: Blue
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div
+        class="margin-top-4"
       >
-        <thead>
-          <tr>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-sorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+        <h2>
+          Section two
+        </h2>
+        <p
+          class="text-pre-line"
+        />
+        <table
+          class="oec-table"
+          id="data-requirements-table"
+        >
+          <thead>
+            <tr>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-sorted"
+                role="columnheader"
+                scope="col"
               >
-                Field name
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Field name
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Required/ Optional
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Required/ Optional
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Definition
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Definition
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Reason for collecting
-              </span>
-            </th>
-            <th
-              aria-sort="none"
-              class="oec-table__column-header oec-unsorted"
-              role="columnheader"
-              scope="col"
-            >
-              <span
-                class="oec-table__column-title"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Reason for collecting
+                </span>
+              </th>
+              <th
+                aria-sort="none"
+                class="oec-table__column-header oec-unsorted"
+                role="columnheader"
+                scope="col"
               >
-                Format
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th
-              scope="row"
-            >
-              <span
-                class="text-bold"
+                <span
+                  class="oec-table__column-title"
+                >
+                  Format
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th
+                scope="row"
               >
-                Lucky number
-              </span>
-            </th>
-            <td>
-               Required 
-            </td>
-            <td>
-              <p>
-                The number you find brings the most luck
-              </p>
-            </td>
-            <td>
-               So we know your lucky number 
-            </td>
-            <td>
-              <div>
-                number
-              </div>
-              <div
-                class="margin-top-1"
-              >
-                Ex: 130
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+                <span
+                  class="text-bold"
+                >
+                  Lucky number
+                </span>
+              </th>
+              <td>
+                 Required 
+              </td>
+              <td>
+                <p>
+                  The number you find brings the most luck
+                </p>
+              </td>
+              <td>
+                 So we know your lucky number 
+              </td>
+              <td>
+                <div>
+                  number
+                </div>
+                <div
+                  class="margin-top-1"
+                >
+                  Ex: 130
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </DocumentFragment>

@@ -78,6 +78,16 @@ exports[`App matches snapshot 1`] = `
                 >
                   <a
                     class="usa-nav__link"
+                    href="/privacy"
+                  >
+                    Privacy policy
+                  </a>
+                </li>
+                <li
+                  class="usa-nav__secondary-item"
+                >
+                  <a
+                    class="usa-nav__link"
                     href="/template"
                   >
                     Data template
