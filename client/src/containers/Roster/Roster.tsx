@@ -59,7 +59,10 @@ const Roster: React.FC = () => {
     : undefined;
   const { withdrawn: showOnlyWithdrawnEnrollments } = query;
 
-  const { children, error } = usePaginatedChildData(query.organization, showOnlyWithdrawnEnrollments);
+  const { children, error } = usePaginatedChildData(
+    query.organization,
+    showOnlyWithdrawnEnrollments
+  );
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const { alertElements } = useChildrenWithErrorsAlert(
@@ -78,7 +81,7 @@ const Roster: React.FC = () => {
     children || [],
     // TODO: MAKE INTO OPTS
     query.site,
-    queryMonth,
+    queryMonth
   );
 
   const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
@@ -86,9 +89,7 @@ const Roster: React.FC = () => {
   if (!isMultiOrgUser) {
     columnsToHide.push(ColumnNames.ORGANIZATION);
   }
-  if (showOnlyWithdrawnEnrollments) {
-    columnsToHide.push(ColumnNames.MISSING);
-  } else {
+  if (!showOnlyWithdrawnEnrollments) {
     columnsToHide.push(ColumnNames.EXIT);
   }
   const accordionProps = {

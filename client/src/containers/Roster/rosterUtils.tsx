@@ -33,7 +33,7 @@ export const getQueryMonthFormat = (month?: Moment) => {
 export function applyClientSideFilters(
   allChildren: Child[],
   site?: string,
-  month?: Moment,
+  month?: Moment
 ): Child[] {
   let filteredChildren: Child[] = allChildren;
   if (month) {
