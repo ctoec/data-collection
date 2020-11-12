@@ -16,10 +16,9 @@ export const updateChild = async (
   update: Partial<Child>
 ) => {
   const readOrgIds = await getReadAccessibleOrgIds(user);
-  let child = await getManager().findOne(Child, id, {
+  const child = await getManager().findOne(Child, id, {
     where: { organization: { id: In(readOrgIds) } },
   });
-  child = removedDeletedEntitiesFromChild(child);
 
   if (!child) {
     console.warn(
