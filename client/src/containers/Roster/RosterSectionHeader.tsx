@@ -39,7 +39,7 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
       {fundingSpaceCounts.map(({ fundingSpace, count }) => {
         let displayStr = `${fundingSpace.source} ${fundingSpace.time} - ${count}`;
         const _hideCapacity =
-          hideCapacity || fundingSpace.source === FundingSource.SHS;
+          hideCapacity || fundingSpace.capacity === -1;
         displayStr += _hideCapacity
           ? ' spaces filled'
           : `/${fundingSpace.capacity}`;
