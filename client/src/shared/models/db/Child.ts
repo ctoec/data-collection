@@ -16,6 +16,7 @@ export const RACE_FIELDS = [
 export interface Child extends ObjectWithValidationErrors {
   id: string;
   sasid?: string;
+  uniqueId?: string;
   firstName?: string;
   middleName?: string;
   lastName?: string;
