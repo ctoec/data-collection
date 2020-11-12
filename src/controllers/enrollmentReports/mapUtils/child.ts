@@ -11,6 +11,7 @@ import {
 import {
   Gender,
   BirthCertificateType,
+  UniqueIdType,
 } from '../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../template';
 import {
@@ -148,7 +149,14 @@ export const mapChild = (
   // TODO: Could do birthdate verification (post-20??)
 
   let child = {
-    sasid: source.sasid,
+    sasid:
+      organization.uniqueIdType === UniqueIdType.SASID
+        ? source.sasidUniqueId
+        : undefined,
+    uniqueId:
+      organization.uniqueIdType === UniqueIdType.Other
+        ? source.sasidUniqueId
+        : undefined,
     firstName: source.firstName,
     middleName: source.middleName,
     lastName: source.lastName,
@@ -245,12 +253,21 @@ export const isIdentifierMatch = (
   child: Child | EnrollmentReportRow,
   other: EnrollmentReportRow
 ) => {
-  const match =
+  let match =
     child.firstName === other.firstName &&
     child.lastName === other.lastName &&
     child.birthdate &&
     child.birthdate?.format('MM/DD/YYYY') ===
-      other.birthdate?.format('MM/DD/YYYY') &&
-    child.sasid === other.sasid;
+      other.birthdate?.format('MM/DD/YYYY');
+
+  if (child instanceof Child) {
+    match =
+      match &&
+      (child.sasid === other.sasidUniqueId ||
+        child.uniqueId === other.sasidUniqueId);
+  } else {
+    match = match && child.sasidUniqueId === other.sasidUniqueId;
+  }
+
   return match;
 };
