@@ -1,5 +1,5 @@
 import React from 'react';
-import { Child, FundingSpace } from '../../shared/models';
+import { Child, FundingSource, FundingSpace } from '../../shared/models';
 import { getCurrentFunding } from '../../utils/models';
 
 type RosterSectionHeaderProps = {
@@ -38,7 +38,9 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
     <div className="display-flex flex-wrap">
       {fundingSpaceCounts.map(({ fundingSpace, count }) => {
         let displayStr = `${fundingSpace.source} ${fundingSpace.time} - ${count}`;
-        displayStr += hideCapacity
+        const _hideCapacity =
+          hideCapacity || fundingSpace.source === FundingSource.SHS;
+        displayStr += _hideCapacity
           ? ' spaces filled'
           : `/${fundingSpace.capacity}`;
         return (

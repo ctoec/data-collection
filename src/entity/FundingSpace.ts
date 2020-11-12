@@ -17,6 +17,7 @@ import {
 import { Organization } from './Organization';
 import { FundingTimeSplit } from './FundingTimeSplit';
 import { enumTransformer } from './transformers';
+import { Equals, ValidateIf } from 'class-validator';
 
 @Entity()
 @Unique('UQ_Source_AgeGroup_Time_Organization', [
@@ -30,6 +31,10 @@ export class FundingSpace implements FundingSpaceInterface {
   id: number;
 
   @Column()
+  @ValidateIf((fundingSpace) => fundingSpace.source === FundingSource.SHS)
+  @Equals(-1, {
+    message: `${FundingSource.SHS} spaces must have capacity value of -1 to indicate that there is no capacity for this type of funding`,
+  })
   capacity: number;
 
   @ManyToOne(() => Organization, { nullable: false })

@@ -1,7 +1,7 @@
+import { random } from 'faker';
 import { FundingSpace, Organization } from '../entity';
 import { AgeGroup, FundingSource } from '../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../client/src/shared/constants';
-import { random } from 'faker';
 
 export const getFakeFundingSpaces = (
   organization: Organization
@@ -15,7 +15,7 @@ export const getFakeFundingSpaces = (
         match.fundingTimes.forEach((fundingTime) =>
           fundingSpaces.push({
             id: fundingSpaces.length + 1,
-            capacity: random.number(50),
+            capacity: source === FundingSource.SHS ? -1 : random.number(50),
             organization,
             source,
             ageGroup,
