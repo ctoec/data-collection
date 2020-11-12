@@ -68,7 +68,7 @@ const Roster: React.FC = () => {
   const { alertElements } = useChildrenWithErrorsAlert(
     !children,
     (children || []).filter(
-      (child) => child.validationErrors && child.validationErrors.length
+      (child) => child?.validationErrors && child.validationErrors.length
     ).length,
     query.organization
   );
