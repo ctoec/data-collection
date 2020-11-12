@@ -147,14 +147,13 @@ async function createNewEnrollment(
     }
   }
 
-  let enrollment = tManager.create(Enrollment, {
+  let enrollment = {
     ...newEnrollment,
     child,
-  });
-  enrollment = await tManager.save(Enrollment, {
-    ...enrollment,
     updateMetaData: { author: user } as UpdateMetaData,
-  });
+  } as Enrollment;
+  enrollment = tManager.create(Enrollment, enrollment);
+  enrollment = await tManager.save(enrollment);
 
   // Create new funding, if exists
   if (newEnrollment.fundings && newEnrollment.fundings.length) {

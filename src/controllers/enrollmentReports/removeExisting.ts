@@ -1,5 +1,6 @@
 import { User, Child } from '../../entity';
 import { EntityManager, In } from 'typeorm';
+import { removeDeletedElements } from '../../utils/filterSoftRemoved';
 
 /**
  * Removes existing child records for the given user, to prepare for uploading a new
@@ -14,9 +15,12 @@ export const removeExistingEnrollmentDataForUser = async (
   user: User,
   siteIdsToReplace?: string[]
 ) => {
-  const allChildren = await transaction.find(Child, {
+  let allChildren = await transaction.find(Child, {
     relations: ['enrollments'],
     where: { organization: { id: In(user.organizationIds) } },
+  });
+  allChildren.forEach((c) => {
+    c.enrollments = removeDeletedElements(c.enrollments || []);
   });
   if (!allChildren || !allChildren.length) return;
 
@@ -32,5 +36,5 @@ export const removeExistingEnrollmentDataForUser = async (
         )
       : allChildren;
 
-  await transaction.delete(Child, childrenToDelete);
+  await transaction.softRemove(childrenToDelete);
 };

@@ -4,7 +4,7 @@ import idx from 'idx';
 import { InlineIcon, Table } from '@ctoec/component-library';
 import { AgeGroup, Child } from '../../shared/models';
 import { RosterSectionHeader } from './RosterSectionHeader';
-import { tableColumns } from './tableColumns';
+import { ColumnNames, tableColumns } from './tableColumns';
 import { Moment } from 'moment';
 import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
 import {
@@ -41,20 +41,18 @@ export function applyClientSideFilters(
       return childHasEnrollmentsActiveInMonth(child, month);
     });
   }
-
   if (site) {
     filteredChildren = filteredChildren.filter(
       (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
     );
   }
-
   return filteredChildren;
 }
 
 /**
  * Helper types for organizing children into sections by ageGroup
  */
-const NoAgeGroup = 'No age group';
+const NoAgeGroup = 'Incomplete enrollments';
 type RosterSections = AgeGroup | typeof NoAgeGroup;
 type ChildrenByAgeGroup = {
   [key in RosterSections]?: Child[];
@@ -114,9 +112,9 @@ export function getChildrenByAgeGroup(
  */
 export function getAccordionItems(
   childrenByAgeGroup: ChildrenByAgeGroup,
-  opts: { hideCapacity: boolean; showOrgInTables: boolean } = {
+  opts: { hideCapacity: boolean; excludeColumns: ColumnNames[] } = {
     hideCapacity: false,
-    showOrgInTables: false,
+    excludeColumns: [ColumnNames.ORGANIZATION, ColumnNames.EXIT],
   }
 ): AccordionItemProps[] {
   return Object.entries(childrenByAgeGroup)
@@ -156,7 +154,7 @@ export function getAccordionItems(
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
           data={ageGroupChildren}
-          columns={tableColumns(opts.showOrgInTables)}
+          columns={tableColumns(opts.excludeColumns)}
           defaultSortColumn={0}
           defaultSortOrder="ascending"
         />

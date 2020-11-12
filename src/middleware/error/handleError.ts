@@ -16,7 +16,7 @@ export const handleError = (
     // UnauthorizedError comes from jwt-express middleware, and so
     // does not subclass our custom ApiError
     if (err instanceof ApiError || err instanceof UnauthorizedError) {
-      res.status(err.status).json({ error: err.message });
+      res.status(err.status).json(err);
       return;
     }
 

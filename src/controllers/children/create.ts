@@ -1,6 +1,9 @@
 import { getManager } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
-import { Family, Child, User } from '../../entity';
+import { Child, Family, User } from '../../entity';
+import { validateObject } from '../../utils/validateObject';
+import { getAllColumnMetadata, SECTIONS } from '../../template';
+import { BadRequestError } from '../../middleware/error/errors';
 
 /**
  * Creates a child from a POST request body.
@@ -20,7 +23,30 @@ export const createChild = async (_child: Child, user: User) => {
     throw new Error('Child creation request denied');
   }
 
-  // TODO: make family optional on the child
+  const newChild = getManager().create(Child, {
+    ..._child,
+    updateMetaData: {
+      author: user,
+    },
+  });
+
+  const validatedChild = await validateObject(newChild);
+  const identifierSectionMetadata = getAllColumnMetadata()
+    .filter((m) => m.section === SECTIONS.CHILD_IDENTIFIER)
+    .map((m) => m.propertyName);
+  const saveBlockingErrors = validatedChild.validationErrors?.some((v) =>
+    identifierSectionMetadata.includes(v.property)
+  );
+  if (saveBlockingErrors) {
+    // Return without saving
+    console.error('Missing child identifier data.');
+    throw new BadRequestError(
+      'Cannot create child without identifier information.',
+      validatedChild
+    );
+  }
+
+  // TODO: create family in family address section instead
   // (to enable family lookup when adding new child)
   // and stop creating it here
   if (!_child.family) {
@@ -31,11 +57,5 @@ export const createChild = async (_child: Child, user: User) => {
     _child.family = family;
   }
 
-  const newChild = getManager().create(Child, {
-    ..._child,
-    updateMetaData: {
-      author: user,
-    },
-  });
-  return getManager().save(newChild);
+  return await getManager().save(newChild);
 };

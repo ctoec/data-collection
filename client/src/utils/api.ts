@@ -92,7 +92,8 @@ async function api(
     try {
       const errorResponse = await res.json();
       // return rejected promise instead of throwing error to avoid catch
-      return Promise.reject(errorResponse.error);
+      const error = errorResponse;
+      return Promise.reject(error?.data ? error : error?.message);
     } catch (err) {
       console.error('error parsing API error response', err);
       throw new Error('There was an error');
