@@ -1,4 +1,4 @@
-import { EntityManager, Like } from 'typeorm';
+import { EntityManager } from 'typeorm';
 import {
   Enrollment,
   Funding,
