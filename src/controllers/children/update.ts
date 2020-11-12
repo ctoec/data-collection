@@ -2,7 +2,6 @@ import { getManager, In } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Child, User } from '../../entity';
 import { NotFoundError } from '../../middleware/error/errors';
-import { removedDeletedEntitiesFromChild } from '../../utils/filterSoftRemoved';
 
 /**
  * Update child record, if user has access

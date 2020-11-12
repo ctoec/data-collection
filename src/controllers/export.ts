@@ -1,88 +1,12 @@
 import { BookType } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { getManager } from 'typeorm';
-import { Child, Site, Enrollment } from '../entity';
+import { Child, Enrollment } from '../entity';
 import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
 import { Response } from 'express';
 import { isMoment } from 'moment';
-import { propertyDateSorter } from '../utils/propertyDateSorter';
 import { streamTabularData } from '../utils/streamTabularData';
 import { SECTIONS } from '../template';
 import { reportingPeriodToString } from './reportingPeriods';
-import { removedDeletedEntitiesFromChild } from '../utils/filterSoftRemoved';
-
-// Make sure to load all nested levels of the Child objects
-// we fetch
-const CHILD_RELATIONS = [
-  'family',
-  'family.incomeDeterminations',
-  'enrollments',
-  'enrollments.site',
-  'enrollments.site.organization',
-  'enrollments.fundings',
-];
-
-/**
- * Performs sorting of nested enrollments and funding periods
- * within a Child object. This allows other functions to
- * know that nested values are already ordered, so that the
- * 0th element can be checked as the most recent.
- * @param child
- */
-function childSorter(child: Child) {
-  child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
-    if (enrollmentA.fundings) {
-      // Sort fundings by last reporting period
-      enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
-        propertyDateSorter(
-          fundingA,
-          fundingB,
-          (f) => f.lastReportingPeriod?.period
-        )
-      );
-    }
-    return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.exit);
-  });
-  return child;
-}
-
-/**
- * Second way of retrieving Children to export. Given an array
- * of sites a user has access to, finds all Children with enrollments
- * at that site, sorts their properties, and returns the collection
- * after filtering for unique child identifiers.
- * @param sites
- */
-export async function getChildrenBySites(sites: Site[]) {
-  const childrenToMap = await getManager().transaction(async (tManager) => {
-    let kids: Child[] = [];
-    for (let i = 0; i < sites.length; i++) {
-      const enrollmentsAtSite = await tManager.find(Enrollment, {
-        site: sites[i],
-      });
-
-      // Keep only one copy of each child, since there could be
-      // overlap in the enrollments
-      const childIds = [
-        ...new Set(enrollmentsAtSite.map((enrollment) => enrollment.childId)),
-      ];
-      const childrenHavingEnrollments = await Promise.all(
-        childIds.map(async (id) => {
-          let child = await tManager.findOne(
-            Child,
-            { id: id },
-            { relations: CHILD_RELATIONS }
-          );
-          child = removedDeletedEntitiesFromChild(child);
-          return childSorter(child);
-        })
-      );
-      kids = kids.concat(childrenHavingEnrollments);
-    }
-    return kids;
-  });
-  return childrenToMap;
-}
 
 /**
  * Function to send the created workbook of information back
