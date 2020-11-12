@@ -4,7 +4,7 @@ import { Child, Enrollment } from '../entity';
 import { Response } from 'express';
 import { isMoment } from 'moment';
 import { streamTabularData } from '../utils/streamTabularData';
-import { SECTIONS } from '../template';
+import { SECTIONS, getAllColumnMetadata } from '../template';
 import { reportingPeriodToString } from './reportingPeriods';
 
 /**
@@ -140,5 +140,3 @@ function formatProperty(value: any, propertyName: string) {
     return value.format('MM/DD/YYYY');
   }
 }
-
-
