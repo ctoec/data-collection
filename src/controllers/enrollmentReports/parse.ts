@@ -170,18 +170,7 @@ function parseEnrollmentReportRow(
 
     // Parse dates
     if (dateProperties.includes(prop)) {
-      let parsedDate = getDate(value);
-      // Override the day value to the first of the month
-      // for funding periods
-      if (parsedDate && prop.toLowerCase().includes('period')) {
-        // .month() counts Jan as 0, so increment by 1
-        let month = (parsedDate.month() + 1).toString();
-        month = month.length === 1 ? '0' + month : month;
-        const year = parsedDate.year().toString();
-        rawEnrollment[prop] = moment.utc(month + '/01/' + year);
-      } else {
-        rawEnrollment[prop] = parsedDate;
-      }
+      rawEnrollment[prop] = getDate(value, prop);
     }
 
     // Parse zipcodes
@@ -217,14 +206,20 @@ function getBoolean(value: string): boolean {
  * to moments using a helper function to convert excel serial
  * date number to Moment date (excelDateToDate)
  */
-function getDate(value: string | number): Moment {
+function getDate(value: string | number, prop: string): Moment {
+  let parsedDate: Moment;
   if (typeof value === 'string') {
     const m = moment.utc(value, [...DATE_FORMATS, ...REPORTING_PERIOD_FORMATS]);
-    return m.isValid() ? m : undefined;
+    parsedDate = m.isValid() ? m : undefined;
   }
   if (typeof value === 'number') {
-    return excelDateToDate(value);
+    parsedDate = excelDateToDate(value);
   }
+  // Override the day value of funding period dates to be 01
+  if (parsedDate && prop.toLowerCase().includes('period')) {
+    return parsedDate.startOf('month');
+  }
+  return parsedDate;
 }
 
 /**
