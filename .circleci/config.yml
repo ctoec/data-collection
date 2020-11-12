@@ -160,7 +160,6 @@ workflows:
           requires:
             - build
       - e2e_test:
-          env: staging
           requires:
             - deploy
   deploy-to-qa:
