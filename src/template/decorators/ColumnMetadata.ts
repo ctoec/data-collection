@@ -4,24 +4,20 @@ import { ColumnMetadata as ColumnMetadataInterface } from '../../../client/src/s
 // Formats
 export const BOOLEAN_FORMAT = 'Yes, Y, No, N';
 export const DATE_FORMATS = [
-  'MM/DD/YYYY',
-  'MM-DD-YYYY',
-  'MM/DD/YY',
-  'MM-DD-YY',
-  'YYYY-MM-DD',
-  'MM-YYYY',
-  'MM/YYYY',
-  'MMM-YYYY',
-  'MMM-YY',
-  'MM/YYYY',
+  'MM/YY',
   'MMM/YY',
+  'MM/YYYY',
+  'MMM/YYYY',
+  'MM/DD/YYYY',
+  'MM/DD/YY',
+  'YYYY/MM/DD',
 ];
 export const DATE_FORMAT = DATE_FORMATS.join(', ');
 export const REPORTING_PERIOD_FORMATS = [
-  'MM/YYYY',
-  'MM-YYYY',
-  'MM-YY',
   'MM/YY',
+  'MMM/YY',
+  'MM/YYYY',
+  'MM/DD/YYYY',
 ];
 export const REPORTING_PERIOD_FORMAT = REPORTING_PERIOD_FORMATS.join(', ');
 

@@ -170,7 +170,18 @@ function parseEnrollmentReportRow(
 
     // Parse dates
     if (dateProperties.includes(prop)) {
-      rawEnrollment[prop] = getDate(value);
+      let parsedDate = getDate(value);
+      // Override the day value to the first of the month
+      // for funding periods
+      if (parsedDate && prop.toLowerCase().includes('period')) {
+        // .month() counts Jan as 0, so increment by 1
+        let month = (parsedDate.month() + 1).toString();
+        month = month.length === 1 ? '0' + month : month;
+        const year = parsedDate.year().toString();
+        rawEnrollment[prop] = moment.utc(month + '/01/' + year);
+      } else {
+        rawEnrollment[prop] = parsedDate;
+      }
     }
 
     // Parse zipcodes
