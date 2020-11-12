@@ -30,17 +30,13 @@ export const getQueryMonthFormat = (month?: Moment) => {
  * @param site
  * @param month
  */
-export function applyClientSideFilters(
-  allChildren: Child[],
-  site?: string,
-  month?: Moment
-): Child[] {
+export function applySiteFilter(
+  allChildren: Child[] | undefined,
+  site?: string
+) {
+  if (!allChildren) return;
+
   let filteredChildren: Child[] = allChildren;
-  if (month) {
-    filteredChildren = filteredChildren.filter((child) => {
-      return childHasEnrollmentsActiveInMonth(child, month);
-    });
-  }
   if (site) {
     filteredChildren = filteredChildren.filter(
       (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
@@ -107,16 +103,26 @@ export function getChildrenByAgeGroup(
 /**
  * Returns array of AccordionItemProps, used to render the roster
  * age group accordion sections.
- * @param childrenByAgeGroup
+ * @param children
  * @param opts
  */
 export function getAccordionItems(
-  childrenByAgeGroup: ChildrenByAgeGroup,
-  opts: { hideCapacity: boolean; excludeColumns: ColumnNames[] } = {
+  children: Child[],
+  opts: {
+    hideCapacity: boolean;
+    hideOrgColumn: boolean;
+    hideExitColumn: boolean;
+  } = {
     hideCapacity: false,
-    excludeColumns: [ColumnNames.ORGANIZATION, ColumnNames.EXIT],
+    hideOrgColumn: true,
+    hideExitColumn: true,
   }
 ): AccordionItemProps[] {
+  const childrenByAgeGroup = getChildrenByAgeGroup(children);
+  const excludeColumns: ColumnNames[] = [];
+  if (opts.hideOrgColumn) excludeColumns.push(ColumnNames.ORGANIZATION);
+  if (opts.hideExitColumn) excludeColumns.push(ColumnNames.EXIT);
+
   return Object.entries(childrenByAgeGroup)
     .filter(
       ([_, ageGroupChildren]) => ageGroupChildren && ageGroupChildren.length
@@ -154,7 +160,7 @@ export function getAccordionItems(
           id={`roster-table-${ageGroup}`}
           rowKey={(row) => row.id}
           data={ageGroupChildren}
-          columns={tableColumns(opts.excludeColumns)}
+          columns={tableColumns(excludeColumns)}
           defaultSortColumn={0}
           defaultSortOrder="ascending"
         />

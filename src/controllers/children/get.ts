@@ -9,6 +9,7 @@ import { User, Child } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { withdraw } from '../enrollments';
+import { Moment } from 'moment';
 
 /**
  * Get child by id, with related family and related
@@ -37,16 +38,25 @@ export const getChildren = async (
   user: User,
   filterOpts: {
     organizationIds?: string[];
-    missingInfo?: string;
-    withdrawnOnly?: string;
+    missingInfoOnly?: boolean;
+    withdrawnOnly?: boolean;
+    activeMonth?: Moment;
     skip?: number;
     take?: number;
   }
 ) => {
-  let { organizationIds, missingInfo, withdrawnOnly, skip, take } = filterOpts;
+  let {
+    organizationIds,
+    missingInfoOnly,
+    withdrawnOnly,
+    activeMonth,
+    skip,
+    take,
+  } = filterOpts;
 
   const opts = (await getFindOpts(user, {
     organizationIds,
+    withdrawnOnly,
   })) as FindManyOptions<Child>;
   opts.skip = skip;
   opts.take = take;
@@ -55,15 +65,33 @@ export const getChildren = async (
   children = children.map((c) => removedDeletedEntitiesFromChild(c));
   children = await Promise.all(children.map(validateObject));
 
+  // If withdrawn qs param
   if (withdrawnOnly) {
     // Do not return any children with active enrollments
     children = children.filter((c) => c.enrollments?.every((e) => !!e.exit));
-  } else {
+  }
+  // Else if month qs param
+  else if (activeMonth) {
+    // Do not return children withouth active enrollment during or before that month
+    children = children.filter((c) => {
+      // filter out enrollments after the current month filter
+      c.enrollments = c.enrollments?.filter((e) =>
+        e.entry.isSameOrBefore(activeMonth.endOf('month'))
+      );
+
+      // filter out children with no qualifying enrollments
+      return c.enrollments && c.enrollments.length;
+    });
+  }
+  // Else
+  else {
     // Default is to return all children with any active enrollments
     children = children.filter((c) => c.enrollments?.some((e) => !e.exit));
   }
 
-  if (missingInfo === 'true') {
+  // If missing info qs param
+  if (missingInfoOnly) {
+    // Only return children with missing info
     children = children.filter(
       (child) => child.validationErrors && child.validationErrors.length
     );
@@ -90,9 +118,14 @@ export const getCount = async (user: User) => {
  */
 const getFindOpts = async (
   user: User,
-  filterOpts: { id?: string; organizationIds?: string[] } = {}
+  filterOpts: {
+    id?: string;
+    organizationIds?: string[];
+    activeMonth?: Moment;
+    withdrawnOnly?: boolean;
+  } = {}
 ) => {
-  const { id, organizationIds } = filterOpts;
+  const { id, organizationIds, activeMonth, withdrawnOnly } = filterOpts;
   const readOrgIds = await getReadAccessibleOrgIds(user);
   const filterOrgIds =
     organizationIds?.filter((orgId) => readOrgIds.includes(orgId)) ||
