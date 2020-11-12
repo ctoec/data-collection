@@ -52,11 +52,9 @@ const App: React.FC = () => {
             path: '/data-requirements',
           },
           {
-            text: 'Feedback',
+            text: 'Help',
             type: 'secondary',
-            path: mailToLinkProps.href,
-            target: mailToLinkProps.target,
-            external: true,
+            path: '/help',
           },
         ]}
         userFirstName={user?.firstName}
