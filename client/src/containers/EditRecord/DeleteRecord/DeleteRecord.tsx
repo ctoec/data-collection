@@ -4,8 +4,6 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
 import { Button, Modal } from '@ctoec/component-library';
-import { useAuthenticatedSWR } from '../../../hooks/useAuthenticatedSWR';
-import { stringify } from 'querystring';
 
 type DeleteProps = {
   child: Child;
@@ -16,9 +14,6 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
   const toggleIsOpen = () => setIsOpen((o) => !o);
 
   const { accessToken } = useContext(AuthenticationContext);
-  const { mutate } = useAuthenticatedSWR(
-    `children?${stringify({ organizationId: child.organization.id })}`
-  );
   const history = useHistory();
 
   const [isDeleting, setIsDeleting] = useState(false);
@@ -28,10 +23,6 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
     apiDelete(`children/${child.id}`, { accessToken })
       .then(() => {
         toggleIsOpen();
-        mutate((children: Child[]) => {
-          if (children) return [...children.filter((c) => c.id !== child.id)];
-          return children;
-        });
         history.push('/roster', {
           alerts: [
             {

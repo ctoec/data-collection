@@ -6,6 +6,7 @@ import { useContext } from 'react';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { Site, Organization } from '../../../shared/models';
 import moment from 'moment';
+import { RosterQueryParams } from '../Roster';
 
 const ALL_SITES = 'all-sites';
 
@@ -15,11 +16,7 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
   const sites = user?.sites || [];
 
   const history = useHistory();
-  const query = parse(history.location.search) as {
-    organization?: string;
-    site?: string;
-    month?: string;
-  };
+  const query = parse(history.location.search) as RosterQueryParams;
 
   // Function to update search query when user clicks on tab nav
   const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
@@ -28,7 +25,10 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
       // Remove site param if clickedId !== current orgId
       if (clickedId !== query.organization) delete query.site;
       history.push({
-        search: stringify({ ...query, organization: clickedId }),
+        search: stringify({
+          ...query,
+          organization: clickedId,
+        }),
       });
     } else {
       // Push a specific site id if specific site clicked
@@ -52,7 +52,7 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
   const props = {
     tabNavProps: undefined as TabNav | undefined,
     h1Text: isLoading ? 'Loading...' : sites[0].siteName,
-    subHeaderText: getSubHeaderText(isLoading, childCount, sites, query.month),
+    subHeaderText: getSubHeaderText(isLoading, childCount, sites, query),
     superHeaderText: organizations?.[0]?.providerName,
   };
 
@@ -69,7 +69,7 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
       isLoading,
       childCount,
       orgSites,
-      query.month
+      query
     );
     props.superHeaderText = '';
     props.tabNavProps = {
@@ -95,6 +95,10 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
     };
   }
 
+  if (query.withdrawn) {
+    props.h1Text = 'Withdrawn enrollments';
+  }
+
   return props;
 };
 
@@ -103,9 +107,12 @@ function getSubHeaderText(
   loading: boolean,
   childCount: number,
   userSites?: Site[],
-  month?: string
+  query?: RosterQueryParams
 ) {
   if (loading) return '';
+  if (query?.withdrawn) {
+    return 'Showing age group at time of withdrawal';
+  }
 
   // Base case
   let returnText = `${childCount} children enrolled`;
@@ -116,9 +123,9 @@ function getSubHeaderText(
     returnText += ` at ${userSites.length} sites`;
   }
 
-  if (month) {
+  if (query?.month) {
     returnText += ` in ${moment
-      .utc(month, QUERY_STRING_MONTH_FORMAT)
+      .utc(query.month, QUERY_STRING_MONTH_FORMAT)
       .format('MMMM YYYY')}`;
   }
   return returnText;

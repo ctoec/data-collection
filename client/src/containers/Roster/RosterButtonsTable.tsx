@@ -1,18 +1,25 @@
-import { Button, Calendar, TextWithIcon } from '@ctoec/component-library';
+import {
+  Button,
+  Calendar,
+  History,
+  TextWithIcon,
+} from '@ctoec/component-library';
 import { Moment } from 'moment';
 import React, { useState } from 'react';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
-import { MonthFilterModal } from './MonthFilter/MonthFilterModal';
+import { MonthFilterModal } from './MonthFilterModal';
 
 type RosterButtonsTable = {
   filterByMonth?: Moment;
   setFilterByMonth: (_: any) => void;
+  updateWithdrawnOnly: (_: any) => void;
 };
 
 export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
   filterByMonth,
   setFilterByMonth,
+  updateWithdrawnOnly,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen((o) => !o);
@@ -35,6 +42,12 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
           <th scope="row">Views</th>
           <td>
             <div className="display-flex">
+              <Button
+                text={<TextWithIcon Icon={History} text="Withdrawn records" />}
+                appearance="unstyled"
+                onClick={() => updateWithdrawnOnly(true)}
+                className="margin-right-2"
+              />
               <Button
                 text={<TextWithIcon Icon={Calendar} text="Past enrollments" />}
                 appearance="unstyled"

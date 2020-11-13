@@ -1,7 +1,8 @@
 import { useHistory } from 'react-router-dom';
 import { useEffect, useContext } from 'react';
 import UserContext from '../../../contexts/UserContext/UserContext';
-import { parse, stringify } from 'querystring';
+import { parse, stringify } from 'query-string';
+import { RosterQueryParams } from '../Roster';
 
 export const useUpdateRosterParams = () => {
   const { user } = useContext(UserContext);
@@ -10,11 +11,7 @@ export const useUpdateRosterParams = () => {
   const isMultiOrgUser = user?.organizations || [];
 
   const history = useHistory();
-  const query = parse(history.location.search.slice(1)) as {
-    organization: string;
-    site: string;
-    month: string;
-  };
+  const query = parse(history.location.search) as RosterQueryParams;
 
   useEffect(() => {
     // Wait until user exists
@@ -27,9 +24,9 @@ export const useUpdateRosterParams = () => {
     if (isMultiOrgUser) {
       if (
         !query.organization ||
-        !organizations.find((o) => o.id.toString() === query.organization)
+        !organizations.find((o) => o?.id?.toString() === query.organization)
       ) {
-        updatedQuery.organization = organizations[0].id.toString();
+        updatedQuery.organization = organizations[0]?.id.toString();
       }
     }
     // Add site id if user has site access AND

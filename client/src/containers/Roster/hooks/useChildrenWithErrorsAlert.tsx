@@ -5,14 +5,17 @@ import { AlertProps } from '@ctoec/component-library';
 import React from 'react';
 import pluralize from 'pluralize';
 import { Link } from 'react-router-dom';
+import { stringify } from 'query-string';
 
 export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
-  childrenWithErrorsCount: number
+  childrenWithErrorsCount: number,
+  organizationId?: string
 ) => {
   const { alertElements, setAlerts, alerts } = useAlerts();
   const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
-    childrenWithErrorsCount
+    childrenWithErrorsCount,
+    organizationId
   );
   useEffect(() => {
     if (isLoading || !childrenWithErrorsCount) {
@@ -46,7 +49,8 @@ export const useChildrenWithErrorsAlert = (
  * @param numberOfChildrenWithErrors
  */
 function getChildrenWithErrorsAlertProps(
-  numberOfChildrenWithErrors: number
+  numberOfChildrenWithErrors: number,
+  organizationId?: string
 ): AlertProps {
   return {
     text: (
@@ -54,7 +58,10 @@ function getChildrenWithErrorsAlertProps(
         You'll need to add required info for{' '}
         {pluralize('record', numberOfChildrenWithErrors, true)} before
         submitting your data to OEC. Update with{' '}
-        <Link className="usa-button usa-button--unstyled" to="/batch-edit">
+        <Link
+          className="usa-button usa-button--unstyled"
+          to={`/batch-edit?${stringify({ organizationId })}`}
+        >
           batch editing.
         </Link>
       </span>
