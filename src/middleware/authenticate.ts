@@ -1,4 +1,4 @@
-import jwt, { UnauthorizedError } from 'express-jwt';
+import jwt from 'express-jwt';
 import jwks from 'jwks-rsa';
 import { Request, Response, NextFunction } from 'express';
 import { getManager, In } from 'typeorm';
@@ -8,6 +8,7 @@ import { passAsyncError } from './error/passAsyncError';
 import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
 import { InvalidSubClaimError } from './error/errors';
+import { isProdLike } from '../utils/isProdLike';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -39,8 +40,8 @@ const addUser = passAsyncError(
     if (req.claims.sub) {
       let fawkesUser = await getUser(req.claims.sub);
 
-      //  TODO: Remove once an actual user management system is implemented
-      if (!fawkesUser) {
+      // We should only create users with full permissions in environments without actual data
+      if (!fawkesUser && !isProdLike()) {
         const res: AxiosResponse<any> = await getUserFromWingedKeys(
           req.headers.authorization
         );
