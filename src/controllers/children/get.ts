@@ -1,4 +1,4 @@
-import { removedDeletedEntitiesFromChild } from '../../utils/filterSoftRemoved';
+import { removeDeletedEntitiesFromChild } from '../../utils/filterSoftRemoved';
 import {
   getManager,
   FindManyOptions,
@@ -8,7 +8,6 @@ import {
 import { User, Child } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
-import { withdraw } from '../enrollments';
 import { Moment } from 'moment';
 
 /**
@@ -20,7 +19,7 @@ import { Moment } from 'moment';
 export const getChildById = async (id: string, user: User): Promise<Child> => {
   const opts = await getFindOpts(user, { id });
   let child = await getManager().findOne(Child, opts);
-  child = removedDeletedEntitiesFromChild(child);
+  child = removeDeletedEntitiesFromChild(child);
 
   return await validateObject(child);
 };
@@ -62,7 +61,7 @@ export const getChildren = async (
   opts.take = take;
 
   let children = await getManager().find(Child, opts);
-  children = children.map((c) => removedDeletedEntitiesFromChild(c));
+  children = children.map((c) => removeDeletedEntitiesFromChild(c));
   children = await Promise.all(children.map(validateObject));
 
   // If withdrawn qs param
