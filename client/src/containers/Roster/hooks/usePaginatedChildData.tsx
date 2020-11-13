@@ -30,12 +30,12 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
     // Paginated api query (but only once we have organizationId param)
     return query.organization
       ? `/children?${stringify({
-          organizationId: query.organization,
-          skip: index * PAGE_SIZE,
-          take: PAGE_SIZE,
-          withdrawn: query.withdrawn,
-          month: query.month,
-        })}`
+        organizationId: query.organization,
+        skip: index * PAGE_SIZE,
+        take: PAGE_SIZE,
+        withdrawn: query.withdrawn,
+        month: query.month,
+      })}`
       : null;
   });
 
@@ -43,12 +43,13 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
   // - we've completed the first fetch (childrenArrays != undefined)
   // - we've completed our most recently triggered fetch (childrenArrays.length == size)
   // - there's more data to fetch (most recent page has records)
-  if (
-    childrenArrays &&
-    childrenArrays.length === size &&
-    childrenArrays[childrenArrays.length - 1].length
-  ) {
-    setSize(size + 1);
+  // Or set fetching to false
+  if (childrenArrays && childrenArrays.length === size) {
+    if (childrenArrays[childrenArrays?.length - 1]?.length) {
+      setSize(size + 1);
+    } else {
+      stillFetching = false;
+    }
   }
 
   return {
