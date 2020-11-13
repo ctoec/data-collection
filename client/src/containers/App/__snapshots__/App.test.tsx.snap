@@ -108,12 +108,9 @@ exports[`App matches snapshot 1`] = `
                 >
                   <a
                     class="usa-nav__link"
-                    href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    to="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
+                    href="/help"
                   >
-                    Feedback
+                    Help
                   </a>
                 </li>
               </ul>
