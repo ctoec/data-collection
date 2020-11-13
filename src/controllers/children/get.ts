@@ -43,7 +43,7 @@ export const getChildren = async (
     activeMonth?: Moment;
     skip?: number;
     take?: number;
-  }
+  } = {}
 ) => {
   let {
     organizationIds,

@@ -3,19 +3,26 @@ import { ColumnMetadata as ColumnMetadataInterface } from '../../../client/src/s
 
 // Formats
 export const BOOLEAN_FORMAT = 'Yes, Y, No, N';
+// Note: The Moment parser ignores separator characters in format strings, so don't
+// need multiple copies with '/' and '-'. Also, formats earlier in the array are
+// given priority, so this ordering matters. See:
+// https://momentjs.com/docs/#/parsing/string-format/ and
+// https://momentjs.com/docs/#/parsing/string-formats/
 export const DATE_FORMATS = [
+  'MM/YY',
+  'MMM/YY',
+  'MM/YYYY',
+  'MMM/YYYY',
   'MM/DD/YYYY',
-  'MM-DD-YYYY',
   'MM/DD/YY',
-  'MM-DD-YY',
-  'YYYY-MM-DD',
+  'YYYY/MM/DD',
 ];
 export const DATE_FORMAT = DATE_FORMATS.join(', ');
 export const REPORTING_PERIOD_FORMATS = [
-  'MM/YYYY',
-  'MM-YYYY',
-  'MM-YY',
   'MM/YY',
+  'MMM/YY',
+  'MM/YYYY',
+  'MM/DD/YYYY',
 ];
 export const REPORTING_PERIOD_FORMAT = REPORTING_PERIOD_FORMATS.join(', ');
 

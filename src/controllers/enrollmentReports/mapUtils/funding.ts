@@ -64,7 +64,6 @@ export const mapFunding = async (
     lastReportingPeriod: ReportingPeriod;
   if (source.firstReportingPeriod) {
     firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      // TODO: this comparison doesn't work-- need fuzzier matching
       where: { type: fundingSource, period: source.firstReportingPeriod },
     });
   }
