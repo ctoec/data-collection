@@ -6,8 +6,7 @@ import { Child, Enrollment } from '../entity';
  * soft-deleted.
  * @param rows
  */
-export const removeDeletedElements = (rows: any[]) => {
-  if (!rows) return [];
+export const removeDeletedElements = (rows?: any[]) => {
   return rows.filter((row: any) => !row.deletedDate);
 };
 
@@ -22,12 +21,12 @@ export const removeDeletedEntitiesFromChild = (child: Child) => {
   if (!child) return undefined;
   if (child.family) {
     child.family.incomeDeterminations = removeDeletedElements(
-      child.family.incomeDeterminations || []
+      child.family.incomeDeterminations
     );
   }
-  child.enrollments = removeDeletedElements(child.enrollments || []);
+  child.enrollments = removeDeletedElements(child.enrollments);
   child.enrollments.forEach((e: Enrollment) => {
-    e.fundings = removeDeletedElements(e.fundings || []);
+    e.fundings = removeDeletedElements(e.fundings);
   });
   return child;
 };
