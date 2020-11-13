@@ -6,6 +6,7 @@ import {
   Enrollment,
   Funding,
   Organization,
+  User,
 } from '../../../entity';
 import {
   Gender,
@@ -26,14 +27,23 @@ export const createNewChild = async (
   source: EnrollmentReportRow,
   organization: Organization,
   site: Site,
+  user: User,
   save: boolean
 ) => {
-  const family = await mapFamily(transaction, source, organization, save);
-  const child = await mapChild(transaction, source, organization, family, save);
+  const family = await mapFamily(transaction, source, organization, user, save);
+  const child = await mapChild(
+    transaction,
+    source,
+    organization,
+    family,
+    user,
+    save
+  );
   const incomeDetermination = await mapIncomeDetermination(
     transaction,
     source,
     family,
+    user,
     save
   );
   const enrollment = await mapEnrollment(
@@ -41,6 +51,7 @@ export const createNewChild = async (
     source,
     site,
     child,
+    user,
     save
   );
   const funding = await mapFunding(
@@ -48,6 +59,7 @@ export const createNewChild = async (
     source,
     organization,
     enrollment,
+    user,
     save
   );
   family.incomeDeterminations = [incomeDetermination];
@@ -63,7 +75,8 @@ export const updateChild = async (
   source: EnrollmentReportRow,
   organization: Organization,
   site: Site,
-  child: Child
+  child: Child,
+  user: User
 ) => {
   let enrollment = getExistingEnrollmentOnChild(source, child);
   const modifyingExistingEnrollment = enrollment !== undefined;
@@ -72,6 +85,7 @@ export const updateChild = async (
     source,
     site,
     child,
+    user,
     enrollment === undefined
   );
 
@@ -88,6 +102,7 @@ export const updateChild = async (
     source,
     organization,
     enrollmentUpdate,
+    user,
     funding === undefined
   );
 
@@ -117,6 +132,7 @@ export const mapChild = (
   source: EnrollmentReportRow,
   organization: Organization,
   family: Family,
+  user: User,
   save: boolean
 ) => {
   // Gender
@@ -158,7 +174,10 @@ export const mapChild = (
   } as Child;
 
   if (save) {
-    child = transaction.create(Child, child);
+    child = transaction.create(Child, {
+      ...child,
+      updateMetaData: { author: user },
+    });
     return transaction.save(child);
   }
 

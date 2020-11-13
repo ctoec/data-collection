@@ -1,5 +1,5 @@
 import { EnrollmentReportRow } from '../../template';
-import { Organization, Site, Enrollment } from '../../entity';
+import { Organization, Site, Enrollment, User } from '../../entity';
 import { BadRequestError } from '../../middleware/error/errors';
 import {
   BirthCertificateType,
@@ -304,6 +304,7 @@ describe('controllers', () => {
             source as EnrollmentReportRow,
             {} as Organization,
             {} as Enrollment,
+            {} as User,
             true
           );
           expect(transaction.create).toBeCalledTimes(doesCreateFunding ? 1 : 0);
