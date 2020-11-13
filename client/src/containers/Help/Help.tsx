@@ -1,9 +1,13 @@
 import React from 'react';
-import { Button, Alert } from '@ctoec/component-library';
-import { Link } from 'react-router-dom';
+import {
+  Button,
+  Alert,
+  QuestionIllustration,
+  Card,
+  HowToIcon,
+  SupportIcon,
+} from '@ctoec/component-library';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
-import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
 import { BackButton } from '../../components/BackButton';
 
 const Help: React.FC = () => {
@@ -29,8 +33,44 @@ const Help: React.FC = () => {
             }
           />
         </div>
+        <div className="tablet:grid-col-4" role="presentation">
+          <QuestionIllustration />
+        </div>
       </div>
-      <div className="grid-row"></div>
+      <div className="display-flex flex-row grid-row grid-gap margin-top-4">
+        <div className="desktop:grid-col-5">
+          <Card>
+            <div className="grid-row">
+              <HowToIcon className="height-8" />
+            </div>
+            <h2>How-to guides</h2>
+            <p>Find your answers to common tasks and questions.</p>
+
+            <Button
+              text="View guides"
+              // TODO: Replace this with an actual link once we have it
+              onClick={() => {}}
+            />
+          </Card>
+        </div>
+        <div className="desktop:grid-col-5">
+          <Card>
+            <div className="grid-row">
+              <SupportIcon className="height-8" />
+            </div>
+            <h2>Support requests</h2>
+            <p>
+              Reach out to the ECE Reporter team. We'll reply within 1 business
+              day.
+            </p>
+            <Button
+              text="Send a request"
+              // TODO: Replace this with an actual link once we have it
+              onClick={() => {}}
+            />
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
