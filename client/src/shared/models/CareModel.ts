@@ -1,6 +1,6 @@
 export enum CareModel {
-  inPerson = 'In-person',
-  hybrid = 'Hybrid',
-  distance = 'Distance',
-  unknown = 'Unknown',
+  InPerson = 'In-person',
+  Hybrid = 'Hybrid',
+  Distance = 'Distance',
+  Unknown = 'Unknown',
 }
