@@ -7,6 +7,7 @@ import { Child, Enrollment } from '../entity';
  * @param rows
  */
 export const removeDeletedElements = (rows?: any[]) => {
+  if (!rows) return [];
   return rows.filter((row: any) => !row.deletedDate);
 };
 
