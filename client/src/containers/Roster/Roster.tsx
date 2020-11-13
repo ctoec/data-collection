@@ -57,16 +57,15 @@ const Roster: React.FC = () => {
     : undefined;
 
   // TODO: handle fetching error
-  const { children: allChildrenForOrg, stillFetching } = usePaginatedChildData(
-    { ...query, withdrawn: false }
-  );
+  const { children: allChildrenForOrg, stillFetching } = usePaginatedChildData({
+    ...query,
+    withdrawn: false,
+  });
   const {
     children: withdrawnChildren,
     stillFetching: stillFetchingWithdrawn,
   } = usePaginatedChildData({ ...query, withdrawn: true });
-  const children = query.withdrawn
-    ? withdrawnChildren
-    : allChildrenForOrg;
+  const children = query.withdrawn ? withdrawnChildren : allChildrenForOrg;
   const loading = stillFetching || stillFetchingWithdrawn;
 
   // Get alerts for page, including alert for children with errors
@@ -104,13 +103,13 @@ const Roster: React.FC = () => {
   // Get roster content as accordion props
   const accordionProps = siteFilteredChildren
     ? {
-      items: getAccordionItems(siteFilteredChildren, {
-        hideCapacity: isSiteLevelUser,
-        hideOrgColumn: !isMultiOrgUser,
-        hideExitColumn: !query.withdrawn,
-      }),
-      titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
-    }
+        items: getAccordionItems(siteFilteredChildren, {
+          hideCapacity: isSiteLevelUser,
+          hideOrgColumn: !isMultiOrgUser,
+          hideExitColumn: !query.withdrawn,
+        }),
+        titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
+      }
     : undefined;
 
   // Function to submit data to OEC, to pass down into submit button

@@ -30,12 +30,12 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
     // Paginated api query (but only once we have organizationId param)
     return query.organization
       ? `/children?${stringify({
-        organizationId: query.organization,
-        skip: index * PAGE_SIZE,
-        take: PAGE_SIZE,
-        withdrawn: query.withdrawn,
-        month: query.month,
-      })}`
+          organizationId: query.organization,
+          skip: index * PAGE_SIZE,
+          take: PAGE_SIZE,
+          withdrawn: query.withdrawn,
+          month: query.month,
+        })}`
       : null;
   });
 
