@@ -1641,12 +1641,12 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      CDC - Child Day Care Full-day - 1 spaces filled
+                      CDC - Child Day Care Full-day - 1 space filled
                     </div>
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      PSR - Priority School Readiness Full-time - 1 spaces filled
+                      PSR - Priority School Readiness Full-time - 1 space filled
                     </div>
                   </div>
                 </div>
@@ -1900,7 +1900,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     <div
                       class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
                     >
-                      CDC - Child Day Care Extended-day - 1 spaces filled
+                      CDC - Child Day Care Extended-day - 1 space filled
                     </div>
                   </div>
                 </div>
