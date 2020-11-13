@@ -62,15 +62,15 @@ export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [
     fundingTimes: [
       {
         value: FundingTime.AdditionalFull,
-        formats: ['9', '+FD/FY', FundingTime.AdditionalFull],
+        formats: ['9', 'FD/FY', FundingTime.AdditionalFull],
       },
       {
         value: FundingTime.AdditionalSchool,
-        formats: ['10', '+SD/SY', FundingTime.AdditionalSchool],
+        formats: ['10', 'SD/SY', FundingTime.AdditionalSchool],
       },
       {
         value: FundingTime.AdditionalExtendedSchool,
-        formats: ['11', '+SD/SY/EY', FundingTime.AdditionalExtendedSchool],
+        formats: ['11', 'SD/SY/EY', FundingTime.AdditionalExtendedSchool],
       },
       {
         value: FundingTime.ExtendedDayYear,

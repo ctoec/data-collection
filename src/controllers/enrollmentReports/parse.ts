@@ -170,7 +170,7 @@ function parseEnrollmentReportRow(
 
     // Parse dates
     if (dateProperties.includes(prop)) {
-      rawEnrollment[prop] = getDate(value);
+      rawEnrollment[prop] = getDate(value, prop);
     }
 
     // Parse zipcodes
@@ -206,14 +206,20 @@ function getBoolean(value: string): boolean {
  * to moments using a helper function to convert excel serial
  * date number to Moment date (excelDateToDate)
  */
-function getDate(value: string | number): Moment {
+function getDate(value: string | number, prop: string): Moment {
+  let parsedDate: Moment;
   if (typeof value === 'string') {
     const m = moment.utc(value, [...DATE_FORMATS, ...REPORTING_PERIOD_FORMATS]);
-    return m.isValid() ? m : undefined;
+    parsedDate = m.isValid() ? m : undefined;
   }
   if (typeof value === 'number') {
-    return excelDateToDate(value);
+    parsedDate = excelDateToDate(value);
   }
+  // Override the day value of funding period dates to be 01
+  if (parsedDate && prop.toLowerCase().includes('period')) {
+    return parsedDate.startOf('month');
+  }
+  return parsedDate;
 }
 
 /**
