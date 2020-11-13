@@ -41,7 +41,7 @@ export const getChildren = async (
     withdrawnOnly?: string;
     skip?: number;
     take?: number;
-  }
+  } = {}
 ) => {
   let { organizationIds, missingInfo, withdrawnOnly, skip, take } = filterOpts;
 
