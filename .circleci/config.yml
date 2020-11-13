@@ -119,6 +119,10 @@ jobs:
           command: yarn
       - run:
           working_directory: e2e-tests
+          name: Download example data
+          command: wget https://staging.ece-fawkes.ctoecskylight.com/api/template/example/xlsx --output-document=Example.xlsx
+      - run:
+          working_directory: e2e-tests
           name: Run e2e tests
           command: yarn test
       - run:

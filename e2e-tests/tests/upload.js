@@ -10,7 +10,10 @@ module.exports = {
     // Log in
     await login(browser);
     // Go to file upload
-    await browser.waitForElementVisible('xpath', '//*/h1[contains(.,"Let\'s get started")]');
+    await browser.waitForElementVisible(
+      'xpath',
+      '//*/h1[contains(.,"Let\'s get started")]'
+    );
     await browser.execute(function () {
       document.querySelector('a[href="/upload"]').click();
     });
@@ -24,13 +27,29 @@ module.exports = {
     await browser.UploadLocalFile(`${process.cwd()}/Example.xlsx`, '#report');
     // TODO: change the ID on the upload element to make more sense
 
+    // Accept the error modal if it pops up
+    const errorModalButtonArgs = [
+      'xpath',
+      "//*/button[contains(.,'Upload and correct in roster')]",
+    ];
+    await browser.element(...errorModalButtonArgs, async (result) => {
+      if (result.state === 'success') {
+        await browser.click(...errorModalButtonArgs);
+      } else {
+        console.log('No error modal appearing');
+      }
+    });
+
     // Accept the replace thing if there is one
-    const replaceDataButtonArgs = ['xpath', "//*/button[contains(.,'Replace data')]"];
+    const replaceDataButtonArgs = [
+      'xpath',
+      "//*/button[contains(.,'Replace data')]",
+    ];
     await browser.element(...replaceDataButtonArgs, async (result) => {
       if (result.state === 'success') {
         await browser.click(...replaceDataButtonArgs);
       } else {
-        console.log('No replace data button', { result });
+        console.log('No replace data button');
       }
     });
 

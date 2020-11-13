@@ -4,6 +4,14 @@ const {
   clickOnFirstChildInRoster,
 } = require('../utils/clickOnFirstChildInRoster');
 
+/**
+ * TODO: Deleting a record doesn't create an alert even in the most
+ * up to date local version of the app. So what we need to do is find
+ * the number of children on the  roster before the delete, then
+ * compare it to the number of children on the roster after the delete.
+ * If the diff is 1, we gucci.
+ */
+
 module.exports = {
   '@tags': ['child', 'delete'],
   deleteChild: async function (browser) {
