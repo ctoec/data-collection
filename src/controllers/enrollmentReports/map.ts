@@ -9,6 +9,7 @@ import {
 } from './mapUtils';
 import { EnrollmentReportRow } from '../../template';
 import { BadRequestError, ApiError } from '../../middleware/error/errors';
+import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 
 /**
  * Can use optional save parameter to decide whether to persist
@@ -22,8 +23,9 @@ export const mapRows = async (
   user: User,
   opts: { save: boolean } = { save: false }
 ) => {
+  const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
   const [organizations, sites] = await Promise.all([
-    transaction.findByIds(Organization, user.organizationIds),
+    transaction.findByIds(Organization, readAccessibleOrgIds),
     transaction.findByIds(Site, user.siteIds),
   ]);
 

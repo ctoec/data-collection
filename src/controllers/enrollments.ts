@@ -98,7 +98,7 @@ export const withdraw = async (id: number, withdrawData: Withdraw) => {
       await tManager.save(currentFunding);
     }
 
-    if (!withdrawData.exitReason || !withdrawData.exitReason) {
+    if (!withdrawData.exitDate || !withdrawData.exitReason) {
       throw new BadRequestError(
         'Exit date and exit reason must be provided to withdraw'
       );

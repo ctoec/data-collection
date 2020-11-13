@@ -8,7 +8,7 @@ const child = {
   id: '00000000-0000-0000-0000-000000000000',
   firstName: 'First',
   lastName: 'Last',
-  birthCertificateType: BirthCertificateType.unavailable,
+  birthCertificateType: BirthCertificateType.Unavailable,
   organization: { id: 1 } as Organization,
   enrollments: [],
   family: {
