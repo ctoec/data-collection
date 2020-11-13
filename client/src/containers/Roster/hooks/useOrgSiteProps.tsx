@@ -1,16 +1,21 @@
 import { TabNav, TabItem } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
-import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils';
 import { useHistory } from 'react-router-dom';
-import { useContext } from 'react';
+import React, { useContext } from 'react';
+import moment from 'moment';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { Site, Organization } from '../../../shared/models';
-import moment from 'moment';
 import { RosterQueryParams } from '../Roster';
+import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils';
+import pluralize from 'pluralize';
 
 const ALL_SITES = 'all-sites';
 
-export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
+export const useOrgSiteProps = (
+  isLoading: boolean,
+  orgChildCount: number,
+  siteChildCount: number
+) => {
   const { user } = useContext(UserContext);
   const organizations = user?.organizations || [];
   const sites = user?.sites || [];
@@ -45,71 +50,81 @@ export const useOrgSiteProps = (isLoading: boolean, childCount: number) => {
     }
   };
 
-  // Base case: single-site user:
-  // - has no tabNav
-  // - has site name as h1Content
-  // - does not include site count in subHeaderText
-  const props = {
-    tabNavProps: undefined as TabNav | undefined,
-    h1Text: isLoading ? 'Loading...' : sites[0].siteName,
-    subHeaderText: getSubHeaderText(isLoading, childCount, sites, query),
-    superHeaderText: organizations?.[0]?.providerName,
-  };
+  if (isLoading) {
+    return {
+      h1Text: 'Loading...',
+      tabNavProps: undefined as TabNav | undefined,
+      subHeaderText: '',
+      rosterH2: '',
+      superHeaderText: '',
+    };
+  }
 
   // Multi-org user gets 'Multiple organizations' h1,
   //nested tabs (for orgs and sites),
   // sub header with only sites for the currently selected org,
   // and no super header
   if (organizations.length > 1) {
-    props.h1Text = 'Multiple organizations';
     const orgSites = sites.filter(
       (s) => `${s.organizationId}` === query.organization
     );
-    props.subHeaderText = getSubHeaderText(
-      isLoading,
-      childCount,
-      orgSites,
-      query
-    );
-    props.superHeaderText = '';
-    props.tabNavProps = {
-      itemType: 'organization',
-      items: getOrganizationTabItems(organizations, sites),
-      onClick: tabNavOnClick,
-      nestedActiveId: query.site,
-      activeId: query.organization,
+    return {
+      h1Text: query.withdrawn
+        ? 'Withdrawn enrollments'
+        : 'Multiple organizations',
+      tabNavProps: {
+        itemType: 'organization',
+        items: getOrganizationTabItems(organizations, sites),
+        onClick: tabNavOnClick,
+        nestedActiveId: query.site,
+        activeId: query.organization,
+      },
+      subHeaderText: getSubHeaderText(orgChildCount, orgSites, query),
+      rosterH2: getRosterH2(siteChildCount, sites, query),
+      superHeaderText: '',
     };
   }
   // Multi-site user gets org name as h1
   // single level of tabs (for sites)
   // and no super header
   else if (sites.length > 1) {
-    // Assume users with multi-site access are all under the same org
-    props.h1Text = organizations[0].providerName;
-    props.superHeaderText = '';
-    props.tabNavProps = {
-      itemType: 'site',
-      onClick: tabNavOnClick,
-      items: getSiteTabItems(sites),
-      activeId: query.site,
+    return {
+      // Assume users with multi-site access are all under the same org
+      h1Text: query.withdrawn
+        ? 'Withdrawn enrollments'
+        : organizations[0].providerName,
+      tabNavProps: {
+        itemType: 'site',
+        onClick: tabNavOnClick,
+        items: getSiteTabItems(sites),
+        activeId: query.site,
+      },
+      subHeaderText: getSubHeaderText(orgChildCount, sites, query),
+      rosterH2: getRosterH2(siteChildCount, sites, query),
+      superHeaderText: '',
     };
   }
 
-  if (query.withdrawn) {
-    props.h1Text = 'Withdrawn enrollments';
-  }
-
-  return props;
+  // Base case: single-site user:
+  // - has no tabNav
+  // - has site name as h1Content
+  // - does not include site count in subHeaderText
+  // - no sub-sub header (because no tabNav)
+  return {
+    h1Text: query.withdrawn ? 'Withdrawn enrollments' : sites[0].siteName,
+    tabNavProps: undefined as TabNav | undefined,
+    subHeaderText: getSubHeaderText(orgChildCount, sites, query),
+    rosterH2: '',
+    superHeaderText: organizations?.[0]?.providerName,
+  };
 };
 
 /****************** HELPER FUNCTIONS  ***********************/
 function getSubHeaderText(
-  loading: boolean,
   childCount: number,
   userSites?: Site[],
   query?: RosterQueryParams
 ) {
-  if (loading) return '';
   if (query?.withdrawn) {
     return 'Showing age group at time of withdrawal';
   }
@@ -129,6 +144,25 @@ function getSubHeaderText(
       .format('MMMM YYYY')}`;
   }
   return returnText;
+}
+
+function getRosterH2(
+  childCount: number,
+  sites: Site[],
+  query?: RosterQueryParams
+) {
+  const siteText = query?.site
+    ? sites.find((s) => `${s.id}` === query.site)?.siteName
+    : 'All sites';
+  return (
+    <h2>
+      {siteText}
+      <span className="text-light">
+        {' '}
+        {pluralize('child', childCount, true)}
+      </span>
+    </h2>
+  );
 }
 
 function getSiteTabItems(sites: Site[]): TabItem[] {

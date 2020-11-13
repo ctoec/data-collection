@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { Family, IncomeDetermination } from '../../../entity';
+import { Family, IncomeDetermination, User } from '../../../entity';
 import { EnrollmentReportRow } from '../../../template';
 
 /**
@@ -10,6 +10,7 @@ export const mapIncomeDetermination = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   family: Family,
+  user: User,
   save: boolean
 ) => {
   // Only attempt to create an income determination if the user supplied any
@@ -26,10 +27,12 @@ export const mapIncomeDetermination = (
     } as IncomeDetermination;
 
     if (save) {
-      incomeDetermination = transaction.create(
-        IncomeDetermination,
-        incomeDetermination
-      );
+      incomeDetermination = transaction.create(IncomeDetermination, {
+        ...incomeDetermination,
+        updateMetaData: {
+          author: user,
+        },
+      });
       return transaction.save(incomeDetermination);
     }
 

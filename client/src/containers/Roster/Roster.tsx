@@ -17,10 +17,9 @@ import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   getAccordionItems,
-  getChildrenByAgeGroup,
   getQueryMonthFormat,
   QUERY_STRING_MONTH_FORMAT,
-  applyClientSideFilters,
+  applySiteFilter,
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
@@ -32,7 +31,6 @@ import {
   usePaginatedChildData,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
-import { ColumnNames } from './tableColumns';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -57,12 +55,9 @@ const Roster: React.FC = () => {
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
-  const { withdrawn: showOnlyWithdrawnEnrollments } = query;
 
-  const { children, error } = usePaginatedChildData(
-    query.organization,
-    showOnlyWithdrawnEnrollments
-  );
+  const { children, error } = usePaginatedChildData(query);
+
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const { alertElements } = useChildrenWithErrorsAlert(
@@ -77,39 +72,33 @@ const Roster: React.FC = () => {
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
   // site is requested
-  const clientSideFilteredChildren = applyClientSideFilters(
-    children || [],
-    // TODO: MAKE INTO OPTS
-    query.site,
-    queryMonth
-  );
+  const siteFilteredChildren = applySiteFilter(children, query.site);
 
-  const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
-  let columnsToHide = [];
-  if (!isMultiOrgUser) {
-    columnsToHide.push(ColumnNames.ORGANIZATION);
-  }
-  if (!showOnlyWithdrawnEnrollments) {
-    columnsToHide.push(ColumnNames.EXIT);
-  }
-  const accordionProps = {
-    items: getAccordionItems(childrenByAgeGroup, {
-      hideCapacity: isSiteLevelUser,
-      excludeColumns: columnsToHide,
-    }),
-    titleHeadingLevel: 'h2' as HeadingLevel,
-  };
-
-  // Get props for tabNav, h1Text, and subHeaderText based on user access (i.e. user's sites and org permissions)
+  // Get props for tabNav, h1Text, and subHeaderText, superHeaderText, and subSubHeader
+  // based on user access (i.e. user's sites and org permissions)
   const {
     tabNavProps,
     h1Text,
     subHeaderText,
+    rosterH2,
     superHeaderText,
   } = useOrgSiteProps(
     !children || !query.organization,
-    clientSideFilteredChildren.length
+    (children || []).length,
+    (siteFilteredChildren || []).length
   );
+
+  // Get roster content as accordion props
+  const accordionProps = siteFilteredChildren
+    ? {
+        items: getAccordionItems(siteFilteredChildren, {
+          hideCapacity: isSiteLevelUser,
+          hideOrgColumn: !isMultiOrgUser,
+          hideExitColumn: !query.withdrawn,
+        }),
+        titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
+      }
+    : undefined;
 
   // Function to submit data to OEC, to pass down into submit button
   async function submitToOEC() {
@@ -147,10 +136,17 @@ const Roster: React.FC = () => {
   };
 
   let rosterContent = <NoRecordsAlert />;
-  if (children?.length && accordionProps.items.length)
+  if (children?.length && accordionProps)
     rosterContent = <Accordion {...accordionProps} />;
   if (tabNavProps)
-    rosterContent = <TabNav {...tabNavProps}>{rosterContent}</TabNav>;
+    rosterContent = (
+      <TabNav {...tabNavProps}>
+        <>
+          {rosterH2}
+          {rosterContent}
+        </>
+      </TabNav>
+    );
 
   return (
     <>
@@ -180,7 +176,7 @@ const Roster: React.FC = () => {
                 icon="calendar"
               />
             )}
-            {showOnlyWithdrawnEnrollments && (
+            {!!query.withdrawn && (
               <RosterFilterIndicator
                 filterTitleText="Withdrawn enrollments"
                 reset={() => updateWithdrawnOnly(false)}
@@ -189,7 +185,7 @@ const Roster: React.FC = () => {
             )}
           </div>
         </div>
-        {!showOnlyWithdrawnEnrollments && (
+        {!query.withdrawn && (
           <RosterButtonsTable
             filterByMonth={queryMonth}
             setFilterByMonth={updateActiveMonth}
