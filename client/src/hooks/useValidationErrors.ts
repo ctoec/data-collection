@@ -22,6 +22,12 @@ export function useValidationErrors<T extends ObjectWithValidationErrors>(
   useEffect(() => {
     if (!errorsHidden) {
       setOutputObject(inputObject);
+    } else {
+      // Otherwise we'll be using stale values
+      setOutputObject({
+        ...inputObject,
+        validationErrors: undefined,
+      });
     }
   }, [errorsHidden, inputObject]);
 

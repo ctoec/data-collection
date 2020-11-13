@@ -1,0 +1,11 @@
+.roster-filter-indicator {
+  text-align: center;
+  svg {
+    color: #a9aeb1;
+  }
+  &__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+  }
+}

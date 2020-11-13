@@ -43,7 +43,7 @@ const children: Child[] = Array.from({ length: 100 }, (_, i) => {
     firstName: name.firstName(),
     lastName: name.lastName(),
     birthCertificateType: weightedBoolean(8)
-      ? BirthCertificateType.nonUS
+      ? BirthCertificateType.NonUS
       : BirthCertificateType.US, // Arbitrary, would be better based on actual frequency in data
     birthdate: moment().add(-random.number({ min: 6, max: 60 }), 'months'),
     organization: org,

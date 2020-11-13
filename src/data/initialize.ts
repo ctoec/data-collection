@@ -10,8 +10,6 @@ import { sitesByOrgName } from './sites';
 import { getFakeFundingSpaces } from './fundingSpace';
 
 export const initialize = async () => {
-  const qb = getManager().createQueryBuilder();
-
   await Promise.all(
     organizations.map(async (orgToCreate) => {
       let organization = await getManager().findOne(Organization, {

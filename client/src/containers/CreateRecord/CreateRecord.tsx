@@ -44,34 +44,12 @@ const CreateRecord: React.FC = () => {
     }
   }, [activeStep, history, steps]);
 
-  const [child, setChild] = useState<Child>();
-  const organization = locationState?.organization || child?.organization;
+  const [child, setChild] = useState<Child>({
+    organization: locationState?.organization,
+  } as Child);
 
   const [refetchChild, setRefetchChild] = useState<number>(0);
   const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
-
-  // On initial load, create child
-  useEffect(() => {
-    if (child || childId || !organization) return;
-
-    const placeholderChild = {
-      firstName: '',
-      lastName: '',
-      organization,
-      raceNotDisclosed: false,
-    };
-
-    apiPost('children', placeholderChild, {
-      accessToken,
-    })
-      .then((res) => {
-        setChild(res);
-        history.replace({ pathname: `/create-record/${res.id}` });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [accessToken, child, locationState, organization, history, childId]);
 
   // Fetch fresh child from API whenever refetch is triggered
   // And move to next step, if current step is complete (has no validation errors)

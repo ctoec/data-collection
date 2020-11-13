@@ -1,6 +1,7 @@
 import { stringify } from 'query-string';
 import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR';
 import { Child } from '../../../shared/models';
+import { cache } from 'swr';
 
 const PAGE_SIZE = 100;
 
@@ -9,11 +10,15 @@ const PAGE_SIZE = 100;
  * automatically requesting the next page of data while it exists
  * by incrementing useSWRInfinite "page size".
  */
-export const usePaginatedChildData = (organization: string | undefined) => {
+export const usePaginatedChildData = (
+  organization: string | undefined,
+  withdrawnEnrollmentsOnly?: boolean
+) => {
   let stillFetching = true;
   // Fetch child data, filtered by organization and month
   const {
     data: childrenArrays,
+    mutate,
     size,
     setSize,
     error,
@@ -30,6 +35,7 @@ export const usePaginatedChildData = (organization: string | undefined) => {
           organizationId: organization,
           skip: index * PAGE_SIZE,
           take: PAGE_SIZE,
+          withdrawn: withdrawnEnrollmentsOnly,
         })}`
       : null;
   });
@@ -48,7 +54,27 @@ export const usePaginatedChildData = (organization: string | undefined) => {
 
   return {
     children: childrenArrays ? childrenArrays.flat() : childrenArrays,
+    mutate,
     stillFetching,
     error,
   };
 };
+
+/**
+ * Clear caches for `children` queries. If organizationId is supplied,
+ * then only clear caches for queries made with that id as a query param,
+ * otherwise clear all child caches
+ *
+ * @param organizationId
+ */
+export const clearChildrenCaches = (organizationId?: string) =>
+  cache
+    .keys()
+    .filter(
+      (key) =>
+        key.includes('children') &&
+        (organizationId
+          ? key.includes(`organizationId=${organizationId}`)
+          : true)
+    )
+    .forEach((childrenCacheKey) => cache.delete(childrenCacheKey));

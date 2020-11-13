@@ -90,9 +90,10 @@ async function api(
   // Handle API error response
   if (res.status >= 400) {
     try {
-      const errorResponse = await res.json();
+      const error = await res.json();
+
       // return rejected promise instead of throwing error to avoid catch
-      return Promise.reject(errorResponse.error);
+      return Promise.reject(error?.data ? error : error?.message);
     } catch (err) {
       console.error('error parsing API error response', err);
       throw new Error('There was an error');

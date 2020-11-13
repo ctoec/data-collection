@@ -12,10 +12,11 @@ import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child } from '../../../shared/models';
-import { apiPut } from '../../../utils/api';
+import { apiPost, apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+import { useHistory } from 'react-router-dom';
 
 // The fields we use to check to see if this form has errors or missing info
 const childIdentifiersFields = [
@@ -41,27 +42,54 @@ export const ChildIdentifiersForm = ({
   showFieldOrFieldset = () => true,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
+  const history = useHistory();
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
 
   if (!inputChild) {
     throw new Error('Child info rendered without child');
   }
-
+  // Must keep track of child locally in case creation fails
+  const [localChild, updateLocalChild] = useState(inputChild);
   const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
-    inputChild,
+    localChild,
     hideErrorsOnFirstLoad
   );
 
+  // This will prevent the flashing of errors
+  // TODO: replicate this in the other forms
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setSaving(false);
+    }
+  };
+
   const onFormSubmit = (_child: Child) => {
-    setErrorsHidden(false);
     setSaving(true);
-    apiPut(`children/${child.id}`, _child, { accessToken })
-      .then(afterSaveSuccess)
-      .catch((err) => {
-        console.log(err);
+    if (!child.id) {
+      apiPost('children', _child, {
+        accessToken,
       })
-      .finally(() => (isMounted() ? setSaving(false) : null));
+        .then((res) => {
+          history.replace({ pathname: `/create-record/${res.id}` });
+          afterSaveSuccess();
+        })
+        .catch((err) => {
+          if (err.data) {
+            updateLocalChild(err.data);
+          }
+          console.error(err);
+        })
+        .finally(onFinally);
+    } else {
+      apiPut(`children/${child.id}`, _child, { accessToken })
+        .then(afterSaveSuccess)
+        .catch((err) => {
+          console.error(err);
+        })
+        .finally(onFinally);
+    }
   };
 
   return (

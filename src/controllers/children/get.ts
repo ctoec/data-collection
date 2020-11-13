@@ -6,8 +6,9 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { User, Child } from '../../entity';
-import { validateObject } from '../../utils/distributeValidationErrorsToSubObjects';
+import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
+import { withdraw } from '../enrollments';
 
 /**
  * Get child by id, with related family and related
@@ -20,7 +21,7 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
   let child = await getManager().findOne(Child, opts);
   child = removedDeletedEntitiesFromChild(child);
 
-  return validateObject(child);
+  return await validateObject(child);
 };
 
 /**
@@ -37,11 +38,12 @@ export const getChildren = async (
   filterOpts: {
     organizationIds?: string[];
     missingInfo?: string;
+    withdrawnOnly?: string;
     skip?: number;
     take?: number;
-  }
+  } = {}
 ) => {
-  let { organizationIds, missingInfo, skip, take } = filterOpts;
+  let { organizationIds, missingInfo, withdrawnOnly, skip, take } = filterOpts;
 
   const opts = (await getFindOpts(user, {
     organizationIds,
@@ -51,7 +53,15 @@ export const getChildren = async (
 
   let children = await getManager().find(Child, opts);
   children = children.map((c) => removedDeletedEntitiesFromChild(c));
-  children.map(validateObject);
+  children = await Promise.all(children.map(validateObject));
+
+  if (withdrawnOnly) {
+    // Do not return any children with active enrollments
+    children = children.filter((c) => c.enrollments?.every((e) => !!e.exit));
+  } else {
+    // Default is to return all children with any active enrollments
+    children = children.filter((c) => c.enrollments?.some((e) => !e.exit));
+  }
 
   if (missingInfo === 'true') {
     children = children.filter(
@@ -100,7 +110,9 @@ const getFindOpts = async (
     ],
     where: (qb: SelectQueryBuilder<Child>) => {
       qb.where('Child.organizationId IN (:...orgIds)', {
-        orgIds: filterOrgIds,
+        // SQLServer doesn't like queries like "IN ()", so supply
+        // an impossible value for empty arrays
+        orgIds: filterOrgIds.length ? filterOrgIds : ['NULL'],
       });
 
       if (id) {
