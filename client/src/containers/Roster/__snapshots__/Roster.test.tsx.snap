@@ -182,6 +182,14 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             class="oec-tab-nav--content"
             role="tabpanel"
           >
+            <h2>
+              All sites
+              <span
+                class="text-light"
+              >
+                 3 children
+              </span>
+            </h2>
             <div
               aria-multiselectable="true"
               class="oec-accordion"
@@ -198,7 +206,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                     class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
                   >
                     <div>
-                      <h2
+                      <h3
                         class="oec-accordion__heading-title"
                       >
                         Infant/toddler 
@@ -207,7 +215,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         >
                           2 children 
                         </span>
-                      </h2>
+                      </h3>
                       <div
                         class="display-flex flex-wrap"
                       >
@@ -480,7 +488,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                     class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
                   >
                     <div>
-                      <h2
+                      <h3
                         class="oec-accordion__heading-title"
                       >
                         Preschool 
@@ -489,7 +497,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         >
                           1 child 
                         </span>
-                      </h2>
+                      </h3>
                       <div
                         class="display-flex flex-wrap"
                       >
@@ -946,6 +954,14 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             class="oec-tab-nav--content"
             role="tabpanel"
           >
+            <h2>
+              All sites
+              <span
+                class="text-light"
+              >
+                 3 children
+              </span>
+            </h2>
             <div
               aria-multiselectable="true"
               class="oec-accordion"
@@ -962,7 +978,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                     class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
                   >
                     <div>
-                      <h2
+                      <h3
                         class="oec-accordion__heading-title"
                       >
                         Infant/toddler 
@@ -971,7 +987,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         >
                           2 children 
                         </span>
-                      </h2>
+                      </h3>
                       <div
                         class="display-flex flex-wrap"
                       >
@@ -1221,7 +1237,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                     class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
                   >
                     <div>
-                      <h2
+                      <h3
                         class="oec-accordion__heading-title"
                       >
                         Preschool 
@@ -1230,7 +1246,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         >
                           1 child 
                         </span>
-                      </h2>
+                      </h3>
                       <div
                         class="display-flex flex-wrap"
                       >
