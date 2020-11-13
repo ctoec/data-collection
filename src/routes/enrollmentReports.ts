@@ -1,7 +1,6 @@
 import express from 'express';
 import { getManager } from 'typeorm';
 import multer from 'multer';
-
 import { Child, EnrollmentReport } from '../entity';
 import {
   BadRequestError,
@@ -67,7 +66,9 @@ enrollmentReportsRouter.post(
           'Unable to determine validation errors in spreadsheet: ',
           err
         );
-        throw new BadRequestError('Cannot parse uploaded sheet');
+        throw new BadRequestError(
+          'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
+        );
       }
     });
   })
