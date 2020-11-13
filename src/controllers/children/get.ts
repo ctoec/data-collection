@@ -55,7 +55,6 @@ export const getChildren = async (
 
   const opts = (await getFindOpts(user, {
     organizationIds,
-    withdrawnOnly,
   })) as FindManyOptions<Child>;
   opts.skip = skip;
   opts.take = take;
@@ -64,15 +63,22 @@ export const getChildren = async (
   children = children.map((c) => removeDeletedEntitiesFromChild(c));
   children = await Promise.all(children.map(validateObject));
 
-  // If withdrawn qs param
-  if (withdrawnOnly) {
+  // If missing info qs param
+  if (missingInfoOnly) {
+    // Return all children with missing info
+    return children.filter(
+      (child) => child.validationErrors && child.validationErrors.length
+    );
+  }
+  // Else if withdrawn qs param
+  else if (withdrawnOnly) {
     // Do not return any children with active enrollments
-    children = children.filter((c) => c.enrollments?.every((e) => !!e.exit));
+    return children.filter((c) => c.enrollments?.every((e) => !!e.exit));
   }
   // Else if month qs param
   else if (activeMonth) {
     // Do not return children withouth active enrollment during or before that month
-    children = children.filter((c) => {
+    return children.filter((c) => {
       // filter out enrollments after the current month filter
       c.enrollments = c.enrollments?.filter((e) =>
         e.entry.isSameOrBefore(activeMonth.endOf('month'))
@@ -82,21 +88,10 @@ export const getChildren = async (
       return c.enrollments && c.enrollments.length;
     });
   }
-  // Else
+  // Else default to return only children with active enrollments
   else {
-    // Default is to return all children with any active enrollments
-    children = children.filter((c) => c.enrollments?.some((e) => !e.exit));
+    return children.filter((c) => c.enrollments?.some((e) => !e.exit));
   }
-
-  // If missing info qs param
-  if (missingInfoOnly) {
-    // Only return children with missing info
-    children = children.filter(
-      (child) => child.validationErrors && child.validationErrors.length
-    );
-  }
-
-  return children;
 };
 
 /**
@@ -120,11 +115,9 @@ const getFindOpts = async (
   filterOpts: {
     id?: string;
     organizationIds?: string[];
-    activeMonth?: Moment;
-    withdrawnOnly?: boolean;
   } = {}
 ) => {
-  const { id, organizationIds, activeMonth, withdrawnOnly } = filterOpts;
+  const { id, organizationIds } = filterOpts;
   const readOrgIds = await getReadAccessibleOrgIds(user);
   const filterOrgIds =
     organizationIds?.filter((orgId) => readOrgIds.includes(orgId)) ||
@@ -155,9 +148,13 @@ const getFindOpts = async (
       // https://github.com/typeorm/typeorm/issues/2707
       // Until then, use the generated aliases to do nested filtering
       if (user.accessType === 'site') {
-        qb.andWhere('Child__enrollments.siteId IN (:...siteIds)', {
-          siteIds: user.siteIds,
-        });
+        qb.andWhere(
+          'Child__enrollments.siteId IN (:...siteIds) OR (Child__enrollments.siteId IS NULL AND (Child.authorId = :userId OR Child__enrollments.authorId = :userId))',
+          {
+            siteIds: user.siteIds,
+            userId: user.id,
+          }
+        );
       }
     },
     loadEagerRelations: true,

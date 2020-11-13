@@ -2,8 +2,10 @@ import { ValidationError, validate } from 'class-validator';
 import { ObjectWithValidationErrors } from '../../client/src/shared/models';
 
 export async function validateObject<T extends ObjectWithValidationErrors>(
-  object: T
+  object: T | undefined
 ) {
+  if (!object) return;
+
   const validationErrors = await validate(object, {
     validationError: { value: false, target: false },
   });

@@ -5,6 +5,7 @@ import {
   Organization,
   FundingSpace,
   ReportingPeriod,
+  User,
 } from '../../../entity';
 import {
   FundingSource,
@@ -27,6 +28,7 @@ export const mapFunding = async (
   source: EnrollmentReportRow,
   organization: Organization,
   enrollment: Enrollment,
+  user: User,
   save: boolean
 ) => {
   const fundingSource: FundingSource = mapEnum(
@@ -87,7 +89,12 @@ export const mapFunding = async (
       enrollmentId: enrollment.id,
     } as Funding;
 
-    funding = transaction.create(Funding, funding);
+    funding = transaction.create(Funding, {
+      ...funding,
+      updateMetaData: {
+        author: user,
+      },
+    });
     if (save) {
       return transaction.save(funding);
     }

@@ -54,7 +54,7 @@ export const createChild = async (_child: Child, user: User) => {
     const family = await getManager().save(
       getManager().create(Family, { organization })
     );
-    _child.family = family;
+    newChild.family = family;
   }
 
   return await getManager().save(newChild);

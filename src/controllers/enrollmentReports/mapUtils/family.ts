@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { Family, Organization } from '../../../entity';
+import { Family, Organization, User } from '../../../entity';
 
 import { EnrollmentReportRow } from '../../../template';
 
@@ -13,6 +13,7 @@ export const mapFamily = (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
+  user: User,
   save: boolean
 ) => {
   let family = {
@@ -25,7 +26,12 @@ export const mapFamily = (
   } as Family;
 
   if (save) {
-    family = transaction.create(Family, family);
+    family = transaction.create(Family, {
+      ...family,
+      updateMetaData: {
+        author: user,
+      },
+    });
     return transaction.save(family);
   }
 
