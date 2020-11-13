@@ -29,5 +29,4 @@ export const removeDeletedEntitiesFromChild = (child: Child) => {
   child.enrollments.forEach((e: Enrollment) => {
     e.fundings = removeDeletedElements(e.fundings);
   });
-  return child;
 };

@@ -228,7 +228,7 @@ export const getExistingEnrollmentOnChild = (
   if (!child.enrollments) return undefined;
   return child.enrollments.find((e) => {
     return (
-      e.site.siteName === row.site &&
+      e.site?.siteName === row.site &&
       e.entry.format('MM/DD/YYYY') === row.entry.format('MM/DD/YYYY')
     );
   });
