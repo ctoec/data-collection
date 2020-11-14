@@ -33,6 +33,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   afterSaveSuccess,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
+  setAlerts,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -55,7 +56,13 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
     apiPut(`families/${family.id}`, newState, { accessToken })
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to save family address',
+          },
+        ]);
       })
       .finally(() => (isMounted() ? setSaving(false) : null));
   };

@@ -1,7 +1,7 @@
 import React from 'react';
 import pluralize from 'pluralize';
 import idx from 'idx';
-import { InlineIcon, Table } from '@ctoec/component-library';
+import { ErrorBoundary, InlineIcon, Table } from '@ctoec/component-library';
 import { AgeGroup, Child } from '../../shared/models';
 import { RosterSectionHeader } from './RosterSectionHeader';
 import { ColumnNames, tableColumns } from './tableColumns';
@@ -9,9 +9,9 @@ import { Moment } from 'moment';
 import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
 import {
   getCurrentEnrollment,
-  childHasEnrollmentsActiveInMonth,
 } from '../../utils/models';
 import { getLastEnrollment } from '../../utils/models/getLastEnrollment';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const MAX_LENGTH_EXPANDED = 50;
 export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
@@ -118,10 +118,10 @@ export function getAccordionItems(
     hideOrgColumn: boolean;
     hideExitColumn: boolean;
   } = {
-    hideCapacity: false,
-    hideOrgColumn: true,
-    hideExitColumn: true,
-  }
+      hideCapacity: false,
+      hideOrgColumn: true,
+      hideExitColumn: true,
+    }
 ): AccordionItemProps[] {
   const childrenByAgeGroup = getChildrenByAgeGroup(children);
   const excludeColumns: ColumnNames[] = [];
@@ -160,15 +160,17 @@ export function getAccordionItems(
       expandText: `Show ${ageGroup} roster`,
       collapseText: `Hide ${ageGroup} roster`,
       content: (
-        <Table<Child>
-          className="margin-bottom-4"
-          id={`roster-table-${ageGroup}`}
-          rowKey={(row) => row?.id}
-          data={ageGroupChildren}
-          columns={tableColumns(excludeColumns)}
-          defaultSortColumn={0}
-          defaultSortOrder="ascending"
-        />
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+          <Table<Child>
+            className="margin-bottom-4"
+            id={`roster-table-${ageGroup}`}
+            rowKey={(row) => row?.id}
+            data={ageGroupChildren}
+            columns={tableColumns(excludeColumns)}
+            defaultSortColumn={0}
+            defaultSortOrder="ascending"
+          />
+        </ErrorBoundary>
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));

@@ -6,6 +6,7 @@ import {
   TabNav,
   HeadingLevel,
   LoadingWrapper,
+  ErrorBoundary,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
@@ -31,6 +32,7 @@ import {
   usePaginatedChildData,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -217,16 +219,18 @@ const Roster: React.FC = () => {
             )}
           </div>
         </div>
-        {!query.withdrawn && (
-          <RosterButtonsTable
-            filterByMonth={queryMonth}
-            setFilterByMonth={updateActiveMonth}
-            updateWithdrawnOnly={updateWithdrawnOnly}
-          />
-        )}
-        <LoadingWrapper text="Loading your roster..." loading={loading}>
-          {rosterContent}
-        </LoadingWrapper>
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+          {!query.withdrawn && (
+            <RosterButtonsTable
+              filterByMonth={queryMonth}
+              setFilterByMonth={updateActiveMonth}
+              updateWithdrawnOnly={updateWithdrawnOnly}
+            />
+          )}
+          <LoadingWrapper text="Loading your roster..." loading={loading}>
+            {rosterContent}
+          </LoadingWrapper>
+        </ErrorBoundary>
       </div>
       <FixedBottomBar>
         <Button

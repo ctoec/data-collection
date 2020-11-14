@@ -1,7 +1,8 @@
+import { LoadingWrapper } from '@ctoec/component-library';
 import React from 'react';
 
 const Login = function () {
-  return <div className="grid-container">Loading...</div>;
+  return <LoadingWrapper loading={true} />;
 };
 
 export default Login;

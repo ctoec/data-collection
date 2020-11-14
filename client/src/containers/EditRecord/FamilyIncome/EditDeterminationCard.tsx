@@ -13,7 +13,7 @@ import {
 import { currencyFormatter } from '../../../utils/formatters';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
-import { FamilyIncomeForm } from '../../../components/Forms';
+import { FamilyIncomeForm, RecordFormProps } from '../../../components/Forms';
 
 type EditDeterminationCardProps = {
   child: Child;
@@ -21,6 +21,7 @@ type EditDeterminationCardProps = {
   afterSaveSuccess: () => void;
   isCurrent?: boolean;
   currentIsNew?: boolean;
+  setAlerts: RecordFormProps['setAlerts'];
 };
 
 /**
@@ -34,6 +35,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
   afterSaveSuccess,
   isCurrent,
   currentIsNew,
+  setAlerts,
 }) => {
   const determination = child?.family?.incomeDeterminations?.find(
     (d) => d.id === determinationId
@@ -55,7 +57,15 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       { accessToken }
     )
       .then(afterSaveSuccess)
-      .catch((err) => console.error('Unable to delete determination'));
+      .catch((err) => {
+        console.error(err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to delete determination',
+          },
+        ]);
+      });
   };
 
   return (
@@ -117,7 +127,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
             setCloseCard(true);
             afterSaveSuccess();
           }}
-          setAlerts={() => {}}
+          setAlerts={setAlerts}
         />
       </CardExpansion>
     </Card>
