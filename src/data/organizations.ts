@@ -17,3 +17,4 @@ export const durmstrang = {
 };
 
 export const organizations = [hogwarts, beauxbatons, durmstrang];
+export const stagingUserAllowedOrganizations = [hogwarts];
