@@ -1,10 +1,19 @@
 const { login } = require('../utils/login');
+const {
+  downloadFileToTestRunnerHost,
+} = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
   '@tags': ['upload'],
   // uploadWrongFormat: async function (browser) {},
   // uploadMissingInfo: async function (browser) {},
   uploadCompleteInfo: async function (browser) {
+    const FILE_PATH = `${process.cwd()}/upload.csv`;
+    const DOWNLOAD_URL =
+      'https://staging.ece-fawkes.ctoecskylight.com/api/template/example/csv';
+
+    await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
+
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     // Log in
@@ -24,7 +33,7 @@ module.exports = {
 
     // Upload example data from local directory
     // TODO: use wget in YAML to get the example file and move it into the right directory in Circle CI
-    await browser.UploadLocalFile(`${process.cwd()}/Example.xlsx`, '#report');
+    await browser.UploadLocalFile(FILE_PATH, '#report');
     // TODO: change the ID on the upload element to make more sense
 
     // Accept the error modal if it pops up
@@ -55,7 +64,7 @@ module.exports = {
 
     await browser.waitForElementVisible(
       'xpath',
-      '//*/p[contains(text(),"50 children enrolled at 4 sites")]'
+      '//*/p[contains(text(),"100 children enrolled at 4 sites")]'
     );
 
     // TODO: check for the specific child names

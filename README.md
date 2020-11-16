@@ -61,9 +61,22 @@ The application has a SQL Server backend. We use [typeORM](https://typeorm.io/) 
 
 ### Testing
 
-Testing on the front end is run through react-scripts and jest to compare rendered pages to stored snapshots. Running `docker-compose exec client yarn run test` will run all test and only pass if all rendered pages match the expected snapshots. Adding a `-u` flag to the end of the command will update all snapshots to be the results of the current code.
+Frontend and backend unit/integration tests exist, and can be run with `yarn test` in either the `src` or `client/src` directories.
+```
+$ cd src
+$ yarn test
+$ cd ../client/src
+$ yarn test
+```
+or in docker-compose
+```
+$ docker-compose exec server yarn test
+$ docker-compose exec client yarn test
+```
+Frontend tests include snapshot matching tests. If a change was made that creates a legitimate change to a snapshot, or snapshots need to be deleted, created, or renamed, run tests with `-u` flag
 
 To run the e2e tests on browserstack against the staging environment, `yarn install` in the e2e-tests directory, add your credentials in a `.env` file, and then `yarn test` from the e2e directory.
+More info on e2e tests [here](e2e-tests/README.md)
 
 ## Deploy
 

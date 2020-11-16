@@ -5,7 +5,7 @@ import {
   Gender,
   RACE_FIELDS,
 } from '../../client/src/shared/models';
-import { organizations } from './organizations';
+import { stagingUserAllowedOrganizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import moment from 'moment';
 import { makeFakeFamily } from './family';
@@ -14,12 +14,14 @@ import { makeFakeEnrollments } from './enrollment';
 import { getFakeFundingSpaces } from './fundingSpace';
 import { weightedBoolean } from './fakeDataUtils';
 
-const _organizations: Organization[] = organizations.map((o, i) => ({
-  ...o,
-  id: i,
-  fundingSpaces: getFakeFundingSpaces({ ...o, id: i }),
-  sites: [],
-}));
+const _organizations: Organization[] = stagingUserAllowedOrganizations.map(
+  (o, i) => ({
+    ...o,
+    id: i,
+    fundingSpaces: getFakeFundingSpaces({ ...o, id: i }),
+    sites: [],
+  })
+);
 
 const _sites: Site[] = [];
 
