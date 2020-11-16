@@ -27,7 +27,6 @@ import {
   SiteConnectionOpts,
 } from './users/create';
 import { createReportingPeriodData } from './reportingPeriods';
-import fs from 'fs';
 
 const optionDefns = [{ name: 'config', type: String }];
 const options = commandLineArgs(optionDefns);
@@ -54,6 +53,7 @@ type Config = {
       user: string;
       password: string;
     };
+    passwordFile?: string;
   };
 
   orgFile: string;
@@ -71,7 +71,13 @@ if (!configPath || !configPath.startsWith('/')) {
 }
 const config: Config = require(configPath);
 
-const { orgFile, siteFile, userFile, reportingPeriodFile } = config;
+const {
+  orgFile,
+  siteFile,
+  userFile,
+  reportingPeriodFile,
+  wingedKeys: { passwordFile },
+} = config;
 
 if (!orgFile && !siteFile && !userFile && !reportingPeriodFile) {
   console.error('At least one file option must be supplied');
@@ -116,6 +122,7 @@ async function create() {
       port: appDBConnOpts.port || connectionOptions.port,
       username: appDBConnOpts.user || connectionOptions.username,
       password: appDBConnOpts.password || connectionOptions.password,
+      database: 'ece',
       name: 'script',
       logging: false,
       migrationsRun: false,
@@ -160,7 +167,8 @@ async function create() {
       await createUserData(
         rawUsers,
         wingedKeysSiteConnOpts,
-        wingedKeysDBConnOpts
+        wingedKeysDBConnOpts,
+        passwordFile
       );
     }
 

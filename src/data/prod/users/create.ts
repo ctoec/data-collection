@@ -36,14 +36,19 @@ export type DBConnectionOpts = {
 export const createUserData = async (
   sheetData: WorkSheet,
   wingedkeysSiteConnectionOpts: SiteConnectionOpts,
-  wingedkeysDbConnectionOpts: DBConnectionOpts
+  wingedkeysDbConnectionOpts: DBConnectionOpts,
+  passwordFile?: string
 ) => {
   const parsedData = parse<UserRow>(sheetData, USER_ROW_PROPS);
 
   let createdCount = 0;
 
   console.log(`Attempting to create ${parsedData.length} winged-keys users...`);
-  await createWingedKeysUsers(parsedData, wingedkeysSiteConnectionOpts);
+  await createWingedKeysUsers(
+    parsedData,
+    wingedkeysSiteConnectionOpts,
+    passwordFile
+  );
   const UUIDs = await getWingedKeysIds(wingedkeysDbConnectionOpts);
 
   console.log(`Attempting to create ${parsedData.length} application users...`);
@@ -90,14 +95,13 @@ async function getWingedKeysIds(connectionOpts: DBConnectionOpts) {
 
     await pool.close();
 
-    const dict = res.recordset.reduce(
+    return res.recordset.reduce(
       (acc, { username, id }: { username: string; id: string }) => {
         acc[username] = id;
         return acc;
       },
       {}
     );
-    console.log('dict', dict);
   } catch (err) {
     console.error('Error fetching ids from wingedkeys', err);
   }

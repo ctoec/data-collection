@@ -19,7 +19,8 @@
       "url": "",
       "user": "",
       "password": ""
-    }
+    },
+    "passwordFile": ""
   },
 
   "orgFile": "",

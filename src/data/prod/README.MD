@@ -55,3 +55,7 @@ $ cp src/data/prod/config.example.json ./config.json
 $ vim config.json // edit config to contain real values!
 $ yarn ts-node src/data/prod/create.ts --config `pwd`/config.json
 ```
+
+## Docker
+If you're running this is in docker (for instance, on a node image), you'll need to install a few dependencies to get puppeteer working.
+Run the `apt-get` command they've got in their puppeteer-in-docker [example Dockerfile](https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker)
