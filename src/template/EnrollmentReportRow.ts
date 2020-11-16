@@ -82,7 +82,7 @@ export class EnrollmentReportRow {
   suffix?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'SASID',
+    formattedName: 'SASID / Unique Identifier',
     required: OPTIONAL,
     definition:
       'A unique number used to identify children. Can be either an SDE-backed SASID or another unique identifier from a system of record such as Childplus.',
@@ -91,7 +91,7 @@ export class EnrollmentReportRow {
     example: '0123456789',
     section: SECTIONS.CHILD_IDENTIFIER,
   })
-  sasid?: string = undefined;
+  sasidUniqueId?: string = undefined;
 
   @ColumnMetadata({
     formattedName: 'Date of birth',

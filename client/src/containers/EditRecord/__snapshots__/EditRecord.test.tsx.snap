@@ -145,32 +145,6 @@ exports[`EditRecord matches snapshot 1`] = `
             Child's identifiers
           </h2>
           <div
-            class="mobile-lg:grid-col-12"
-          >
-            <div
-              class=" usa-form-group"
-            >
-              <label
-                class="usa-label"
-                for="sasid"
-              >
-                SASID 
-                <span
-                  class="usa-hint"
-                >
-                   (optional)
-                </span>
-              </label>
-              <input
-                aria-required="false"
-                class="usa-input"
-                id="sasid"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-          <div
             class="mobile-lg:grid-col-9"
           >
             <div
