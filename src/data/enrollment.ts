@@ -40,8 +40,8 @@ export const makeFakeEnrollments = (
       id, // TODO do duplicates matter for fake data?
       ageGroup: AgeGroup.Preschool,
       model: random.arrayElement(Object.values(CareModel)),
-      entry: currentEnrollmentEntry.add(-1, 'years'),
-      exit: currentEnrollmentEntry.add(-1, 'days'),
+      entry: currentEnrollmentEntry.clone().add(-1, 'years'),
+      exit: currentEnrollmentEntry.clone().add(-1, 'days'),
       exitReason: 'Aged out',
       updateMetaData: { updatedAt: new Date() },
       deletedDate: null,
