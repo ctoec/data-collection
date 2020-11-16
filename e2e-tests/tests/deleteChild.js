@@ -13,6 +13,7 @@ const {
  */
 
 module.exports = {
+  '@disabled': true,
   '@tags': ['child', 'delete'],
   deleteChild: async function (browser) {
     await browser.init();
