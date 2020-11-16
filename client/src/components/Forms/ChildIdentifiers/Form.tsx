@@ -11,20 +11,18 @@ import {
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { Child } from '../../../shared/models';
+import { Child, UniqueIdType } from '../../../shared/models';
 import { apiPost, apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { useHistory } from 'react-router-dom';
+import { UniqueIdField } from './Fields/UniqueId';
 
 // The fields we use to check to see if this form has errors or missing info
 const childIdentifiersFields = [
-  'sasid',
   'firstName',
-  'middleName',
   'lastName',
-  'suffix',
   'birthdate',
   'birthCertificateType',
   'birthTown',
@@ -101,11 +99,18 @@ export const ChildIdentifiersForm = ({
       autoComplete="off"
     >
       {!hideHeader && <h2>Child's identifiers</h2>}
-      {showFieldOrFieldset(child, ['sasid']) && (
-        <div className="mobile-lg:grid-col-12">
-          <SasidField />
-        </div>
-      )}
+      {showFieldOrFieldset(child, ['sasid', 'uniqueId']) &&
+        (child.organization.uniqueIdType === UniqueIdType.SASID ? (
+          <div className="mobile-lg:grid-col-12">
+            <SasidField />
+          </div>
+        ) : child.organization.uniqueIdType === UniqueIdType.Other ? (
+          <div className="mobile-lg:grid-col-12">
+            <UniqueIdField />
+          </div>
+        ) : (
+          <></>
+        ))}
       {showFieldOrFieldset(child, [
         'firstName',
         'lastName',

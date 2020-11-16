@@ -9,6 +9,7 @@ import { User, Child } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
+import { propertyDateSorter } from '../../utils/propertyDateSorter';
 
 /**
  * Get child by id, with related family and related
@@ -18,16 +19,16 @@ import { Moment } from 'moment';
  */
 export const getChildById = async (id: string, user: User): Promise<Child> => {
   const opts = await getFindOpts(user, { id });
-  let child = await getManager().findOne(Child, opts);
-  child = removeDeletedEntitiesFromChild(child);
-
-  return await validateObject(child);
+  const child = await getManager().findOne(Child, opts);
+  return await postProcessChild(child);
 };
 
 /**
  * Get all children the given user has access to.
  * Optionally, can filter to only return children:
- * 	- for specific organizations,
+ * 	- for specific organizations
+ *  - who are totally withdrawn (no active enrollments)
+ *  - with active enrollments in a specific month
  * 	- with missing info
  * Supports pagination with skip and take parameters, which
  * leverages offset fetch capability of sorted sql server query
@@ -60,8 +61,7 @@ export const getChildren = async (
   opts.take = take;
 
   let children = await getManager().find(Child, opts);
-  children = children.map((c) => removeDeletedEntitiesFromChild(c));
-  children = await Promise.all(children.map(validateObject));
+  children = await Promise.all(children.map(postProcessChild));
 
   // If missing info qs param
   if (missingInfoOnly) {
@@ -149,7 +149,7 @@ const getFindOpts = async (
       // Until then, use the generated aliases to do nested filtering
       if (user.accessType === 'site') {
         qb.andWhere(
-          'Child__enrollments.siteId IN (:...siteIds) OR (Child__enrollments.siteId IS NULL AND (Child.authorId = :userId OR Child__enrollments.authorId = :userId))',
+          '(Child__enrollments.siteId IN (:...siteIds) OR (Child__enrollments.siteId IS NULL AND (Child.authorId = :userId OR Child__enrollments.authorId = :userId)))',
           {
             siteIds: user.siteIds,
             userId: user.id,
@@ -161,4 +161,51 @@ const getFindOpts = async (
   };
 
   return opts;
+};
+
+/**
+ * Apply all post-processing to a child record:
+ * 	- remove deleted entities
+ * 	- sort entities by date
+ * 	- validate full object tree
+ * @param child
+ */
+const postProcessChild = async (child: Child) => {
+  removeDeletedEntitiesFromChild(child);
+  sortEntities(child);
+  return validateObject(child);
+};
+
+/**
+ * Sort enrollments, fundings, and income determinations
+ * @param child
+ */
+const sortEntities = (child: Child) => {
+  if (!child) return;
+  if (child.enrollments) {
+    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
+      if (enrollmentA.fundings) {
+        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
+          propertyDateSorter(
+            fundingA,
+            fundingB,
+            (f) => f.firstReportingPeriod.period
+          )
+        );
+      }
+
+      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.entry);
+    });
+  }
+
+  if (child.family?.incomeDeterminations) {
+    child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
+      (determinationA, determinationB) =>
+        propertyDateSorter(
+          determinationA,
+          determinationB,
+          (d) => d.determinationDate
+        )
+    );
+  }
 };
