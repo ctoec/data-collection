@@ -10,11 +10,13 @@ import { stringify } from 'query-string';
 export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
   childrenWithErrorsCount: number,
+  withdrawnChildrenCount: number,
   organizationId?: string
 ) => {
   const { alertElements, setAlerts, alerts } = useAlerts();
   const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
     childrenWithErrorsCount,
+    withdrawnChildrenCount,
     organizationId
   );
   useEffect(() => {
@@ -50,14 +52,26 @@ export const useChildrenWithErrorsAlert = (
  */
 function getChildrenWithErrorsAlertProps(
   numberOfChildrenWithErrors: number,
+  numberOfWithdrawnChildrenWithErrors: number,
   organizationId?: string
 ): AlertProps {
+  let alertText = `You'll need to add required info for
+        ${pluralize('record', numberOfChildrenWithErrors, true)} before
+        submitting your data to OEC. Update with `;
+  if (numberOfWithdrawnChildrenWithErrors > 0) {
+    alertText = `You'll need to add required info for ${numberOfChildrenWithErrors} active ${pluralize(
+      'record',
+      numberOfChildrenWithErrors
+    )} and ${numberOfWithdrawnChildrenWithErrors} withdrawn ${pluralize(
+      'record',
+      numberOfWithdrawnChildrenWithErrors
+    )} before
+        submitting your data to OEC. Update all records that need info with `;
+  }
   return {
     text: (
       <span>
-        You'll need to add required info for{' '}
-        {pluralize('record', numberOfChildrenWithErrors, true)} before
-        submitting your data to OEC. Update with{' '}
+        {alertText}
         <Link
           className="usa-button usa-button--unstyled"
           to={`/batch-edit?${stringify({ organizationId })}`}

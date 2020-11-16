@@ -25,7 +25,6 @@ type DownloadOptionsType = {
   fileName: string;
 };
 
-// TODO: does roster need to be downloadable as Excel sheet?
 const getRosterProps = (): DownloadOptionsType => ({
   downloadText: 'Export roster',
   backendPath: 'export/roster',

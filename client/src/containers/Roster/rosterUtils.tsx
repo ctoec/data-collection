@@ -11,6 +11,7 @@ import {
   getCurrentEnrollment,
   childHasEnrollmentsActiveInMonth,
 } from '../../utils/models';
+import { getLastEnrollment } from '../../utils/models/getLastEnrollment';
 
 const MAX_LENGTH_EXPANDED = 50;
 export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
@@ -32,14 +33,18 @@ export const getQueryMonthFormat = (month?: Moment) => {
  */
 export function applySiteFilter(
   allChildren: Child[] | undefined,
-  site?: string
+  site?: string,
+  withdrawn?: boolean
 ) {
   if (!allChildren) return;
 
   let filteredChildren: Child[] = allChildren;
   if (site) {
+    const getEnrollmentFunc = withdrawn
+      ? getLastEnrollment
+      : getCurrentEnrollment;
     filteredChildren = filteredChildren.filter(
-      (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
+      (child) => getEnrollmentFunc(child)?.site?.id.toString() === site
     );
   }
   return filteredChildren;
@@ -128,7 +133,7 @@ export function getAccordionItems(
       ([_, ageGroupChildren]) => ageGroupChildren && ageGroupChildren.length
     )
     .map(([ageGroup, ageGroupChildren = []]) => ({
-      id: ageGroup,
+      id: ageGroup.replace(' ', '-'),
       title: (
         <>
           {ageGroup === NoAgeGroup && <InlineIcon icon="attentionNeeded" />}
@@ -158,7 +163,7 @@ export function getAccordionItems(
         <Table<Child>
           className="margin-bottom-4"
           id={`roster-table-${ageGroup}`}
-          rowKey={(row) => row.id}
+          rowKey={(row) => row?.id}
           data={ageGroupChildren}
           columns={tableColumns(excludeColumns)}
           defaultSortColumn={0}

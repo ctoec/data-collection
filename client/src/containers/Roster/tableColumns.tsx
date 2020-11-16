@@ -31,17 +31,17 @@ export const tableColumns: (
     {
       className: tableColumnClassName,
       name: ColumnNames.NAME,
-      sort: (row) => row.lastName || '',
+      sort: (row) => row?.lastName || '',
       width: `${longColumnWidthPercent}%`,
       cell: ({ row }) => (
         <th scope="row" className={tableRowClassName}>
           <Link
             className="usa-button usa-button--unstyled font-body-2xs text-no-wrap" // set font size again to override font size from usa-button
             to={{
-              pathname: `/edit-record/${row.id}`,
+              pathname: `/edit-record/${row?.id}`,
             }}
           >
-            {row.lastName}, {row.firstName}{' '}
+            {row?.lastName}, {row?.firstName}{' '}
           </Link>
         </th>
       ),
@@ -51,12 +51,12 @@ export const tableColumns: (
       name: ColumnNames.MISSING,
       width: `${shortColumnWidthPercent}%`,
       sort: (row) =>
-        !row.validationErrors || !row.validationErrors.length ? 1 : 0,
+        !row?.validationErrors || !row?.validationErrors.length ? 1 : 0,
       cell: ({ row }) => {
         return (
           <td className={tableRowClassName}>
-            {!!row.validationErrors && !!row.validationErrors.length && (
-              <Link to={`/batch-edit/${row.id}`}>
+            {!!row?.validationErrors && !!row?.validationErrors.length && (
+              <Link to={`/batch-edit/${row?.id}`}>
                 <InlineIcon icon="incomplete" />
               </Link>
             )}
@@ -67,11 +67,11 @@ export const tableColumns: (
     {
       className: tableColumnClassName,
       name: ColumnNames.BIRTHDATE,
-      sort: (row) => row.birthdate?.unix() || 0,
+      sort: (row) => row?.birthdate?.unix() || 0,
       width: `${shortColumnWidthPercent}%`,
       cell: ({ row }) => (
         <td className={tableRowClassName}>
-          {row.birthdate ? row.birthdate.format('MM/DD/YYYY') : ''}
+          {row?.birthdate ? row?.birthdate.format('MM/DD/YYYY') : ''}
         </td>
       ),
     },
