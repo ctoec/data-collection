@@ -104,7 +104,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       {showFieldOrFieldset(enrollment, ['site']) && (
         <SiteField<Enrollment>
           sites={sites.filter(
-            (s) => s.organizationId === child.organization.id
+            (s) => s.organizationId === child?.organization?.id
           )}
         />
       )}
@@ -121,7 +121,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
         <NewFundingField<Enrollment>
           fundingAccessor={(data) => data.at('fundings').at(0)}
           getEnrollment={(data) => data.value}
-          organizationId={child.organization.id}
+          organizationId={child?.organization?.id}
         />
       )}
       {AdditionalButton}
