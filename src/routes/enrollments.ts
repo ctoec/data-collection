@@ -1,7 +1,8 @@
 import express, { Request, Response } from 'express';
-import { getManager } from 'typeorm';
+import { getManager, In } from 'typeorm';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { Enrollment, Funding } from '../entity';
+import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 import {
   NotFoundError,
   ApiError,
@@ -16,7 +17,10 @@ enrollmentsRouter.put(
   passAsyncError(async (req, res) => {
     try {
       const id = req.params['enrollmentId'];
-      let enrollment = await getManager().findOne(Enrollment, id);
+      const readOrgIds = await getReadAccessibleOrgIds(req.user);
+      let enrollment = await getManager().findOne(Enrollment, id, {
+        where: { site: { organizationId: In(readOrgIds) } },
+      });
 
       if (!enrollment) throw new NotFoundError();
 
@@ -38,7 +42,7 @@ enrollmentsRouter.post(
   passAsyncError(async (req, res) => {
     const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      await controller.changeFunding(enrollmentId, req.body);
+      await controller.changeFunding(enrollmentId, req.user, req.body);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -56,7 +60,7 @@ enrollmentsRouter.post(
   passAsyncError(async (req, res) => {
     const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      await controller.withdraw(enrollmentId, req.body);
+      await controller.withdraw(enrollmentId, req.user, req.body);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -91,7 +95,10 @@ enrollmentsRouter.put(
   passAsyncError(async (req, res) => {
     try {
       const id = req.params['fundingId'];
-      const funding = await getManager().findOne(Funding, id);
+      const readOrgIds = await getReadAccessibleOrgIds(req.user);
+      const funding = await getManager().findOne(Funding, id, {
+        where: { enrollment: { site: { organizationId: In(readOrgIds) } } },
+      });
 
       if (!funding) throw new NotFoundError();
 
@@ -112,6 +119,7 @@ enrollmentsRouter.delete(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const fundingId = parseInt(req.params['fundingId']);
+      const readOrgIds = await getReadAccessibleOrgIds(req.user);
       const funding = await getManager().find(Funding, { id: fundingId });
       await getManager().softRemove(funding);
       res.sendStatus(200);
