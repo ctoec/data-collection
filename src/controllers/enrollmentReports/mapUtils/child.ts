@@ -148,7 +148,7 @@ export const mapChild = (
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
-  let child = {
+  let child: Child = {
     sasid:
       organization.uniqueIdType === UniqueIdType.SASID
         ? source.sasidUniqueId
@@ -181,11 +181,15 @@ export const mapChild = (
     family: family,
   } as Child;
 
+  // Need to create child in all cases, even if unsaved, so that
+  // instanceof in the identifiers match can check the proper
+  // prototype constructor name instead of just getting 'Object'
+  child = transaction.create(Child, {
+    ...child,
+    updateMetaData: { author: user },
+  });
+
   if (save) {
-    child = transaction.create(Child, {
-      ...child,
-      updateMetaData: { author: user },
-    });
     return transaction.save(child);
   }
 
