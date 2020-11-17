@@ -33,9 +33,11 @@ const EditRecord: React.FC = () => {
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
-  // Clear any previously displayed alerts from other tabs
+  // Clear any previously displayed alerts that are not the general missing info alert
   useEffect(() => {
-    setAlerts([]);
+    setAlerts((alerts) => [
+      ...alerts.filter((alert) => alert.heading === MISSING_INFO_ALERT_HEADING),
+    ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
   const history = useHistory();
@@ -126,6 +128,7 @@ const EditRecord: React.FC = () => {
   );
 };
 
+const MISSING_INFO_ALERT_HEADING = 'This record has missing or incorrect info';
 const getMissingInfoAlertProps: (child: Child) => AlertProps | undefined = (
   child: Child
 ) => {
@@ -134,15 +137,12 @@ const getMissingInfoAlertProps: (child: Child) => AlertProps | undefined = (
   );
   if (!formsWithErrors.length) return;
 
-  const formsWithErrorsString =
-    formsWithErrors.length > 1
-      ? formsWithErrors.map(({ name }) => name.toLowerCase()).join(', ')
-      : `${formsWithErrors[0].name.toLowerCase()} `;
-  const errorMessage = `Add required info in ${formsWithErrorsString}before submitting your data to OEC.`;
   return {
-    heading: 'This record has missing or incorrect info',
+    heading: MISSING_INFO_ALERT_HEADING,
     type: 'error',
-    text: errorMessage,
+    text: `Add required info in ${formsWithErrors
+      .map((form) => form.name.toLowerCase())
+      .join(', ')} before submitting your data to OEC.`,
   };
 };
 

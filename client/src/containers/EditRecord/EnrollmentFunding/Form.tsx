@@ -6,6 +6,8 @@ import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
 import { Enrollment, Child } from '../../../shared/models';
 import { AlertProps, Alert } from '@ctoec/component-library';
+import { Link } from 'react-router-dom';
+import { SECTION_KEYS } from '../../../components/Forms';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
@@ -26,7 +28,21 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
+  // TODO: remove this banner alert error, and replace with funding card with
+  // missing info icons - https://github.com/ctoec/data-collection/pull/795#issuecomment-729150524
   const missingFundedEnrollmentError = getMissingFundedEnrollmentError(child);
+  if (missingFundedEnrollmentError) {
+    setAlerts((alerts) => {
+      if (
+        !alerts.find(
+          (alert) => alert.heading === missingFundedEnrollmentError.heading
+        )
+      ) {
+        return [...alerts, missingFundedEnrollmentError];
+      }
+      return alerts;
+    });
+  }
 
   const commonProps = {
     afterSaveSuccess,
@@ -36,11 +52,6 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
 
   return (
     <>
-      {missingFundedEnrollmentError && (
-        <div className="margin-y-1">
-          <Alert {...missingFundedEnrollmentError} />
-        </div>
-      )}
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentCard
         {...commonProps}
@@ -110,7 +121,16 @@ const getMissingFundedEnrollmentError: (_: Child) => AlertProps | undefined = (
   if (missingFundingError) {
     return {
       type: 'error',
-      text: 'A child must have at least one funded enrollment.',
+      heading: 'This record is missing funding information',
+      text: (
+        <>
+          Records must have at least one current or past funded enrollment to be
+          submitted to OEC. Add funding info in the{' '}
+          <Link to={`/edit-record/${child.id}#${SECTION_KEYS.ENROLLMENT}`}>
+            enrollment and funding section
+          </Link>
+        </>
+      ),
     };
   }
 };
