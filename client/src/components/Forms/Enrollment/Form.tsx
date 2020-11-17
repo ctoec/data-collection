@@ -84,7 +84,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setAlerts([
           {
             type: 'error',

@@ -52,3 +52,4 @@ fawkes-bundle.zip
 # Browserstack/nightwatch makes a folder
 */tests_output
 .env
+e2e-tests/upload.csv

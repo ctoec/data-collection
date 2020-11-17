@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import cx from 'classnames';
 import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
-import { Button, TextWithIcon } from '@ctoec/component-library';
+import { Button, LoadingWrapper, TextWithIcon } from '@ctoec/component-library';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
 
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -17,7 +17,7 @@ const Home: React.FC = () => {
 
   // To prevent flash of splash page if user is logged in
   if (loading) {
-    return <></>;
+    return <LoadingWrapper loading={true} />;
   }
 
   // If the user is logged in, don't show the splash page

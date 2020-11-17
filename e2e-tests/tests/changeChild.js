@@ -28,11 +28,15 @@ module.exports = {
       "//*/h2[contains(., 'Record updated')]"
     );
 
-    // Then navigate to roster and see if that text is on the roster
     await navigateToRoster(browser);
-    const tableArgs = ['xpath', '//*/table[1]'];
-    await scrollToElement(browser, tableArgs);
-    browser.assert.containsText('table', newFirstNameText);
+
+    // We've changed/expanded the table header, so access the
+    // changed child and check if the form field has the
+    // correct value isntead
+    await clickOnFirstChildInRoster(browser);
+    browser.expect
+      .element('input#firstName')
+      .to.have.value.which.contains(newFirstNameText);
     browser.end();
   },
 };

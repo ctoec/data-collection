@@ -43,7 +43,6 @@ export const IncomeDeterminationFieldSet: React.FC<IncomeDeterminationFieldSetPr
       break;
   }
 
-  // TODO: STATUS
   return (
     <FormFieldSet<IncomeDetermination>
       id={elementId}

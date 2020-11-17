@@ -34,7 +34,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
         <p
           class="font-body-xl margin-top-1"
         >
-          3 children enrolled
+          4 children enrolled
         </p>
       </div>
       <div
@@ -187,13 +187,249 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
               <span
                 class="text-light"
               >
-                 3 children
+                 4 children
               </span>
             </h2>
             <div
               aria-multiselectable="true"
               class="oec-accordion"
             >
+              <div
+                class="oec-accordion__heading"
+              >
+                <button
+                  aria-controls="Incomplete-enrollments"
+                  aria-expanded="true"
+                  class="oec-accordion__button"
+                >
+                  <div
+                    class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
+                  >
+                    <div>
+                      <h3
+                        class="oec-accordion__heading-title"
+                      >
+                        <span
+                          class="oec-inline-icon oec-inline-icon--attentionNeeded"
+                        >
+                          <span
+                            class="usa-sr-only"
+                          >
+                            (attention needed)
+                          </span>
+                        </span>
+                        Incomplete enrollments 
+                        <span
+                          class="text-normal"
+                        >
+                          1 child 
+                        </span>
+                        <br />
+                        <p
+                          class="usa-error-message margin-y-0 font-body-md"
+                        >
+                          All records must have an assigned age group
+                        </p>
+                      </h3>
+                      <div
+                        class="display-flex flex-wrap"
+                      />
+                    </div>
+                    <div
+                      class="oec-accordion__heading-expand"
+                    >
+                      Hide Incomplete enrollments roster
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                aria-hidden="false"
+                class="oec-accordion__content"
+                id="Incomplete-enrollments"
+              >
+                <table
+                  class="oec-table margin-bottom-4"
+                  id="roster-table-Incomplete enrollments"
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Name in descending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Name
+                          <div
+                            class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Missing info in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Missing info
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Birthdate in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Birthdate
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Funding type in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Funding type
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Space type in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Space type
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Site in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Site
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 20%;"
+                      >
+                        <button
+                          aria-label="Sort table by Organization in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Organization
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Enrollment date in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Enrollment date
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th
+                        class="font-body-2xs"
+                        scope="row"
+                      >
+                        <a
+                          class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
+                          href="/edit-record/undefined"
+                        >
+                          ,  
+                        </a>
+                      </th>
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <div
                 class="oec-accordion__heading"
               >
@@ -806,7 +1042,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
         <p
           class="font-body-xl margin-top-1"
         >
-          3 children enrolled at 2 sites
+          4 children enrolled at 2 sites
         </p>
       </div>
       <div
@@ -960,13 +1196,229 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
               <span
                 class="text-light"
               >
-                 3 children
+                 4 children
               </span>
             </h2>
             <div
               aria-multiselectable="true"
               class="oec-accordion"
             >
+              <div
+                class="oec-accordion__heading"
+              >
+                <button
+                  aria-controls="Incomplete-enrollments"
+                  aria-expanded="true"
+                  class="oec-accordion__button"
+                >
+                  <div
+                    class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
+                  >
+                    <div>
+                      <h3
+                        class="oec-accordion__heading-title"
+                      >
+                        <span
+                          class="oec-inline-icon oec-inline-icon--attentionNeeded"
+                        >
+                          <span
+                            class="usa-sr-only"
+                          >
+                            (attention needed)
+                          </span>
+                        </span>
+                        Incomplete enrollments 
+                        <span
+                          class="text-normal"
+                        >
+                          1 child 
+                        </span>
+                        <br />
+                        <p
+                          class="usa-error-message margin-y-0 font-body-md"
+                        >
+                          All records must have an assigned age group
+                        </p>
+                      </h3>
+                      <div
+                        class="display-flex flex-wrap"
+                      />
+                    </div>
+                    <div
+                      class="oec-accordion__heading-expand"
+                    >
+                      Hide Incomplete enrollments roster
+                    </div>
+                  </div>
+                </button>
+              </div>
+              <div
+                aria-hidden="false"
+                class="oec-accordion__content"
+                id="Incomplete-enrollments"
+              >
+                <table
+                  class="oec-table margin-bottom-4"
+                  id="roster-table-Incomplete enrollments"
+                >
+                  <thead>
+                    <tr>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 25%;"
+                      >
+                        <button
+                          aria-label="Sort table by Name in descending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Name
+                          <div
+                            class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Missing info in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Missing info
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Birthdate in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Birthdate
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Funding type in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Funding type
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Space type in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Space type
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 25%;"
+                      >
+                        <button
+                          aria-label="Sort table by Site in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Site
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                      <th
+                        aria-sort="ascending"
+                        class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                        role="columnheader"
+                        scope="col"
+                        style="width: 10%;"
+                      >
+                        <button
+                          aria-label="Sort table by Enrollment date in ascending order"
+                          class="oec-table__column-title usa-button--unstyled width-full"
+                        >
+                          Enrollment date
+                          <div
+                            class="oec-table__sort-controls"
+                          />
+                        </button>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th
+                        class="font-body-2xs"
+                        scope="row"
+                      >
+                        <a
+                          class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
+                          href="/edit-record/undefined"
+                        >
+                          ,  
+                        </a>
+                      </th>
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                      <td
+                        class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                      />
+                      <td
+                        class="font-body-2xs"
+                      />
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
               <div
                 class="oec-accordion__heading"
               >
@@ -1541,7 +1993,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         <p
           class="font-body-xl margin-top-1"
         >
-          3 children enrolled
+          4 children enrolled
         </p>
       </div>
       <div
@@ -1631,6 +2083,222 @@ exports[`Roster matches snapshot for site level user 1`] = `
           aria-multiselectable="true"
           class="oec-accordion"
         >
+          <div
+            class="oec-accordion__heading"
+          >
+            <button
+              aria-controls="Incomplete-enrollments"
+              aria-expanded="true"
+              class="oec-accordion__button"
+            >
+              <div
+                class="display-flex flex-justify flex-col flex-align-center padding-top-3 padding-bottom-3"
+              >
+                <div>
+                  <h2
+                    class="oec-accordion__heading-title"
+                  >
+                    <span
+                      class="oec-inline-icon oec-inline-icon--attentionNeeded"
+                    >
+                      <span
+                        class="usa-sr-only"
+                      >
+                        (attention needed)
+                      </span>
+                    </span>
+                    Incomplete enrollments 
+                    <span
+                      class="text-normal"
+                    >
+                      1 child 
+                    </span>
+                    <br />
+                    <p
+                      class="usa-error-message margin-y-0 font-body-md"
+                    >
+                      All records must have an assigned age group
+                    </p>
+                  </h2>
+                  <div
+                    class="display-flex flex-wrap"
+                  />
+                </div>
+                <div
+                  class="oec-accordion__heading-expand"
+                >
+                  Hide Incomplete enrollments roster
+                </div>
+              </div>
+            </button>
+          </div>
+          <div
+            aria-hidden="false"
+            class="oec-accordion__content"
+            id="Incomplete-enrollments"
+          >
+            <table
+              class="oec-table margin-bottom-4"
+              id="roster-table-Incomplete enrollments"
+            >
+              <thead>
+                <tr>
+                  <th
+                    aria-sort="ascending"
+                    class="oec-table__column-header oec-sortable oec-sorted text-pre text-center font-body-2xs"
+                    role="columnheader"
+                    scope="col"
+                    style="width: 25%;"
+                  >
+                    <button
+                      aria-label="Sort table by Name in descending order"
+                      class="oec-table__column-title usa-button--unstyled width-full"
+                    >
+                      Name
+                      <div
+                        class="oec-table__sort-controls oec-table__sort-controls--ascending"
+                      />
+                    </button>
+                  </th>
+                  <th
+                    aria-sort="ascending"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                    role="columnheader"
+                    scope="col"
+                    style="width: 10%;"
+                  >
+                    <button
+                      aria-label="Sort table by Missing info in ascending order"
+                      class="oec-table__column-title usa-button--unstyled width-full"
+                    >
+                      Missing info
+                      <div
+                        class="oec-table__sort-controls"
+                      />
+                    </button>
+                  </th>
+                  <th
+                    aria-sort="ascending"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    role="columnheader"
+                    scope="col"
+                    style="width: 10%;"
+                  >
+                    <button
+                      aria-label="Sort table by Birthdate in ascending order"
+                      class="oec-table__column-title usa-button--unstyled width-full"
+                    >
+                      Birthdate
+                      <div
+                        class="oec-table__sort-controls"
+                      />
+                    </button>
+                  </th>
+                  <th
+                    aria-sort="ascending"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    role="columnheader"
+                    scope="col"
+                    style="width: 10%;"
+                  >
+                    <button
+                      aria-label="Sort table by Funding type in ascending order"
+                      class="oec-table__column-title usa-button--unstyled width-full"
+                    >
+                      Funding type
+                      <div
+                        class="oec-table__sort-controls"
+                      />
+                    </button>
+                  </th>
+                  <th
+                    aria-sort="ascending"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    role="columnheader"
+                    scope="col"
+                    style="width: 10%;"
+                  >
+                    <button
+                      aria-label="Sort table by Space type in ascending order"
+                      class="oec-table__column-title usa-button--unstyled width-full"
+                    >
+                      Space type
+                      <div
+                        class="oec-table__sort-controls"
+                      />
+                    </button>
+                  </th>
+                  <th
+                    aria-sort="ascending"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs"
+                    role="columnheader"
+                    scope="col"
+                    style="width: 25%;"
+                  >
+                    <button
+                      aria-label="Sort table by Site in ascending order"
+                      class="oec-table__column-title usa-button--unstyled width-full"
+                    >
+                      Site
+                      <div
+                        class="oec-table__sort-controls"
+                      />
+                    </button>
+                  </th>
+                  <th
+                    aria-sort="ascending"
+                    class="oec-table__column-header oec-sortable oec-unsorted text-pre text-center font-body-2xs break-spaces"
+                    role="columnheader"
+                    scope="col"
+                    style="width: 10%;"
+                  >
+                    <button
+                      aria-label="Sort table by Enrollment date in ascending order"
+                      class="oec-table__column-title usa-button--unstyled width-full"
+                    >
+                      Enrollment date
+                      <div
+                        class="oec-table__sort-controls"
+                      />
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th
+                    class="font-body-2xs"
+                    scope="row"
+                  >
+                    <a
+                      class="usa-button usa-button--unstyled font-body-2xs text-no-wrap"
+                      href="/edit-record/undefined"
+                    >
+                      ,  
+                    </a>
+                  </th>
+                  <td
+                    class="font-body-2xs"
+                  />
+                  <td
+                    class="font-body-2xs"
+                  />
+                  <td
+                    class="font-body-2xs"
+                  />
+                  <td
+                    class="font-body-2xs"
+                  />
+                  <td
+                    class="font-body-2xs ellipsis-wrap-text ellipsis-wrap-text--tight"
+                  />
+                  <td
+                    class="font-body-2xs"
+                  />
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div
             class="oec-accordion__heading"
           >

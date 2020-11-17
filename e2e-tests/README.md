@@ -1,6 +1,24 @@
 # e2e tests
+## Running tests
+From `/e2e-tests` dir:
+1. Install dependencies
+```
+$ yarn
+```
+1. Create .env file with browserstack credentials, or export env variables
+```
+$ cp .env.example .env // then, edit .env file
+```
+1. Run tests
+```
+$ yarn test
+```
+To filter tests by tag, use `--tag [tagname]` argument like
+```
+$ yarn test --tag upload
+```
 
-Gotchas:
+## Gotchas:
 
 - Selenium/nightwatch/browserstack (not sure which) cares, for certain functions, about whether or not the element is currently on the screen. Nightwatch docs say that it scrolls the element into view for certain functions. This seems to be a lie. The `scrollToElement` util should actually do it though.
 

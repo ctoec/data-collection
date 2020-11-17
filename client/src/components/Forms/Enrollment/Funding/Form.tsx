@@ -77,7 +77,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
     })
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setAlerts([
           {
             type: 'error',
