@@ -1190,10 +1190,16 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
+<<<<<<< HEAD
 "@ctoec/component-library@1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.0.5.tgz#2ceba69f5a9266a49ea27a600fc9a6ca35005717"
   integrity sha512-QNuWKqquKALB4DMl0mV91Q53A/YGYLpOKCRemyQI9qE9bxZWT7CCey3A5qIPUJ4KVfY4uabnyyNlnPiQoIAE4w==
+=======
+"@ctoec/component-library@https://github.com/ctoec/component-library#fileinput-ie-click-target":
+  version "1.0.5"
+  resolved "https://github.com/ctoec/component-library#5949ca7749014e995d64ef4ef5752ec719c5d5b2"
+>>>>>>> f98e6aee (Fix click target issue in component library)
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

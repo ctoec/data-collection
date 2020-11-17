@@ -22,20 +22,6 @@ import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const Upload: React.FC = () => {
-  // USWDS File Input is managed by JS (not exclusive CSS)
-  // We need to import the distributed JS code. It runs immediately
-  // after being parsed, and searches for DOM elements with the
-  // appriopriate HTML attributes. React constantly mounts/unmounts
-  // DOM nodes. To get around this, we dynamically import USWDS every
-  // render. However, browsers cache the module and so subsequent
-  // imports don't trigger the code to execute again. To get around
-  // this, we must delete the module from the cache.
-  useEffect(() => {
-    delete require.cache[require.resolve('uswds/dist/js/uswds')];
-    // @ts-ignore
-    import('uswds/dist/js/uswds');
-  }, []);
-
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
