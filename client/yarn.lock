@@ -1191,8 +1191,8 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#fileinput-ie-click-target":
-  version "1.0.5"
-  resolved "https://github.com/ctoec/component-library#5949ca7749014e995d64ef4ef5752ec719c5d5b2"
+  version "1.0.6"
+  resolved "https://github.com/ctoec/component-library#625423e7da6fc53e20cf66fc8afc7e350a52002b"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
