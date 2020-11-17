@@ -28,11 +28,12 @@ const BatchEdit: React.FC = () => {
 
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
-  const { data: children, isValidating } = useAuthenticatedSWR<Child[]>(
+  const { data: children, isValidating, error } = useAuthenticatedSWR<Child[]>(
     childId
       ? null // no need to fetch all children for single record batch edit
       : `children?${stringify({ organizationId, 'missing-info': true })}`
   );
+  const loading = !children && !error;
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
   >([]);
@@ -96,7 +97,7 @@ const BatchEdit: React.FC = () => {
       <h1 ref={h1Ref} className="margin-bottom-1">
         Add needed information
       </h1>
-      <LoadingWrapper loading={isValidating}>
+      <LoadingWrapper loading={loading}>
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
           <div className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
             {currentlyMissingInfoCount ? (
@@ -109,12 +110,12 @@ const BatchEdit: React.FC = () => {
                 incomplete info required to submit your data
               </>
             ) : (
-              <>
-                {/* TODO make it possible to make this icon big */}
-                <InlineIcon className="height-4 width-4" icon="complete" /> All
+                <>
+                  {/* TODO make it possible to make this icon big */}
+                  <InlineIcon className="height-4 width-4" icon="complete" /> All
                 enrollments are complete
               </>
-            )}
+              )}
           </div>
           <SideNav
             activeItemId={activeRecordId}
@@ -141,21 +142,21 @@ const BatchEdit: React.FC = () => {
                 />
               </ErrorBoundary>
             ) : (
-              <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
-                <InlineIcon icon="complete" />
-                <p className="font-body-lg text-bold margin-y-1">
-                  All records are complete!
+                <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
+                  <InlineIcon icon="complete" />
+                  <p className="font-body-lg text-bold margin-y-1">
+                    All records are complete!
                 </p>
-                <Link to="/roster">
-                  <TextWithIcon
-                    text="Back to roster"
-                    iconSide="right"
-                    Icon={ArrowRight}
-                    direction="right"
-                  />
-                </Link>
-              </div>
-            )}
+                  <Link to="/roster">
+                    <TextWithIcon
+                      text="Back to roster"
+                      iconSide="right"
+                      Icon={ArrowRight}
+                      direction="right"
+                    />
+                  </Link>
+                </div>
+              )}
           </SideNav>
         </ErrorBoundary>
       </LoadingWrapper>

@@ -84,10 +84,6 @@ const EditRecord: React.FC = () => {
 
   useFocusFirstError([child]);
 
-  if (!child) {
-    return <LoadingWrapper loading={true} />;
-  }
-
   const commonFormProps = {
     child,
     afterSaveSuccess: () => setTriggerRefetchCounter((r) => r + 1),
@@ -102,29 +98,33 @@ const EditRecord: React.FC = () => {
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
             <span className="h2 h2--lighter">Edit record </span>
-            {child.firstName} {child.lastName}
+            {child ? `${child.firstName} ${child.lastName}` : 'Loading...'}
           </h1>
         </div>
-        <div className="display-flex flex-col flex-align-center">
+        {child && <div className="display-flex flex-col flex-align-center">
           {!!activeEnrollment && (
             <>
               <WithdrawRecord child={child} enrollment={activeEnrollment} />
             </>
           )}
           <DeleteRecord child={child} setAlerts={setAlerts} />
-        </div>
+        </div>}
       </div>
-      <TabNav
-        items={getTabItems(commonFormProps)}
-        activeId={activeTab}
-        onClick={(tabId) => {
-          history.replace({ hash: tabId });
-        }}
-      >
-        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-          {getTabContent(activeTab, commonFormProps)}
-        </ErrorBoundary>
-      </TabNav>
+      <div className="grid-col">
+        <LoadingWrapper loading={!child}>
+          <TabNav
+            items={getTabItems(commonFormProps)}
+            activeId={activeTab}
+            onClick={(tabId) => {
+              history.replace({ hash: tabId });
+            }}
+          >
+            <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+              {child ? getTabContent(activeTab, commonFormProps) : <></>}
+            </ErrorBoundary>
+          </TabNav>
+        </LoadingWrapper>
+      </div>
     </div>
   );
 };

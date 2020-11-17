@@ -65,7 +65,7 @@ const App: React.FC = () => {
           userFirstName={user?.firstName}
         />
         <main id="main-content">
-          <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+          <ErrorBoundary alertProps={defaultErrorBoundaryProps}>
             <Switch>
               {routes.map((route, index) => (
                 <MakeRouteWithSubRoutes key={index} {...route} />
