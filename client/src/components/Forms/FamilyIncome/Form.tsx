@@ -120,7 +120,7 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setAlerts([
           { type: 'error', text: 'Unable to save family income determination' },
         ]);

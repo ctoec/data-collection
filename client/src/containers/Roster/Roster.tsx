@@ -6,13 +6,14 @@ import {
   TabNav,
   HeadingLevel,
   LoadingWrapper,
+  ErrorBoundary,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
@@ -31,6 +32,7 @@ import {
   usePaginatedChildData,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -56,18 +58,30 @@ const Roster: React.FC = () => {
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
 
-  const { children, error } = usePaginatedChildData(query);
+  // TODO: handle fetching error
+  const { children: allChildrenForOrg, stillFetching } = usePaginatedChildData({
+    ...query,
+    withdrawn: false,
+  });
+  const {
+    children: withdrawnChildren,
+    stillFetching: stillFetchingWithdrawn,
+  } = usePaginatedChildData({ ...query, withdrawn: true });
+  const children = query.withdrawn ? withdrawnChildren : allChildrenForOrg;
+  const loading = stillFetching || stillFetchingWithdrawn;
 
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const { alertElements } = useChildrenWithErrorsAlert(
-    !children,
-    (children || []).filter(
+    loading,
+    (allChildrenForOrg || []).filter(
+      (child) => child?.validationErrors && child.validationErrors.length
+    ).length,
+    (withdrawnChildren || []).filter(
       (child) => child?.validationErrors && child.validationErrors.length
     ).length,
     query.organization
   );
-  const loading = !children && !error;
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
@@ -136,8 +150,28 @@ const Roster: React.FC = () => {
   };
 
   let rosterContent = <NoRecordsAlert />;
-  if (children?.length && accordionProps)
+  if (query.withdrawn) {
+    // Default for no children and show only withdrawn
+    rosterContent = (
+      <div className="margin-top-4 margin-bottom-4">
+        <div className="font-body-lg margin-bottom-2">
+          You have no withdrawn enrollments
+        </div>
+        {/* TODO: we're doing a lot of sketchy buttons-that-go-somewhere stuff, and they should probably all be links */}
+        <Link
+          to={{
+            ...history.location,
+            search: stringify({ ...query, withdrawn: undefined }),
+          }}
+        >
+          Return to current roster
+        </Link>
+      </div>
+    );
+  }
+  if (children?.length && accordionProps?.items.length) {
     rosterContent = <Accordion {...accordionProps} />;
+  }
   if (tabNavProps)
     rosterContent = (
       <TabNav {...tabNavProps}>
@@ -185,16 +219,18 @@ const Roster: React.FC = () => {
             )}
           </div>
         </div>
-        {!query.withdrawn && (
-          <RosterButtonsTable
-            filterByMonth={queryMonth}
-            setFilterByMonth={updateActiveMonth}
-            updateWithdrawnOnly={updateWithdrawnOnly}
-          />
-        )}
-        <LoadingWrapper text="Loading your roster..." loading={loading}>
-          {rosterContent}
-        </LoadingWrapper>
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+          {!query.withdrawn && (
+            <RosterButtonsTable
+              filterByMonth={queryMonth}
+              setFilterByMonth={updateActiveMonth}
+              updateWithdrawnOnly={updateWithdrawnOnly}
+            />
+          )}
+          <LoadingWrapper text="Loading your roster..." loading={loading}>
+            {rosterContent}
+          </LoadingWrapper>
+        </ErrorBoundary>
       </div>
       <FixedBottomBar>
         <Button

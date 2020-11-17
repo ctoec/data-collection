@@ -25,7 +25,6 @@ type DownloadOptionsType = {
   fileName: string;
 };
 
-// TODO: does roster need to be downloadable as Excel sheet?
 const getRosterProps = (): DownloadOptionsType => ({
   downloadText: 'Export roster',
   backendPath: 'export/roster',
@@ -70,7 +69,9 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
         : backendPath,
       fileName,
       accessToken || ''
-    ).catch((err) => console.error(err));
+    ).catch((err) => {
+      throw new Error(err);
+    });
   };
 
   return (

@@ -7,6 +7,7 @@ import {
   TextWithIcon,
   Alert,
   LoadingWrapper,
+  ErrorBoundary,
 } from '@ctoec/component-library';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost, apiGet } from '../../utils/api';
@@ -18,6 +19,7 @@ import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton'
 import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 import { clearChildrenCaches } from '../Roster/hooks';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const Upload: React.FC = () => {
   // USWDS File Input is managed by JS (not exclusive CSS)
@@ -41,9 +43,11 @@ const Upload: React.FC = () => {
   // Count how many children are in the roster so we can determine if we're writing over that data
   const [userRosterCount, setUserRosterCount] = useState(undefined);
   useEffect(() => {
-    apiGet('children?count=true', accessToken).then((res) =>
-      setUserRosterCount(res.count)
-    );
+    apiGet('children?count=true', accessToken)
+      .then((res) => setUserRosterCount(res.count))
+      .catch((err) => {
+        throw new Error(err);
+      });
   }, [accessToken]);
 
   const [error, setError] = useState<string>();
@@ -225,21 +229,23 @@ const Upload: React.FC = () => {
           spreadsheet template, upload the file here.
         </p>
       </div>
-      <div className="grid-row">
-        <form
-          className={cx('usa-form', {
-            'display-none': checkReplaceDataOpen || errorModalOpen,
-          })}
-        >
-          <LoadingWrapper text="Uploading your file..." loading={loading}>
-            <FileInput
-              id="report"
-              label="Choose a file"
-              onChange={fileUpload}
-            />
-          </LoadingWrapper>
-        </form>
-      </div>
+      <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+        <div className="grid-row">
+          <form
+            className={cx('usa-form', {
+              'display-none': checkReplaceDataOpen || errorModalOpen,
+            })}
+          >
+            <LoadingWrapper text="Uploading your file..." loading={loading}>
+              <FileInput
+                id="report"
+                label="Choose a file"
+                onChange={fileUpload}
+              />
+            </LoadingWrapper>
+          </form>
+        </div>
+      </ErrorBoundary>
     </div>
   );
 };

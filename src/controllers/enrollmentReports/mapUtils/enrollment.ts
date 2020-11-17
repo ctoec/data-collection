@@ -1,5 +1,5 @@
 import { EntityManager } from 'typeorm';
-import { Child, Site, Enrollment } from '../../../entity';
+import { Child, Site, Enrollment, User } from '../../../entity';
 import { AgeGroup, CareModel } from '../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../template';
 import { mapEnum } from '.';
@@ -15,6 +15,7 @@ export const mapEnrollment = (
   source: EnrollmentReportRow,
   site: Site,
   child: Child,
+  user: User,
   save: boolean
 ) => {
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
@@ -31,7 +32,12 @@ export const mapEnrollment = (
   } as Enrollment;
 
   if (save) {
-    enrollment = transaction.create(Enrollment, enrollment);
+    enrollment = transaction.create(Enrollment, {
+      ...enrollment,
+      updateMetaData: {
+        author: user,
+      },
+    });
     return transaction.save(enrollment);
   }
 

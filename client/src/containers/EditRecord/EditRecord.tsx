@@ -1,6 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { AlertProps, TabNav } from '@ctoec/component-library';
+import {
+  AlertProps,
+  ErrorBoundary,
+  LoadingWrapper,
+  TabNav,
+} from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
@@ -15,6 +20,7 @@ import {
   formSections,
 } from '../../components/Forms/formSections';
 import { Child } from '../../shared/models';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -45,38 +51,38 @@ const EditRecord: React.FC = () => {
   // Child re-fetch
   const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
-    apiGet(`children/${childId}`, accessToken).then((updatedChild) => {
-      setChild(updatedChild);
+    apiGet(`children/${childId}`, accessToken)
+      .then((updatedChild) => {
+        setChild(updatedChild);
 
-      // On initial fetch, refetch = 0 AND we do not want to create alerts
-      if (triggerRefetchCounter > 0) {
-        const newAlerts: AlertProps[] = [
-          {
-            type: 'success',
-            heading: 'Record updated',
-            text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
-          },
-        ];
-        const formStepInfo = formSections.find((s) => s.key === activeTab);
-        const incomplete = formStepInfo?.hasError(updatedChild);
-        const formName = formStepInfo?.name.toLowerCase();
-        if (incomplete) {
-          newAlerts.push({
-            type: 'error',
-            heading: 'This record has missing or incorrect info',
-            text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
-          });
+        // On initial fetch, refetch = 0 AND we do not want to create alerts
+        if (triggerRefetchCounter > 0) {
+          const newAlerts: AlertProps[] = [
+            {
+              type: 'success',
+              heading: 'Record updated',
+              text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
+            },
+          ];
+          const formStepInfo = formSections.find((s) => s.key === activeTab);
+          const incomplete = formStepInfo?.hasError(updatedChild);
+          const formName = formStepInfo?.name.toLowerCase();
+          if (incomplete) {
+            newAlerts.push({
+              type: 'error',
+              heading: 'This record has missing or incorrect info',
+              text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
+            });
+          }
+          setAlerts(newAlerts);
         }
-        setAlerts(newAlerts);
-      }
-    });
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   }, [accessToken, childId, triggerRefetchCounter]);
 
   useFocusFirstError([child]);
-
-  if (!child) {
-    return <></>;
-  }
 
   const commonFormProps = {
     child,
@@ -92,31 +98,35 @@ const EditRecord: React.FC = () => {
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
             <span className="h2 h2--lighter">Edit record </span>
-            {child.firstName} {child.lastName}
+            {child ? `${child.firstName} ${child.lastName}` : 'Loading...'}
           </h1>
         </div>
-        <div className="display-flex flex-col flex-align-center">
-          {!!activeEnrollment && (
-            <>
-              <WithdrawRecord
-                setAlerts={setAlerts}
-                child={child}
-                enrollment={activeEnrollment}
-              />
-            </>
-          )}
-          <DeleteRecord child={child} />
-        </div>
+        {child && (
+          <div className="display-flex flex-col flex-align-center">
+            {!!activeEnrollment && (
+              <>
+                <WithdrawRecord child={child} enrollment={activeEnrollment} />
+              </>
+            )}
+            <DeleteRecord child={child} setAlerts={setAlerts} />
+          </div>
+        )}
       </div>
-      <TabNav
-        items={getTabItems(commonFormProps)}
-        activeId={activeTab}
-        onClick={(tabId) => {
-          history.replace({ hash: tabId });
-        }}
-      >
-        {getTabContent(activeTab, commonFormProps)}
-      </TabNav>
+      <div className="grid-col">
+        <LoadingWrapper loading={!child}>
+          <TabNav
+            items={getTabItems(commonFormProps)}
+            activeId={activeTab}
+            onClick={(tabId) => {
+              history.replace({ hash: tabId });
+            }}
+          >
+            <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+              {child ? getTabContent(activeTab, commonFormProps) : <></>}
+            </ErrorBoundary>
+          </TabNav>
+        </LoadingWrapper>
+      </div>
     </div>
   );
 };

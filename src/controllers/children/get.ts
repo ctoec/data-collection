@@ -1,4 +1,4 @@
-import { removedDeletedEntitiesFromChild } from '../../utils/filterSoftRemoved';
+import { removeDeletedEntitiesFromChild } from '../../utils/filterSoftRemoved';
 import {
   getManager,
   FindManyOptions,
@@ -8,8 +8,8 @@ import {
 import { User, Child } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
-import { withdraw } from '../enrollments';
 import { Moment } from 'moment';
+import { propertyDateSorter } from '../../utils/propertyDateSorter';
 
 /**
  * Get child by id, with related family and related
@@ -19,16 +19,16 @@ import { Moment } from 'moment';
  */
 export const getChildById = async (id: string, user: User): Promise<Child> => {
   const opts = await getFindOpts(user, { id });
-  let child = await getManager().findOne(Child, opts);
-  child = removedDeletedEntitiesFromChild(child);
-
-  return await validateObject(child);
+  const child = await getManager().findOne(Child, opts);
+  return await postProcessChild(child);
 };
 
 /**
  * Get all children the given user has access to.
  * Optionally, can filter to only return children:
- * 	- for specific organizations,
+ * 	- for specific organizations
+ *  - who are totally withdrawn (no active enrollments)
+ *  - with active enrollments in a specific month
  * 	- with missing info
  * Supports pagination with skip and take parameters, which
  * leverages offset fetch capability of sorted sql server query
@@ -56,24 +56,29 @@ export const getChildren = async (
 
   const opts = (await getFindOpts(user, {
     organizationIds,
-    withdrawnOnly,
   })) as FindManyOptions<Child>;
   opts.skip = skip;
   opts.take = take;
 
   let children = await getManager().find(Child, opts);
-  children = children.map((c) => removedDeletedEntitiesFromChild(c));
-  children = await Promise.all(children.map(validateObject));
+  children = await Promise.all(children.map(postProcessChild));
 
-  // If withdrawn qs param
-  if (withdrawnOnly) {
+  // If missing info qs param
+  if (missingInfoOnly) {
+    // Return all children with missing info
+    return children.filter(
+      (child) => child.validationErrors && child.validationErrors.length
+    );
+  }
+  // Else if withdrawn qs param
+  else if (withdrawnOnly) {
     // Do not return any children with active enrollments
-    children = children.filter((c) => c.enrollments?.every((e) => !!e.exit));
+    return children.filter((c) => c.enrollments?.every((e) => !!e.exit));
   }
   // Else if month qs param
   else if (activeMonth) {
     // Do not return children withouth active enrollment during or before that month
-    children = children.filter((c) => {
+    return children.filter((c) => {
       // filter out enrollments after the current month filter
       c.enrollments = c.enrollments?.filter((e) =>
         e.entry.isSameOrBefore(activeMonth.endOf('month'))
@@ -83,21 +88,10 @@ export const getChildren = async (
       return c.enrollments && c.enrollments.length;
     });
   }
-  // Else
+  // Else default to return only children with active enrollments
   else {
-    // Default is to return all children with any active enrollments
-    children = children.filter((c) => c.enrollments?.some((e) => !e.exit));
+    return children.filter((c) => c.enrollments?.some((e) => !e.exit));
   }
-
-  // If missing info qs param
-  if (missingInfoOnly) {
-    // Only return children with missing info
-    children = children.filter(
-      (child) => child.validationErrors && child.validationErrors.length
-    );
-  }
-
-  return children;
 };
 
 /**
@@ -121,11 +115,9 @@ const getFindOpts = async (
   filterOpts: {
     id?: string;
     organizationIds?: string[];
-    activeMonth?: Moment;
-    withdrawnOnly?: boolean;
   } = {}
 ) => {
-  const { id, organizationIds, activeMonth, withdrawnOnly } = filterOpts;
+  const { id, organizationIds } = filterOpts;
   const readOrgIds = await getReadAccessibleOrgIds(user);
   const filterOrgIds =
     organizationIds?.filter((orgId) => readOrgIds.includes(orgId)) ||
@@ -156,13 +148,64 @@ const getFindOpts = async (
       // https://github.com/typeorm/typeorm/issues/2707
       // Until then, use the generated aliases to do nested filtering
       if (user.accessType === 'site') {
-        qb.andWhere('Child__enrollments.siteId IN (:...siteIds)', {
-          siteIds: user.siteIds,
-        });
+        qb.andWhere(
+          '(Child__enrollments.siteId IN (:...siteIds) OR (Child__enrollments.siteId IS NULL AND (Child.authorId = :userId OR Child__enrollments.authorId = :userId)))',
+          {
+            siteIds: user.siteIds,
+            userId: user.id,
+          }
+        );
       }
     },
     loadEagerRelations: true,
   };
 
   return opts;
+};
+
+/**
+ * Apply all post-processing to a child record:
+ * 	- remove deleted entities
+ * 	- sort entities by date
+ * 	- validate full object tree
+ * @param child
+ */
+const postProcessChild = async (child: Child) => {
+  removeDeletedEntitiesFromChild(child);
+  sortEntities(child);
+  return validateObject(child);
+};
+
+/**
+ * Sort enrollments, fundings, and income determinations
+ * @param child
+ */
+const sortEntities = (child: Child) => {
+  if (!child) return;
+  if (child.enrollments) {
+    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
+      if (enrollmentA.fundings) {
+        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
+          propertyDateSorter(
+            fundingA,
+            fundingB,
+            (f) => f.firstReportingPeriod.period
+          )
+        );
+      }
+
+      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.entry);
+    });
+  }
+
+  if (child.family?.incomeDeterminations) {
+    child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
+      (determinationA, determinationB) =>
+        propertyDateSorter(
+          determinationA,
+          determinationB,
+          (d) => d.determinationDate
+        )
+    );
+  }
 };

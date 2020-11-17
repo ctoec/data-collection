@@ -9,6 +9,7 @@ import { Enrollment } from '../../../shared/models';
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
+  setAlerts,
 }) => {
   if (!child) {
     throw new Error('Enrollment funding form rendered without child');
@@ -24,38 +25,41 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
+  const commonProps = {
+    afterSaveSuccess,
+    child,
+    setAlerts,
+  };
+
   return (
     <>
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentCard
-        child={child}
+        {...commonProps}
         currentEnrollment={currentEnrollment}
-        afterSaveSuccess={afterSaveSuccess}
       />
       {currentEnrollment && (
         <>
           <h3>Current enrollment</h3>
           <EditEnrollmentCard
+            {...commonProps}
             key="edit-current-enrollment"
             isCurrent={true}
-            child={child}
             enrollmentId={currentEnrollment.id}
-            afterSaveSuccess={afterSaveSuccess}
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingCard
+              {...commonProps}
               key={funding.id}
               isCurrent={true}
-              child={child}
               fundingId={funding.id}
               enrollmentId={currentEnrollment.id}
-              afterSaveSuccess={afterSaveSuccess}
             />
           ))}
           <ChangeFundingCard
+            {...commonProps}
             enrollment={currentEnrollment}
             orgId={child.organization.id}
-            afterSaveSuccess={afterSaveSuccess}
           />
         </>
       )}
@@ -65,18 +69,16 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
           {pastEnrollments.map((enrollment) => (
             <>
               <EditEnrollmentCard
+                {...commonProps}
                 key={enrollment.id}
-                child={child}
                 enrollmentId={enrollment.id}
-                afterSaveSuccess={afterSaveSuccess}
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingCard
+                  {...commonProps}
                   key={funding.id}
-                  child={child}
                   fundingId={funding.id}
                   enrollmentId={enrollment.id}
-                  afterSaveSuccess={afterSaveSuccess}
                 />
               ))}
             </>

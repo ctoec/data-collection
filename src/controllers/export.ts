@@ -1,11 +1,10 @@
 import { BookType } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { Child, Enrollment } from '../entity';
-import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
 import { Response } from 'express';
 import { isMoment } from 'moment';
 import { streamTabularData } from '../utils/streamTabularData';
-import { SECTIONS } from '../template';
+import { SECTIONS, getAllColumnMetadata } from '../template';
 import { reportingPeriodToString } from './reportingPeriods';
 
 /**
@@ -39,42 +38,6 @@ export async function streamUploadedChildren(
     }
   });
   streamTabularData(response, format, childStrings);
-}
-
-/**
- * Helper function that transforms the various non-String data
- * of various Child fields into appropriate formats to display
- * in cells of the CSV to export.
- * @param value
- */
-function formatProperty(value: any, propertyName: string) {
-  // Check for absent values before invoking type check
-  if (value === null || value === undefined) return '';
-  // Check for specific property names
-  if (propertyName === 'fundingSpace') {
-    return value.source;
-  }
-  if (propertyName === 'site') {
-    return value.siteName;
-  }
-  if (
-    propertyName === 'firstReportingPeriod' ||
-    propertyName === 'lastReportingPeriod'
-  ) {
-    return reportingPeriodToString(value);
-  }
-  if (typeof value === 'boolean') {
-    return value ? 'Yes' : 'No';
-  }
-  if (typeof value === 'string') {
-    return value || '';
-  }
-  if (typeof value === 'number') {
-    return value.toString();
-  }
-  if (isMoment(value)) {
-    return value.format('MM/DD/YYYY');
-  }
 }
 
 /**
@@ -140,4 +103,40 @@ function flattenChild(
     }
   });
   return childString;
+}
+
+/**
+ * Helper function that transforms the various non-String data
+ * of various Child fields into appropriate formats to display
+ * in cells of the CSV to export.
+ * @param value
+ */
+function formatProperty(value: any, propertyName: string) {
+  // Check for absent values before invoking type check
+  if (value === null || value === undefined) return '';
+  // Check for specific property names
+  if (propertyName === 'fundingSpace') {
+    return value.source;
+  }
+  if (propertyName === 'site') {
+    return value.siteName;
+  }
+  if (
+    propertyName === 'firstReportingPeriod' ||
+    propertyName === 'lastReportingPeriod'
+  ) {
+    return reportingPeriodToString(value);
+  }
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  if (typeof value === 'string') {
+    return value || '';
+  }
+  if (typeof value === 'number') {
+    return value.toString();
+  }
+  if (isMoment(value)) {
+    return value.format('MM/DD/YYYY');
+  }
 }

@@ -93,7 +93,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
         if (triggerRefetchCount) moveNextStep();
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }, [accessToken, triggerRefetchCount, !!child]);
 

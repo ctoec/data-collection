@@ -1,7 +1,12 @@
 import React from 'react';
 import EditRecord from './EditRecord';
 import { accessibilityTestHelper, snapshotTestHelper } from '../../testHelpers';
-import { Child, Organization, BirthCertificateType } from '../../shared/models';
+import {
+  Child,
+  Organization,
+  BirthCertificateType,
+  UniqueIdType,
+} from '../../shared/models';
 import { waitFor } from '@testing-library/dom';
 
 const child = {
@@ -9,7 +14,7 @@ const child = {
   firstName: 'First',
   lastName: 'Last',
   birthCertificateType: BirthCertificateType.Unavailable,
-  organization: { id: 1 } as Organization,
+  organization: { id: 1, uniqueIdType: UniqueIdType.None } as Organization,
   enrollments: [],
   family: {
     id: 1,
