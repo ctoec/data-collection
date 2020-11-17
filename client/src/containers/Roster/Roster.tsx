@@ -210,11 +210,9 @@ const Roster: React.FC = () => {
                 : 'Send to OEC'
             }
             onClick={submitToOEC}
-            // TODO: Submit button must be disabled until the app is in a prod environment
-            disabled={
-              !query.organization ||
-              process.env.REACT_APP_STAGE !== 'production'
-            }
+            // TODO: Re-enable button in Jan once we're ready for full-go
+            // disabled={!query.organization}
+            disabled={true}
           />
         )}
       </FixedBottomBar>
