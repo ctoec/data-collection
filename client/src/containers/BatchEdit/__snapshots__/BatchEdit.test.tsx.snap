@@ -147,8 +147,8 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
       class="oec-loading-wrapper"
     >
       <div
-        aria-hidden="false"
-        class=""
+        aria-hidden="true"
+        class="opacity-0"
       >
         <div
           class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
@@ -209,7 +209,6 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
       </div>
       <div
         class="oec-loading-wrapper__indicator bg-white"
-        hidden=""
       >
         <div
           class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
