@@ -7,9 +7,7 @@ import { RosterSectionHeader } from './RosterSectionHeader';
 import { ColumnNames, tableColumns } from './tableColumns';
 import { Moment } from 'moment';
 import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
-import {
-  getCurrentEnrollment,
-} from '../../utils/models';
+import { getCurrentEnrollment } from '../../utils/models';
 import { getLastEnrollment } from '../../utils/models/getLastEnrollment';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
@@ -118,10 +116,10 @@ export function getAccordionItems(
     hideOrgColumn: boolean;
     hideExitColumn: boolean;
   } = {
-      hideCapacity: false,
-      hideOrgColumn: true,
-      hideExitColumn: true,
-    }
+    hideCapacity: false,
+    hideOrgColumn: true,
+    hideExitColumn: true,
+  }
 ): AccordionItemProps[] {
   const childrenByAgeGroup = getChildrenByAgeGroup(children);
   const excludeColumns: ColumnNames[] = [];

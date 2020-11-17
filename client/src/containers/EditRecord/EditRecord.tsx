@@ -101,14 +101,16 @@ const EditRecord: React.FC = () => {
             {child ? `${child.firstName} ${child.lastName}` : 'Loading...'}
           </h1>
         </div>
-        {child && <div className="display-flex flex-col flex-align-center">
-          {!!activeEnrollment && (
-            <>
-              <WithdrawRecord child={child} enrollment={activeEnrollment} />
-            </>
-          )}
-          <DeleteRecord child={child} setAlerts={setAlerts} />
-        </div>}
+        {child && (
+          <div className="display-flex flex-col flex-align-center">
+            {!!activeEnrollment && (
+              <>
+                <WithdrawRecord child={child} enrollment={activeEnrollment} />
+              </>
+            )}
+            <DeleteRecord child={child} setAlerts={setAlerts} />
+          </div>
+        )}
       </div>
       <div className="grid-col">
         <LoadingWrapper loading={!child}>
