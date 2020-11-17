@@ -152,11 +152,11 @@ const Upload: React.FC = () => {
 
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e?.target?.files?.[0];
-    if (!file) {
+    const _file = e?.target?.files?.[0];
+    if (!_file) {
       return setError('No file selected for upload');
     }
-    setFile(file);
+    setFile(_file);
     setError(undefined);
 
     // set target.files = null to ensure change event is properly triggered
