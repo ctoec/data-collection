@@ -55,27 +55,22 @@ const EditRecord: React.FC = () => {
       .then((updatedChild) => {
         setChild(updatedChild);
 
-        // On initial fetch, refetch = 0 AND we do not want to create alerts
-        if (triggerRefetchCounter > 0) {
-          const newAlerts: AlertProps[] = [
-            {
-              type: 'success',
-              heading: 'Record updated',
-              text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
-            },
-          ];
-          const formStepInfo = formSections.find((s) => s.key === activeTab);
-          const incomplete = formStepInfo?.hasError(updatedChild);
-          const formName = formStepInfo?.name.toLowerCase();
-          if (incomplete) {
-            newAlerts.push({
-              type: 'error',
-              heading: 'This record has missing or incorrect info',
-              text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
-            });
-          }
-          setAlerts(newAlerts);
+        const newAlerts: AlertProps[] = [];
+        const missingInfoAlertProps = getMissingInfoAlertProps(updatedChild);
+        // Always set missing info alert, if one exists
+        if (missingInfoAlertProps) {
+          newAlerts.push(missingInfoAlertProps);
         }
+
+        // Only set success alert on a GET that happens after an update (refetch count > 0)
+        if (triggerRefetchCounter > 0) {
+          newAlerts.push({
+            type: 'success',
+            heading: 'Record updated',
+            text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
+          });
+        }
+        setAlerts(newAlerts);
       })
       .catch((err) => {
         throw new Error(err);
@@ -129,6 +124,26 @@ const EditRecord: React.FC = () => {
       </div>
     </div>
   );
+};
+
+const getMissingInfoAlertProps: (child: Child) => AlertProps | undefined = (
+  child: Child
+) => {
+  const formsWithErrors = formSections.filter((section) =>
+    section.hasError(child)
+  );
+  if (!formsWithErrors.length) return;
+
+  const formsWithErrorsString =
+    formsWithErrors.length > 1
+      ? formsWithErrors.map(({ name }) => name.toLowerCase()).join(', ')
+      : `${formsWithErrors[0].name.toLowerCase()} `;
+  const errorMessage = `Add required info in ${formsWithErrorsString}before submitting your data to OEC.`;
+  return {
+    heading: 'This record has missing or incorrect info',
+    type: 'error',
+    text: errorMessage,
+  };
 };
 
 export default EditRecord;

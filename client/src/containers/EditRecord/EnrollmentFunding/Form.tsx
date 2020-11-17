@@ -4,7 +4,8 @@ import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
-import { Enrollment } from '../../../shared/models';
+import { Enrollment, Child } from '../../../shared/models';
+import { AlertProps, Alert } from '@ctoec/component-library';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
@@ -25,6 +26,8 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
+  const missingFundedEnrollmentError = getMissingFundedEnrollmentError(child);
+
   const commonProps = {
     afterSaveSuccess,
     child,
@@ -33,6 +36,11 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
 
   return (
     <>
+      {missingFundedEnrollmentError && (
+        <div className="margin-y-1">
+          <Alert {...missingFundedEnrollmentError} />
+        </div>
+      )}
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentCard
         {...commonProps}
@@ -87,4 +95,22 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
       )}
     </>
   );
+};
+
+const getMissingFundedEnrollmentError: (_: Child) => AlertProps | undefined = (
+  child: Child
+) => {
+  const missingFundingError = child.validationErrors?.find(
+    (err) =>
+      err.property === 'enrollments' &&
+      err.constraints &&
+      err.constraints['fundedEnrollment']
+  );
+
+  if (missingFundingError) {
+    return {
+      type: 'error',
+      text: 'A child must have at least one funded enrollment.',
+    };
+  }
 };

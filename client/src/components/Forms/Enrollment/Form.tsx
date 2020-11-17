@@ -34,6 +34,10 @@ export const doesEnrollmentFormHaveErrors = (
       : false;
   }
 
+  if (child && !!getValidationStatusForFields(child, ['enrollments'])) {
+    return true;
+  }
+
   return child?.enrollments?.length
     ? !!getValidationStatusForFields(child.enrollments, enrollmentFundingFields)
     : true;
