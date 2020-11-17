@@ -246,7 +246,9 @@ const Roster: React.FC = () => {
                 : 'Send to OEC'
             }
             onClick={submitToOEC}
-            disabled={!query.organization}
+            // TODO: Re-enable button in Jan once we're ready for full-go
+            // disabled={!query.organization}
+            disabled={true}
           />
         )}
       </FixedBottomBar>
