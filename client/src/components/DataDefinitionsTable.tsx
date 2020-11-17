@@ -17,9 +17,11 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   const [columnMetadata, setColumnMetadata] = useState<ColumnMetadata[]>([]);
 
   useEffect(() => {
-    apiGet('template/column-metadata').then((definitions) =>
-      setColumnMetadata(definitions)
-    );
+    apiGet('template/column-metadata')
+      .then((definitions) => setColumnMetadata(definitions))
+      .catch((err) => {
+        throw new Error(err);
+      });
   }, [accessToken]);
 
   const columns: Column<ColumnMetadata>[] = [

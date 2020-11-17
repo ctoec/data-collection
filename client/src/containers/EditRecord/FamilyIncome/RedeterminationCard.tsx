@@ -1,5 +1,5 @@
 import React from 'react';
-import { FamilyIncomeForm } from '../../../components/Forms';
+import { FamilyIncomeForm, RecordFormProps } from '../../../components/Forms';
 import { Child } from '../../../shared/models';
 import { Card, Button } from '@ctoec/component-library';
 
@@ -7,6 +7,7 @@ type RedeterminationCardProps = {
   child: Child;
   afterSaveSuccess: () => void;
   onCancel: () => void;
+  setAlerts: RecordFormProps['setAlerts'];
 };
 
 /**
@@ -17,6 +18,7 @@ export const RedeterminationCard: React.FC<RedeterminationCardProps> = ({
   child,
   afterSaveSuccess,
   onCancel,
+  setAlerts,
 }) => {
   return (
     <>
@@ -27,7 +29,7 @@ export const RedeterminationCard: React.FC<RedeterminationCardProps> = ({
           legend={'Redetermine family income'}
           child={child}
           afterSaveSuccess={afterSaveSuccess}
-          setAlerts={() => {}}
+          setAlerts={setAlerts}
           CancelButton={<Button text="Cancel" onChange={onCancel} />}
         />
       </Card>

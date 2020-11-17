@@ -25,7 +25,7 @@ describe('EditRecord', () => {
           child={{ firstName: 'Name' } as Child}
           enrollment={enrollment}
         />,
-        { before: expandModal }
+        { before: expandModal, wrapInRouter: true }
       );
 
       const modal = screen.getByRole('dialog');
@@ -38,7 +38,7 @@ describe('EditRecord', () => {
           child={{ firstName: 'Name' } as Child}
           enrollment={enrollment}
         />,
-        { before: expandModal }
+        { before: expandModal, wrapInRouter: true }
       );
 
       const modal = screen.getByRole('dialog');

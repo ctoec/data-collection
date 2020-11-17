@@ -42,6 +42,7 @@ export const ChildInfoForm = ({
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
   showFieldOrFieldset = () => true,
+  setAlerts,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -62,7 +63,13 @@ export const ChildInfoForm = ({
     apiPut(`children/${child.id}`, _child, { accessToken })
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to save child info',
+          },
+        ]);
       })
       .finally(() => (isMounted() ? setSaving(false) : null));
   };

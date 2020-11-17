@@ -10,11 +10,11 @@ import {
   TextWithIcon,
   Pencil,
   CardExpansion,
-  Alert,
   TrashCan,
   InlineIcon,
 } from '@ctoec/component-library';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
+import { RecordFormProps } from '../../../components/Forms';
 
 type EditFundingCardProps = {
   child: Child;
@@ -22,6 +22,7 @@ type EditFundingCardProps = {
   enrollmentId: number;
   isCurrent?: boolean;
   afterSaveSuccess: () => void;
+  setAlerts: RecordFormProps['setAlerts'];
 };
 
 /**
@@ -36,6 +37,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   enrollmentId,
   isCurrent,
   afterSaveSuccess: _afterSaveSuccess,
+  setAlerts,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -49,7 +51,6 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
 
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
-  const [error, setError] = useState<string>();
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
@@ -61,7 +62,6 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   });
 
   const afterSaveSuccess = () => {
-    setError(undefined);
     setCloseCard(true);
     _afterSaveSuccess();
   };
@@ -75,6 +75,12 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       })
       .catch((err) => {
         console.error('Unable to delete enrollment', err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to delete enrollment',
+          },
+        ]);
       });
   }
 
@@ -133,14 +139,13 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         </div>
       </div>
       <CardExpansion>
-        {error && <Alert type="error" text={error} />}
         <FundingForm
           id={`edit-funding-form-${funding.id}`}
           child={child}
           fundingId={funding.id}
           enrollmentId={enrollment.id}
           afterSaveSuccess={afterSaveSuccess}
-          setAlerts={() => setError('Unable to save funding')}
+          setAlerts={setAlerts}
         />
       </CardExpansion>
     </Card>

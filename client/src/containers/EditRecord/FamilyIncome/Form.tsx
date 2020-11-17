@@ -15,6 +15,7 @@ import { FosterIncomeNotRequiredAlert } from '../../../components/Forms/FamilyIn
 export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
+  setAlerts,
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
@@ -50,6 +51,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
             afterSaveSuccess();
           }}
           onCancel={() => setShowRedeterminationForm(false)}
+          setAlerts={setAlerts}
         />
       )}
       <div className="margin-top-1">
@@ -77,6 +79,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
             afterSaveSuccess={afterSaveSuccess}
             isCurrent={true}
             currentIsNew={currentIsNew}
+            setAlerts={setAlerts}
           />
         )}
 
@@ -89,6 +92,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
                   child={child}
                   determinationId={determination.id}
                   afterSaveSuccess={afterSaveSuccess}
+                  setAlerts={setAlerts}
                 />
               ))}
             </div>
