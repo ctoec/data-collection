@@ -26,37 +26,17 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
       Add needed information
     </h1>
     <div
-      class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
-    >
-      <span
-        class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
-      >
-        <span
-          class="usa-sr-only"
-        >
-          (complete)
-        </span>
-      </span>
-       All enrollments are complete
-    </div>
-    <div
-      class="oec-sidenav grid-row"
+      class="oec-loading-wrapper"
     >
       <div
-        class="mobile-lg:grid-col-4"
-      >
-        <nav>
-          <ul />
-        </nav>
-      </div>
-      <div
-        class="oec-sidenav__content mobile-lg:grid-col-12"
+        aria-hidden="false"
+        class=""
       >
         <div
-          class="margin-x-4 margin-top-4 display-flex flex-column flex-align-center"
+          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
         >
           <span
-            class="oec-inline-icon oec-inline-icon--complete"
+            class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
           >
             <span
               class="usa-sr-only"
@@ -64,20 +44,73 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
               (complete)
             </span>
           </span>
-          <p
-            class="font-body-lg text-bold margin-y-1"
+           All enrollments are complete
+        </div>
+        <div
+          class="oec-sidenav grid-row"
+        >
+          <div
+            class="mobile-lg:grid-col-4"
           >
-            All records are complete!
-          </p>
-          <a
-            href="/roster"
+            <nav>
+              <ul />
+            </nav>
+          </div>
+          <div
+            class="oec-sidenav__content mobile-lg:grid-col-12"
           >
-            <span
-              class="oec-text-with-icon"
+            <div
+              class="margin-x-4 margin-top-4 display-flex flex-column flex-align-center"
             >
-              Back to roster
-            </span>
-          </a>
+              <span
+                class="oec-inline-icon oec-inline-icon--complete"
+              >
+                <span
+                  class="usa-sr-only"
+                >
+                  (complete)
+                </span>
+              </span>
+              <p
+                class="font-body-lg text-bold margin-y-1"
+              >
+                All records are complete!
+              </p>
+              <a
+                href="/roster"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Back to roster
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="oec-loading-wrapper__indicator bg-white"
+        hidden=""
+      >
+        <div
+          class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+          role="progressbar"
+          style="width: 40px; height: 40px;"
+        >
+          <svg
+            class="MuiCircularProgress-svg"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
         </div>
       </div>
     </div>
@@ -111,37 +144,17 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
       Add needed information
     </h1>
     <div
-      class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
-    >
-      <span
-        class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
-      >
-        <span
-          class="usa-sr-only"
-        >
-          (complete)
-        </span>
-      </span>
-       All enrollments are complete
-    </div>
-    <div
-      class="oec-sidenav grid-row"
+      class="oec-loading-wrapper"
     >
       <div
-        class="mobile-lg:grid-col-4"
-      >
-        <nav>
-          <ul />
-        </nav>
-      </div>
-      <div
-        class="oec-sidenav__content mobile-lg:grid-col-12"
+        aria-hidden="true"
+        class="opacity-0"
       >
         <div
-          class="margin-x-4 margin-top-4 display-flex flex-column flex-align-center"
+          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
         >
           <span
-            class="oec-inline-icon oec-inline-icon--complete"
+            class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
           >
             <span
               class="usa-sr-only"
@@ -149,20 +162,72 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
               (complete)
             </span>
           </span>
-          <p
-            class="font-body-lg text-bold margin-y-1"
+           All enrollments are complete
+        </div>
+        <div
+          class="oec-sidenav grid-row"
+        >
+          <div
+            class="mobile-lg:grid-col-4"
           >
-            All records are complete!
-          </p>
-          <a
-            href="/roster"
+            <nav>
+              <ul />
+            </nav>
+          </div>
+          <div
+            class="oec-sidenav__content mobile-lg:grid-col-12"
           >
-            <span
-              class="oec-text-with-icon"
+            <div
+              class="margin-x-4 margin-top-4 display-flex flex-column flex-align-center"
             >
-              Back to roster
-            </span>
-          </a>
+              <span
+                class="oec-inline-icon oec-inline-icon--complete"
+              >
+                <span
+                  class="usa-sr-only"
+                >
+                  (complete)
+                </span>
+              </span>
+              <p
+                class="font-body-lg text-bold margin-y-1"
+              >
+                All records are complete!
+              </p>
+              <a
+                href="/roster"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Back to roster
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="oec-loading-wrapper__indicator bg-white"
+      >
+        <div
+          class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+          role="progressbar"
+          style="width: 40px; height: 40px;"
+        >
+          <svg
+            class="MuiCircularProgress-svg"
+            viewBox="22 22 44 44"
+          >
+            <circle
+              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+              cx="44"
+              cy="44"
+              fill="none"
+              r="20.2"
+              stroke-width="3.6"
+            />
+          </svg>
         </div>
       </div>
     </div>

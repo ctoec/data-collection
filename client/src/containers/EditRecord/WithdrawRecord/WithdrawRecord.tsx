@@ -4,16 +4,9 @@ import {
   Form,
   Button,
   FormSubmitButton,
-  Alert,
   Modal,
-  AlertProps,
 } from '@ctoec/component-library';
-import {
-  Enrollment,
-  Child,
-  Funding,
-  FundingSource,
-} from '../../../shared/models';
+import { Enrollment, Child, FundingSource } from '../../../shared/models';
 import { apiPost } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { useHistory } from 'react-router-dom';
@@ -21,22 +14,21 @@ import { EnrollmentEndDateField } from '../../../components/Forms/Enrollment/Fie
 import { ReportingPeriodField } from '../../../components/Forms/Enrollment/Funding/Fields';
 import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
+import { useAlerts } from '../../../hooks/useAlerts';
 
 type WithdrawProps = {
   child: Child;
   enrollment: Enrollment;
-  setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
 };
 export const WithdrawRecord: React.FC<WithdrawProps> = ({
   child,
   enrollment,
-  setAlerts,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
 
   const [isSaving, setIsSaving] = useState(false);
-  const [error, setError] = useState<string>();
+  const { alertElements, setAlerts } = useAlerts();
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
 
@@ -59,8 +51,10 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
         });
       })
       .catch((err) => {
-        console.log(err);
-        setError(`Unable to withdraw ${child.firstName}`);
+        console.error(err);
+        setAlerts([
+          { type: 'error', text: `Unable to withdraw ${child.firstName}` },
+        ]);
       })
       .finally(() => setIsSaving(false));
   };
@@ -74,14 +68,13 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
   const onClick =
     child.validationErrors && child.validationErrors.length
       ? () =>
-          setAlerts((alerts) => [
+          setAlerts([
             {
               type: 'error',
               heading:
                 'Records cannot be withdrawn with missing or incorrect info',
               text: 'Add required info before withdrawing.',
             },
-            ...alerts,
           ])
       : toggleIsOpen;
 
@@ -98,7 +91,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
         toggleOpen={toggleIsOpen}
         header={
           <>
-            {!!error && <Alert text={error} type="error" />}
+            {alertElements}
             <h2 className="margin-bottom-0">Withdraw {child.firstName}</h2>
           </>
         }

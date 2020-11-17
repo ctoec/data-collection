@@ -4,12 +4,14 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
 import { Button, Modal } from '@ctoec/component-library';
+import { RecordFormProps } from '../../../components/Forms';
 
 type DeleteProps = {
   child: Child;
+  setAlerts: RecordFormProps['setAlerts'];
 };
 
-export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
+export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
 
@@ -34,7 +36,13 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child }) => {
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to delete record',
+          },
+        ]);
       })
       .finally(() => {
         setIsDeleting(false);

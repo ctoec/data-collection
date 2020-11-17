@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BackButton } from '../../components/BackButton';
-import { StepList } from '@ctoec/component-library';
+import { ErrorBoundary, StepList } from '@ctoec/component-library';
 import { Organization, Child } from '../../shared/models';
-import { apiGet, apiPost } from '../../utils/api';
+import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
@@ -10,6 +10,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { RecordFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 type LocationType = Location & {
   state: {
@@ -91,7 +92,7 @@ const CreateRecord: React.FC = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }, [accessToken, childId, refetchChild]);
 
@@ -110,10 +111,6 @@ const CreateRecord: React.FC = () => {
     },
   };
 
-  if (!child) {
-    return <>Loading...</>;
-  }
-
   return (
     <div className="grid-container">
       <BackButton />
@@ -122,7 +119,13 @@ const CreateRecord: React.FC = () => {
       <p className="usa-hint">
         Information is required unless otherwise specified.
       </p>
-      <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
+      <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+        <StepList
+          steps={steps}
+          props={commonFormProps}
+          activeStep={activeStep}
+        />
+      </ErrorBoundary>
     </div>
   );
 };

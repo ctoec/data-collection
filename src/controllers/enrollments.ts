@@ -1,15 +1,19 @@
 import { removeDeletedElements } from '../utils/filterSoftRemoved';
-import { getManager } from 'typeorm';
+import { getManager, In } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
-import { Enrollment, ReportingPeriod, Funding } from '../entity';
+import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
+import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 
 export const changeFunding = async (
   id: number,
+  user: User,
   changeFundingData: ChangeFunding
 ) => {
+  const readOrgIds = await getReadAccessibleOrgIds(user);
   let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
+    where: { site: { organizationId: In(readOrgIds) } },
   });
   enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
@@ -74,9 +78,15 @@ export const changeFunding = async (
   });
 };
 
-export const withdraw = async (id: number, withdrawData: Withdraw) => {
+export const withdraw = async (
+  id: number,
+  user: User,
+  withdrawData: Withdraw
+) => {
+  const readOrgIds = await getReadAccessibleOrgIds(user);
   let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
+    where: { site: { organizationId: In(readOrgIds) } },
   });
   enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 

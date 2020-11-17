@@ -69,7 +69,9 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
         : backendPath,
       fileName,
       accessToken || ''
-    ).catch((err) => console.error(err));
+    ).catch((err) => {
+      throw new Error(err);
+    });
   };
 
   return (

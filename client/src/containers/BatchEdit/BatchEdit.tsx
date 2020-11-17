@@ -5,6 +5,8 @@ import {
   TextWithIcon,
   ArrowRight,
   InlineIcon,
+  ErrorBoundary,
+  LoadingWrapper,
 } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
 import { hasValidationError } from '../../utils/hasValidationError';
@@ -16,6 +18,7 @@ import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 import { stringify, parse } from 'query-string';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const BatchEdit: React.FC = () => {
   const { childId } = useParams() as { childId: string };
@@ -25,11 +28,12 @@ const BatchEdit: React.FC = () => {
 
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
-  const { data: children, isValidating } = useAuthenticatedSWR<Child[]>(
+  const { data: children, isValidating, error } = useAuthenticatedSWR<Child[]>(
     childId
       ? null // no need to fetch all children for single record batch edit
       : `children?${stringify({ organizationId, 'missing-info': true })}`
   );
+  const loading = !children && !error;
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
   >([]);
@@ -93,10 +97,8 @@ const BatchEdit: React.FC = () => {
       <h1 ref={h1Ref} className="margin-bottom-1">
         Add needed information
       </h1>
-      {isValidating ? (
-        <>Loading</>
-      ) : (
-        <>
+      <LoadingWrapper loading={loading}>
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
           <div className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
             {currentlyMissingInfoCount ? (
               <>
@@ -132,11 +134,13 @@ const BatchEdit: React.FC = () => {
             }))}
           >
             {activeRecordId !== undefined ? (
-              <BatchEditItemContent
-                childId={activeRecordId}
-                moveNextRecord={moveNextRecord}
-                organizationId={organizationId}
-              />
+              <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+                <BatchEditItemContent
+                  childId={activeRecordId}
+                  moveNextRecord={moveNextRecord}
+                  organizationId={organizationId}
+                />
+              </ErrorBoundary>
             ) : (
               <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
                 <InlineIcon icon="complete" />
@@ -154,8 +158,8 @@ const BatchEdit: React.FC = () => {
               </div>
             )}
           </SideNav>
-        </>
-      )}
+        </ErrorBoundary>
+      </LoadingWrapper>
     </div>
   );
 };

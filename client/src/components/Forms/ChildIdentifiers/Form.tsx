@@ -38,6 +38,7 @@ export const ChildIdentifiersForm = ({
   hideHeader = false,
   hideErrorsOnFirstLoad,
   showFieldOrFieldset = () => true,
+  setAlerts,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
@@ -78,6 +79,9 @@ export const ChildIdentifiersForm = ({
             updateLocalChild(err.data);
           }
           console.error(err);
+          setAlerts([
+            { type: 'error', text: 'Unable to save child identifiers' },
+          ]);
         })
         .finally(onFinally);
     } else {
@@ -85,6 +89,9 @@ export const ChildIdentifiersForm = ({
         .then(afterSaveSuccess)
         .catch((err) => {
           console.error(err);
+          setAlerts([
+            { type: 'error', text: 'Unable to save child identifiers' },
+          ]);
         })
         .finally(onFinally);
     }
