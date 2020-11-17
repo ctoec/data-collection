@@ -154,14 +154,11 @@ const Upload: React.FC = () => {
     e.preventDefault();
     const _file = e?.target?.files?.[0];
     if (!_file) {
+      setFile(undefined);
       return setError('No file selected for upload');
     }
     setFile(_file);
     setError(undefined);
-
-    // set target.files = null to ensure change event is properly triggered
-    // even if file with same name is re-uploaded
-    e.target.files = null;
   };
 
   return (
