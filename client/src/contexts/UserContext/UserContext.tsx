@@ -3,7 +3,6 @@ import AuthenticationContext from '../AuthenticationContext/AuthenticationContex
 import { User } from '../../shared/models';
 import { apiGet } from '../../utils/api';
 import { useHistory } from 'react-router-dom';
-import { handleJWTError } from '../../utils/handleJWTError';
 
 export type UserContextType = {
   user: User | null;
@@ -37,11 +36,9 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
         .then((data) => {
           setUser(data);
         })
-        .catch(
-          handleJWTError(history, (err) => {
-            throw new Error(err);
-          })
-        )
+        .catch((err) => {
+          throw new Error(err);
+        })
         .finally(() => {
           setUserLoading(false);
         });
