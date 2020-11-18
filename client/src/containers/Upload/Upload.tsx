@@ -50,7 +50,7 @@ const Upload: React.FC = () => {
       // https://developer.mozilla.org/en-US/docs/Web/API/FormData
       // https://www.npmjs.com/package/formdata-polyfill
       const formData = new FormData();
-      formData.set('file', file);
+      formData.append('file', file, file.name);
       apiPost(`enrollment-reports/check`, formData, {
         accessToken,
         rawBody: true,
