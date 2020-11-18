@@ -33,6 +33,7 @@ enrollmentReportsRouter.post(
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
       try {
+        console.log({ req }, { res })
         const reportRows = controller.parseUploadedTemplate(req.file);
         console.log(`File parsed into ${reportRows?.length} rows`);
         const reportChildren: Child[] = await controller.mapRows(
@@ -104,8 +105,8 @@ enrollmentReportsRouter.post(
         const siteIdsToReplace = !siteIdToReplace
           ? undefined
           : ((Array.isArray(siteIdToReplace)
-              ? siteIdToReplace
-              : [siteIdToReplace]) as string[]);
+            ? siteIdToReplace
+            : [siteIdToReplace]) as string[]);
         await controller.removeExistingEnrollmentDataForUser(
           tManager,
           req.user,
