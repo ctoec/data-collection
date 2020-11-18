@@ -34,18 +34,21 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (tManager) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
+        console.log(`File parsed into ${reportRows?.length} rows`);
         const reportChildren: Child[] = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
           { save: false }
         );
+        console.log('Children parsed');
         const schemaChildren: Child[] = await Promise.all(
           reportChildren.map(async (child) => {
             // Create object as the DB would see it without saving
             return getManager().create(Child, child);
           })
         );
+        console.log('Create children entitites');
         const childrenWithErrors = await Promise.all(
           schemaChildren.map(async (child) => {
             return {
@@ -55,6 +58,7 @@ enrollmentReportsRouter.post(
             };
           })
         );
+        console.log('Validation errors fetched');
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
