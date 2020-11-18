@@ -28,22 +28,6 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
-  // TODO: remove this banner alert error, and replace with funding card with
-  // missing info icons - https://github.com/ctoec/data-collection/pull/795#issuecomment-729150524
-  const missingFundedEnrollmentError = getMissingFundedEnrollmentError(child);
-  if (missingFundedEnrollmentError) {
-    setAlerts((alerts) => {
-      if (
-        !alerts.find(
-          (alert) => alert.heading === missingFundedEnrollmentError.heading
-        )
-      ) {
-        return [...alerts, missingFundedEnrollmentError];
-      }
-      return alerts;
-    });
-  }
-
   const commonProps = {
     afterSaveSuccess,
     child,
@@ -106,31 +90,4 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
       )}
     </>
   );
-};
-
-const getMissingFundedEnrollmentError: (_: Child) => AlertProps | undefined = (
-  child: Child
-) => {
-  const missingFundingError = child.validationErrors?.find(
-    (err) =>
-      err.property === 'enrollments' &&
-      err.constraints &&
-      err.constraints['fundedEnrollment']
-  );
-
-  if (missingFundingError) {
-    return {
-      type: 'error',
-      heading: 'This record is missing funding information',
-      text: (
-        <>
-          Records must have at least one current or past funded enrollment to be
-          submitted to OEC. Add funding info in the{' '}
-          <Link to={`/edit-record/${child.id}#${SECTION_KEYS.ENROLLMENT}`}>
-            enrollment and funding section
-          </Link>
-        </>
-      ),
-    };
-  }
 };
