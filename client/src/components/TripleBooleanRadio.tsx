@@ -42,7 +42,7 @@ export const TripleBooleanRadio = <T extends {}>({
     preprocessForDisplay: (data) => {
       if (data === true) return trueOption.id === id;
       else if (data === false) return falseOption.id === id;
-      else return unknownOption.id === id;
+      else if (data === undefined) return unknownOption.id === id;
     },
     id,
     text: label,
