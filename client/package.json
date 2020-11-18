@@ -23,6 +23,7 @@
     "class-validator": "^0.12.2",
     "content-disposition": "^0.5.3",
     "file-saver": "^2.0.2",
+    "formdata-polyfill": "^3.0.20",
     "idx": "^2.5.6",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",

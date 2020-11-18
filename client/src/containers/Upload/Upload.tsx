@@ -46,6 +46,9 @@ const Upload: React.FC = () => {
     // Haven't yet determined how many errors of each type there are
     if (file && errorDict === undefined) {
       setLoading(true);
+      // Ugh internet explorer why
+      // https://developer.mozilla.org/en-US/docs/Web/API/FormData
+      // https://www.npmjs.com/package/formdata-polyfill
       const formData = new FormData();
       formData.set('file', file);
       apiPost(`enrollment-reports/check`, formData, {
