@@ -11,7 +11,9 @@ import {
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
+// TODO: Uncomment this import when you want to reactivate the
+// bottom bar with buttons
+// import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { Link, useHistory } from 'react-router-dom';
 import { apiPut } from '../../utils/api';
@@ -69,6 +71,7 @@ const Roster: React.FC = () => {
   } = usePaginatedChildData({ ...query, withdrawn: true });
   const children = query.withdrawn ? withdrawnChildren : allChildrenForOrg;
   const loading = stillFetching || stillFetchingWithdrawn;
+  const isSingleSiteView = query.site ? true : false;
 
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
@@ -106,7 +109,7 @@ const Roster: React.FC = () => {
   const accordionProps = siteFilteredChildren
     ? {
         items: getAccordionItems(siteFilteredChildren, {
-          hideCapacity: isSiteLevelUser,
+          hideCapacity: isSiteLevelUser || isSingleSiteView,
           hideOrgColumn: !isMultiOrgUser,
           hideExitColumn: !query.withdrawn,
         }),
@@ -232,6 +235,7 @@ const Roster: React.FC = () => {
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
+      {/* // TODO: Re-enable the bottom bar once we're in January and using the app
       <FixedBottomBar>
         <Button
           text="Back to getting started"
@@ -246,12 +250,10 @@ const Roster: React.FC = () => {
                 : 'Send to OEC'
             }
             onClick={submitToOEC}
-            // TODO: Re-enable button in Jan once we're ready for full-go
-            // disabled={!query.organization}
-            disabled={true}
+            disabled={!query.organization}
           />
         )}
-      </FixedBottomBar>
+      </FixedBottomBar> */}
     </>
   );
 };
