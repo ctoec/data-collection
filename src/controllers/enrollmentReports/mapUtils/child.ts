@@ -77,7 +77,8 @@ export const updateChild = async (
   organization: Organization,
   site: Site,
   child: Child,
-  user: User
+  user: User,
+  save: boolean
 ) => {
   let enrollment = getExistingEnrollmentOnChild(source, child);
   const modifyingExistingEnrollment = enrollment !== undefined;
@@ -87,13 +88,14 @@ export const updateChild = async (
     site,
     child,
     user,
-    enrollment === undefined
+    save && enrollment === undefined
   );
 
   // Apply any needed enrollment info updates before going to funding
   // TODO: this pattern is unnecessary because save updates an entity if it existed before-- we should refactor to just save
-  if (modifyingExistingEnrollment) {
+  if (save && modifyingExistingEnrollment) {
     await transaction.update(Enrollment, enrollment.id, enrollmentUpdate);
+    enrollmentUpdate.id = enrollment.id;
   }
 
   let funding = getExistingFundingForEnrollment(source, enrollment);
@@ -104,12 +106,12 @@ export const updateChild = async (
     organization,
     enrollmentUpdate,
     user,
-    funding === undefined
+    save && funding === undefined
   );
 
   if (modifyingExistingEnrollment) {
     // Either modifying existing funding or attaching brand new funding
-    if (modifyingExistingFunding) {
+    if (save && modifyingExistingFunding) {
       await transaction.update(Funding, funding.id, fundingUpdate);
     } else {
       enrollment.fundings.push(fundingUpdate);
@@ -267,11 +269,12 @@ export const isIdentifierMatch = (
   if (child instanceof Child) {
     match =
       match &&
-      (child.sasid === other.sasidUniqueId ||
-        child.uniqueId === other.sasidUniqueId);
+      // NOTE: use == to evaluate undefined from 'other' and
+      // null from 'child' to be equivalent
+      (child.sasid == other.sasidUniqueId ||
+        child.uniqueId == other.sasidUniqueId);
   } else {
     match = match && child.sasidUniqueId === other.sasidUniqueId;
   }
-
   return match;
 };
