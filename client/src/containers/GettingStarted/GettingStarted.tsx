@@ -39,10 +39,10 @@ const GettingStarted: React.FC = () => {
               </span>
             }
           />
-          <h3>Reporting period</h3>
+          <h3>Data collection period</h3>
           <p>
-            Data is due on March 31, 2020 and must include data from July 1,
-            2020 to at least Jan 1, 2021.
+            You must submit your data to OEC by 03/05/2021. The data collection
+            period begins 07/01/2020 and continues through at least 01/01/2021.
           </p>
           <div>
             <h2>Download the latest batch upload template</h2>
