@@ -9,6 +9,7 @@ import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
 import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
+import { organizations } from '../data/organizations';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -52,7 +53,7 @@ const addUser = passAsyncError(
           res.data.sub &&
           res.data.sub === req.claims.sub
         ) {
-          fawkesUser = await createUserWithFullPermissions(
+          fawkesUser = await createUserWithSingleOrgPermissions(
             req.claims.sub,
             res.data
           );
@@ -123,7 +124,7 @@ async function getUserFromWingedKeys(
   });
 }
 
-async function createUserWithFullPermissions(
+async function createUserWithSingleOrgPermissions(
   wingedKeysId: string,
   wingedKeysUser: { given_name: string; family_name: string }
 ): Promise<User> {
@@ -138,15 +139,14 @@ async function createUserWithFullPermissions(
 
     user = await manager.save(_user);
 
-    const orgs: Organization[] = await manager.find(Organization);
-    if (orgs.length) {
-      const orgPermsForUser = manager.create(
-        OrganizationPermission,
-        orgs.map((org) => ({
-          user,
-          organizationId: org.id,
-        }))
-      );
+    const org: Organization = await manager.findOne(Organization, {
+      where: { providerName: organizations[0].providerName },
+    });
+    if (org) {
+      const orgPermsForUser = manager.create(OrganizationPermission, {
+        user,
+        organizationId: org.id,
+      });
       await manager.save(orgPermsForUser);
     }
   });
