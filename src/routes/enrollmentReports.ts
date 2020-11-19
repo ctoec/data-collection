@@ -40,7 +40,7 @@ enrollmentReportsRouter.post(
           reportRows,
           req.user,
           { save: false }
-				);
+        );
         const childrenWithErrors = await Promise.all(
           reportChildren.map(async (child) => {
             return {
@@ -52,9 +52,9 @@ enrollmentReportsRouter.post(
         );
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
-				);
-				
-				res.send(errorDict);
+        );
+
+        res.send(errorDict);
       } catch (err) {
         if (err instanceof ApiError) throw err;
 
@@ -65,9 +65,9 @@ enrollmentReportsRouter.post(
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
-			} finally {
-				if(req.file && req.file.path) fs.unlinkSync(req.file.path);
-			}
+      } finally {
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+      }
     });
   })
 );
@@ -130,9 +130,9 @@ enrollmentReportsRouter.post(
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
-			} finally {
-				if(req.file && req.file.path) fs.unlinkSync(req.file.path);
-			}
+      } finally {
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+      }
     });
   })
 );
