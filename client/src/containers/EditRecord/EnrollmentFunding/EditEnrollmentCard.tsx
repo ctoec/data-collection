@@ -1,15 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Card,
-  InlineIcon,
   ExpandCard,
   Button,
   TextWithIcon,
   Pencil,
   CardExpansion,
   TrashCan,
-  TooltipWrapper,
 } from '@ctoec/component-library';
+import { IncompleteIcon } from '../../../components/IncompleteIcon';
 import { Enrollment, Child } from '../../../shared/models';
 import { apiDelete } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -70,12 +69,6 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
       });
   }
 
-  const incompleteIcon = (
-    <TooltipWrapper tooltipText="Add missing info">
-      {InlineIcon({ icon: 'incomplete' })}
-    </TooltipWrapper>
-  );
-
   return (
     <Card
       key={enrollmentId}
@@ -86,19 +79,19 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         <div className="flex-1">
           <p className="margin-bottom-0">Site</p>
           <p className="text-bold margin-top-0">
-            {enrollment.site?.siteName || incompleteIcon}
+            {enrollment.site?.siteName || <IncompleteIcon />}
           </p>
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Model type</p>
           <p className="text-bold margin-top-0">
-            {enrollment.model || incompleteIcon}
+            {enrollment.model || <IncompleteIcon />}
           </p>
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Age group</p>
           <p className="text-bold margin-top-0">
-            {enrollment.ageGroup || incompleteIcon}
+            {enrollment.ageGroup || <IncompleteIcon />}
           </p>
         </div>
         <div className="flex-2">
@@ -106,7 +99,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
           <p className="text-bold margin-top-0">
             {enrollment.entry && enrollment.entry.isValid()
               ? enrollment.entry.format('MM/DD/YYYY')
-              : incompleteIcon}{' '}
+              : IncompleteIcon}{' '}
             -{' '}
             {enrollment.exit ? enrollment.exit.format('MM/DD/YYYY') : 'present'}
           </p>

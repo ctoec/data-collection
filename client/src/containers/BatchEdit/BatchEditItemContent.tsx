@@ -147,10 +147,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
           </div>
         </div>
       </div>
-      <div
-        style={{ padding: '1em' }}
-        className="padding-top-1 border-top-1px border-base-light"
-      >
+      <div className="padding-1 border-top-1px border-base-light">
         {steps && steps.length ? (
           <StepList<RecordFormProps>
             key={child.id}

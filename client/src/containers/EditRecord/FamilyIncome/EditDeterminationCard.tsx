@@ -2,15 +2,14 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Child } from '../../../shared/models';
 import {
   Card,
-  InlineIcon,
   ExpandCard,
   Button,
   TextWithIcon,
   Pencil,
   TrashCan,
   CardExpansion,
-  TooltipWrapper,
 } from '@ctoec/component-library';
+import { IncompleteIcon } from '../../../components/IncompleteIcon';
 import { currencyFormatter } from '../../../utils/formatters';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
@@ -69,12 +68,6 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       });
   };
 
-  const incompleteIcon = (
-    <TooltipWrapper tooltipText="Add missing info">
-      {InlineIcon({ icon: 'incomplete' })}
-    </TooltipWrapper>
-  );
-
   return (
     <Card
       className="margin-bottom-2"
@@ -87,23 +80,27 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
         <div className="flex-1">
           <p>Household size</p>
           <p className="text-bold">
-            {determination.numberOfPeople || incompleteIcon}
+            {determination.numberOfPeople || <IncompleteIcon />}
           </p>
         </div>
         <div className="flex-1">
           <p>Income</p>
           <p className="text-bold">
-            {determination.income
-              ? currencyFormatter(determination.income)
-              : incompleteIcon}
+            {determination.income ? (
+              currencyFormatter(determination.income)
+            ) : (
+              <IncompleteIcon />
+            )}
           </p>
         </div>
         <div className="flex-2">
           <p>Determined on</p>
           <p className="text-bold">
-            {determination.determinationDate
-              ? determination.determinationDate.format('MM/DD/YYYY')
-              : incompleteIcon}
+            {determination.determinationDate ? (
+              determination.determinationDate.format('MM/DD/YYYY')
+            ) : (
+              <IncompleteIcon />
+            )}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">

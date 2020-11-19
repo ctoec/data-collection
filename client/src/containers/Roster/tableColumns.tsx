@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { Link } from 'react-router-dom';
 import { Column, InlineIcon, TooltipWrapper } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
+import { IncompleteIcon } from '../../components/IncompleteIcon';
 
 export enum ColumnNames {
   NAME = 'Name',
@@ -56,11 +57,7 @@ export const tableColumns: (
         return (
           <td className={tableRowClassName}>
             {!!row?.validationErrors && !!row?.validationErrors.length && (
-              <TooltipWrapper tooltipText="Add missing info">
-                <Link to={`/batch-edit/${row?.id}`}>
-                  <InlineIcon icon="incomplete" />
-                </Link>
-              </TooltipWrapper>
+              <IncompleteIcon />
             )}
           </td>
         );
