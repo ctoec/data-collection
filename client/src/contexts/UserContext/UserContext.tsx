@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 import { User } from '../../shared/models';
 import { apiGet } from '../../utils/api';
-import { useHistory } from 'react-router-dom';
-import { handleJWTError } from '../../utils/handleJWTError';
 
 export type UserContextType = {
   user: User | null;
@@ -28,7 +26,6 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
   const { accessToken, loading } = useContext(AuthenticationContext);
   const [user, setUser] = useState<User | null>(null);
   const [userLoading, setUserLoading] = useState(loading);
-  const history = useHistory();
 
   useEffect(() => {
     if (accessToken) {
@@ -37,11 +34,9 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
         .then((data) => {
           setUser(data);
         })
-        .catch(
-          handleJWTError(history, (err) => {
-            throw new Error(err);
-          })
-        )
+        .catch((err) => {
+          throw new Error(err);
+        })
         .finally(() => {
           setUserLoading(false);
         });

@@ -2,7 +2,6 @@ import { removeDeletedElements } from '../utils/filterSoftRemoved';
 import { getManager, In } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
-import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 
 export const changeFunding = async (
@@ -10,10 +9,9 @@ export const changeFunding = async (
   user: User,
   changeFundingData: ChangeFunding
 ) => {
-  const readOrgIds = await getReadAccessibleOrgIds(user);
   let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
-    where: { site: { organizationId: In(readOrgIds) } },
+    where: { site: { id: In(user.siteIds) } },
   });
   enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
@@ -83,14 +81,14 @@ export const withdraw = async (
   user: User,
   withdrawData: Withdraw
 ) => {
-  const readOrgIds = await getReadAccessibleOrgIds(user);
   let enrollment = await getManager().findOne(Enrollment, id, {
     relations: ['fundings'],
-    where: { site: { organizationId: In(readOrgIds) } },
+    where: { site: { id: In(user.siteIds) } },
   });
-  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
   if (!enrollment) throw new NotFoundError();
+
+  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
   return getManager().transaction(async (tManager) => {
     const currentFunding = (enrollment.fundings || []).find(
@@ -108,13 +106,13 @@ export const withdraw = async (
       await tManager.save(currentFunding);
     }
 
-    if (!withdrawData.exitDate || !withdrawData.exitReason) {
+    if (!withdrawData.exit || !withdrawData.exitReason) {
       throw new BadRequestError(
         'Exit date and exit reason must be provided to withdraw'
       );
     }
 
-    enrollment.exit = withdrawData.exitDate;
+    enrollment.exit = withdrawData.exit;
     enrollment.exitReason = withdrawData.exitReason;
     await tManager.save(enrollment);
   });
