@@ -8,6 +8,7 @@ import {
   Pencil,
   CardExpansion,
   TrashCan,
+  TooltipWrapper,
 } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../shared/models';
 import { apiDelete } from '../../../utils/api';
@@ -69,6 +70,12 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
       });
   }
 
+  const incompleteIcon = (
+    <TooltipWrapper tooltipText="Add missing info">
+      {InlineIcon({ icon: 'incomplete' })}
+    </TooltipWrapper>
+  );
+
   return (
     <Card
       key={enrollmentId}
@@ -79,19 +86,19 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         <div className="flex-1">
           <p className="margin-bottom-0">Site</p>
           <p className="text-bold margin-top-0">
-            {enrollment.site?.siteName || InlineIcon({ icon: 'incomplete' })}
+            {enrollment.site?.siteName || incompleteIcon}
           </p>
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Model type</p>
           <p className="text-bold margin-top-0">
-            {enrollment.model || InlineIcon({ icon: 'incomplete' })}
+            {enrollment.model || incompleteIcon}
           </p>
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Age group</p>
           <p className="text-bold margin-top-0">
-            {enrollment.ageGroup || InlineIcon({ icon: 'incomplete' })}
+            {enrollment.ageGroup || incompleteIcon}
           </p>
         </div>
         <div className="flex-2">
@@ -99,7 +106,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
           <p className="text-bold margin-top-0">
             {enrollment.entry && enrollment.entry.isValid()
               ? enrollment.entry.format('MM/DD/YYYY')
-              : InlineIcon({ icon: 'incomplete' })}{' '}
+              : incompleteIcon}{' '}
             -{' '}
             {enrollment.exit ? enrollment.exit.format('MM/DD/YYYY') : 'present'}
           </p>

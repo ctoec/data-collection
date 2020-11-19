@@ -2,7 +2,7 @@ import React from 'react';
 import idx from 'idx';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
-import { Column, InlineIcon } from '@ctoec/component-library';
+import { Column, InlineIcon, TooltipWrapper } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 
 export enum ColumnNames {
@@ -56,9 +56,11 @@ export const tableColumns: (
         return (
           <td className={tableRowClassName}>
             {!!row?.validationErrors && !!row?.validationErrors.length && (
-              <Link to={`/batch-edit/${row?.id}`}>
-                <InlineIcon icon="incomplete" />
-              </Link>
+              <TooltipWrapper tooltipText="Add missing info">
+                <Link to={`/batch-edit/${row?.id}`}>
+                  <InlineIcon icon="incomplete" />
+                </Link>
+              </TooltipWrapper>
             )}
           </td>
         );

@@ -32,7 +32,7 @@ export const getBatchEditErrorDetailsString = (child: Child) => {
   if (!formsWithErrors.length) return '';
 
   let errorStr = formsWithErrors.map(({ name }) => name).join(', ');
-  return `Errors in ${errorStr.toLowerCase()}`;
+  return `${errorStr[0].toUpperCase() + errorStr.substring(1).toLowerCase()}`;
 };
 
 export const listSteps = (child: Child) =>

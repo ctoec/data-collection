@@ -9,6 +9,7 @@ import {
   Pencil,
   TrashCan,
   CardExpansion,
+  TooltipWrapper,
 } from '@ctoec/component-library';
 import { currencyFormatter } from '../../../utils/formatters';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -68,6 +69,12 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       });
   };
 
+  const incompleteIcon = (
+    <TooltipWrapper tooltipText="Add missing info">
+      {InlineIcon({ icon: 'incomplete' })}
+    </TooltipWrapper>
+  );
+
   return (
     <Card
       className="margin-bottom-2"
@@ -80,7 +87,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
         <div className="flex-1">
           <p>Household size</p>
           <p className="text-bold">
-            {determination.numberOfPeople || InlineIcon({ icon: 'incomplete' })}
+            {determination.numberOfPeople || incompleteIcon}
           </p>
         </div>
         <div className="flex-1">
@@ -88,7 +95,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
           <p className="text-bold">
             {determination.income
               ? currencyFormatter(determination.income)
-              : InlineIcon({ icon: 'incomplete' })}
+              : incompleteIcon}
           </p>
         </div>
         <div className="flex-2">
@@ -96,7 +103,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
           <p className="text-bold">
             {determination.determinationDate
               ? determination.determinationDate.format('MM/DD/YYYY')
-              : InlineIcon({ icon: 'incomplete' })}
+              : incompleteIcon}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">
