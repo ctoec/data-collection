@@ -10,6 +10,7 @@ import {
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
+import fs from 'fs';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -40,14 +41,8 @@ enrollmentReportsRouter.post(
           req.user,
           { save: false }
         );
-        const schemaChildren: Child[] = await Promise.all(
-          reportChildren.map(async (child) => {
-            // Create object as the DB would see it without saving
-            return getManager().create(Child, child);
-          })
-        );
         const childrenWithErrors = await Promise.all(
-          schemaChildren.map(async (child) => {
+          reportChildren.map(async (child) => {
             return {
               ...child,
               validationErrors: await validate(child),
@@ -58,6 +53,7 @@ enrollmentReportsRouter.post(
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
+
         res.send(errorDict);
       } catch (err) {
         if (err instanceof ApiError) throw err;
@@ -69,6 +65,8 @@ enrollmentReportsRouter.post(
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
+      } finally {
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
       }
     });
   })
@@ -132,6 +130,8 @@ enrollmentReportsRouter.post(
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
+      } finally {
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
       }
     });
   })

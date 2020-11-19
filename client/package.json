@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ctoec/component-library": "1.0.5",
+    "@ctoec/component-library": "1.0.6",
     "@openid/appauth": "^1.2.7",
     "@testing-library/dom": "^7.24.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -23,6 +23,7 @@
     "class-validator": "^0.12.2",
     "content-disposition": "^0.5.3",
     "file-saver": "^2.0.2",
+    "formdata-polyfill": "^3.0.20",
     "idx": "^2.5.6",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
@@ -51,11 +52,9 @@
   "browserslist": {
     "production": [
       ">0.2%",
-      "not dead",
       "not op_mini all"
     ],
     "development": [
-      "ie 11",
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"

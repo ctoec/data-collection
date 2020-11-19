@@ -1190,10 +1190,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.0.5.tgz#2ceba69f5a9266a49ea27a600fc9a6ca35005717"
-  integrity sha512-QNuWKqquKALB4DMl0mV91Q53A/YGYLpOKCRemyQI9qE9bxZWT7CCey3A5qIPUJ4KVfY4uabnyyNlnPiQoIAE4w==
+"@ctoec/component-library@1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.0.6.tgz#de46eb3c1e3c2d8c33344010f3e48a8272db97f9"
+  integrity sha512-+YCxblNwIpdwIs16wppb9ckxx/SK4izYvIlRskRgX1KIY2grMQCTJPy6mF4Mqir33H+3gihPUBz+OkzMPoDV7g==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
@@ -5465,6 +5465,11 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
+
+formdata-polyfill@^3.0.20:
+  version "3.0.20"
+  resolved "https://registry.yarnpkg.com/formdata-polyfill/-/formdata-polyfill-3.0.20.tgz#d6319db8efc5cf4bb2da27856c2b902be63be1c6"
+  integrity sha512-TAaxIEwTBdoH1TWndtUH1T0/GisUHwmOKcV5hjkR/iTatHBJSOHb563FP86Lra5nXo3iNdhK7HPwMl5Ihg71pg==
 
 forwarded@~0.1.2:
   version "0.1.2"
