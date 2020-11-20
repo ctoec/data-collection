@@ -100,7 +100,7 @@ const Roster: React.FC = () => {
     rosterH2,
     superHeaderText,
   } = useOrgSiteProps(
-    !children || !query.organization,
+    loading,
     (children || []).length,
     (siteFilteredChildren || []).length
   );
@@ -108,13 +108,13 @@ const Roster: React.FC = () => {
   // Get roster content as accordion props
   const accordionProps = siteFilteredChildren
     ? {
-        items: getAccordionItems(siteFilteredChildren, {
-          hideCapacity: isSiteLevelUser || isSingleSiteView,
-          hideOrgColumn: !isMultiOrgUser,
-          hideExitColumn: !query.withdrawn,
-        }),
-        titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
-      }
+      items: getAccordionItems(siteFilteredChildren, {
+        hideCapacity: isSiteLevelUser || isSingleSiteView,
+        hideOrgColumn: !isMultiOrgUser,
+        hideExitColumn: !query.withdrawn,
+      }),
+      titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
+    }
     : undefined;
 
   // Function to submit data to OEC, to pass down into submit button

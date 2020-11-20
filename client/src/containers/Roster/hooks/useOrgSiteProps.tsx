@@ -53,10 +53,6 @@ export const useOrgSiteProps = (
   if (isLoading) {
     return {
       h1Text: 'Loading...',
-      tabNavProps: undefined as TabNav | undefined,
-      subHeaderText: '',
-      rosterH2: '',
-      superHeaderText: '',
     };
   }
 
@@ -74,7 +70,7 @@ export const useOrgSiteProps = (
         : 'Multiple organizations',
       tabNavProps: {
         itemType: 'organization',
-        items: getOrganizationTabItems(organizations, sites),
+        items: getOrganizationTabItems(organizations, orgSites),
         onClick: tabNavOnClick,
         nestedActiveId: query.site,
         activeId: query.organization,
@@ -101,7 +97,6 @@ export const useOrgSiteProps = (
       },
       subHeaderText: getSubHeaderText(orgChildCount, sites, query),
       rosterH2: getRosterH2(siteChildCount, sites, query),
-      superHeaderText: '',
     };
   }
 
@@ -112,9 +107,9 @@ export const useOrgSiteProps = (
   // - no sub-sub header (because no tabNav)
   return {
     h1Text: query.withdrawn ? 'Withdrawn enrollments' : sites[0].siteName,
-    tabNavProps: undefined as TabNav | undefined,
+    tabNavProps: undefined,
     subHeaderText: getSubHeaderText(orgChildCount, sites, query),
-    rosterH2: '',
+    rosterH2: undefined,
     superHeaderText: organizations?.[0]?.providerName,
   };
 };
@@ -181,14 +176,14 @@ function getSiteTabItems(sites: Site[]): TabItem[] {
 
 function getOrganizationTabItems(
   organizations: Organization[],
-  sites: Site[]
+  orgSites: Site[]
 ): TabItem[] {
   const items: TabItem[] = organizations.map(({ id, providerName }) => ({
     id: `${id}`,
     tabText: providerName,
     tabTextFormatter: formatTabItemText,
     nestedItemType: 'site',
-    nestedTabs: getSiteTabItems(sites.filter((s) => s.organizationId === id)),
+    nestedTabs: getSiteTabItems(orgSites),
   }));
   return items;
 }
