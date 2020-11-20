@@ -21,7 +21,6 @@ export const useChildrenWithErrorsAlert = (
   );
   useEffect(() => {
     if (isLoading || !childrenWithErrorsCount) {
-      setAlerts([]);
       return;
     }
 
