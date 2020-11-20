@@ -116,10 +116,10 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
 
   const AllComplete = (
     <div className="margin-y-2">
-      <div style={{ textAlign: 'center' }} className="font-body-xl">
+      <div className="text-center font-body-xl">
         <InlineIcon icon="complete" />
       </div>
-      <div style={{ textAlign: 'center' }}>
+      <div className="text-center">
         <h2>{`${child?.firstName}'s record is now complete!`}</h2>
       </div>
     </div>
