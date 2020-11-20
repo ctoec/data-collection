@@ -1,5 +1,19 @@
 import { getManager } from 'typeorm';
-import { Organization, Site, FundingSpace, ReportingPeriod } from '../entity';
+import {
+  Organization,
+  Site,
+  FundingSpace,
+  ReportingPeriod,
+  Funding,
+  Enrollment,
+  Child,
+  Family,
+  IncomeDetermination,
+  SitePermission,
+  OrganizationPermission,
+  EnrollmentReport,
+  User,
+} from '../entity';
 import { FundingSource } from '../../client/src/shared/models';
 import {
   getReportingPeriodFromDates,
@@ -8,8 +22,54 @@ import {
 import { organizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import { getFakeFundingSpaces } from './fundingSpace';
+import { isDevelopment } from '../utils/isDevelopment';
 
 export const initialize = async () => {
+  if (!isDevelopment()) {
+    await getManager().createQueryBuilder().delete().from(Funding).execute();
+    await getManager().createQueryBuilder().delete().from(Enrollment).execute();
+    await getManager().createQueryBuilder().delete().from(Child).execute();
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(IncomeDetermination)
+      .execute();
+    await getManager().createQueryBuilder().delete().from(Family).execute();
+
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(EnrollmentReport)
+      .execute();
+
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(SitePermission)
+      .execute();
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(OrganizationPermission)
+      .execute();
+    await getManager().createQueryBuilder().delete().from(User).execute();
+    await getManager().createQueryBuilder().delete().from(Site).execute();
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(FundingSpace)
+      .execute();
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(Organization)
+      .execute();
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(ReportingPeriod)
+      .execute();
+  }
   await Promise.all(
     organizations.map(async (orgToCreate) => {
       let organization = await getManager().findOne(Organization, {

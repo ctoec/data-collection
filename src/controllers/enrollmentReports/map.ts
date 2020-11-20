@@ -103,6 +103,7 @@ const mapRow = async (
     organization,
     site,
     childToUpdate,
-    user
+    user,
+    save
   );
 };

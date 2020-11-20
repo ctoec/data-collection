@@ -22,20 +22,6 @@ import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const Upload: React.FC = () => {
-  // USWDS File Input is managed by JS (not exclusive CSS)
-  // We need to import the distributed JS code. It runs immediately
-  // after being parsed, and searches for DOM elements with the
-  // appriopriate HTML attributes. React constantly mounts/unmounts
-  // DOM nodes. To get around this, we dynamically import USWDS every
-  // render. However, browsers cache the module and so subsequent
-  // imports don't trigger the code to execute again. To get around
-  // this, we must delete the module from the cache.
-  useEffect(() => {
-    delete require.cache[require.resolve('uswds/dist/js/uswds')];
-    // @ts-ignore
-    import('uswds/dist/js/uswds');
-  }, []);
-
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
@@ -60,8 +46,11 @@ const Upload: React.FC = () => {
     // Haven't yet determined how many errors of each type there are
     if (file && errorDict === undefined) {
       setLoading(true);
+      // Ugh internet explorer why
+      // https://developer.mozilla.org/en-US/docs/Web/API/FormData
+      // https://www.npmjs.com/package/formdata-polyfill
       const formData = new FormData();
-      formData.set('file', file);
+      formData.append('file', file, file.name);
       apiPost(`enrollment-reports/check`, formData, {
         accessToken,
         rawBody: true,
@@ -152,16 +141,13 @@ const Upload: React.FC = () => {
 
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e?.target?.files?.[0];
-    if (!file) {
+    const _file = e?.target?.files?.[0];
+    if (!_file) {
+      setFile(undefined);
       return setError('No file selected for upload');
     }
-    setFile(file);
+    setFile(_file);
     setError(undefined);
-
-    // set target.files = null to ensure change event is properly triggered
-    // even if file with same name is re-uploaded
-    e.target.files = null;
   };
 
   return (
