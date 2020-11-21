@@ -35,7 +35,8 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
           setUser(data);
         })
         .catch((err) => {
-          throw new Error(err);
+          // This doesn't need to throw an error because the lack of user is taken to mean that this failed
+          console.error(err);
         })
         .finally(() => {
           setUserLoading(false);
