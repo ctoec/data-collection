@@ -10,23 +10,16 @@ export type RosterContentProps = {
   query: RosterQueryParams;
   accordionProps?: AccordionProps;
   childRecords?: Child[];
-  rosterH2?: JSX.Element;
 };
 
 export const RosterContent: React.FC<RosterContentProps> = ({
   query,
   childRecords,
   accordionProps,
-  rosterH2,
 }) => {
   const history = useHistory();
   if (childRecords?.length && accordionProps?.items.length) {
-    return (
-      <>
-        {rosterH2 && rosterH2}
-        <Accordion {...accordionProps} />
-      </>
-    );
+    return <Accordion {...accordionProps} />;
   }
 
   // If withdrawn and no child records

@@ -1,4 +1,4 @@
-import { TabNav, TabItem } from '@ctoec/component-library';
+import { TabItem } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import { useHistory } from 'react-router-dom';
 import React, { useContext } from 'react';

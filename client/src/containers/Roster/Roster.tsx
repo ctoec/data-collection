@@ -205,6 +205,7 @@ const Roster: React.FC = () => {
           <LoadingWrapper text="Loading your roster..." loading={loading}>
             {tabNavProps ? (
               <TabNav {...tabNavProps}>
+                {rosterH2}
                 <RosterContent {...rosterContentProps} />
               </TabNav>
             ) : (
