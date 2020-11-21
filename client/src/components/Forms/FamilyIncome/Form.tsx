@@ -17,6 +17,8 @@ import {
   DeterminationDateField,
 } from './Fields';
 import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
+import useIsMounted from '../../../hooks/useIsMounted';
+import { useValidationErrors } from '../../../hooks/useValidationErrors';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -64,20 +66,21 @@ type FamilyIncomeFormProps = {
 export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   id = 'new-income-determination',
   legend = 'New income determination',
-  child,
+  child: inputChild,
   incomeDeterminationId,
   CancelButton,
   afterSaveSuccess,
   setAlerts,
+  hideErrorsOnFirstLoad,
 }) => {
-  if (!child?.family) {
+  if (!inputChild?.family) {
     throw new Error('Family income form rendered without family');
   }
 
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
 
-  if (child?.foster) {
+  if (inputChild?.foster) {
     // New child is and batch edit both use this form directly
     // So this alert will show for those two forms
     // Edit child conditionally shows this form, so this alert is in that container too
@@ -92,6 +95,11 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
       </div>
     );
   }
+
+  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
+    inputChild,
+    hideErrorsOnFirstLoad
+  );
 
   const determination =
     child?.family?.incomeDeterminations?.find(
@@ -115,6 +123,15 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
 
   const saveData = determination.id ? updateDetermination : createDetermination;
+
+  const isMounted = useIsMounted();
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setLoading(false);
+    }
+  };
+
   const onSubmit = (updatedData: IncomeDetermination) => {
     setLoading(true);
     saveData(updatedData)
@@ -125,7 +142,7 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
           { type: 'error', text: 'Unable to save family income determination' },
         ]);
       })
-      .finally(() => setLoading(false));
+      .finally(onFinally);
   };
 
   return (

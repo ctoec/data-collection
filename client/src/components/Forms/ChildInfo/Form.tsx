@@ -57,6 +57,13 @@ export const ChildInfoForm = ({
     hideErrorsOnFirstLoad
   );
 
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setSaving(false);
+    }
+  };
+
   const onFormSubmit = (_child: Child) => {
     setErrorsHidden(false);
     setSaving(true);
@@ -71,7 +78,7 @@ export const ChildInfoForm = ({
           },
         ]);
       })
-      .finally(() => (isMounted() ? setSaving(false) : null));
+      .finally(onFinally);
   };
 
   return (

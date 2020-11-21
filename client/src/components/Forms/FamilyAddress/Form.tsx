@@ -50,8 +50,14 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
     hideErrorsOnFirstLoad
   );
 
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setSaving(false);
+    }
+  };
+
   const onSubmit = (newState: Family) => {
-    setErrorsHidden(false);
     setSaving(true);
     apiPut(`families/${family.id}`, newState, { accessToken })
       .then(afterSaveSuccess)
@@ -64,7 +70,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
           },
         ]);
       })
-      .finally(() => (isMounted() ? setSaving(false) : null));
+      .finally(onFinally);
   };
 
   return (

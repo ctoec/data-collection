@@ -14,6 +14,8 @@ import { getValidationStatusForFields } from '../../../utils/getValidationStatus
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { getCurrentEnrollment } from '../../../utils/models';
 import { apiPost, apiPut } from '../../../utils/api';
+import useIsMounted from '../../../hooks/useIsMounted';
+import { useValidationErrors } from '../../../hooks/useValidationErrors';
 
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'model'];
 const enrollmentFundingFields = [...enrollmentFields, 'fundings'];
@@ -44,16 +46,22 @@ type EnrollmentFormProps = {
 
 export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   id,
-  child,
+  child: inputChild,
   enrollmentId,
   AdditionalButton,
   afterSaveSuccess,
   setAlerts,
   showFieldOrFieldset = () => true,
+  hideErrorsOnFirstLoad,
 }) => {
-  if (!child) {
+  if (!inputChild) {
     throw new Error('Enrollment form rendered without child');
   }
+
+  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
+    inputChild,
+    hideErrorsOnFirstLoad
+  );
 
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
@@ -79,6 +87,15 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
     });
 
   const saveData = enrollment.id ? updateEnrollment : createEnrollment;
+
+  const isMounted = useIsMounted();
+
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setLoading(false);
+    }
+  };
   const onSubmit = (updatedData: Enrollment) => {
     setLoading(true);
     saveData(updatedData)
@@ -92,7 +109,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
           },
         ]);
       })
-      .finally(() => setLoading(false));
+      .finally(onFinally);
   };
 
   return (
