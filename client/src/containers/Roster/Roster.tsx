@@ -21,6 +21,7 @@ import {
   getQueryMonthFormat,
   QUERY_STRING_MONTH_FORMAT,
   applySiteFilter,
+  getRosterH2,
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
@@ -95,14 +96,11 @@ const Roster: React.FC = () => {
     tabNavProps,
     h1Text,
     subHeaderText,
-    rosterH2,
     superHeaderText,
-  } = useOrgSiteProps(
-    loading,
-    (children || []).length,
-    (siteFilteredChildren || []).length
-  );
+  } = useOrgSiteProps(loading, (children || []).length);
 
+  const siteChildCount = (siteFilteredChildren || []).length;
+  const rosterH2 = getRosterH2(siteChildCount, user?.sites, query);
   // Get roster content as accordion props
   const accordionProps = siteFilteredChildren
     ? {
