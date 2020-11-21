@@ -1191,8 +1191,8 @@
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#812-tab-nav":
-  version "1.0.7"
-  resolved "https://github.com/ctoec/component-library#5f4225989bcda54f52673107bdd431d92011f8de"
+  version "1.0.8"
+  resolved "https://github.com/ctoec/component-library#f01bf94bd3089031684e8db40a593e7d9a949361"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
