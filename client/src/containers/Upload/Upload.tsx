@@ -20,6 +20,7 @@ import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { BatchUpload } from '../../shared/payloads';
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -83,10 +84,26 @@ const Upload: React.FC = () => {
         accessToken,
         rawBody: true,
       })
-        .then(() => {
+        // Response contains id of created enrollmentReport,
+        // number of active enrollments, and num withdrawn enrollments
+        // via BatchUpload payload
+        .then((resp: BatchUpload) => {
           // Clear all children records from data cache
           clearChildrenCaches();
-          history.push(`/roster`);
+          let uploadText = `You uploaded ${resp.activeEnrollments} active enrollments`;
+          uploadText +=
+            resp.withdrawnEnrollments > 0
+              ? ` and ${resp.withdrawnEnrollments} withdrawn enrollments.`
+              : `.`;
+          history.push(`/roster`, {
+            alerts: [
+              {
+                type: 'success',
+                heading: 'Your records have been uploaded!',
+                text: uploadText,
+              },
+            ],
+          });
         })
         .catch(
           handleJWTError(history, (err) => {
