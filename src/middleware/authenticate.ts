@@ -135,6 +135,7 @@ async function createUserWithSingleOrgPermissions(
       wingedKeysId,
       firstName: wingedKeysUser.given_name,
       lastName: wingedKeysUser.family_name,
+      confidentialityAgreed: false,
     });
 
     user = await manager.save(_user);
