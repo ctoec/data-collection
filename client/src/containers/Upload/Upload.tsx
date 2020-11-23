@@ -55,6 +55,7 @@ const Upload: React.FC = () => {
       apiPost(`enrollment-reports/check`, formData, {
         accessToken,
         rawBody: true,
+        headers: { 'content-type': file.type },
       })
         // Back end sends back an object whose fields are error table obj.
         .then((resp) => {
