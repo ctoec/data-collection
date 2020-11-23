@@ -14,7 +14,13 @@ import fs from 'fs';
 import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
-const upload = multer({ dest: '/tmp/uploads' }).single('file');
+const upload = multer({
+  dest: '/tmp/uploads',
+  fileFilter: (req, file, cb) => {
+    console.log('FILE FILTER');
+    return cb(null, true);
+  },
+}).single('file');
 
 /**
  * /enrollment-reports/check POST
@@ -32,7 +38,6 @@ const upload = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
   '/check',
   (req, res, next) => {
-    console.log(req.body);
     console.log(req.headers);
     console.log(req.rawHeaders);
     next();
