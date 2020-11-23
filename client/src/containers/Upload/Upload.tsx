@@ -22,6 +22,12 @@ import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { BatchUpload } from '../../shared/payloads';
 
+const MIME_TYPES = {
+  OCTET_STREAM: 'application/octet-stream',
+  CSV: 'text/csv',
+  XLSX: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+};
+
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
@@ -169,11 +175,21 @@ const Upload: React.FC = () => {
   };
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const _file = e?.target?.files?.[0];
+    let _file = e?.target?.files?.[0];
     if (!_file) {
       clearFile();
       return setError('No file selected for upload');
     }
+    // Workaround for windows, which can't figure out data type of csv / xlsx
+    // unless Excel application is installed
+    if (_file.type === MIME_TYPES.OCTET_STREAM) {
+      const fileType = _file.name.includes('.csv')
+        ? MIME_TYPES.CSV
+        : MIME_TYPES.XLSX;
+      console.log('Creating new file with type ', fileType);
+      _file = new File([_file], _file.name, { type: fileType });
+    }
+
     setFile(_file);
     setError(undefined);
     setErrorDict(undefined);
