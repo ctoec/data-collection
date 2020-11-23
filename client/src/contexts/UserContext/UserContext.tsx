@@ -21,7 +21,7 @@ const UserContext = React.createContext<UserContextType>({
   user: null,
   loading: true,
   confidentialityAgreedDate: null,
-  setConfidentialityAgreedDate: () => {},
+  setConfidentialityAgreedDate: () => { },
 });
 
 const { Provider, Consumer } = UserContext;
