@@ -55,37 +55,19 @@ function getChildrenWithErrorsAlertProps(
   numberOfWithdrawnChildrenWithErrors: number,
   organizationId?: string
 ): AlertProps {
-  let alertHeading =
-    numberOfWithdrawnChildrenWithErrors > 0
-      ? `${pluralize(
-          'record',
-          numberOfChildrenWithErrors,
-          true
-        )} and ${pluralize(
-          'record',
-          numberOfWithdrawnChildrenWithErrors,
-          true
-        )} have missing or incorrect info`
-      : `${pluralize(
-          'record',
-          numberOfChildrenWithErrors,
-          true
-        )} have missing or incorrect info`;
-  // let alertText = `You'll need to add required info for
-  //       ${pluralize('record', numberOfChildrenWithErrors, true)} before
-  //       submitting your data to OEC. Update with `;
-  // if (numberOfWithdrawnChildrenWithErrors > 0) {
-  //   alertText = `You'll need to add required info for ${numberOfChildrenWithErrors} active ${pluralize(
-  //     'record',
-  //     numberOfChildrenWithErrors
-  //   )} and ${numberOfWithdrawnChildrenWithErrors} withdrawn ${pluralize(
-  //     'record',
-  //     numberOfWithdrawnChildrenWithErrors
-  //   )} before
-  //       submitting your data to OEC. Update all records that need info with `;
-  // }
-  let alertText =
-    'Add the required info before you can submit your data to OEC. Update all records that need info with ';
+  let alertText = `You'll need to add required info for
+        ${pluralize('record', numberOfChildrenWithErrors, true)} before
+        submitting your data to OEC. Update with `;
+  if (numberOfWithdrawnChildrenWithErrors > 0) {
+    alertText = `You'll need to add required info for ${numberOfChildrenWithErrors} active ${pluralize(
+      'record',
+      numberOfChildrenWithErrors
+    )} and ${numberOfWithdrawnChildrenWithErrors} withdrawn ${pluralize(
+      'record',
+      numberOfWithdrawnChildrenWithErrors
+    )} before
+        submitting your data to OEC. Update all records that need info with `;
+  }
   return {
     text: (
       <span>
@@ -98,8 +80,7 @@ function getChildrenWithErrorsAlertProps(
         </Link>
       </span>
     ),
-    // heading: `${pluralize('record', numberOfChildrenWithErrors, true)} have missing or incorrect info`,
-    heading: alertHeading,
+    heading: `Update roster before submitting`,
     type: 'warning',
   };
 }
