@@ -66,21 +66,24 @@ type FamilyIncomeFormProps = {
 export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   id = 'new-income-determination',
   legend = 'New income determination',
-  child: inputChild,
+  child,
   incomeDeterminationId,
   CancelButton,
   afterSaveSuccess,
   setAlerts,
   hideErrorsOnFirstLoad,
 }) => {
-  if (!inputChild?.family) {
+  if (!child?.family) {
     throw new Error('Family income form rendered without family');
   }
 
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
+    hideErrorsOnFirstLoad
+  );
 
-  if (inputChild?.foster) {
+  if (child?.foster) {
     // New child is and batch edit both use this form directly
     // So this alert will show for those two forms
     // Edit child conditionally shows this form, so this alert is in that container too
@@ -95,11 +98,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
       </div>
     );
   }
-
-  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
-    inputChild,
-    hideErrorsOnFirstLoad
-  );
 
   const determination =
     child?.family?.incomeDeterminations?.find(
@@ -146,7 +144,12 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   };
 
   return (
-    <Form<IncomeDetermination> id={id} data={determination} onSubmit={onSubmit}>
+    <Form<IncomeDetermination>
+      id={id}
+      data={determination}
+      onSubmit={onSubmit}
+      hideStatus={errorsHidden}
+    >
       <FormFieldSet<IncomeDetermination>
         id={`${id}-fieldset`}
         legend={legend}

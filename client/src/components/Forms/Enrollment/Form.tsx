@@ -46,7 +46,7 @@ type EnrollmentFormProps = {
 
 export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   id,
-  child: inputChild,
+  child,
   enrollmentId,
   AdditionalButton,
   afterSaveSuccess,
@@ -54,12 +54,11 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   showFieldOrFieldset = () => true,
   hideErrorsOnFirstLoad,
 }) => {
-  if (!inputChild) {
+  if (!child) {
     throw new Error('Enrollment form rendered without child');
   }
 
-  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
-    inputChild,
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
 
@@ -117,6 +116,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       id={id || `edit-enrollment-form-${enrollment.id}`}
       data={enrollment}
       onSubmit={onSubmit}
+      hideStatus={errorsHidden}
     >
       {showFieldOrFieldset(enrollment, ['site']) && (
         <SiteField<Enrollment>

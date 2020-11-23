@@ -49,9 +49,8 @@ export const ChildIdentifiersForm = ({
     throw new Error('Child info rendered without child');
   }
   // Must keep track of child locally in case creation fails
-  const [localChild, updateLocalChild] = useState(inputChild);
-  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
-    localChild,
+  const [child, updateChild] = useState(inputChild);
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
 
@@ -76,7 +75,7 @@ export const ChildIdentifiersForm = ({
         })
         .catch((err) => {
           if (err.data) {
-            updateLocalChild(err.data);
+            updateChild(err.data);
           }
           console.error(err);
           setAlerts([
@@ -104,6 +103,7 @@ export const ChildIdentifiersForm = ({
       onSubmit={onFormSubmit}
       noValidate
       autoComplete="off"
+      hideStatus={errorsHidden}
     >
       {!hideHeader && <h2>Child's identifiers</h2>}
       {showFieldOrFieldset(child, ['sasid', 'uniqueId']) &&

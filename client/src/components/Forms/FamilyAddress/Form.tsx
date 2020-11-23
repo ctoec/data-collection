@@ -43,10 +43,9 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
     throw new Error('Family info rendered without child');
   }
 
-  const { family: inputFamily = {} as Family } = child;
+  const { family = {} as Family } = child;
 
-  const { obj: family, setErrorsHidden } = useValidationErrors<Family>(
-    inputFamily,
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
 
@@ -82,6 +81,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
         onSubmit={onSubmit}
         noValidate
         autoComplete="off"
+        hideStatus={errorsHidden}
       >
         <AddressFieldset />
         <HomelessnessField />
