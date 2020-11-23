@@ -43,7 +43,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
+    "test": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen --silent",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
