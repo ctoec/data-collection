@@ -2,7 +2,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 import idx from 'idx';
 import { ErrorBoundary, InlineIcon, Table } from '@ctoec/component-library';
-import { AgeGroup, Child } from '../../shared/models';
+import { AgeGroup, Child, Site } from '../../shared/models';
 import { RosterSectionHeader } from './RosterSectionHeader';
 import { ColumnNames, tableColumns } from './tableColumns';
 import { Moment } from 'moment';
@@ -10,6 +10,7 @@ import { AccordionItemProps } from '@ctoec/component-library/dist/components/Acc
 import { getCurrentEnrollment } from '../../utils/models';
 import { getLastEnrollment } from '../../utils/models/getLastEnrollment';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { RosterQueryParams } from './Roster';
 
 const MAX_LENGTH_EXPANDED = 50;
 export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
@@ -172,4 +173,24 @@ export function getAccordionItems(
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
+}
+
+export function getRosterH2(
+  childCount: number,
+  sites?: Site[],
+  query?: RosterQueryParams
+) {
+  if (!sites || sites?.length === 1) return;
+  const siteText = query?.site
+    ? sites.find((s) => `${s.id}` === query.site)?.siteName
+    : 'All sites';
+  return (
+    <h2>
+      {siteText}
+      <span className="text-light">
+        {' '}
+        {pluralize('child', childCount, true)}
+      </span>
+    </h2>
+  );
 }

@@ -44,8 +44,11 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
   // - we've completed our most recently triggered fetch (childrenArrays.length == size)
   // - there's more data to fetch (most recent page has records)
   // Or set fetching to false
-  if (childrenArrays && childrenArrays.length === size) {
-    if (childrenArrays[childrenArrays?.length - 1]?.length) {
+  if (childrenArrays) {
+    if (
+      childrenArrays.length === size &&
+      childrenArrays[childrenArrays?.length - 1]?.length
+    ) {
       setSize(size + 1);
     } else {
       stillFetching = false;
