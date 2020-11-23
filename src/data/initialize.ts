@@ -13,6 +13,7 @@ import {
   OrganizationPermission,
   EnrollmentReport,
   User,
+  OECReport,
 } from '../entity';
 import { FundingSource } from '../../client/src/shared/models';
 import {
@@ -52,6 +53,7 @@ export const initialize = async () => {
       .delete()
       .from(OrganizationPermission)
       .execute();
+    await getManager().createQueryBuilder().delete().from(OECReport).execute();
     await getManager().createQueryBuilder().delete().from(User).execute();
     await getManager().createQueryBuilder().delete().from(Site).execute();
     await getManager()

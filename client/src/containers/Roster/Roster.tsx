@@ -1,8 +1,6 @@
 import React, { useContext } from 'react';
 import { Moment } from 'moment';
 import {
-  Accordion,
-  Button,
   TabNav,
   HeadingLevel,
   LoadingWrapper,
@@ -15,7 +13,7 @@ import UserContext from '../../contexts/UserContext/UserContext';
 // bottom bar with buttons
 // import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
@@ -23,10 +21,10 @@ import {
   getQueryMonthFormat,
   QUERY_STRING_MONTH_FORMAT,
   applySiteFilter,
+  getRosterH2,
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
-import { NoRecordsAlert } from './NoRecordsAlert';
 import {
   useUpdateRosterParams,
   useOrgSiteProps,
@@ -35,6 +33,7 @@ import {
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { RosterContent } from './RosterContent';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -97,14 +96,11 @@ const Roster: React.FC = () => {
     tabNavProps,
     h1Text,
     subHeaderText,
-    rosterH2,
     superHeaderText,
-  } = useOrgSiteProps(
-    !children || !query.organization,
-    (children || []).length,
-    (siteFilteredChildren || []).length
-  );
+  } = useOrgSiteProps(loading, (children || []).length);
 
+  const siteChildCount = (siteFilteredChildren || []).length;
+  const rosterH2 = getRosterH2(siteChildCount, user?.sites, query);
   // Get roster content as accordion props
   const accordionProps = siteFilteredChildren
     ? {
@@ -152,38 +148,12 @@ const Roster: React.FC = () => {
     });
   };
 
-  let rosterContent = <NoRecordsAlert />;
-  if (query.withdrawn) {
-    // Default for no children and show only withdrawn
-    rosterContent = (
-      <div className="margin-top-4 margin-bottom-4">
-        <div className="font-body-lg margin-bottom-2">
-          You have no withdrawn enrollments
-        </div>
-        {/* TODO: we're doing a lot of sketchy buttons-that-go-somewhere stuff, and they should probably all be links */}
-        <Link
-          to={{
-            ...history.location,
-            search: stringify({ ...query, withdrawn: undefined }),
-          }}
-        >
-          Return to current roster
-        </Link>
-      </div>
-    );
-  }
-  if (children?.length && accordionProps?.items.length) {
-    rosterContent = <Accordion {...accordionProps} />;
-  }
-  if (tabNavProps)
-    rosterContent = (
-      <TabNav {...tabNavProps}>
-        <>
-          {rosterH2}
-          {rosterContent}
-        </>
-      </TabNav>
-    );
+  const rosterContentProps = {
+    query,
+    childRecords: children,
+    accordionProps,
+    rosterH2,
+  };
 
   return (
     <>
@@ -231,7 +201,14 @@ const Roster: React.FC = () => {
             />
           )}
           <LoadingWrapper text="Loading your roster..." loading={loading}>
-            {rosterContent}
+            {tabNavProps ? (
+              <TabNav {...tabNavProps}>
+                {rosterH2}
+                <RosterContent {...rosterContentProps} />
+              </TabNav>
+            ) : (
+              <RosterContent {...rosterContentProps} />
+            )}
           </LoadingWrapper>
         </ErrorBoundary>
       </div>

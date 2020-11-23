@@ -11,6 +11,7 @@ import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
+import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -41,8 +42,14 @@ enrollmentReportsRouter.post(
           req.user,
           { save: false }
         );
+        // Need this line to create entities as the DB would see them.
+        // Since only given properties are copied into the entities,
+        // anything that winds up with missing info will set off
+        // validation errors, which we need to find nested errors in
+        // e.g. family address, enrollments, income dets, etc.
+        const dbChildren = tManager.create(Child, reportChildren);
         const childrenWithErrors = await Promise.all(
-          reportChildren.map(async (child) => {
+          dbChildren.map(async (child) => {
             return {
               ...child,
               validationErrors: await validate(child),
@@ -50,6 +57,7 @@ enrollmentReportsRouter.post(
             };
           })
         );
+
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
@@ -122,7 +130,21 @@ enrollmentReportsRouter.post(
         const report = await tManager.save(
           tManager.create(EnrollmentReport, { children: reportChildren })
         );
-        res.status(201).json({ id: report.id });
+
+        let numActive = 0,
+          numWithdrawn = 0;
+        reportChildren.forEach((child) => {
+          child.enrollments?.forEach((e) => {
+            if (e.exit) numWithdrawn += 1;
+            else numActive += 1;
+          });
+        });
+
+        res.status(201).json({
+          id: report.id,
+          activeEnrollments: numActive,
+          withdrawnEnrollments: numWithdrawn,
+        } as BatchUpload);
       } catch (err) {
         if (err instanceof ApiError) throw err;
 

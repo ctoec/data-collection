@@ -145,6 +145,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 class="oec-tab-nav--tab oec-tab-nav--tab__active"
                 id="1"
                 role="tab"
+                title="Organization"
                 type="button"
               >
                 <span>
@@ -156,6 +157,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 class="oec-tab-nav--tab"
                 id="2"
                 role="tab"
+                title="Org 2"
                 type="button"
               >
                 <span>
@@ -1119,6 +1121,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 class="oec-tab-nav--tab oec-tab-nav--tab__active"
                 id="all-sites"
                 role="tab"
+                title="All sites"
                 type="button"
               >
                 <span>
@@ -1130,6 +1133,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 class="oec-tab-nav--tab"
                 id="1"
                 role="tab"
+                title="Site1"
                 type="button"
               >
                 <span>
@@ -1141,6 +1145,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 class="oec-tab-nav--tab"
                 id="2"
                 role="tab"
+                title="Site 2"
                 type="button"
               >
                 <span>
