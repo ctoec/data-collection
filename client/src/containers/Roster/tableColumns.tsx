@@ -57,7 +57,9 @@ export const tableColumns: (
         return (
           <td className={tableRowClassName}>
             {!!row?.validationErrors && !!row?.validationErrors.length && (
-              <IncompleteIcon />
+              <Link to={`/batch-edit/${row?.id}`}>
+                <IncompleteIcon />
+              </Link>
             )}
           </td>
         );

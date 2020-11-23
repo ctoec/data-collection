@@ -80,7 +80,7 @@ function getChildrenWithErrorsAlertProps(
         </Link>
       </span>
     ),
-    heading: `Update roster before submitting`,
+    heading: 'Update roster before submitting',
     type: 'warning',
   };
 }
