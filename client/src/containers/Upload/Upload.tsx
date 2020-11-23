@@ -20,6 +20,7 @@ import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { BatchUpload } from '../../shared/payloads';
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -85,7 +86,8 @@ const Upload: React.FC = () => {
       })
         // Response contains id of created enrollmentReport,
         // number of active enrollments, and num withdrawn enrollments
-        .then((resp) => {
+        // via BatchUpload payload
+        .then((resp: BatchUpload) => {
           // Clear all children records from data cache
           clearChildrenCaches();
           let uploadText = `You uploaded ${resp.activeEnrollments} active enrollments`;

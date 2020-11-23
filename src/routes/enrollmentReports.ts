@@ -11,6 +11,7 @@ import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
+import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -139,13 +140,11 @@ enrollmentReportsRouter.post(
           });
         });
 
-        res
-          .status(201)
-          .json({
-            id: report.id,
-            activeEnrollments: numActive,
-            withdrawnEnrollments: numWithdrawn,
-          });
+        res.status(201).json({
+          id: report.id,
+          activeEnrollments: numActive,
+          withdrawnEnrollments: numWithdrawn,
+        } as BatchUpload);
       } catch (err) {
         if (err instanceof ApiError) throw err;
 
