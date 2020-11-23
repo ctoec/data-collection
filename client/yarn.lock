@@ -1190,9 +1190,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#812-tab-nav":
+"@ctoec/component-library@1.0.8":
   version "1.0.8"
-  resolved "https://github.com/ctoec/component-library#f01bf94bd3089031684e8db40a593e7d9a949361"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.0.8.tgz#cf3540f14cc8232fda9702bd8dada27156409c5f"
+  integrity sha512-ELKFmWc9wR5MD+TJo7s4gk7T+Tifxik6A9SYzps/Uvd3eN8sPhZ0fheaFENOdsFvuajFlmSPHzUGJb3wyT13RQ==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
