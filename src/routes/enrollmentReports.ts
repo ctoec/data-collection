@@ -20,7 +20,7 @@ const upload = multer({
     console.log('FILE FILTER');
     return cb(null, true);
   },
-}).single('file');
+}).any();
 
 /**
  * /enrollment-reports/check POST
@@ -37,16 +37,15 @@ const upload = multer({
  */
 enrollmentReportsRouter.post(
   '/check',
-  (req, res, next) => {
-    console.log(req.headers);
-    console.log(req.rawHeaders);
-    next();
-  },
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
+      const file = req.files?.[0];
+      if (!file) {
+        throw new ApiError('Failed to upload file. Try using a newer browser.');
+      }
       try {
-        const reportRows = controller.parseUploadedTemplate(req.file);
+        const reportRows = controller.parseUploadedTemplate(file);
         const reportChildren: Child[] = await controller.mapRows(
           tManager,
           reportRows,
@@ -85,7 +84,7 @@ enrollmentReportsRouter.post(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
       } finally {
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+        if (file.path) fs.unlinkSync(file.path);
       }
     });
   })
@@ -110,6 +109,10 @@ enrollmentReportsRouter.post(
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
+      const file = req.files?.[0];
+      if (!file) {
+        throw new ApiError('Failed to upload file. Try using a newer browser.');
+      }
       // Prepare for ingestion by removing any existing data
       try {
         const siteIdToReplace = req.query['overwriteSites'];
@@ -130,7 +133,7 @@ enrollmentReportsRouter.post(
 
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
-        const reportRows = controller.parseUploadedTemplate(req.file);
+        const reportRows = controller.parseUploadedTemplate(file);
         const reportChildren = await controller.mapRows(
           tManager,
           reportRows,
@@ -163,7 +166,7 @@ enrollmentReportsRouter.post(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
       } finally {
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+        if (file.path) fs.unlinkSync(file.path);
       }
     });
   })
