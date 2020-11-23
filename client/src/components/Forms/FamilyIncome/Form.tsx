@@ -48,9 +48,9 @@ export const doesFamilyIncomeFormHaveErrors = (
   const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
     ?.length
     ? !!getValidationStatusForFields(
-        child.family.incomeDeterminations,
-        incomeDeterminationFields
-      )
+      child.family.incomeDeterminations,
+      incomeDeterminationFields
+    )
     : false;
 
   return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
@@ -82,6 +82,8 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
+
+  const isMounted = useIsMounted();
 
   if (child?.foster) {
     // New child is and batch edit both use this form directly
@@ -122,7 +124,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   const saveData = determination.id ? updateDetermination : createDetermination;
 
-  const isMounted = useIsMounted();
   const onFinally = () => {
     if (isMounted()) {
       setErrorsHidden(false);
