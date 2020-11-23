@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 import { User } from '../../shared/models';
-import { apiGet } from '../../utils/api';
+import { apiGet, apiPost } from '../../utils/api';
 
 export type UserContextType = {
   user: User | null;
@@ -20,7 +20,7 @@ const UserContext = React.createContext<UserContextType>({
   user: null,
   loading: true,
   confidentialityAgreed: false,
-  setConfidentialityAgreed: () => {},
+  setConfidentialityAgreed: () => { },
 });
 
 const { Provider, Consumer } = UserContext;
@@ -36,6 +36,7 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
   const { accessToken, loading } = useContext(AuthenticationContext);
   const [user, setUser] = useState<User | null>(null);
   const [userLoading, setUserLoading] = useState(loading);
+  const [refetchUser, setRefetchUser] = useState(false);
 
   useEffect(() => {
     if (accessToken) {
@@ -50,22 +51,28 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
         })
         .finally(() => {
           setUserLoading(false);
+          setRefetchUser(false);
         });
     } else {
       setUserLoading(loading);
     }
-  }, [accessToken, loading]);
+  }, [accessToken, loading, refetchUser]);
 
-  const [confidentialityAgreed, setConfidentialityAgreed] = useState<boolean>(
-    false
-  );
+  function setConfidentialityAgreed() {
+    apiPost(`/users/${user?.id}`, { ...user, confidentialityAgreed: true }, { accessToken })
+      .then(() => setRefetchUser(true))
+      .catch(err => {
+        console.error(err);
+        throw new Error('Error processing confidentiality agreement')
+      })
+  }
 
   return (
     <Provider
       value={{
         loading: userLoading,
         user,
-        confidentialityAgreed,
+        confidentialityAgreed: user?.confidentialityAgreed || false,
         setConfidentialityAgreed,
       }}
     >

@@ -1,5 +1,9 @@
 import express from 'express';
+import { getManager } from 'typeorm';
+import { User } from '../entity';
+import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/users';
+import { BadRequestError } from 'src/middleware/error/errors';
 
 export const usersRouter = express.Router();
 
@@ -15,3 +19,17 @@ usersRouter.get('/current', async (req, res) => {
   await controller.addDataToUser(user);
   res.send(user);
 });
+
+usersRouter.post('/:userId', passAsyncError(async (req, res) => {
+  try {
+    const user = req.user;
+    const updatedUser = getManager().merge(User, user,
+      req.body
+    )
+    await getManager().save(updatedUser);
+    res.sendStatus(200);
+  } catch (err) {
+    console.error(err);
+    throw new BadRequestError('User information not saved.')
+  }
+}));

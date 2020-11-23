@@ -30,6 +30,9 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   suffix?: string;
 
+  @Column({ nullable: false, default: false })
+  confidentialityAgreed?: boolean;
+
   @OneToMany((type) => OrganizationPermission, (perm) => perm.user)
   orgPermissions?: Array<OrganizationPermission>;
 
