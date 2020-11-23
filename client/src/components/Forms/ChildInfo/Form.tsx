@@ -64,7 +64,6 @@ export const ChildInfoForm = ({
   };
 
   const onFormSubmit = (_child: Child) => {
-    setErrorsHidden(false);
     setSaving(true);
     apiPut(`children/${child.id}`, _child, { accessToken })
       .then(afterSaveSuccess)

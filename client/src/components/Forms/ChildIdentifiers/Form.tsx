@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SasidField,
   FirstNameField,
@@ -50,12 +50,14 @@ export const ChildIdentifiersForm = ({
   }
   // Must keep track of child locally in case creation fails
   const [child, updateChild] = useState(inputChild);
+  useEffect(() => {
+    updateChild(inputChild);
+  }, [inputChild]);
   const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
 
   // This will prevent the flashing of errors
-  // TODO: replicate this in the other forms
   const onFinally = () => {
     if (isMounted()) {
       setErrorsHidden(false);
