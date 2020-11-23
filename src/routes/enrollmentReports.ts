@@ -14,6 +14,7 @@ import fs from 'fs';
 import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
+const upload = multer({ dest: '/tmp/uploads' }).single('file');
 
 /**
  * /enrollment-reports/check POST
@@ -28,10 +29,15 @@ export const enrollmentReportsRouter = express.Router();
  *  - sends back an Error Dictionary mapping columns to how many errors
  *    of that kind occur in the file
  */
-const temp = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
   '/check',
-  temp,
+  (req, res, next) => {
+    console.log(req.body);
+    console.log(req.headers);
+    console.log(req.rawHeaders);
+    next();
+  },
+  upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
       try {
@@ -94,7 +100,6 @@ enrollmentReportsRouter.post(
  * 		and saves that to the DB as an EnrollmentReport
  * 	- returns new EnrollmentReport on success
  */
-const upload = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
   '/',
   upload,
