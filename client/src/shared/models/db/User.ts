@@ -12,5 +12,4 @@ export interface User {
   sites?: Array<Site>;
   organizations?: Array<Organization>;
   accessType?: 'site' | 'organization';
-  confidentialityAgreed?: boolean;
 }
