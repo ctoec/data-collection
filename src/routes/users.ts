@@ -21,7 +21,7 @@ usersRouter.get('/current', async (req, res) => {
 });
 
 usersRouter.post(
-  '/:userId',
+  '/current',
   passAsyncError(async (req, res) => {
     try {
       const user = req.user;

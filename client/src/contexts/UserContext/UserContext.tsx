@@ -60,7 +60,7 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
 
   function setConfidentialityAgreed() {
     apiPost(
-      `users/${user?.id}`,
+      `users/current`,
       { ...user, confidentialityAgreed: true },
       { accessToken, jsonParse: false }
     )
