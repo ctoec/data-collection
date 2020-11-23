@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { getCurrentHost } from './getCurrentHost';
+import { head } from 'lodash';
 
 type ApiOpts = {
   accessToken?: string | null;
@@ -71,6 +72,11 @@ async function api(
   opts: ApiOpts
 ) {
   const headers = opts.headers || {};
+  for (const [key, value] of Object.entries(headers)) {
+    if (value === null || value === undefined) {
+      delete headers[key];
+    }
+  }
 
   // The access token was supplied, but does not yet have a value
   // Skip request
