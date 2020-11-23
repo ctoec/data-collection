@@ -20,7 +20,7 @@ const UserContext = React.createContext<UserContextType>({
   user: null,
   loading: true,
   confidentialityAgreed: false,
-  setConfidentialityAgreed: () => { },
+  setConfidentialityAgreed: () => {},
 });
 
 const { Provider, Consumer } = UserContext;
@@ -59,12 +59,16 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
   }, [accessToken, loading, refetchUser]);
 
   function setConfidentialityAgreed() {
-    apiPost(`/users/${user?.id}`, { ...user, confidentialityAgreed: true }, { accessToken })
+    apiPost(
+      `users/${user?.id}`,
+      { ...user, confidentialityAgreed: true },
+      { accessToken, jsonParse: false }
+    )
       .then(() => setRefetchUser(true))
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
-        throw new Error('Error processing confidentiality agreement')
-      })
+        throw new Error('Error processing confidentiality agreement');
+      });
   }
 
   return (
