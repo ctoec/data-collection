@@ -148,6 +148,13 @@ workflows:
           filters:
             branches:
               only: base
+      - e2e_test:
+          requires:
+            - deploy
+          filters:
+            branches:
+              only: base
+
   deploy-to-staging:
     jobs:
       - hold:
@@ -163,9 +170,6 @@ workflows:
           env: staging
           requires:
             - build
-      - e2e_test:
-          requires:
-            - deploy
   deploy-to-qa:
     jobs:
       - hold:
