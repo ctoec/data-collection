@@ -1,6 +1,6 @@
 import { Child } from '../../entity';
 import { ColumnMetadata } from '../../../client/src/shared/models';
-import { getAllColumnMetadata } from '../../template';
+import { EnrollmentReportRow, getAllColumnMetadata } from '../../template';
 import { ValidationError } from 'class-validator';
 
 /**
@@ -13,15 +13,25 @@ import { ValidationError } from 'class-validator';
  * @param error
  * @param errorDict
  */
-const processErrorsInFields = (error: ValidationError, errorDict: Object) => {
+const processErrorsInFields = (
+  child: Child,
+  error: ValidationError,
+  errorDict: Object,
+  errorOccursIn: Object
+) => {
   // Base case: error is not in a nested field
   if (error.children.length === 0) {
     errorDict[error.property] += 1;
+    errorOccursIn[error.property].push(
+      (child.firstName || '') + ' ' + (child.lastName || '')
+    );
   }
   // Recursive case: validation errors live on children
   // of initial error
   else {
-    error.children.map((e) => processErrorsInFields(e, errorDict));
+    error.children.map((e) =>
+      processErrorsInFields(child, e, errorDict, errorOccursIn)
+    );
   }
 };
 
@@ -31,22 +41,27 @@ const processErrorsInFields = (error: ValidationError, errorDict: Object) => {
  * possible field of the child schema.
  * @param children Array of DB-view child objects to analyze
  */
-export const checkErrorsInChildren = async (children: Child[]) => {
+export const checkErrorsInChildren = async (
+  children: Child[],
+  reportRows: EnrollmentReportRow[]
+) => {
   const cols: ColumnMetadata[] = getAllColumnMetadata();
   const propertyNameToFormattedName = {};
   let errorDict = {};
+  let errorOccursIn = {};
 
   // Start the count of each type of error at 0 overall
   cols.map((c) => {
     errorDict[c.propertyName] = 0;
     propertyNameToFormattedName[c.propertyName] = c.formattedName;
+    errorOccursIn[c.propertyName] = [];
   });
 
   await Promise.all(
     children.map(async (child) => {
-      // Accumulate counts across all children (don't need to
-      // differentiate errors by individual child)
-      child.validationErrors.map((e) => processErrorsInFields(e, errorDict));
+      child.validationErrors.map((e) =>
+        processErrorsInFields(child, e, errorDict, errorOccursIn)
+      );
     })
   );
 
@@ -58,6 +73,7 @@ export const checkErrorsInChildren = async (children: Child[]) => {
       property: k,
       formattedName: propertyNameToFormattedName[k],
       count: errorDict[k],
+      occursIn: errorOccursIn[k],
     };
   });
 

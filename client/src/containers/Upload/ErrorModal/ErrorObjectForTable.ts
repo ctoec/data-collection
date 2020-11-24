@@ -7,4 +7,5 @@ export type ErrorObjectForTable = {
   property: string;
   count: number;
   formattedName: string;
+  occursIn: string[];
 };
