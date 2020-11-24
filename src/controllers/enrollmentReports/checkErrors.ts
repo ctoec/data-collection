@@ -21,10 +21,16 @@ const processErrorsInFields = (
 ) => {
   // Base case: error is not in a nested field
   if (error.children.length === 0) {
-    errorDict[error.property] += 1;
-    errorOccursIn[error.property].push(
-      (child.firstName || '') + ' ' + (child.lastName || '')
-    );
+    // There are some validation errors that aren't related to
+    // fields in the spreadsheet, so this conditional ensures
+    // the error modal only reports actual _sheet_ errors as
+    // present in the spreadsheet
+    if (errorDict.hasOwnProperty(error.property)) {
+      errorDict[error.property] += 1;
+      errorOccursIn[error.property].push(
+        (child.firstName || '') + ' ' + (child.lastName || '')
+      );
+    }
   }
   // Recursive case: validation errors live on children
   // of initial error
@@ -41,10 +47,7 @@ const processErrorsInFields = (
  * possible field of the child schema.
  * @param children Array of DB-view child objects to analyze
  */
-export const checkErrorsInChildren = async (
-  children: Child[],
-  reportRows: EnrollmentReportRow[]
-) => {
+export const checkErrorsInChildren = async (children: Child[]) => {
   const cols: ColumnMetadata[] = getAllColumnMetadata();
   const propertyNameToFormattedName = {};
   let errorDict = {};

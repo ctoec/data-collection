@@ -59,8 +59,7 @@ enrollmentReportsRouter.post(
         );
 
         const errorDict = await controller.checkErrorsInChildren(
-          childrenWithErrors,
-          reportRows
+          childrenWithErrors
         );
 
         res.send(errorDict);
