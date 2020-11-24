@@ -80,7 +80,7 @@ const CreateRecord: React.FC = () => {
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        const currentStepStatus = steps[indexOfCurrentStep].status({
+        const currentStepStatus = steps[indexOfCurrentStep]?.status({
           child: updatedChild,
         } as RecordFormProps);
 
