@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { json } from 'express';
 
 import { authenticate } from '../middleware/authenticate';
 import { usersRouter } from './users';
@@ -12,6 +12,7 @@ import { reportingPeriodsRouter } from './reportingPeriods';
 import { templateRouter } from './template';
 import { exportRouter } from './export';
 import { oecReportRouter } from './oecReport';
+import moment from 'moment';
 
 export const router = express.Router();
 
@@ -19,9 +20,18 @@ export const router = express.Router();
 router.use('/template', templateRouter);
 
 /* AUTHENTICATED ROUTES */
-router.use('/users', authenticate, usersRouter);
-
 router.use('/enrollment-reports', authenticate, enrollmentReportsRouter);
+
+router.use('/users', authenticate, usersRouter);
+// Register pre-processing middlewares
+const dateReviver = (_: any, value: string) => {
+  if (typeof value === 'string') {
+    const parsedDate = moment.utc(value, undefined, true);
+    if (parsedDate.isValid()) return parsedDate;
+  }
+  return value;
+};
+router.use(json({ reviver: dateReviver }));
 
 router.use('/children', authenticate, childrenRouter);
 

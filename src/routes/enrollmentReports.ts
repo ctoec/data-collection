@@ -111,7 +111,9 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (tManager) => {
       const file = req.files?.[0];
       if (!file) {
-        throw new ApiError('Failed to upload file. Try using a newer browser.');
+        throw new BadRequestError(
+          'Failed to upload file. Try using a newer browser.'
+        );
       }
       // Prepare for ingestion by removing any existing data
       try {

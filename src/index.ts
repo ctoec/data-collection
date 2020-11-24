@@ -27,16 +27,6 @@ getConnectionOptions().then((connectionOptions) => {
       // Instantiate the application server
       const app = express();
 
-      // Register pre-processing middlewares
-      const dateReviver = (_: any, value: string) => {
-        if (typeof value === 'string') {
-          const parsedDate = moment.utc(value, undefined, true);
-          if (parsedDate.isValid()) return parsedDate;
-        }
-        return value;
-      };
-      app.use(json({ reviver: dateReviver }));
-
       // Register business logic routes
       app.use('/api', apiRouter);
 
