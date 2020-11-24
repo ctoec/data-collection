@@ -174,8 +174,8 @@ function parseEnrollmentReportRow(
     }
 
     // Parse zipcodes
-    if (prop.match('/zipcode/i')) {
-      rawEnrollment[prop] = getZipcode(value);
+    if (prop === 'zipCode') {
+      rawEnrollment[prop] = getZipCode(value);
     }
   });
 
@@ -244,7 +244,7 @@ function excelDateToDate(excelDate: number) {
  * they are truncated to return just the first 5 digits.
  * @param value
  */
-function getZipcode(value: any) {
+function getZipCode(value: any) {
   const stringValue = value.toString();
   if (stringValue.length === 4) {
     return `0${stringValue}`;
