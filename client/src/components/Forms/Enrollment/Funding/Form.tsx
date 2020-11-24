@@ -11,6 +11,7 @@ import {
 } from '../../../../utils/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { NewFundingField } from '../Fields';
+import { useValidationErrors } from '../../../../hooks/useValidationErrors';
 
 const fundingFields = [
   'fundingSpace',
@@ -47,6 +48,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   AdditionalButton,
   setAlerts,
   afterSaveSuccess,
+  hideErrorsOnFirstLoad,
 }) => {
   if (!child) {
     throw new Error('Funding form rendered without child');
@@ -68,6 +70,10 @@ export const FundingForm: React.FC<FundingFormProps> = ({
     throw new Error('Funding form rendered without funding');
   }
 
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
+    hideErrorsOnFirstLoad
+  );
+
   const { accessToken } = useContext(AuthenticationContext);
   const [loading, setLoading] = useState(false);
   const onSubmit = (updatedData: Funding) => {
@@ -85,7 +91,10 @@ export const FundingForm: React.FC<FundingFormProps> = ({
           },
         ]);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+        setErrorsHidden(false);
+      });
   };
 
   // If the funding has a funding space, render
@@ -101,6 +110,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       className="usa-form"
       data={funding}
       onSubmit={onSubmit}
+      hideStatus={errorsHidden}
     >
       <ContractSpaceField<Funding>
         ageGroup={enrollment.ageGroup}
@@ -133,6 +143,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       className="usa-form"
       data={funding}
       onSubmit={onSubmit}
+      hideStatus={errorsHidden}
     >
       <NewFundingField<Funding>
         getEnrollment={() => enrollment}

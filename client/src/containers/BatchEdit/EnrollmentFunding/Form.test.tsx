@@ -85,7 +85,8 @@ describe('BatchEdit', () => {
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
         showFieldOrFieldset={showFieldInBatchEditForm}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     accessibilityTestHelper(
@@ -94,7 +95,8 @@ describe('BatchEdit', () => {
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
         showFieldOrFieldset={showFieldInBatchEditForm}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     it('only shows forms for enrollments or fundings with validationErrors', async () => {
@@ -104,7 +106,8 @@ describe('BatchEdit', () => {
           afterSaveSuccess={jest.fn}
           setAlerts={jest.fn()}
           showFieldOrFieldset={showFieldInBatchEditForm}
-        />
+        />,
+        { wrapInRouter: true }
       );
 
       // Assert there are only forms for objects with validation errors:
