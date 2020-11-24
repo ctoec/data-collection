@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 import { User } from '../../shared/models';
 import { apiGet } from '../../utils/api';
@@ -6,11 +12,15 @@ import { apiGet } from '../../utils/api';
 export type UserContextType = {
   user: User | null;
   loading: boolean;
+  setConfidentialityAgreed: Dispatch<SetStateAction<boolean>>;
+  confidentialityAgreed: boolean;
 };
 
 const UserContext = React.createContext<UserContextType>({
   user: null,
   loading: true,
+  confidentialityAgreed: false,
+  setConfidentialityAgreed: () => {},
 });
 
 const { Provider, Consumer } = UserContext;
@@ -46,7 +56,22 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
     }
   }, [accessToken, loading]);
 
-  return <Provider value={{ loading: userLoading, user }}>{children}</Provider>;
+  const [confidentialityAgreed, setConfidentialityAgreed] = useState<boolean>(
+    false
+  );
+
+  return (
+    <Provider
+      value={{
+        loading: userLoading,
+        user,
+        confidentialityAgreed,
+        setConfidentialityAgreed,
+      }}
+    >
+      {children}
+    </Provider>
+  );
 };
 
 export { UserProvider };
