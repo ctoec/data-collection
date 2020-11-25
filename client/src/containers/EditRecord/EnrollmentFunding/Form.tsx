@@ -4,10 +4,7 @@ import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
-import { Enrollment, Child } from '../../../shared/models';
-import { AlertProps, Alert } from '@ctoec/component-library';
-import { Link } from 'react-router-dom';
-import { SECTION_KEYS } from '../../../components/Forms';
+import { Enrollment } from '../../../shared/models';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
