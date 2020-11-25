@@ -15,7 +15,7 @@ import {
   User,
   OECReport,
 } from '../entity';
-import { FundingSource } from '../../client/src/shared/models';
+import { FundingSource, Region } from '../../client/src/shared/models';
 import {
   getReportingPeriodFromDates,
   reportingPeriods,
@@ -72,6 +72,8 @@ export const initialize = async () => {
       .from(ReportingPeriod)
       .execute();
   }
+
+  await createDummyRows();
 
   await Promise.all(
     organizations.map(async (orgToCreate) => {
@@ -130,34 +132,53 @@ async function createDummyRows() {
   const manager: EntityManager = await getManager();
 
   const organization: Organization = manager.create(Organization, {
-    providerName: 'Dummy Organization',
+    providerName: 'DUMMY_PROVIDER_NAME',
+  });
+
+  const site: Site = manager.create(Site, {
+    region: Region.East,
+    siteName: 'DUMMY_SITE_NAME',
+    organization,
   });
 
   const family: Family = manager.create(Family, {
     organization,
-    streetAddress: 'Dummy Family Address',
+    streetAddress: 'DUMMY_STREET_ADDRESS',
   });
 
   const child: Child = manager.create(Child, {
     family,
-    firstName: 'Not A Real Child',
+    firstName: 'DUMMY_FIRST_NAME',
+    lastName: 'DUMMY_LAST_NAME',
     organization,
   });
 
-  const enrollment: Enrollment = manager.create(Enrollment);
+  const enrollment: Enrollment = manager.create(Enrollment, { child });
 
-  await manager.save(manager.create(Organization, organization));
-  await manager.save(manager.create(Family, family));
-  await manager.save(manager.create(Child, child));
+  const user: User = manager.create(User, {
+    firstName: 'DUMMY_FIRST_NAME',
+    lastName: 'DUMMY_LAST_NAME',
+    wingedKeysId: 'DUMMY_WINGEDKEYS_ID',
+  });
 
-  await manager.save(manager.create(Funding, fs));
-  await manager.save(manager.create(Enrollment, fs));
+  //  These need to be created specifically in this sequence
+  await manager.save<Organization>(organization);
+  await manager.save<Site>(site);
+  await manager.save<Family>(family);
+  await manager.save<Child>(child);
+  await manager.save<Enrollment>(manager.create(Enrollment, { child }));
+  await manager.save<Funding>(manager.create(Funding, { enrollment }));
+
+  //  And these specifically in this sequence
+  await manager.save<User>(user);
+  await manager.save<SitePermission>(
+    manager.create(SitePermission, { site, user })
+  );
+  await manager.save(
+    manager.create(OrganizationPermission, { organization, user })
+  );
+
   await manager.save(manager.create(IncomeDetermination, { family }));
-
-  await manager.save(manager.create(EnrollmentReport, fs));
-  await manager.save(manager.create(SitePermission, fs));
-  await manager.save(manager.create(OrganizationPermission, fs));
-
+  await manager.save(manager.create(EnrollmentReport, { children: [child] }));
   await manager.save(manager.create(OECReport, { organization }));
-  await manager.save(manager.create(User, fs));
 }
