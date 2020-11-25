@@ -174,7 +174,7 @@ export function parseEnrollmentReportRow(
     }
 
     // Parse zipcodes
-    if (prop === 'zipCode') {
+    if (prop.match(/zipcode/i)) {
       rawEnrollment[prop] = getZipCode(value);
     }
   });
