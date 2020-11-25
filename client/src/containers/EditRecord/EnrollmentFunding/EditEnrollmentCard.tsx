@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Card,
-  InlineIcon,
   ExpandCard,
   Button,
   TextWithIcon,
   Pencil,
   CardExpansion,
   TrashCan,
+  InlineIcon,
 } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../shared/models';
 import { apiDelete } from '../../../utils/api';
