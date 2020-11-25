@@ -60,7 +60,8 @@ describe('Forms', () => {
         fundingId={1}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     accessibilityTestHelper(
@@ -71,7 +72,8 @@ describe('Forms', () => {
         fundingId={1}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
   });
 });

@@ -37,7 +37,8 @@ describe('EditForms', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     accessibilityTestHelper(
@@ -45,7 +46,8 @@ describe('EditForms', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
-      />
+      />,
+      { wrapInRouter: true }
     );
   });
 });

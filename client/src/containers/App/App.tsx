@@ -9,7 +9,7 @@ import { mailToLinkProps } from '../../components/MailToLink';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const App: React.FC = () => {
-  const { user } = useContext(UserContext);
+  const { user, confidentialityAgreed } = useContext(UserContext);
 
   return (
     <div className="App">
@@ -22,7 +22,7 @@ const App: React.FC = () => {
           primaryTitle="ECE Reporter"
           loginPath="/login"
           logoutPath="/logout"
-          showPrimaryNavItems={!!user?.firstName}
+          showPrimaryNavItems={!!user?.firstName && confidentialityAgreed}
           navItems={[
             {
               type: 'primary',
