@@ -2,13 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Child } from '../../../shared/models';
 import {
   Card,
-  InlineIcon,
   ExpandCard,
   Button,
   TextWithIcon,
   Pencil,
   TrashCan,
   CardExpansion,
+  InlineIcon,
 } from '@ctoec/component-library';
 import { currencyFormatter } from '../../../utils/formatters';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';

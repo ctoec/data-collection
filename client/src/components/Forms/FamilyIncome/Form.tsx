@@ -104,9 +104,7 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   const determination =
     child?.family?.incomeDeterminations?.find(
       (d) => d.id === incomeDeterminationId
-    ) ||
-    idx(child, (_) => _.family.incomeDeterminations[0]) ||
-    ({} as IncomeDetermination);
+    ) || ({} as IncomeDetermination);
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
     apiPost(

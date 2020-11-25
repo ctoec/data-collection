@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Child, ObjectWithValidationErrors } from '../../shared/models';
-import { StepProps, StepList, Button } from '@ctoec/component-library';
+import {
+  StepProps,
+  StepList,
+  Button,
+  InlineIcon,
+} from '@ctoec/component-library';
 import { RecordFormProps } from '../../components/Forms/types';
 import { listSteps } from './listSteps';
 import { nameFormatter } from '../../utils/formatters';
@@ -110,7 +115,14 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   };
 
   const AllComplete = (
-    <div className="margin-y-2 display-flex flex-center">All complete!</div>
+    <div className="margin-y-2">
+      <div className="text-center font-body-xl">
+        <InlineIcon icon="complete" />
+      </div>
+      <div className="text-center text-bold font-body-lg">
+        {`${child?.firstName}'s record is now complete!`}
+      </div>
+    </div>
   );
 
   if (!child) {
@@ -120,21 +132,22 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   const currentEnrollment = getCurrentEnrollment(child);
   return (
     <>
-      <div className="padding-x-2 padding-bottom-3">
+      <div className="padding-left-2 padding-right-2 padding-bottom-3">
         <div className="display-flex flex-row flex-justify flex-align-end">
           <h2 className="margin-bottom-0">{nameFormatter(child)}</h2>
           <div className="text-baseline text-base">
-            Date of birth: {child.birthdate?.format('MM/DD/YYYY')}
+            Date of birth: {child.birthdate?.format('MM/DD/YYYY') || 'Missing'}
           </div>
         </div>
         <div className="margin-top-1 display-flex flex-row flex-justify">
           <Link to={`/edit-record/${child.id}`}>View full profile</Link>
           <div className="text-base">
-            {currentEnrollment?.ageGroup} — {currentEnrollment?.site?.siteName}
+            {currentEnrollment?.ageGroup || 'Missing age group'} —{' '}
+            {currentEnrollment?.site?.siteName || 'Missing site'}
           </div>
         </div>
       </div>
-      <div className="padding-top-1 border-top-1px border-base-light">
+      <div className="padding-1 border-top-1px border-base-light">
         {steps && steps.length ? (
           <StepList<RecordFormProps>
             key={child.id}
