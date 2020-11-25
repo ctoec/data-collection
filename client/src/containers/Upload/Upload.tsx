@@ -58,7 +58,10 @@ const Upload: React.FC = () => {
       // https://www.npmjs.com/package/formdata-polyfill
       const formData = new FormData();
       formData.append('file', file, file.name);
-      apiPost(`enrollment-reports/check`, formData, {
+      const postBody = (formData as any)._blob
+        ? (formData as any)._blob()
+        : formData;
+      apiPost(`enrollment-reports/check`, postBody, {
         accessToken,
         rawBody: true,
         headers: {
@@ -182,9 +185,6 @@ const Upload: React.FC = () => {
     }
     // Workaround for windows, which can't figure out data type of csv / xlsx
     // unless Excel application is installed
-    console.log('FILE TYPE', _file.type);
-    console.log('typeof', typeof _file.type);
-    console.log('not', !_file.type);
     if (!_file.type || _file.type === MIME_TYPES.OCTET_STREAM) {
       const fileType = _file.name.includes('.csv')
         ? MIME_TYPES.CSV
