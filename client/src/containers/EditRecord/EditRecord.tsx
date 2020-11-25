@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams, useLocation, useHistory } from 'react-router-dom';
+import { useParams, useLocation, useHistory, Link } from 'react-router-dom';
 import {
   AlertProps,
   ErrorBoundary,
@@ -33,9 +33,11 @@ const EditRecord: React.FC = () => {
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
-  // Clear any previously displayed alerts from other tabs
+  // Clear any previously displayed success alerts
   useEffect(() => {
-    setAlerts([]);
+    setAlerts((alerts) => [
+      ...alerts.filter((alert) => alert.type === 'error'),
+    ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
   const history = useHistory();
@@ -55,27 +57,31 @@ const EditRecord: React.FC = () => {
       .then((updatedChild) => {
         setChild(updatedChild);
 
-        // On initial fetch, refetch = 0 AND we do not want to create alerts
-        if (triggerRefetchCounter > 0) {
-          const newAlerts: AlertProps[] = [
-            {
-              type: 'success',
-              heading: 'Record updated',
-              text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
-            },
-          ];
-          const formStepInfo = formSections.find((s) => s.key === activeTab);
-          const incomplete = formStepInfo?.hasError(updatedChild);
-          const formName = formStepInfo?.name.toLowerCase();
-          if (incomplete) {
-            newAlerts.push({
-              type: 'error',
-              heading: 'This record has missing or incorrect info',
-              text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
-            });
-          }
-          setAlerts(newAlerts);
+        const newAlerts: AlertProps[] = [];
+        const missingInfoAlertProps = getMissingInfoAlertProps(updatedChild);
+        // Always set missing info alert, if one exists
+        if (missingInfoAlertProps) {
+          newAlerts.push(missingInfoAlertProps);
         }
+
+        // TODO: remove this banner alert error, and replace with funding card with
+        // missing info icons - https://github.com/ctoec/data-collection/pull/795#issuecomment-729150524
+        const missingFundedEnrollmentAlertProps = getMissingFundedEnrollmentAlertProps(
+          updatedChild
+        );
+        if (missingFundedEnrollmentAlertProps) {
+          newAlerts.push(missingFundedEnrollmentAlertProps);
+        }
+
+        // Only set success alert on a GET that happens after an update (refetch count > 0)
+        if (triggerRefetchCounter > 0) {
+          newAlerts.push({
+            type: 'success',
+            heading: 'Record updated',
+            text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
+          });
+        }
+        setAlerts(newAlerts);
       })
       .catch((err) => {
         throw new Error(err);
@@ -129,6 +135,51 @@ const EditRecord: React.FC = () => {
       </div>
     </div>
   );
+};
+
+const MISSING_INFO_ALERT_HEADING = 'This record has missing or incorrect info';
+const getMissingInfoAlertProps: (child: Child) => AlertProps | undefined = (
+  child: Child
+) => {
+  const formsWithErrors = formSections.filter((section) =>
+    section.hasError(child)
+  );
+  if (!formsWithErrors.length) return;
+
+  return {
+    heading: MISSING_INFO_ALERT_HEADING,
+    type: 'error',
+    text: `Add required info in ${formsWithErrors
+      .map((form) => form.name.toLowerCase())
+      .join(', ')} before submitting your data to OEC.`,
+  };
+};
+
+const getMissingFundedEnrollmentAlertProps: (
+  _: Child
+) => AlertProps | undefined = (child: Child) => {
+  const missingFundingError = child.validationErrors?.find(
+    (err) =>
+      err.property === 'enrollments' &&
+      err.constraints &&
+      err.constraints['fundedEnrollment']
+  );
+
+  if (missingFundingError) {
+    return {
+      type: 'error',
+      heading: 'This record is missing funding information',
+      text: (
+        <>
+          Records must have at least one current or past funded enrollment to be
+          submitted to OEC. Add funding info in the{' '}
+          <Link to={`/edit-record/${child.id}#${SECTION_KEYS.ENROLLMENT}`}>
+            enrollment and funding section
+          </Link>
+        </>
+      ),
+    };
+  }
 };
 
 export default EditRecord;
