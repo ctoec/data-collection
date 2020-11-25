@@ -12,15 +12,15 @@ import { apiGet, apiPost } from '../../utils/api';
 export type UserContextType = {
   user: User | null;
   loading: boolean;
-  setConfidentialityAgreed: Dispatch<SetStateAction<Date>>;
-  confidentialityAgreed: Date | null;
+  setConfidentialityAgreedDate: Dispatch<SetStateAction<Date>>;
+  confidentialityAgreedDate: Date | null;
 };
 
 const UserContext = React.createContext<UserContextType>({
   user: null,
   loading: true,
-  confidentialityAgreed: null,
-  setConfidentialityAgreed: () => {},
+  confidentialityAgreedDate: null,
+  setConfidentialityAgreedDate: () => {},
 });
 
 const { Provider, Consumer } = UserContext;
@@ -58,10 +58,10 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
     }
   }, [accessToken, loading, refetchUser]);
 
-  function setConfidentialityAgreed() {
+  function setConfidentialityAgreedDate() {
     apiPost(
       `users/current`,
-      { ...user, confidentialityAgreed: new Date() },
+      { ...user, confidentialityAgreedDate: new Date() },
       { accessToken, jsonParse: false }
     )
       .then(() => setRefetchUser(true))
@@ -76,8 +76,8 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
       value={{
         loading: userLoading,
         user,
-        confidentialityAgreed: user?.confidentialityAgreed || null,
-        setConfidentialityAgreed,
+        confidentialityAgreedDate: user?.confidentialityAgreedDate || null,
+        setConfidentialityAgreedDate,
       }}
     >
       {children}
