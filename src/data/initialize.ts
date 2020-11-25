@@ -1,4 +1,4 @@
-import { getManager } from 'typeorm';
+import { EntityManager, getManager } from 'typeorm';
 import {
   Organization,
   Site,
@@ -72,6 +72,7 @@ export const initialize = async () => {
       .from(ReportingPeriod)
       .execute();
   }
+
   await Promise.all(
     organizations.map(async (orgToCreate) => {
       let organization = await getManager().findOne(Organization, {
@@ -124,3 +125,39 @@ export const initialize = async () => {
     await getManager().save(reportingPeriodsToAdd);
   }
 };
+
+async function createDummyRows() {
+  const manager: EntityManager = await getManager();
+
+  const organization: Organization = manager.create(Organization, {
+    providerName: 'Dummy Organization',
+  });
+
+  const family: Family = manager.create(Family, {
+    organization,
+    streetAddress: 'Dummy Family Address',
+  });
+
+  const child: Child = manager.create(Child, {
+    family,
+    firstName: 'Not A Real Child',
+    organization,
+  });
+
+  const enrollment: Enrollment = manager.create(Enrollment);
+
+  await manager.save(manager.create(Organization, organization));
+  await manager.save(manager.create(Family, family));
+  await manager.save(manager.create(Child, child));
+
+  await manager.save(manager.create(Funding, fs));
+  await manager.save(manager.create(Enrollment, fs));
+  await manager.save(manager.create(IncomeDetermination, { family }));
+
+  await manager.save(manager.create(EnrollmentReport, fs));
+  await manager.save(manager.create(SitePermission, fs));
+  await manager.save(manager.create(OrganizationPermission, fs));
+
+  await manager.save(manager.create(OECReport, { organization }));
+  await manager.save(manager.create(User, fs));
+}

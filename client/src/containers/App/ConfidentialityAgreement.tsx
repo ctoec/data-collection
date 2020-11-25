@@ -10,7 +10,7 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
     confidentialityAgreed
   );
 
-  return confidentialityAgreed ? (
+  return !!confidentialityAgreed ? (
     <>{children}</>
   ) : (
     <div className="grid-container">
@@ -63,7 +63,7 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
             <Checkbox
               id="confidentiality-checkbox"
               text="I have read and agreed to the confidentiality agreement"
-              checked={_confidentialityAgreed}
+              checked={!!_confidentialityAgreed}
               onChange={(_) => _setConfidentialityAgreed((a) => !a)}
             />
           </div>
@@ -72,7 +72,7 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
             <Button
               text="Continue to ECE Reporter"
               disabled={!_confidentialityAgreed}
-              onClick={() => setConfidentialityAgreed(true)}
+              onClick={() => setConfidentialityAgreed(new Date())}
             />
           </div>
         </div>
