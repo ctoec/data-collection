@@ -157,7 +157,7 @@ function getSpecialProperties() {
  * date values (as Moment instances).
  * @param rawEnrollment
  */
-function parseEnrollmentReportRow(
+export function parseEnrollmentReportRow(
   rawEnrollment: object,
   booleanProperties: string[],
   dateProperties: string[]
@@ -253,6 +253,9 @@ function getZipCode(value: any) {
   if (stringValue.length > 5) {
     return stringValue.slice(0, 5);
   }
+
+  // Base case for a zip code that's already 5 numbers with no leading 0
+  return stringValue;
 }
 
 /**
