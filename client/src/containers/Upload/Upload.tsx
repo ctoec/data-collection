@@ -61,6 +61,7 @@ const Upload: React.FC = () => {
       const postBody = (formData as any)._blob
         ? (formData as any)._blob()
         : formData;
+      console.log('POST BODY', postBody);
       apiPost(`enrollment-reports/check`, postBody, {
         accessToken,
         rawBody: true,
@@ -190,9 +191,11 @@ const Upload: React.FC = () => {
         ? MIME_TYPES.CSV
         : MIME_TYPES.XLSX;
       console.log('Creating new file with type ', fileType);
+      console.log('from file', _file);
       _file = new File([_file], _file.name, { type: fileType });
     }
 
+    console.log('file after', _file);
     setFile(_file);
     setError(undefined);
     setErrorDict(undefined);
