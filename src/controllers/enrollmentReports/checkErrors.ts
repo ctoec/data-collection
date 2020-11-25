@@ -76,7 +76,7 @@ export const checkErrorsInChildren = async (children: Child[]) => {
       property: k,
       formattedName: propertyNameToFormattedName[k],
       count: errorDict[k],
-      occursIn: errorOccursIn[k],
+      affectedRows: errorOccursIn[k],
     };
   });
 

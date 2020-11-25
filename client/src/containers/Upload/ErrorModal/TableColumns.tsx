@@ -33,12 +33,12 @@ export const tableColumns: () => Column<ErrorObjectForTable>[] = () => {
       cell: ({ row }) => (
         <th scope="row" className="font-body-2xs">
           <p>
-            {row.occursIn.length > 5
-              ? row.occursIn.slice(0, 5).join(', ') +
+            {row.affectedRows.length > 5
+              ? row.affectedRows.slice(0, 5).join(', ') +
                 ', and ' +
-                (row.occursIn.length - 5).toString() +
+                (row.affectedRows.length - 5).toString() +
                 ' more'
-              : row.occursIn.join(', ')}
+              : row.affectedRows.join(', ')}
           </p>
         </th>
       ),
