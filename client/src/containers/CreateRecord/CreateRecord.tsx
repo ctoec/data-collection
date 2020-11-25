@@ -103,7 +103,7 @@ const CreateRecord: React.FC = () => {
 
   const commonFormProps = {
     child,
-    afterSaveSuccess: triggerRefetchChild,
+    afterSaveSuccess: () => { triggerRefetchChild(); setAlerts([]); },
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: (_hash: string) => {

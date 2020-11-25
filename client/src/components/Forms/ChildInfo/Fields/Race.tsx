@@ -78,10 +78,6 @@ const raceOptionFactory = (
   getValue: (data) => {
     return data.at(field);
   },
-  preprocessForDisplay: (data) => {
-    if (field === 'raceNotDisclosed') setNotDisclosed(data);
-    return data;
-  },
   parseOnChangeEvent: (e) => {
     setNotDisclosed(field === 'raceNotDisclosed' && e.target.checked);
     return e.target.checked;
