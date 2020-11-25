@@ -22,10 +22,11 @@ import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { BatchUpload } from '../../shared/payloads';
 
+const CHARSET_UTF_8 = 'charset=utf-8';
 const MIME_TYPES = {
   OCTET_STREAM: 'application/octet-stream',
-  CSV: 'text/csv',
-  XLSX: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  CSV: `text/csv;${CHARSET_UTF_8}`,
+  XLSX: `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;${CHARSET_UTF_8}`,
 };
 
 const Upload: React.FC = () => {
