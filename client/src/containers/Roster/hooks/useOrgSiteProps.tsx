@@ -120,7 +120,7 @@ function getSubHeaderText(
   }
 
   // Base case
-  let returnText = `${childCount} children enrolled`;
+  let returnText = `${pluralize('child', childCount, true)} enrolled`;
 
   // If multi-site + user is not looking at a single site
   // then include the count of all sites in the sub header
