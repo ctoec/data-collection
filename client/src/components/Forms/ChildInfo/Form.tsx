@@ -37,7 +37,7 @@ export const doesChildInfoFormHaveErrors = (child?: Child) =>
   child ? !!getValidationStatusForFields(child, childInfoFields) : true;
 
 export const ChildInfoForm = ({
-  child: inputChild,
+  child,
   afterSaveSuccess,
   hideHeader = false,
   hideErrorsOnFirstLoad = false,
@@ -48,17 +48,22 @@ export const ChildInfoForm = ({
   const isMounted = useIsMounted();
   const [saving, setSaving] = useState(false);
 
-  if (!inputChild) {
+  if (!child) {
     throw new Error('Child info rendered without child');
   }
 
-  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
-    inputChild,
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
 
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setSaving(false);
+    }
+  };
+
   const onFormSubmit = (_child: Child) => {
-    setErrorsHidden(false);
     setSaving(true);
     apiPut(`children/${child.id}`, _child, { accessToken })
       .then(afterSaveSuccess)
@@ -71,7 +76,7 @@ export const ChildInfoForm = ({
           },
         ]);
       })
-      .finally(() => (isMounted() ? setSaving(false) : null));
+      .finally(onFinally);
   };
 
   return (
@@ -81,6 +86,7 @@ export const ChildInfoForm = ({
       onSubmit={onFormSubmit}
       noValidate
       autoComplete="off"
+      hideStatus={errorsHidden}
     >
       {!hideHeader && <h2>Child info</h2>}
       {showFieldOrFieldset(child, [

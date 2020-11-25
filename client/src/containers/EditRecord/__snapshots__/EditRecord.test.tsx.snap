@@ -21,6 +21,32 @@ exports[`EditRecord matches snapshot 1`] = `
       </span>
     </button>
     <div
+      class="usa-alert usa-alert--error grid-row"
+      role="alert"
+    >
+      <div
+        class="display-flex flex-fill"
+      >
+        <div
+          class="usa-alert__body grid-col flex-fill"
+        >
+          <h2
+            class="usa-alert__heading"
+          >
+            This record has missing or incorrect info
+          </h2>
+          <p
+            class="usa-alert__text"
+          >
+            Add required info in enrollment and funding before submitting your data to OEC.
+          </p>
+        </div>
+        <div
+          class="usa-alert__body flex-auto display-flex flex-align-center"
+        />
+      </div>
+    </div>
+    <div
       class="display-flex flex-justify"
     >
       <div>

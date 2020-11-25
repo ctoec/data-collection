@@ -7,6 +7,7 @@ export interface User {
   lastName: string;
   middleName?: string;
   suffix?: string;
+  confidentialityAgreed: boolean;
   sites?: Array<Site>;
   organizations?: Array<Organization>;
   accessType?: 'site' | 'organization';

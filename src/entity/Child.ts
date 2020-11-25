@@ -31,6 +31,7 @@ import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
 import { ChildBirthCertificateSpecified } from './decorators/Child/birthCertificateValidation';
+import { FundedEnrollmentValidation } from './decorators/Child/fundedEnrollmentValidation';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -156,6 +157,7 @@ export class Child implements ChildInterface {
 
   @ValidateNested({ each: true })
   @OneToMany(() => Enrollment, (enrollment) => enrollment.child)
+  @FundedEnrollmentValidation()
   enrollments?: Array<Enrollment>;
 
   @Column(() => UpdateMetaData, { prefix: false })
