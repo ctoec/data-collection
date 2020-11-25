@@ -7,8 +7,8 @@ import {
   Pencil,
   CardExpansion,
   TrashCan,
+  InlineIcon,
 } from '@ctoec/component-library';
-import { IncompleteIcon } from '../../../components/IncompleteIcon';
 import { Enrollment, Child } from '../../../shared/models';
 import { apiDelete } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
@@ -79,19 +79,19 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         <div className="flex-1">
           <p className="margin-bottom-0">Site</p>
           <p className="text-bold margin-top-0">
-            {enrollment.site?.siteName || <IncompleteIcon />}
+            {enrollment.site?.siteName || InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Model type</p>
           <p className="text-bold margin-top-0">
-            {enrollment.model || <IncompleteIcon />}
+            {enrollment.model || InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Age group</p>
           <p className="text-bold margin-top-0">
-            {enrollment.ageGroup || <IncompleteIcon />}
+            {enrollment.ageGroup || InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="flex-2">
@@ -99,7 +99,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
           <p className="text-bold margin-top-0">
             {enrollment.entry && enrollment.entry.isValid()
               ? enrollment.entry.format('MM/DD/YYYY')
-              : IncompleteIcon}{' '}
+              : InlineIcon({ icon: 'incomplete' })}{' '}
             -{' '}
             {enrollment.exit ? enrollment.exit.format('MM/DD/YYYY') : 'present'}
           </p>

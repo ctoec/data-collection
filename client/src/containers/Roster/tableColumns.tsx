@@ -2,7 +2,7 @@ import React from 'react';
 import idx from 'idx';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
-import { Column, InlineIcon, TooltipWrapper } from '@ctoec/component-library';
+import { Column } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 import { IncompleteIcon } from '../../components/IncompleteIcon';
 

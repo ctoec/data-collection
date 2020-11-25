@@ -8,8 +8,8 @@ import {
   Pencil,
   TrashCan,
   CardExpansion,
+  InlineIcon,
 } from '@ctoec/component-library';
-import { IncompleteIcon } from '../../../components/IncompleteIcon';
 import { currencyFormatter } from '../../../utils/formatters';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
@@ -80,27 +80,23 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
         <div className="flex-1">
           <p>Household size</p>
           <p className="text-bold">
-            {determination.numberOfPeople || <IncompleteIcon />}
+            {determination.numberOfPeople || InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="flex-1">
           <p>Income</p>
           <p className="text-bold">
-            {determination.income ? (
-              currencyFormatter(determination.income)
-            ) : (
-              <IncompleteIcon />
-            )}
+            {determination.income
+              ? currencyFormatter(determination.income)
+              : InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="flex-2">
           <p>Determined on</p>
           <p className="text-bold">
-            {determination.determinationDate ? (
-              determination.determinationDate.format('MM/DD/YYYY')
-            ) : (
-              <IncompleteIcon />
-            )}
+            {determination.determinationDate
+              ? determination.determinationDate.format('MM/DD/YYYY')
+              : InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">

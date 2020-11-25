@@ -11,8 +11,8 @@ import {
   Pencil,
   CardExpansion,
   TrashCan,
+  InlineIcon,
 } from '@ctoec/component-library';
-import { IncompleteIcon } from '../../../components/IncompleteIcon';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 import { RecordFormProps } from '../../../components/Forms';
 
@@ -97,23 +97,21 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
           {funding.fundingSpace ? (
             <Tag className="margin-top-0" text={funding.fundingSpace.source} />
           ) : (
-            <IncompleteIcon />
+            InlineIcon({ icon: 'incomplete' })
           )}
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Space type</p>
           <p className="text-bold margin-top-0">
-            {funding.fundingSpace?.time || <IncompleteIcon />}
+            {funding.fundingSpace?.time || InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="flex-2">
           <p className="margin-bottom-0">Reporting periods</p>
           <p className="text-bold margin-top-0">
-            {funding.firstReportingPeriod ? (
-              funding.firstReportingPeriod.period.format('MMMM YYYY')
-            ) : (
-              <IncompleteIcon />
-            )}{' '}
+            {funding.firstReportingPeriod
+              ? funding.firstReportingPeriod.period.format('MMMM YYYY')
+              : InlineIcon({ icon: 'incomplete' })}{' '}
             -{' '}
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')
