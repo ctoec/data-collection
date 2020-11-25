@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SasidField,
   FirstNameField,
@@ -49,14 +49,15 @@ export const ChildIdentifiersForm = ({
     throw new Error('Child info rendered without child');
   }
   // Must keep track of child locally in case creation fails
-  const [localChild, updateLocalChild] = useState(inputChild);
-  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
-    localChild,
+  const [child, updateChild] = useState(inputChild);
+  useEffect(() => {
+    updateChild(inputChild);
+  }, [inputChild]);
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
 
   // This will prevent the flashing of errors
-  // TODO: replicate this in the other forms
   const onFinally = () => {
     if (isMounted()) {
       setErrorsHidden(false);
@@ -76,7 +77,7 @@ export const ChildIdentifiersForm = ({
         })
         .catch((err) => {
           if (err.data) {
-            updateLocalChild(err.data);
+            updateChild(err.data);
           }
           console.error(err);
           setAlerts([
@@ -104,6 +105,7 @@ export const ChildIdentifiersForm = ({
       onSubmit={onFormSubmit}
       noValidate
       autoComplete="off"
+      hideStatus={errorsHidden}
     >
       {!hideHeader && <h2>Child's identifiers</h2>}
       {showFieldOrFieldset(child, ['sasid', 'uniqueId']) &&

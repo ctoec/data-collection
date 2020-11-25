@@ -17,6 +17,8 @@ import {
   DeterminationDateField,
 } from './Fields';
 import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
+import useIsMounted from '../../../hooks/useIsMounted';
+import { useValidationErrors } from '../../../hooks/useValidationErrors';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -69,6 +71,7 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   CancelButton,
   afterSaveSuccess,
   setAlerts,
+  hideErrorsOnFirstLoad,
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
@@ -76,6 +79,11 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
+    hideErrorsOnFirstLoad
+  );
+
+  const isMounted = useIsMounted();
 
   if (child?.foster) {
     // New child is and batch edit both use this form directly
@@ -115,6 +123,14 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
 
   const saveData = determination.id ? updateDetermination : createDetermination;
+
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setLoading(false);
+    }
+  };
+
   const onSubmit = (updatedData: IncomeDetermination) => {
     setLoading(true);
     saveData(updatedData)
@@ -125,11 +141,16 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
           { type: 'error', text: 'Unable to save family income determination' },
         ]);
       })
-      .finally(() => setLoading(false));
+      .finally(onFinally);
   };
 
   return (
-    <Form<IncomeDetermination> id={id} data={determination} onSubmit={onSubmit}>
+    <Form<IncomeDetermination>
+      id={id}
+      data={determination}
+      onSubmit={onSubmit}
+      hideStatus={errorsHidden}
+    >
       <FormFieldSet<IncomeDetermination>
         id={`${id}-fieldset`}
         legend={legend}

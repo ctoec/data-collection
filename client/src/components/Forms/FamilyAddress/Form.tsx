@@ -43,15 +43,20 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
     throw new Error('Family info rendered without child');
   }
 
-  const { family: inputFamily = {} as Family } = child;
+  const { family = {} as Family } = child;
 
-  const { obj: family, setErrorsHidden } = useValidationErrors<Family>(
-    inputFamily,
+  const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
 
+  const onFinally = () => {
+    if (isMounted()) {
+      setErrorsHidden(false);
+      setSaving(false);
+    }
+  };
+
   const onSubmit = (newState: Family) => {
-    setErrorsHidden(false);
     setSaving(true);
     apiPut(`families/${family.id}`, newState, { accessToken })
       .then(afterSaveSuccess)
@@ -64,7 +69,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
           },
         ]);
       })
-      .finally(() => (isMounted() ? setSaving(false) : null));
+      .finally(onFinally);
   };
 
   return (
@@ -76,6 +81,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
         onSubmit={onSubmit}
         noValidate
         autoComplete="off"
+        hideStatus={errorsHidden}
       >
         <AddressFieldset />
         <HomelessnessField />
