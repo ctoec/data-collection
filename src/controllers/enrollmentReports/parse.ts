@@ -157,7 +157,7 @@ function getSpecialProperties() {
  * date values (as Moment instances).
  * @param rawEnrollment
  */
-function parseEnrollmentReportRow(
+export function parseEnrollmentReportRow(
   rawEnrollment: object,
   booleanProperties: string[],
   dateProperties: string[]
@@ -174,8 +174,8 @@ function parseEnrollmentReportRow(
     }
 
     // Parse zipcodes
-    if (prop.match('/zipcode/i')) {
-      rawEnrollment[prop] = getZipcode(value);
+    if (prop.match(/zipcode/i)) {
+      rawEnrollment[prop] = getZipCode(value);
     }
   });
 
@@ -244,7 +244,7 @@ function excelDateToDate(excelDate: number) {
  * they are truncated to return just the first 5 digits.
  * @param value
  */
-function getZipcode(value: any) {
+function getZipCode(value: any) {
   const stringValue = value.toString();
   if (stringValue.length === 4) {
     return `0${stringValue}`;
@@ -253,6 +253,9 @@ function getZipcode(value: any) {
   if (stringValue.length > 5) {
     return stringValue.slice(0, 5);
   }
+
+  // Base case for a zip code that's already 5 numbers with no leading 0
+  return stringValue;
 }
 
 /**

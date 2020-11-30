@@ -2,8 +2,9 @@ import React from 'react';
 import idx from 'idx';
 import cx from 'classnames';
 import { Link } from 'react-router-dom';
-import { Column, InlineIcon } from '@ctoec/component-library';
+import { Column } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
+import { IncompleteIcon } from '../../components/IncompleteIcon';
 
 export enum ColumnNames {
   NAME = 'Name',
@@ -57,7 +58,7 @@ export const tableColumns: (
           <td className={tableRowClassName}>
             {!!row?.validationErrors && !!row?.validationErrors.length && (
               <Link to={`/batch-edit/${row?.id}`}>
-                <InlineIcon icon="incomplete" />
+                <IncompleteIcon />
               </Link>
             )}
           </td>

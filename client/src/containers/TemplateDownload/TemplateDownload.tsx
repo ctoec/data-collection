@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { ReactComponent as Image } from '../../images/SpreadsheetIllustration.svg';
+import { BackButton } from '../../components/BackButton';
 
 const TemplateDownload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   return (
     <div className="grid-container margin-top-4">
+      <BackButton />
       <div className="grid-row grid-gap">
         <div className="desktop:grid-col-8">
           <h1 ref={h1Ref}>Batch upload data template</h1>
