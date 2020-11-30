@@ -8,14 +8,14 @@ import React, {
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 import { User } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
-import { Moment as MomentInterface } from 'moment';
+import { Moment } from 'moment';
 import * as moment from 'moment';
 
 export type UserContextType = {
   user: User | null;
   loading: boolean;
   setConfidentialityAgreedDate: Dispatch<SetStateAction<Date>>;
-  confidentialityAgreedDate: MomentInterface | null;
+  confidentialityAgreedDate: Moment | null;
 };
 
 const UserContext = React.createContext<UserContextType>({
