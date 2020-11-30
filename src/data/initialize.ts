@@ -137,46 +137,51 @@ export const initialize = async () => {
 async function createDummyRows() {
   const manager: EntityManager = await getManager();
 
-  const organization: Organization = manager.create(Organization, {
-    providerName: 'DUMMY_PROVIDER_NAME',
-  });
+  const organization: Organization = await manager.save(
+    manager.create(Organization, {
+      providerName: 'DUMMY_PROVIDER_NAME',
+    })
+  );
 
-  const site: Site = manager.create(Site, {
-    region: Region.East,
-    siteName: 'DUMMY_SITE_NAME',
-    organization,
-  });
+  const site: Site = await manager.save(
+    manager.create(Site, {
+      organization,
+      region: Region.East,
+      siteName: 'DUMMY_SITE_NAME',
+      titleI: false,
+    })
+  );
 
-  const family: Family = manager.create(Family, {
-    organization,
-    streetAddress: 'DUMMY_STREET_ADDRESS',
-  });
+  const family: Family = await manager.save(
+    manager.create(Family, {
+      organization,
+      streetAddress: 'DUMMY_STREET_ADDRESS',
+    })
+  );
 
-  const child: Child = manager.create(Child, {
-    family,
-    firstName: 'DUMMY_FIRST_NAME',
-    lastName: 'DUMMY_LAST_NAME',
-    organization,
-  });
+  const child: Child = await manager.save(
+    manager.create(Child, {
+      family,
+      firstName: 'DUMMY_FIRST_NAME',
+      lastName: 'DUMMY_LAST_NAME',
+      organization,
+    })
+  );
 
-  const enrollment: Enrollment = manager.create(Enrollment, { child });
+  const enrollment: Enrollment = await manager.save(
+    manager.create(Enrollment, { child })
+  );
 
-  const user: User = manager.create(User, {
-    firstName: 'DUMMY_FIRST_NAME',
-    lastName: 'DUMMY_LAST_NAME',
-    wingedKeysId: 'DUMMY_WINGEDKEYS_ID',
-  });
+  const user: User = await manager.save(
+    manager.create(User, {
+      firstName: 'DUMMY_FIRST_NAME',
+      lastName: 'DUMMY_LAST_NAME',
+      wingedKeysId: 'DUMMY_WINGEDKEYS_ID',
+    })
+  );
 
-  //  These need to be created specifically in this sequence
-  await manager.save<Organization>(organization);
-  await manager.save<Site>(site);
-  await manager.save<Family>(family);
-  await manager.save<Child>(child);
-  await manager.save<Enrollment>(manager.create(Enrollment, { child }));
   await manager.save<Funding>(manager.create(Funding, { enrollment }));
 
-  //  And these specifically in this sequence
-  await manager.save<User>(user);
   await manager.save<SitePermission>(
     manager.create(SitePermission, { site, user })
   );
