@@ -8,8 +8,7 @@ import React, {
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 import { User } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
-import { Moment } from 'moment';
-import * as moment from 'moment';
+import moment, { Moment } from 'moment';
 
 export type UserContextType = {
   user: User | null;
