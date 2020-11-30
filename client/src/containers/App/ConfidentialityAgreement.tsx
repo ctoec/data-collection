@@ -7,9 +7,7 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
     confidentialityAgreedDate,
     setConfidentialityAgreedDate,
   } = useContext(UserContext);
-  const [_confidentialityAgreedDate, _setConfidentialityAgreedDate] = useState(
-    confidentialityAgreedDate
-  );
+  const [_confidentialityAgreed, _setConfidentialityAgreed] = useState(false);
 
   return !!confidentialityAgreedDate ? (
     <>{children}</>
@@ -65,18 +63,14 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
               id="confidentiality-checkbox"
               text="I have read and agreed to the confidentiality agreement"
               checked={!!confidentialityAgreedDate}
-              onChange={(_) =>
-                _setConfidentialityAgreedDate((agreed) =>
-                  agreed ? new Date() : null
-                )
-              }
+              onChange={(_) => _setConfidentialityAgreed((agreed) => !agreed)}
             />
           </div>
           <div>
             <Button text="Logout" href="/logout" appearance="outline" />
             <Button
               text="Continue to ECE Reporter"
-              disabled={!_confidentialityAgreedDate}
+              disabled={!_confidentialityAgreed}
               onClick={() => setConfidentialityAgreedDate(new Date())}
             />
           </div>
