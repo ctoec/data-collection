@@ -88,6 +88,13 @@ async function api(
     headers['Authorization'] = `Bearer ${opts.accessToken}`;
   }
 
+  // Add no-cache headers to override I.E. cacheing behavior
+  if (method === 'GET') {
+    headers['Cache-Control'] = 'no-cache';
+    headers['Pragma'] = 'no-cache';
+  }
+
+  // Default to application/json on PUT/POST, unless otherwise specified
   if ((method === 'PUT' || method === 'POST') && !opts.rawBody) {
     headers['Content-Type'] = 'application/json';
   }
