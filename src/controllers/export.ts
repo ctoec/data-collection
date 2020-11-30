@@ -4,7 +4,8 @@ import { Child, Enrollment } from '../entity';
 import { Response } from 'express';
 import { isMoment } from 'moment';
 import { streamTabularData } from '../utils/streamTabularData';
-import { SECTIONS, getAllColumnMetadata } from '../template';
+import { getAllColumnMetadata } from '../template';
+import { TEMPLATE_SECTIONS } from '../../client/src/shared/constants';
 import { reportingPeriodToString } from './reportingPeriods';
 
 /**
@@ -84,8 +85,8 @@ function flattenChild(
     const { propertyName, section } = column;
     if (
       skipInfoForPastEnrollments &&
-      section !== SECTIONS.CHILD_IDENTIFIER &&
-      section !== SECTIONS.ENROLLMENT_FUNDING
+      section !== TEMPLATE_SECTIONS.CHILD_IDENT &&
+      section !== TEMPLATE_SECTIONS.ENROLLMENT_FUNDING
     ) {
       childString.push('');
       return;

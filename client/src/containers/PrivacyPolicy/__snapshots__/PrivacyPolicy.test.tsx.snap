@@ -235,7 +235,7 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
         />
         <table
           class="oec-table"
-          id="data-requirements-table"
+          id="data-requirements-Section-one"
         >
           <thead>
             <tr>
@@ -313,7 +313,11 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
                 </span>
               </th>
               <td>
-                 Optional 
+                <span
+                  class="usa-tag usa-tag--no-transform required-tag"
+                >
+                  Optional
+                </span>
               </td>
               <td>
                 <p>
@@ -348,7 +352,7 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
         />
         <table
           class="oec-table"
-          id="data-requirements-table"
+          id="data-requirements-Section-two"
         >
           <thead>
             <tr>
@@ -426,7 +430,11 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
                 </span>
               </th>
               <td>
-                 Required 
+                <span
+                  class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+                >
+                  Required
+                </span>
               </td>
               <td>
                 <p>

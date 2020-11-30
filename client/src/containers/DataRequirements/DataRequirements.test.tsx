@@ -6,6 +6,9 @@ jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { ColumnMetadata } from '../../shared/models';
 import { waitFor } from '@testing-library/react';
+import { TemplateMetadata } from '../../shared/payloads';
+import moment from 'moment';
+import { cache } from 'swr';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const dataRequirements: ColumnMetadata[] = [
@@ -15,7 +18,7 @@ const dataRequirements: ColumnMetadata[] = [
     format: 'string',
     reason: 'So we know your favorite color',
     definition: 'The color you like the most',
-    required: 'Optional',
+    requirementLevel: 'Optional',
     formattedName: 'Favorite color',
     propertyName: 'favoriteColor',
   },
@@ -25,24 +28,35 @@ const dataRequirements: ColumnMetadata[] = [
     format: 'number',
     reason: 'So we know your lucky number',
     definition: 'The number you find brings the most luck',
-    required: 'Required',
+    requirementLevel: 'Required',
     formattedName: 'Lucky number',
     propertyName: 'luckyNumber',
   },
 ];
+
+const templateMetadata: TemplateMetadata = {
+  version: 1,
+  lastUpdated: moment(),
+  columnMetadata: dataRequirements,
+};
 describe('DataRequirements', () => {
   beforeAll(() =>
     apiMock.apiGet.mockReturnValue(
-      new Promise((resolve) => resolve(dataRequirements))
+      new Promise((resolve) => resolve(templateMetadata))
     )
   );
 
   const helperOpts = {
     wrapInRouter: true,
-    before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
+    wrapInSWRConfig: true,
   };
-  snapshotTestHelper(<DataRequirements />, helperOpts);
+  snapshotTestHelper(<DataRequirements />, {
+    ...helperOpts,
+    before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
+  });
   accessibilityTestHelper(<DataRequirements />, helperOpts);
 
-  afterAll(() => jest.clearAllMocks());
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
 });

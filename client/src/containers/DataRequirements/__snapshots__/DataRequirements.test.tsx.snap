@@ -23,19 +23,166 @@ exports[`DataRequirements matches snapshot 1`] = `
     <h1>
       OEC's enrollment data requirements
     </h1>
-    <p
-      class="text-pre-line"
-    >
-      Looking for info on how to format contract space types?
-      <br />
-      See 
-      <a
-        href="/funding-space-types"
+    <p>
+      Last updated: 
+      <span
+        class="text-bold"
       >
-        funding space types
-      </a>
-      .
+        June 21, 2008
+      </span>
     </p>
+    <p>
+      ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC).
+    </p>
+    <p>
+      <span
+        class="text-bold"
+      >
+        Enrollments to include
+      </span>
+      <br />
+      Children receiving funding through the following programs:
+    </p>
+    <ul>
+      <li>
+        Child Day Care
+      </li>
+      <li>
+        Priority School Readiness
+      </li>
+      <li>
+        Competative School Readiness
+      </li>
+      <li>
+        Smart Start
+      </li>
+      <li>
+        State Head Start
+      </li>
+    </ul>
+    <p>
+      <span
+        class="text-bold"
+      >
+        Data collection period
+      </span>
+      <br />
+      The data collection period begins 07/01/2020 and continues through 12/31/2020.
+    </p>
+    <p>
+      <span
+        class="text-bold"
+      >
+        Data submission deadline
+      </span>
+      <br />
+      You must submit your data to OECby 03/05/2021.
+    </p>
+    <h2>
+      Data elements
+    </h2>
+    <h3>
+      Requirement levels
+    </h3>
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <span
+              class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+            >
+              Required
+            </span>
+          </td>
+          <td>
+            Must be entered for all enrollments
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span
+              class="usa-tag usa-tag--no-transform required-tag required-tag--conditional"
+            >
+              Conditional
+            </span>
+          </td>
+          <td>
+            Must be entered for certain scenarios (such as for an exited enrollment)
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span
+              class="usa-tag usa-tag--no-transform required-tag"
+            >
+              Optional
+            </span>
+          </td>
+          <td>
+            Suggested for better data quality and record matching, but not required for submission to OEC
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>
+      Filter fields
+    </h3>
+    <fieldset
+      aria-labelledby="fieldset-legend-filter-fields"
+      class="usa-fieldset"
+      id="filter-fields"
+    >
+      <legend
+        id="fieldset-legend-filter-fields"
+      >
+        <span
+          class="usa-sr-only"
+        >
+          filter fields
+        </span>
+      </legend>
+      <div>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              checked=""
+              class="usa-radio__input"
+              id="all"
+              name="field filter option"
+              type="radio"
+              value="all"
+            />
+            <label
+              class="usa-radio__label"
+              for="all"
+            >
+              All fields
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="required"
+              name="field filter option"
+              type="radio"
+              value="required"
+            />
+            <label
+              class="usa-radio__label"
+              for="required"
+            >
+              Only required  and conditionally required fields
+            </label>
+          </div>
+        </span>
+      </div>
+    </fieldset>
     <div>
       <div
         class="margin-top-4"
@@ -48,7 +195,7 @@ exports[`DataRequirements matches snapshot 1`] = `
         />
         <table
           class="oec-table"
-          id="data-requirements-table"
+          id="data-requirements-Section-one"
         >
           <thead>
             <tr>
@@ -126,7 +273,11 @@ exports[`DataRequirements matches snapshot 1`] = `
                 </span>
               </th>
               <td>
-                 Optional 
+                <span
+                  class="usa-tag usa-tag--no-transform required-tag"
+                >
+                  Optional
+                </span>
               </td>
               <td>
                 <p>
@@ -161,7 +312,7 @@ exports[`DataRequirements matches snapshot 1`] = `
         />
         <table
           class="oec-table"
-          id="data-requirements-table"
+          id="data-requirements-Section-two"
         >
           <thead>
             <tr>
@@ -239,7 +390,11 @@ exports[`DataRequirements matches snapshot 1`] = `
                 </span>
               </th>
               <td>
-                 Required 
+                <span
+                  class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+                >
+                  Required
+                </span>
               </td>
               <td>
                 <p>
