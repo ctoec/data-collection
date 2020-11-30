@@ -7,7 +7,6 @@ jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { ColumnMetadata } from '../../shared/models';
 import { waitFor } from '@testing-library/react';
-import { cache } from 'swr';
 import { TemplateMetadata } from '../../shared/payloads';
 const apiMock = api as jest.Mocked<typeof api>;
 
@@ -53,6 +52,7 @@ describe('PrivacyPolicy', () => {
   };
   snapshotTestHelper(<PrivacyPolicy />, {
     ...helperOpts,
+    // Mystery about useSWR in tests. See `Roster.test.tsx` for more in-depth info
     before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
   });
   accessibilityTestHelper(<PrivacyPolicy />, helperOpts);

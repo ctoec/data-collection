@@ -8,7 +8,6 @@ import { ColumnMetadata } from '../../shared/models';
 import { waitFor } from '@testing-library/react';
 import { TemplateMetadata } from '../../shared/payloads';
 import moment from 'moment';
-import { cache } from 'swr';
 const apiMock = api as jest.Mocked<typeof api>;
 
 const dataRequirements: ColumnMetadata[] = [
@@ -52,6 +51,7 @@ describe('DataRequirements', () => {
   };
   snapshotTestHelper(<DataRequirements />, {
     ...helperOpts,
+    // Mystery about useSWR in tests. See `Roster.test.tsx` for more in-depth info
     before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
   });
   accessibilityTestHelper(<DataRequirements />, helperOpts);
