@@ -48,6 +48,7 @@ export const initialize = async () => {
       .delete()
       .from(SitePermission)
       .execute();
+
     await getManager()
       .createQueryBuilder()
       .delete()
@@ -71,9 +72,9 @@ export const initialize = async () => {
       .delete()
       .from(ReportingPeriod)
       .execute();
-  }
 
-  await createDummyRows();
+    await createDummyRows();
+  }
 
   await Promise.all(
     organizations.map(async (orgToCreate) => {
