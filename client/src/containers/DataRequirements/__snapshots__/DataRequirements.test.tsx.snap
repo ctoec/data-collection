@@ -194,7 +194,7 @@ exports[`DataRequirements matches snapshot 1`] = `
           class="text-pre-line"
         />
         <table
-          class="oec-table"
+          class="oec-table data-definitions-table"
           id="data-requirements-Section-one"
         >
           <thead>
@@ -204,6 +204,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-sorted"
                 role="columnheader"
                 scope="col"
+                style="width: 18%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -216,6 +217,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 20%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -228,6 +230,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 24%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -240,6 +243,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 20%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -252,6 +256,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 20%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -264,6 +269,7 @@ exports[`DataRequirements matches snapshot 1`] = `
           <tbody>
             <tr>
               <th
+                class=""
                 scope="row"
               >
                 <span
@@ -272,25 +278,33 @@ exports[`DataRequirements matches snapshot 1`] = `
                   Favorite color
                 </span>
               </th>
-              <td>
+              <td
+                class=""
+              >
                 <span
                   class="usa-tag usa-tag--no-transform required-tag"
                 >
                   Optional
                 </span>
               </td>
-              <td>
+              <td
+                class=""
+              >
                 <p>
                   The color you like the most
                 </p>
               </td>
-              <td>
-                 So we know your favorite color 
+              <td
+                class=""
+              >
+                So we know your favorite color
               </td>
-              <td>
-                <div>
+              <td
+                class=""
+              >
+                <p>
                   string
-                </div>
+                </p>
                 <div
                   class="margin-top-1"
                 >
@@ -311,7 +325,7 @@ exports[`DataRequirements matches snapshot 1`] = `
           class="text-pre-line"
         />
         <table
-          class="oec-table"
+          class="oec-table data-definitions-table"
           id="data-requirements-Section-two"
         >
           <thead>
@@ -321,6 +335,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-sorted"
                 role="columnheader"
                 scope="col"
+                style="width: 18%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -333,6 +348,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 20%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -345,6 +361,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 24%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -357,6 +374,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 20%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -369,6 +387,7 @@ exports[`DataRequirements matches snapshot 1`] = `
                 class="oec-table__column-header oec-unsorted"
                 role="columnheader"
                 scope="col"
+                style="width: 20%;"
               >
                 <span
                   class="oec-table__column-title"
@@ -381,6 +400,7 @@ exports[`DataRequirements matches snapshot 1`] = `
           <tbody>
             <tr>
               <th
+                class=""
                 scope="row"
               >
                 <span
@@ -389,25 +409,33 @@ exports[`DataRequirements matches snapshot 1`] = `
                   Lucky number
                 </span>
               </th>
-              <td>
+              <td
+                class=""
+              >
                 <span
                   class="usa-tag usa-tag--no-transform required-tag required-tag--required"
                 >
                   Required
                 </span>
               </td>
-              <td>
+              <td
+                class=""
+              >
                 <p>
                   The number you find brings the most luck
                 </p>
               </td>
-              <td>
-                 So we know your lucky number 
+              <td
+                class=""
+              >
+                So we know your lucky number
               </td>
-              <td>
-                <div>
+              <td
+                class=""
+              >
+                <p>
                   number
-                </div>
+                </p>
                 <div
                   class="margin-top-1"
                 >

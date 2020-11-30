@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ColumnMetadata } from '../../shared/models';
 import { Table, HeadingLevel, LoadingWrapper } from '@ctoec/component-library';
 import { TemplateMetadata } from '../../shared/payloads';
@@ -7,15 +7,22 @@ import { RequirementLevelLegend } from './RequirementLevelLegend';
 import { RequirementLevelFilter } from './RequirementLevelFilter';
 import { TableColumns } from './TableColumns';
 import useSWR, { responseInterface } from 'swr';
+import {
+  isFirstReportingPeriodRow,
+  FIRST_REPORTING_PERIOD_ALERT_ROW,
+  isFirstReportingPeriodAlertRow,
+} from './utils';
 
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
   showDataElementsSection?: boolean;
+  addFirstReportingPeriodAlert?: boolean;
 };
 
 const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   headerLevel,
-  showDataElementsSection,
+  showDataElementsSection = false,
+  addFirstReportingPeriodAlert = false,
 }) => {
   const Heading = headerLevel;
   const [requiredFilter, setRequiredFilter] = useState<boolean>(false);
@@ -34,6 +41,24 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
       (m) =>
         m.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.REQUIRED ||
         m.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL
+    );
+  }
+
+  const firstReportingPeriodRowIdx = filteredColumnMetadata.findIndex(
+    isFirstReportingPeriodRow
+  );
+  const firstReportingPeriodAlertRowIdx = filteredColumnMetadata.findIndex(
+    isFirstReportingPeriodAlertRow
+  );
+  if (
+    addFirstReportingPeriodAlert &&
+    firstReportingPeriodRowIdx > -1 &&
+    firstReportingPeriodAlertRowIdx === -1
+  ) {
+    filteredColumnMetadata.splice(
+      firstReportingPeriodRowIdx + 1,
+      0,
+      FIRST_REPORTING_PERIOD_ALERT_ROW
     );
   }
 
@@ -64,10 +89,11 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
               <Heading>{sectionName}</Heading>
               <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
               <Table
+                className="data-definitions-table"
                 id={`data-requirements-${sectionName.replace(' ', '-')}`}
                 data={sectionData}
                 rowKey={(row) => (row ? row.formattedName : '')}
-                columns={TableColumns}
+                columns={TableColumns(addFirstReportingPeriodAlert)}
                 defaultSortColumn={0}
               />
             </div>

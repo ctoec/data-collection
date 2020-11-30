@@ -1,6 +1,5 @@
 import React from 'react';
 import { BackButton } from '../../components/BackButton';
-import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import DataDefinitionsTable from '../../components/DataDefinitionsTable/DataDefinitionsTable';
 import useSWR, { responseInterface } from 'swr';
@@ -52,7 +51,11 @@ const DataRequirements: React.FC = () => {
         <br />
         You must submit your data to OECby 03/05/2021.
       </p>
-      <DataDefinitionsTable headerLevel="h2" showDataElementsSection />
+      <DataDefinitionsTable
+        headerLevel="h2"
+        showDataElementsSection
+        addFirstReportingPeriodAlert
+      />
     </div>
   );
 };

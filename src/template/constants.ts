@@ -7,7 +7,7 @@ export const TEMPLATE_VERSION = 1;
 export const TEMPLATE_LAST_UPDATED = moment.utc('11-24-2020', ['MM-DD-YYYY']);
 
 // Formats
-export const BOOLEAN_FORMAT = 'Yes, Y, No, N, Not collected';
+export const BOOLEAN_FORMATS = ['Yes', 'Y', 'No', 'N', 'Not collected'];
 // Note: The Moment parser ignores separator characters in format strings, so don't
 // need multiple copies with '/' and '-'. Also, formats earlier in the array are
 // given priority, so this ordering matters. See:
@@ -22,14 +22,12 @@ export const DATE_FORMATS = [
   'MM/DD/YY',
   'YYYY/MM/DD',
 ];
-export const DATE_FORMAT = DATE_FORMATS.join(', ');
 export const REPORTING_PERIOD_FORMATS = [
   'MM/YY',
   'MMM/YY',
   'MM/YYYY',
   'MM/DD/YYYY',
 ];
-export const REPORTING_PERIOD_FORMAT = REPORTING_PERIOD_FORMATS.join(', ');
 
 // Conditional requirement strings
 export const REQUIRED_IF_US_BORN = 'Required if child was born in the U.S.';
