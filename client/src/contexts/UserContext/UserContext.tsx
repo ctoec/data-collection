@@ -8,12 +8,14 @@ import React, {
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 import { User } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
+import { Moment as MomentInterface } from 'moment';
+import * as moment from 'moment';
 
 export type UserContextType = {
   user: User | null;
   loading: boolean;
   setConfidentialityAgreedDate: Dispatch<SetStateAction<Date>>;
-  confidentialityAgreedDate: Date | null;
+  confidentialityAgreedDate: MomentInterface | null;
 };
 
 const UserContext = React.createContext<UserContextType>({
@@ -61,7 +63,7 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
   function setConfidentialityAgreedDate() {
     apiPost(
       `users/current`,
-      { ...user, confidentialityAgreedDate: new Date() },
+      { ...user, confidentialityAgreedDate: moment.utc() },
       { accessToken, jsonParse: false }
     )
       .then(() => setRefetchUser(true))
