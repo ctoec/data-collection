@@ -95,31 +95,31 @@ export class Child implements ChildInterface {
   @IsNotEmpty()
   birthCertificateId?: string;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   americanIndianOrAlaskaNative?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   asian?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   blackOrAfricanAmerican?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   nativeHawaiianOrPacificIslander?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   white?: boolean;
 
-  @Column({ nullable: true, default: true })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   raceNotDisclosed?: boolean;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true })
   hispanicOrLatinxEthnicity?: boolean;
 
   @Column({
@@ -131,13 +131,13 @@ export class Child implements ChildInterface {
   @ChildGenderSpecified()
   gender?: Gender;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true })
   dualLanguageLearner?: boolean;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true })
   foster?: boolean;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true })
   receivesDisabilityServices?: boolean;
 
   @ValidateNested()

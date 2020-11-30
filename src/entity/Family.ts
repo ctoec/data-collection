@@ -47,7 +47,7 @@ export class Family implements FamilyInterface {
   @ValidateIf((f) => !f.homelessness)
   zipCode?: string;
 
-  @Column({ nullable: true, default: null })
+  @Column({ nullable: true })
   homelessness?: boolean;
 
   @OneToMany(() => IncomeDetermination, (det) => det.family)
