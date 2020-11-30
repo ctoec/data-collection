@@ -128,6 +128,12 @@ export const initialize = async () => {
   }
 };
 
+/**
+ * Create an intentionally unused row across all of our database tables, to ensure that
+ * data is always present in the db post-deploy (even in our test environments).  Necessary to
+ * properly reflect our prod environment when running migrations (which of course already has
+ * data populated.)
+ */
 async function createDummyRows() {
   const manager: EntityManager = await getManager();
 
