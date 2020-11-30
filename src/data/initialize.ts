@@ -1,4 +1,4 @@
-import { getManager } from 'typeorm';
+import { EntityManager, getManager } from 'typeorm';
 import {
   Organization,
   Site,
@@ -15,7 +15,7 @@ import {
   User,
   OECReport,
 } from '../entity';
-import { FundingSource } from '../../client/src/shared/models';
+import { FundingSource, Region } from '../../client/src/shared/models';
 import {
   getReportingPeriodFromDates,
   reportingPeriods,
@@ -48,6 +48,7 @@ export const initialize = async () => {
       .delete()
       .from(SitePermission)
       .execute();
+
     await getManager()
       .createQueryBuilder()
       .delete()
@@ -71,7 +72,10 @@ export const initialize = async () => {
       .delete()
       .from(ReportingPeriod)
       .execute();
+
+    await createDummyRows();
   }
+
   await Promise.all(
     organizations.map(async (orgToCreate) => {
       let organization = await getManager().findOne(Organization, {
@@ -124,3 +128,69 @@ export const initialize = async () => {
     await getManager().save(reportingPeriodsToAdd);
   }
 };
+
+/**
+ * Create an intentionally unused row across all of our database tables, to ensure that
+ * data is always present in the db post-deploy (even in our test environments).  Necessary to
+ * properly reflect our prod environment when running migrations (which of course already has
+ * data populated.)
+ */
+async function createDummyRows() {
+  const manager: EntityManager = await getManager();
+
+  const organization: Organization = await manager.save(
+    manager.create(Organization, {
+      providerName: 'DUMMY_PROVIDER_NAME',
+    })
+  );
+
+  const site: Site = await manager.save(
+    manager.create(Site, {
+      organization,
+      region: Region.East,
+      siteName: 'DUMMY_SITE_NAME',
+      titleI: false,
+    })
+  );
+
+  const family: Family = await manager.save(
+    manager.create(Family, {
+      organization,
+      streetAddress: 'DUMMY_STREET_ADDRESS',
+    })
+  );
+
+  const child: Child = await manager.save(
+    manager.create(Child, {
+      family,
+      firstName: 'DUMMY_FIRST_NAME',
+      lastName: 'DUMMY_LAST_NAME',
+      organization,
+    })
+  );
+
+  const enrollment: Enrollment = await manager.save(
+    manager.create(Enrollment, { child })
+  );
+
+  const user: User = await manager.save(
+    manager.create(User, {
+      firstName: 'DUMMY_FIRST_NAME',
+      lastName: 'DUMMY_LAST_NAME',
+      wingedKeysId: 'DUMMY_WINGEDKEYS_ID',
+    })
+  );
+
+  await manager.save<Funding>(manager.create(Funding, { enrollment }));
+
+  await manager.save<SitePermission>(
+    manager.create(SitePermission, { site, user })
+  );
+  await manager.save(
+    manager.create(OrganizationPermission, { organization, user })
+  );
+
+  await manager.save(manager.create(IncomeDetermination, { family }));
+  await manager.save(manager.create(EnrollmentReport, { children: [child] }));
+  await manager.save(manager.create(OECReport, { organization }));
+}

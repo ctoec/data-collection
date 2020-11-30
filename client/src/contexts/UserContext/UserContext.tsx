@@ -8,19 +8,20 @@ import React, {
 import AuthenticationContext from '../AuthenticationContext/AuthenticationContext';
 import { User } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
+import moment, { Moment } from 'moment';
 
 export type UserContextType = {
   user: User | null;
   loading: boolean;
-  setConfidentialityAgreed: Dispatch<SetStateAction<boolean>>;
-  confidentialityAgreed: boolean;
+  setConfidentialityAgreedDate: Dispatch<SetStateAction<Date>>;
+  confidentialityAgreedDate: Moment | null;
 };
 
 const UserContext = React.createContext<UserContextType>({
   user: null,
   loading: true,
-  confidentialityAgreed: false,
-  setConfidentialityAgreed: () => {},
+  confidentialityAgreedDate: null,
+  setConfidentialityAgreedDate: () => {},
 });
 
 const { Provider, Consumer } = UserContext;
@@ -58,10 +59,10 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
     }
   }, [accessToken, loading, refetchUser]);
 
-  function setConfidentialityAgreed() {
+  function setConfidentialityAgreedDate() {
     apiPost(
       `users/current`,
-      { ...user, confidentialityAgreed: true },
+      { ...user, confidentialityAgreedDate: moment.utc() },
       { accessToken, jsonParse: false }
     )
       .then(() => setRefetchUser(true))
@@ -76,8 +77,8 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
       value={{
         loading: userLoading,
         user,
-        confidentialityAgreed: user?.confidentialityAgreed || false,
-        setConfidentialityAgreed,
+        confidentialityAgreedDate: user?.confidentialityAgreedDate || null,
+        setConfidentialityAgreedDate,
       }}
     >
       {children}
