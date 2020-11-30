@@ -3,30 +3,26 @@ import { MigrationInterface, QueryRunner } from "typeorm";
 export class RemoveDefaultsFromChild1606268723397 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(
-            `ALTER TABLE "child" (
-                "raceNotDisclosed" bit,
-                "hispanicOrLatinxEthnicity" bit,
-                "dualLanguageLearner" bit,
-                "foster" bit CONSTRAINT "DF_4f4d36a381d8a984f1e0006f6e9", "receivesDisabilityServices" bit CONSTRAINT "DF_820b6edac45ec4ca39ee34fe0cf")`
-        );
-        await queryRunner.query(`ALTER TABLE "family" (
-            "homelessness" bit CONSTRAINT "DF_ff0d12e7344b70e7bf34b24f6f3"
-        )`)
+        const dropDefaultConstraint = async (tableName, columnName) => {
+            const _query = `(SELECT d.name FROM sys.default_constraints AS d INNER JOIN sys.columns AS c ON d.parent_object_id = c.object_id AND d.parent_column_id = c.column_id WHERE d.parent_object_id = OBJECT_ID(N'${tableName}', N'U') AND c.name = '${columnName}')`
+            const columnConstraints = await queryRunner.query(_query);
+            if (!columnConstraints?.length) return;
+            const constraintName = columnConstraints[0].name
+            await queryRunner.query(`ALTER TABLE ${tableName} DROP constraint "${constraintName}";`);
+        }
+
+        await dropDefaultConstraint('child', 'raceNotDisclosed');
+        await dropDefaultConstraint('child', 'hispanicOrLatinxEthnicity');
+        await dropDefaultConstraint('child', 'dualLanguageLearner');
+        await dropDefaultConstraint('child', 'foster');
+        await dropDefaultConstraint('child', 'receivesDisabilityServices');
+        await dropDefaultConstraint('family', 'homelessness');
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(
-            `ALTER TABLE "child" (
-                "raceNotDisclosed" bit DEFAULT 1,
-                "hispanicOrLatinxEthnicity" bit DEFAULT NULL,
-                "dualLanguageLearner" bit DEFAULT NULL,
-                "foster" bit CONSTRAINT "DF_4f4d36a381d8a984f1e0006f6e9" DEFAULT NULL,
-                "receivesDisabilityServices" bit CONSTRAINT "DF_820b6edac45ec4ca39ee34fe0cf" DEFAULT NULL)`
-        );
-        await queryRunner.query(`ALTER TABLE "family" (
-            "homelessness" bit CONSTRAINT "DF_ff0d12e7344b70e7bf34b24f6f3" DEFAULT NULL
-        )`)
+        await queryRunner.query(`ALTER TABLE "child" ADD CONSTRAINT null_default DEFAULT NULL FOR "raceNotDisclosed";ALTER TABLE "child" ADD CONSTRAINT null_default DEFAULT NULL FOR "hispanicOrLatinxEthnicity";ALTER TABLE "child" ADD CONSTRAINT null_default DEFAULT NULL FOR "dualLanguageLearner";ALTER TABLE "child" ADD CONSTRAINT null_default DEFAULT NULL FOR "foster";ALTER TABLE "child" ADD CONSTRAINT null_default DEFAULT NULL FOR "receivesDisabilityServices";`);
+
+        await queryRunner.query(`ALTER TABLE "family" ADD CONSTRAINT null_default DEFAULT NULL FOR "homelessness";`)
     }
 
 }

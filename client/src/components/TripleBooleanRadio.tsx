@@ -41,10 +41,11 @@ export const TripleBooleanRadio = <T extends {}>({
       return e.target.value === trueOption.id;
     },
     preprocessForDisplay: (data) => {
-      console.log({ data })
+      console.log(data, field)
       if (data === true) return trueOption.id === id;
       else if (data === false) return falseOption.id === id;
       else if (data === null) return unknownOption.id === id;
+      return false
     },
     id,
     text: label,
