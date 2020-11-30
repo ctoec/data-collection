@@ -9,6 +9,8 @@ import {
 } from './Permission';
 import { Site } from './Site';
 import { Organization } from './Organization';
+import { momentTransformer } from './transformers';
+import { Moment } from 'moment';
 
 @Entity()
 export class User implements UserInterface {
@@ -30,8 +32,8 @@ export class User implements UserInterface {
   @Column({ nullable: true })
   suffix?: string;
 
-  @Column({ nullable: true })
-  confidentialityAgreedDate?: Date;
+  @Column({ nullable: true, type: 'date', transformer: momentTransformer })
+  confidentialityAgreedDate?: Moment;
 
   @OneToMany((type) => OrganizationPermission, (perm) => perm.user)
   orgPermissions?: Array<OrganizationPermission>;

@@ -11,7 +11,7 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
     !!confidentialityAgreedDate
   );
 
-  return _confidentialityAgreed ? (
+  return !!confidentialityAgreedDate ? (
     <>{children}</>
   ) : (
     <div className="grid-container">

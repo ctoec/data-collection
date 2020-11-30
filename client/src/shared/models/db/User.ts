@@ -1,3 +1,4 @@
+import { Moment } from 'moment';
 import { Site, Organization } from '.';
 
 export interface User {
@@ -7,7 +8,7 @@ export interface User {
   lastName: string;
   middleName?: string;
   suffix?: string;
-  confidentialityAgreedDate?: Date;
+  confidentialityAgreedDate?: Moment;
   sites?: Array<Site>;
   organizations?: Array<Organization>;
   accessType?: 'site' | 'organization';
