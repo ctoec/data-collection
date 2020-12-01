@@ -2,7 +2,7 @@ import React from 'react';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { BackButton } from '../../components/BackButton';
 import { Link } from 'react-router-dom';
-import DataDefinitionsTable from '../../components/DataDefinitionsTable';
+import DataDefinitionsTable from '../../components/DataDefinitionsTable/DataDefinitionsTable';
 
 const PrivacyPolicy: React.FC = () => {
   const h1Ref = getH1RefForTitle();

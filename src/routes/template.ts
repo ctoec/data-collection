@@ -4,6 +4,7 @@ import { BookType } from 'xlsx/types';
 
 import { streamTabularData } from '../utils/streamTabularData';
 import { getAllColumnMetadata } from '../template';
+import { TEMPLATE_VERSION, TEMPLATE_LAST_UPDATED } from '../template/constants';
 import { InternalServerError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import {
@@ -13,16 +14,24 @@ import {
 } from '../data/children';
 import { streamUploadedChildren } from '../controllers/export';
 import { parseQueryString } from '../utils/parseQueryString';
+import { TemplateMetadata } from '../../client/src/shared/payloads';
 
 export const templateRouter = express.Router();
 /**
- * /template/column-metadata GET
+ * /template/metadata GET
  *
- * Returns all column metadata from the FlattenedEnrollment model,
- * as an array of ColumnMetadata objects
+ * Returns a TemplateMetadata object, including:
+ * 	- template version
+ * 	- template update date
+ * 	- column metadata from the FlattenedEnrollment model
  */
-templateRouter.get('/column-metadata', (_, res) => {
-  res.send(getAllColumnMetadata());
+templateRouter.get('/metadata', (_, res) => {
+  const templateMetadata: TemplateMetadata = {
+    version: TEMPLATE_VERSION,
+    lastUpdated: TEMPLATE_LAST_UPDATED,
+    columnMetadata: getAllColumnMetadata(),
+  };
+  res.send(templateMetadata);
 });
 
 /**

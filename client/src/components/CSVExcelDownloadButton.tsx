@@ -4,6 +4,8 @@ import { stringify } from 'query-string';
 import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
 import { downloadStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
+import useSWR, { responseInterface } from 'swr';
+import { TemplateMetadata } from '../shared/payloads';
 
 type FileTypeOpts = 'xlsx' | 'csv';
 const fileTypeName = {
@@ -31,16 +33,22 @@ const getRosterProps = (): DownloadOptionsType => ({
   fileName: 'Roster.csv',
 });
 
-const getTemplateProps = (fileType: FileTypeOpts): DownloadOptionsType => ({
+const getTemplateProps = (
+  fileType: FileTypeOpts,
+  versionString: string
+): DownloadOptionsType => ({
   downloadText: `Download ${fileTypeName[fileType]} template`,
   backendPath: `template/${fileType}`,
-  fileName: `ECE Data Collection Template.${fileType}`,
+  fileName: `ECE Data Collection Template${versionString}.${fileType}`,
 });
 
-const getExampleProps = (fileType: FileTypeOpts): DownloadOptionsType => ({
+const getExampleProps = (
+  fileType: FileTypeOpts,
+  versionString: string
+): DownloadOptionsType => ({
   downloadText: `Download ${fileTypeName[fileType]} sample data`,
   backendPath: `template/example/${fileType}`,
-  fileName: `Example.${fileType}`,
+  fileName: `Example${versionString}.${fileType}`,
 });
 
 export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
@@ -52,11 +60,19 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
 
+  const { data: templateMetadata } = useSWR('template/metadata', {
+    dedupingInterval: 100000,
+  }) as responseInterface<TemplateMetadata, string>;
+
+  const versionString = templateMetadata?.version
+    ? ` (v${templateMetadata.version})`
+    : '';
+
   let options: DownloadOptionsType = getRosterProps();
   if (whichDownload === 'example') {
-    options = getExampleProps(fileType);
+    options = getExampleProps(fileType, versionString);
   } else if (whichDownload === 'template') {
-    options = getTemplateProps(fileType);
+    options = getTemplateProps(fileType, versionString);
   }
 
   const { downloadText: defaultDownloadText, fileName, backendPath } = options;
