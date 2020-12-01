@@ -2,10 +2,10 @@ import { readFile, utils, WorkSheet } from 'xlsx';
 import moment, { Moment } from 'moment';
 import {
   EnrollmentReportRow,
-  SECTIONS,
   DATE_FORMATS,
   REPORTING_PERIOD_FORMATS,
 } from '../../template';
+import { TEMPLATE_SECTIONS } from '../../../client/src/shared/constants';
 import { BadRequestError } from '../../middleware/error/errors';
 import { getAllColumnMetadata } from '../../template';
 
@@ -127,7 +127,7 @@ function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
  * @param sheet
  */
 function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
-  return sheet['B1']?.v === SECTIONS.CHILD_IDENTIFIER ? 'xlxs' : 'csv';
+  return sheet['B1']?.v === TEMPLATE_SECTIONS.CHILD_IDENT ? 'xlxs' : 'csv';
 }
 
 /**

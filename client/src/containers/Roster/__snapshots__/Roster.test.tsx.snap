@@ -74,16 +74,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                   </div>
                 </button>
               </div>
-              <button
-                class="usa-button usa-button--unstyled text-bold display-block"
-                type="button"
-              >
-                <span
-                  class="oec-text-with-icon text-underline"
-                >
-                  Export roster
-                </span>
-              </button>
+              Placeholder for CSVExcelDownloadButton
             </div>
           </td>
         </tr>
@@ -1050,16 +1041,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                   Add a record
                 </span>
               </a>
-              <button
-                class="usa-button usa-button--unstyled text-bold display-block"
-                type="button"
-              >
-                <span
-                  class="oec-text-with-icon text-underline"
-                >
-                  Export roster
-                </span>
-              </button>
+              Placeholder for CSVExcelDownloadButton
             </div>
           </td>
         </tr>
@@ -1979,16 +1961,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   Add a record
                 </span>
               </a>
-              <button
-                class="usa-button usa-button--unstyled text-bold display-block"
-                type="button"
-              >
-                <span
-                  class="oec-text-with-icon text-underline"
-                >
-                  Export roster
-                </span>
-              </button>
+              Placeholder for CSVExcelDownloadButton
             </div>
           </td>
         </tr>

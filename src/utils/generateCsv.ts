@@ -1,6 +1,7 @@
 import { getAllColumnMetadata } from '../template';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { utils } from 'xlsx';
+import { TEMPLATE_REQUIREMENT_LEVELS } from '../../client/src/shared/constants';
 
 /**
  * Process an array of retrieved child objects and turn them into
@@ -9,8 +10,10 @@ import { utils } from 'xlsx';
  */
 export function generateCSV(rows?: string[][]) {
   const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
-  const formattedColumnNames: string[] = columnMetadatas.map(
-    (c) => c.formattedName
+  const formattedColumnNames: string[] = columnMetadatas.map((c) =>
+    c.requirementLevel !== TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL
+      ? c.formattedName
+      : `(OPTIONAL) ${c.formattedName}`
   );
   const sheet = utils.aoa_to_sheet([formattedColumnNames]);
 
