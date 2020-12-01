@@ -31,10 +31,6 @@ The result of all this is:
 - Removing enum values will always require a migration, as any data referencing that enum value would need to be cleaned up.
 - Renaming enum key will require a migration, to update data referencing the old key to have the new key value, but this is not expected to happen frequently.
 
-### Triple booleans
-
-We needed to make it possible for a user to indicate that a boolean value was not going to be supplied. Since "undefined" in all other cases means that a user has not supplied any information, undefined still indicates that a user has not entered anything in the field, and null is used to indicate that a value will not be supplied.
-
 ### Creating migrations
 
 Migrations are automatically applied by app on startup,

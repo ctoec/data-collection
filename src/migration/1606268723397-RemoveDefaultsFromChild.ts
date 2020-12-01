@@ -8,15 +8,30 @@ export class RemoveDefaultsFromChild1606268723397 implements MigrationInterface 
             const columnConstraints = await queryRunner.query(_query);
             if (!columnConstraints?.length) return;
             const constraintName = columnConstraints[0].name
-            await queryRunner.query(`ALTER TABLE ${tableName} DROP constraint "${constraintName}";`);
+            await queryRunner.query(`ALTER TABLE "${tableName}" DROP constraint "${constraintName}";`);
+        }
+
+        const makeBooleansIntoVarChars = async (tableName, columnName) => {
+            await queryRunner.query(`ALTER TABLE "${tableName}" ALTER COLUMN "${columnName}" varchar(20);`);
         }
 
         await dropDefaultConstraint('child', 'raceNotDisclosed');
+        await makeBooleansIntoVarChars('child', 'raceNotDisclosed');
+
         await dropDefaultConstraint('child', 'hispanicOrLatinxEthnicity');
+        await makeBooleansIntoVarChars('child', 'hispanicOrLatinxEthnicity');
+
         await dropDefaultConstraint('child', 'dualLanguageLearner');
+        await makeBooleansIntoVarChars('child', 'dualLanguageLearner');
+
         await dropDefaultConstraint('child', 'foster');
+        await makeBooleansIntoVarChars('child', 'foster');
+
         await dropDefaultConstraint('child', 'receivesDisabilityServices');
+        await makeBooleansIntoVarChars('child', 'receivesDisabilityServices');
+
         await dropDefaultConstraint('family', 'homelessness');
+        await makeBooleansIntoVarChars('family', 'homelessness');
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

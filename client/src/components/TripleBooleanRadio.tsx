@@ -45,7 +45,7 @@ export const TripleBooleanRadio = <T extends {}>({
       if (data === true) return trueOption.id === id;
       else if (data === false) return falseOption.id === id;
       else if (data === null) return unknownOption.id === id;
-      return false
+      return false;
     },
     id,
     text: label,

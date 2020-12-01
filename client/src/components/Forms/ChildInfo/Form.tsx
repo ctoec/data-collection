@@ -52,6 +52,8 @@ export const ChildInfoForm = ({
     throw new Error('Child info rendered without child');
   }
 
+  console.log(child)
+
   const { errorsHidden, setErrorsHidden } = useValidationErrors(
     hideErrorsOnFirstLoad
   );
@@ -93,11 +95,11 @@ export const ChildInfoForm = ({
         ...RACE_FIELDS,
         'hispanixOrLatinxEthnicity',
       ]) && (
-        <>
-          <RaceField />
-          <EthnicityField />
-        </>
-      )}
+          <>
+            <RaceField />
+            <EthnicityField />
+          </>
+        )}
       {showFieldOrFieldset(child, ['gender']) && <GenderField />}
       <br />
 

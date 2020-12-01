@@ -20,6 +20,7 @@ import {
   Child as ChildInterface,
   Gender,
   BirthCertificateType,
+  UndefinableBoolean
 } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
@@ -115,12 +116,22 @@ export class Child implements ChildInterface {
   @ChildRaceIndicated()
   white?: boolean;
 
-  @Column({ nullable: true })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
   @ChildRaceIndicated()
-  raceNotDisclosed?: boolean;
+  raceNotDisclosed?: UndefinableBoolean;
 
-  @Column({ nullable: true })
-  hispanicOrLatinxEthnicity?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  hispanicOrLatinxEthnicity?: UndefinableBoolean;
 
   @Column({
     type: 'varchar',
@@ -131,14 +142,28 @@ export class Child implements ChildInterface {
   @ChildGenderSpecified()
   gender?: Gender;
 
-  @Column({ nullable: true })
-  dualLanguageLearner?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  }) dualLanguageLearner?: UndefinableBoolean;
 
-  @Column({ nullable: true })
-  foster?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  foster?: UndefinableBoolean;
 
-  @Column({ nullable: true })
-  receivesDisabilityServices?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  receivesDisabilityServices?: UndefinableBoolean;
 
   @ValidateNested()
   @ValidateIf((child) => {

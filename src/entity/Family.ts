@@ -9,7 +9,7 @@ import {
   getManager,
 } from 'typeorm';
 
-import { Family as FamilyInterface } from '../../client/src/shared/models';
+import { Family as FamilyInterface, UndefinableBoolean } from '../../client/src/shared/models';
 
 import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
@@ -21,6 +21,7 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
+import { enumTransformer } from './transformers';
 
 @Entity()
 export class Family implements FamilyInterface {
@@ -47,8 +48,13 @@ export class Family implements FamilyInterface {
   @ValidateIf((f) => !f.homelessness)
   zipCode?: string;
 
-  @Column({ nullable: true })
-  homelessness?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  homelessness?: UndefinableBoolean;
 
   @OneToMany(() => IncomeDetermination, (det) => det.family)
   @ValidateNested({ each: true })
