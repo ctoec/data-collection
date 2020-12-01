@@ -35,7 +35,6 @@ export const TripleBooleanRadio = <T extends {}>({
   }): RadioOptionInForm<T> => ({
     getValue: (data) => data.at(field),
     parseOnChangeEvent: (e) => {
-      console.log(e.target.value, 'on change fired');
       if (e.target.value === unknownOption.id) {
         return UndefinableBoolean.NotCollected;
       }
@@ -44,7 +43,6 @@ export const TripleBooleanRadio = <T extends {}>({
         : UndefinableBoolean.No;
     },
     preprocessForDisplay: (data) => {
-      console.log(data, field);
       if (data === UndefinableBoolean.Yes) return trueOption.id === id;
       else if (data === UndefinableBoolean.No) return falseOption.id === id;
       else if (data === UndefinableBoolean.NotCollected)
