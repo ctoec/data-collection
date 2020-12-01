@@ -7,11 +7,11 @@ export const makeFakeFamily = (id): Family => {
   const familyAddress = homelessness
     ? {}
     : {
-      streetAddress: address.streetAddress(),
-      town: address.city(),
-      state: 'CT',
-      zipCode: address.zipCodeByState('CT'),
-    };
+        streetAddress: address.streetAddress(),
+        town: address.city(),
+        state: 'CT',
+        zipCode: address.zipCodeByState('CT'),
+      };
   return {
     id,
     ...familyAddress,
