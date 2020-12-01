@@ -90,14 +90,12 @@ exports[`DataRequirements matches snapshot 1`] = `
     <div
       class="data-definitions"
     >
-      <div
-        class="margin-bottom-1 text-bold"
-      >
-        Requirement levels
-      </div>
-      <table
-        class="margin-bottom-1"
-      >
+      <table>
+        <caption
+          class="text-bold text-left margin-bottom-1"
+        >
+          Requirement levels
+        </caption>
         <tbody>
           <tr>
             <td>
@@ -137,11 +135,6 @@ exports[`DataRequirements matches snapshot 1`] = `
           </tr>
         </tbody>
       </table>
-      <div
-        class="margin-bottom-1 margin-top-3 text-bold"
-      >
-        Filter fields
-      </div>
       <fieldset
         aria-labelledby="fieldset-legend-filter-fields"
         class="usa-fieldset requirement-level-filter"
@@ -151,9 +144,9 @@ exports[`DataRequirements matches snapshot 1`] = `
           id="fieldset-legend-filter-fields"
         >
           <span
-            class="usa-sr-only"
+            class="usa-label"
           >
-            filter fields
+            Filter fields
           </span>
         </legend>
         <div>
