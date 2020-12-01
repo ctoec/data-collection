@@ -32,6 +32,10 @@ export const useHandlers = ({
   const [notifier] = useState<AuthorizationNotifier>(
     new AuthorizationNotifier()
   );
+  const [tokenHandler] = useState<TokenRequestHandler>(
+    new BaseTokenRequestHandler(new FetchRequestor())
+  );
+
   notifier.setAuthorizationListener((req, resp, _) => {
     if (resp) {
       let verifier: string | undefined;
@@ -54,10 +58,6 @@ export const useHandlers = ({
     )
   );
   authorizationHandler.setAuthorizationNotifier(notifier);
-
-  const [tokenHandler] = useState<TokenRequestHandler>(
-    new BaseTokenRequestHandler(new FetchRequestor())
-  );
 
   /**
    * Create and perform authorization code-based token request.

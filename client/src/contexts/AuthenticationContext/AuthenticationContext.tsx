@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   AuthorizationRequest,
@@ -47,7 +47,6 @@ const { Provider, Consumer } = AuthenticationContext;
  */
 const defaultProps = {
   loginEndpoint: '/login',
-  defaultOpenIdConnectUrl: null,
   redirectEndpoint: '/login/callback',
   logoutEndpoint: '/logout',
   responseType: AuthorizationRequest.RESPONSE_TYPE_CODE,
@@ -75,34 +74,36 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     logoutEndpoint
   } = props;
 
-  const history = useHistory();
   // Get the URL for winged keys-- in local development, localhost:5050
   const openIdConnectUrl = useOpenIdConnectUrl(defaultOpenIdConnectUrl);
   // Get the configuration, which has the endpoints that we need to use
   const configuration = useAuthConfig(openIdConnectUrl);
+
+  const history = useHistory();
   const redirectUrl = `${getCurrentHost()}${redirectEndpoint}`;
-
   const [loading, setLoading] = useState(true);
-  const [idToken, setIdToken] = useState<string>();
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [tokenResponse, setTokenResponse] = useState<TokenResponse>();
-  console.log({ tokenResponse })
 
-  const onTokenRequestSuccess = (resp: TokenResponse) => {
+  // Token response is set on initial auth and when a refresh token is requested
+  const [tokenResponse, setTokenResponse] = useState<TokenResponse>();
+  const { idToken } = tokenResponse || {};
+  // Access token is set in memory on initial auth and when refresh token is requested
+  // Access token is set in local storage whenever it changes
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+
+  const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
     // After user successfully logs in
-    console.log({ resp })
     setTokenResponse(resp);
-    setIdToken(resp.idToken);
     localStorage.setItem(localStorageIdTokenKey, resp.idToken || '');
     setAccessToken(resp.accessToken);
     setLoading(false);
     history.push('/');
   };
+
   const { authorizationHandler, tokenHandler } = useHandlers({
     clientId,
     configuration,
     redirectUrl,
-    onTokenRequestSuccess,
+    onTokenRequestSuccess: onInitialTokenRequestSuccess,
   });
 
   // Get accessToken from localstorage on initial mount
@@ -110,10 +111,12 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     const localStorageAccessToken = localStorage.getItem(
       localStorageAccessTokenKey
     );
+    console.log('initial mount??', { localStorageAccessToken })
     // Update accessToken if it was present in local storage
     if (!!localStorageAccessToken) {
       setLoading(false);
       setAccessToken(localStorageAccessToken);
+      makeRefreshTokenRequest();
     }
   }, [localStorageAccessTokenKey]);
 
@@ -184,7 +187,6 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       refresh_token: tokenResponse.refreshToken,
     });
     tokenHandler.performTokenRequest(configuration, req).then((resp) => {
-      console.log('Refresh token: ', { resp })
       setTokenResponse(resp);
       setAccessToken(resp.accessToken);
       // If there's an error just log the user out
@@ -199,16 +201,23 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     makeRefreshTokenRequest();
   });
 
+  // Whenever a token response is received, set a "when the token expires" var in memory and local storage
+  // Track it the same way we're doing access tokens
+  // tokenResponse.issuedAt + tokenResponse.expiresIn
+  // Set a timeout for the difference between then and when this is loaded
+  // Reset that timeout every time a new token response is received
+
+  const tokenResponseRef = useRef(tokenResponse);
+  tokenResponseRef.current = tokenResponse;
   setTimeout(() => {
     // if (!(tokenResponse && tokenResponse.refreshToken)) return;
     // TODO: do we need to check if we're on an authorized-only route?
-    console.log({ tokenResponse }, tokenResponse?.isValid())
-    if (!tokenResponse?.isValid()) {
+    console.log(tokenResponseRef.current)
+    if (tokenResponseRef.current && !tokenResponseRef.current.isValid()) {
       history.push(logoutEndpoint);
     };
     // Every five minutes, check
     // TODO: base this on the response token values
-    // tokenResponse.issuedAt + tokenResponse.expiresIn
   }, 1 * 60 * 1000);
 
   const handleLogin = () => {
