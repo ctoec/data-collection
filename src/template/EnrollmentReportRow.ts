@@ -80,7 +80,7 @@ export class EnrollmentReportRow {
     formattedName: 'SASID / Unique Identifier',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition:
-      'A unique number used to identify children.Either an SDE-backed SASID creted from the PSIS system, or another unique identifier from a system of record such as Childplus.',
+      'A unique number used to identify children.  Either an SDE-backed SASID created from the PSIS system, or another unique identifier from a system of record such as Childplus.',
     reason: "Allows for easy reference with your program's system of record.",
     format: 'Text (if SASID, a valid 10-digit number)',
     example: '0123456789',
@@ -94,7 +94,7 @@ export class EnrollmentReportRow {
     definition: "Date of birth as it appears on the child's birth certificate",
     reason:
       'Used for a variety of reporting; allows linking to a variety of data sets, including SASID-backed data.',
-    format: makeMarkdownOptionsList(DATE_FORMATS),
+    format: makeMarkdownList(DATE_FORMATS),
     example: '10/01/2016',
     section: TEMPLATE_SECTIONS.CHILD_IDENT,
   })
@@ -106,8 +106,10 @@ export class EnrollmentReportRow {
     definition: 'Type of birth certificate based on country of issue',
     reason:
       'Used for a variety of reporting; allows linking to a variety of data sets, including SASID-backed data.',
-    format: Object.values(BirthCertificateType).join(', '),
-    example: 'US birth certificate',
+    format: makeMarkdownList(
+      Object.values(BirthCertificateType).map((type) => type.split(' ')[0])
+    ),
+    example: 'US',
     section: TEMPLATE_SECTIONS.CHILD_IDENT,
   })
   birthCertificateType?: BirthCertificateType = undefined;
@@ -153,11 +155,11 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'Race: American Indian or Alaska Native',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -165,11 +167,11 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'Race: Asian',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -177,11 +179,11 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'Race: Black or African American',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -189,11 +191,11 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'Race: Native Hawaiian or Pacific Islander',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -201,11 +203,11 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'Race: White',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -213,11 +215,11 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'Race Not Disclosed',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -228,7 +230,7 @@ export class EnrollmentReportRow {
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: "The child's ethnicity, has identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -240,7 +242,7 @@ export class EnrollmentReportRow {
     definition:
       "The child's gender, as identified by the family (not as it appears on the birth certificate).",
     reason: 'Allows linking to SASID-backed data',
-    format: Object.values(Gender).join(', '),
+    format: makeMarkdownList(Object.values(Gender)),
     example: 'Nonbinary',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -252,7 +254,7 @@ export class EnrollmentReportRow {
     definition:
       'Children who have a home language other than English and are learning to or more languages at the same time, or learning a second language while continuing to develop their first language.',
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -264,7 +266,7 @@ export class EnrollmentReportRow {
     definition:
       'Children receiving services for Autism, emotional disturbance, intellectual disability, learning disability, speech-language impairment, and other disabilities.',
     reason: DEMOGRAPHIC_REPORTING_REASON,
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -320,7 +322,7 @@ export class EnrollmentReportRow {
     definition: 'Whether the child lives with a foster family.',
     reason:
       'Affects eligibility for state funding, and used for demographic reporting.',
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
@@ -333,7 +335,7 @@ export class EnrollmentReportRow {
       "Children and youth who lack a fixed, regular, and adequate nighttime residence. See [Decision-making Tool to Determine a Family's Homeless Situation](https://eclkc.ohs.acf.hhs.gov/sites/default/files/learning-modules/homelessness-v2/module-4/story_content/external_files/HL%20Module%204%20Decision-Tool_Final%204_20_18.pdf) for definitions and guidance.",
     reason:
       'Used for reporting and identification of programs that serve families at risk of homelessness.',
-    format: makeMarkdownOptionsList(BOOLEAN_FORMATS),
+    format: makeMarkdownList(BOOLEAN_FORMATS),
     example: 'Yes',
     section: TEMPLATE_SECTIONS.FAMILY_ADDRESS,
   })
@@ -374,7 +376,7 @@ export class EnrollmentReportRow {
       "The date the provider received documentation of the family's income.",
     reason:
       'Used to ensure the family income has been determined within the last year.',
-    format: makeMarkdownOptionsList(DATE_FORMATS),
+    format: makeMarkdownList(DATE_FORMATS),
     example: `10/01/${new Date().getFullYear()}`,
     section: TEMPLATE_SECTIONS.FAMILY_INCOME,
   })
@@ -408,7 +410,7 @@ export class EnrollmentReportRow {
     definition:
       'The type of services received by the child.  \n__In-Person__: In-school learning for all students on a full-time basis.  \n__Hybrid__: A combination of both in-person and remote learning support resulting in a limited student population on school premises at any given time.  \n__Distance__: Learning opportunities in which students and educators are not physically present in a classroom environment.',
     reason: 'Used to identify children receiving in-person or virtual services',
-    format: makeMarkdownOptionsList(Object.values(CareModel)),
+    format: makeMarkdownList(Object.values(CareModel)),
     example: 'Hybrid',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -420,7 +422,7 @@ export class EnrollmentReportRow {
     definition:
       'The type of service being provided, as described by the age of the participating children.',
     reason: UTILIZATION_REPORTING_REASON,
-    format: makeMarkdownOptionsList(Object.values(AgeGroup)),
+    format: makeMarkdownList(Object.values(AgeGroup)),
     example: 'School aged',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -431,7 +433,7 @@ export class EnrollmentReportRow {
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The first date the child attended the program.',
     reason: REPORTING_REASON,
-    format: makeMarkdownOptionsList(DATE_FORMATS),
+    format: makeMarkdownList(DATE_FORMATS),
     example: '10/01/2016',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -444,7 +446,7 @@ export class EnrollmentReportRow {
     definition:
       'The last date the child attended services at a site __or__ the last date the child received services before changing age groups.',
     reason: REPORTING_REASON,
-    format: makeMarkdownOptionsList(DATE_FORMATS),
+    format: makeMarkdownList(DATE_FORMATS),
     example: '08/30/2017',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -456,7 +458,7 @@ export class EnrollmentReportRow {
     requirementString: REQUIRED_IF_CHANGED_ENROLLMENT,
     definition: 'The reason for ending an enrollment.',
     reason: REPORTING_REASON,
-    format: makeMarkdownOptionsList(Object.values(ExitReason)),
+    format: makeMarkdownList(Object.values(ExitReason)),
     example: 'Aged out',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -468,7 +470,7 @@ export class EnrollmentReportRow {
     definition:
       'The type of service being provided, as described by the funding source',
     reason: UTILIZATION_REPORTING_REASON,
-    format: makeMarkdownOptionsList(Object.values(FundingSource)),
+    format: makeMarkdownList(Object.values(FundingSource)),
     example: 'CSR',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -492,7 +494,7 @@ export class EnrollmentReportRow {
     definition:
       "The first reporting period (roughly equal to a month) during which the child occupied the funded space. The first funding period is often the same as the child's enrollment start month.",
     reason: UTILIZATION_REPORTING_REASON,
-    format: makeMarkdownOptionsList(REPORTING_PERIOD_FORMATS),
+    format: makeMarkdownList(REPORTING_PERIOD_FORMATS),
     example: '10/2016',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
@@ -505,13 +507,13 @@ export class EnrollmentReportRow {
     definition:
       'The last reporting period (roughly equal to a month) during which the child occupied the funded space.',
     reason: 'Used to track children moving between funding groups',
-    format: makeMarkdownOptionsList(REPORTING_PERIOD_FORMATS),
+    format: makeMarkdownList(REPORTING_PERIOD_FORMATS),
     example: '08/2017',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
   lastReportingPeriod?: Moment = moment.invalid();
 }
 
-function makeMarkdownOptionsList(opts: string[]) {
+function makeMarkdownList(opts: string[]) {
   return opts.map((o) => `- ${o}`).join('  \n');
 }

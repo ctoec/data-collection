@@ -9,8 +9,9 @@ export const RequirementLevelFilter: React.FC<RequirementLevelFilterProps> = ({
   setFilter,
 }) => (
   <>
-    <h3>Filter fields</h3>
+    <div className="margin-bottom-1 margin-top-3 text-bold">Filter fields</div>
     <RadioButtonGroup
+      className="requirement-level-filter"
       legend="filter fields"
       showLegend={false}
       id="filter-fields"

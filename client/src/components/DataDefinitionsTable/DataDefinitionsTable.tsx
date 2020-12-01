@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ColumnMetadata } from '../../shared/models';
 import { Table, HeadingLevel, LoadingWrapper } from '@ctoec/component-library';
 import { TemplateMetadata } from '../../shared/payloads';
-import { TEMPLATE_REQUIREMENT_LEVELS } from '../../shared/constants';
+import {
+  TEMPLATE_REQUIREMENT_LEVELS,
+  TEMPLATE_SECTIONS,
+} from '../../shared/constants';
 import { RequirementLevelLegend } from './RequirementLevelLegend';
 import { RequirementLevelFilter } from './RequirementLevelFilter';
 import { TableColumns } from './TableColumns';
@@ -15,13 +18,13 @@ import {
 
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
-  showDataElementsSection?: boolean;
+  showRequirementLevelLegendAndFilter?: boolean;
   addFirstReportingPeriodAlert?: boolean;
 };
 
 const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   headerLevel,
-  showDataElementsSection = false,
+  showRequirementLevelLegendAndFilter = false,
   addFirstReportingPeriodAlert = false,
 }) => {
   const Heading = headerLevel;
@@ -74,10 +77,9 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   }, columnMetadataBySection);
 
   return (
-    <>
-      {showDataElementsSection && (
+    <div className="data-definitions">
+      {showRequirementLevelLegendAndFilter && (
         <>
-          <Heading>Data elements</Heading>
           <RequirementLevelLegend />
           <RequirementLevelFilter setFilter={setRequiredFilter} />
         </>
@@ -89,7 +91,6 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
               <Heading>{sectionName}</Heading>
               <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
               <Table
-                className="data-definitions-table"
                 id={`data-requirements-${sectionName.replace(' ', '-')}`}
                 data={sectionData}
                 rowKey={(row) => (row ? row.formattedName : '')}
@@ -100,20 +101,20 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
           )
         )}
       </div>
-    </>
+    </div>
   );
 };
 
 const getSectionCopy = (section: string) => {
-  if (section.toLowerCase().includes('child identifier'))
+  if (section === TEMPLATE_SECTIONS.CHILD_IDENT)
     return 'Data used to identify unique children enrolled in an ECE program.';
-  if (section.toLocaleLowerCase().includes('child information'))
+  if (section === TEMPLATE_SECTIONS.CHILD_INFO)
     return "Data on children's circumstances. This data is used to ensure children from different backgrounds are equitably served by ECE programs.";
-  if (section.toLowerCase().includes('income'))
+  if (section === TEMPLATE_SECTIONS.FAMILY_INCOME)
     return 'This data is collected to assess eligibility for public funding by calculating state median income percentage. Income determinations must be updated at least once a year.';
-  if (section.toLowerCase().includes('family'))
+  if (section === TEMPLATE_SECTIONS.FAMILY_ADDRESS)
     return 'One or more children that share the same address and household income.';
-  if (section.toLowerCase().includes('enrollment'))
+  if (section === TEMPLATE_SECTIONS.ENROLLMENT_FUNDING)
     return 'Enrollment: A period of time during which a child recieved ECE services.\nFunding: A period of time during which an enrollment was subsidized by a state-funded contract space.';
 };
 export default DataDefinitionsTable;

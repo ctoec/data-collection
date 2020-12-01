@@ -4,8 +4,8 @@ import { getRequiredTag } from './utils';
 
 export const RequirementLevelLegend: React.FC = () => (
   <>
-    <h3>Requirement levels</h3>
-    <table>
+    <div className="margin-bottom-1 text-bold">Requirement levels</div>
+    <table className="margin-bottom-1">
       <tbody>
         <tr>
           <td>{getRequiredTag(TEMPLATE_REQUIREMENT_LEVELS.REQUIRED)}</td>

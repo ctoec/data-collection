@@ -1,5 +1,5 @@
 export const TEMPLATE_REQUIREMENT_LEVELS = {
   REQUIRED: 'Required',
-  CONDITIONAL: 'Conditional',
+  CONDITIONAL: 'Required If',
   OPTIONAL: 'Optional',
 };

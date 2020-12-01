@@ -51,9 +51,10 @@ export const TableColumns: (_: boolean) => Column<ColumnMetadata>[] = (
           })}
         >
           {getRequiredTag(row.requirementLevel)}
-          {row.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL && (
-            <ReactMarkdown source={row.requirementString} />
-          )}
+          {row.requirementLevel !== TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL &&
+            row.requirementString && (
+              <ReactMarkdown source={row.requirementString} />
+            )}
         </td>
       ),
     width: '20%',

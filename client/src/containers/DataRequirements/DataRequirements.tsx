@@ -4,6 +4,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import DataDefinitionsTable from '../../components/DataDefinitionsTable/DataDefinitionsTable';
 import useSWR, { responseInterface } from 'swr';
 import { TemplateMetadata } from '../../shared/payloads';
+import { FundingSource } from '../../shared/models';
 
 const DataRequirements: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -15,8 +16,10 @@ const DataRequirements: React.FC = () => {
   return (
     <div className="grid-container margin-top-4">
       <BackButton />
-      <h1 ref={h1Ref}>OEC's enrollment data requirements</h1>
-      <p>
+      <h1 className="margin-bottom-0" ref={h1Ref}>
+        OEC's enrollment data requirements
+      </h1>
+      <p className="margin-top-05">
         Last updated:{' '}
         <span className="text-bold">
           {templateMetadata
@@ -34,11 +37,9 @@ const DataRequirements: React.FC = () => {
         Children receiving funding through the following programs:
       </p>
       <ul>
-        <li>Child Day Care</li>
-        <li>Priority School Readiness</li>
-        <li>Competative School Readiness</li>
-        <li>Smart Start</li>
-        <li>State Head Start</li>
+        {Object.values(FundingSource).map((fundingSource) => (
+          <li>{fundingSource.split('-')[1]}</li>
+        ))}
       </ul>
       <p>
         <span className="text-bold">Data collection period</span>
@@ -49,11 +50,14 @@ const DataRequirements: React.FC = () => {
       <p>
         <span className="text-bold">Data submission deadline</span>
         <br />
-        You must submit your data to OECby 03/05/2021.
+        You must submit your data to OEC by 03/05/2021.
       </p>
+      <h2 className="border-top border-base-lighter padding-top-1">
+        Data elements
+      </h2>
       <DataDefinitionsTable
-        headerLevel="h2"
-        showDataElementsSection
+        headerLevel="h3"
+        showRequirementLevelLegendAndFilter
         addFirstReportingPeriodAlert
       />
     </div>
