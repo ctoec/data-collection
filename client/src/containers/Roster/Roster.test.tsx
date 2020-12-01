@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { waitFor } from '@testing-library/react';
 import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 import Roster from './Roster';
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -15,6 +16,12 @@ import {
   User,
   FundingTime,
 } from '../../shared/models';
+
+const commonUserProvider = {
+  loading: false,
+  confidentialityAgreed: true,
+  setConfidentialityAgreed: () => {},
+};
 
 const _child = {
   firstName: '',
@@ -149,9 +156,14 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
+// Need to mock this component because the useSWR hook in there conflicts
+// with the call we actually care about in the Roster
+jest.mock('../../components/CSVExcelDownloadButton');
+import * as DownloadButton from '../../components/CSVExcelDownloadButton';
+const DownloadButtonMock = DownloadButton as jest.Mocked<typeof DownloadButton>;
+
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
-import { waitFor } from '@testing-library/react';
 const apiMock = api as jest.Mocked<typeof api>;
 
 // For reasons I cannot explain, clearing the cache does not work
@@ -167,13 +179,16 @@ const waitGetChildren = async () => {
 
 describe('Roster', () => {
   beforeAll(async () => {
+    DownloadButtonMock.CSVExcelDownloadButton.mockReturnValue(
+      <>Placeholder for CSVExcelDownloadButton</>
+    );
     apiMock.apiGet
       .mockReturnValueOnce(new Promise((resolve) => resolve(children)))
       .mockReturnValueOnce(new Promise((resolve) => resolve([])));
   });
 
   snapshotTestHelper(
-    <UserContext.Provider value={{ user: oneSiteUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: oneSiteUser }}>
       <Roster />
     </UserContext.Provider>,
     {
@@ -185,7 +200,7 @@ describe('Roster', () => {
   );
 
   snapshotTestHelper(
-    <UserContext.Provider value={{ user: oneOrgUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: oneOrgUser }}>
       <Roster />
     </UserContext.Provider>,
     {
@@ -196,7 +211,7 @@ describe('Roster', () => {
   );
 
   snapshotTestHelper(
-    <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: multiOrgUser }}>
       <Roster />
     </UserContext.Provider>,
     {
@@ -207,7 +222,7 @@ describe('Roster', () => {
   );
 
   accessibilityTestHelper(
-    <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: multiOrgUser }}>
       <Roster />
     </UserContext.Provider>,
     {

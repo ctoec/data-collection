@@ -2,6 +2,7 @@ import { WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { wrapText } from '../utils/string';
 import { getAllColumnMetadata } from '../template';
+import { TEMPLATE_REQUIREMENT_LEVELS } from '../../client/src/shared/constants';
 
 export function generateExcelWorkbook(rows?: string[][]): WorkBook {
   const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
@@ -14,7 +15,10 @@ export function generateExcelWorkbook(rows?: string[][]): WorkBook {
 
   columnMetadatas.forEach((columnMetadata, index) => {
     sections[index] = columnMetadata.section;
-    columnNames[index] = columnMetadata.formattedName;
+    columnNames[index] =
+      columnMetadata.requirementLevel !== TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL
+        ? columnMetadata.formattedName
+        : `(OPTIONAL) ${columnMetadata.formattedName}`;
     formats[index] = columnMetadata.format;
 
     //  Reserve a certain number of minimum characters for column widths, for the sake of

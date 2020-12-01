@@ -251,16 +251,16 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="Birth-certificate-unavailable"
+              id="Unavailable"
               name="birthCertificateType"
               type="radio"
-              value="Birth certificate unavailable"
+              value="Unavailable"
             />
             <label
               class="usa-radio__label"
-              for="Birth-certificate-unavailable"
+              for="Unavailable"
             >
-              Birth certificate unavailable
+              Unavailable
             </label>
           </div>
         </span>
@@ -552,16 +552,16 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="Birth-certificate-unavailable"
+              id="Unavailable"
               name="birthCertificateType"
               type="radio"
-              value="Birth certificate unavailable"
+              value="Unavailable"
             />
             <label
               class="usa-radio__label"
-              for="Birth-certificate-unavailable"
+              for="Unavailable"
             >
-              Birth certificate unavailable
+              Unavailable
             </label>
           </div>
         </span>
@@ -853,16 +853,16 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
           >
             <input
               class="usa-radio__input"
-              id="Birth-certificate-unavailable"
+              id="Unavailable"
               name="birthCertificateType"
               type="radio"
-              value="Birth certificate unavailable"
+              value="Unavailable"
             />
             <label
               class="usa-radio__label"
-              for="Birth-certificate-unavailable"
+              for="Unavailable"
             >
-              Birth certificate unavailable
+              Unavailable
             </label>
           </div>
         </span>
