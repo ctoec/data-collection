@@ -81,15 +81,16 @@ export const useHandlers = ({
       client_id: clientId,
       redirect_uri: redirectUrl,
       grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
-      code: code,
+      code,
       refresh_token: undefined,
       extras: extras,
     });
-    return tokenHandler
+
+    tokenHandler
       .performTokenRequest(configuration, req)
       .then(onTokenRequestSuccess)
       .catch((e) => {
-        console.error(e);
+        console.error('Error making authorization code token request: ', e);
       });
   }
 

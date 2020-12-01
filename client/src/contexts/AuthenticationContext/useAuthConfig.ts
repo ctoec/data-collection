@@ -16,7 +16,7 @@ export const useAuthConfig = (openIdConnectUrl?: string) => {
      * This function should only need to be called once for the lifetime of the app
      */
     async function fetchServiceConfiguration(): Promise<void> {
-      if (!openIdConnectUrl) {
+      if (!openIdConnectUrl || configuration) {
         return;
       }
       const _configuration = await AuthorizationServiceConfiguration.fetchFromIssuer(

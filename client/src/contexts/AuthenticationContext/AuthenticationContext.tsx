@@ -71,10 +71,14 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     state,
     extras,
     children,
+    defaultOpenIdConnectUrl,
+    logoutEndpoint
   } = props;
 
   const history = useHistory();
-  const openIdConnectUrl = useOpenIdConnectUrl(props.defaultOpenIdConnectUrl);
+  // Get the URL for winged keys-- in local development, localhost:5050
+  const openIdConnectUrl = useOpenIdConnectUrl(defaultOpenIdConnectUrl);
+  // Get the configuration, which has the endpoints that we need to use
   const configuration = useAuthConfig(openIdConnectUrl);
   const redirectUrl = `${getCurrentHost()}${redirectEndpoint}`;
 
@@ -82,12 +86,15 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
   const [idToken, setIdToken] = useState<string>();
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [tokenResponse, setTokenResponse] = useState<TokenResponse>();
+  console.log({ tokenResponse })
 
   const onTokenRequestSuccess = (resp: TokenResponse) => {
+    // After user successfully logs in
+    console.log({ resp })
+    setTokenResponse(resp);
     setIdToken(resp.idToken);
     localStorage.setItem(localStorageIdTokenKey, resp.idToken || '');
     setAccessToken(resp.accessToken);
-    setTokenResponse(resp);
     setLoading(false);
     history.push('/');
   };
@@ -124,10 +131,9 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
   // 1) the authorizationHandler is set,
   // 2) the configuration is set or changes, and
   // 3) it is the login screen (isLogin or isCallback)
-  const whichPath = usePath(props);
+  const { isLogin, isCallback, isLogout } = usePath(props);
   useEffect(() => {
     if (configuration && authorizationHandler) {
-      const { isLogin, isCallback, isLogout } = whichPath;
       if (isLogin) {
         handleLogin();
       } else if (isCallback) {
@@ -138,7 +144,6 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
          */
         authorizationHandler.completeAuthorizationRequestIfPossible();
       } else if (isLogout) {
-        console.log({ isLogout });
         handleLogout();
       } else {
         setLoading(false);
@@ -156,7 +161,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     state,
     extras,
     history,
-    whichPath,
+    isLogin, isLogout, isCallback,
     redirectUrl,
   ]);
 
@@ -167,6 +172,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
   async function makeRefreshTokenRequest() {
     if (!configuration) return;
     if (!(tokenResponse && tokenResponse.refreshToken)) return;
+
     // isValid includes a defaut 10 min expiration buffer.
     if (tokenResponse.isValid()) return;
 
@@ -178,16 +184,32 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       refresh_token: tokenResponse.refreshToken,
     });
     tokenHandler.performTokenRequest(configuration, req).then((resp) => {
+      console.log('Refresh token: ', { resp })
       setTokenResponse(resp);
       setAccessToken(resp.accessToken);
-    });
+      // If there's an error just log the user out
+    }).catch(e => {
+      console.error('Could not get refresh token: ', e);
+      history.push(logoutEndpoint);
+    })
   }
   useEffect(() => {
     // Ensure token is always fresh
-    // (function exits early if token is still valid
-    // -- only does request if necessary)
+    // (function exits early if token is still valid)
     makeRefreshTokenRequest();
   });
+
+  setTimeout(() => {
+    // if (!(tokenResponse && tokenResponse.refreshToken)) return;
+    // TODO: do we need to check if we're on an authorized-only route?
+    console.log({ tokenResponse }, tokenResponse?.isValid())
+    if (!tokenResponse?.isValid()) {
+      history.push(logoutEndpoint);
+    };
+    // Every five minutes, check
+    // TODO: base this on the response token values
+    // tokenResponse.issuedAt + tokenResponse.expiresIn
+  }, 1 * 60 * 1000);
 
   const handleLogin = () => {
     /*
@@ -214,7 +236,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     setAccessToken(null);
     setLoading(false);
     if (!configuration?.endSessionEndpoint) {
-      throw new Error('no logout');
+      throw new Error('End session endpoint not found');
     }
     const savedIdToken = localStorage.getItem(localStorageIdTokenKey);
     const endSessionQueryParams = {
