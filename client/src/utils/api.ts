@@ -19,7 +19,12 @@ export function apiGet(
   accessToken?: string | null,
   opts?: ApiOpts
 ) {
-  return api(path, undefined, 'GET', { accessToken, ...opts });
+  // Need to add some headers for IE to cache properly
+  const getOpts = opts || {};
+  getOpts['headers'] = opts?.headers || {};
+  getOpts.headers['Pragma'] = 'no-cache';
+  getOpts.headers['Cache-Control'] = 'no-cache';
+  return api(path, undefined, 'GET', { accessToken, ...getOpts });
 }
 
 /**
