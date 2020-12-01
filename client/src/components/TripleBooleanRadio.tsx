@@ -1,6 +1,7 @@
 import React from 'react';
 import { RadioButtonGroup, RadioOptionInForm } from '@ctoec/component-library';
 import { getValidationStatusForFields } from '../utils/getValidationStatus';
+import { UndefinableBoolean } from '../shared/models';
 
 export type TripleBooleanRadioOption = {
   id: string;
@@ -34,17 +35,20 @@ export const TripleBooleanRadio = <T extends {}>({
   }): RadioOptionInForm<T> => ({
     getValue: (data) => data.at(field),
     parseOnChangeEvent: (e) => {
-      console.log('on change fired')
+      console.log(e.target.value, 'on change fired');
       if (e.target.value === unknownOption.id) {
-        return null;
+        return UndefinableBoolean.NotCollected;
       }
-      return e.target.value === trueOption.id;
+      return e.target.value === trueOption.id
+        ? UndefinableBoolean.Yes
+        : UndefinableBoolean.No;
     },
     preprocessForDisplay: (data) => {
-      console.log(data, field)
-      if (data === true) return trueOption.id === id;
-      else if (data === false) return falseOption.id === id;
-      else if (data === null) return unknownOption.id === id;
+      console.log(data, field);
+      if (data === UndefinableBoolean.Yes) return trueOption.id === id;
+      else if (data === UndefinableBoolean.No) return falseOption.id === id;
+      else if (data === UndefinableBoolean.NotCollected)
+        return unknownOption.id === id;
       return false;
     },
     id,

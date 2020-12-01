@@ -41,7 +41,7 @@ const raceOptions: { label: string; field: RaceField }[] = [
  * Component for entering the race of a child in an enrollment.
  */
 export const RaceField: React.FC = () => {
-  const [notDisclosed, setNotDisclosed] = useState(true);
+  const [notDisclosed, setNotDisclosed] = useState<boolean>();
 
   return (
     <CheckboxGroup<Child>
@@ -72,7 +72,7 @@ export const RaceField: React.FC = () => {
 const raceOptionFactory = (
   label: string,
   field: RaceField,
-  notDisclosed: boolean,
+  notDisclosed: boolean | undefined,
   setNotDisclosed: any
 ): CheckboxOptionInForm<Child> => ({
   getValue: (data) => {

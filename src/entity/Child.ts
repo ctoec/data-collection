@@ -20,7 +20,7 @@ import {
   Child as ChildInterface,
   Gender,
   BirthCertificateType,
-  UndefinableBoolean
+  UndefinableBoolean,
 } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
@@ -116,14 +116,9 @@ export class Child implements ChildInterface {
   @ChildRaceIndicated()
   white?: boolean;
 
-  @Column({
-    type: 'varchar',
-    length: 20,
-    nullable: true,
-    transformer: enumTransformer(UndefinableBoolean),
-  })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
-  raceNotDisclosed?: UndefinableBoolean;
+  raceNotDisclosed?: boolean;
 
   @Column({
     type: 'varchar',
@@ -147,7 +142,8 @@ export class Child implements ChildInterface {
     length: 20,
     nullable: true,
     transformer: enumTransformer(UndefinableBoolean),
-  }) dualLanguageLearner?: UndefinableBoolean;
+  })
+  dualLanguageLearner?: UndefinableBoolean;
 
   @Column({
     type: 'varchar',

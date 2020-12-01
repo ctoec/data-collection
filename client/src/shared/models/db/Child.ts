@@ -32,7 +32,7 @@ export interface Child extends ObjectWithValidationErrors {
   blackOrAfricanAmerican?: boolean;
   nativeHawaiianOrPacificIslander?: boolean;
   white?: boolean;
-  raceNotDisclosed?: UndefinableBoolean;
+  raceNotDisclosed?: boolean;
   hispanicOrLatinxEthnicity?: UndefinableBoolean;
   gender?: Gender;
   dualLanguageLearner?: UndefinableBoolean;

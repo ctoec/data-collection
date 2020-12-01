@@ -9,7 +9,10 @@ import {
   getManager,
 } from 'typeorm';
 
-import { Family as FamilyInterface, UndefinableBoolean } from '../../client/src/shared/models';
+import {
+  Family as FamilyInterface,
+  UndefinableBoolean,
+} from '../../client/src/shared/models';
 
 import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
