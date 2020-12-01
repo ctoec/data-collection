@@ -6,6 +6,7 @@ import {
   getRequiredTag,
   isFirstReportingPeriodRow,
   isFirstReportingPeriodAlertRow,
+  getMarkdownStyledFormatOptionsList,
 } from './utils';
 import { TEMPLATE_REQUIREMENT_LEVELS } from '../../shared/constants';
 import ReactMarkdown from 'react-markdown';
@@ -105,7 +106,9 @@ export const TableColumns: (_: boolean) => Column<ColumnMetadata>[] = (
               isFirstReportingPeriodRow(row) && addFirstReportingPeriodAlert,
           })}
         >
-          <ReactMarkdown source={row.format} />
+          <ReactMarkdown
+            source={getMarkdownStyledFormatOptionsList(row.format)}
+          />
           {!!row.example && (
             <div className="margin-top-1">Ex: {row.example}</div>
           )}

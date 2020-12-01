@@ -3,10 +3,10 @@ import { ColumnMetadata } from '../../client/src/shared/models';
 import { Child, Enrollment } from '../entity';
 import { Response } from 'express';
 import { isMoment } from 'moment';
-import { streamTabularData } from '../utils/streamTabularData';
-import { getAllColumnMetadata } from '../template';
+import { streamTabularData } from '../utils/generateFiles/streamTabularData';
 import { TEMPLATE_SECTIONS } from '../../client/src/shared/constants';
 import { reportingPeriodToString } from './reportingPeriods';
+import { getAllColumnMetadata } from '../template';
 
 /**
  * Function to send the created workbook of information back

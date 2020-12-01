@@ -28,9 +28,12 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
   } = getPropertyNamesAndExpectedHeaders();
   const { headers, data } = parseSheet(sheet, propertyNames);
 
-  if (!expectedHeaders.every((header, idx) => header === headers[idx])) {
-    const errorMessage = getExcessandInvalidString(headers, expectedHeaders);
-    throw new BadRequestError(errorMessage);
+  const excessInvalidHeadersError = getInvalidHeadersError(
+    headers,
+    expectedHeaders
+  );
+  if (excessInvalidHeadersError) {
+    throw new BadRequestError(excessInvalidHeadersError);
   }
 
   if (!data.length) {
@@ -283,17 +286,17 @@ function getInvalidColumnData(invalidColumns: string[]): [string, string] {
  * @param headers
  * @param expectedHeaders
  */
-function getExcessandInvalidString(
-  headers: any[],
-  expectedHeaders: any[]
+function getInvalidHeadersError(
+  headers: (string | undefined)[],
+  expectedHeaders: string[]
 ): string {
-  const headersSet = new Set(headers);
-  const missingHeaders = expectedHeaders.filter((x) => !headersSet.has(x) && x);
+  const missingHeaders = expectedHeaders.filter(
+    (expectedHeader, idx) =>
+      !headers[idx] || !headers[idx].includes(expectedHeader)
+  );
   const [missingMessage, missingNumber] = getInvalidColumnData(missingHeaders);
 
-  let errorMessage = '';
   if (missingHeaders.length > 0) {
-    errorMessage = `Your upload has ${missingNumber}.\n ${missingMessage} Download the latest template for the correct column headers and formatting.`;
+    return `Your upload has ${missingNumber}.\n ${missingMessage} Download the latest template for the correct column headers and formatting.`;
   }
-  return errorMessage;
 }
