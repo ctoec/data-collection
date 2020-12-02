@@ -4,18 +4,43 @@ import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 
+export const getEnrollment = async (
+  id: number | string,
+  user: User,
+  withFundings?: boolean
+) => {
+  const enrollment = getManager().findOne(Enrollment, id, {
+    where: { siteId: In(user.siteIds) },
+    relations: withFundings ? ['fundings'] : undefined,
+  });
+
+  if (!enrollment) throw new NotFoundError();
+  return enrollment;
+};
+
+export const getFunding = async (
+  enrollmentId: number | string,
+  fundingId: number | string,
+  user: User
+) => {
+  // To assert that the user has access to the enrollment
+  await getEnrollment(enrollmentId, user);
+  const funding = await getManager().findOne(Funding, fundingId, {
+    where: { enrollmentId: enrollmentId },
+  });
+
+  if (!funding) throw new NotFoundError();
+
+  return funding;
+};
+
 export const changeFunding = async (
   id: number,
   user: User,
   changeFundingData: ChangeFunding
 ) => {
-  let enrollment = await getManager().findOne(Enrollment, id, {
-    relations: ['fundings'],
-    where: { site: { id: In(user.siteIds) } },
-  });
-  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
-
-  if (!enrollment) throw new NotFoundError();
+  const enrollment = await getEnrollment(id, user, true);
+  enrollment.fundings = removeDeletedElements(enrollment.fundings);
 
   return getManager().transaction(async (tManager) => {
     // Update current funding, if exists
@@ -81,12 +106,7 @@ export const withdraw = async (
   user: User,
   withdrawData: Withdraw
 ) => {
-  let enrollment = await getManager().findOne(Enrollment, id, {
-    relations: ['fundings'],
-    where: { site: { id: In(user.siteIds) } },
-  });
-
-  if (!enrollment) throw new NotFoundError();
+  const enrollment = await getEnrollment(id, user, true);
 
   enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
