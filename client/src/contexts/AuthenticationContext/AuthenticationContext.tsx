@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   AuthorizationRequest,
@@ -13,6 +13,7 @@ import { usePath } from './usePath';
 import { useAuthConfig } from './useAuthConfig';
 import { useOpenIdConnectUrl } from './useOpenIdConnectUrl';
 import { useHandlers } from './useHandlers';
+import { useTimedLogout } from './useTimedLogout';
 
 export type AuthenticationContextType = {
   accessToken: string | null;
@@ -111,7 +112,6 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     const localStorageAccessToken = localStorage.getItem(
       localStorageAccessTokenKey
     );
-    console.log('initial mount??', { localStorageAccessToken })
     // Update accessToken if it was present in local storage
     if (!!localStorageAccessToken) {
       setLoading(false);
@@ -168,6 +168,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     redirectUrl,
   ]);
 
+  const removeTimeoutFromLocalStorage = useTimedLogout({ tokenResponse, logoutEndpoint })
+
   /**
    * Create and perform token refresh request.
    * Requires that initial code-based token request has already been performed.
@@ -201,25 +203,6 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     makeRefreshTokenRequest();
   });
 
-  // Whenever a token response is received, set a "when the token expires" var in memory and local storage
-  // Track it the same way we're doing access tokens
-  // tokenResponse.issuedAt + tokenResponse.expiresIn
-  // Set a timeout for the difference between then and when this is loaded
-  // Reset that timeout every time a new token response is received
-
-  const tokenResponseRef = useRef(tokenResponse);
-  tokenResponseRef.current = tokenResponse;
-  setTimeout(() => {
-    // if (!(tokenResponse && tokenResponse.refreshToken)) return;
-    // TODO: do we need to check if we're on an authorized-only route?
-    console.log(tokenResponseRef.current)
-    if (tokenResponseRef.current && !tokenResponseRef.current.isValid()) {
-      history.push(logoutEndpoint);
-    };
-    // Every five minutes, check
-    // TODO: base this on the response token values
-  }, 1 * 60 * 1000);
-
   const handleLogin = () => {
     /*
      * Create and perform the initial authorization request,
@@ -242,6 +225,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
      * Remove the access token, clear react state, and navigate to main page.
      */
     localStorage.removeItem(localStorageAccessTokenKey);
+    removeTimeoutFromLocalStorage();
     setAccessToken(null);
     setLoading(false);
     if (!configuration?.endSessionEndpoint) {
