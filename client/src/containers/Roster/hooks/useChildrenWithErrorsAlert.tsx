@@ -11,13 +11,15 @@ export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
   childrenWithErrorsCount: number,
   withdrawnChildrenCount: number,
-  organizationId?: string
+  organizationId?: string,
+  alertType?: 'warning' | 'error'
 ) => {
   const { alertElements, setAlerts, alerts } = useAlerts();
   const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
     childrenWithErrorsCount,
     withdrawnChildrenCount,
-    organizationId
+    organizationId,
+    alertType
   );
   useEffect(() => {
     if (isLoading || !childrenWithErrorsCount) {
@@ -44,7 +46,7 @@ export const useChildrenWithErrorsAlert = (
         childrenWithErrorsAlert,
       ]);
     }
-  }, [childrenWithErrorsCount, isLoading]);
+  }, [childrenWithErrorsCount, isLoading, alertType]);
 
   return { alertElements };
 };
@@ -56,7 +58,8 @@ export const useChildrenWithErrorsAlert = (
 function getChildrenWithErrorsAlertProps(
   numberOfChildrenWithErrors: number,
   numberOfWithdrawnChildrenWithErrors: number,
-  organizationId?: string
+  organizationId?: string,
+  alertType?: 'warning' | 'error'
 ): AlertProps {
   let alertText = `You'll need to add required info for
         ${pluralize('record', numberOfChildrenWithErrors, true)} before
@@ -84,6 +87,6 @@ function getChildrenWithErrorsAlertProps(
       </span>
     ),
     heading: 'Update roster before submitting',
-    type: 'warning',
+    type: alertType ? alertType : 'warning',
   };
 }
