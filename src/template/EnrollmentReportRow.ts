@@ -5,6 +5,7 @@ import {
   CareModel,
   BirthCertificateType,
   ExitReason,
+  UndefinableBoolean,
 } from '../../client/src/shared/models';
 import {
   TEMPLATE_SECTIONS,
@@ -234,7 +235,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
-  hispanicOrLatinxEthnicity?: boolean = false;
+  hispanicOrLatinxEthnicity?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
     formattedName: 'Gender',
@@ -258,7 +259,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
-  dualLanguageLearner?: boolean = false;
+  dualLanguageLearner?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
     formattedName: 'Receiving Disability Services',
@@ -270,7 +271,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
-  receivesDisabilityServices?: boolean = false;
+  receivesDisabilityServices?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
     formattedName: 'Street address',
@@ -326,7 +327,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: TEMPLATE_SECTIONS.CHILD_INFO,
   })
-  foster?: boolean = false;
+  foster?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
     formattedName: 'Experiencing homelessness or housing insecurity',
@@ -339,7 +340,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: TEMPLATE_SECTIONS.FAMILY_ADDRESS,
   })
-  homelessness?: boolean = false;
+  homelessness?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
     formattedName: 'Household size',
