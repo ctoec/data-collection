@@ -72,7 +72,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     extras,
     children,
     defaultOpenIdConnectUrl,
-    logoutEndpoint
+    logoutEndpoint,
   } = props;
 
   // Get the URL for winged keys-- in local development, localhost:5050
@@ -122,6 +122,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
   // Update localstorage when accessToken changes
   useEffect(() => {
+    // TODO: should we reconsider storing the access token in local storage?
     const localStorageAccessToken = localStorage.getItem(
       localStorageAccessTokenKey
     );
@@ -164,11 +165,16 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     state,
     extras,
     history,
-    isLogin, isLogout, isCallback,
+    isLogin,
+    isLogout,
+    isCallback,
     redirectUrl,
   ]);
 
-  const removeTimeoutFromLocalStorage = useTimedLogout({ tokenResponse, logoutEndpoint })
+  const removeTimeoutFromLocalStorage = useTimedLogout({
+    tokenResponse,
+    logoutEndpoint,
+  });
 
   /**
    * Create and perform token refresh request.
@@ -176,7 +182,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
    */
   async function makeRefreshTokenRequest() {
     if (!configuration) return;
-    if (!(tokenResponse && tokenResponse.refreshToken)) return;
+    if (!tokenResponse?.refreshToken) return;
 
     // isValid includes a defaut 10 min expiration buffer.
     if (tokenResponse.isValid()) return;
@@ -188,14 +194,17 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       code: undefined,
       refresh_token: tokenResponse.refreshToken,
     });
-    tokenHandler.performTokenRequest(configuration, req).then((resp) => {
-      setTokenResponse(resp);
-      setAccessToken(resp.accessToken);
-      // If there's an error just log the user out
-    }).catch(e => {
-      console.error('Could not get refresh token: ', e);
-      history.push(logoutEndpoint);
-    })
+    tokenHandler
+      .performTokenRequest(configuration, req)
+      .then((resp) => {
+        setTokenResponse(resp);
+        setAccessToken(resp.accessToken);
+        // If there's an error just log the user out
+      })
+      .catch((e) => {
+        console.error('Could not get refresh token: ', e);
+        history.push(logoutEndpoint);
+      });
   }
   useEffect(() => {
     // Ensure token is always fresh
@@ -236,8 +245,9 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       id_token_hint: idToken || savedIdToken,
       post_logout_redirect_uri: getCurrentHost(),
     } as StringMap;
-    const logoutUrl = `${configuration.endSessionEndpoint
-      }?${new BasicQueryStringUtils().stringify(endSessionQueryParams)}`;
+    const logoutUrl = `${
+      configuration.endSessionEndpoint
+    }?${new BasicQueryStringUtils().stringify(endSessionQueryParams)}`;
     // Can't use history.push because react router thinks it should give a 404
     window.location.href = logoutUrl;
   };
