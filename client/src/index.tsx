@@ -32,6 +32,7 @@ const render = (Component: React.FC) =>
           extras={{
             // NOTE: Required for refresh tokens
             access_type: 'offline',
+            max_age: 60,
           }}
         >
           <UserProvider>
