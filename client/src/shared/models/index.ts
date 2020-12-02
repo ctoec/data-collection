@@ -11,4 +11,5 @@ export * from './FundingTime';
 export * from './Gender';
 export * from './Region';
 export * from './ObjectWithValidationErrors';
+export * from './UndefinableBoolean';
 export * from './UniqueIdType';

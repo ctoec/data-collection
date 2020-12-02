@@ -12,7 +12,7 @@ import { makeFakeFamily } from './family';
 import { getFakeIncomeDet } from './incomeDeterminations';
 import { makeFakeEnrollments } from './enrollment';
 import { getFakeFundingSpaces } from './fundingSpace';
-import { weightedBoolean } from './fakeDataUtils';
+import { weightedBoolean, weightedUndefinableBoolean } from './fakeDataUtils';
 
 const _organizations: Organization[] = stagingUserAllowedOrganizations.map(
   (o, i) => ({
@@ -84,13 +84,13 @@ const completeChildren: Child[] = children.map((c, i) => {
     .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
   const family = makeFakeFamily(i);
-  const foster = weightedBoolean(5);
+  const foster = weightedUndefinableBoolean(5);
 
   return {
     ...c,
     ...birthCertDetails,
     ...childRace,
-    hispanicOrLatinxEthnicity: weightedBoolean(30), // No idea if this is representative
+    hispanicOrLatinxEthnicity: weightedUndefinableBoolean(30), // No idea if this is representative
     middleName: makeMiddleNameEdgeCases(
       weightedBoolean(10) ? 1 : random.number(3)
     ),
@@ -99,9 +99,9 @@ const completeChildren: Child[] = children.map((c, i) => {
       : undefined,
     sasid: random.number({ min: 1000000000, max: 9999999999 }) + '',
     gender: random.arrayElement(possibleGenders),
-    dualLanguageLearner: weightedBoolean(10), // No idea if this is representative
+    dualLanguageLearner: weightedUndefinableBoolean(10), // No idea if this is representative
     foster,
-    receivesDisabilityServices: weightedBoolean(5),
+    receivesDisabilityServices: weightedUndefinableBoolean(5),
     family: {
       ...family,
       incomeDeterminations: foster ? [] : [getFakeIncomeDet(i, family)],

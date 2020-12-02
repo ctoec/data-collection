@@ -186,7 +186,6 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
               class="usa-radio"
             >
               <input
-                checked=""
                 class="usa-radio__input"
                 id="homelessness-no"
                 name="homelessness"
