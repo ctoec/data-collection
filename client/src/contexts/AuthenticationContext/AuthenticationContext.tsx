@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   AuthorizationRequest,
   TokenResponse,
@@ -116,13 +116,11 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     if (!!localStorageAccessToken) {
       setLoading(false);
       setAccessToken(localStorageAccessToken);
-      makeRefreshTokenRequest();
     }
   }, [localStorageAccessTokenKey]);
 
   // Update localstorage when accessToken changes
   useEffect(() => {
-    // TODO: should we reconsider storing the access token in local storage?
     const localStorageAccessToken = localStorage.getItem(
       localStorageAccessTokenKey
     );
@@ -206,11 +204,13 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
         history.push(logoutEndpoint);
       });
   }
+
+  const location = useLocation();
   useEffect(() => {
-    // Ensure token is always fresh
+    // Ensure token is always fresh by making refresh request whenever browser location changes
     // (function exits early if token is still valid)
     makeRefreshTokenRequest();
-  });
+  }, [location]);
 
   const handleLogin = () => {
     /*
@@ -245,9 +245,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       id_token_hint: idToken || savedIdToken,
       post_logout_redirect_uri: getCurrentHost(),
     } as StringMap;
-    const logoutUrl = `${
-      configuration.endSessionEndpoint
-    }?${new BasicQueryStringUtils().stringify(endSessionQueryParams)}`;
+    const logoutUrl = `${configuration.endSessionEndpoint
+      }?${new BasicQueryStringUtils().stringify(endSessionQueryParams)}`;
     // Can't use history.push because react router thinks it should give a 404
     window.location.href = logoutUrl;
   };
