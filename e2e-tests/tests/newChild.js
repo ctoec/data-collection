@@ -35,9 +35,10 @@ module.exports = {
           if (getChildIndex) {
             selector = `${selector} *:nth-child(${getChildIndex})`;
           }
-          await browser.execute(
-            `document.querySelector('#${id}').setAttribute('${addTrueAttribute}', 'true');`
-          );
+          // await browser.execute(
+          //   `document.querySelector('${selector}').setAttribute('${addTrueAttribute}', 'true');`
+          // );
+          await browser.click('css selector', selector);
         } else if (newValue) {
           // If the value is specified, set the value
           await browser.setValue(...selectorArgs, newValue);
@@ -48,8 +49,9 @@ module.exports = {
         await browser.pause(1000);
       }
       // Click save and wait
-      await browser.click('css selector', 'input[value=Save]');
+      await browser.click('css selector', 'input[value^=Save]');
       await browser.pause(1000);
+      // TODO: assert that there are no fields with error messages
     }
 
     // TODO: expect that child to show up in the right place on the roster
