@@ -69,9 +69,7 @@ templateRouter.get(
       } else if (whichFakeChildren === 'missingOne') {
         fakeChildren = childrenAllMissingOneField;
       }
-      res.send(
-        await streamUploadedChildren(res, fakeChildren, fileType as BookType)
-      );
+      await streamUploadedChildren(res, fakeChildren, fileType as BookType);
     } catch (err) {
       console.error('Unable to download example', err);
       throw new InternalServerError('Could not download example file: ' + err);
