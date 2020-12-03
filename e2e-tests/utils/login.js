@@ -1,4 +1,5 @@
 const { scrollToElement } = require('../utils/scrollToElement');
+const { headerMatch } = require('../utils/headerMatch');
 module.exports = {
   login: async function (browser) {
     // Click login from ECE Reporter
@@ -55,6 +56,6 @@ module.exports = {
     // captures the 'ECE Reporter' at the top of the page and parses
     // that as a title (was another fail reason)
     await browser.waitForElementVisible('main');
-    browser.assert.title("Let's get started");
+    await headerMatch(browser, "Let's get started");
   },
 };
