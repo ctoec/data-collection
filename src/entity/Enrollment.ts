@@ -76,7 +76,7 @@ export class Enrollment implements EnrollmentInterface {
   @OneToMany(() => Funding, (funding) => funding.enrollment, {
     cascade: true,
     onDelete: 'CASCADE',
-    eager: true
+    eager: true,
   })
   @ValidateNested({ each: true })
   @FundingDoesNotOverlap()

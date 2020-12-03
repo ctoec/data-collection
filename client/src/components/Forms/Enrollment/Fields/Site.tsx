@@ -30,7 +30,7 @@ export const SiteField = <T extends Enrollment | ChangeEnrollment>({
           e.target.value || null,
         value: `${site.id}`,
         id: `site-${site.id}`,
-        preprocessForDisplay: (data) => data === site.id
+        preprocessForDisplay: (data) => data === site.id,
       }))}
       status={(_, dataDriller) =>
         getValidationStatusForFields(

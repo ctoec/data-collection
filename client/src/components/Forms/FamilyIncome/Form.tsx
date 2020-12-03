@@ -51,9 +51,9 @@ export const doesFamilyIncomeFormHaveErrors = (
   const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
     ?.length
     ? !!getValidationStatusForFields(
-      child.family.incomeDeterminations,
-      incomeDeterminationFields
-    )
+        child.family.incomeDeterminations,
+        incomeDeterminationFields
+      )
     : false;
 
   return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;

@@ -58,7 +58,6 @@ const CreateRecord: React.FC = () => {
     if (!childId) return;
 
     const moveToNextStep = () => {
-      console.log(indexOfCurrentStep, steps.length);
       if (indexOfCurrentStep === steps.length - 1) {
         history.push('/roster', {
           alerts: [
@@ -85,8 +84,6 @@ const CreateRecord: React.FC = () => {
         const currentStepStatus = steps[indexOfCurrentStep]?.status({
           child: updatedChild,
         } as RecordFormProps);
-
-        console.log(currentStepStatus, updatedChild);
         if (
           currentStepStatus === 'complete' ||
           currentStepStatus === 'exempt'

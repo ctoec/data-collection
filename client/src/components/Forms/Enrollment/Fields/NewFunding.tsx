@@ -69,7 +69,7 @@ export const NewFundingField = <
       id,
       value: id,
       text: fundingSource,
-      onChange: () => { },
+      onChange: () => {},
       expansion: (
         <>
           <ContractSpaceField<T>
@@ -97,16 +97,15 @@ export const NewFundingField = <
         </>
       ),
     };
-  })
+  });
 
   if (isEdit) {
     options.splice(0, 0, {
       text: UNFUNDED,
       id: UNFUNDED,
       value: UNFUNDED,
-      onChange: () => {
-      },
-    })
+      onChange: () => {},
+    });
   }
 
   return (
@@ -118,6 +117,7 @@ export const NewFundingField = <
       legend="Funding source options"
       showLegend
       defaultSelectedItemId={UNFUNDED}
+      // TODO: figure out how to display the "enrollment must have at least one funding" validation error
       status={getValidationStatusForFields(enrollment, ['fundings'])}
       options={options}
     />
