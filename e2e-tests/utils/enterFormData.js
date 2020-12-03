@@ -12,7 +12,7 @@ module.exports = {
     const { clickLabel, clickChildIndex } = opts || {};
     const selectorArgs = ['css selector', `#${id}`];
     if (clickLabel) {
-      selectorArgs[1] = `label[for=${id}]`;
+      selectorArgs[1] = `label[for*=${id}]`;
     }
     await scrollToElement(browser, selectorArgs);
     if (clickChildIndex) {

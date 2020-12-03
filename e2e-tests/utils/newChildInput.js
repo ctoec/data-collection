@@ -75,5 +75,35 @@ module.exports = {
     },
   ],
   familyIncomeFields: [],
-  enrollmentFundingFields: [],
+  enrollmentFundingFields: [
+    {
+      // Does it work to just grab the first site??
+      id: 'site',
+      clickLabel: true,
+    },
+    {
+      id: 'start-date-month',
+      newValue: '10',
+    },
+    {
+      id: 'start-date-day',
+      newValue: '10',
+    },
+    {
+      id: 'start-date-year',
+      newValue: '2020',
+    },
+    {
+      id: 'In-person',
+      clickLabel: true,
+    },
+    {
+      id: 'Infant/toddler',
+      clickLabel: true,
+    },
+    {
+      id: 'Unfunded',
+      clickLabel: true,
+    },
+  ],
 };
