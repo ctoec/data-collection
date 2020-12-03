@@ -33,11 +33,9 @@ As an overview, the nightwatch docs are a good starting resource, but should NOT
 
 ### Nits, or Death By Details
 
-- We have to use CommonJS modules, even though VSCode will try to tell you that you can use ES Modules
+- We have to use CommonJS modules, even though VSCode will try to tell you that you can use ES Modules. This means imports from utils or other files follow a different signature than JS. They look like `const { login } = require('../utils/login');` (note the `require` rather than `import`).
 
 - Xpath arrays start at 1-- so if more than one el will be returned, use `[1]`, not `[0]`
-
-- Imports from utils or other files follow a different signature than JS. They look like `const { login } = require('../utils/login');` (note the `require` rather than `import`).
 
 - Defining a test uses the following syntax: 
 ```
@@ -77,6 +75,8 @@ browser.waitForElementNotPresent(...someElementSelectorArgs);
 browser.waitForElementVisible(...newElementSelectorArgs);
 ```
 This transition can come in handy if, for example, you're testing a page where a button must be clicked (maybe to submit something), and this triggers a new page to appear, but the content of that page isn't necessarily known so you're waiting for a `body` element.
+
+- Due to some of the USWDS styling, there are elements that are hidden off-screen and replaced with `::before` tags. Nightwatch will deem these elements not `visible` and `non-interactable` even though they may show up on screen (which means that attempts to `waitForElementVisible` or `click` will  fail). The workaround for this is to use a `css selector` on the label element instead, e.g. `selectorArgs = ['css selector', 'label[for=element-id]'`.
 
 - If you're particularly struggling with flakiness or can't get syntax to find or manipulate an element you want, you can resort to direct JS injection in order to use the DOM. This is built into the nightwatch API to handle things their code doesn't cover (we use it in the `scrollToElement` util as well as the `login` util). The syntax for this uses the `execute()` command, as in:
 ```
