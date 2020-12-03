@@ -1,63 +1,7 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
 const { scrollToElement } = require('../utils/scrollToElement');
-
-const childIdentFields = [
-  {
-    id: 'firstName',
-    newValue: 'New child',
-  },
-  {
-    id: 'lastName',
-    newValue: 'From e2e test',
-  },
-  {
-    id: 'dateOfBirth-picker-month',
-    newValue: '10',
-  },
-  {
-    id: 'dateOfBirth-picker-day',
-    newValue: '10',
-  },
-  {
-    id: 'dateOfBirth-picker-year',
-    newValue: '2017',
-  },
-  {
-    id: 'Non-US-birth-certificate',
-    clickLabel: true,
-  },
-];
-
-const childInfoFields = [
-  {
-    id: 'raceNotDisclosed',
-    clickLabel: true,
-  },
-  {
-    id: 'hispanic-ethnicity-yes',
-    clickLabel: true,
-  },
-  {
-    id: 'gender-select',
-    addTrueAttribute: 'selected',
-  },
-  {
-    id: 'disability-yes',
-    clickLabel: true,
-  },
-  {
-    id: 'dual-no',
-    clickLabel: true,
-  },
-  {
-    id: 'foster-unknown',
-    clickLabel: true,
-  },
-];
-// const familyAddressFields = [];
-// const familyIncomeFields = [];
-// const enrollmentFundingFields = [];
+const newChildInput = require('../utils/newChildInput');
 
 module.exports = {
   '@tags': ['child', 'new'],
@@ -73,7 +17,7 @@ module.exports = {
     await browser.waitForElementVisible('body');
     browser.assert.title('Add a child record');
 
-    const setsOfInfo = [childIdentFields, childInfoFields];
+    const setsOfInfo = Object.values(newChildInput);
     // For each of the sets of data
     for (let j = 0; j < setsOfInfo.length; j++) {
       const setOfFields = setsOfInfo[j];
