@@ -104,7 +104,7 @@ jobs:
           command: eb deploy ece-fawkes-<< parameters.env >>-env
 
   e2e_test:
-    description: 'Run e2e tests against staging after deployment is complete'
+    description: 'Run e2e tests against a deployed pre-prod env'
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
         aws_auth:
@@ -125,9 +125,14 @@ jobs:
           working_directory: e2e-tests
           name: Run e2e tests that need to skip MS Edge
           command: yarn test-edge
+      - run:
+          working_directory: client
+          name: Run api integration tests
+          command: yarn test-e2e
+  
 
 workflows:
-  build-and-test:
+  local-tests-and-deploy-if-base:
     jobs:
       - install
       - build:
@@ -144,12 +149,25 @@ workflows:
           filters:
             branches:
               only: base
-      - e2e_test:
+  qa-tests:
+    jobs:
+      - install:
+        requires:
+          - hold
+      - build:
+          env: qa
+          requires: 
+            - install
+      - deploy:
+          env: qa
           requires:
-            - deploy
-          filters:
-            branches:
-              only: base
+            - build
+      - e2e_test:
+        environment:
+          LAUNCH_URL: 'https://qa.ece-fawkes.ctoecskylight.com'
+          TEST_API_HOST: 'https://qa.ece-fawkes.ctoecskylight.com'
+        requires:
+          - deploy
 
   deploy-to-staging:
     jobs:

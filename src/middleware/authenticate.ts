@@ -10,6 +10,7 @@ import * as https from 'https';
 import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
 import { organizations } from '../data/organizations';
+import { networkInterfaces } from 'os';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -38,7 +39,7 @@ const decodeClaim = jwt({
  */
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
-    if (req.claims.sub) {
+    if (req.claims?.sub) {
       let fawkesUser = await getUser(req.claims.sub);
 
       // We should only create users with full permissions in environments without actual data
@@ -47,12 +48,7 @@ const addUser = passAsyncError(
           req.headers.authorization
         );
 
-        if (
-          res &&
-          res.data &&
-          res.data.sub &&
-          res.data.sub === req.claims.sub
-        ) {
+        if (res?.data?.sub === req.claims.sub) {
           fawkesUser = await createUserWithSingleOrgPermissions(
             req.claims.sub,
             res.data
@@ -155,9 +151,24 @@ async function createUserWithSingleOrgPermissions(
   return user;
 }
 
+const decodeOrMockClaim = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!isProdLike() && req.headers['x-test-no-authenticate']) {
+    const user = await getManager().findOne(User, {
+      where: { firstName: 'voldemort' },
+    });
+    req.claims = { sub: user.wingedKeysId };
+    return next();
+  }
+
+  decodeClaim(req, res, next);
+};
 /**
  * Full authentication middleware chains together decodeClaim and addUser,
  * so that any authenticated route gets the user, looked up via decoded JWT
  * "sub" claim, added to the request
  */
-export const authenticate = [decodeClaim, addUser];
+export const authenticate = [decodeOrMockClaim, addUser];
