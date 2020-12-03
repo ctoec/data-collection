@@ -36,6 +36,7 @@ module.exports = {
     },
     {
       id: 'gender-select',
+      getChildIndex: 2,
       addTrueAttribute: 'selected',
     },
     {
@@ -51,7 +52,29 @@ module.exports = {
       clickLabel: true,
     },
   ],
-  familyAddressFields: [],
+  familyAddressFields: [
+    {
+      id: 'street-address',
+      newValue: '4 Privet Drive',
+    },
+    {
+      id: 'town',
+      newValue: 'Hartford',
+    },
+    {
+      id: 'town',
+      getChildIndex: 2,
+      addTrueAttribute: 'selected',
+    },
+    {
+      id: 'zip',
+      newValue: '01234',
+    },
+    {
+      id: 'homelessness-no',
+      clickLabel: true,
+    },
+  ],
   familyIncomeFields: [],
   enrollmentFundingFields: [],
 };
