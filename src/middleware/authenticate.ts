@@ -4,13 +4,11 @@ import { Request, Response, NextFunction } from 'express';
 import { getManager, In } from 'typeorm';
 import { User, Organization, Site, OrganizationPermission } from '../entity';
 import { passAsyncError } from './error/passAsyncError';
-
 import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
 import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
 import { organizations } from '../data/organizations';
-import { networkInterfaces } from 'os';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)

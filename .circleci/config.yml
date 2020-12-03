@@ -105,6 +105,13 @@ jobs:
 
   e2e_test:
     description: 'Run e2e tests against a deployed pre-prod env'
+    parameters:
+      test_api_host:
+        description: 'The host to use for api integration tests'
+        type: string
+      launch_url:
+        description: 'The host to use for api integration tests'
+        type: string
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
         aws_auth:
@@ -113,6 +120,11 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - run:
+          name: Setup environment variables
+          command: |
+            echo "export TEST_API_HOST=<<parameters.test_api_host>>"
+            echo "export LAUNCH_URL=<<parameters.launch_url>>"
       - run:
           working_directory: e2e-tests
           name: Install e2e test dependencies
@@ -151,9 +163,11 @@ workflows:
               only: base
   qa-tests:
     jobs:
+      - hold:
+          type: approval
       - install:
-        requires:
-          - hold
+          requires:
+            - hold
       - build:
           env: qa
           requires: 
@@ -163,11 +177,10 @@ workflows:
           requires:
             - build
       - e2e_test:
-        environment:
-          LAUNCH_URL: 'https://qa.ece-fawkes.ctoecskylight.com'
-          TEST_API_HOST: 'https://qa.ece-fawkes.ctoecskylight.com'
-        requires:
-          - deploy
+          test_api_host: "https://qa.ece-fawkes.ctoecskylight.com"
+          launch_url: "https://qa.ece-fawkes.ctoecskylight.com"
+          requires:
+            - deploy
 
   deploy-to-staging:
     jobs:
