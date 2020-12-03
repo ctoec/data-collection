@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { RecordFormProps } from '../../../components/Forms';
-import { IncomeDetermination } from '../../../shared/models';
+import {
+  IncomeDetermination,
+  UndefinableBoolean,
+} from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
 import { Button } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
@@ -24,7 +27,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
-  if (child?.foster) {
+  if (child?.foster === UndefinableBoolean.Yes) {
     return (
       <>
         <h2>Family income determination</h2>
