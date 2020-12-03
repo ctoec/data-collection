@@ -37,7 +37,6 @@ module.exports = {
     {
       id: 'gender-select',
       getChildIndex: 2,
-      addTrueAttribute: 'selected',
     },
     {
       id: 'disability-yes',
@@ -64,7 +63,6 @@ module.exports = {
     {
       id: 'town',
       getChildIndex: 2,
-      addTrueAttribute: 'selected',
     },
     {
       id: 'zip',

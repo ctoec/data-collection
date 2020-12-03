@@ -23,22 +23,16 @@ module.exports = {
       const setOfFields = setsOfInfo[j];
       for (let i = 0; i < setOfFields.length; i++) {
         const field = setOfFields[i];
-        const { id, addTrueAttribute, newValue, clickLabel, getChildIndex } = field;
+        const { id, newValue, clickLabel, getChildIndex } = field;
         const selectorArgs = ['css selector', `#${id}`];
         if (clickLabel) {
           selectorArgs[1] = `label[for=${id}]`;
         }
-        // If addTrueAttribute, add that attribute
         await scrollToElement(browser, selectorArgs);
-        if (addTrueAttribute) {
-          let selector = `#${id}`;
-          if (getChildIndex) {
-            selector = `${selector} *:nth-child(${getChildIndex})`;
-          }
-          // await browser.execute(
-          //   `document.querySelector('${selector}').setAttribute('${addTrueAttribute}', 'true');`
-          // );
-          await browser.click('css selector', selector);
+        if (getChildIndex) {
+          // If get child, change selector args for it
+          selectorArgs[1] = `#${id} *:nth-child(${getChildIndex})`;
+          await browser.click(...selectorArgs);
         } else if (newValue) {
           // If the value is specified, set the value
           await browser.setValue(...selectorArgs, newValue);
