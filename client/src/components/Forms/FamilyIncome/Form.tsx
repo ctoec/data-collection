@@ -51,9 +51,9 @@ export const doesFamilyIncomeFormHaveErrors = (
   const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
     ?.length
     ? !!getValidationStatusForFields(
-        child.family.incomeDeterminations,
-        incomeDeterminationFields
-      )
+      child.family.incomeDeterminations,
+      incomeDeterminationFields
+    )
     : false;
 
   return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
@@ -108,6 +108,8 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     child?.family?.incomeDeterminations?.find(
       (d) => d.id === incomeDeterminationId
     ) || ({} as IncomeDetermination);
+  // TODO: if we're in the create record flow, just find the income det that exists
+  // If more than one exists in the create record flow, throw an error
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
     apiPost(

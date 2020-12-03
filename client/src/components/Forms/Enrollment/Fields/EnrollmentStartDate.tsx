@@ -23,12 +23,14 @@ export const EnrollmentStartDateField = <
 }: EnrollmentStartDateProps<T>) => {
   return (
     <FormField<T, DateInputProps, Moment | null>
-      getValue={(data) => enrollmentAccessor(data).at('entry')}
-      parseOnChangeEvent={(e: any) => e}
+      getValue={(data) => {
+        console.log(data)
+        return enrollmentAccessor(data).at('entry')
+      }}
+      parseOnChangeEvent={(e) => { console.log(e); return e as unknown as Moment }}
       inputComponent={DateInput}
       label="Enrollment start date"
       id="start-date"
-      defaultValue={null}
       status={(data, _, props) =>
         getValidationStatusForField(
           enrollmentAccessor(data),

@@ -10,6 +10,8 @@ import {
   useGenericContext,
   FormContext,
   TObjectDriller,
+  RadioButtonProps,
+  RadioOption,
 } from '@ctoec/component-library';
 import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
 import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
@@ -62,9 +64,54 @@ export const NewFundingField = <
     setFundingSourceOptions(Array.from(_fundingSourceOptions));
   }, [enrollment, fundingSpaces?.length]);
 
-  const [status, setStatus] = useState(
-    getValidationStatusForFields(enrollment, ['funding'])
-  );
+  const options: RadioOption[] = fundingSourceOptions.map((fundingSource) => {
+    const id = fundingSource.replace(/\s/g, '-');
+    return {
+      id,
+      value: id,
+      text: fundingSource,
+      onChange: () => { },
+      expansion: (
+        <>
+          <ContractSpaceField<T>
+            // Do not show status when field is editing an existing funding
+            // because the user will be creating this data for the first time
+            showStatus={!isEdit}
+            ageGroup={enrollment.ageGroup}
+            fundingSource={fundingSource}
+            organizationId={organizationId}
+            fundingAccessor={fundingAccessor}
+          />
+          <ReportingPeriodField<T>
+            fundingSource={fundingSource}
+            accessor={(data) =>
+              fundingAccessor(data).at('firstReportingPeriod')
+            }
+          />
+          {/* Show last reporting period when field is editing an existing funding*/}
+          {isEdit && (
+            <ReportingPeriodField<T>
+              isLast={true}
+              fundingSource={fundingSource}
+              accessor={(data) =>
+                fundingAccessor(data).at('lastReportingPeriod')
+              }
+            />
+          )}
+        </>
+      ),
+    };
+  })
+
+  if (isEdit) {
+    options.splice(0, 0, {
+      text: UNFUNDED,
+      id: UNFUNDED,
+      value: UNFUNDED,
+      onChange: () => {
+      },
+    })
+  }
 
   return (
     <RadioButtonGroup
@@ -75,61 +122,8 @@ export const NewFundingField = <
       legend="Funding source options"
       showLegend
       defaultSelectedItemId={UNFUNDED}
-      status={status}
-      options={[
-        {
-          text: UNFUNDED,
-          id: UNFUNDED,
-          value: UNFUNDED,
-          onChange: (e) => {
-            if (!isEdit && e.target.value) {
-              setStatus({
-                id: 'no-unfunded',
-                type: 'error',
-                message: 'Every child must have at least one funded enrollment',
-              });
-            }
-          },
-        },
-        ...fundingSourceOptions.map((fundingSource) => {
-          const id = fundingSource.replace(/\s/g, '-');
-          return {
-            id,
-            value: id,
-            text: fundingSource,
-            onChange: () => {},
-            expansion: (
-              <>
-                <ContractSpaceField<T>
-                  // Do not show status when field is editing an existing funding
-                  // because the user will be creating this data for the first time
-                  showStatus={!isEdit}
-                  ageGroup={enrollment.ageGroup}
-                  fundingSource={fundingSource}
-                  organizationId={organizationId}
-                  fundingAccessor={fundingAccessor}
-                />
-                <ReportingPeriodField<T>
-                  fundingSource={fundingSource}
-                  accessor={(data) =>
-                    fundingAccessor(data).at('firstReportingPeriod')
-                  }
-                />
-                {/* Show last reporting period when field is editing an existing funding*/}
-                {isEdit && (
-                  <ReportingPeriodField<T>
-                    isLast={true}
-                    fundingSource={fundingSource}
-                    accessor={(data) =>
-                      fundingAccessor(data).at('lastReportingPeriod')
-                    }
-                  />
-                )}
-              </>
-            ),
-          };
-        }),
-      ]}
+      status={getValidationStatusForFields(enrollment, ['funding'])}
+      options={options}
     />
   );
 };
