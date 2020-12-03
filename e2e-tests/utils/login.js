@@ -2,6 +2,8 @@ const { scrollToElement } = require('../utils/scrollToElement');
 const { headerMatch } = require('../utils/headerMatch');
 module.exports = {
   login: async function (browser) {
+    // TODO: Click on the header; if it takes us to the login page then do this stuff-- it takes us to getting started, skip it
+
     // Click login from ECE Reporter
     await browser.click('xpath', "//*/a[contains(@href,'/login')]");
     await browser.waitForElementVisible('css selector', 'body');
