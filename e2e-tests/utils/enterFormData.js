@@ -16,6 +16,7 @@ module.exports = {
     }
     await scrollToElement(browser, selectorArgs);
     if (clickChildIndex) {
+      // Used for select/option
       selectorArgs[1] = `#${id} *:nth-child(${clickChildIndex})`;
     }
     await browser.click(...selectorArgs);
