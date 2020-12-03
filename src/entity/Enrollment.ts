@@ -74,6 +74,7 @@ export class Enrollment implements EnrollmentInterface {
   exitReason?: string;
 
   @OneToMany(() => Funding, (funding) => funding.enrollment, {
+    cascade: true,
     onDelete: 'CASCADE',
     eager: true
   })
