@@ -36,6 +36,7 @@ module.exports = {
     },
     {
       id: 'gender-select',
+      // Index starts at 1 for css selectors
       getChildIndex: 2,
     },
     {

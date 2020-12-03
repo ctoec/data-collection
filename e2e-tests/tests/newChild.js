@@ -25,22 +25,23 @@ module.exports = {
         const field = setOfFields[i];
         const { id, newValue, clickLabel, getChildIndex } = field;
         const selectorArgs = ['css selector', `#${id}`];
+
         if (clickLabel) {
           selectorArgs[1] = `label[for=${id}]`;
         }
-        await scrollToElement(browser, selectorArgs);
         if (getChildIndex) {
-          // If get child, change selector args for it
           selectorArgs[1] = `#${id} *:nth-child(${getChildIndex})`;
-          await browser.click(...selectorArgs);
-        } else if (newValue) {
+        }
+
+        await scrollToElement(browser, selectorArgs);
+        if (newValue) {
           // If the value is specified, set the value
           await browser.setValue(...selectorArgs, newValue);
         } else {
-          // If only the id is specified, click on it
+          // Click on whatever is specified by the selector args
           await browser.click(...selectorArgs);
         }
-        await browser.pause(1000);
+        await browser.pause(500);
       }
       // Click save and wait
       await browser.click('css selector', 'input[value^=Save]');
