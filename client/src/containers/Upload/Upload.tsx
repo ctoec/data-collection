@@ -63,7 +63,7 @@ const Upload: React.FC = () => {
         .catch(
           handleJWTError(history, (err) => {
             setError(err);
-            setFile(undefined);
+            clearFile();
             setErrorDict(undefined);
           })
         )
@@ -108,7 +108,7 @@ const Upload: React.FC = () => {
         .catch(
           handleJWTError(history, (err) => {
             setError(err);
-            setFile(undefined);
+            clearFile();
           })
         )
         // Reset this flag to false so the upload can be subsequently re-triggered
@@ -156,15 +156,22 @@ const Upload: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, userRosterCount, errorDict]);
 
+  const [fileKey, setFileKey] = useState(0);
+  const clearFile = () => {
+    // When the file is cleared, change the key to force the file component to rerender/reset
+    setFile(undefined);
+    setFileKey((oldKey) => oldKey + 1);
+  };
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const _file = e?.target?.files?.[0];
     if (!_file) {
-      setFile(undefined);
+      clearFile();
       return setError('No file selected for upload');
     }
     setFile(_file);
     setError(undefined);
+    setErrorDict(undefined);
   };
 
   return (
@@ -173,7 +180,7 @@ const Upload: React.FC = () => {
         isOpen={errorModalOpen}
         toggleIsOpen={() => setErrorModalOpen((o) => !o)}
         clearFile={() => {
-          setFile(undefined);
+          clearFile();
           setErrorDict(undefined);
         }}
         errorDict={errorDict || []}
@@ -183,7 +190,7 @@ const Upload: React.FC = () => {
       />
       <CheckReplaceData
         isOpen={checkReplaceDataOpen}
-        clearFile={() => setFile(undefined)}
+        clearFile={clearFile}
         toggleIsOpen={() => setCheckReplaceDataOpen((o) => !o)}
         setPostUpload={setPostUpload}
         setQueryString={setQueryStringForUpload}
@@ -241,6 +248,7 @@ const Upload: React.FC = () => {
           >
             <LoadingWrapper text="Uploading your file..." loading={loading}>
               <FileInput
+                key={fileKey}
                 id="report"
                 label="Choose a file"
                 onChange={fileUpload}

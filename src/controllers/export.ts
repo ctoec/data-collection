@@ -129,7 +129,12 @@ function formatProperty(value: any, propertyName: string) {
     return reportingPeriodToString(value);
   }
   if (typeof value === 'boolean') {
-    return value ? 'Yes' : 'No';
+    if (value === true) {
+      return 'Yes';
+    } else if (value === false) {
+      return 'No';
+    }
+    return '';
   }
   if (typeof value === 'string') {
     return value || '';

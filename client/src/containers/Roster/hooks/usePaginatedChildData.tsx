@@ -33,7 +33,6 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
           organizationId: query.organization,
           skip: index * PAGE_SIZE,
           take: PAGE_SIZE,
-          withdrawn: query.withdrawn,
           month: query.month,
         })}`
       : null;
