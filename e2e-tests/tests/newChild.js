@@ -1,7 +1,7 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const { scrollToElement } = require('../utils/scrollToElement');
 const newChildInput = require('../utils/newChildInput');
+const { enterFormValue, clickFormEl } = require('../utils/enterFormData');
 
 module.exports = {
   '@tags': ['child', 'new'],
@@ -23,25 +23,14 @@ module.exports = {
       const setOfFields = setsOfInfo[j];
       for (let i = 0; i < setOfFields.length; i++) {
         const field = setOfFields[i];
-        const { id, newValue, clickLabel, getChildIndex } = field;
-        const selectorArgs = ['css selector', `#${id}`];
-
-        if (clickLabel) {
-          selectorArgs[1] = `label[for=${id}]`;
-        }
-        if (getChildIndex) {
-          selectorArgs[1] = `#${id} *:nth-child(${getChildIndex})`;
-        }
-
-        await scrollToElement(browser, selectorArgs);
+        const { id, newValue } = field;
         if (newValue) {
           // If the value is specified, set the value
-          await browser.setValue(...selectorArgs, newValue);
+          await enterFormValue(browser, id, newValue);
         } else {
-          // Click on whatever is specified by the selector args
-          await browser.click(...selectorArgs);
+          // Otherwise click on it
+          await clickFormEl(browser, id, field);
         }
-        await browser.pause(500);
       }
       // Click save and wait
       await browser.click('css selector', 'input[value^=Save]');

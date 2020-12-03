@@ -37,7 +37,7 @@ module.exports = {
     {
       id: 'gender-select',
       // Index starts at 1 for css selectors
-      getChildIndex: 2,
+      clickChildIndex: 2,
     },
     {
       id: 'disability-yes',
@@ -62,8 +62,8 @@ module.exports = {
       newValue: 'Hartford',
     },
     {
-      id: 'town',
-      getChildIndex: 2,
+      id: 'state',
+      clickChildIndex: 2,
     },
     {
       id: 'zip',
