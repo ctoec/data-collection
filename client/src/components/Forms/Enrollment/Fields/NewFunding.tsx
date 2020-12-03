@@ -15,6 +15,7 @@ import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
 import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
+import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 const UNFUNDED = 'Unfunded';
 
@@ -61,6 +62,10 @@ export const NewFundingField = <
     setFundingSourceOptions(Array.from(_fundingSourceOptions));
   }, [enrollment, fundingSpaces?.length]);
 
+  const [status, setStatus] = useState(
+    getValidationStatusForFields(enrollment, ['funding'])
+  );
+
   return (
     <RadioButtonGroup
       // The radio buttons only really control what expansions are shown
@@ -70,12 +75,21 @@ export const NewFundingField = <
       legend="Funding source options"
       showLegend
       defaultSelectedItemId={UNFUNDED}
+      status={status}
       options={[
         {
           text: UNFUNDED,
           id: UNFUNDED,
           value: UNFUNDED,
-          onChange: () => {},
+          onChange: (e) => {
+            if (!isEdit && e.target.value) {
+              setStatus({
+                id: 'no-unfunded',
+                type: 'error',
+                message: 'Every child must have at least one funded enrollment',
+              });
+            }
+          },
         },
         ...fundingSourceOptions.map((fundingSource) => {
           const id = fundingSource.replace(/\s/g, '-');

@@ -35,6 +35,7 @@ export const doesEnrollmentFormHaveErrors = (
   }
 
   if (child && !!getValidationStatusForFields(child, ['enrollments'])) {
+    console.log('?', child);
     return true;
   }
 
@@ -100,6 +101,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
     }
   };
   const onSubmit = (updatedData: Enrollment) => {
+    console.log(updatedData);
     setLoading(true);
     saveData(updatedData)
       .then(afterSaveSuccess)

@@ -58,6 +58,7 @@ const CreateRecord: React.FC = () => {
     if (!childId) return;
 
     const moveToNextStep = () => {
+      console.log(indexOfCurrentStep, steps.length);
       if (indexOfCurrentStep === steps.length - 1) {
         history.push('/roster', {
           alerts: [
@@ -68,6 +69,7 @@ const CreateRecord: React.FC = () => {
             },
           ],
         });
+        return;
       } else {
         updateStepsVisited((oldSteps) => {
           const newSteps = [...oldSteps];
@@ -84,6 +86,7 @@ const CreateRecord: React.FC = () => {
           child: updatedChild,
         } as RecordFormProps);
 
+        console.log(currentStepStatus);
         if (
           currentStepStatus === 'complete' ||
           currentStepStatus === 'exempt'
@@ -104,6 +107,7 @@ const CreateRecord: React.FC = () => {
   const commonFormProps = {
     child,
     afterSaveSuccess: () => {
+      console.log('save success');
       triggerRefetchChild();
       setAlerts([]);
     },
