@@ -74,7 +74,28 @@ module.exports = {
       clickLabel: true,
     },
   ],
-  familyIncomeFields: [],
+  familyIncomeFields: [
+    {
+      id: 'number-of-people',
+      newValue: '5',
+    },
+    {
+      id: 'income-determination',
+      newValue: '40000',
+    },
+    {
+      id: 'determination-date-month',
+      newValue: '10',
+    },
+    {
+      id: 'determination-date-day',
+      newValue: '10',
+    },
+    {
+      id: 'determination-date-year',
+      newValue: '2020',
+    },
+  ],
   enrollmentFundingFields: [
     {
       // Does it work to just grab the first site??
