@@ -25,7 +25,6 @@ childrenRouter.get(
     }) as string[];
     const count = parseQueryString(req, 'count');
     const missingInfo = parseQueryString(req, 'missing-info') as string;
-    const withdrawn = parseQueryString(req, 'withdrawn') as string;
     const activeMonth = parseQueryString(req, 'month', {
       post: (monthStr) => moment.utc(monthStr, 'MMM-YYYY'),
     }) as Moment;
@@ -41,7 +40,6 @@ childrenRouter.get(
     const children = await controller.getChildren(req.user, {
       organizationIds,
       missingInfoOnly: missingInfo === 'true',
-      withdrawnOnly: withdrawn === 'true',
       activeMonth,
       skip,
       take,
