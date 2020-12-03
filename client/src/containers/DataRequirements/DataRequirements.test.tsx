@@ -51,7 +51,8 @@ describe('DataRequirements', () => {
   };
   snapshotTestHelper(<DataRequirements />, {
     ...helperOpts,
-    // Mystery about useSWR in tests. See `Roster.test.tsx` for more in-depth info
+    // Mystery about useSWR in tests (clearing the cache doesn't seem to work, and so
+    // the api fetch only occurs 1x per test sutie)
     before: () => waitFor(() => expect(apiMock.apiGet).toBeCalled()),
   });
   accessibilityTestHelper(<DataRequirements />, helperOpts);
