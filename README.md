@@ -78,7 +78,7 @@ Frontend tests include snapshot matching tests. If a change was made that create
 #### Integration/End-to-end testing
 We do two types of full-stack testing which encompass the client <-> server interactions and server <-> database interactions.
 Because we don't mock or instantiate a SQL Server instance for our unit/integration tests, these tests can only be run against a full stack of the app (either a local docker-compose stack, or a deployed stack)
-1. **API Tests**: perhaps a bit confusingly, API integration tests are written in the `client` dir, because we already have a util for calling the api there! find them [here](client/src/utils/api.test.ts)
+1. **API Tests**: perhaps a bit confusingly, API integration tests are written in the `client` dir, because we already have a util for calling the api there! find them [here](client/src/integrationTests)
 
     To run these tests:
     ```

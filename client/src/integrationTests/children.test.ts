@@ -1,9 +1,9 @@
-import { apiGet, apiPost, ApiOpts } from './api';
-import { disableFetchMocks } from 'jest-fetch-mock';
+import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
-disableFetchMocks();
-jest.mock('./getCurrentHost');
-import * as util from './getCurrentHost';
+import { apiGet, apiPost, ApiOpts } from '../utils/api';
+
+jest.mock('../utils/getCurrentHost');
+import * as util from '../utils/getCurrentHost';
 import { Child, Organization } from '../shared/models';
 const utilMock = util as jest.Mocked<typeof util>;
 
@@ -15,6 +15,7 @@ const TEST_OPTS: ApiOpts = {
 describe('integration', () => {
   describe('api', () => {
     beforeAll(() => {
+      disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
@@ -108,6 +109,9 @@ describe('integration', () => {
         );
       });
     });
-    afterAll(() => jest.resetAllMocks());
+    afterAll(() => {
+      enableFetchMocks();
+      jest.resetAllMocks();
+    });
   });
 });
