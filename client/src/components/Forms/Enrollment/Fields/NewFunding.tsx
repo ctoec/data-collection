@@ -10,7 +10,6 @@ import {
   useGenericContext,
   FormContext,
   TObjectDriller,
-  RadioButtonProps,
   RadioOption,
 } from '@ctoec/component-library';
 import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
@@ -74,9 +73,6 @@ export const NewFundingField = <
       expansion: (
         <>
           <ContractSpaceField<T>
-            // Do not show status when field is editing an existing funding
-            // because the user will be creating this data for the first time
-            showStatus={!isEdit}
             ageGroup={enrollment.ageGroup}
             fundingSource={fundingSource}
             organizationId={organizationId}
@@ -122,7 +118,7 @@ export const NewFundingField = <
       legend="Funding source options"
       showLegend
       defaultSelectedItemId={UNFUNDED}
-      status={getValidationStatusForFields(enrollment, ['funding'])}
+      status={getValidationStatusForFields(enrollment, ['fundings'])}
       options={options}
     />
   );

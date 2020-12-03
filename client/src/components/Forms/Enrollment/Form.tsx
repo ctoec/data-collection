@@ -100,7 +100,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
     }
   };
   const onSubmit = (updatedData: Enrollment) => {
-    console.log(updatedData)
+    console.log({ updatedData })
     setLoading(true);
     saveData(updatedData)
       .then(afterSaveSuccess)
@@ -115,7 +115,6 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       })
       .finally(onFinally);
   };
-  console.log(enrollment)
 
   return (
     <Form<Enrollment>
