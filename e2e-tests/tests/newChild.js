@@ -25,15 +25,18 @@ const childIdentFields = [
   },
   {
     id: 'Non-US-birth-certificate',
-    selectorArgs: ['css selector', 'label[for=Non-US-birth-certificate]'],
+    clickLabel: true,
   },
 ];
+
 const childInfoFields = [
   {
     id: 'raceNotDisclosed',
+    clickLabel: true,
   },
   {
     id: 'hispanic-ethnicity-yes',
+    clickLabel: true,
   },
   {
     id: 'gender-select',
@@ -41,12 +44,15 @@ const childInfoFields = [
   },
   {
     id: 'disability-yes',
+    clickLabel: true,
   },
   {
     id: 'dual-no',
+    clickLabel: true,
   },
   {
     id: 'foster-unknown',
+    clickLabel: true,
   },
 ];
 // const familyAddressFields = [];
@@ -73,8 +79,11 @@ module.exports = {
       const setOfFields = setsOfInfo[j];
       for (let i = 0; i < setOfFields.length; i++) {
         const field = setOfFields[i];
-        const { id, addTrueAttribute, newValue, selectorArgs: inputSelectorArgs } = field;
-        const selectorArgs = inputSelectorArgs || ['css selector', `#${id}`];
+        const { id, addTrueAttribute, newValue, clickLabel } = field;
+        const selectorArgs = ['css selector', `#${id}`];
+        if (clickLabel) {
+          selectorArgs[1] = `label[for=${id}]`;
+        }
         // If addTrueAttribute, add that attribute
         await scrollToElement(browser, selectorArgs);
         if (addTrueAttribute) {
@@ -83,16 +92,16 @@ module.exports = {
           );
         } else if (newValue) {
           // If the value is specified, set the value
-          await browser.execute(
-            `document.querySelector('#${id}').setAttribute('value', '${newValue}');`
-          );
+          await browser.setValue(...selectorArgs, newValue);
         } else {
           // If only the id is specified, click on it
           await browser.click(...selectorArgs);
         }
+        await browser.pause(1000);
       }
       // Click save and wait
-      browser.click('xpath', "//*/input[contains(@value,'Save')]");
+      await browser.click('css selector', 'input[value=Save]');
+      await browser.pause(1000);
     }
 
     // TODO: expect that child to show up in the right place on the roster
