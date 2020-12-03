@@ -171,6 +171,7 @@ const Upload: React.FC = () => {
     }
     setFile(_file);
     setError(undefined);
+    setErrorDict(undefined);
   };
 
   return (
