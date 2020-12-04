@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
+import { Alert, Form, FormSubmitButton } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../shared/models';
 import {
   SiteField,
@@ -122,6 +122,12 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       onSubmit={onSubmit}
       hideStatus={errorsHidden}
     >
+      {!enrollment.id && (
+        <Alert
+          type="info"
+          text="Adding a child who has withdrawn, changed sites or age groups? Add their earliest enrollment then make changes from the child's record in your roster."
+        />
+      )}
       {showFieldOrFieldset(enrollment, ['site']) && (
         <SiteField<Enrollment>
           sites={sites.filter(
