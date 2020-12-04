@@ -18,8 +18,6 @@ import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
-const UNFUNDED = 'Unfunded';
-
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
@@ -99,15 +97,6 @@ export const NewFundingField = <
     };
   });
 
-  if (isEdit) {
-    options.splice(0, 0, {
-      text: UNFUNDED,
-      id: UNFUNDED,
-      value: UNFUNDED,
-      onChange: () => {},
-    });
-  }
-
   return (
     <RadioButtonGroup
       // The radio buttons only really control what expansions are shown
@@ -116,7 +105,6 @@ export const NewFundingField = <
       inputName="fundingSource"
       legend="Funding source options"
       showLegend
-      defaultSelectedItemId={UNFUNDED}
       // TODO: figure out how to display the "enrollment must have at least one funding" validation error
       status={getValidationStatusForFields(enrollment, ['fundings'])}
       options={options}

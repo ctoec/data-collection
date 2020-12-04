@@ -68,7 +68,6 @@ const CreateRecord: React.FC = () => {
             },
           ],
         });
-        return;
       } else {
         updateStepsVisited((oldSteps) => {
           const newSteps = [...oldSteps];
