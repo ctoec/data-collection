@@ -98,7 +98,6 @@ module.exports = {
   ],
   enrollmentFundingFields: [
     {
-      // Does it work to just grab the first site??
       id: 'site',
       clickLabel: true,
     },
