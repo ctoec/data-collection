@@ -84,15 +84,15 @@ module.exports = {
       newValue: '40000',
     },
     {
-      id: 'determination-date-month',
+      id: 'determination-date--month',
       newValue: '10',
     },
     {
-      id: 'determination-date-day',
+      id: 'determination-date--day',
       newValue: '10',
     },
     {
-      id: 'determination-date-year',
+      id: 'determination-date--year',
       newValue: '2020',
     },
   ],
@@ -119,12 +119,20 @@ module.exports = {
       clickLabel: true,
     },
     {
-      id: 'Infant/toddler',
+      id: 'Preschool',
       clickLabel: true,
     },
     {
-      id: 'Unfunded',
+      id: 'CDC---Child-Day-Care',
       clickLabel: true,
+    },
+    {
+      id: 'contract-space',
+      clickChildIndex: 2,
+    },
+    {
+      id: 'first-reporting-period',
+      clickChildIndex: 2,
     },
   ],
 };

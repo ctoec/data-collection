@@ -35,8 +35,9 @@ module.exports = {
       // Click save and wait
       await browser.click('css selector', 'input[value^=Save]');
       await browser.pause(1000);
-      // TODO: assert that there are no fields with error messages
     }
+    await browser.waitForElementVisible('main');
+    await headerMatch(browser, 'Hogwarts Childcare');
 
     // TODO: expect that child to show up in the right place on the roster
     browser.end();
