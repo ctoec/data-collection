@@ -51,8 +51,8 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
 
   const onFinally = () => {
     if (isMounted()) {
-      setErrorsHidden(false);
       setSaving(false);
+      setErrorsHidden(false);
     }
   };
 
@@ -73,25 +73,23 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   };
 
   return (
-    <div className="grid-container margin-top-2">
+    <Form<Family>
+      className="FamilyAddressForm"
+      data={family}
+      onSubmit={onSubmit}
+      noValidate
+      autoComplete="off"
+      hideStatus={errorsHidden}
+    >
       {!hideHeader && <h2 className="grid-row">Family Address</h2>}
-      <Form<Family>
-        className="FamilyAddressForm"
-        data={family}
-        onSubmit={onSubmit}
-        noValidate
-        autoComplete="off"
-        hideStatus={errorsHidden}
-      >
-        <AddressFieldset />
-        <HomelessnessField />
-        <div className="grid-row margin-top-2">
-          <FormSubmitButton
-            text={saving ? 'Saving...' : 'Save edits'}
-            disabled={saving}
-          />
-        </div>
-      </Form>
-    </div>
+      <AddressFieldset />
+      <HomelessnessField />
+      <div className="grid-row margin-top-2">
+        <FormSubmitButton
+          text={saving ? 'Saving...' : 'Save edits'}
+          disabled={saving}
+        />
+      </div>
+    </Form>
   );
 };

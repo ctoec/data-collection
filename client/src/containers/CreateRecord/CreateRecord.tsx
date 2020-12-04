@@ -83,7 +83,6 @@ const CreateRecord: React.FC = () => {
         const currentStepStatus = steps[indexOfCurrentStep]?.status({
           child: updatedChild,
         } as RecordFormProps);
-
         if (
           currentStepStatus === 'complete' ||
           currentStepStatus === 'exempt'

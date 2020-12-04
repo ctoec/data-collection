@@ -21,14 +21,21 @@ export const EnrollmentStartDateField = <
 >({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: EnrollmentStartDateProps<T>) => {
+  // TODO: why does this not show up after save during create child?
+  // To reproduce: add child, save without completely filling out enrollment form (but include entry)
   return (
     <FormField<T, DateInputProps, Moment | null>
-      getValue={(data) => enrollmentAccessor(data).at('entry')}
-      parseOnChangeEvent={(e: any) => e}
+      getValue={(data) => {
+        console.log(data);
+        return enrollmentAccessor(data).at('entry');
+      }}
+      parseOnChangeEvent={(e) => {
+        console.log(e);
+        return (e as unknown) as Moment;
+      }}
       inputComponent={DateInput}
       label="Enrollment start date"
       id="start-date"
-      defaultValue={null}
       status={(data, _, props) =>
         getValidationStatusForField(
           enrollmentAccessor(data),
