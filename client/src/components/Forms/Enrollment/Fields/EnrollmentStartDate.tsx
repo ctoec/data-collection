@@ -26,11 +26,9 @@ export const EnrollmentStartDateField = <
   return (
     <FormField<T, DateInputProps, Moment | null>
       getValue={(data) => {
-        console.log(data);
         return enrollmentAccessor(data).at('entry');
       }}
       parseOnChangeEvent={(e) => {
-        console.log(e);
         return (e as unknown) as Moment;
       }}
       inputComponent={DateInput}
