@@ -40,7 +40,6 @@ module.exports = {
     await browser.waitForElementVisible('main');
     await headerMatch(browser, 'Hogwarts Childcare');
 
-    // TODO: expect that child to show up in the right place on the roster
     browser.end();
   },
 };
