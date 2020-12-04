@@ -21,7 +21,10 @@ module.exports = {
     await browser.click(...saveButtonArgs);
     await scrollToElement(browser, ['css selector', 'header']);
     // TODO: change if we change alert header level
-    await browser.waitForElementVisible('xpath', "//*/h2[contains(., 'Record updated')]");
+    await browser.waitForElementVisible(
+      'xpath',
+      "//*/h2[contains(., 'Record updated')]"
+    );
 
     await navigateToRoster(browser);
 
@@ -29,7 +32,9 @@ module.exports = {
     // changed child and check if the form field has the
     // correct value isntead
     await clickOnChildInRoster(browser);
-    browser.expect.element('input#firstName').to.have.value.which.contains(newFirstNameText);
+    browser.expect
+      .element('input#firstName')
+      .to.have.value.which.contains(newFirstNameText);
     browser.end();
   },
 };

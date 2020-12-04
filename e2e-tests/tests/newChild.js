@@ -1,7 +1,8 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const newChildInput = require('../utils/newChildInput');
 const { enterFormValue, clickFormEl } = require('../utils/enterFormData');
+const { headerMatch } = require('../utils/headerMatch');
+const newChildInput = require('../utils/newChildInput');
 
 module.exports = {
   '@tags': ['child', 'new'],
