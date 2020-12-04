@@ -51,7 +51,7 @@ module.exports = {
     // Initializes with the launch_url value set in config
     await browser.init();
     // Log in
-    await login(browser, true);
+    await login(browser);
     // Navigate to roster
     await navigateToRoster(browser);
     // Add child

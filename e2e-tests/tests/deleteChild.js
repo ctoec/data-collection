@@ -17,7 +17,7 @@ module.exports = {
   '@tags': ['child', 'delete'],
   deleteChild: async function (browser) {
     await browser.init();
-    await login(browser, true);
+    await login(browser);
     await navigateToRoster(browser);
     await clickOnFirstChildInRoster(browser);
 

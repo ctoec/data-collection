@@ -10,7 +10,7 @@ module.exports = {
   '@tags': ['child', 'change'],
   changeChild: async function (browser) {
     await browser.init();
-    await login(browser, true);
+    await login(browser);
     await navigateToRoster(browser);
     await clickOnFirstChildInRoster(browser);
 
