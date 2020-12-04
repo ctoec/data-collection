@@ -1,14 +1,12 @@
 module.exports = {
-  downloadTemplateOrExample: async function (browser, buttonText) {
+  downloadTemplateOrExample: async function (browser, { buttonText }) {
     await browser.click('xpath', `//*/button[contains(., '${buttonText}')]`);
 
-    // Just check for file existence now since we download one
-    // sample at a time--stupid version numbers
+    // Check that a file has been downloaded in this test session
     const { value: fileDownloaded } = await browser.execute(
       `browserstack_executor: {"action": "fileExists"}`
     );
     await browser.pause(3000);
-    // This just checks true or false value
     await browser.assert.ok(fileDownloaded);
   },
   buttonTexts: {
