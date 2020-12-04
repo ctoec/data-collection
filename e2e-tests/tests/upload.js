@@ -1,4 +1,5 @@
 const { login } = require('../utils/login');
+const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
 } = require('../utils/downloadFileToTestRunnerHost');
@@ -8,6 +9,10 @@ module.exports = {
   // uploadWrongFormat: async function (browser) {},
   // uploadMissingInfo: async function (browser) {},
   uploadCompleteInfo: async function (browser) {
+    // TODO: MODIFY THIS IF NUMBER OF SITES ON TEST USER CHANGES
+    // (Previously, we were checking for four, but then we switched
+    // something and went up to 8 but we didnn't change that in the test)
+    const EXPCTED_NUMBER_OF_SITES = 8;
     const FILE_PATH = `${process.cwd()}/upload.csv`;
     const DOWNLOAD_URL =
       'https://staging.ece-fawkes.ctoecskylight.com/api/template/example/csv';
@@ -37,34 +42,18 @@ module.exports = {
     // TODO: change the ID on the upload element to make more sense
 
     // Accept the error modal if it pops up
-    const errorModalButtonArgs = [
-      'xpath',
-      "//*/button[contains(.,'Upload and correct in roster')]",
-    ];
-    await browser.element(...errorModalButtonArgs, async (result) => {
-      if (result.state === 'success') {
-        await browser.click(...errorModalButtonArgs);
-      } else {
-        console.log('No error modal appearing');
-      }
-    });
+    await acceptModal(
+      browser,
+      'Upload and correct in roster',
+      'No error modal appearing'
+    );
 
     // Accept the replace thing if there is one
-    const replaceDataButtonArgs = [
-      'xpath',
-      "//*/button[contains(.,'Replace data')]",
-    ];
-    await browser.element(...replaceDataButtonArgs, async (result) => {
-      if (result.state === 'success') {
-        await browser.click(...replaceDataButtonArgs);
-      } else {
-        console.log('No replace data button');
-      }
-    });
+    await acceptModal(browser, 'Replace data', 'No replace data button');
 
     await browser.waitForElementVisible(
       'xpath',
-      '//*/p[contains(text(),"100 children enrolled at 4 sites")]'
+      `//*/p[contains(text(),"100 children enrolled at ${EXPCTED_NUMBER_OF_SITES.toString()} sites")]`
     );
 
     // TODO: check for the specific child names

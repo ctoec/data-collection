@@ -1,11 +1,19 @@
 const { scrollToElement } = require('../utils/scrollToElement');
 const { headerMatch } = require('../utils/headerMatch');
 module.exports = {
-  login: async function (browser) {
+  login: async function (browser, okayIfAlreadyLoggedIn) {
     // Click login from ECE Reporter
     await browser.click('xpath', "//*/a[contains(@href,'/login')]");
     await browser.waitForElementVisible('css selector', 'body');
-    browser.assert.title('IdentityServer4');
+    await browser.title(function (result) {
+      if (!okayIfAlreadyLoggedIn) {
+        browser.assert.title('IdentityServer4');
+      }
+      // If it's okay to be logged in and we are, test is done
+      else if (result.valule != 'IdentityServer4') {
+        return;
+      }
+    });
 
     // Enter username and password
     await browser.setValue('css selector', '#Username', 'voldemort');
