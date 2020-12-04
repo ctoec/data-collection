@@ -116,46 +116,48 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   };
 
   return (
-    <Form<Enrollment>
-      id={id || `edit-enrollment-form-${enrollment.id}`}
-      data={enrollment}
-      onSubmit={onSubmit}
-      hideStatus={errorsHidden}
-    >
+    <>
       {!enrollment.id && (
         <Alert
           type="info"
           text="Adding a child who has withdrawn, changed sites or age groups? Add their earliest enrollment then make changes from the child's record in your roster."
         />
       )}
-      {showFieldOrFieldset(enrollment, ['site']) && (
-        <SiteField<Enrollment>
-          sites={sites.filter(
-            (s) => s.organizationId === child?.organization?.id
-          )}
+      <Form<Enrollment>
+        id={id || `edit-enrollment-form-${enrollment.id}`}
+        data={enrollment}
+        onSubmit={onSubmit}
+        hideStatus={errorsHidden}
+      >
+        {showFieldOrFieldset(enrollment, ['site']) && (
+          <SiteField<Enrollment>
+            sites={sites.filter(
+              (s) => s.organizationId === child?.organization?.id
+            )}
+          />
+        )}
+        {showFieldOrFieldset(enrollment, ['entry', 'model']) && (
+          <>
+            <EnrollmentStartDateField<Enrollment> />
+            <CareModelField<Enrollment> />
+          </>
+        )}
+        {showFieldOrFieldset(enrollment, ['ageGroup']) && (
+          <AgeGroupField<Enrollment> />
+        )}
+        {showFieldOrFieldset(enrollment, ['fundings']) && (
+          <NewFundingField<Enrollment>
+            fundingAccessor={(data) => data.at('fundings').at(0)}
+            getEnrollment={(data) => data.value}
+            organizationId={child?.organization?.id}
+          />
+        )}
+        {AdditionalButton}
+        <FormSubmitButton
+          text={loading ? 'Saving...' : 'Save'}
+          disabled={loading}
         />
-      )}
-      {showFieldOrFieldset(enrollment, ['entry', 'model']) && (
-        <>
-          <EnrollmentStartDateField<Enrollment> />
-          <CareModelField<Enrollment> />
-        </>
-      )}
-      {showFieldOrFieldset(enrollment, ['ageGroup']) && (
-        <AgeGroupField<Enrollment> />
-      )}
-      {showFieldOrFieldset(enrollment, ['fundings']) && (
-        <NewFundingField<Enrollment>
-          fundingAccessor={(data) => data.at('fundings').at(0)}
-          getEnrollment={(data) => data.value}
-          organizationId={child?.organization?.id}
-        />
-      )}
-      {AdditionalButton}
-      <FormSubmitButton
-        text={loading ? 'Saving...' : 'Save'}
-        disabled={loading}
-      />
-    </Form>
+      </Form>
+    </>
   );
 };

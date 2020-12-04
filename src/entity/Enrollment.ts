@@ -74,6 +74,7 @@ export class Enrollment implements EnrollmentInterface {
   exitReason?: string;
 
   @OneToMany(() => Funding, (funding) => funding.enrollment, {
+    // We need to cascade updates so that if a user adds an enrollment in the create flow with a funding, saves with errors, and needs to correct those errors, they can re-save and have the funding update too
     cascade: true,
     onDelete: 'CASCADE',
     eager: true,
