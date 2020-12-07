@@ -1,10 +1,16 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
-
 import { apiGet, apiPost, ApiOpts } from '../utils/api';
 
 jest.mock('../utils/getCurrentHost');
 import * as util from '../utils/getCurrentHost';
-import { Child, Organization } from '../shared/models';
+import {
+  Child,
+  Organization,
+  User,
+  Site,
+  BirthCertificateType,
+} from '../shared/models';
+import moment from 'moment';
 const utilMock = util as jest.Mocked<typeof util>;
 
 const TEST_OPTS: ApiOpts = {
@@ -12,13 +18,18 @@ const TEST_OPTS: ApiOpts = {
   accessToken: '',
 };
 
+let ALLOWED_ORGS: Organization[];
+
 describe('integration', () => {
   describe('api', () => {
-    beforeAll(() => {
+    beforeAll(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
+
+      const thisUser: User = await apiGet('/users/current', '', TEST_OPTS);
+      ALLOWED_ORGS = thisUser.organizations as Organization[];
     });
     describe('children', () => {
       let children: Child[];
@@ -32,6 +43,16 @@ describe('integration', () => {
 
         const { count } = await apiGet('children?count=true', '', TEST_OPTS);
         expect(count).toEqual(children.length);
+      });
+
+      it('GET /children?organizationId', async () => {
+        const orgId = ALLOWED_ORGS[0].id;
+        const children: Child[] = await apiGet(
+          `children?organizationId=${orgId}`,
+          '',
+          TEST_OPTS
+        );
+        expect(children.every((child) => child.organization.id === orgId));
       });
 
       it('GET /children?missing-info=true', async () => {
@@ -74,12 +95,14 @@ describe('integration', () => {
       });
       let child: Child;
       it('POST /children for allowed org', async () => {
-        if (!children?.length) throw new Error('no children');
         const newChild = {
-          ...children[0],
           firstName: 'AllowedNewChild',
           lastName: 'FromIntegrationTest',
-        };
+          birthCertificateType: BirthCertificateType.Unavailable,
+          birthdate: moment('06-22-2019', ['MM-DD-YYYY']),
+          organization: { id: ALLOWED_ORGS[0].id } as Organization,
+        } as Child;
+
         const { id } = await apiPost('children', newChild, TEST_OPTS);
         expect(id).not.toBeUndefined;
         newChild.id = id;
@@ -96,13 +119,11 @@ describe('integration', () => {
       });
 
       it('POST /children for disallowed org', async () => {
-        if (!children?.length) throw new Error('no children');
         const newChild = {
-          ...children[0],
           firstName: 'DisallowedNewChild',
           lastName: 'FromIntegrationTest',
           organization: { id: 1000000000000000000000 } as Organization,
-        };
+        } as Child;
 
         expect(apiPost('children', newChild, TEST_OPTS)).rejects.toMatch(
           'Child information not saved'

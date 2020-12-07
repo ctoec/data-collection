@@ -50,7 +50,6 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - .
   test:
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
@@ -74,7 +73,6 @@ jobs:
           working_directory: client
           # skip pre-flight checks to avoid the parent-directory node_module issues
           command: SKIP_PREFLIGHT_CHECK=true yarn run test
-
   deploy:
     description: 'Job for deploying Fawkes to the specified environment'
     parameters:
@@ -102,7 +100,33 @@ jobs:
       - run:
           name: Deploy to Elastic Beanstalk environment
           command: eb deploy ece-fawkes-<< parameters.env >>-env
-
+  deploy-dupe:
+    description: 'Duplicate job for deploying Fawkes to the specified environment in a workflow with an earlier deploy step'
+    parameters:
+      env:
+        description: 'The environment to deploy Fawkes to (qa, devsecure, staging)'
+        type: string
+    docker:
+      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install Elastic Beanstalk CLI
+          working_directory: /
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get install python3-pip python3-dev build-essential
+            sudo pip3 install awsebcli
+      - run:
+          name: Initialize Elastic Beanstalk
+          command: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
+      - run:
+          name: Deploy to Elastic Beanstalk environment
+          command: eb deploy ece-fawkes-<< parameters.env >>-env
   e2e_test:
     description: 'Run e2e tests against a deployed pre-prod env'
     parameters:
@@ -110,7 +134,7 @@ jobs:
         description: 'The host to use for api integration tests'
         type: string
       launch_url:
-        description: 'The host to use for api integration tests'
+        description: 'The host to use for browserstack e2e tests'
         type: string
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
@@ -141,7 +165,6 @@ jobs:
           working_directory: client
           name: Run api integration tests
           command: yarn test-e2e
-  
 
 workflows:
   local-tests-and-deploy-if-base:
@@ -161,6 +184,15 @@ workflows:
           filters:
             branches:
               only: base
+      - e2e_test:
+          test_api_host: "https://staging.ece-fawkes.ctoecskylight.com"
+          launch_url: "https://staging.ece-fawkes.ctoecskylight.com"
+          requires:
+            - deploy
+      - deploy-dupe:
+          env: devsecure
+          requires:
+            - e2e_test
   qa-tests:
     jobs:
       - hold:
@@ -170,7 +202,7 @@ workflows:
             - hold
       - build:
           env: qa
-          requires: 
+          requires:
             - install
       - deploy:
           env: qa
