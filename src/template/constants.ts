@@ -31,7 +31,7 @@ export const REPORTING_PERIOD_FORMATS = [
 
 // Conditional requirement strings
 export const REQUIRED_IF_US_BORN = 'Required if child was born in the U.S.';
-export const REQUIRED_AT_LEAST_ONE = 'At least one required';
+export const REQUIRED_AT_LEAST_ONE = 'At least one race option required';
 export const REQUIRED_NOT_FOSTER =
   'Required if child is not living with foster family';
 export const REQUIRED_IF_CHANGED_ENROLLMENT =

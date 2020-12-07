@@ -12,6 +12,7 @@ import {
   Gender,
   BirthCertificateType,
   UniqueIdType,
+  UndefinableBoolean,
 } from '../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../template';
 import {
@@ -147,6 +148,27 @@ export const mapChild = (
     source.birthCertificateType
   );
 
+  // Ethnicity
+  const hispanicOrLatinxEthnicity: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.hispanicOrLatinxEthnicity
+  );
+
+  // Dual Language Learner
+  const dualLanguageLearner: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.dualLanguageLearner
+  );
+
+  // Foster
+  const foster: UndefinableBoolean = mapEnum(UndefinableBoolean, source.foster);
+
+  // Receives Disability Services
+  const receivesDisabilityServices: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.receivesDisabilityServices
+  );
+
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
@@ -174,11 +196,11 @@ export const mapChild = (
     nativeHawaiianOrPacificIslander: source.nativeHawaiianOrPacificIslander,
     white: source.white,
     raceNotDisclosed: !getRaceIndicated(source),
-    hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
+    hispanicOrLatinxEthnicity,
     gender,
-    dualLanguageLearner: source.dualLanguageLearner,
-    foster: source.foster,
-    receivesDisabilityServices: source.receivesDisabilityServices,
+    dualLanguageLearner,
+    foster,
+    receivesDisabilityServices,
     organization,
     family: family,
   } as Child;
