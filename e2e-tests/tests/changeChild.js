@@ -1,8 +1,6 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const {
-  clickOnFirstChildInRoster,
-} = require('../utils/clickOnFirstChildInRoster');
+const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { scrollToElement } = require('../utils/scrollToElement');
 const { enterFormData } = require('../utils/enterFormData');
 
@@ -12,7 +10,7 @@ module.exports = {
     await browser.init();
     await login(browser);
     await navigateToRoster(browser);
-    await clickOnFirstChildInRoster(browser);
+    await clickOnChildInRoster(browser);
 
     const firstNameSelectorArgs = ['css selector', 'input#firstName'];
     const newFirstNameText = 'New first name';
@@ -33,7 +31,7 @@ module.exports = {
     // We've changed/expanded the table header, so access the
     // changed child and check if the form field has the
     // correct value isntead
-    await clickOnFirstChildInRoster(browser);
+    await clickOnChildInRoster(browser);
     browser.expect
       .element('input#firstName')
       .to.have.value.which.contains(newFirstNameText);

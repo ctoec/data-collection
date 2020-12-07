@@ -1519,28 +1519,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
               Funding source options
             </span>
           </legend>
-          <div>
-            <span>
-              <div
-                class="usa-radio"
-              >
-                <input
-                  checked=""
-                  class="usa-radio__input"
-                  id="Unfunded"
-                  name="fundingSource"
-                  type="radio"
-                  value="Unfunded"
-                />
-                <label
-                  class="usa-radio__label"
-                  for="Unfunded"
-                >
-                  Unfunded
-                </label>
-              </div>
-            </span>
-          </div>
+          <div />
         </fieldset>
         <h3>
           Previous enrollment

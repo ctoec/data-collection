@@ -1,8 +1,6 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const {
-  clickOnFirstChildInRoster,
-} = require('../utils/clickOnFirstChildInRoster');
+const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 
 /**
  * TODO: Deleting a record doesn't create an alert even in the most
@@ -19,7 +17,7 @@ module.exports = {
     await browser.init();
     await login(browser);
     await navigateToRoster(browser);
-    await clickOnFirstChildInRoster(browser);
+    await clickOnChildInRoster(browser);
 
     await browser.click('xpath', "//*/button[contains(., 'Delete record')]");
     await browser.click(

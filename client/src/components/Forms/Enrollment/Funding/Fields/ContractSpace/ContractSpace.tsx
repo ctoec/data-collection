@@ -27,7 +27,6 @@ type ContractSpaceProps<T> = {
   fundingSource: FundingSource;
   organizationId: number;
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
-  showStatus?: boolean;
 };
 
 export const ContractSpaceField = <
@@ -37,7 +36,6 @@ export const ContractSpaceField = <
   fundingSource,
   organizationId,
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
-  showStatus,
 }: ContractSpaceProps<T>) => {
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
@@ -78,15 +76,12 @@ export const ContractSpaceField = <
         text: fundingSpaceFormatter(fs),
         value: `${fs.id}`,
       }))}
-      status={
-        showStatus
-          ? (data, _, props) =>
-              getValidationStatusForField(
-                fundingAccessor(data),
-                fundingAccessor(data).at('fundingSpace').path,
-                props
-              )
-          : undefined
+      status={(data, _, props) =>
+        getValidationStatusForField(
+          fundingAccessor(data),
+          fundingAccessor(data).at('fundingSpace').path,
+          props
+        )
       }
     />
   );

@@ -12,8 +12,11 @@ enrollmentsRouter.put(
   passAsyncError(async (req, res) => {
     try {
       const enrollmentId = req.params['enrollmentId'];
-      const enrollment = await controller.getEnrollment(enrollmentId, req.user);
-
+      const enrollment = await controller.getEnrollment(
+        enrollmentId,
+        req.user,
+        true
+      );
       await getManager().save(
         getManager().merge(Enrollment, enrollment, req.body)
       );

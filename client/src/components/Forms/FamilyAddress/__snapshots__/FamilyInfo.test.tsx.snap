@@ -2,235 +2,231 @@
 
 exports[`EditRecord FamilyInfo matches snapshot 1`] = `
 <DocumentFragment>
-  <div
-    class="grid-container margin-top-2"
+  <form
+    autocomplete="off"
+    class="usa-form FamilyAddressForm"
+    novalidate=""
   >
     <h2
       class="grid-row"
     >
       Family Address
     </h2>
-    <form
-      autocomplete="off"
-      class="usa-form FamilyAddressForm"
-      novalidate=""
+    <fieldset
+      aria-labelledby="fieldset-legend-family-address"
+      class="usa-fieldset display-inline-block"
+      id="family-address"
     >
-      <fieldset
-        aria-labelledby="fieldset-legend-family-address"
-        class="usa-fieldset display-inline-block"
-        id="family-address"
+      <legend
+        id="fieldset-legend-family-address"
       >
-        <legend
-          id="fieldset-legend-family-address"
+        <span
+          class="usa-label"
         >
-          <span
-            class="usa-label"
-          >
-            Address
-          </span>
-        </legend>
-        <div
-          class="grid-col"
-        >
-          <div
-            class="grid-col-12 margin-top-2"
-          >
-            <div
-              class=" usa-form-group"
-            >
-              <label
-                class="usa-label"
-                for="street-address"
-              >
-                Street address 
-              </label>
-              <input
-                aria-required="true"
-                class="usa-input"
-                id="street-address"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-          <div
-            class="grid-row grid-gap display-flex flex-row flex-align-end"
-          >
-            <div
-              class="grid-col-8 display-inline-block flex-align-self-end"
-            >
-              <div
-                class=" usa-form-group"
-              >
-                <label
-                  class="usa-label"
-                  for="town"
-                >
-                  Town 
-                </label>
-                <input
-                  aria-required="true"
-                  class="usa-input"
-                  id="town"
-                  type="text"
-                  value=""
-                />
-              </div>
-            </div>
-            <div
-              class="grid-col-4 display-inline-block flex-align-self-end"
-            >
-              <div
-                class="usa-form-group"
-              >
-                <label
-                  class="usa-label"
-                  for="state"
-                >
-                  State
-                </label>
-                <select
-                  aria-required="true"
-                  class="usa-select"
-                  id="state"
-                  name="state"
-                >
-                  <option
-                    value=""
-                  >
-                    - Select -
-                  </option>
-                  <option
-                    value="CT"
-                  >
-                    CT
-                  </option>
-                  <option
-                    value="MA"
-                  >
-                    MA
-                  </option>
-                  <option
-                    value="NY"
-                  >
-                    NY
-                  </option>
-                  <option
-                    value="RI"
-                  >
-                    RI
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div
-            class="grid-col-6"
-          >
-            <div
-              class=" usa-form-group"
-            >
-              <label
-                class="usa-label"
-                for="zip"
-              >
-                Zip code 
-              </label>
-              <input
-                aria-required="true"
-                class="usa-input"
-                id="zip"
-                type="text"
-                value=""
-              />
-            </div>
-          </div>
-        </div>
-      </fieldset>
-      <fieldset
-        aria-labelledby="fieldset-legend-homelessness-button-group"
-        class="usa-fieldset"
-        id="homelessness-button-group"
-      >
-        <legend
-          id="fieldset-legend-homelessness-button-group"
-        >
-          <span
-            class="usa-label"
-          >
-            Homelessness status
-          </span>
-        </legend>
-        <div>
-          <span>
-            <div
-              class="usa-radio"
-            >
-              <input
-                class="usa-radio__input"
-                id="homelessness-yes"
-                name="homelessness"
-                type="radio"
-                value="homelessness-yes"
-              />
-              <label
-                class="usa-radio__label"
-                for="homelessness-yes"
-              >
-                Child is currently experiencing homelessness
-              </label>
-            </div>
-          </span>
-          <span>
-            <div
-              class="usa-radio"
-            >
-              <input
-                class="usa-radio__input"
-                id="homelessness-no"
-                name="homelessness"
-                type="radio"
-                value="homelessness-no"
-              />
-              <label
-                class="usa-radio__label"
-                for="homelessness-no"
-              >
-                Child is not currently experiencing homelessness
-              </label>
-            </div>
-          </span>
-          <span>
-            <div
-              class="usa-radio"
-            >
-              <input
-                class="usa-radio__input"
-                id="homelessness-unknown"
-                name="homelessness"
-                type="radio"
-                value="homelessness-unknown"
-              />
-              <label
-                class="usa-radio__label"
-                for="homelessness-unknown"
-              >
-                Unknown/not collected
-              </label>
-            </div>
-          </span>
-        </div>
-      </fieldset>
+          Address
+        </span>
+      </legend>
       <div
-        class="grid-row margin-top-2"
+        class="grid-col"
       >
-        <input
-          class="usa-button"
-          type="submit"
-          value="Save edits"
-        />
+        <div
+          class="grid-col-12 margin-top-2"
+        >
+          <div
+            class=" usa-form-group"
+          >
+            <label
+              class="usa-label"
+              for="street-address"
+            >
+              Street address 
+            </label>
+            <input
+              aria-required="true"
+              class="usa-input"
+              id="street-address"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+        <div
+          class="grid-row grid-gap display-flex flex-row flex-align-end"
+        >
+          <div
+            class="grid-col-8 display-inline-block flex-align-self-end"
+          >
+            <div
+              class=" usa-form-group"
+            >
+              <label
+                class="usa-label"
+                for="town"
+              >
+                Town 
+              </label>
+              <input
+                aria-required="true"
+                class="usa-input"
+                id="town"
+                type="text"
+                value=""
+              />
+            </div>
+          </div>
+          <div
+            class="grid-col-4 display-inline-block flex-align-self-end"
+          >
+            <div
+              class="usa-form-group"
+            >
+              <label
+                class="usa-label"
+                for="state"
+              >
+                State
+              </label>
+              <select
+                aria-required="true"
+                class="usa-select"
+                id="state"
+                name="state"
+              >
+                <option
+                  value=""
+                >
+                  - Select -
+                </option>
+                <option
+                  value="CT"
+                >
+                  CT
+                </option>
+                <option
+                  value="MA"
+                >
+                  MA
+                </option>
+                <option
+                  value="NY"
+                >
+                  NY
+                </option>
+                <option
+                  value="RI"
+                >
+                  RI
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div
+          class="grid-col-6"
+        >
+          <div
+            class=" usa-form-group"
+          >
+            <label
+              class="usa-label"
+              for="zip"
+            >
+              Zip code 
+            </label>
+            <input
+              aria-required="true"
+              class="usa-input"
+              id="zip"
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
       </div>
-    </form>
-  </div>
+    </fieldset>
+    <fieldset
+      aria-labelledby="fieldset-legend-homelessness-button-group"
+      class="usa-fieldset"
+      id="homelessness-button-group"
+    >
+      <legend
+        id="fieldset-legend-homelessness-button-group"
+      >
+        <span
+          class="usa-label"
+        >
+          Homelessness status
+        </span>
+      </legend>
+      <div>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="homelessness-yes"
+              name="homelessness"
+              type="radio"
+              value="homelessness-yes"
+            />
+            <label
+              class="usa-radio__label"
+              for="homelessness-yes"
+            >
+              Child is currently experiencing homelessness
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="homelessness-no"
+              name="homelessness"
+              type="radio"
+              value="homelessness-no"
+            />
+            <label
+              class="usa-radio__label"
+              for="homelessness-no"
+            >
+              Child is not currently experiencing homelessness
+            </label>
+          </div>
+        </span>
+        <span>
+          <div
+            class="usa-radio"
+          >
+            <input
+              class="usa-radio__input"
+              id="homelessness-unknown"
+              name="homelessness"
+              type="radio"
+              value="homelessness-unknown"
+            />
+            <label
+              class="usa-radio__label"
+              for="homelessness-unknown"
+            >
+              Unknown/not collected
+            </label>
+          </div>
+        </span>
+      </div>
+    </fieldset>
+    <div
+      class="grid-row margin-top-2"
+    >
+      <input
+        class="usa-button"
+        type="submit"
+        value="Save"
+      />
+    </div>
+  </form>
 </DocumentFragment>
 `;

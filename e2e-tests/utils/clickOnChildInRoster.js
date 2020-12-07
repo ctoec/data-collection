@@ -1,10 +1,10 @@
 const { scrollToElement } = require('./scrollToElement');
 
 module.exports = {
-  clickOnFirstChildInRoster: async function (browser) {
-    const childLinkSelectorArgs = [
-      'xpath',
-      "//*/a[contains(@href,'/edit-record')][1]",
+  clickOnChildInRoster: async function (browser, selectorArgs) {
+    // Clicks on first child by default
+    const childLinkSelectorArgs = selectorArgs || [
+      ('xpath', "//*/a[contains(@href,'/edit-record')][1]"),
     ];
     await scrollToElement(browser, childLinkSelectorArgs);
     await browser.click(...childLinkSelectorArgs);
