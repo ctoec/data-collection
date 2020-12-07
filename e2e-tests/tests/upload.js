@@ -1,4 +1,5 @@
 const { login } = require('../utils/login');
+const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
 } = require('../utils/downloadFileToTestRunnerHost');
@@ -37,34 +38,18 @@ module.exports = {
     // TODO: change the ID on the upload element to make more sense
 
     // Accept the error modal if it pops up
-    const errorModalButtonArgs = [
-      'xpath',
-      "//*/button[contains(.,'Upload and correct in roster')]",
-    ];
-    await browser.element(...errorModalButtonArgs, async (result) => {
-      if (result.state === 'success') {
-        await browser.click(...errorModalButtonArgs);
-      } else {
-        console.log('No error modal appearing');
-      }
-    });
+    await acceptModal(
+      browser,
+      'Upload and correct in roster',
+      'No error modal appearing'
+    );
 
     // Accept the replace thing if there is one
-    const replaceDataButtonArgs = [
-      'xpath',
-      "//*/button[contains(.,'Replace data')]",
-    ];
-    await browser.element(...replaceDataButtonArgs, async (result) => {
-      if (result.state === 'success') {
-        await browser.click(...replaceDataButtonArgs);
-      } else {
-        console.log('No replace data button');
-      }
-    });
+    await acceptModal(browser, 'Replace data', 'No replace data button');
 
     await browser.waitForElementVisible(
       'xpath',
-      '//*/p[contains(text(),"100 children enrolled at 4 sites")]'
+      `//*/p[contains(text(),"100 children enrolled")]`
     );
 
     // TODO: check for the specific child names
