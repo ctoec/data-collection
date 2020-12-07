@@ -224,7 +224,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
       <input
         class="usa-button"
         type="submit"
-        value="Save edits"
+        value="Save"
       />
     </div>
   </form>

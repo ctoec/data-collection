@@ -1,19 +1,29 @@
 # e2e tests
+
 ## Running tests
+
 From `/e2e-tests` dir:
+
 1. Install dependencies
+
 ```
 $ yarn
 ```
+
 1. Create .env file with browserstack credentials, or export env variables
+
 ```
 $ cp .env.example .env // then, edit .env file
 ```
+
 1. Run tests
+
 ```
 $ yarn test
 ```
+
 To filter tests by tag, use `--tag [tagname]` argument like
+
 ```
 $ yarn test --tag upload
 ```
@@ -37,7 +47,8 @@ As an overview, the nightwatch docs are a good starting resource, but should NOT
 
 - Xpath arrays start at 1-- so if more than one el will be returned, use `[1]`, not `[0]`
 
-- Defining a test uses the following syntax: 
+- Defining a test uses the following syntax:
+
 ```
 module.exports = {
   '@tags': ['tag_name_here'],
@@ -55,7 +66,7 @@ module.exports = {
 
 - Nightwatch's definition of `visible` isn't the same as your definition. That's because nightwatch makes a distinction between three different types of 'states' of elements on a page, but doesn't explain how they're different or when to use them. Here's what we've figured out:
 
-* `present` elements are simply those that occur in a page's HTML. They can be visible, invisible, hidden, whatever; they're just there. *All* elements should be considered `present`.
+* `present` elements are simply those that occur in a page's HTML. They can be visible, invisible, hidden, whatever; they're just there. _All_ elements should be considered `present`.
 * `visible` elements are those that are `present`, and also can be seen by a viewer of the page (i.e. no hidden elements). What it means to be seen is somewhat murky, because things like disabled buttons or non-interactable form elements (see below) don't register as `visible`. The best working definition we have for `visible` is that an element is not hidden and is also 'active' on the page.
 * `interactable` elements are those that are `present`, `visible`, and also can receive data input or be manipulated in some way. Text inputs in form fields are `interactable` elements, as are radio buttons (and yet, the checkboxes in our component library are not...). `Non-interactable` elements are also not considered `visible`. An element must be considered `interactive` by nightwatch in order for a test to `click()` on it.
 
@@ -69,19 +80,23 @@ module.exports = {
 
 * Using a `waitForElementVisible()` test with a high timeout setting (e.g. 5000ms or longer) as the last parameter can make sure the test doesn't go on until some known element shows up on the page.
 
-* If you need a page to fully transition and an element to explicitly disappear before continuing, you can chain 
+* If you need a page to fully transition and an element to explicitly disappear before continuing, you can chain
+
 ```
 browser.waitForElementNotPresent(...someElementSelectorArgs);
 browser.waitForElementVisible(...newElementSelectorArgs);
 ```
+
 This transition can come in handy if, for example, you're testing a page where a button must be clicked (maybe to submit something), and this triggers a new page to appear, but the content of that page isn't necessarily known so you're waiting for a `body` element.
 
-- Due to some of the USWDS styling, there are elements that are hidden off-screen and replaced with `::before` tags. Nightwatch will deem these elements not `visible` and `non-interactable` even though they may show up on screen (which means that attempts to `waitForElementVisible` or `click` will  fail). The workaround for this is to use a `css selector` on the label element instead, e.g. `selectorArgs = ['css selector', 'label[for=element-id]'`.
+- Due to some of the USWDS styling, there are elements that are hidden off-screen and replaced with `::before` tags. Nightwatch will deem these elements not `visible` and `non-interactable` even though they may show up on screen (which means that attempts to `waitForElementVisible` or `click` will fail). The workaround for this is to use a `css selector` on the label element instead, e.g. `selectorArgs = ['css selector', 'label[for=element-id]'`.
 
 - If you're particularly struggling with flakiness or can't get syntax to find or manipulate an element you want, you can resort to direct JS injection in order to use the DOM. This is built into the nightwatch API to handle things their code doesn't cover (we use it in the `scrollToElement` util as well as the `login` util). The syntax for this uses the `execute()` command, as in:
+
 ```
 await browser.execute(
   `document.querySelector('input#confidentiality-checkbox').click()`
 );
 ```
+
 This code, for example, uses the DOM to click on an element (a checkbox) that nightwatch considered not visible and not interactive, and so their functions couldn't locate or manipulate it.

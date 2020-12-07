@@ -86,7 +86,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
       <HomelessnessField />
       <div className="grid-row margin-top-2">
         <FormSubmitButton
-          text={saving ? 'Saving...' : 'Save edits'}
+          text={saving ? 'Saving...' : 'Save'}
           disabled={saving}
         />
       </div>
