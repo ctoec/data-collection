@@ -1,4 +1,6 @@
 const { launch_url } = require('../nightwatch.conf');
+const { acceptModal } = require('../utils/acceptModal');
+const { downloadFileToTestRunnerHost } = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
   uploadFile: async function (browser) {

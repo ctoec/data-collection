@@ -1,6 +1,6 @@
 const { login } = require('../utils/login');
-const { navigateToRoster } = require('../utils/navigateToRoster');
 const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
+const { uploadFile } = require('../utils/uploadFile');
 
 /**
  * TODO: Deleting a record doesn't create an alert even in the most
@@ -16,10 +16,8 @@ module.exports = {
   deleteChild: async function (browser) {
     await browser.init();
     await login(browser);
-    await navigateToRoster(browser);
+    await uploadFile(browser);
     await clickOnChildInRoster(browser);
-    // TODO: if no child, upload file
-    // Before all tests, curl to get the latest example locally and name it Example.xlsx
     // Change example file to only be like 10
     // Random seed to keep it consistent?
 
