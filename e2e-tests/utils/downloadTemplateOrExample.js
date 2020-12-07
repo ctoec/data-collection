@@ -1,8 +1,5 @@
 module.exports = {
-  downloadTemplateOrExample: async function (
-    browser,
-    { buttonText, expect = true }
-  ) {
+  downloadTemplateOrExample: async function (browser, buttonText) {
     await browser.click('xpath', `//*/button[contains(., '${buttonText}')]`);
 
     // Just check for file existence now since we download one
@@ -12,7 +9,7 @@ module.exports = {
     );
     await browser.pause(3000);
     // This just checks true or false value
-    await browser.assert.ok(fileDownloaded === expect);
+    await browser.assert.ok(fileDownloaded);
   },
   buttonTexts: {
     templateExcel: 'Download Excel template',

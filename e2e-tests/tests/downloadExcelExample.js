@@ -9,13 +9,9 @@ module.exports = {
   // https://www.browserstack.com/docs/automate/selenium/test-file-download
   '@tags': ['download-excel-example', 'skip-edge'],
   downloadExcelExample: async function (browser) {
-    opts = {
-      buttonText: buttonTexts.exampleExcel,
-      expect: true,
-    };
     await browser.init();
     await navigateToDataTemplate(browser);
-    await downloadTemplateOrExample(browser, opts);
+    await downloadTemplateOrExample(browser, buttonTexts.exampleExcel);
     browser.end();
   },
 };

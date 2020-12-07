@@ -9,13 +9,9 @@ module.exports = {
   // https://www.browserstack.com/docs/automate/selenium/test-file-download
   '@tags': ['download-csv-template', 'skip-edge'],
   downloadCSVTemplate: async function (browser) {
-    opts = {
-      buttonText: buttonTexts.templateCSV,
-      expect: true,
-    };
     await browser.init();
     await navigateToDataTemplate(browser);
-    await downloadTemplateOrExample(browser, opts);
+    await downloadTemplateOrExample(browser, buttonTexts.templateCSV);
     browser.end();
   },
 };

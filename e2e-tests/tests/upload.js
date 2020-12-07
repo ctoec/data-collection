@@ -9,10 +9,6 @@ module.exports = {
   // uploadWrongFormat: async function (browser) {},
   // uploadMissingInfo: async function (browser) {},
   uploadCompleteInfo: async function (browser) {
-    // TODO: MODIFY THIS IF NUMBER OF SITES ON TEST USER CHANGES
-    // (Previously, we were checking for four, but then we switched
-    // something and went up to 8 but we didnn't change that in the test)
-    const EXPCTED_NUMBER_OF_SITES = 8;
     const FILE_PATH = `${process.cwd()}/upload.csv`;
     const DOWNLOAD_URL =
       'https://staging.ece-fawkes.ctoecskylight.com/api/template/example/csv';
@@ -53,7 +49,7 @@ module.exports = {
 
     await browser.waitForElementVisible(
       'xpath',
-      `//*/p[contains(text(),"100 children enrolled at ${EXPCTED_NUMBER_OF_SITES.toString()} sites")]`
+      `//*/p[contains(text(),"100 children enrolled")]`
     );
 
     // TODO: check for the specific child names
