@@ -275,6 +275,15 @@ const Upload: React.FC = () => {
             })}
           >
             <LoadingWrapper text="Uploading your file..." loading={loading}>
+              <form
+                name="testform"
+                encType="multipart/form-data"
+                action="api/enrollment-reports/check"
+                method="post"
+              >
+                <input type="file" name="file"></input>
+                <input type="submit" value="submit" />
+              </form>
               <FileInput
                 key={fileKey}
                 id="report"

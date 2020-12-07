@@ -20,7 +20,7 @@ export const router = express.Router();
 router.use('/template', templateRouter);
 
 /* AUTHENTICATED ROUTES */
-router.use('/enrollment-reports', authenticate, enrollmentReportsRouter);
+router.use('/enrollment-reports', enrollmentReportsRouter);
 
 router.use('/users', authenticate, usersRouter);
 // Register pre-processing middlewares
