@@ -13,7 +13,7 @@ import moment, { Moment } from 'moment';
 export type UserContextType = {
   user: User | null;
   loading: boolean;
-  setConfidentialityAgreedDate: Dispatch<SetStateAction<Date>>;
+  setConfidentialityAgreedDate: () => void;
   confidentialityAgreedDate: Moment | null;
 };
 

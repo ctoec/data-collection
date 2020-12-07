@@ -22,7 +22,6 @@ router.use('/template', templateRouter);
 /* AUTHENTICATED ROUTES */
 router.use('/enrollment-reports', enrollmentReportsRouter);
 
-router.use('/users', authenticate, usersRouter);
 // Register pre-processing middlewares
 const dateReviver = (_: any, value: string) => {
   if (typeof value === 'string') {
@@ -32,6 +31,8 @@ const dateReviver = (_: any, value: string) => {
   return value;
 };
 router.use(json({ reviver: dateReviver }));
+
+router.use('/users', authenticate, usersRouter);
 
 router.use('/children', authenticate, childrenRouter);
 

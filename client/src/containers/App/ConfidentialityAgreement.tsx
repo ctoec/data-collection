@@ -73,7 +73,7 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
             <Button
               text="Continue to ECE Reporter"
               disabled={!_confidentialityAgreed}
-              onClick={() => setConfidentialityAgreedDate(new Date())}
+              onClick={() => setConfidentialityAgreedDate()}
             />
           </div>
         </div>
