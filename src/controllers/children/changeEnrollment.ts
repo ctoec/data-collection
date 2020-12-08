@@ -35,16 +35,15 @@ export const changeEnrollment = async (
   changeEnrollmentData: ChangeEnrollment,
   user: User
 ) => {
-  console.log('Attempting to change enrollment...', changeEnrollmentData);
+  console.log('Attempting to change enrollment...');
 
   const child = await getChildById(id, user);
 
   if (!child) throw new NotFoundError();
-  console.log('Child found.  Changing enrollment...');
+  console.log(`Matching child found for ${id}.  Initiating enrollment change...`);
 
   // Get current enrollment
   return getManager().transaction(async (tManager) => {
-    console.log('Transaction opened!');
     // Update current enrollment, if exists
     const currentEnrollment = (child.enrollments || []).find((e) => !e.exit);
     if (currentEnrollment) {
@@ -79,26 +78,15 @@ export const changeEnrollment = async (
           newEnrollmentNextReportingPeriod.id &&
           !newEnrollmentNextReportingPeriod.period
         ) {
-          console.log('Looking up new enrollment reporting period...');
-
-          try {
             newEnrollmentNextReportingPeriod.period = (
               await tManager.findOne(
                 ReportingPeriod,
                 newEnrollmentNextReportingPeriod.id
               )
             ).period;
-          } catch (e) {
-            console.error('Failed to locate new enrollment reporting period', e);
-            throw e;
-          }
         }
 
-        let lastReportingPeriod;
-
-        try {
-          console.log('Looking up old reporting period...');
-          lastReportingPeriod =
+        const lastReportingPeriod =
           oldEnrollmentLastReportingPeriod ||
           (await tManager.findOne(ReportingPeriod, {
             where: {
@@ -108,10 +96,6 @@ export const changeEnrollment = async (
               type: currentFunding.fundingSpace.source,
             },
           }));
-        } catch (e) {
-          console.error('Failed to locate old reporting period', e);
-          throw e;
-        }
 
         // Update current funding lastReportinPeriod
         currentFunding.lastReportingPeriod = lastReportingPeriod;
@@ -155,11 +139,10 @@ async function createNewEnrollment(
   tManager: EntityManager,
   user: User
 ): Promise<void> {
-  console.log('Creating new enrollment...');
+  console.debug('createNewEnrollment invoked...');
 
   if (newEnrollment.site) {
-    console.log('Looking up matching enrollment site...', newEnrollment.site.id);
-    console.log('The site...', newEnrollment.site);
+    console.debug(`Looking up matching enrollment site for ${newEnrollment.site.id}`);
     const matchingSite = await tManager.findOne(Site, newEnrollment.site.id);
 
     if (!matchingSite || matchingSite.organizationId !== child.organizationId) {
