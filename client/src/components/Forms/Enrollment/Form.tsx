@@ -101,6 +101,11 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   };
   const onSubmit = (updatedData: Enrollment) => {
     setLoading(true);
+
+    if (!!updatedData.site && !!updatedData.site.id && typeof updatedData.site.id === 'string') {
+      updatedData.site.id = parseInt(updatedData.site.id);
+    }
+
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {
