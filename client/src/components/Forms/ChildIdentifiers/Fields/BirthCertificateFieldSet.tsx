@@ -21,9 +21,9 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
   return (
     <RadioButtonGroup<Child>
       inForm
+      inputName="birthCertificateType"
       id="birth-certificate-fields"
       legend="Birth certificate"
-      inputName="birthCertificateType"
       showLegend
       options={[
         ...Object.values(BirthCertificateType).map(
@@ -31,6 +31,8 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
             const id = certificateType.replace(/\s/g, '-');
             return {
               getValue: (data) => data.at('birthCertificateType'),
+              preprocessForDisplay: value => { console.log(value); return value === certificateType },
+              parseOnChangeEvent: e => { console.log(e.target.value); return e.target.value },
               id,
               value: certificateType,
               text: certificateType,
@@ -40,9 +42,9 @@ export const BirthCertificateFieldSet: React.FC<BirthCertificateFieldsetProps> =
                     <BirthCertificateIdField />
                   </div>
                   <div className="display-flex flex-row flex-align-end grid-row grid-gap">
-                    <BirthTownField child={child} />
+                    <BirthTownField />
                     <div className="margin-top-2">
-                      <BirthStateField child={child} />
+                      <BirthStateField />
                     </div>
                   </div>
                 </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   TextInput,
   Checkbox,
@@ -9,28 +9,11 @@ import { Child } from '../../../../shared/models';
 import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
 import set from 'lodash/set';
 
-type TownFieldProps = {
-  child: Child;
-};
-
 /**
  * Component for entering the birth town of a child in an enrollment.
  */
-export const BirthTownField: React.FC<TownFieldProps> = ({ child }) => {
-  // Use state to control clearing input when one component or the other is manipulated
-  const [town, setTown] = useState<string | null>(null);
-  const { dataDriller, updateData } = useGenericContext<Child>(FormContext);
-
-  // Can't parse undefined visually, so need conversion from null
-  useEffect(() => {
-    setTown(
-      child.birthTown === undefined
-        ? null
-        : child.birthTown === null
-        ? null
-        : child.birthTown
-    );
-  }, []);
+export const BirthTownField: React.FC = () => {
+  const { data: child, dataDriller, updateData } = useGenericContext<Child>(FormContext);
 
   return (
     <>
@@ -38,11 +21,10 @@ export const BirthTownField: React.FC<TownFieldProps> = ({ child }) => {
         type="input"
         label="Town"
         id="birthTown"
-        value={town || ''}
+        value={child.birthTown}
         onChange={(e) => {
-          setTown(e.target.value);
-          updateData(
-            set(child, dataDriller.at('birthTown').path, e.target.value)
+          updateData(oldChild =>
+            set(oldChild, dataDriller.at('birthTown').path, e.target.value)
           );
           return e.target.value;
         }}
@@ -55,12 +37,11 @@ export const BirthTownField: React.FC<TownFieldProps> = ({ child }) => {
       <Checkbox
         id="birth-town-not-collected-checkbox"
         text="Unknown/not collected"
-        checked={town === null}
+        checked={child.birthTown === null}
         onChange={(e) => {
-          setTown(e.target.checked ? null : '');
-          updateData(
+          updateData(oldChild =>
             set(
-              child,
+              oldChild,
               dataDriller.at('birthTown').path,
               e.target.checked ? null : ''
             )
