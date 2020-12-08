@@ -1212,6 +1212,27 @@
     typescript "^3.9.0"
     uswds "^2.9.0"
 
+"@ctoec/component-library@https://github.com/ctoec/component-library.git#allow-number-values-for-radio":
+  version "1.0.9"
+  resolved "https://github.com/ctoec/component-library.git#f77269d67ea11a25b138e02aee561c84318845d1"
+  dependencies:
+    "@material-ui/core" "^4.11.0"
+    "@material-ui/icons" "^4.9.1"
+    "@types/pluralize" "^0.0.29"
+    "@types/react-modal" "^3.10.6"
+    dompurify "^2.0.12"
+    html-react-parser "^0.13.0"
+    lodash "^4.17.15"
+    material-table "^1.68.0"
+    pluralize "^8.0.0"
+    react "^16.13.1"
+    react-dates "^21.8.0"
+    react-dom "^16.13.1"
+    react-modal "^3.11.2"
+    react-router-dom "^5.2.0"
+    typescript "^3.9.0"
+    uswds "^2.9.0"
+
 "@date-io/core@^1.1.0":
   version "1.3.13"
   resolved "https://registry.yarnpkg.com/@date-io/core/-/core-1.3.13.tgz#90c71da493f20204b7a972929cc5c482d078b3fa"
