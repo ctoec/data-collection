@@ -148,7 +148,7 @@ export const ChildIdentifiersForm = ({
         'birthCertificateId',
         'birthTown',
         'birthState',
-      ]) && <BirthCertificateFieldSet child={child} />}
+      ]) && <BirthCertificateFieldSet />}
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

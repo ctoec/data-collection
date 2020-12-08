@@ -14,7 +14,9 @@ import set from 'lodash/set';
  */
 export const BirthStateField: React.FC = () => {
   // Use state to control clearing input when one component or the other is manipulated
-  const { data: child, dataDriller, updateData } = useGenericContext<Child>(FormContext);
+  const { data: child, dataDriller, updateData } = useGenericContext<Child>(
+    FormContext
+  );
 
   return (
     <>
