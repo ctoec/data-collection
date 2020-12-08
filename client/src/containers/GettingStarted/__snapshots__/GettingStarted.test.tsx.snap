@@ -12,122 +12,26 @@ exports[`GettingStarted matches snapshot 1`] = `
         class="tablet:grid-col-8"
       >
         <h1>
-          Let's get started
+          Hello !
         </h1>
         <p>
-          This tool will allow you to share your state-funded enrollment data with OEC.
+          ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). OEC uses this data to make informed program and policy decisions affecting young children and families.
         </p>
         <h2>
-          Here's what to include
+          Sites you manage at 
         </h2>
-        <h3>
-          Enrollments in spaces funded by
-        </h3>
-        <ul>
-          <li>
-            Child Day Care (CDC)
-          </li>
-          <li>
-            Priority or Competitive School Readiness (PSR and CSR)
-          </li>
-          <li>
-            Smart Start (SS)
-          </li>
-          <li>
-            State Head Start (SHS)
-          </li>
-        </ul>
-        <div
-          class="usa-alert usa-alert--info grid-row"
-        >
-          <div
-            class="display-flex flex-fill"
-          >
-            <div
-              class="usa-alert__body grid-col flex-fill"
-            >
-              <h2
-                class="usa-alert__heading"
-              >
-                Learn more about required data
-              </h2>
-              <p
-                class="usa-alert__text"
-              >
-                <span>
-                  See all required data fields, definitions and rationale in 
-                  <a
-                    class="usa-button usa-button--unstyled"
-                    href="/data-requirements"
-                  >
-                    OEC's enrollment data requirements
-                  </a>
-                </span>
-              </p>
-            </div>
-            <div
-              class="usa-alert__body flex-auto display-flex flex-align-center"
-            />
-          </div>
-        </div>
-        <h3>
-          Data collection period
-        </h3>
+        <ul />
+        <h2>
+          How to use ECE Reporter
+        </h2>
         <p>
-          You must submit your data to OEC by 03/05/2021. The data collection period begins 07/01/2020 and continues through at least 01/01/2021.
+          These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually,
+          <a
+            href="/roster/"
+          >
+             you can add them on your roster.
+          </a>
         </p>
-        <div>
-          <h2>
-            Download the latest batch upload template
-          </h2>
-          <button
-            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
-            type="button"
-          >
-            <span
-              class="oec-text-with-icon text-underline"
-            >
-              Download Excel template
-            </span>
-          </button>
-          <button
-            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
-            type="button"
-          >
-            <span
-              class="oec-text-with-icon text-underline"
-            >
-              Download CSV template
-            </span>
-          </button>
-        </div>
-        <div
-          class="display-block"
-        >
-          <p>
-            You can see a completed example template here:
-          </p>
-          <button
-            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
-            type="button"
-          >
-            <span
-              class="oec-text-with-icon text-underline"
-            >
-              Download Excel sample data
-            </span>
-          </button>
-          <button
-            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
-            type="button"
-          >
-            <span
-              class="oec-text-with-icon text-underline"
-            >
-              Download CSV sample data
-            </span>
-          </button>
-        </div>
       </div>
       <div
         class="tablet:grid-col-4"
@@ -138,21 +42,141 @@ exports[`GettingStarted matches snapshot 1`] = `
         </svg>
       </div>
     </div>
-    <div
-      class="grid-row"
+    <h3
+      class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
     >
-      <a
-        class="usa-button margin-top-2"
-        href="/upload"
+      <div
+        class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
       >
-        Go to file upload
-      </a>
-      <a
-        class="usa-button margin-top-2"
-        href="/roster"
+        1
+      </div>
+      Review the data requirements
+    </h3>
+    <div
+      class="margin-left-6"
+    >
+      <p>
+        Learn more about the data elements ECE Reporter collects for each enrollment.
+      </p>
+      <p>
+        <a
+          class="usa-button usa-button--unstyled"
+          href="/data-requirements/"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            See required data
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+            >
+              arrowRight.svg
+            </svg>
+          </span>
+        </a>
+      </p>
+    </div>
+    <h3
+      class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
+    >
+      <div
+        class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
       >
-        Go to roster
-      </a>
+        2
+      </div>
+      Download the data template
+    </h3>
+    <div
+      class="margin-left-6"
+    >
+      <p>
+        You'll need to enter data in this file to upload in ECE Reporter.
+      </p>
+      <p>
+        <a
+          class="usa-button usa-button--unstyled"
+          href="/template/"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            Download the template
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+            >
+              arrowRight.svg
+            </svg>
+          </span>
+        </a>
+      </p>
+    </div>
+    <h3
+      class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
+    >
+      <div
+        class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
+      >
+        3
+      </div>
+      Prepare your data
+    </h3>
+    <div
+      class="margin-left-6"
+    >
+      <p>
+        Get instructions on how to enter data into OEC's template.
+      </p>
+      <p>
+        <a
+          class="usa-button usa-button--unstyled"
+          href="/https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            See the how-to guide
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+            >
+              arrowRight.svg
+            </svg>
+          </span>
+        </a>
+      </p>
+    </div>
+    <h3
+      class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
+    >
+      <div
+        class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
+      >
+        4
+      </div>
+      Upload your data
+    </h3>
+    <div
+      class="margin-left-6"
+    >
+      <p>
+        Once your template is filled out, you'll upload the data to ECE Reporter.
+      </p>
+      <p>
+        <a
+          class="usa-button usa-button--unstyled"
+          href="/upload/"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            Go to file upload
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+            >
+              arrowRight.svg
+            </svg>
+          </span>
+        </a>
+      </p>
     </div>
   </div>
 </DocumentFragment>
