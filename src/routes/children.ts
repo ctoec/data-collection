@@ -126,8 +126,6 @@ childrenRouter.post(
   '/:childId/change-enrollment',
   passAsyncError(async (req, res) => {
     try {
-      console.log('Change enrollment request body', req.body);
-
       await controller.changeEnrollment(
         req.params['childId'],
         req.body,
