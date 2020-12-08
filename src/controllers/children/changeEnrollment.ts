@@ -78,12 +78,12 @@ export const changeEnrollment = async (
           newEnrollmentNextReportingPeriod.id &&
           !newEnrollmentNextReportingPeriod.period
         ) {
-            newEnrollmentNextReportingPeriod.period = (
-              await tManager.findOne(
-                ReportingPeriod,
-                newEnrollmentNextReportingPeriod.id
-              )
-            ).period;
+          newEnrollmentNextReportingPeriod.period = (
+            await tManager.findOne(
+              ReportingPeriod,
+              newEnrollmentNextReportingPeriod.id
+            )
+          ).period;
         }
 
         const lastReportingPeriod =
