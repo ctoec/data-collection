@@ -1,10 +1,5 @@
 import React, { useContext } from 'react';
-import {
-  Button,
-  Alert,
-  StepList,
-  TextWithIcon,
-} from '@ctoec/component-library';
+import { TextWithIcon } from '@ctoec/component-library';
 import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
@@ -131,7 +126,6 @@ const GettingStarted: React.FC = () => {
           </Link>
         </p>
       </div>
-      {/* <div style={{width: '1em', height: 372, background: '#dcdee0'}}></div> */}
     </div>
   );
 };
