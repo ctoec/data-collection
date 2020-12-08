@@ -20,6 +20,7 @@ module.exports = {
 
     // Upload example data from local directory
     await browser.UploadLocalFile(FILE_PATH, '#report');
+    await browser.pause(5000);
 
     // Accept the error modal if it pops up
     await acceptModal(browser, 'Upload and correct in roster', 'No error modal appearing');
