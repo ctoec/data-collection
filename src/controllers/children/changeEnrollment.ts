@@ -35,7 +35,7 @@ export const changeEnrollment = async (
   changeEnrollmentData: ChangeEnrollment,
   user: User
 ) => {
-  console.log('Attempting to change enrollment...');
+  console.debug('changeEnrollment() invoked');
 
   const child = await getChildById(id, user);
 
@@ -139,7 +139,7 @@ async function createNewEnrollment(
   tManager: EntityManager,
   user: User
 ): Promise<void> {
-  console.debug('createNewEnrollment invoked...');
+  console.debug('createNewEnrollment() invoked');
 
   if (newEnrollment.site) {
     console.debug(`Looking up matching enrollment site for ${newEnrollment.site.id}`);
@@ -159,7 +159,6 @@ async function createNewEnrollment(
     updateMetaData: { author: user } as UpdateMetaData,
   } as Enrollment;
 
-  console.log('Writing new enrollment to row...', enrollment);
   enrollment = tManager.create(Enrollment, enrollment);
   enrollment = await tManager.save(enrollment);
 
