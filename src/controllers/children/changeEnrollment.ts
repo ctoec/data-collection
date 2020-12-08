@@ -158,7 +158,6 @@ async function createNewEnrollment(
     child,
     updateMetaData: { author: user } as UpdateMetaData,
   } as Enrollment;
-
   enrollment = tManager.create(Enrollment, enrollment);
   enrollment = await tManager.save(enrollment);
 
