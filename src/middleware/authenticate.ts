@@ -38,6 +38,7 @@ const decodeClaim = jwt({
  */
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
+    console.log('the request body...', req.body);
     if (req.claims.sub) {
       let fawkesUser = await getUser(req.claims.sub);
 
