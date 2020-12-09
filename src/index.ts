@@ -1,7 +1,7 @@
-import express, { json } from 'express';
+import express from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
-import moment from 'moment';
+import morgan from 'morgan';
 import { createConnection, getConnectionOptions } from 'typeorm';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';
@@ -26,6 +26,10 @@ getConnectionOptions().then((connectionOptions) => {
 
       // Instantiate the application server
       const app = express();
+
+      // Set up logger
+      const logger = morgan('combined');
+      app.use(logger);
 
       // Register business logic routes
       app.use('/api', apiRouter);
