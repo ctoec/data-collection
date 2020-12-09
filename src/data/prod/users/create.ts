@@ -66,16 +66,16 @@ export const createUserData = async (
       });
 
       if (!user) {
-        user = getManager('script').create(User, {
-          firstName: _firstName,
-          lastName: _lastName,
-          wingedKeysId,
-        });
-        const { id, firstName, lastName } = await getManager('script').save(
-          user
+        user = await getManager('script').save(
+          getManager('script').create(User, {
+            firstName: _firstName,
+            lastName: _lastName,
+            wingedKeysId,
+          })
         );
+
         console.log(
-          `\tCreated user for ${firstName} ${lastName} with app id ${id}`
+          `\tCreated user for ${user.firstName} ${user.lastName} with app id ${user.id}`
         );
         createdCount += 1;
       } else {

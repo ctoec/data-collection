@@ -50,16 +50,23 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
     try {
       // Create org
       const idType = Object.values(UniqueIdType).find(
-        (value) => value.toLowerCase() === row.uniqueIdType.toLowerCase()
+        (value) => value.toLowerCase() === row.uniqueIdType?.toLowerCase()
       );
-      const org = getManager('script').create(Organization, {
-        providerName: row.name,
-        uniqueIdType: idType || UniqueIdType.Other,
+      let org = await getManager('script').findOne(Organization, {
+        where: { providerName: row.name },
       });
-
-      const { id: orgId, providerName } = await getManager('script').save(org);
-      console.log(`\tCreated organization ${providerName}`);
-      createdCount += 1;
+      if (!org) {
+        org = org = await getManager('script').save(
+          getManager('script').create(Organization, {
+            providerName: row.name,
+            uniqueIdType: idType || UniqueIdType.Other,
+          })
+        );
+        console.log(`\tCreated organization ${org.providerName}`);
+        createdCount += 1;
+      } else {
+        console.log(`\tOrganization ${org.providerName} already exists`);
+      }
 
       // Create funding spaces for org
       const fundingProps = ORGANIZATION_ROW_PROPS.filter(
@@ -78,7 +85,7 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
         const ageGroup = AgeGroup[ageGroupKey];
         const fundingTime = FundingTime[fundingTimeKey];
         await createFundingSpace(
-          orgId,
+          org.id,
           row[fundingProp],
           fundingSource,
           ageGroup,
