@@ -20,7 +20,8 @@ export const mapFamily = (
 ) => {
   const homelessness: UndefinableBoolean = mapEnum(
     UndefinableBoolean,
-    source.homelessness
+    source.homelessness,
+    { isUndefineableBoolean: true }
   );
 
   let family = {

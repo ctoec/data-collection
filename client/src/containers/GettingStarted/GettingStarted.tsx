@@ -25,7 +25,7 @@ const GettingStarted: React.FC = () => {
           <h2>Sites you manage at {org.providerName}</h2>
           <ul>
             {(user?.sites || []).map((site) => (
-              <li>{site.siteName}</li>
+              <li key={site.siteName}>{site.siteName}</li>
             ))}
           </ul>
           <h2>How to use ECE Reporter</h2>

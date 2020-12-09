@@ -8,6 +8,7 @@ import {
 import { Child } from '../../../../shared/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { set } from 'lodash';
+import produce from 'immer';
 
 /**
  * Helper type of all valid race properties on Child
@@ -43,10 +44,6 @@ const raceOptions: { label: string; field: RaceField }[] = [
   },
 ];
 
-type RaceFieldProps = {
-  child: Child;
-};
-
 /**
  * Component for entering the race of a child in an enrollment.
  * Need to use a FormFieldSet that contains checkboxes based
@@ -57,9 +54,13 @@ type RaceFieldProps = {
  * accessor is still used for safely manipulating each field in
  * the child object.
  */
-export const RaceField: React.FC<RaceFieldProps> = ({ child }) => {
-  const [notDisclosed, setNotDisclosed] = useState<boolean>();
-  const { dataDriller, updateData } = useGenericContext<Child>(FormContext);
+export const RaceField: React.FC = () => {
+  const { data: child, dataDriller, updateData } = useGenericContext<Child>(
+    FormContext
+  );
+  const [notDisclosed, setNotDisclosed] = useState<boolean>(
+    dataDriller.at('raceNotDisclosed').value
+  );
 
   return (
     <FormFieldSet<Child>
@@ -109,25 +110,27 @@ const raceOptionFactory = (
       id={field}
       text={label}
       onChange={(e) => {
+        const checked = e.target.checked;
         if (field === 'raceNotDisclosed') {
-          setNotDisclosed(e.target.checked);
-          raceOptions.forEach((o) => {
-            if (o.field !== 'raceNotDisclosed') {
-              updateData(
-                set(
-                  child,
-                  dataDriller.at(o.field).path,
-                  e.target.checked ? false : null
-                )
-              );
-            } else {
-              updateData(
-                set(child, dataDriller.at(o.field).path, e.target.checked)
-              );
-            }
+          setNotDisclosed(checked);
+          // Bulk update all non-disclosed race fields
+          const updateChild = produce<Child>(child, (draft) => {
+            raceOptions.forEach((o) => {
+              if (o.field !== 'raceNotDisclosed') {
+                set(draft, dataDriller.at(o.field).path, false);
+              } else {
+                set(draft, dataDriller.at(o.field).path, checked);
+              }
+            });
+            return draft;
           });
+          updateData(updateChild);
         } else {
-          updateData(set(child, dataDriller.at(field).path, e.target.checked));
+          updateData(
+            produce<Child>(child, (draft) =>
+              set(draft, dataDriller.at(field).path, checked)
+            )
+          );
         }
       }}
       disabled={field !== 'raceNotDisclosed' && notDisclosed}

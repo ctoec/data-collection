@@ -12,15 +12,25 @@ exports[`GettingStarted matches snapshot 1`] = `
         class="tablet:grid-col-8"
       >
         <h1>
-          Hello !
+          Hello Voldy!
         </h1>
         <p>
           ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). OEC uses this data to make informed program and policy decisions affecting young children and families.
         </p>
         <h2>
-          Sites you manage at 
+          Sites you manage at Mort School For Dark-Inclined Wizards
         </h2>
-        <ul />
+        <ul>
+          <li>
+            Students of Salazaar
+          </li>
+          <li>
+            Karkaroff Kids
+          </li>
+          <li>
+            Nocturn Alley Nargles
+          </li>
+        </ul>
         <h2>
           How to use ECE Reporter
         </h2>

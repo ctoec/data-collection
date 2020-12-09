@@ -94,7 +94,7 @@ export const ChildInfoForm = ({
         'hispanixOrLatinxEthnicity',
       ]) && (
         <>
-          <RaceField child={child} />
+          <RaceField />
           <EthnicityField />
         </>
       )}

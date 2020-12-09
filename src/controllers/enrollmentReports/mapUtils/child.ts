@@ -151,22 +151,29 @@ export const mapChild = (
   // Ethnicity
   const hispanicOrLatinxEthnicity: UndefinableBoolean = mapEnum(
     UndefinableBoolean,
-    source.hispanicOrLatinxEthnicity
+    source.hispanicOrLatinxEthnicity,
+    { isUndefineableBoolean: true }
   );
 
   // Dual Language Learner
   const dualLanguageLearner: UndefinableBoolean = mapEnum(
     UndefinableBoolean,
-    source.dualLanguageLearner
+    source.dualLanguageLearner,
+    { isUndefineableBoolean: true }
   );
 
   // Foster
-  const foster: UndefinableBoolean = mapEnum(UndefinableBoolean, source.foster);
+  const foster: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.foster,
+    { isUndefineableBoolean: true }
+  );
 
   // Receives Disability Services
   const receivesDisabilityServices: UndefinableBoolean = mapEnum(
     UndefinableBoolean,
-    source.receivesDisabilityServices
+    source.receivesDisabilityServices,
+    { isUndefineableBoolean: true }
   );
 
   // TODO: Could do city/state verification here for birth cert location
