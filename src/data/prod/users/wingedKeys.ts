@@ -23,7 +23,7 @@ export const createWingedKeysUsers = async (
     await page.type('#Username', siteConnection.user);
     await page.type('#Password', siteConnection.password);
     await page.click('button[value="login"]');
-    await page.waitForSelector('.dropdown-menu'); // dropdown menu only exists for logged in user
+    await page.waitForTimeout(3000);
 
     for (const _user of userData) {
       console.log('trying to make user', _user);

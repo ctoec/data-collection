@@ -54,17 +54,35 @@ export const createUserData = async (
   console.log(`Attempting to create ${parsedData.length} application users...`);
   for (const row of parsedData) {
     try {
-      const user = getManager('script').create(User, {
-        firstName: row.userName.split(' ')[0],
-        lastName: row.userName.split(' ')[1],
-        wingedKeysId: UUIDs[row.email],
+      const _firstName = row.userName.split(' ')[0];
+      const _lastName = row.userName.split(' ')[1];
+      // New users have username = email; pilot v1 users have username = firstname.lastname
+      const wingedKeysId =
+        UUIDs[row.email] ||
+        UUIDs[`${_firstName.toLowerCase()}.${_lastName.toLowerCase()}`];
+
+      let user = await getManager('script').findOne(User, {
+        where: { wingedKeysId },
       });
 
-      const { id, firstName, lastName } = await getManager('script').save(user);
-      console.log(
-        `\tCreated user for ${firstName} ${lastName} with app id ${id}`
-      );
-      createdCount += 1;
+      if (!user) {
+        user = getManager('script').create(User, {
+          firstName: _firstName,
+          lastName: _lastName,
+          wingedKeysId,
+        });
+        const { id, firstName, lastName } = await getManager('script').save(
+          user
+        );
+        console.log(
+          `\tCreated user for ${firstName} ${lastName} with app id ${id}`
+        );
+        createdCount += 1;
+      } else {
+        console.log(
+          `\tUser ${row.userName} with username ${row.email} already exists`
+        );
+      }
 
       const somePermissionsCreated = await createOrgOrSitePermissions(
         user,
@@ -113,7 +131,7 @@ async function createOrgOrSitePermissions(
   userSites: string
 ) {
   const orgs = userOrgs.split(',').map((o) => o.trim());
-  const sites = userSites.split(',').map((s) => s.trim());
+  const sites = userSites?.split(',').map((s) => s.trim());
   let somePermissionsCreated = false;
 
   // User is multi-org user -- create multiple org permissions
@@ -131,8 +149,14 @@ async function createOrgOrSitePermissions(
       where: { providerName: orgs[0] },
     });
 
-    // User has access to all org sites (is single-org user -- create single org permission)
-    if ((org.sites || []).every((site) => sites.includes(site.siteName))) {
+    // User has no specific site permissions
+    // or has access to all sites for an organization
+    // (is single-org user -- create single org permission)
+    if (
+      !sites ||
+      !sites.length ||
+      (org.sites || []).every((site) => sites.includes(site.siteName))
+    ) {
       somePermissionsCreated =
         (await createOrgPermission(user, org)) || somePermissionsCreated;
       return somePermissionsCreated;
@@ -148,7 +172,8 @@ async function createOrgOrSitePermissions(
     return somePermissionsCreated;
   } catch (err) {
     console.error(
-      `\t\tError creating permissions for user ${user.firstName} ${user.lastName} at orgs ${userOrgs}, sites ${userSites}`
+      `\t\tError creating permissions for user ${user.firstName} ${user.lastName} at orgs ${userOrgs}, sites ${userSites}`,
+      err
     );
   }
 }

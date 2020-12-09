@@ -7,6 +7,7 @@ import { parse } from './utils';
 class SiteRow {
   name: string = '';
   parentOrgName: string = '';
+  region: string = '';
   licenseId: string = '';
   naeycId: string = '';
   registryId: string = '';
@@ -29,6 +30,10 @@ export const createSiteData = async (sheetData: WorkSheet) => {
           where: { providerName: row.parentOrgName },
         }
       );
+
+      const region = Object.values(Region).find(
+        (value) => value.toLowerCase() === row.region?.toLowerCase()
+      );
       const site = getManager('script').create(Site, {
         siteName: row.name,
         licenseNumber: parseInt(row.licenseId),
@@ -37,7 +42,7 @@ export const createSiteData = async (sheetData: WorkSheet) => {
         facilityCode: parseInt(row.facilityCode),
         organizationId: orgId,
         titleI: false, // placeholder
-        region: Region.East, // placeholder
+        region: region || Region.East, // placeholder
       });
 
       const { siteName, organizationId } = await getManager('script').save(

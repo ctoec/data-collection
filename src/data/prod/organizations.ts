@@ -4,6 +4,7 @@ import {
   FundingSource,
   AgeGroup,
   FundingTime,
+  UniqueIdType,
 } from '../../../client/src/shared/models';
 import { FundingSpace, Organization } from '../../entity';
 import { parse } from './utils';
@@ -48,9 +49,12 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
   for (const row of parsedData) {
     try {
       // Create org
+      const idType = Object.values(UniqueIdType).find(
+        (value) => value.toLowerCase() === row.uniqueIdType.toLowerCase()
+      );
       const org = getManager('script').create(Organization, {
         providerName: row.name,
-        // uniqueIdType:  TODO
+        uniqueIdType: idType || UniqueIdType.Other,
       });
 
       const { id: orgId, providerName } = await getManager('script').save(org);
