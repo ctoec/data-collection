@@ -2,29 +2,44 @@ const { login } = require('../utils/login');
 const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { uploadFile } = require('../utils/uploadFile');
 
-/**
- * TODO: Deleting a record doesn't create an alert even in the most
- * up to date local version of the app. So what we need to do is find
- * the number of children on the  roster before the delete, then
- * compare it to the number of children on the roster after the delete.
- * If the diff is 1, we gucci.
- */
-
 module.exports = {
   '@tags': ['child', 'delete'],
   deleteChild: async function (browser) {
-    await browser.init();
-    await browser.timeoutsImplicitWait(10000);
-    await login(browser);
-    await uploadFile(browser);
-    await clickOnChildInRoster(browser);
+    try {
+      await browser.init();
+      await browser.timeoutsImplicitWait(10000);
+      await login(browser);
+      await uploadFile(browser);
+      const clickedChildLinkText = await clickOnChildInRoster(browser);
+      const lastName = clickedChildLinkText.split(',')[0];
+      // Expect the edit record h1 to contain the child's last name
+      await browser.verify.elementPresent({
+        locateStrategy: 'xpath',
+        selector: `//*/h1[contains(., '${lastName}')]`,
+      });
 
-    await browser.click('xpath', "//*/button[contains(., 'Delete record')]");
-    await browser.click('xpath', "//*/button[contains(., 'Yes, delete record')]");
-    // TODO: change if we change alert header level
-    await browser.waitForElementVisible('xpath', "//*/h2[contains(., 'Record deleted')]");
+      await browser.click('xpath', "//*/button[contains(., 'Delete record')]");
+      await browser.click(
+        'xpath',
+        "//*/button[contains(., 'Yes, delete record')]"
+      );
+      // TODO: change if we change alert header level
+      await browser.waitForElementVisible(
+        'xpath',
+        "//*/h2[contains(., 'Record deleted')]"
+      );
+      await browser.verify.containsText(
+        { locateStrategy: 'css selector', selector: '.usa-alert' },
+        lastName
+      );
 
-    // TODO: make sure the record deleted was the right one
-    browser.end();
+      // Expect the first tab nav content to not have that link text in it
+      await browser.verify.not.containsText(
+        { locateStrategy: 'css selector', selector: '.oec-tab-nav--content' },
+        clickedChildLinkText
+      );
+    } finally {
+      browser.end();
+    }
   },
 };
