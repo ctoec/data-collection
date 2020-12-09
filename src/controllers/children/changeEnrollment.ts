@@ -40,7 +40,7 @@ export const changeEnrollment = async (
   const child = await getChildById(id, user);
 
   if (!child) throw new NotFoundError();
-  console.log(`Matching child found for ${id}.  Initiating enrollment change...`);
+  console.debug(`Matching child found for ${id}.  Initiating enrollment change...`);
 
   // Get current enrollment
   return getManager().transaction(async (tManager) => {
