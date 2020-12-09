@@ -35,9 +35,12 @@ export const changeEnrollment = async (
   changeEnrollmentData: ChangeEnrollment,
   user: User
 ) => {
+  console.debug('changeEnrollment() invoked');
+
   const child = await getChildById(id, user);
 
   if (!child) throw new NotFoundError();
+  console.debug(`Matching child found for ${id}.  Initiating enrollment change...`);
 
   // Get current enrollment
   return getManager().transaction(async (tManager) => {
@@ -136,7 +139,10 @@ async function createNewEnrollment(
   tManager: EntityManager,
   user: User
 ): Promise<void> {
+  console.debug('createNewEnrollment() invoked');
+
   if (newEnrollment.site) {
+    console.debug(`Looking up matching enrollment site for ${newEnrollment.site.id}`);
     const matchingSite = await tManager.findOne(Site, newEnrollment.site.id);
 
     if (!matchingSite || matchingSite.organizationId !== child.organizationId) {
