@@ -4,6 +4,7 @@ const { downloadFileToTestRunnerHost } = require('../utils/downloadFileToTestRun
 
 module.exports = {
   uploadFile: async function (browser) {
+    // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
     const FILE_PATH = `${process.cwd()}/upload.csv`;
     const DOWNLOAD_URL = `${launch_url}/api/template/example/csv`;
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);

@@ -11,15 +11,13 @@ const { uploadFile } = require('../utils/uploadFile');
  */
 
 module.exports = {
-  '@disabled': true,
   '@tags': ['child', 'delete'],
   deleteChild: async function (browser) {
     await browser.init();
+    await browser.timeoutsImplicitWait(10000);
     await login(browser);
     await uploadFile(browser);
     await clickOnChildInRoster(browser);
-    // Change example file to only be like 10
-    // Random seed to keep it consistent?
 
     await browser.click('xpath', "//*/button[contains(., 'Delete record')]");
     await browser.click('xpath', "//*/button[contains(., 'Yes, delete record')]");

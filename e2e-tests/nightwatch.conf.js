@@ -16,7 +16,7 @@ https: nightwatch_config = {
   },
   // TODO: make it possible to pass an arg or have an environment variable or something
   // So that we actually test PRs and not just staging
-  launch_url: 'https://qa.ece-fawkes.ctoecskylight.com',
+  launch_url: 'https://staging.ece-fawkes.ctoecskylight.com',
   test_settings: {
     default: {
       globals: {
