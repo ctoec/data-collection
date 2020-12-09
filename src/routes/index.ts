@@ -20,7 +20,7 @@ export const router = express.Router();
 router.use('/template', templateRouter);
 
 /* AUTHENTICATED ROUTES */
-router.use('/enrollment-reports', enrollmentReportsRouter);
+router.use('/enrollment-reports', authenticate, enrollmentReportsRouter);
 
 // Register pre-processing middlewares
 const dateReviver = (_: any, value: string) => {

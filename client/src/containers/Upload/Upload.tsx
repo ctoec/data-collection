@@ -56,19 +56,30 @@ const Upload: React.FC = () => {
       // Ugh internet explorer why
       // https://developer.mozilla.org/en-US/docs/Web/API/FormData
       // https://www.npmjs.com/package/formdata-polyfill
-      const formData = new FormData();
-      formData.append('file', file, file.name);
-      const postBody = (formData as any)._blob
-        ? (formData as any)._blob()
-        : formData;
-      console.log('POST BODY', postBody);
-      apiPost(`enrollment-reports/check`, postBody, {
+      // const formData = new FormData();
+      // formData.append('file', file, file.name);
+      // const postBody = (formData as any)._blob
+      //   ? (formData as any)._blob()
+      //   : formData;
+      const boundary = '----bbbbb';
+      const blobParts = [];
+      blobParts.push(
+        `--${boundary}\r\n`,
+        `Content-Disposition: form-data; name="file"; filename="${file.name}"\r\n` +
+          `Content-Type: ${file.type}\r\n\r\n`,
+        file,
+        '\r\n',
+        `--${boundary}--`
+      );
+      console.log('blob parts', blobParts);
+      const blob = new Blob(blobParts, {
+        type: `multipart/form-data; boundary=${boundary}`,
+      });
+      apiPost(`enrollment-reports/check`, blob, {
         accessToken,
         rawBody: true,
         headers: {
-          'content-type': (formData as any)._blob
-            ? (formData as any)._blob().type
-            : undefined,
+          'content-type': `multipart/form-data; boundary=${boundary}`,
         },
       })
         // Back end sends back an object whose fields are error table obj.
@@ -190,8 +201,6 @@ const Upload: React.FC = () => {
       const fileType = _file.name.includes('.csv')
         ? MIME_TYPES.CSV
         : MIME_TYPES.XLSX;
-      console.log('Creating new file with type ', fileType);
-      console.log('from file', _file);
       _file = new File([_file], _file.name, { type: fileType });
     }
 
