@@ -1,6 +1,6 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const { enterFormValue, clickFormEl } = require('../utils/enterFormData');
+const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { headerMatch } = require('../utils/headerMatch');
 const newChildInput = require('../utils/newChildInput');
 

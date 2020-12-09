@@ -11,6 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.4.16",
-    "nightwatch": "^1.4.3"
+    "nightwatch": "^1.5.1"
   }
 }

@@ -34,7 +34,16 @@ As an overview, the nightwatch docs are a good starting resource, but should NOT
 
 ### About Selectors
 
-- Most nightwatch functions take a selection type `xpath` or `css selector`. The option to do this on a given function is usually but not always indicated in the nightwatch docs. It is totally unclear whether this is required, though there are funcs that switch the browser to using one selector type to another... so we default here to specifying it. There are also some nightwatch functions that specifically do not take a selector even though the docs seem to indicate that they do (`browser.assert.containsText`, for example, only works when a selector was not specified and a css selector was used).
+- Nightwatch API command functions take a selection type `xpath` or `css selector`. It is totally unclear whether this is required so we default here to specifying it.
+
+- Nightwatch's assert and expect functions take selectors either in plain string form or as an object:
+
+```
+{
+  selector: 'your selector here',
+  locateStrategy: 'xpath' (or css selector or whatever)
+}
+```
 
 - xpath can be finnicky with its syntax, but here are some resources that can help you identify elements you need:
 
