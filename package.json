@@ -64,7 +64,6 @@
   },
   "devDependencies": {
     "@types/command-line-args": "^5.0.0",
-    "@types/mssql": "^6.0.5",
     "@types/puppeteer": "^5.4.0",
     "command-line-args": "^5.1.1",
     "husky": "^4.3.0",

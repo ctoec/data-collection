@@ -836,13 +836,6 @@
   resolved "https://registry.yarnpkg.com/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/tedious@*":
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/@types/tedious/-/tedious-4.0.2.tgz#ec520f5574616dadd3ef8a16587f00a510925e76"
-  integrity sha512-VqGhXfiIEYmvc6y36PTlk29M65O07rUWIt5E9bzcWwQwCke9m+ZLsviR2x27x04UWogop0ENdfyJJM+QC5cdyQ==
-  dependencies:
-    "@types/node" "*"
-
 "@types/tunnel@0.0.0":
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/@types/tunnel/-/tunnel-0.0.0.tgz#c2a42943ee63c90652a5557b8c4e56cda77f944e"
