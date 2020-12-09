@@ -1,4 +1,6 @@
 import React from 'react';
+import set from 'lodash/set';
+import produce from 'immer';
 import {
   TextInput,
   Checkbox,
@@ -7,7 +9,6 @@ import {
 } from '@ctoec/component-library';
 import { Child } from '../../../../shared/models';
 import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
-import set from 'lodash/set';
 
 /**
  * Component for entering the birth town of a child in an enrollment.
@@ -17,6 +18,8 @@ export const BirthTownField: React.FC = () => {
     FormContext
   );
 
+  const path = dataDriller.at('birthTown').path;
+
   return (
     <>
       <TextInput
@@ -25,27 +28,21 @@ export const BirthTownField: React.FC = () => {
         id="birthTown"
         value={child.birthTown}
         onChange={(e) => {
-          updateData((oldChild) =>
-            set(oldChild, dataDriller.at('birthTown').path, e.target.value)
+          updateData(
+            produce<Child>(child, (draft) => set(draft, path, e.target.value))
           );
           return e.target.value;
         }}
-        status={getValidationStatusForFieldInFieldset(
-          dataDriller,
-          dataDriller.at('birthTown').path,
-          {}
-        )}
+        status={getValidationStatusForFieldInFieldset(dataDriller, path, {})}
       />
       <Checkbox
         id="birth-town-not-collected-checkbox"
-        text="Unknown/not collected"
+        text="Town unknown/not collected"
         checked={child.birthTown === null}
         onChange={(e) => {
-          updateData((oldChild) =>
-            set(
-              oldChild,
-              dataDriller.at('birthTown').path,
-              e.target.checked ? null : ''
+          updateData(
+            produce<Child>(child, (draft) =>
+              set(draft, path, e.target.checked ? null : '')
             )
           );
           return e.target.checked;

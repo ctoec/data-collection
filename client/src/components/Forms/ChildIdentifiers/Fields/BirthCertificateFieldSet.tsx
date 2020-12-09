@@ -1,5 +1,10 @@
 import React from 'react';
-import { RadioButtonGroup, RadioOptionInForm } from '@ctoec/component-library';
+import {
+  FormContext,
+  RadioButtonGroup,
+  RadioOptionInForm,
+  useGenericContext,
+} from '@ctoec/component-library';
 import { BirthCertificateType, Child } from '../../../../shared/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { BirthCertificateIdField } from './BirthCertificateId';
@@ -11,17 +16,25 @@ import { BirthTownField } from './BirthTown';
  * If type selected is US birth certificate, user is prompted to
  * enter additional required information in an expansion.
  */
-export const BirthCertificateFieldSet: React.FC = () => (
-  <RadioButtonGroup<Child>
-    inForm
-    inputName="birthCertificateType"
-    id="birth-certificate-fields"
-    legend="Birth certificate"
-    showLegend
-    options={[
-      ...Object.values(BirthCertificateType).map(
+export const BirthCertificateFieldSet: React.FC = () => {
+  const { data: child } = useGenericContext<Child>(FormContext);
+  const selectedBirthCertType = child?.birthCertificateType;
+  const getId = (certType: BirthCertificateType) =>
+    certType.replace(/\s/g, '-');
+
+  return (
+    <RadioButtonGroup<Child>
+      inForm
+      inputName="birthCertificateType"
+      id="birth-certificate-fields"
+      legend="Birth certificate"
+      showLegend
+      defaultSelectedItemId={
+        selectedBirthCertType ? getId(selectedBirthCertType) : undefined
+      }
+      options={Object.values(BirthCertificateType).map(
         (certificateType): RadioOptionInForm<Child> => {
-          const id = certificateType.replace(/\s/g, '-');
+          const id = getId(certificateType);
           return {
             getValue: (data) => data.at('birthCertificateType'),
             preprocessForDisplay: (value) => {
@@ -45,22 +58,22 @@ export const BirthCertificateFieldSet: React.FC = () => (
             ),
           };
         }
-      ),
-    ]}
-    status={(_child) =>
-      getValidationStatusForFields(
-        _child,
-        [
-          'birthCertificateType',
-          'birthCertificateId',
-          'birthTown',
-          'birthState',
-        ],
-        {
-          message:
-            'Birth certificate ID, birth town, and birth state are required (or must be "Unknown/not collected") for US birth certificates.',
-        }
-      )
-    }
-  />
-);
+      )}
+      status={(_child) =>
+        getValidationStatusForFields(
+          _child,
+          [
+            'birthCertificateType',
+            'birthCertificateId',
+            'birthTown',
+            'birthState',
+          ],
+          {
+            message:
+              'Birth certificate ID, birth town, and birth state are required (or must be "Unknown/not collected") for US birth certificates.',
+          }
+        )
+      }
+    />
+  );
+};
