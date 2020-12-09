@@ -104,9 +104,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
 
     //  Because the radio group for the Site field broadcasts ID as a string, 
     //  but the API is expecting a number (as it should)
-    console.log('updatedsite', updatedData.site)
     if (!!updatedData.site && !!updatedData.site.id && typeof updatedData.site.id === 'string') {
-      console.log('Converting site id to string');
       updatedData.site.id = parseInt(updatedData.site.id);
     }
 
