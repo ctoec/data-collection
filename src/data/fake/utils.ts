@@ -1,5 +1,4 @@
-import { UndefinableBoolean } from '../../client/src/shared/models';
-import { random } from 'faker';
+import { UndefinableBoolean } from '../../../client/src/shared/models';
 
 export function weightedBoolean(probabilityTruePercentage: number) {
   // Param should be a number between 1 and 100
