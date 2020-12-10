@@ -58,19 +58,24 @@ export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
 
 export type EnhancedColumnMetadata = ColumnMetadata & {
   columnFormatters?: {
-    [key in DATA_DEF_COLUMN_NAMES]?: (row: EnhancedColumnMetadata) => string | React.ReactElement
-  }
-}
+    [key in DATA_DEF_COLUMN_NAMES]?: (
+      row: EnhancedColumnMetadata
+    ) => string | React.ReactElement;
+  };
+};
 
 export const getSiteFormatters = (sites: Site[]) => ({
-  [DATA_DEF_COLUMN_NAMES.format]: (row: EnhancedColumnMetadata) =>
+  [DATA_DEF_COLUMN_NAMES.format]: (row: EnhancedColumnMetadata) => (
     // user.sites?.map(s => s.siteName).join(', ') || ''
     <td>
       Text, one of:
       <div className="margin-top-1">
         <ul>
-          {sites.map(s => <li key={s.siteName}>{s.siteName}</li>)}
+          {sites.map((s) => (
+            <li key={s.siteName}>{s.siteName}</li>
+          ))}
         </ul>
       </div>
     </td>
-})
+  ),
+});

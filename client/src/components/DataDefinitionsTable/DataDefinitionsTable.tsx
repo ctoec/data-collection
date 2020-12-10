@@ -41,7 +41,8 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
     return <LoadingWrapper loading={true} />;
   }
 
-  let filteredColumnMetadata: EnhancedColumnMetadata[] = templateMetadata.columnMetadata;
+  let filteredColumnMetadata: EnhancedColumnMetadata[] =
+    templateMetadata.columnMetadata;
   if (requiredFilter) {
     // If only the required fields are shown right now
     filteredColumnMetadata = filteredColumnMetadata.filter(
@@ -69,13 +70,22 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
     );
   }
 
+  console.log(filteredColumnMetadata);
   if (user) {
     // TODO: this prob has to be memoized
-    const siteRow = filteredColumnMetadata.find(row => row.propertyName === 'site');
+    const siteRow = filteredColumnMetadata.find(
+      (row) => row.propertyName === 'site'
+    );
     siteRow!.columnFormatters = getSiteFormatters(user.sites || []);
+    const providerRow = filteredColumnMetadata.find(
+      (row) => row.propertyName === 'providerName'
+    );
+    // Are we still using provider name? We didn't switch back to org??
   }
 
-  const columnMetadataBySection: { [key: string]: EnhancedColumnMetadata[] } = {};
+  const columnMetadataBySection: {
+    [key: string]: EnhancedColumnMetadata[];
+  } = {};
   filteredColumnMetadata.reduce((_bySection, _metadata) => {
     if (_bySection[_metadata.section]) {
       _bySection[_metadata.section].push(_metadata);
