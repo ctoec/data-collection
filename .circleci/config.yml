@@ -165,7 +165,7 @@ jobs:
       - run:
           working_directory: client
           name: Run api integration tests
-          command: yarn test-e2e
+          command: yarn test-integration
 
 workflows:
   local-tests-and-deploy-if-base:
