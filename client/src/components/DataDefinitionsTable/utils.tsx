@@ -46,6 +46,7 @@ export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
         .replace(match[0], '')
         // then split by expected ', ' string
         .split(', ')
+        // TODO: WHY??
         // prepend markdown list character
         .map((li) => `- ${li}`)
         // then re-combine into two-space + new-line separated markdown list
@@ -66,10 +67,10 @@ export type EnhancedColumnMetadata = ColumnMetadata & {
 
 export const getSiteFormatters = (sites: Site[]) => ({
   [DATA_DEF_COLUMN_NAMES.format]: (row: EnhancedColumnMetadata) => (
-    // user.sites?.map(s => s.siteName).join(', ') || ''
     <td>
       Text, one of:
       <div className="margin-top-1">
+        {/* TODO: STYLE */}
         <ul>
           {sites.map((s) => (
             <li key={s.siteName}>{s.siteName}</li>
