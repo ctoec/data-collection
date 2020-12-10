@@ -111,18 +111,9 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   }
 
   let determination: IncomeDetermination;
-  // If we're in the create flow, want to restrict a child to only
-  // having a maximum of one determination--can't make two at
-  // once in add record
   if (inCreateFlow) {
     const dets = child?.family?.incomeDeterminations || [];
-    if (dets.length > 1) {
-      throw new Error(
-        'Child in add record flow cannot contain more than one income determination'
-      );
-    }
     determination = dets[0] || ({} as IncomeDetermination);
-    console.log(determination);
   } else {
     determination =
       child?.family?.incomeDeterminations?.find(

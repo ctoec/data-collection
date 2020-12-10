@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { FindOneOptions, getManager, In, SelectQueryBuilder } from 'typeorm';
+import { getManager, In } from 'typeorm';
 import { Family, IncomeDetermination } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
@@ -47,22 +47,24 @@ familyRouter.put(
       const detId = parseInt(req.params['determinationId']);
       const readOrgIds = await getReadAccessibleOrgIds(req.user);
 
-      // Need to build out the options dict because we want to do property
-      // filtering on a nested relation alias
-      const opts: FindOneOptions<IncomeDetermination> = {
-        relations: ['family', 'family.organization'],
-        where: (qb: SelectQueryBuilder<IncomeDetermination>) => {
-          qb.where('IncomeDetermination.id = :detId', { detId });
-          qb.andWhere('IncomeDetermination.familyId = :famId', { famId });
-          qb.andWhere(
-            'IncomeDetermination__family__organization.id IN (:...readOrgIds)',
-            { readOrgIds }
-          );
+      // Verify the user has access to the determination via
+      // family lookup--as in enrollment/funding controller
+      const family = await getManager().findOne(Family, famId, {
+        relations: ['organization'],
+        where: {
+          organization: { id: In(readOrgIds) },
         },
-        loadEagerRelations: true,
-      };
+      });
+      if (!family) throw new NotFoundError();
 
-      const detToModify = await getManager().findOne(IncomeDetermination, opts);
+      // User must be authorized, so get the income det
+      const detToModify = await getManager().findOne(
+        IncomeDetermination,
+        detId,
+        {
+          where: { familyId: famId },
+        }
+      );
       if (!detToModify) throw new NotFoundError();
 
       const mergedEntity = getManager().merge(
