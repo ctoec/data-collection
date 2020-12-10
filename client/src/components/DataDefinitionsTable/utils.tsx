@@ -5,7 +5,7 @@ import {
   TEMPLATE_REQUIREMENT_LEVELS,
   TEMPLATE_SECTIONS,
 } from '../../shared/constants';
-import { ColumnMetadata, Site, User } from '../../shared/models';
+import { ColumnMetadata, Site } from '../../shared/models';
 import { DATA_DEF_COLUMN_NAMES } from './TableColumns';
 
 export const getRequiredTag = (requirementLevel: string) => (
@@ -37,6 +37,8 @@ export const isFirstReportingPeriodRow = (row: ColumnMetadata) =>
 export const isFirstReportingPeriodAlertRow = (row: ColumnMetadata) =>
   row.propertyName === FIRST_REPORTING_PERIOD_ALERT_NAME;
 
+export const getAlertRow = () => { }
+
 export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
   const match = formatString.match(/^(One of:)/);
   if (match) {
@@ -46,7 +48,7 @@ export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
         .replace(match[0], '')
         // then split by expected ', ' string
         .split(', ')
-        // TODO: WHY??
+        // TODO: WHY MARKDOWN??
         // prepend markdown list character
         .map((li) => `- ${li}`)
         // then re-combine into two-space + new-line separated markdown list
