@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { getManager, In } from 'typeorm';
+import { FindOneOptions, getManager, In, SelectQueryBuilder } from 'typeorm';
 import { Family, IncomeDetermination } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
@@ -47,16 +47,22 @@ familyRouter.put(
       const detId = parseInt(req.params['determinationId']);
       const readOrgIds = await getReadAccessibleOrgIds(req.user);
 
-      const detToModify = await getManager().findOne(
-        IncomeDetermination,
-        {
-          id: detId,
-          familyId: famId,
+      // Need to build out the options dict because we want to do property
+      // filtering on a nested relation alias
+      const opts: FindOneOptions<IncomeDetermination> = {
+        relations: ['family', 'family.organization'],
+        where: (qb: SelectQueryBuilder<IncomeDetermination>) => {
+          qb.where('IncomeDetermination.id = :detId', { detId });
+          qb.andWhere('IncomeDetermination.familyId = :famId', { famId });
+          qb.andWhere(
+            'IncomeDetermination__family__organization.id IN (:...readOrgIds)',
+            { readOrgIds }
+          );
         },
-        {
-          where: { family: { organization: { id: In(readOrgIds) } } },
-        }
-      );
+        loadEagerRelations: true,
+      };
+
+      const detToModify = await getManager().findOne(IncomeDetermination, opts);
       if (!detToModify) throw new NotFoundError();
 
       const mergedEntity = getManager().merge(

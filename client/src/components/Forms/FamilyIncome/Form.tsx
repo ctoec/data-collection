@@ -22,6 +22,7 @@ import {
 import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { useLocation } from 'react-router-dom';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -86,6 +87,11 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     hideErrorsOnFirstLoad
   );
 
+  // Determine if we're in the create flow: affects how we
+  // retrieve income determinations
+  const { pathname: path } = useLocation();
+  const inCreateFlow = path.includes('create-record');
+
   const isMounted = useIsMounted();
 
   if (child?.foster === UndefinableBoolean.Yes) {
@@ -104,12 +110,25 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
   }
 
-  const determination =
-    child?.family?.incomeDeterminations?.find(
-      (d) => d.id === incomeDeterminationId
-    ) || ({} as IncomeDetermination);
-  // TODO: if we're in the create record flow, just find the income det that exists
-  // If more than one exists in the create record flow, throw an error
+  let determination: IncomeDetermination;
+  // If we're in the create flow, want to restrict a child to only
+  // having a maximum of one determination--can't make two at
+  // once in add record
+  if (inCreateFlow) {
+    const dets = child?.family?.incomeDeterminations || [];
+    if (dets.length > 1) {
+      throw new Error(
+        'Child in add record flow cannot contain more than one income determination'
+      );
+    }
+    determination = dets[0] || ({} as IncomeDetermination);
+    console.log(determination);
+  } else {
+    determination =
+      child?.family?.incomeDeterminations?.find(
+        (d) => d.id === incomeDeterminationId
+      ) || ({} as IncomeDetermination);
+  }
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
     apiPost(
