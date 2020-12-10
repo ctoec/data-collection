@@ -59,3 +59,8 @@ $ yarn ts-node src/data/prod/create.ts --config `pwd`/config.json
 ## Docker
 If you're running this is in docker (for instance, on a node image), you'll need to install a few dependencies to get puppeteer working.
 Run the `apt-get` command they've got in their puppeteer-in-docker [example Dockerfile](https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#running-puppeteer-in-docker)
+
+## Gotchas
+- Local DB connections need to be established (via ssh tunnels or whatever you want) before running
+- Any changes to the template columns (not titles, just order) will require changes to the corresponding row class defined in the various data creation utils
+- Org/site names cannot have commas (",") in them because this will mess with parsing. So just take them out, sorry.

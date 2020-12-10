@@ -12,7 +12,6 @@ import { parse } from './utils';
 class OrganizationRow {
   name: string = '';
   uniqueIdType: string = '';
-  fundingSpaces: string = '';
   CDC_InfantToddler_FullTime: number = 0;
   CDC_InfantToddler_PartTime: number = 0;
   CDC_InfantToddler_SplitTime: number = 0;
@@ -72,6 +71,7 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
       const fundingProps = ORGANIZATION_ROW_PROPS.filter(
         (prop) =>
           row[prop] &&
+          parseInt(row[prop]) > 0 &&
           Object.keys(FundingSource).some((fs) => prop.includes(fs))
       );
 
