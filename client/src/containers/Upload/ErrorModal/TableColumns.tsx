@@ -5,7 +5,7 @@ import { ErrorObjectForTable } from './ErrorObjectForTable';
 /**
  * Tabular column formatter that displays a dictionary of
  * counts of validation errors as a formatted table within
- * a batch upload modal.
+ * a file upload modal.
  */
 export const tableColumns: () => Column<ErrorObjectForTable>[] = () => {
   const columns: Column<ErrorObjectForTable>[] = [

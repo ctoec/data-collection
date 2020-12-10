@@ -13,7 +13,7 @@ type ErrorModalProps = {
 };
 
 /**
- * Modal that lets users know whether a Batch Uploaded sheet contains
+ * Modal that lets users know whether an uploaded sheet contains
  * any data errors. If so, it shows a count of how many errors occur
  * across each field of uploaded data.
  * @param param0

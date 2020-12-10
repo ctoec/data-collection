@@ -58,6 +58,7 @@ exports[`GettingStarted matches snapshot 1`] = `
           </div>
           Review the data requirements
         </h3>
+<<<<<<< HEAD
         <div
           class="margin-left-6"
         >
@@ -68,6 +69,21 @@ exports[`GettingStarted matches snapshot 1`] = `
             <a
               class="usa-button usa-button--unstyled"
               href="/data-requirements/"
+=======
+        <p>
+          You must submit your data to OEC by 03/05/2021. The data collection period begins 07/01/2020 and continues through at least 01/01/2021.
+        </p>
+        <div>
+          <h2>
+            Download the latest file upload template
+          </h2>
+          <button
+            class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
+            type="button"
+          >
+            <span
+              class="oec-text-with-icon text-underline"
+>>>>>>> c7bbbdb6 (Move one nav item)
             >
               <span
                 class="oec-text-with-icon"
