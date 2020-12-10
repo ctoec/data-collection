@@ -22,10 +22,12 @@ const GettingStarted: React.FC = () => {
             make informed program and policy decisions affecting young children
             and families.
           </p>
-          <h2>Sites you manage at {org.providerName}</h2>
+          <h2>Sites you manage at {org.providerName}:</h2>
           <ul>
             {(user?.sites || []).map((site) => (
-              <li key={site.siteName}>{site.siteName}</li>
+              <li key={site.siteName} className="line-height-body-4">
+                {site.siteName}
+              </li>
             ))}
           </ul>
           <h2>How to use ECE Reporter</h2>
@@ -34,97 +36,99 @@ const GettingStarted: React.FC = () => {
             many records at once. If you'd like to add records manually,
             <Link to="/roster/"> you can add them on your roster.</Link>
           </p>
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              1
+            </div>
+            Review the data requirements
+          </h3>
+          <div className="margin-left-6">
+            <p>
+              Learn more about the data elements ECE Reporter collects for each
+              enrollment.
+            </p>
+            <p>
+              <Link
+                className="usa-button usa-button--unstyled"
+                to="/data-requirements/"
+              >
+                <TextWithIcon
+                  text="See required data"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
+            </p>
+          </div>
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              2
+            </div>
+            Download the data template
+          </h3>
+          <div className="margin-left-6">
+            <p>
+              You'll need to enter data in this file to upload in ECE Reporter.
+            </p>
+            <p>
+              <Link className="usa-button usa-button--unstyled" to="/template/">
+                <TextWithIcon
+                  text="Download the template"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
+            </p>
+          </div>
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              3
+            </div>
+            Prepare your data
+          </h3>
+          <div className="margin-left-6">
+            <p>Get instructions on how to enter data into OEC's template.</p>
+            <p>
+              {
+                // TODO: Check that this link is the right one to use here / is ready to go
+              }
+              <Link
+                className="usa-button usa-button--unstyled"
+                to="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
+              >
+                <TextWithIcon
+                  text="See the how-to guide"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
+            </p>
+          </div>
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              4
+            </div>
+            Upload your data
+          </h3>
+          <div className="margin-left-6">
+            <p>
+              Once your template is filled out, you'll upload the data to ECE
+              Reporter.
+            </p>
+            <p>
+              <Link className="usa-button usa-button--unstyled" to="/upload/">
+                <TextWithIcon
+                  text="Go to file upload"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
+            </p>
+          </div>
         </div>
         <div className="tablet:grid-col-4" role="presentation">
           <Image />
         </div>
-      </div>
-      <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
-        <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
-          1
-        </div>
-        Review the data requirements
-      </h3>
-      <div className="margin-left-6">
-        <p>
-          Learn more about the data elements ECE Reporter collects for each
-          enrollment.
-        </p>
-        <p>
-          <Link
-            className="usa-button usa-button--unstyled"
-            to="/data-requirements/"
-          >
-            <TextWithIcon
-              text="See required data"
-              Icon={Arrow}
-              iconSide="right"
-            />
-          </Link>
-        </p>
-      </div>
-      <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
-        <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
-          2
-        </div>
-        Download the data template
-      </h3>
-      <div className="margin-left-6">
-        <p>You'll need to enter data in this file to upload in ECE Reporter.</p>
-        <p>
-          <Link className="usa-button usa-button--unstyled" to="/template/">
-            <TextWithIcon
-              text="Download the template"
-              Icon={Arrow}
-              iconSide="right"
-            />
-          </Link>
-        </p>
-      </div>
-      <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
-        <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
-          3
-        </div>
-        Prepare your data
-      </h3>
-      <div className="margin-left-6">
-        <p>Get instructions on how to enter data into OEC's template.</p>
-        <p>
-          {
-            // TODO: Check that this link is the right one to use here / is ready to go
-          }
-          <Link
-            className="usa-button usa-button--unstyled"
-            to="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
-          >
-            <TextWithIcon
-              text="See the how-to guide"
-              Icon={Arrow}
-              iconSide="right"
-            />
-          </Link>
-        </p>
-      </div>
-      <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
-        <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
-          4
-        </div>
-        Upload your data
-      </h3>
-      <div className="margin-left-6">
-        <p>
-          Once your template is filled out, you'll upload the data to ECE
-          Reporter.
-        </p>
-        <p>
-          <Link className="usa-button usa-button--unstyled" to="/upload/">
-            <TextWithIcon
-              text="Go to file upload"
-              Icon={Arrow}
-              iconSide="right"
-            />
-          </Link>
-        </p>
       </div>
     </div>
   );
