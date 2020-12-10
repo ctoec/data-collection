@@ -117,7 +117,6 @@ export const TableColumns: (_: boolean) => Column<EnhancedColumnMetadata>[] = (
               <ReactMarkdown
                 source={getMarkdownStyledFormatOptionsList(row.format)}
               />
-              {row.possibleValues}
               {!!row.example && (
                 <div className="margin-top-1">Ex: {row.example}</div>
               )}

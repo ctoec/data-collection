@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { ColumnMetadata } from '../../shared/models';
 import { Table, HeadingLevel, LoadingWrapper } from '@ctoec/component-library';
 import { TemplateMetadata } from '../../shared/payloads';
 import {
@@ -15,6 +14,7 @@ import {
   FIRST_REPORTING_PERIOD_ALERT_ROW,
   isFirstReportingPeriodAlertRow,
   EnhancedColumnMetadata,
+  getSiteFormatters,
 } from './utils';
 import UserContext from '../../contexts/UserContext/UserContext';
 
@@ -70,9 +70,9 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   }
 
   if (user) {
-    const siteRowIdx = filteredColumnMetadata.findIndex(row => row.propertyName === 'site');
-    const newSiteRow = { ...filteredColumnMetadata[siteRowIdx], possibleValues: user.sites?.map(s => s.siteName) || [] }
-    filteredColumnMetadata.splice(siteRowIdx, 1, newSiteRow)
+    // TODO: this prob has to be memoized
+    const siteRow = filteredColumnMetadata.find(row => row.propertyName === 'site');
+    siteRow!.columnFormatters = getSiteFormatters(user.sites || []);
   }
 
   const columnMetadataBySection: { [key: string]: EnhancedColumnMetadata[] } = {};

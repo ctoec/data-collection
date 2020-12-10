@@ -5,7 +5,7 @@ import {
   TEMPLATE_REQUIREMENT_LEVELS,
   TEMPLATE_SECTIONS,
 } from '../../shared/constants';
-import { ColumnMetadata } from '../../shared/models';
+import { ColumnMetadata, Site, User } from '../../shared/models';
 import { DATA_DEF_COLUMN_NAMES } from './TableColumns';
 
 export const getRequiredTag = (requirementLevel: string) => (
@@ -57,8 +57,20 @@ export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
 };
 
 export type EnhancedColumnMetadata = ColumnMetadata & {
-  possibleValues?: string[];
   columnFormatters?: {
-    [key in DATA_DEF_COLUMN_NAMES]: ((row: EnhancedColumnMetadata) => string) | React.FunctionComponentElement<EnhancedColumnMetadata>
+    [key in DATA_DEF_COLUMN_NAMES]?: (row: EnhancedColumnMetadata) => string | React.ReactElement
   }
 }
+
+export const getSiteFormatters = (sites: Site[]) => ({
+  [DATA_DEF_COLUMN_NAMES.format]: (row: EnhancedColumnMetadata) =>
+    // user.sites?.map(s => s.siteName).join(', ') || ''
+    <td>
+      Text, one of:
+      <div className="margin-top-1">
+        <ul>
+          {sites.map(s => <li key={s.siteName}>{s.siteName}</li>)}
+        </ul>
+      </div>
+    </td>
+})
