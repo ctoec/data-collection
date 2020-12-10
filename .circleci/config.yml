@@ -156,12 +156,8 @@ jobs:
           command: yarn
       - run:
           working_directory: e2e-tests
-          name: Run e2e tests
+          name: Run e2e tests (in chrome)
           command: yarn test
-      - run:
-          working_directory: e2e-tests
-          name: Run e2e tests that need to skip MS Edge
-          command: yarn test-edge
       - run:
           working_directory: client
           name: Run api integration tests
