@@ -40,7 +40,7 @@ const addUser = passAsyncError(
     if (req.claims?.sub) {
       let fawkesUser = await getUser(req.claims.sub);
 
-      // We should only create users with full permissions in environments without actual data
+      // Only automatically create app user in test environments
       if (!fawkesUser && !isProdLike()) {
         const res: AxiosResponse<any> = await getUserFromWingedKeys(
           req.headers.authorization
@@ -105,6 +105,11 @@ const getUser = async (wingedKeysId: string) => {
   return user;
 };
 
+/**
+ * Fetches a user object from winged-keys, for test env automatic
+ * app user creation flow
+ * @param bearerToken
+ */
 async function getUserFromWingedKeys(
   bearerToken: string
 ): Promise<AxiosResponse<any>> {
@@ -118,6 +123,13 @@ async function getUserFromWingedKeys(
   });
 }
 
+/**
+ * For test environments. Incoming requests from legit
+ * wingek-keys users get an application user created for them,
+ * with org-level permissions for a single test org
+ * @param wingedKeysId
+ * @param wingedKeysUser
+ */
 async function createUserWithSingleOrgPermissions(
   wingedKeysId: string,
   wingedKeysUser: { given_name: string; family_name: string }
@@ -149,6 +161,16 @@ async function createUserWithSingleOrgPermissions(
   return user;
 }
 
+/**
+ * A conditional wrapper around the real authentication logic to decode the
+ * jwt claim. If `x-test-no-authenticate` header is set, and the request is
+ * being processed in a non-prod environment, then skip token decode. Instead,
+ * add the default "voldemort" user to the request and continue down the
+ * middlewares chain
+ * @param req
+ * @param res
+ * @param next
+ */
 const decodeOrMockClaim = async (
   req: Request,
   res: Response,
@@ -165,7 +187,7 @@ const decodeOrMockClaim = async (
   decodeClaim(req, res, next);
 };
 /**
- * Full authentication middleware chains together decodeClaim and addUser,
+ * Full authentication middleware chains together decodeOrMockClaim and addUser,
  * so that any authenticated route gets the user, looked up via decoded JWT
  * "sub" claim, added to the request
  */

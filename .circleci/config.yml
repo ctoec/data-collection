@@ -50,6 +50,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
+            - .
   test:
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12

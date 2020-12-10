@@ -1,5 +1,5 @@
 module.exports = {
-  downloadTemplateOrExample: async function (browser, { buttonText }) {
+  downloadTemplateOrExample: async function (browser, buttonText) {
     await browser.click('xpath', `//*/button[contains(., '${buttonText}')]`);
 
     // Check that a file has been downloaded in this test session

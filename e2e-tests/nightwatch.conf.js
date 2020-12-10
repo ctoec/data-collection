@@ -14,8 +14,6 @@ https: nightwatch_config = {
     silent: true,
     disable_error_log: true,
   },
-  // TODO: make it possible to pass an arg or have an environment variable or something
-  // So that we actually test PRs and not just staging
   launch_url:
     process.env.LAUNCH_URL || 'https://staging.ece-fawkes.ctoecskylight.com',
   test_settings: {
