@@ -36,13 +36,10 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   const { data: templateMetadata } = useSWR('template/metadata', {
     dedupingInterval: 100000,
   }) as responseInterface<TemplateMetadata, string>;
+  const { columnMetadata } = templateMetadata || {};
 
-  if (!templateMetadata) {
-    return <LoadingWrapper loading={true} />;
-  }
+  let filteredColumnMetadata: EnhancedColumnMetadata[] = columnMetadata || [];
 
-  let filteredColumnMetadata: EnhancedColumnMetadata[] =
-    templateMetadata.columnMetadata;
   if (requiredFilter) {
     // If only the required fields are shown right now
     filteredColumnMetadata = filteredColumnMetadata.filter(
@@ -68,11 +65,10 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
       0,
       FIRST_REPORTING_PERIOD_ALERT_ROW
     );
+    // TODO: use columnFormatters value to make every column but the first in the alert row <></>
   }
 
-  console.log(filteredColumnMetadata);
   if (user) {
-    // TODO: this prob has to be memoized
     const siteRow = filteredColumnMetadata.find(
       (row) => row.propertyName === 'site'
     );
@@ -97,31 +93,33 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   }, columnMetadataBySection);
 
   return (
-    <div className="data-definitions">
-      {showRequirementLevelLegendAndFilter && (
-        <>
-          <RequirementLevelLegend />
-          <RequirementLevelFilter setFilter={setRequiredFilter} />
-        </>
-      )}
-      <div>
-        {Object.entries(columnMetadataBySection).map(
-          ([sectionName, sectionData]) => (
-            <div key={sectionName} className="margin-top-4">
-              <Heading>{sectionName}</Heading>
-              <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
-              <Table
-                id={`data-requirements-${sectionName.replace(' ', '-')}`}
-                data={sectionData}
-                rowKey={(row) => (row ? row.formattedName : '')}
-                columns={TableColumns(addFirstReportingPeriodAlert)}
-                defaultSortColumn={0}
-              />
-            </div>
-          )
+    <LoadingWrapper loading={!templateMetadata}>
+      <div className="data-definitions">
+        {showRequirementLevelLegendAndFilter && (
+          <>
+            <RequirementLevelLegend />
+            <RequirementLevelFilter setFilter={setRequiredFilter} />
+          </>
         )}
+        <div>
+          {Object.entries(columnMetadataBySection).map(
+            ([sectionName, sectionData]) => (
+              <div key={sectionName} className="margin-top-4">
+                <Heading>{sectionName}</Heading>
+                <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
+                <Table
+                  id={`data-requirements-${sectionName.replace(' ', '-')}`}
+                  data={sectionData}
+                  rowKey={(row) => (row ? row.formattedName : '')}
+                  columns={TableColumns(addFirstReportingPeriodAlert)}
+                  defaultSortColumn={0}
+                />
+              </div>
+            )
+          )}
+        </div>
       </div>
-    </div>
+    </LoadingWrapper>
   );
 };
 

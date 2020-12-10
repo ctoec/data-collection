@@ -104,10 +104,14 @@ export const TableColumns: (_: boolean) => Column<EnhancedColumnMetadata>[] = (
   },
   {
     name: DATA_DEF_COLUMN_NAMES.format,
-    cell: ({ row }) =>
-      !row || isFirstReportingPeriodAlertRow(row) ? (
-        <></>
-      ) : (
+    cell: ({ row }) => {
+      if (!row || isFirstReportingPeriodAlertRow(row)) return <></>;
+      const columnFormatter =
+        row.columnFormatters?.[DATA_DEF_COLUMN_NAMES.format];
+      if (columnFormatter) {
+        return columnFormatter(row);
+      }
+      return (
         <td
           className={cx({
             'hide-bottom-border':
@@ -121,7 +125,8 @@ export const TableColumns: (_: boolean) => Column<EnhancedColumnMetadata>[] = (
             <div className="margin-top-1">Ex: {row.example}</div>
           )}
         </td>
-      ),
+      );
+    },
     width: '20%',
   },
 ];

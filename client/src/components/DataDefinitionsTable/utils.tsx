@@ -60,7 +60,7 @@ export type EnhancedColumnMetadata = ColumnMetadata & {
   columnFormatters?: {
     [key in DATA_DEF_COLUMN_NAMES]?: (
       row: EnhancedColumnMetadata
-    ) => string | React.ReactElement;
+    ) => React.ReactElement;
   };
 };
 
