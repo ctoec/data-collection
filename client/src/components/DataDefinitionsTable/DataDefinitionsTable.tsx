@@ -15,6 +15,7 @@ import {
   isFirstReportingPeriodAlertRow,
   EnhancedColumnMetadata,
   getSiteFormatters,
+  getProviderFormatters,
 } from './utils';
 import UserContext from '../../contexts/UserContext/UserContext';
 
@@ -65,7 +66,6 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
       0,
       FIRST_REPORTING_PERIOD_ALERT_ROW
     );
-    // TODO: use columnFormatters value to make every column but the first in the alert row <></>
   }
 
   if (user) {
@@ -76,7 +76,7 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
     const providerRow = filteredColumnMetadata.find(
       (row) => row.propertyName === 'providerName'
     );
-    // Are we still using provider name? We didn't switch back to org??
+    providerRow!.columnFormatters = getProviderFormatters(user.organizations);
   }
 
   const columnMetadataBySection: {

@@ -5,7 +5,7 @@ import {
   TEMPLATE_REQUIREMENT_LEVELS,
   TEMPLATE_SECTIONS,
 } from '../../shared/constants';
-import { ColumnMetadata, Site } from '../../shared/models';
+import { ColumnMetadata, Organization, Site } from '../../shared/models';
 import { DATA_DEF_COLUMN_NAMES } from './TableColumns';
 
 export const getRequiredTag = (requirementLevel: string) => (
@@ -37,7 +37,7 @@ export const isFirstReportingPeriodRow = (row: ColumnMetadata) =>
 export const isFirstReportingPeriodAlertRow = (row: ColumnMetadata) =>
   row.propertyName === FIRST_REPORTING_PERIOD_ALERT_NAME;
 
-export const getAlertRow = () => { }
+export const getAlertRow = () => {};
 
 export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
   const match = formatString.match(/^(One of:)/);
@@ -68,11 +68,10 @@ export type EnhancedColumnMetadata = ColumnMetadata & {
 };
 
 export const getSiteFormatters = (sites: Site[]) => ({
-  [DATA_DEF_COLUMN_NAMES.format]: (row: EnhancedColumnMetadata) => (
+  [DATA_DEF_COLUMN_NAMES.format]: () => (
     <td>
       Text, one of:
       <div className="margin-top-1">
-        {/* TODO: STYLE */}
         <ul>
           {sites.map((s) => (
             <li key={s.siteName}>{s.siteName}</li>
@@ -81,4 +80,33 @@ export const getSiteFormatters = (sites: Site[]) => ({
       </div>
     </td>
   ),
+});
+
+export const getProviderFormatters = (organizations?: Organization[]) => ({
+  [DATA_DEF_COLUMN_NAMES.format]: () => {
+    if (!organizations?.length) {
+      // TODO: is there a case where there is no provider name?
+      return <></>;
+    }
+    if (organizations?.length === 1) {
+      return (
+        <td>
+          Text:
+          <div className="margin-top-1">{organizations[0].providerName}</div>
+        </td>
+      );
+    }
+    return (
+      <td>
+        Text:
+        <div className="margin-top-1">
+          <ul>
+            {organizations?.map((o) => (
+              <li key={o.providerName}>{o.providerName}</li>
+            ))}
+          </ul>
+        </div>
+      </td>
+    );
+  },
 });
