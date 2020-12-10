@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ColumnMetadata } from '../../shared/models';
 import { Table, HeadingLevel, LoadingWrapper } from '@ctoec/component-library';
 import { TemplateMetadata } from '../../shared/payloads';
@@ -14,7 +14,9 @@ import {
   isFirstReportingPeriodRow,
   FIRST_REPORTING_PERIOD_ALERT_ROW,
   isFirstReportingPeriodAlertRow,
+  EnhancedColumnMetadata,
 } from './utils';
+import UserContext from '../../contexts/UserContext/UserContext';
 
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
@@ -28,6 +30,7 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   addFirstReportingPeriodAlert = false,
 }) => {
   const Heading = headerLevel;
+  const { user } = useContext(UserContext);
   const [requiredFilter, setRequiredFilter] = useState<boolean>(false);
 
   const { data: templateMetadata } = useSWR('template/metadata', {
@@ -38,8 +41,9 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
     return <LoadingWrapper loading={true} />;
   }
 
-  let filteredColumnMetadata = templateMetadata.columnMetadata;
+  let filteredColumnMetadata: EnhancedColumnMetadata[] = templateMetadata.columnMetadata;
   if (requiredFilter) {
+    // If only the required fields are shown right now
     filteredColumnMetadata = filteredColumnMetadata.filter(
       (m) =>
         m.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.REQUIRED ||
@@ -65,7 +69,13 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
     );
   }
 
-  const columnMetadataBySection: { [key: string]: ColumnMetadata[] } = {};
+  if (user) {
+    const siteRowIdx = filteredColumnMetadata.findIndex(row => row.propertyName === 'site');
+    const newSiteRow = { ...filteredColumnMetadata[siteRowIdx], possibleValues: user.sites?.map(s => s.siteName) || [] }
+    filteredColumnMetadata.splice(siteRowIdx, 1, newSiteRow)
+  }
+
+  const columnMetadataBySection: { [key: string]: EnhancedColumnMetadata[] } = {};
   filteredColumnMetadata.reduce((_bySection, _metadata) => {
     if (_bySection[_metadata.section]) {
       _bySection[_metadata.section].push(_metadata);

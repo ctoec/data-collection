@@ -6,6 +6,7 @@ import {
   TEMPLATE_SECTIONS,
 } from '../../shared/constants';
 import { ColumnMetadata } from '../../shared/models';
+import { DATA_DEF_COLUMN_NAMES } from './TableColumns';
 
 export const getRequiredTag = (requirementLevel: string) => (
   <Tag
@@ -54,3 +55,10 @@ export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
 
   return formatString;
 };
+
+export type EnhancedColumnMetadata = ColumnMetadata & {
+  possibleValues?: string[];
+  columnFormatters?: {
+    [key in DATA_DEF_COLUMN_NAMES]: ((row: EnhancedColumnMetadata) => string) | React.FunctionComponentElement<EnhancedColumnMetadata>
+  }
+}
