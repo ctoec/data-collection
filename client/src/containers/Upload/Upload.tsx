@@ -21,6 +21,7 @@ import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { BatchUpload } from '../../shared/payloads';
+import { getFormDataBlob } from '../../utils/getFormDataBlob';
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -47,13 +48,10 @@ const Upload: React.FC = () => {
     // Haven't yet determined how many errors of each type there are
     if (file && errorDict === undefined) {
       setLoading(true);
-      // Ugh internet explorer why
-      // https://developer.mozilla.org/en-US/docs/Web/API/FormData
-      // https://www.npmjs.com/package/formdata-polyfill
-      const formData = new FormData();
-      formData.append('file', file, file.name);
+      const formData = getFormDataBlob(file);
       apiPost(`enrollment-reports/check`, formData, {
         accessToken,
+        headers: { 'content-type': formData.type },
         rawBody: true,
       })
         // Back end sends back an object whose fields are error table obj.
@@ -78,10 +76,10 @@ const Upload: React.FC = () => {
   useEffect(() => {
     if (file && postUpload) {
       setLoading(true);
-      const formData = new FormData();
-      formData.set('file', file);
+      const formData = getFormDataBlob(file);
       apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
         accessToken,
+        headers: { 'content-type': formData.type },
         rawBody: true,
       })
         // Response contains id of created enrollmentReport,
