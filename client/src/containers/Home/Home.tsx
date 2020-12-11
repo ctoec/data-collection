@@ -38,17 +38,17 @@ const Home: React.FC = () => {
         </div>
       </div>
       <div className="grid-container margin-top-4">
-        <div className="grid-row">
-          <div className="tablet:grid-col-auto margin-right-6">
+        <div className="grid-row grid-gap">
+          <div className="tablet:grid-col-3">
             <img className="hero-bubble" src={HomeCareerBubbleSrc} alt="" />
           </div>
-          <div className="tablet:grid-col-fill">
+          <div className="tablet:grid-col-6">
             <h2 className="text-primary text-light margin-y-3">
               We support affordable child care in Connecticut
             </h2>
             <p className="line-height-sans-5">
               Publicly-funded early care and education programs use ECE Reporter
-              to share data with the Connecticut Office of Early Childhood.
+              to share data with the Connecticut Office of Early Childhood (OEC).
             </p>
             <p>
               The Office of Early Childhood uses this data to pay programs and
@@ -60,10 +60,10 @@ const Home: React.FC = () => {
               <Button
                 appearance="unstyled"
                 href="/data-requirements"
-                className="text-bold margin-bottom-3 display-block"
+                className="margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
-                    text="See the data requirements"
+                    text="Learn the data requirements"
                     Icon={ArrowRight}
                     direction="right"
                     iconSide="right"
@@ -71,13 +71,28 @@ const Home: React.FC = () => {
                   />
                 }
               />
-              <h3>Get help with ECE Reporter</h3>
+              <Button
+                appearance="unstyled"
+                href="/template"
+                className="margin-bottom-3 display-block"
+                text={
+                  <TextWithIcon
+                    text="See the latest data template"
+                    Icon={ArrowRight}
+                    direction="right"
+                    iconSide="right"
+                    className="text-underline"
+                  />
+                }
+              />
+              {/* <h3>Get help with ECE Reporter</h3> */}
+              {/* TODO: HELP PAGE LINK */}
               <h3>Learn more about OEC</h3>
               <Button
                 appearance="unstyled"
                 external={true}
                 href="https://ctoec.org"
-                className="text-bold margin-bottom-3 display-block"
+                className="margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
                     text="Visit OEC's website"
@@ -92,7 +107,7 @@ const Home: React.FC = () => {
               <Button
                 appearance="unstyled"
                 href="/privacy-policy"
-                className="text-bold margin-bottom-3 display-block"
+                className="margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
                     text="See the privacy policy"
