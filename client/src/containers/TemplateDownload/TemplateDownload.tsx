@@ -12,10 +12,10 @@ const TemplateDownload: React.FC = () => {
       <BackButton />
       <div className="grid-row grid-gap">
         <div className="desktop:grid-col-8">
-          <h1 ref={h1Ref}>Batch upload data template</h1>
+          <h1 ref={h1Ref}>File upload data template</h1>
           <p>
-            You can use this template to batch upload many enrollment records to
-            ECE Reporter.
+            You can use this template to upload many enrollment records to ECE
+            Reporter.
           </p>
           <CSVExcelDownloadButton
             fileType="xlsx"
@@ -30,7 +30,7 @@ const TemplateDownload: React.FC = () => {
           <h2>Sample data</h2>
           <p>
             We created a sample set of data to show how to format enrollment
-            records for batch uploading.
+            records for upload.
           </p>
           <CSVExcelDownloadButton
             fileType="xlsx"

@@ -12,7 +12,10 @@ module.exports = {
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 
     // Go to file upload
-    await headerMatch(browser, 'Hello Voldemort!');
+    await browser.waitForElementVisible(
+      'xpath',
+      '//*/h1[contains(.,"Hello Voldemort")]'
+    );
     await browser.execute(function () {
       document.querySelector('a[href="/upload"]').click();
     });

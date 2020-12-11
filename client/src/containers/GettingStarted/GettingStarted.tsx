@@ -36,6 +36,7 @@ const GettingStarted: React.FC = () => {
             many records at once. If you'd like to add records manually,
             <Link to="/roster/"> you can add them on your roster.</Link>
           </p>
+          {/* TODO: this should be an ordered list, not a bunch of divs standing on top of each other in a trench coat */}
           <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
             <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
               1
