@@ -131,7 +131,7 @@ jobs:
   e2e_test:
     description: 'Run e2e tests against a deployed pre-prod env'
     parameters:
-      test_api_host:
+      api_test_host:
         description: 'The host to use for api integration tests'
         type: string
       launch_url:
@@ -148,7 +148,7 @@ jobs:
       - run:
           name: Setup environment variables
           command: |
-            echo "export TEST_API_HOST=<<parameters.test_api_host>>" >> $BASH_ENV
+            echo "export API_TEST_HOST=<<parameters.api_test_host>>" >> $BASH_ENV
             echo "export LAUNCH_URL=<<parameters.launch_url>>" >> $BASH_ENV
       - run:
           working_directory: e2e-tests
@@ -157,16 +157,11 @@ jobs:
       - run:
           working_directory: e2e-tests
           name: Run e2e tests (in chrome)
-          command: |
-            source $BASH_ENV
-            env
-            yarn test
+          command: yarn test
       - run:
           working_directory: client
           name: Run api integration tests
-          command: |
-            env
-            SKIP_PREFLIGHT_CHECK=true yarn test-integration
+          command: SKIP_PREFLIGHT_CHECK=true yarn test-integration
 
 workflows:
   local-tests-and-deploy-if-base:
@@ -187,7 +182,7 @@ workflows:
             branches:
               only: base
       - e2e_test:
-          test_api_host: "https://staging.ece-fawkes.ctoecskylight.com"
+          api_test_host: "https://staging.ece-fawkes.ctoecskylight.com"
           launch_url: "https://staging.ece-fawkes.ctoecskylight.com"
           requires:
             - deploy
@@ -211,7 +206,7 @@ workflows:
           requires:
             - build
       - e2e_test:
-          test_api_host: "https://qa.ece-fawkes.ctoecskylight.com"
+          api_test_host: "https://qa.ece-fawkes.ctoecskylight.com"
           launch_url: "https://qa.ece-fawkes.ctoecskylight.com"
           requires:
             - deploy
