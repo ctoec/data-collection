@@ -82,7 +82,6 @@ export const getSiteFormatters = (sites: Site[]) => ({
 export const getProviderFormatters = (organizations?: Organization[]) => ({
   [DATA_DEF_COLUMN_NAMES.format]: () => {
     if (!organizations?.length) {
-      // TODO: is there a case where there is no provider name?
       return <></>;
     }
     if (organizations?.length === 1) {
