@@ -161,7 +161,7 @@ jobs:
       - run:
           working_directory: client
           name: Run api integration tests
-          command: yarn test-integration
+          command: SKIP_PREFLIGHT_CHECK=true yarn test-integration
 
 workflows:
   local-tests-and-deploy-if-base:
