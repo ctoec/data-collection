@@ -8,20 +8,23 @@ import { FundingSource } from '../../client/src/shared/models';
  * and less than 3 years in the future
  */
 export const getReportingPeriods = async (shortFundingSource?: string) => {
-  const fundingSource = Object.values(FundingSource).find((fs) =>
-    fs.startsWith(shortFundingSource)
-  );
   const threeYearsAgo = moment().add(-3, 'years').format('YYYY-MM-DD');
   const threeYearsAhead = moment().add(3, 'years').format('YYYY-MM-DD');
-  return getManager().find(ReportingPeriod, {
-    where: {
-      period: Raw(
-        (column) =>
-          `${column} > '${threeYearsAgo}' AND ${column} < '${threeYearsAhead}'`
-      ),
-      type: fundingSource,
-    },
-  });
+  const where = {
+    period: Raw(
+      (column) =>
+        `${column} > '${threeYearsAgo}' AND ${column} < '${threeYearsAhead}'`
+    ),
+  };
+
+  if (shortFundingSource) {
+    const fundingSource = Object.values(FundingSource).find((fs) =>
+      fs.startsWith(shortFundingSource)
+    );
+    where['type'] = fundingSource;
+  }
+
+  return getManager().find(ReportingPeriod, where);
 };
 
 export function reportingPeriodToString(reportingPeriod: ReportingPeriod) {

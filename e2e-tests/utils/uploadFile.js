@@ -14,7 +14,7 @@ module.exports = {
     // Go to file upload
     await browser.waitForElementVisible(
       'xpath',
-      '//*/h1[contains(.,"Let\'s get started")]'
+      '//*/h1[contains(.,"Hello Voldemort")]'
     );
     await browser.execute(function () {
       document.querySelector('a[href="/upload"]').click();

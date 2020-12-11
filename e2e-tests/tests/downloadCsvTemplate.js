@@ -7,7 +7,7 @@ const {
 module.exports = {
   // Need to skip this in edge and ie because testing download functionality with browserstack doesn't work in those browsers
   // https://www.browserstack.com/docs/automate/selenium/test-file-download
-  '@tags': ['download-csv-template', 'skip-edge'],
+  '@tags': ['download', 'skip-edge'],
   downloadCSVTemplate: async function (browser) {
     await browser.init();
     await navigateToDataTemplate(browser);

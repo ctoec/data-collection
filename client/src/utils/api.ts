@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { getCurrentHost } from './getCurrentHost';
 
-type ApiOpts = {
+export type ApiOpts = {
   accessToken?: string | null;
   jsonParse?: boolean;
   rawBody?: boolean;
