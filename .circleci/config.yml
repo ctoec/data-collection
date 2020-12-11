@@ -148,8 +148,8 @@ jobs:
       - run:
           name: Setup environment variables
           command: |
-            export TEST_API_HOST=<<parameters.test_api_host>>
-            export LAUNCH_URL=<<parameters.launch_url>>
+            echo "export TEST_API_HOST=<<parameters.test_api_host>>" >> $BASH_ENV
+            echo "export LAUNCH_URL=<<parameters.launch_url>>" >> $BASH_ENV
       - run:
           working_directory: e2e-tests
           name: Install e2e test dependencies
@@ -158,8 +158,6 @@ jobs:
           working_directory: e2e-tests
           name: Run e2e tests (in chrome)
           command: |
-            echo $TEST_API_HOST
-            env
             yarn test
       - run:
           working_directory: client
