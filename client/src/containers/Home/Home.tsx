@@ -123,21 +123,23 @@ const Home: React.FC = () => {
         </div>
       </div>
       <footer className={cx('bg-base-lightest', 'padding-y-6', 'footer')}>
-        <div className="grid-row flex-justify flex-align-center">
-          <div className="grid-col-10">
-            <h2 className="text-primary text-light margin-y-3">
-              Have feedback about OEC's data collection process?
+        <div className="grid-container">
+          <div className="grid-row flex-justify flex-align-center">
+            <div className="grid-col-10">
+              <h2 className="text-primary text-light margin-y-3">
+                Have feedback about OEC's data collection process?
             </h2>
-            <p>
-              Feedback from providers like you helps make this tool even better.
+              <p>
+                Feedback from providers like you helps make this tool even better.
             </p>
-            <p>
-              Send us your feedback at <MailToLink />
-            </p>
+              <p>
+                Send us your feedback at <MailToLink />
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="grid-col-2">
-          {/* TODO: Add icon of message bubbles */}
+          <div className="grid-col-2">
+            {/* TODO: Add icon of message bubbles */}
+          </div>
         </div>
       </footer>
     </div>
