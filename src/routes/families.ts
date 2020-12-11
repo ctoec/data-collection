@@ -8,6 +8,7 @@ import {
   NotFoundError,
   ApiError,
 } from '../middleware/error/errors';
+import * as controller from '../controllers/incomeDeterminations';
 
 export const familyRouter = express.Router();
 
@@ -46,26 +47,11 @@ familyRouter.put(
       const famId = parseInt(req.params['familyId']);
       const detId = parseInt(req.params['determinationId']);
       const readOrgIds = await getReadAccessibleOrgIds(req.user);
-
-      // Verify the user has access to the determination via
-      // family lookup--as in enrollment/funding controller
-      const family = await getManager().findOne(Family, famId, {
-        relations: ['organization'],
-        where: {
-          organization: { id: In(readOrgIds) },
-        },
-      });
-      if (!family) throw new NotFoundError();
-
-      // User must be authorized, so get the income det
-      const detToModify = await getManager().findOne(
-        IncomeDetermination,
+      const detToModify = await controller.getDetermination(
+        famId,
         detId,
-        {
-          where: { familyId: famId },
-        }
+        readOrgIds
       );
-      if (!detToModify) throw new NotFoundError();
 
       const mergedEntity = getManager().merge(
         IncomeDetermination,
@@ -120,8 +106,10 @@ familyRouter.delete(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
+      const famId = parseInt(req.params['familyId']);
       const detId = parseInt(req.params['determinationId']);
-      const det = await getManager().find(IncomeDetermination, { id: detId });
+      const readOrgIds = await getReadAccessibleOrgIds(req.user);
+      const det = await controller.getDetermination(famId, detId, readOrgIds);
       await getManager().softRemove(det);
       res.sendStatus(200);
     } catch (err) {
