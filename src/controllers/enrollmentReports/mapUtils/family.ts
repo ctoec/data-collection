@@ -1,7 +1,9 @@
+import { UndefinableBoolean } from '../../../../client/src/shared/models';
 import { EntityManager } from 'typeorm';
 import { Family, Organization, User } from '../../../entity';
 
 import { EnrollmentReportRow } from '../../../template';
+import { mapEnum } from './enum';
 
 /**
  * Create Family object (with IncomeDetermination) from FlattenedEnrollment
@@ -16,12 +18,18 @@ export const mapFamily = (
   user: User,
   save: boolean
 ) => {
+  const homelessness: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.homelessness,
+    { isUndefineableBoolean: true }
+  );
+
   let family = {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zipCode: source.zipCode,
-    homelessness: source.homelessness,
+    homelessness,
     organization,
   } as Family;
 

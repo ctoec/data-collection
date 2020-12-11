@@ -33,7 +33,7 @@
     "morgan": "^1.10.0",
     "mssql": "^6.2.1",
     "multer": "^1.4.2",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.6",
     "pg": "^7.3.0",
     "reflect-metadata": "^0.1.10",
     "ts-jest": "^26.4.1",
