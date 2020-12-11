@@ -148,8 +148,8 @@ jobs:
       - run:
           name: Setup environment variables
           command: |
-            TEST_API_HOST=<<parameters.test_api_host>>
-            LAUNCH_URL=<<parameters.launch_url>>
+            export TEST_API_HOST=<<parameters.test_api_host>>
+            export LAUNCH_URL=<<parameters.launch_url>>
       - run:
           working_directory: e2e-tests
           name: Install e2e test dependencies
