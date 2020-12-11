@@ -1,5 +1,5 @@
 import { removeDeletedElements } from '../utils/filterSoftRemoved';
-import { getManager, In } from 'typeorm';
+import { getManager, In, IsNull } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
@@ -10,8 +10,8 @@ export const getEnrollment = async (
   user: User,
   withFundings?: boolean
 ) => {
-  const enrollment = getManager().findOne(Enrollment, id, {
-    where: { siteId: In(user.siteIds) },
+  const enrollment = await getManager().findOne(Enrollment, id, {
+    where: [{ siteId: In(user.siteIds) }, { siteId: IsNull() }],
     relations: withFundings ? ['fundings'] : undefined,
   });
 
