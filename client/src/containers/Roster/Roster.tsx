@@ -35,6 +35,7 @@ import {
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { RosterContent } from './RosterContent';
+import { EmptyRosterCard } from '../../components/EmptyRosterCard';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -69,6 +70,7 @@ const Roster: React.FC = () => {
     active: activeChildren,
     withdrawn: withdrawnChildren,
   } = filterChildrenByWithdrawn(allChildren || []);
+  const rosterIsEmpty = (allChildren || []).length === 0;
   const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
   const isSingleSiteView = query.site ? true : false;
 
@@ -89,6 +91,7 @@ const Roster: React.FC = () => {
   // but site filtering needs to happen in the client-side, if a
   // site is requested
   const siteFilteredChildren = applySiteFilter(displayChildren, query.site);
+  const siteIsEmpty = (siteFilteredChildren || []).length === 0;
 
   // Get props for tabNav, h1Text, and subHeaderText, superHeaderText, and subSubHeader
   // based on user access (i.e. user's sites and org permissions)
@@ -155,6 +158,23 @@ const Roster: React.FC = () => {
     rosterH2,
   };
 
+  const rosterContent = tabNavProps ? (
+    <TabNav {...tabNavProps}>
+      {rosterH2}
+      <RosterContent {...rosterContentProps} />
+    </TabNav>
+  ) : (
+    <RosterContent {...rosterContentProps} />
+  );
+
+  const buttonTable = !query.withdrawn && (
+    <RosterButtonsTable
+      filterByMonth={queryMonth}
+      setFilterByMonth={updateActiveMonth}
+      updateWithdrawnOnly={updateWithdrawnOnly}
+    />
+  );
+
   return (
     <>
       <div className="Roster grid-container">
@@ -193,21 +213,14 @@ const Roster: React.FC = () => {
           </div>
         </div>
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-          {!query.withdrawn && (
-            <RosterButtonsTable
-              filterByMonth={queryMonth}
-              setFilterByMonth={updateActiveMonth}
-              updateWithdrawnOnly={updateWithdrawnOnly}
-            />
-          )}
+          {rosterIsEmpty ? <></> : buttonTable}
           <LoadingWrapper text="Loading your roster..." loading={loading}>
-            {tabNavProps ? (
-              <TabNav {...tabNavProps}>
-                {rosterH2}
-                <RosterContent {...rosterContentProps} />
-              </TabNav>
+            {rosterIsEmpty ? (
+              <EmptyRosterCard
+                boldText={"There aren't any records in your roster yet"}
+              />
             ) : (
-              <RosterContent {...rosterContentProps} />
+              rosterContent
             )}
           </LoadingWrapper>
         </ErrorBoundary>
