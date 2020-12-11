@@ -1,14 +1,11 @@
 import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import cx from 'classnames';
-import { ReactComponent as ArrowRight } from 'uswds/dist/img/arrow-right.svg';
+import { ReactComponent as ArrowRight } from '@ctoec/component-library/dist/assets/images/arrowForward.svg';
 import { Button, LoadingWrapper, TextWithIcon } from '@ctoec/component-library';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
-
 import UserContext from '../../contexts/UserContext/UserContext';
-
 import { MailToLink } from '../../components/MailToLink';
-import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const Home: React.FC = () => {
@@ -28,21 +25,21 @@ const Home: React.FC = () => {
   return (
     <div className="Home">
       <div className="usa-hero">
-        <div>
+        <div className="grid-container">
           <h1 ref={h1Ref} className="margin-bottom-2">
-            Upload your enrollment data
+            Welcome to ECE Reporter
           </h1>
           <Button
             className="btn--inverse"
             href="/login"
-            text="Sign in"
+            text="Log in"
             appearance="base"
           />
         </div>
       </div>
       <div className="grid-container margin-top-4">
         <div className="grid-row">
-          <div className="tablet:grid-col-auto margin-right-4 padding-4">
+          <div className="tablet:grid-col-auto margin-right-6">
             <img className="hero-bubble" src={HomeCareerBubbleSrc} alt="" />
           </div>
           <div className="tablet:grid-col-fill">
@@ -58,7 +55,24 @@ const Home: React.FC = () => {
               help families access quality care.
             </p>
             <div className="margin-bottom-4">
-              <p className="text-bold">Learn more</p>
+              <h2 className="text-primary text-light margin-y-3">Learn more</h2>
+              <h3>See the data collected by ECE Reporter</h3>
+              <Button
+                appearance="unstyled"
+                href="/data-requirements"
+                className="text-bold margin-bottom-3 display-block"
+                text={
+                  <TextWithIcon
+                    text="See the data requirements"
+                    Icon={ArrowRight}
+                    direction="right"
+                    iconSide="right"
+                    className="text-underline"
+                  />
+                }
+              />
+              <h3>Get help with ECE Reporter</h3>
+              <h3>Learn more about OEC</h3>
               <Button
                 appearance="unstyled"
                 external={true}
@@ -74,6 +88,7 @@ const Home: React.FC = () => {
                   />
                 }
               />
+              <h3>Learn how ECE Reporter collects and stores data</h3>
               <Button
                 appearance="unstyled"
                 href="/privacy-policy"
@@ -87,33 +102,6 @@ const Home: React.FC = () => {
                     className="text-underline"
                   />
                 }
-              />
-              <Button
-                appearance="unstyled"
-                href="/data-requirements"
-                className="text-bold margin-bottom-3 display-block"
-                text={
-                  <TextWithIcon
-                    text="See the data requirements"
-                    Icon={ArrowRight}
-                    direction="right"
-                    iconSide="right"
-                    className="text-underline"
-                  />
-                }
-              />
-            </div>
-            <div>
-              <p className="text-bold">Download the data collection template</p>
-              <CSVExcelDownloadButton
-                fileType="xlsx"
-                whichDownload="template"
-                className="margin-bottom-3"
-              />
-              <CSVExcelDownloadButton
-                fileType="csv"
-                whichDownload="template"
-                className="margin-bottom-3"
               />
             </div>
           </div>
