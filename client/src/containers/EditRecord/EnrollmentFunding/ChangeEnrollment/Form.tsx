@@ -43,11 +43,17 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   const onSubmit = (updatedData: ChangeEnrollment) => {
     setLoading(true);
 
-    //  Because the radio group for the Site field broadcasts ID as a string, 
+    //  Because the radio group for the Site field broadcasts ID as a string,
     //  but the API is expecting a number (as it should)
-    if (!!updatedData.newEnrollment && !!updatedData.newEnrollment.site && 
-      !!updatedData.newEnrollment.site.id && typeof updatedData.newEnrollment.site.id === 'string') {
-      updatedData.newEnrollment.site.id = parseInt(updatedData.newEnrollment.site.id);
+    if (
+      !!updatedData.newEnrollment &&
+      !!updatedData.newEnrollment.site &&
+      !!updatedData.newEnrollment.site.id &&
+      typeof updatedData.newEnrollment.site.id === 'string'
+    ) {
+      updatedData.newEnrollment.site.id = parseInt(
+        updatedData.newEnrollment.site.id
+      );
     }
 
     apiPost(`children/${child.id}/change-enrollment`, updatedData, {

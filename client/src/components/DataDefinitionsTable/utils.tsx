@@ -5,7 +5,8 @@ import {
   TEMPLATE_REQUIREMENT_LEVELS,
   TEMPLATE_SECTIONS,
 } from '../../shared/constants';
-import { ColumnMetadata } from '../../shared/models';
+import { ColumnMetadata, Organization, Site } from '../../shared/models';
+import { DATA_DEF_COLUMN_NAMES } from './TableColumns';
 
 export const getRequiredTag = (requirementLevel: string) => (
   <Tag
@@ -54,3 +55,54 @@ export const getMarkdownStyledFormatOptionsList = (formatString: string) => {
 
   return formatString;
 };
+
+export type EnhancedColumnMetadata = ColumnMetadata & {
+  columnFormatters?: {
+    [key in DATA_DEF_COLUMN_NAMES]?: (
+      row: EnhancedColumnMetadata
+    ) => React.ReactElement;
+  };
+};
+
+export const getSiteFormatters = (sites: Site[]) => ({
+  [DATA_DEF_COLUMN_NAMES.format]: () => (
+    <td>
+      Text, one of:
+      <div className="margin-top-1">
+        <ul>
+          {sites.map((s) => (
+            <li key={s.siteName}>{s.siteName}</li>
+          ))}
+        </ul>
+      </div>
+    </td>
+  ),
+});
+
+export const getProviderFormatters = (organizations?: Organization[]) => ({
+  [DATA_DEF_COLUMN_NAMES.format]: () => {
+    if (!organizations?.length) {
+      return <></>;
+    }
+    if (organizations?.length === 1) {
+      return (
+        <td>
+          Text:
+          <div className="margin-top-1">{organizations[0].providerName}</div>
+        </td>
+      );
+    }
+    return (
+      <td>
+        Text:
+        <div className="margin-top-1">
+          <ul>
+            {organizations?.map((o) => (
+              <li key={o.providerName}>{o.providerName}</li>
+            ))}
+          </ul>
+        </div>
+      </td>
+    );
+  },
+});
