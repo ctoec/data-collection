@@ -55,7 +55,7 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
         where: { providerName: row.name },
       });
       if (!org) {
-        org = org = await getManager('script').save(
+        org = await getManager('script').save(
           getManager('script').create(Organization, {
             providerName: row.name,
             uniqueIdType: idType || UniqueIdType.Other,
