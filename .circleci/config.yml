@@ -158,11 +158,15 @@ jobs:
           working_directory: e2e-tests
           name: Run e2e tests (in chrome)
           command: |
+            source $BASH_ENV
+            env
             yarn test
       - run:
           working_directory: client
           name: Run api integration tests
-          command: SKIP_PREFLIGHT_CHECK=true yarn test-integration
+          command: |
+            env
+            SKIP_PREFLIGHT_CHECK=true yarn test-integration
 
 workflows:
   local-tests-and-deploy-if-base:
