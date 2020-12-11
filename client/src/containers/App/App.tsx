@@ -31,13 +31,13 @@ const App: React.FC = () => {
             },
             {
               type: 'primary',
-              text: 'Roster',
-              path: '/roster',
+              text: 'File upload',
+              path: '/upload',
             },
             {
               type: 'primary',
-              text: 'Batch upload',
-              path: '/upload',
+              text: 'Roster',
+              path: '/roster',
             },
             {
               text: 'Privacy policy',

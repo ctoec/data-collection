@@ -23,7 +23,7 @@ export const parseQueryString = <T = string>(
   }
 
   if (forceArray) {
-    return (value ? [value] : []) as T[];
+    return (value ? [value] : undefined) as T[];
   }
   return value;
 };

@@ -3,6 +3,7 @@ import { getManager, In } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
+import moment from 'moment';
 
 export const getEnrollment = async (
   id: number | string,
@@ -47,6 +48,7 @@ export const changeFunding = async (
     const currentFunding = (enrollment.fundings || []).find(
       (f) => !f.lastReportingPeriod
     );
+
     if (currentFunding) {
       const oldFundingLastReportingPeriod =
         changeFundingData.oldFunding?.lastReportingPeriod;
@@ -76,11 +78,21 @@ export const changeFunding = async (
         ).period;
       }
 
+      // Check that the reporting period prior to the new funding reporting period
+      // is not before July 2020 (the first date supported in the app)
+      let periodBeforeNewFundingFirst = newFundingFirstReportingPeriod.period
+        .clone()
+        .add(-1, 'month');
+      const EARLIEST_PERIOD = moment.utc('07-01-2020', ['DD-MM-YYYY']);
+      if (periodBeforeNewFundingFirst < EARLIEST_PERIOD) {
+        // If it is prior to July 2020, use that date instead
+        periodBeforeNewFundingFirst = EARLIEST_PERIOD;
+      }
       const lastReportingPeriod =
         oldFundingLastReportingPeriod ||
         (await tManager.findOne(ReportingPeriod, {
           where: {
-            period: newFundingFirstReportingPeriod.period.add(-1, 'month'),
+            period: periodBeforeNewFundingFirst,
             type: currentFunding.fundingSpace.source,
           },
         }));
