@@ -12,7 +12,7 @@ module.exports = {
       // If we didn't go to login page, we must already be logged in
       // Just verify the correct landing page and we're done
       else if (result.value !== 'IdentityServer4') {
-        await headerMatch(browser, "Let's get started");
+        await headerMatch(browser, 'Hello Voldemort!');
         return;
       }
     });
@@ -66,6 +66,6 @@ module.exports = {
     // captures the 'ECE Reporter' at the top of the page and parses
     // that as a title (was another fail reason)
     await browser.waitForElementVisible('main');
-    await headerMatch(browser, "Let's get started");
+    await headerMatch(browser, 'Hello Voldemort!');
   },
 };
