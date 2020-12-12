@@ -1,4 +1,4 @@
-import { FundingSource, FundingTime } from '../models';
+import { AgeGroup, FundingSource, FundingTime } from '../models';
 import { FundingSourceTime } from '../models/FundingSourceTime';
 
 //  This enumerates all of the valid funding source/funding time combinations,
@@ -27,6 +27,7 @@ export const FUNDING_SOURCE_TIMES: FundingSourceTime[] = [
   {
     displayName: 'School Readiness',
     fundingSources: [FundingSource.PSR, FundingSource.CSR],
+    ageGroupLimitations: [AgeGroup.Preschool],
     fundingTimes: [
       {
         value: FundingTime.FullDay,
