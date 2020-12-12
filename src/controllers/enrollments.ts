@@ -10,8 +10,11 @@ export const getEnrollment = async (
   user: User,
   withFundings?: boolean
 ) => {
-  const enrollment = await getManager().findOne(Enrollment, id, {
-    where: [{ siteId: In(user.siteIds) }, { siteId: IsNull() }],
+  const enrollment = await getManager().findOne(Enrollment, {
+    where: [
+      { siteId: In(user.siteIds), id },
+      { siteId: IsNull(), id },
+    ],
     relations: withFundings ? ['fundings'] : undefined,
   });
 

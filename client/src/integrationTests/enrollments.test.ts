@@ -21,7 +21,6 @@ const TEST_OPTS: ApiOpts = {
 
 describe('integration', () => {
   describe('api', () => {
-    let child: Child | undefined;
     let enrollment: Enrollment | undefined;
     let reportingPeriods: ReportingPeriod[] | undefined;
     beforeAll(async () => {
@@ -30,8 +29,12 @@ describe('integration', () => {
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
       const children: Child[] = await apiGet('children', '', TEST_OPTS);
-      child = children.find((child) => child.enrollments?.length);
-      enrollment = child?.enrollments?.shift();
+      const child = children.find((c) =>
+        c.enrollments?.some((e) => !e?.exit && !!e?.fundings?.length)
+      );
+      enrollment = child?.enrollments?.find(
+        (e) => !e?.exit && !!e?.fundings?.length
+      );
       reportingPeriods = await apiGet(`reporting-periods`, '', TEST_OPTS);
     });
     afterAll(() => {
@@ -69,11 +72,13 @@ describe('integration', () => {
 
         const site = enrollment.site;
 
-        delete enrollment.id;
-        delete enrollment.site;
-        delete enrollment.siteId;
+        const newEnrollment = { ...enrollment };
+        delete newEnrollment.id;
+        delete newEnrollment.site;
+        delete newEnrollment.siteId;
+        delete newEnrollment.fundings;
         const changeEnrollment: ChangeEnrollment = {
-          newEnrollment: enrollment,
+          newEnrollment,
           oldEnrollment: {
             funding: {
               lastReportingPeriod: reportingPeriods?.find(
@@ -136,7 +141,6 @@ describe('integration', () => {
             fundingSpace: fundingSpace,
           } as Funding,
         };
-
         const res = await apiPost(
           `enrollments/${enrollment.id}/change-funding`,
           changeFunding,
@@ -149,6 +153,7 @@ describe('integration', () => {
           '',
           TEST_OPTS
         );
+
         const updatedEnrollment = updatedChild.enrollments?.find(
           (e) => e.id === enrollment?.id
         );
@@ -163,6 +168,7 @@ describe('integration', () => {
           const updatedFunding = updatedEnrollment?.fundings?.find(
             (f) => f.id === previouslyCurrentFunding.id
           );
+
           expect(
             updatedFunding?.lastReportingPeriod?.period.format('MM-YYYY')
           ).toEqual(
@@ -194,6 +200,7 @@ describe('integration', () => {
         const currentFunding = enrollment.fundings?.find(
           (f) => !f.lastReportingPeriod
         );
+
         if (currentFunding) {
           const reportingPeriods: ReportingPeriod[] = await apiGet(
             `reporting-periods?source=${
