@@ -5,11 +5,8 @@
     padding: 3em 0;
     margin-bottom: 1em;
 
-    div {
-      max-width: 64em;
-      margin: 0 auto;
-      padding-left: 2em;
-      padding-right: 2em;
+    h1 {
+      font-weight: 400;
     }
 
     .btn--inverse {
@@ -21,10 +18,6 @@
     }
   }
 
-  .hero-bubble {
-    width: 13em;
-  }
-
   .footer {
     margin-top: -1em;
     margin-bottom: -10em;
@@ -33,10 +26,7 @@
     div {
       height: 100%;
       width: 100%;
-      max-width: 64em;
       margin: 0 auto;
-      padding-left: 2em;
-      padding-right: 2em;
     }
 
     .usa-button:hover {

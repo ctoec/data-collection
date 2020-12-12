@@ -33,8 +33,12 @@ module.exports = {
         lastName
       );
 
+      await browser.waitForElementVisible(
+        'xpath',
+        "//*/p[contains(., '99 children enrolled')]"
+      );
       // Expect the first tab nav content to not have that link text in it
-      await browser.verify.not.containsText(
+      await browser.assert.not.containsText(
         { locateStrategy: 'css selector', selector: '.oec-tab-nav--content' },
         clickedChildLinkText
       );

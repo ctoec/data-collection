@@ -11,6 +11,8 @@ import { RequestHandler, Request, Response, NextFunction } from 'express';
  */
 export function passAsyncError(func: RequestHandler) {
   return function (req: Request, res: Response, next: NextFunction) {
+    // @ts-ignore
+    // This works the way it needs to so I'm not sure why typescript is complaining
     func(req, res, next).catch(next);
   };
 }
