@@ -56,10 +56,12 @@ export const createUserData = async (
     try {
       const _firstName = row.userName.split(' ')[0];
       const _lastName = row.userName.split(' ')[1];
-      // New users have username = email; pilot v1 users have username = firstname.lastname
+      // New users have username = email;
+      // pilot v1 users have username = firstname.lastname or Firstname.Lastname
       const wingedKeysId =
         UUIDs[row.email] ||
-        UUIDs[`${_firstName.toLowerCase()}.${_lastName.toLowerCase()}`];
+        UUIDs[`${_firstName.toLowerCase()}.${_lastName.toLowerCase()}`] ||
+        UUIDs[`${_firstName}.${_lastName}`];
 
       let user = await getManager('script').findOne(User, {
         where: { wingedKeysId },
