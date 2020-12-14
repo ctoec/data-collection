@@ -16,12 +16,10 @@ export const getFakeFunding = (
       (f) => f.ageGroup === enrollment.ageGroup
     ) || []
   );
-  const firstAndLastReportingPeriods = random
-    .arrayElements(reportingPeriods, 2)
-    .map((r) => ({
-      id,
-      ...getReportingPeriodFromDates(fundingSpace.source, r),
-    }));
+  const firstAndLastReportingPeriods = reportingPeriods.slice(-2).map((r) => ({
+    id,
+    ...getReportingPeriodFromDates(fundingSpace.source, r),
+  }));
   return {
     id,
     enrollment,

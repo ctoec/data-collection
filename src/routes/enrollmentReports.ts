@@ -57,7 +57,6 @@ enrollmentReportsRouter.post(
             };
           })
         );
-
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );

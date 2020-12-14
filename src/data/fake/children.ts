@@ -118,7 +118,8 @@ const completeChildren: Child[] = children.map((c, i) => {
     gender: random.arrayElement(possibleGenders),
     family: {
       ...family,
-      incomeDeterminations: c.foster ? [] : [getFakeIncomeDet(i, family)],
+      incomeDeterminations:
+        c.foster === UndefinableBoolean.Yes ? [] : [getFakeIncomeDet(i, family)],
     },
     enrollments: makeFakeEnrollments(i, c, site),
     cascadeDeleteEnrollments: null,
