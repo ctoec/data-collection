@@ -8,7 +8,7 @@ import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
 import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
-import { organizations } from '../data/organizations';
+import { organizations } from '../data/fake/organizations';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)

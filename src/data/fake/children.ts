@@ -1,10 +1,10 @@
 import { name, address, random } from 'faker';
-import { Child, Organization, Site } from '../entity';
+import { Child, Organization, Site } from '../../entity';
 import {
   BirthCertificateType,
   Gender,
   RACE_FIELDS,
-} from '../../client/src/shared/models';
+} from '../../../client/src/shared/models';
 import { stagingUserAllowedOrganizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import moment from 'moment';
@@ -12,7 +12,7 @@ import { makeFakeFamily } from './family';
 import { getFakeIncomeDet } from './incomeDeterminations';
 import { makeFakeEnrollments } from './enrollment';
 import { getFakeFundingSpaces } from './fundingSpace';
-import { weightedBoolean, weightedUndefinableBoolean } from './fakeDataUtils';
+import { weightedBoolean, weightedUndefinableBoolean } from './utils';
 
 const _organizations: Organization[] = stagingUserAllowedOrganizations.map(
   (o, i) => ({
