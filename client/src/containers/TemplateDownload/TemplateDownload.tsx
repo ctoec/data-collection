@@ -1,23 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import useSWR, { responseInterface } from 'swr';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { ReactComponent as Image } from '../../images/SpreadsheetIllustration.svg';
 import { BackButton } from '../../components/BackButton';
-import { apiGet } from '../../utils/api';
+import { TemplateMetadata } from '../../shared/payloads';
 
 const TemplateDownload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-  const [lastUpdated, setLastUpdated] = useState();
-  useEffect(() => {
-    if (lastUpdated) return;
-    apiGet('/template/metadata')
-      .then((res) => {
-        setLastUpdated(res.lastUpdated.format('MMMM DD, YYYY'));
-      })
-      .catch((e) => {
-        throw new Error(e);
-      });
-  }, []);
+  const { data: templateMetadata } = useSWR('template/metadata', {
+    dedupingInterval: 100000,
+  }) as responseInterface<TemplateMetadata, string>;
+  const { lastUpdated } = templateMetadata || {};
 
   return (
     <div className="grid-container">
@@ -27,7 +21,10 @@ const TemplateDownload: React.FC = () => {
           <h1 ref={h1Ref}>File upload template</h1>
           {lastUpdated && (
             <p>
-              Last updated: <span className="text-bold">{lastUpdated}</span>
+              Last updated:{' '}
+              <span className="text-bold">
+                {lastUpdated.format('MMMM DD, YYYY')}
+              </span>
             </p>
           )}
           <p>
