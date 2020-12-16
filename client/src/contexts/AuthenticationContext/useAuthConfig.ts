@@ -5,9 +5,10 @@ import {
 } from '@openid/appauth';
 
 export const useAuthConfig = (openIdConnectUrl?: string) => {
-  const [configuration, setConfiguration] = useState<
-    AuthorizationServiceConfiguration
-  >();
+  const [
+    configuration,
+    setConfiguration,
+  ] = useState<AuthorizationServiceConfiguration>();
 
   // Only fetch on openIdConnectUrl change
   useEffect(() => {
