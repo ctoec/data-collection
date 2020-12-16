@@ -181,7 +181,7 @@ describe('integration', () => {
         const newFunding = updatedEnrollment?.fundings?.find(
           (f) =>
             f.firstReportingPeriod?.id ===
-              changeFunding.newFunding?.firstReportingPeriod?.id &&
+            changeFunding.newFunding?.firstReportingPeriod?.id &&
             f.fundingSpace?.id === changeFunding.newFunding?.fundingSpace?.id
         );
         expect(newFunding).not.toBeUndefined;
@@ -203,8 +203,7 @@ describe('integration', () => {
 
         if (currentFunding) {
           const reportingPeriods: ReportingPeriod[] = await apiGet(
-            `reporting-periods?source=${
-              currentFunding.fundingSpace?.source.split('-')[0]
+            `reporting-periods?source=${currentFunding.fundingSpace?.source.split('-')[0]
             }`,
             '',
             TEST_OPTS
