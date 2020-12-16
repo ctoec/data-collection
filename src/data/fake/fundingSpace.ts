@@ -7,12 +7,13 @@ export const getFakeFundingSpaces = (
   organization: Organization
 ): FundingSpace[] => {
   let fundingSpaces = [];
-  Object.values(AgeGroup).forEach((ageGroup) => {
-    Object.values(FundingSource).forEach((source) => {
-      FUNDING_SOURCE_TIMES.filter((fst) =>
-        fst.fundingSources.includes(source)
-      ).forEach((match) => {
-        match.fundingTimes.forEach((fundingTime) =>
+  Object.values(FundingSource).forEach((source) => {
+    FUNDING_SOURCE_TIMES.filter((fst) =>
+      fst.fundingSources.includes(source)
+    ).forEach((match) => {
+      match.fundingTimes.forEach((fundingTime) => {
+        const ageGroups = match.ageGroupLimitations || Object.values(AgeGroup);
+        ageGroups.forEach((ageGroup) => {
           fundingSpaces.push({
             id: fundingSpaces.length + 1,
             capacity: source === FundingSource.SHS ? -1 : random.number(50),
@@ -21,8 +22,8 @@ export const getFakeFundingSpaces = (
             ageGroup,
             time: fundingTime.value,
             organizationId: organization.id,
-          })
-        );
+          });
+        });
       });
     });
   });

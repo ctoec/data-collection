@@ -40,7 +40,7 @@ module.exports = {
 
     await browser.waitForElementVisible(
       'xpath',
-      `//*/p[contains(text(),"100 children enrolled")]`
+      `//*/p[contains(text(),"20 children enrolled")]`
     );
   },
 };
