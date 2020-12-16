@@ -11,8 +11,8 @@ export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
   childrenWithErrorsCount: number,
   withdrawnChildrenCount: number,
-  organizationId?: string,
-  alertType?: 'warning' | 'error' = 'warning'
+  alertType: 'warning' | 'error' = 'warning',
+  organizationId?: string
 ) => {
   const { alertElements, setAlerts, alerts } = useAlerts();
   const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(

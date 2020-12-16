@@ -75,7 +75,7 @@ const Roster: React.FC = () => {
 
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
-  const [useWarningAlerts, setUseWarningAlerts] = useState(true);
+  const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
   const activeChildrenWithErrorsCount = activeChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
   ).length;
@@ -86,8 +86,8 @@ const Roster: React.FC = () => {
     loading,
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,
-    query.organization,
-    useWarningAlerts
+    alertType,
+    query.organization
   );
 
   // Organization filtering happens on the server-side,
@@ -127,7 +127,7 @@ const Roster: React.FC = () => {
       0
     ) {
       window.scrollTo(0, 0);
-      setUseWarningAlerts(false);
+      setAlertType('error');
       return;
     }
     // If there's an active org submit
