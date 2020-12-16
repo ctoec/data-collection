@@ -21,6 +21,7 @@ import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { BatchUpload } from '../../shared/payloads';
+import { getFormDataBlob } from '../../utils/getFormDataBlob';
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -47,13 +48,10 @@ const Upload: React.FC = () => {
     // Haven't yet determined how many errors of each type there are
     if (file && errorDict === undefined) {
       setLoading(true);
-      // Ugh internet explorer why
-      // https://developer.mozilla.org/en-US/docs/Web/API/FormData
-      // https://www.npmjs.com/package/formdata-polyfill
-      const formData = new FormData();
-      formData.append('file', file, file.name);
+      const formData = getFormDataBlob(file);
       apiPost(`enrollment-reports/check`, formData, {
         accessToken,
+        headers: { 'content-type': formData.type },
         rawBody: true,
       })
         // Back end sends back an object whose fields are error table obj.
@@ -63,7 +61,7 @@ const Upload: React.FC = () => {
         .catch(
           handleJWTError(history, (err) => {
             setError(err);
-            setFile(undefined);
+            clearFile();
             setErrorDict(undefined);
           })
         )
@@ -78,10 +76,10 @@ const Upload: React.FC = () => {
   useEffect(() => {
     if (file && postUpload) {
       setLoading(true);
-      const formData = new FormData();
-      formData.set('file', file);
+      const formData = getFormDataBlob(file);
       apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
         accessToken,
+        headers: { 'content-type': formData.type },
         rawBody: true,
       })
         // Response contains id of created enrollmentReport,
@@ -108,7 +106,7 @@ const Upload: React.FC = () => {
         .catch(
           handleJWTError(history, (err) => {
             setError(err);
-            setFile(undefined);
+            clearFile();
           })
         )
         // Reset this flag to false so the upload can be subsequently re-triggered
@@ -156,15 +154,22 @@ const Upload: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, userRosterCount, errorDict]);
 
+  const [fileKey, setFileKey] = useState(0);
+  const clearFile = () => {
+    // When the file is cleared, change the key to force the file component to rerender/reset
+    setFile(undefined);
+    setFileKey((oldKey) => oldKey + 1);
+  };
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const _file = e?.target?.files?.[0];
     if (!_file) {
-      setFile(undefined);
+      clearFile();
       return setError('No file selected for upload');
     }
     setFile(_file);
     setError(undefined);
+    setErrorDict(undefined);
   };
 
   return (
@@ -173,7 +178,7 @@ const Upload: React.FC = () => {
         isOpen={errorModalOpen}
         toggleIsOpen={() => setErrorModalOpen((o) => !o)}
         clearFile={() => {
-          setFile(undefined);
+          clearFile();
           setErrorDict(undefined);
         }}
         errorDict={errorDict || []}
@@ -183,7 +188,7 @@ const Upload: React.FC = () => {
       />
       <CheckReplaceData
         isOpen={checkReplaceDataOpen}
-        clearFile={() => setFile(undefined)}
+        clearFile={clearFile}
         toggleIsOpen={() => setCheckReplaceDataOpen((o) => !o)}
         setPostUpload={setPostUpload}
         setQueryString={setQueryStringForUpload}
@@ -241,6 +246,7 @@ const Upload: React.FC = () => {
           >
             <LoadingWrapper text="Uploading your file..." loading={loading}>
               <FileInput
+                key={fileKey}
                 id="report"
                 label="Choose a file"
                 onChange={fileUpload}

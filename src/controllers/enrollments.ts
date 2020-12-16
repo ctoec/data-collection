@@ -1,27 +1,57 @@
 import { removeDeletedElements } from '../utils/filterSoftRemoved';
-import { getManager, In } from 'typeorm';
+import { getManager, In, IsNull } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
+import moment from 'moment';
+
+export const getEnrollment = async (
+  id: number | string,
+  user: User,
+  withFundings?: boolean
+) => {
+  const enrollment = await getManager().findOne(Enrollment, {
+    where: [
+      { siteId: In(user.siteIds), id },
+      { siteId: IsNull(), id },
+    ],
+    relations: withFundings ? ['fundings'] : undefined,
+  });
+
+  if (!enrollment) throw new NotFoundError();
+  return enrollment;
+};
+
+export const getFunding = async (
+  enrollmentId: number | string,
+  fundingId: number | string,
+  user: User
+) => {
+  // To assert that the user has access to the enrollment
+  await getEnrollment(enrollmentId, user);
+  const funding = await getManager().findOne(Funding, fundingId, {
+    where: { enrollmentId: enrollmentId },
+  });
+
+  if (!funding) throw new NotFoundError();
+
+  return funding;
+};
 
 export const changeFunding = async (
   id: number,
   user: User,
   changeFundingData: ChangeFunding
 ) => {
-  let enrollment = await getManager().findOne(Enrollment, id, {
-    relations: ['fundings'],
-    where: { site: { id: In(user.siteIds) } },
-  });
-  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
-
-  if (!enrollment) throw new NotFoundError();
+  const enrollment = await getEnrollment(id, user, true);
+  enrollment.fundings = removeDeletedElements(enrollment.fundings);
 
   return getManager().transaction(async (tManager) => {
     // Update current funding, if exists
     const currentFunding = (enrollment.fundings || []).find(
       (f) => !f.lastReportingPeriod
     );
+
     if (currentFunding) {
       const oldFundingLastReportingPeriod =
         changeFundingData.oldFunding?.lastReportingPeriod;
@@ -51,11 +81,21 @@ export const changeFunding = async (
         ).period;
       }
 
+      // Check that the reporting period prior to the new funding reporting period
+      // is not before July 2020 (the first date supported in the app)
+      let periodBeforeNewFundingFirst = newFundingFirstReportingPeriod.period
+        .clone()
+        .add(-1, 'month');
+      const EARLIEST_PERIOD = moment.utc('07-01-2020', ['DD-MM-YYYY']);
+      if (periodBeforeNewFundingFirst < EARLIEST_PERIOD) {
+        // If it is prior to July 2020, use that date instead
+        periodBeforeNewFundingFirst = EARLIEST_PERIOD;
+      }
       const lastReportingPeriod =
         oldFundingLastReportingPeriod ||
         (await tManager.findOne(ReportingPeriod, {
           where: {
-            period: newFundingFirstReportingPeriod.period.add(-1, 'month'),
+            period: periodBeforeNewFundingFirst,
             type: currentFunding.fundingSpace.source,
           },
         }));
@@ -81,12 +121,7 @@ export const withdraw = async (
   user: User,
   withdrawData: Withdraw
 ) => {
-  let enrollment = await getManager().findOne(Enrollment, id, {
-    relations: ['fundings'],
-    where: { site: { id: In(user.siteIds) } },
-  });
-
-  if (!enrollment) throw new NotFoundError();
+  const enrollment = await getEnrollment(id, user, true);
 
   enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 

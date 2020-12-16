@@ -1,19 +1,24 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 import { stringify } from 'query-string';
-import { Button, TextWithIcon, DownloadArrow } from '@ctoec/component-library';
+import useSWR, { responseInterface } from 'swr';
+import {
+  Button,
+  TextWithIcon,
+  FileDownload,
+  ButtonProps,
+} from '@ctoec/component-library';
 import { downloadStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
-import useSWR, { responseInterface } from 'swr';
 import { TemplateMetadata } from '../shared/payloads';
 
 type FileTypeOpts = 'xlsx' | 'csv';
 const fileTypeName = {
   xlsx: 'Excel',
-  csv: 'CSV',
+  csv: '.csv',
 };
 
-type CSVExcelDownloadButtonProps = {
+type CSVExcelDownloadButtonProps = Omit<ButtonProps, 'text'> & {
   whichDownload: 'roster' | 'template' | 'example';
   fileType?: FileTypeOpts;
   queryParamsAsObject?: { [key: string]: any };
@@ -57,6 +62,7 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
   queryParamsAsObject,
   className,
   downloadText: specifiedDownloadText,
+  ...buttonProps
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
 
@@ -99,11 +105,12 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
       text={
         <TextWithIcon
           text={downloadText}
-          Icon={DownloadArrow}
+          Icon={FileDownload}
           iconSide="left"
           className="text-underline"
         />
       }
+      {...buttonProps}
     />
   );
 };

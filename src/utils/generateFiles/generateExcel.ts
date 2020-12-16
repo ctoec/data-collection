@@ -1,8 +1,8 @@
 import { WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
-import { ColumnMetadata } from '../../client/src/shared/models';
-import { wrapText } from '../utils/string';
-import { getAllColumnMetadata } from '../template';
-import { TEMPLATE_REQUIREMENT_LEVELS } from '../../client/src/shared/constants';
+import { ColumnMetadata } from '../../../client/src/shared/models';
+import { wrapText } from '../string';
+import { getAllColumnMetadata, EnrollmentReportRow } from '../../template';
+import { getFormattedColumnHeader } from './getFormattedColumnHeader';
 
 export function generateExcelWorkbook(rows?: string[][]): WorkBook {
   const columnMetadatas: ColumnMetadata[] = getAllColumnMetadata();
@@ -15,14 +15,10 @@ export function generateExcelWorkbook(rows?: string[][]): WorkBook {
 
   columnMetadatas.forEach((columnMetadata, index) => {
     sections[index] = columnMetadata.section;
-    columnNames[index] =
-      columnMetadata.requirementLevel !== TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL
-        ? columnMetadata.formattedName
-        : `(OPTIONAL) ${columnMetadata.formattedName}`;
-    formats[index] = columnMetadata.format;
+    columnNames[index] = getFormattedColumnHeader(columnMetadata);
 
-    //  Reserve a certain number of minimum characters for column widths, for the sake of
-    //  having actually readable format descriptors
+    // Reserve a certain number of minimum characters for column widths, for the sake of
+    // having actually readable format descriptors
     const displayNameLength: number = columnMetadata.formattedName.length;
     const columnCharCount: number =
       displayNameLength > 16 ? displayNameLength : 16;
@@ -31,8 +27,10 @@ export function generateExcelWorkbook(rows?: string[][]): WorkBook {
       wch: columnCharCount,
     };
 
-    formats[index] = wrapText(columnMetadata.format, columnCharCount);
-
+    formats[index] = wrapText(
+      getFormattedColumnFormat(columnMetadata),
+      columnCharCount
+    );
     if (!sectionCounts[columnMetadata.section]) {
       sectionCounts[columnMetadata.section] = 0;
     } else {
@@ -50,8 +48,8 @@ export function generateExcelWorkbook(rows?: string[][]): WorkBook {
   let merges = [];
   let start = 0;
 
-  //  Iterate through each column's section and add merge points whenever
-  //  the section changes
+  // Iterate through each column's section and add merge points whenever
+  // the section changes
   sections.forEach((sectionName, index) => {
     if (index === sections.length - 1 || sectionName !== sections[index + 1]) {
       merges.push({ s: { c: start, r: 0 }, e: { c: index, r: 0 } });
@@ -66,4 +64,22 @@ export function generateExcelWorkbook(rows?: string[][]): WorkBook {
   utils.book_append_sheet(workbook, sheet);
 
   return workbook;
+}
+
+/**
+ * Quick fix for replacing relative markdown-style links with real URLs.
+ * Always replace template link with prod link for now, to avoid needing
+ * to inject and access FQDN in the app
+ * @param columnMetadata
+ */
+function getFormattedColumnFormat(columnMetadata: ColumnMetadata) {
+  const match = columnMetadata.format.match(/(\[.*\]\((\/.*)\))/);
+  const productionSitePath = 'https://ece-reporter.ctoec.org';
+  if (match && match.length >= 3) {
+    return columnMetadata.format.replace(
+      match[1],
+      `${productionSitePath}${match[2]}`
+    );
+  }
+  return columnMetadata.format;
 }

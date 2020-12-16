@@ -1,5 +1,6 @@
 import { Child, IncomeDetermination, Organization } from '.';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
+import { UndefinableBoolean } from '../UndefinableBoolean';
 
 export interface Family extends ObjectWithValidationErrors {
   id: number;
@@ -7,7 +8,7 @@ export interface Family extends ObjectWithValidationErrors {
   town?: string;
   state?: string;
   zipCode?: string;
-  homelessness?: boolean;
+  homelessness?: UndefinableBoolean;
   incomeDeterminations?: Array<IncomeDetermination>;
   children?: Array<Child>;
   organization?: Organization;

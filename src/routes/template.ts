@@ -2,7 +2,7 @@ import express from 'express';
 import { Response, Request } from 'express';
 import { BookType } from 'xlsx/types';
 
-import { streamTabularData } from '../utils/streamTabularData';
+import { streamTabularData } from '../utils/generateFiles/streamTabularData';
 import { getAllColumnMetadata } from '../template';
 import { TEMPLATE_VERSION, TEMPLATE_LAST_UPDATED } from '../template/constants';
 import { InternalServerError } from '../middleware/error/errors';
@@ -11,7 +11,7 @@ import {
   completeChildren,
   childrenAllMissingOneField,
   childrenMissingSomeInfo,
-} from '../data/children';
+} from '../data/fake/children';
 import { streamUploadedChildren } from '../controllers/export';
 import { parseQueryString } from '../utils/parseQueryString';
 import { TemplateMetadata } from '../../client/src/shared/payloads';
@@ -69,9 +69,7 @@ templateRouter.get(
       } else if (whichFakeChildren === 'missingOne') {
         fakeChildren = childrenAllMissingOneField;
       }
-      res.send(
-        await streamUploadedChildren(res, fakeChildren, fileType as BookType)
-      );
+      await streamUploadedChildren(res, fakeChildren, fileType as BookType);
     } catch (err) {
       console.error('Unable to download example', err);
       throw new InternalServerError('Could not download example file: ' + err);

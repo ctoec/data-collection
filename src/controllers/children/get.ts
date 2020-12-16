@@ -27,7 +27,6 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
  * Get all children the given user has access to.
  * Optionally, can filter to only return children:
  * 	- for specific organizations
- *  - who are totally withdrawn (no active enrollments)
  *  - with active enrollments in a specific month
  * 	- with missing info
  * Supports pagination with skip and take parameters, which
@@ -39,7 +38,6 @@ export const getChildren = async (
   filterOpts: {
     organizationIds?: string[];
     missingInfoOnly?: boolean;
-    withdrawnOnly?: boolean;
     activeMonth?: Moment;
     skip?: number;
     take?: number;
@@ -48,7 +46,6 @@ export const getChildren = async (
   let {
     organizationIds,
     missingInfoOnly,
-    withdrawnOnly,
     activeMonth,
     skip,
     take,
@@ -70,11 +67,6 @@ export const getChildren = async (
       (child) => child.validationErrors && child.validationErrors.length
     );
   }
-  // Else if withdrawn qs param
-  else if (withdrawnOnly) {
-    // Do not return any children with active enrollments
-    return children.filter((c) => c.enrollments?.every((e) => !!e.exit));
-  }
   // Else if month qs param
   else if (activeMonth) {
     // Do not return children withouth active enrollment during or before that month
@@ -88,10 +80,9 @@ export const getChildren = async (
       return c.enrollments && c.enrollments.length;
     });
   }
-  // Else default to return only children with active enrollments
-  else {
-    return children.filter((c) => c.enrollments?.some((e) => !e.exit));
-  }
+
+  // Default return all children
+  return children;
 };
 
 /**

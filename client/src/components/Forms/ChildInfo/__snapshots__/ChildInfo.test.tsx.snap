@@ -31,114 +31,102 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         As identified by family
       </span>
       <div>
-        <span>
-          <div
-            class="usa-checkbox"
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="americanIndianOrAlaskaNative"
+            type="checkbox"
+            value="americanIndianOrAlaskaNative"
+          />
+          <label
+            class="usa-checkbox__label"
+            for="americanIndianOrAlaskaNative"
           >
-            <input
-              class="usa-checkbox__input"
-              id="americanIndianOrAlaskaNative"
-              type="checkbox"
-              value="americanIndianOrAlaskaNative"
-            />
-            <label
-              class="usa-checkbox__label"
-              for="americanIndianOrAlaskaNative"
-            >
-              American Indian or Alaska Native
-            </label>
-          </div>
-        </span>
-        <span>
-          <div
-            class="usa-checkbox"
+            American Indian or Alaska Native
+          </label>
+        </div>
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="asian"
+            type="checkbox"
+            value="asian"
+          />
+          <label
+            class="usa-checkbox__label"
+            for="asian"
           >
-            <input
-              class="usa-checkbox__input"
-              id="asian"
-              type="checkbox"
-              value="asian"
-            />
-            <label
-              class="usa-checkbox__label"
-              for="asian"
-            >
-              Asian
-            </label>
-          </div>
-        </span>
-        <span>
-          <div
-            class="usa-checkbox"
+            Asian
+          </label>
+        </div>
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="blackOrAfricanAmerican"
+            type="checkbox"
+            value="blackOrAfricanAmerican"
+          />
+          <label
+            class="usa-checkbox__label"
+            for="blackOrAfricanAmerican"
           >
-            <input
-              class="usa-checkbox__input"
-              id="blackOrAfricanAmerican"
-              type="checkbox"
-              value="blackOrAfricanAmerican"
-            />
-            <label
-              class="usa-checkbox__label"
-              for="blackOrAfricanAmerican"
-            >
-              Black or African American
-            </label>
-          </div>
-        </span>
-        <span>
-          <div
-            class="usa-checkbox"
+            Black or African American
+          </label>
+        </div>
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="nativeHawaiianOrPacificIslander"
+            type="checkbox"
+            value="nativeHawaiianOrPacificIslander"
+          />
+          <label
+            class="usa-checkbox__label"
+            for="nativeHawaiianOrPacificIslander"
           >
-            <input
-              class="usa-checkbox__input"
-              id="nativeHawaiianOrPacificIslander"
-              type="checkbox"
-              value="nativeHawaiianOrPacificIslander"
-            />
-            <label
-              class="usa-checkbox__label"
-              for="nativeHawaiianOrPacificIslander"
-            >
-              Native Hawaiian or Pacific Islander
-            </label>
-          </div>
-        </span>
-        <span>
-          <div
-            class="usa-checkbox"
+            Native Hawaiian or Pacific Islander
+          </label>
+        </div>
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="white"
+            type="checkbox"
+            value="white"
+          />
+          <label
+            class="usa-checkbox__label"
+            for="white"
           >
-            <input
-              class="usa-checkbox__input"
-              id="white"
-              type="checkbox"
-              value="white"
-            />
-            <label
-              class="usa-checkbox__label"
-              for="white"
-            >
-              White
-            </label>
-          </div>
-        </span>
-        <span>
-          <div
-            class="usa-checkbox"
+            White
+          </label>
+        </div>
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="raceNotDisclosed"
+            type="checkbox"
+            value="raceNotDisclosed"
+          />
+          <label
+            class="usa-checkbox__label"
+            for="raceNotDisclosed"
           >
-            <input
-              class="usa-checkbox__input"
-              id="raceNotDisclosed"
-              type="checkbox"
-              value="raceNotDisclosed"
-            />
-            <label
-              class="usa-checkbox__label"
-              for="raceNotDisclosed"
-            >
-              Race Not Disclosed
-            </label>
-          </div>
-        </span>
+            Race Not Disclosed
+          </label>
+        </div>
       </div>
     </fieldset>
     <fieldset
@@ -180,7 +168,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
-              checked=""
               class="usa-radio__input"
               id="hispanic-ethnicity-no"
               name="hispanicOrLatinxEthnicity"
@@ -307,7 +294,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
-              checked=""
               class="usa-radio__input"
               id="disability-no"
               name="receivesDisabilityServices"
@@ -382,7 +368,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
-              checked=""
               class="usa-radio__input"
               id="dual-no"
               name="dualLanguageLearner"
@@ -457,7 +442,6 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
             class="usa-radio"
           >
             <input
-              checked=""
               class="usa-radio__input"
               id="foster-no"
               name="foster"

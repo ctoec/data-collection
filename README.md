@@ -60,7 +60,7 @@ This mono-repo consists of three main parts:
 The application has a SQL Server backend. We use [typeORM](https://typeorm.io/) to manage database migrations. [Read more about our specific use of typeORM here](src/entity/README.md)
 
 ### Testing
-
+#### Unit/Integration testing
 Frontend and backend unit/integration tests exist, and can be run with `yarn test` in either the `src` or `client/src` directories.
 ```
 $ cd src
@@ -75,8 +75,28 @@ $ docker-compose exec client yarn test
 ```
 Frontend tests include snapshot matching tests. If a change was made that creates a legitimate change to a snapshot, or snapshots need to be deleted, created, or renamed, run tests with `-u` flag
 
-To run the e2e tests on browserstack against the staging environment, `yarn install` in the e2e-tests directory, add your credentials in a `.env` file, and then `yarn test` from the e2e directory.
-More info on e2e tests [here](e2e-tests/README.md)
+#### Integration/End-to-end testing
+We do two types of full-stack testing which encompass the client <-> server interactions and server <-> database interactions.
+Because we don't mock or instantiate a SQL Server instance for our unit/integration tests, these tests can only be run against a full stack of the app (either a local docker-compose stack, or a deployed stack)
+1. **API Tests**: perhaps a bit confusingly, API integration tests are written in the `client` dir, because we already have a util for calling the api there! find them [here](client/src/integrationTests)
+
+    To run these tests:
+    ```
+    $ cd client
+    $ yarn test-e2e
+
+    ```
+    Set `TEST_API_PATH` env var to run them against an environment other than the default `http://localhost:5001`
+
+2. **End-to-end Tests**: these [nightwatch](https://nightwatchjs.org/)-powered selemnium tests run in Browserstack. Thus, they can only be run against a deployed stack (for now, there are ways to set up Browserstack for local apps but we haven't done that). They live [here](e2e-tests), and there's more info about them [here](e2e-tests/README.md)
+
+    To run the e2e tests:
+    **NOTE**: Be sure to add browserstack credentials to a .env file or export them as env vars
+    ```
+    $ cd e2e-tests
+    $ yarn test
+    ```
+    Set `LAUNCH_URL` env var to run them against an environment other than the default `https://staging.ece-fawkes.ctoecskylight.com`
 
 ## Deploy
 

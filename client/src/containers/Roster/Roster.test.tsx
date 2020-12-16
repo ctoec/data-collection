@@ -19,8 +19,8 @@ import {
 
 const commonUserProvider = {
   loading: false,
-  confidentialityAgreed: true,
-  setConfidentialityAgreed: () => {},
+  confidentialityAgreedDate: moment.utc(),
+  setConfidentialityAgreedDate: () => {},
 };
 
 const _child = {
@@ -156,35 +156,25 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-// Need to mock this component because the useSWR hook in there conflicts
-// with the call we actually care about in the Roster
-jest.mock('../../components/CSVExcelDownloadButton');
-import * as DownloadButton from '../../components/CSVExcelDownloadButton';
-const DownloadButtonMock = DownloadButton as jest.Mocked<typeof DownloadButton>;
+jest.mock('./hooks/usePaginatedChildData');
+import * as paginatedChildData from './hooks/usePaginatedChildData';
+const paginatedChildDataMock = paginatedChildData as jest.Mocked<
+  typeof paginatedChildData
+>;
 
-jest.mock('../../utils/api');
-import * as api from '../../utils/api';
-const apiMock = api as jest.Mocked<typeof api>;
-
-// For reasons I cannot explain, clearing the cache does not work
-// ( apparantly, `cache.clear()` should reset the swr cache), and so
-// if more than one tests gets the `before` func, the subsequent tests
-// fail because the apiGet call is never made. I cannot be bothered
-// spending more time trying to figure this out right now, so only
-// one test is doing the awaiting for the apiGet call to be made,
-// and other tests are using the cache results.
-const waitGetChildren = async () => {
-  return waitFor(() => expect(apiMock.apiGet).toBeCalled());
+const helperOpts = {
+  wrapInRouter: true,
+  wrapInSWRConfig: true,
 };
 
 describe('Roster', () => {
   beforeAll(async () => {
-    DownloadButtonMock.CSVExcelDownloadButton.mockReturnValue(
-      <>Placeholder for CSVExcelDownloadButton</>
-    );
-    apiMock.apiGet
-      .mockReturnValueOnce(new Promise((resolve) => resolve(children)))
-      .mockReturnValueOnce(new Promise((resolve) => resolve([])));
+    paginatedChildDataMock.usePaginatedChildData.mockReturnValue({
+      children,
+      stillFetching: false,
+      mutate: async () => undefined,
+      error: undefined,
+    });
   });
 
   snapshotTestHelper(
@@ -192,10 +182,8 @@ describe('Roster', () => {
       <Roster />
     </UserContext.Provider>,
     {
-      wrapInRouter: true,
-      wrapInSWRConfig: true,
+      ...helperOpts,
       name: 'matches snapshot for site level user',
-      before: waitGetChildren,
     }
   );
 
@@ -204,8 +192,7 @@ describe('Roster', () => {
       <Roster />
     </UserContext.Provider>,
     {
-      wrapInRouter: true,
-      wrapInSWRConfig: true,
+      ...helperOpts,
       name: 'matches snapshot for one-org, multi-site user',
     }
   );
@@ -215,8 +202,7 @@ describe('Roster', () => {
       <Roster />
     </UserContext.Provider>,
     {
-      wrapInRouter: true,
-      wrapInSWRConfig: true,
+      ...helperOpts,
       name: 'matches snapshot for multi-org user',
     }
   );
@@ -225,11 +211,8 @@ describe('Roster', () => {
     <UserContext.Provider value={{ ...commonUserProvider, user: multiOrgUser }}>
       <Roster />
     </UserContext.Provider>,
-    {
-      wrapInSWRConfig: true,
-      wrapInRouter: true,
-    }
+    helperOpts
   );
 
-  afterEach(() => jest.clearAllMocks());
+  afterAll(() => jest.clearAllMocks());
 });

@@ -1,22 +1,23 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
-const {
-  clickOnFirstChildInRoster,
-} = require('../utils/clickOnFirstChildInRoster');
+const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { scrollToElement } = require('../utils/scrollToElement');
-const { enterFormData } = require('../utils/enterFormData');
+const { enterFormValue } = require('../utils/enterFormValue');
+const { uploadFile } = require('../utils/uploadFile');
 
 module.exports = {
   '@tags': ['child', 'change'],
   changeChild: async function (browser) {
     await browser.init();
+    await browser.timeoutsImplicitWait(10000);
     await login(browser);
+    await uploadFile(browser);
     await navigateToRoster(browser);
-    await clickOnFirstChildInRoster(browser);
+    await clickOnChildInRoster(browser);
 
     const firstNameSelectorArgs = ['css selector', 'input#firstName'];
     const newFirstNameText = 'New first name';
-    await enterFormData(browser, firstNameSelectorArgs, newFirstNameText);
+    await enterFormValue(browser, firstNameSelectorArgs, newFirstNameText);
 
     const saveButtonArgs = ['xpath', "//*/input[contains(@value,'Save')]"];
     await scrollToElement(browser, saveButtonArgs);
@@ -33,7 +34,7 @@ module.exports = {
     // We've changed/expanded the table header, so access the
     // changed child and check if the form field has the
     // correct value isntead
-    await clickOnFirstChildInRoster(browser);
+    await clickOnChildInRoster(browser);
     browser.expect
       .element('input#firstName')
       .to.have.value.which.contains(newFirstNameText);

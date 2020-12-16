@@ -20,6 +20,7 @@ import {
   Child as ChildInterface,
   Gender,
   BirthCertificateType,
+  UndefinableBoolean,
 } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
@@ -95,32 +96,37 @@ export class Child implements ChildInterface {
   @IsNotEmpty()
   birthCertificateId?: string;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   americanIndianOrAlaskaNative?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   asian?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   blackOrAfricanAmerican?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   nativeHawaiianOrPacificIslander?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   white?: boolean;
 
-  @Column({ nullable: true, default: true })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   raceNotDisclosed?: boolean;
 
-  @Column({ nullable: true, default: null })
-  hispanicOrLatinxEthnicity?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  hispanicOrLatinxEthnicity?: UndefinableBoolean;
 
   @Column({
     type: 'varchar',
@@ -131,14 +137,29 @@ export class Child implements ChildInterface {
   @ChildGenderSpecified()
   gender?: Gender;
 
-  @Column({ nullable: true, default: null })
-  dualLanguageLearner?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  dualLanguageLearner?: UndefinableBoolean;
 
-  @Column({ nullable: true, default: null })
-  foster?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  foster?: UndefinableBoolean;
 
-  @Column({ nullable: true, default: null })
-  receivesDisabilityServices?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  receivesDisabilityServices?: UndefinableBoolean;
 
   @ValidateNested()
   @ValidateIf((child) => {

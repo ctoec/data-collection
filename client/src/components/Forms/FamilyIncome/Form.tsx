@@ -1,10 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { Child, IncomeDetermination } from '../../../shared/models';
+import {
+  Child,
+  IncomeDetermination,
+  UndefinableBoolean,
+} from '../../../shared/models';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
-import idx from 'idx';
 import {
   Form,
   FormSubmitButton,
@@ -19,6 +22,7 @@ import {
 import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { useLocation } from 'react-router-dom';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -83,9 +87,14 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     hideErrorsOnFirstLoad
   );
 
+  // Determine if we're in the create flow: affects how we
+  // retrieve income determinations
+  const { pathname: path } = useLocation();
+  const inCreateFlow = path.includes('create-record');
+
   const isMounted = useIsMounted();
 
-  if (child?.foster) {
+  if (child?.foster === UndefinableBoolean.Yes) {
     // New child is and batch edit both use this form directly
     // So this alert will show for those two forms
     // Edit child conditionally shows this form, so this alert is in that container too
@@ -101,10 +110,16 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
   }
 
-  const determination =
-    child?.family?.incomeDeterminations?.find(
-      (d) => d.id === incomeDeterminationId
-    ) || ({} as IncomeDetermination);
+  let determination: IncomeDetermination;
+  if (inCreateFlow) {
+    const dets = child?.family?.incomeDeterminations || [];
+    determination = dets[0] || ({} as IncomeDetermination);
+  } else {
+    determination =
+      child?.family?.incomeDeterminations?.find(
+        (d) => d.id === incomeDeterminationId
+      ) || ({} as IncomeDetermination);
+  }
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
     apiPost(

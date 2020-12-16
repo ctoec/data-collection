@@ -13,7 +13,6 @@ import {
   Select,
   TObjectDriller,
 } from '@ctoec/component-library';
-import moment from 'moment';
 import {
   ChangeFunding,
   ChangeEnrollment,
@@ -66,18 +65,18 @@ export const ReportingPeriodField = <
   const currentReportingPeriod = accessor(dataDriller).value;
   useEffect(() => {
     if (!reportingPeriods) return;
+    // See https://github.com/ctoec/data-collection/issues/842 - display all options for now
     // Only display 5 options, centered around existing value or today
     // No need to account for "isChangeFunding", because in that situation
     // a reporting period value will never exist
-    const existingValueOrThisMonth =
-      currentReportingPeriod?.period || moment.utc().startOf('month');
-    const twoMonthsPrior = existingValueOrThisMonth.clone().add(-2, 'months');
-    const twoMonthsAfter = existingValueOrThisMonth.clone().add(2, 'months');
+    // const existingValueOrThisMonth =
+    //   currentReportingPeriod?.period || moment.utc().startOf('month');
+    // const twoMonthsPrior = existingValueOrThisMonth.clone().add(-2, 'months');
+    // const twoMonthsAfter = existingValueOrThisMonth.clone().add(2, 'months');
     const _reportingPeriodOptions = reportingPeriods.filter(
-      (rp) =>
-        rp.type === fundingSource &&
-        rp.period.isSameOrAfter(twoMonthsPrior) &&
-        rp.period.isSameOrBefore(twoMonthsAfter)
+      (rp) => rp.type === fundingSource
+      // && rp.period.isSameOrAfter(twoMonthsPrior)
+      // && rp.period.isSameOrBefore(twoMonthsAfter)
     );
 
     setReportingPeriodOptions(_reportingPeriodOptions);

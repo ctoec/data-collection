@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
+import { Alert, Form, FormSubmitButton } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../shared/models';
 import {
   SiteField,
@@ -101,6 +101,17 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   };
   const onSubmit = (updatedData: Enrollment) => {
     setLoading(true);
+
+    //  Because the radio group for the Site field broadcasts ID as a string,
+    //  but the API is expecting a number (as it should)
+    if (
+      !!updatedData.site &&
+      !!updatedData.site.id &&
+      typeof updatedData.site.id === 'string'
+    ) {
+      updatedData.site.id = parseInt(updatedData.site.id);
+    }
+
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {
@@ -116,40 +127,48 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   };
 
   return (
-    <Form<Enrollment>
-      id={id || `edit-enrollment-form-${enrollment.id}`}
-      data={enrollment}
-      onSubmit={onSubmit}
-      hideStatus={errorsHidden}
-    >
-      {showFieldOrFieldset(enrollment, ['site']) && (
-        <SiteField<Enrollment>
-          sites={sites.filter(
-            (s) => s.organizationId === child?.organization?.id
-          )}
+    <>
+      {!enrollment.id && (
+        <Alert
+          type="info"
+          text="Adding a child who has withdrawn, changed sites or age groups? Add their earliest enrollment then make changes from the child's record in your roster."
         />
       )}
-      {showFieldOrFieldset(enrollment, ['entry', 'model']) && (
-        <>
-          <EnrollmentStartDateField<Enrollment> />
-          <CareModelField<Enrollment> />
-        </>
-      )}
-      {showFieldOrFieldset(enrollment, ['ageGroup']) && (
-        <AgeGroupField<Enrollment> />
-      )}
-      {showFieldOrFieldset(enrollment, ['fundings']) && (
-        <NewFundingField<Enrollment>
-          fundingAccessor={(data) => data.at('fundings').at(0)}
-          getEnrollment={(data) => data.value}
-          organizationId={child?.organization?.id}
+      <Form<Enrollment>
+        id={id || `edit-enrollment-form-${enrollment.id}`}
+        data={enrollment}
+        onSubmit={onSubmit}
+        hideStatus={errorsHidden}
+      >
+        {showFieldOrFieldset(enrollment, ['site']) && (
+          <SiteField<Enrollment>
+            sites={sites.filter(
+              (s) => s.organizationId === child?.organization?.id
+            )}
+          />
+        )}
+        {showFieldOrFieldset(enrollment, ['entry', 'model']) && (
+          <>
+            <EnrollmentStartDateField<Enrollment> />
+            <CareModelField<Enrollment> />
+          </>
+        )}
+        {showFieldOrFieldset(enrollment, ['ageGroup']) && (
+          <AgeGroupField<Enrollment> />
+        )}
+        {showFieldOrFieldset(enrollment, ['fundings']) && (
+          <NewFundingField<Enrollment>
+            fundingAccessor={(data) => data.at('fundings').at(0)}
+            getEnrollment={(data) => data.value}
+            organizationId={child?.organization?.id}
+          />
+        )}
+        {AdditionalButton}
+        <FormSubmitButton
+          text={loading ? 'Saving...' : 'Save'}
+          disabled={loading}
         />
-      )}
-      {AdditionalButton}
-      <FormSubmitButton
-        text={loading ? 'Saving...' : 'Save'}
-        disabled={loading}
-      />
-    </Form>
+      </Form>
+    </>
   );
 };

@@ -5,7 +5,7 @@ module.exports = {
   login: async function (browser) {
     // Initializes with the launch_url value set in config
     await browser.init();
-    await login(browser);
+    await login(browser, false);
     browser.end();
   },
 };

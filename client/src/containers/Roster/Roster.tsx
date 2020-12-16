@@ -23,6 +23,7 @@ import {
   QUERY_STRING_MONTH_FORMAT,
   applySiteFilter,
   getRosterH2,
+  filterChildrenByWithdrawn,
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
@@ -61,25 +62,24 @@ const Roster: React.FC = () => {
     : undefined;
 
   // TODO: handle fetching error
-  const { children: allChildrenForOrg, stillFetching } = usePaginatedChildData({
-    ...query,
-    withdrawn: false,
-  });
   const {
-    children: withdrawnChildren,
-    stillFetching: stillFetchingWithdrawn,
-  } = usePaginatedChildData({ ...query, withdrawn: true });
-  const children = query.withdrawn ? withdrawnChildren : allChildrenForOrg;
-  const loading = stillFetching || stillFetchingWithdrawn;
+    children: allChildren,
+    stillFetching: loading,
+  } = usePaginatedChildData(query);
+  const {
+    active: activeChildren,
+    withdrawn: withdrawnChildren,
+  } = filterChildrenByWithdrawn(allChildren || []);
+  const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
   const isSingleSiteView = query.site ? true : false;
 
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const [useWarningAlerts, setUseWarningAlerts] = useState(true);
-  const activeChildrenWithErrorsCount = (allChildrenForOrg || []).filter(
+  const activeChildrenWithErrorsCount = activeChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
   ).length;
-  const withdrawnChildrenWithErrorsCount = (withdrawnChildren || []).filter(
+  const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
   ).length;
   const { alertElements } = useChildrenWithErrorsAlert(
@@ -87,13 +87,13 @@ const Roster: React.FC = () => {
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,
     query.organization,
-    useWarningAlerts ? 'warning' : 'error'
+    useWarningAlerts
   );
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
   // site is requested
-  const siteFilteredChildren = applySiteFilter(children, query.site);
+  const siteFilteredChildren = applySiteFilter(displayChildren, query.site);
 
   // Get props for tabNav, h1Text, and subHeaderText, superHeaderText, and subSubHeader
   // based on user access (i.e. user's sites and org permissions)
@@ -102,7 +102,7 @@ const Roster: React.FC = () => {
     h1Text,
     subHeaderText,
     superHeaderText,
-  } = useOrgSiteProps(loading, (children || []).length);
+  } = useOrgSiteProps(loading, displayChildren.length);
 
   const siteChildCount = (siteFilteredChildren || []).length;
   const rosterH2 = getRosterH2(siteChildCount, user?.sites, query);
@@ -165,7 +165,7 @@ const Roster: React.FC = () => {
 
   const rosterContentProps = {
     query,
-    childRecords: children,
+    childRecords: displayChildren,
     accordionProps,
     rosterH2,
   };

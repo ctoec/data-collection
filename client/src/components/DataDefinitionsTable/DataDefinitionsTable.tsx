@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { ColumnMetadata } from '../../shared/models';
+import React, { useContext, useState } from 'react';
 import { Table, HeadingLevel, LoadingWrapper } from '@ctoec/component-library';
 import { TemplateMetadata } from '../../shared/payloads';
 import {
@@ -14,7 +13,11 @@ import {
   isFirstReportingPeriodRow,
   FIRST_REPORTING_PERIOD_ALERT_ROW,
   isFirstReportingPeriodAlertRow,
+  EnhancedColumnMetadata,
+  getSiteFormatters,
+  getProviderFormatters,
 } from './utils';
+import UserContext from '../../contexts/UserContext/UserContext';
 
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
@@ -28,18 +31,18 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   addFirstReportingPeriodAlert = false,
 }) => {
   const Heading = headerLevel;
+  const { user } = useContext(UserContext);
   const [requiredFilter, setRequiredFilter] = useState<boolean>(false);
 
   const { data: templateMetadata } = useSWR('template/metadata', {
     dedupingInterval: 100000,
   }) as responseInterface<TemplateMetadata, string>;
+  const { columnMetadata } = templateMetadata || {};
 
-  if (!templateMetadata) {
-    return <LoadingWrapper loading={true} />;
-  }
+  let filteredColumnMetadata: EnhancedColumnMetadata[] = columnMetadata || [];
 
-  let filteredColumnMetadata = templateMetadata.columnMetadata;
   if (requiredFilter) {
+    // If only the required fields are shown right now
     filteredColumnMetadata = filteredColumnMetadata.filter(
       (m) =>
         m.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.REQUIRED ||
@@ -65,7 +68,20 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
     );
   }
 
-  const columnMetadataBySection: { [key: string]: ColumnMetadata[] } = {};
+  if (user) {
+    const siteRow = filteredColumnMetadata.find(
+      (row) => row.propertyName === 'site'
+    );
+    siteRow!.columnFormatters = getSiteFormatters(user.sites || []);
+    const providerRow = filteredColumnMetadata.find(
+      (row) => row.propertyName === 'providerName'
+    );
+    providerRow!.columnFormatters = getProviderFormatters(user.organizations);
+  }
+
+  const columnMetadataBySection: {
+    [key: string]: EnhancedColumnMetadata[];
+  } = {};
   filteredColumnMetadata.reduce((_bySection, _metadata) => {
     if (_bySection[_metadata.section]) {
       _bySection[_metadata.section].push(_metadata);
@@ -77,31 +93,33 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   }, columnMetadataBySection);
 
   return (
-    <div className="data-definitions">
-      {showRequirementLevelLegendAndFilter && (
-        <>
-          <RequirementLevelLegend />
-          <RequirementLevelFilter setFilter={setRequiredFilter} />
-        </>
-      )}
-      <div>
-        {Object.entries(columnMetadataBySection).map(
-          ([sectionName, sectionData]) => (
-            <div key={sectionName} className="margin-top-4">
-              <Heading>{sectionName}</Heading>
-              <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
-              <Table
-                id={`data-requirements-${sectionName.replace(' ', '-')}`}
-                data={sectionData}
-                rowKey={(row) => (row ? row.formattedName : '')}
-                columns={TableColumns(addFirstReportingPeriodAlert)}
-                defaultSortColumn={0}
-              />
-            </div>
-          )
+    <LoadingWrapper loading={!templateMetadata}>
+      <div className="data-definitions">
+        {showRequirementLevelLegendAndFilter && (
+          <>
+            <RequirementLevelLegend />
+            <RequirementLevelFilter setFilter={setRequiredFilter} />
+          </>
         )}
+        <div>
+          {Object.entries(columnMetadataBySection).map(
+            ([sectionName, sectionData]) => (
+              <div key={sectionName} className="margin-top-4">
+                <Heading>{sectionName}</Heading>
+                <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
+                <Table
+                  id={`data-requirements-${sectionName.replace(' ', '-')}`}
+                  data={sectionData}
+                  rowKey={(row) => (row ? row.formattedName : '')}
+                  columns={TableColumns(addFirstReportingPeriodAlert)}
+                  defaultSortColumn={0}
+                />
+              </div>
+            )
+          )}
+        </div>
       </div>
-    </div>
+    </LoadingWrapper>
   );
 };
 

@@ -14,8 +14,8 @@ import {
   EnrollmentReport,
   User,
   OECReport,
-} from '../entity';
-import { FundingSource, Region } from '../../client/src/shared/models';
+} from '../../entity';
+import { FundingSource, Region } from '../../../client/src/shared/models';
 import {
   getReportingPeriodFromDates,
   reportingPeriods,
@@ -23,7 +23,7 @@ import {
 import { organizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import { getFakeFundingSpaces } from './fundingSpace';
-import { isDevelopment } from '../utils/isDevelopment';
+import { isDevelopment } from '../../utils/isDevelopment';
 
 export const initialize = async () => {
   if (!isDevelopment()) {

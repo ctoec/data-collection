@@ -83,7 +83,6 @@ const CreateRecord: React.FC = () => {
         const currentStepStatus = steps[indexOfCurrentStep]?.status({
           child: updatedChild,
         } as RecordFormProps);
-
         if (
           currentStepStatus === 'complete' ||
           currentStepStatus === 'exempt'
@@ -103,7 +102,10 @@ const CreateRecord: React.FC = () => {
 
   const commonFormProps = {
     child,
-    afterSaveSuccess: triggerRefetchChild,
+    afterSaveSuccess: () => {
+      triggerRefetchChild();
+      setAlerts([]);
+    },
     setAlerts,
     hideHeader: true,
     hideErrorsOnFirstLoad: (_hash: string) => {

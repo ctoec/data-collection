@@ -8,17 +8,19 @@ exports[`Home matches snapshot 1`] = `
     <div
       class="usa-hero"
     >
-      <div>
+      <div
+        class="grid-container"
+      >
         <h1
           class="margin-bottom-2"
         >
-          Upload your enrollment data
+          Welcome to ECE Reporter
         </h1>
         <a
           class="usa-button usa-button--base btn--inverse"
           href="/login"
         >
-          Sign in
+          Log in
         </a>
       </div>
     </div>
@@ -26,10 +28,10 @@ exports[`Home matches snapshot 1`] = `
       class="grid-container margin-top-4"
     >
       <div
-        class="grid-row"
+        class="grid-row grid-gap"
       >
         <div
-          class="tablet:grid-col-auto margin-right-4 padding-4"
+          class="tablet:grid-col-3"
         >
           <img
             alt=""
@@ -38,7 +40,7 @@ exports[`Home matches snapshot 1`] = `
           />
         </div>
         <div
-          class="tablet:grid-col-fill"
+          class="tablet:grid-col-6"
         >
           <h2
             class="text-primary text-light margin-y-3"
@@ -48,7 +50,7 @@ exports[`Home matches snapshot 1`] = `
           <p
             class="line-height-sans-5"
           >
-            Publicly-funded early care and education programs use ECE Reporter to share data with the Connecticut Office of Early Childhood.
+            Publicly-funded early care and education programs use ECE Reporter to share data with the Connecticut Office of Early Childhood (OEC).
           </p>
           <p>
             The Office of Early Childhood uses this data to pay programs and help families access quality care.
@@ -56,13 +58,49 @@ exports[`Home matches snapshot 1`] = `
           <div
             class="margin-bottom-4"
           >
-            <p
-              class="text-bold"
+            <h2
+              class="text-primary text-light margin-y-3"
             >
               Learn more
-            </p>
+            </h2>
+            <h3>
+              See the data collected by ECE Reporter
+            </h3>
             <a
-              class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+              href="/data-requirements"
+            >
+              <span
+                class="oec-text-with-icon text-underline"
+              >
+                Learn the data requirements
+                <svg
+                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                >
+                  arrowForward.svg
+                </svg>
+              </span>
+            </a>
+            <a
+              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+              href="/template"
+            >
+              <span
+                class="oec-text-with-icon text-underline"
+              >
+                See the latest data template
+                <svg
+                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                >
+                  arrowForward.svg
+                </svg>
+              </span>
+            </a>
+            <h3>
+              Learn more about OEC
+            </h3>
+            <a
+              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
               href="https://ctoec.org"
             >
               <span
@@ -72,12 +110,15 @@ exports[`Home matches snapshot 1`] = `
                 <svg
                   class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
                 >
-                  arrow-right.svg
+                  arrowForward.svg
                 </svg>
               </span>
             </a>
+            <h3>
+              Learn how ECE Reporter collects and stores data
+            </h3>
             <a
-              class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
+              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
               href="/privacy-policy"
             >
               <span
@@ -87,52 +128,10 @@ exports[`Home matches snapshot 1`] = `
                 <svg
                   class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
                 >
-                  arrow-right.svg
+                  arrowForward.svg
                 </svg>
               </span>
             </a>
-            <a
-              class="usa-button usa-button--unstyled text-bold margin-bottom-3 display-block"
-              href="/data-requirements"
-            >
-              <span
-                class="oec-text-with-icon text-underline"
-              >
-                See the data requirements
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                >
-                  arrow-right.svg
-                </svg>
-              </span>
-            </a>
-          </div>
-          <div>
-            <p
-              class="text-bold"
-            >
-              Download the data collection template
-            </p>
-            <button
-              class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon text-underline"
-              >
-                Download Excel template
-              </span>
-            </button>
-            <button
-              class="usa-button usa-button--unstyled text-bold display-block margin-bottom-3"
-              type="button"
-            >
-              <span
-                class="oec-text-with-icon text-underline"
-              >
-                Download CSV template
-              </span>
-            </button>
           </div>
         </div>
       </div>
@@ -141,35 +140,39 @@ exports[`Home matches snapshot 1`] = `
       class="bg-base-lightest padding-y-6 footer"
     >
       <div
-        class="grid-row flex-justify flex-align-center"
+        class="grid-container"
       >
         <div
-          class="grid-col-10"
+          class="grid-row flex-justify flex-align-center"
         >
-          <h2
-            class="text-primary text-light margin-y-3"
+          <div
+            class="grid-col-10"
           >
-            Have feedback about OEC's data collection process?
-          </h2>
-          <p>
-            Feedback from providers like you helps make this tool even better.
-          </p>
-          <p>
-            Send us your feedback at 
-            <a
-              class="usa-button usa-button--unstyled"
-              href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
-              rel="noopener noreferrer"
-              target="_blank"
+            <h2
+              class="text-primary text-light margin-y-3"
             >
-              oec-data-pilot@skylight.digital
-            </a>
-          </p>
+              Have feedback about OEC's data collection process?
+            </h2>
+            <p>
+              Feedback from providers like you helps make this tool even better.
+            </p>
+            <p>
+              Send us your feedback at 
+              <a
+                class="usa-button usa-button--unstyled"
+                href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                oec-data-pilot@skylight.digital
+              </a>
+            </p>
+          </div>
         </div>
+        <div
+          class="grid-col-2"
+        />
       </div>
-      <div
-        class="grid-col-2"
-      />
     </footer>
   </div>
 </DocumentFragment>

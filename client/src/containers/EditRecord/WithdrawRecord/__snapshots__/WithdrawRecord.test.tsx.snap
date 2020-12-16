@@ -2,6 +2,7 @@
 
 exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
 <div
+  aria-modal="true"
   class="ReactModal__Content ReactModal__Content--after-open"
   role="dialog"
   style="position: absolute; top: 50%; left: 50%; right: 40px; border: 1px solid #ccc; background: rgb(255, 255, 255); overflow: auto; border-radius: 4px; outline: none; padding: 20px; transform: translate(-50%, -50%); max-height: 100%; overflow-y: scroll;"

@@ -1,7 +1,7 @@
 import { write, WorkBook, BookType } from 'xlsx';
 import { Response } from 'express';
-import { generateCSV } from '../utils/generateCsv';
-import { generateExcelWorkbook } from '../utils/generateExcel';
+import { generateCSV } from './generateCsv';
+import { generateExcelWorkbook } from './generateExcel';
 
 export function streamTabularData(
   response: Response,
