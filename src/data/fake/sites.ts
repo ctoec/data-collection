@@ -1,4 +1,4 @@
-import { Region } from '../../client/src/shared/models';
+import { Region } from '../../../client/src/shared/models';
 import { beauxbatons, durmstrang, hogwarts } from './organizations';
 
 export const sitesByOrgName = {

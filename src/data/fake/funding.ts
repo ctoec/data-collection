@@ -1,5 +1,5 @@
 import { random } from 'faker';
-import { Enrollment, Funding, Organization } from '../entity';
+import { Enrollment, Funding, Organization } from '../../entity';
 import {
   getReportingPeriodFromDates,
   reportingPeriods,

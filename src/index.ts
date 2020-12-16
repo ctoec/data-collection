@@ -6,7 +6,7 @@ import { createConnection, getConnectionOptions } from 'typeorm';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';
 import { router as apiRouter } from './routes';
-import { initialize } from './data/initialize';
+import { initialize } from './data/fake/initialize';
 import { QueryLogger } from './loggers/QueryLogger';
 import { isProdLike } from './utils/isProdLike';
 import { requestLogger } from './loggers/RequestLogger';

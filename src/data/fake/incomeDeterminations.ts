@@ -1,6 +1,6 @@
 import { random } from 'faker';
 import moment from 'moment';
-import { IncomeDetermination } from '../entity';
+import { IncomeDetermination } from '../../entity';
 
 export const getFakeIncomeDet = (id, family): IncomeDetermination => {
   return {

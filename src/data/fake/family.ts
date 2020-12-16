@@ -1,6 +1,6 @@
 import { address } from 'faker';
-import { Family } from '../entity';
-import { weightedUndefinableBoolean } from './fakeDataUtils';
+import { Family } from '../../entity';
+import { weightedUndefinableBoolean } from './utils';
 
 export const makeFakeFamily = (id): Family => {
   const homelessness = weightedUndefinableBoolean(5);
