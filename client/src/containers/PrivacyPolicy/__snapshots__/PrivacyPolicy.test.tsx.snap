@@ -319,7 +319,6 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
                 <tbody>
                   <tr>
                     <th
-                      class=""
                       scope="row"
                     >
                       <span
@@ -328,30 +327,22 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
                         Favorite color
                       </span>
                     </th>
-                    <td
-                      class=""
-                    >
+                    <td>
                       <span
                         class="usa-tag usa-tag--no-transform required-tag"
                       >
                         Optional
                       </span>
                     </td>
-                    <td
-                      class=""
-                    >
+                    <td>
                       <p>
                         The color you like the most
                       </p>
                     </td>
-                    <td
-                      class=""
-                    >
+                    <td>
                       So we know your favorite color
                     </td>
-                    <td
-                      class=""
-                    >
+                    <td>
                       <p>
                         string
                       </p>
@@ -450,7 +441,6 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
                 <tbody>
                   <tr>
                     <th
-                      class=""
                       scope="row"
                     >
                       <span
@@ -459,30 +449,22 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
                         Lucky number
                       </span>
                     </th>
-                    <td
-                      class=""
-                    >
+                    <td>
                       <span
                         class="usa-tag usa-tag--no-transform required-tag required-tag--required"
                       >
                         Required
                       </span>
                     </td>
-                    <td
-                      class=""
-                    >
+                    <td>
                       <p>
                         The number you find brings the most luck
                       </p>
                     </td>
-                    <td
-                      class=""
-                    >
+                    <td>
                       So we know your lucky number
                     </td>
-                    <td
-                      class=""
-                    >
+                    <td>
                       <p>
                         number
                       </p>

@@ -1,11 +1,9 @@
 import React from 'react';
 import cx from 'classnames';
 import ReactMarkdown from 'react-markdown';
-import { Column, Alert } from '@ctoec/component-library';
+import { Column } from '@ctoec/component-library';
 import {
   getRequiredTag,
-  isFirstReportingPeriodRow,
-  isFirstReportingPeriodAlertRow,
   getMarkdownStyledFormatOptionsList,
   EnhancedColumnMetadata,
 } from './utils';
@@ -19,29 +17,14 @@ export enum DATA_DEF_COLUMN_NAMES {
   format = 'Format',
 }
 
-export const TableColumns: (_: boolean) => Column<EnhancedColumnMetadata>[] = (
-  addFirstReportingPeriodAlert: boolean
-) => [
+export const TableColumns: Column<EnhancedColumnMetadata>[] = [
   {
     name: DATA_DEF_COLUMN_NAMES.fieldName,
     cell: ({ row }) =>
       !row ? (
         <></>
-      ) : isFirstReportingPeriodAlertRow(row) ? (
-        <td colSpan={5}>
-          <Alert
-            type="info"
-            text="Record 07/2020 for any child whose funding began in or before July 2020."
-          />
-        </td>
       ) : (
-        <th
-          scope="row"
-          className={cx({
-            'hide-bottom-border':
-              isFirstReportingPeriodRow(row) && addFirstReportingPeriodAlert,
-          })}
-        >
+        <th scope="row">
           <span className="text-bold">{row.formattedName}</span>
         </th>
       ),
@@ -50,15 +33,10 @@ export const TableColumns: (_: boolean) => Column<EnhancedColumnMetadata>[] = (
   {
     name: DATA_DEF_COLUMN_NAMES.requiredOptional,
     cell: ({ row }) =>
-      !row || isFirstReportingPeriodAlertRow(row) ? (
+      !row ? (
         <></>
       ) : (
-        <td
-          className={cx({
-            'hide-bottom-border':
-              isFirstReportingPeriodRow(row) && addFirstReportingPeriodAlert,
-          })}
-        >
+        <td>
           {getRequiredTag(row.requirementLevel)}
           {row.requirementLevel !== TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL &&
             row.requirementString && (
@@ -71,15 +49,10 @@ export const TableColumns: (_: boolean) => Column<EnhancedColumnMetadata>[] = (
   {
     name: DATA_DEF_COLUMN_NAMES.definition,
     cell: ({ row }) =>
-      !row || isFirstReportingPeriodAlertRow(row) ? (
+      !row ? (
         <></>
       ) : (
-        <td
-          className={cx({
-            'hide-bottom-border':
-              isFirstReportingPeriodRow(row) && addFirstReportingPeriodAlert,
-          })}
-        >
+        <td>
           <ReactMarkdown source={row.definition} />
         </td>
       ),
@@ -87,37 +60,20 @@ export const TableColumns: (_: boolean) => Column<EnhancedColumnMetadata>[] = (
   },
   {
     name: DATA_DEF_COLUMN_NAMES.reason,
-    cell: ({ row }) =>
-      !row || isFirstReportingPeriodAlertRow(row) ? (
-        <></>
-      ) : (
-        <td
-          className={cx({
-            'hide-bottom-border':
-              isFirstReportingPeriodRow(row) && addFirstReportingPeriodAlert,
-          })}
-        >
-          {row.reason}
-        </td>
-      ),
+    cell: ({ row }) => (!row ? <></> : <td>{row.reason}</td>),
     width: '20%',
   },
   {
     name: DATA_DEF_COLUMN_NAMES.format,
     cell: ({ row }) => {
-      if (!row || isFirstReportingPeriodAlertRow(row)) return <></>;
+      if (!row) return <></>;
       const columnFormatter =
         row.columnFormatters?.[DATA_DEF_COLUMN_NAMES.format];
       if (columnFormatter) {
         return columnFormatter(row);
       }
       return (
-        <td
-          className={cx({
-            'hide-bottom-border':
-              isFirstReportingPeriodRow(row) && addFirstReportingPeriodAlert,
-          })}
-        >
+        <td>
           <ReactMarkdown
             source={getMarkdownStyledFormatOptionsList(row.format)}
           />
