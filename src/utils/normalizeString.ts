@@ -1,5 +1,5 @@
 // Match "-", "/", " ", ".", "'"
-const stripRegex = /[-\/\s/\.']/g;
+const stripRegex = /[-\s/\.']/g;
 export function normalizeString(
   inputString: string | number | undefined
 ): string | undefined {
