@@ -14,34 +14,42 @@ const TEST_OPTS: ApiOpts = {
 
 describe('integration', () => {
   describe('api', async () => {
-    const children: Child[] = await apiGet('children', '', TEST_OPTS);
-    const childrenWithDets = children.filter(
-      (c) => !!c.family?.incomeDeterminations?.length
-    );
-
     // Used for update and create income dets
-    const childToUpdate = childrenWithDets[0];
-    const { family: familyToUpdate } = childToUpdate || {};
-    const detToUpdate = familyToUpdate?.incomeDeterminations?.[0];
+    let familyToUpdate: Family | undefined;
+    let detToUpdate: IncomeDetermination | undefined;
 
     // Used for delete income det
-    const childToDeleteFrom = childrenWithDets[1];
-    const { family: familyToDeleteFrom } = childToDeleteFrom || {};
-    const detToDelete = familyToDeleteFrom?.incomeDeterminations?.[0];
+    let familyToDeleteFrom: Family | undefined;
+    let detToDelete: IncomeDetermination | undefined;
 
     beforeAll(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
+      const children: Child[] = await apiGet('children', '', TEST_OPTS);
+      const childrenWithDets = children.filter(
+        (c) => !!c.family?.incomeDeterminations?.length
+      );
+
+      const childToUpdate = childrenWithDets[0];
+      familyToUpdate = childToUpdate.family;
+      detToUpdate = familyToUpdate?.incomeDeterminations?.[0];
+
+      const childToDeleteFrom = childrenWithDets[1];
+      familyToDeleteFrom = childToDeleteFrom.family;
+      detToDelete = familyToDeleteFrom?.incomeDeterminations?.[0];
     });
+
     afterAll(() => {
       enableFetchMocks();
     });
+
     describe('income determinations', () => {
       it('PUT /:familyId/income-determinations/:determinationId', async () => {
         if (!familyToUpdate || !detToUpdate)
           throw new Error('no income det to update');
+
         const newIncome = 33599;
 
         const res = await apiPut(
@@ -57,10 +65,11 @@ describe('integration', () => {
           TEST_OPTS
         );
         const updatedDet = updatedFamily?.incomeDeterminations?.find(
-          (d) => d.id === detToUpdate.id
+          (d) => d.id === detToUpdate?.id
         );
         expect(updatedDet?.income).toEqual(newIncome);
       });
+
       it('POST /:familyId/income-determinations', async () => {
         if (!familyToUpdate) throw new Error('no family to add income det to');
         const newDet = {
@@ -87,8 +96,8 @@ describe('integration', () => {
         );
         expect(createdDet).toBeDefined;
       });
+
       it('DELETE /:familyId/income-determinations/:determinationId', async () => {
-        // DO THESE RUN IN ORDER, OR DO WE NEED A DIFF DET TO DELETE?
         if (!familyToDeleteFrom || !detToDelete)
           throw new Error('no income det to delete');
         const res = await apiDelete(
@@ -103,7 +112,7 @@ describe('integration', () => {
         );
 
         const deletedDet = updatedFamily?.incomeDeterminations?.find(
-          (d) => d.id === detToDelete.id
+          (d) => d.id === detToDelete?.id
         );
         expect(deletedDet).toBeUndefined;
       });
