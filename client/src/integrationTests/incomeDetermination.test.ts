@@ -101,7 +101,8 @@ describe('integration', () => {
         if (!familyToDeleteFrom || !detToDelete)
           throw new Error('no income det to delete');
         const res = await apiDelete(
-          `families/${familyToDeleteFrom.id}/income-determinations/${detToDelete.id}`
+          `families/${familyToDeleteFrom.id}/income-determinations/${detToDelete.id}`,
+          TEST_OPTS
         );
         expect(res.status).toEqual(200);
 
