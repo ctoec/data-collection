@@ -1,6 +1,6 @@
 import { random } from 'faker';
-import { Child, Enrollment, Site } from '../entity';
-import { AgeGroup, CareModel } from '../../client/src/shared/models';
+import { Child, Enrollment, Site } from '../../entity';
+import { AgeGroup, CareModel } from '../../../client/src/shared/models';
 import moment from 'moment';
 import { getFakeFunding } from './funding';
 
@@ -37,7 +37,7 @@ export const makeFakeEnrollments = (
   if (currentEnrollment.ageGroup === AgeGroup.SchoolAge) {
     const oldEnrollment: Enrollment = {
       ...commonEnrollmentAttrs,
-      id, // TODO do duplicates matter for fake data?
+      id, // duplicates don't matter for fake data
       ageGroup: AgeGroup.Preschool,
       model: random.arrayElement(Object.values(CareModel)),
       entry: currentEnrollmentEntry.clone().add(-1, 'years'),

@@ -5,6 +5,6 @@ module.exports = {
 
     await browser.waitForElementVisible('body');
 
-    browser.assert.titleContains('Upload your enrollment data').end();
+    browser.assert.titleContains('Welcome to ECE Reporter').end();
   },
 };

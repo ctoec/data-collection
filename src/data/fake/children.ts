@@ -1,10 +1,11 @@
 import { name, address, random } from 'faker';
-import { Child, Organization, Site } from '../entity';
+import { Child, Family, Organization, Site } from '../../entity';
 import {
   BirthCertificateType,
   Gender,
   RACE_FIELDS,
-} from '../../client/src/shared/models';
+  UndefinableBoolean,
+} from '../../../client/src/shared/models';
 import { stagingUserAllowedOrganizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import moment from 'moment';
@@ -12,7 +13,7 @@ import { makeFakeFamily } from './family';
 import { getFakeIncomeDet } from './incomeDeterminations';
 import { makeFakeEnrollments } from './enrollment';
 import { getFakeFundingSpaces } from './fundingSpace';
-import { weightedBoolean, weightedUndefinableBoolean } from './fakeDataUtils';
+import { weightedBoolean } from './utils';
 
 const _organizations: Organization[] = stagingUserAllowedOrganizations.map(
   (o, i) => ({
@@ -26,7 +27,7 @@ const _organizations: Organization[] = stagingUserAllowedOrganizations.map(
 const _sites: Site[] = [];
 
 _organizations.forEach((o) =>
-  sitesByOrgName[o.providerName].forEach((s, i) => {
+  sitesByOrgName[o.providerName].forEach((s) => {
     const newSite = {
       ...s,
       organization: o,
@@ -38,23 +39,41 @@ _organizations.forEach((o) =>
   })
 );
 
-const children: Child[] = Array.from({ length: 100 }, (_, i) => {
+const children: Child[] = Array.from({ length: 20 }, (_, i) => {
   const org = random.arrayElement(_organizations);
   return {
     id: '' + i,
     firstName: name.firstName(),
     lastName: name.lastName(),
-    birthCertificateType: weightedBoolean(8)
-      ? BirthCertificateType.NonUS
-      : BirthCertificateType.US, // Arbitrary, would be better based on actual frequency in data
     birthdate: moment().add(-random.number({ min: 6, max: 60 }), 'months'),
+    birthCertificateType: BirthCertificateType.US,
     organization: org,
     organizationId: org.id,
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
     cascadeDeleteEnrollments: null,
+    family: {} as Family,
   };
 });
+
+random
+  .arrayElements(children, 5)
+  .forEach((c) => (c.birthCertificateType = BirthCertificateType.NonUS));
+random
+  .arrayElements(children, 5)
+  .forEach((c) => (c.foster = UndefinableBoolean.Yes));
+random
+  .arrayElements(children, 5)
+  .forEach((c) => (c.dualLanguageLearner = UndefinableBoolean.Yes));
+random
+  .arrayElements(children, 5)
+  .forEach((c) => (c.receivesDisabilityServices = UndefinableBoolean.Yes));
+random
+  .arrayElements(children, 5)
+  .forEach((c) => (c.hispanicOrLatinxEthnicity = UndefinableBoolean.Yes));
+random
+  .arrayElements(children, 5)
+  .forEach((c) => (c.family.homelessness = UndefinableBoolean.Yes));
 
 const possibleGenders = [Gender.Female, Gender.Male, Gender.Nonbinary];
 function makeMiddleNameEdgeCases(num: number) {
@@ -70,11 +89,11 @@ const completeChildren: Child[] = children.map((c, i) => {
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-        birthTown: address.city(),
-        birthState: weightedBoolean(90) ? 'CT' : address.stateAbbr(),
-        birthCertificateId:
-          random.number({ min: 10000000000, max: 99999999999 }) + '',
-      }
+      birthTown: address.city(),
+      birthState: weightedBoolean(80) ? 'CT' : address.stateAbbr(),
+      birthCertificateId:
+        random.number({ min: 10000000000, max: 99999999999 }) + '',
+    }
     : {};
   const childRace = random
     .arrayElements(
@@ -83,28 +102,23 @@ const completeChildren: Child[] = children.map((c, i) => {
     )
     .reduce((acc, race) => ({ ...acc, [race]: true }), {});
 
-  const family = makeFakeFamily(i);
-  const foster = weightedUndefinableBoolean(5);
+  const family = makeFakeFamily({ ...c.family, id: i });
 
   return {
     ...c,
     ...birthCertDetails,
     ...childRace,
-    hispanicOrLatinxEthnicity: weightedUndefinableBoolean(30), // No idea if this is representative
     middleName: makeMiddleNameEdgeCases(
       weightedBoolean(10) ? 1 : random.number(3)
     ),
-    suffix: weightedBoolean(5)
+    suffix: weightedBoolean(10)
       ? random.arrayElement(possibleSuffixes)
       : undefined,
     sasid: random.number({ min: 1000000000, max: 9999999999 }) + '',
     gender: random.arrayElement(possibleGenders),
-    dualLanguageLearner: weightedUndefinableBoolean(10), // No idea if this is representative
-    foster,
-    receivesDisabilityServices: weightedUndefinableBoolean(5),
     family: {
       ...family,
-      incomeDeterminations: foster ? [] : [getFakeIncomeDet(i, family)],
+      incomeDeterminations: c.foster ? [] : [getFakeIncomeDet(i, family)],
     },
     enrollments: makeFakeEnrollments(i, c, site),
     cascadeDeleteEnrollments: null,

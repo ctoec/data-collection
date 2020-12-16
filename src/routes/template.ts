@@ -11,7 +11,7 @@ import {
   completeChildren,
   childrenAllMissingOneField,
   childrenMissingSomeInfo,
-} from '../data/children';
+} from '../data/fake/children';
 import { streamUploadedChildren } from '../controllers/export';
 import { parseQueryString } from '../utils/parseQueryString';
 import { TemplateMetadata } from '../../client/src/shared/payloads';
