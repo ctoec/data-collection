@@ -11,8 +11,8 @@ module.exports = {
   },
   buttonTexts: {
     templateExcel: 'Download Excel template',
-    templateCSV: 'Download CSV template',
+    templateCSV: 'Download .csv template',
     exampleExcel: 'Download Excel sample data',
-    exampleCSV: 'Download CSV sample data',
+    exampleCSV: 'Download .csv sample data',
   },
 };

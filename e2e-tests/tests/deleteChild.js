@@ -35,7 +35,7 @@ module.exports = {
 
       await browser.waitForElementVisible(
         'xpath',
-        "//*/p[contains(., '99 children enrolled')]"
+        "//*/p[contains(., '19 children enrolled')]"
       );
       // Expect the first tab nav content to not have that link text in it
       await browser.assert.not.containsText(

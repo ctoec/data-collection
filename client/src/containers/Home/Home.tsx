@@ -48,7 +48,8 @@ const Home: React.FC = () => {
             </h2>
             <p className="line-height-sans-5">
               Publicly-funded early care and education programs use ECE Reporter
-              to share data with the Connecticut Office of Early Childhood (OEC).
+              to share data with the Connecticut Office of Early Childhood
+              (OEC).
             </p>
             <p>
               The Office of Early Childhood uses this data to pay programs and
@@ -128,10 +129,11 @@ const Home: React.FC = () => {
             <div className="grid-col-10">
               <h2 className="text-primary text-light margin-y-3">
                 Have feedback about OEC's data collection process?
-            </h2>
+              </h2>
               <p>
-                Feedback from providers like you helps make this tool even better.
-            </p>
+                Feedback from providers like you helps make this tool even
+                better.
+              </p>
               <p>
                 Send us your feedback at <MailToLink />
               </p>

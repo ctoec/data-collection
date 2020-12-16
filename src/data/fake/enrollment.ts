@@ -37,7 +37,7 @@ export const makeFakeEnrollments = (
   if (currentEnrollment.ageGroup === AgeGroup.SchoolAge) {
     const oldEnrollment: Enrollment = {
       ...commonEnrollmentAttrs,
-      id, // TODO do duplicates matter for fake data?
+      id, // duplicates don't matter for fake data
       ageGroup: AgeGroup.Preschool,
       model: random.arrayElement(Object.values(CareModel)),
       entry: currentEnrollmentEntry.clone().add(-1, 'years'),

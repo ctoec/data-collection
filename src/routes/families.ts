@@ -8,6 +8,7 @@ import {
   NotFoundError,
   ApiError,
 } from '../middleware/error/errors';
+import * as controller from '../controllers/incomeDeterminations';
 
 export const familyRouter = express.Router();
 
@@ -43,22 +44,7 @@ familyRouter.put(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const famId = parseInt(req.params['familyId']);
-      const detId = parseInt(req.params['determinationId']);
-      const readOrgIds = await getReadAccessibleOrgIds(req.user);
-
-      const detToModify = await getManager().findOne(
-        IncomeDetermination,
-        {
-          id: detId,
-          familyId: famId,
-        },
-        {
-          where: { family: { organization: { id: In(readOrgIds) } } },
-        }
-      );
-      if (!detToModify) throw new NotFoundError();
-
+      const detToModify = await controller.getDetermination(req);
       const mergedEntity = getManager().merge(
         IncomeDetermination,
         detToModify,
@@ -112,8 +98,7 @@ familyRouter.delete(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const detId = parseInt(req.params['determinationId']);
-      const det = await getManager().find(IncomeDetermination, { id: detId });
+      const det = await controller.getDetermination(req);
       await getManager().softRemove(det);
       res.sendStatus(200);
     } catch (err) {
