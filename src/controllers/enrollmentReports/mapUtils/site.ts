@@ -1,5 +1,6 @@
 import { Site } from '../../../entity';
 import { EnrollmentReportRow } from '../../../template';
+import { normalizeString } from '../../../utils/normalizeString';
 
 /**
  * Look up site from user's sites that matches source site name,
@@ -16,7 +17,7 @@ export const lookUpSite = (
 
   return sites.find(
     (site) =>
-      site.siteName.toLowerCase() === source.site.toLowerCase() &&
+      normalizeString(site.siteName) === normalizeString(source.site) &&
       site.organizationId === organizationId
   );
 };
