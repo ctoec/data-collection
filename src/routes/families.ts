@@ -44,15 +44,7 @@ familyRouter.put(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const famId = parseInt(req.params['familyId']);
-      const detId = parseInt(req.params['determinationId']);
-      const readOrgIds = await getReadAccessibleOrgIds(req.user);
-      const detToModify = await controller.getDetermination(
-        famId,
-        detId,
-        readOrgIds
-      );
-
+      const detToModify = await controller.getDetermination(req);
       const mergedEntity = getManager().merge(
         IncomeDetermination,
         detToModify,
@@ -106,10 +98,7 @@ familyRouter.delete(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const famId = parseInt(req.params['familyId']);
-      const detId = parseInt(req.params['determinationId']);
-      const readOrgIds = await getReadAccessibleOrgIds(req.user);
-      const det = await controller.getDetermination(famId, detId, readOrgIds);
+      const det = await controller.getDetermination(req);
       await getManager().softRemove(det);
       res.sendStatus(200);
     } catch (err) {
