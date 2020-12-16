@@ -174,8 +174,11 @@ const Roster: React.FC = () => {
     <>
       <div className="Roster grid-container">
         <BackButton
-          text="Back to getting started"
-          location="/getting-started"
+          location={
+            query.month || query.withdrawn
+              ? `/roster?organization=${query.organization}`
+              : '/'
+          }
         />
         {alertElements}
         <div className="grid-row flex-align-center">

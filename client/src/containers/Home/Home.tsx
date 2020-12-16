@@ -1,149 +1,136 @@
 import React, { useContext } from 'react';
-import { Redirect } from 'react-router-dom';
-import cx from 'classnames';
-import { ReactComponent as ArrowRight } from '@ctoec/component-library/dist/assets/images/arrowForward.svg';
-import { Button, LoadingWrapper, TextWithIcon } from '@ctoec/component-library';
-import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
-import UserContext from '../../contexts/UserContext/UserContext';
-import { MailToLink } from '../../components/MailToLink';
+import { TextWithIcon } from '@ctoec/component-library';
+import { Link } from 'react-router-dom';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
+import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
+import UserContext from '../../contexts/UserContext/UserContext';
 
 const Home: React.FC = () => {
-  const { user, loading } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const h1Ref = getH1RefForTitle();
-
-  // To prevent flash of splash page if user is logged in
-  if (loading) {
-    return <LoadingWrapper loading={true} />;
-  }
-
-  // If the user is logged in, don't show the splash page
-  if (user) {
-    return <Redirect to="/getting-started" />;
-  }
+  const org = (user?.organizations || [])[0] || {};
 
   return (
-    <div className="Home">
-      <div className="usa-hero">
-        <div className="grid-container">
-          <h1 ref={h1Ref} className="margin-bottom-2">
-            Welcome to ECE Reporter
-          </h1>
-          <Button
-            className="btn--inverse"
-            href="/login"
-            text="Log in"
-            appearance="base"
-          />
-        </div>
-      </div>
-      <div className="grid-container margin-top-4">
-        <div className="grid-row grid-gap">
-          <div className="tablet:grid-col-3">
-            <img className="hero-bubble" src={HomeCareerBubbleSrc} alt="" />
-          </div>
-          <div className="tablet:grid-col-6">
-            <h2 className="text-primary text-light margin-y-3">
-              We support affordable child care in Connecticut
-            </h2>
-            <p className="line-height-sans-5">
-              Publicly-funded early care and education programs use ECE Reporter
-              to share data with the Connecticut Office of Early Childhood
-              (OEC).
+    <div className="grid-container margin-top-4">
+      <div className="grid-row grid-gap">
+        <div className="tablet:grid-col-8">
+          <h1 ref={h1Ref}>Hello {user?.firstName}!</h1>
+          <p>
+            ECE Reporter will allow you to share your state-funded enrollment
+            data with the Office of Early Childhood (OEC). OEC uses this data to
+            make informed program and policy decisions affecting young children
+            and families.
+          </p>
+          <h2>Sites you manage at {org.providerName}:</h2>
+          <ul>
+            {(user?.sites || []).map((site) => (
+              <li key={site.siteName} className="line-height-body-4">
+                {site.siteName}
+              </li>
+            ))}
+          </ul>
+          <h2>How to use ECE Reporter</h2>
+          <p>
+            These instructions guide you through the file upload process to add
+            many records at once. If you'd like to add records manually,
+            <Link to="/roster/"> you can add them on your roster.</Link>
+          </p>
+          {/* TODO: this should be an ordered list, not a bunch of divs standing on top of each other in a trench coat */}
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              1
+            </div>
+            Review the data requirements
+          </h3>
+          <div className="margin-left-6">
+            <p>
+              Learn more about the data elements ECE Reporter collects for each
+              enrollment.
             </p>
             <p>
-              The Office of Early Childhood uses this data to pay programs and
-              help families access quality care.
+              <Link
+                className="usa-button usa-button--unstyled"
+                to="/data-requirements"
+              >
+                <TextWithIcon
+                  text="See required data"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
             </p>
-            <div className="margin-bottom-4">
-              <h2 className="text-primary text-light margin-y-3">Learn more</h2>
-              <h3>See the data collected by ECE Reporter</h3>
-              <Button
-                appearance="unstyled"
-                href="/data-requirements"
-                className="margin-bottom-3 display-block"
-                text={
-                  <TextWithIcon
-                    text="Learn the data requirements"
-                    Icon={ArrowRight}
-                    direction="right"
-                    iconSide="right"
-                    className="text-underline"
-                  />
-                }
-              />
-              <Button
-                appearance="unstyled"
-                href="/template"
-                className="margin-bottom-3 display-block"
-                text={
-                  <TextWithIcon
-                    text="See the latest data template"
-                    Icon={ArrowRight}
-                    direction="right"
-                    iconSide="right"
-                    className="text-underline"
-                  />
-                }
-              />
-              {/* <h3>Get help with ECE Reporter</h3> */}
-              {/* TODO: HELP PAGE LINK */}
-              <h3>Learn more about OEC</h3>
-              <Button
-                appearance="unstyled"
-                external={true}
-                href="https://ctoec.org"
-                className="margin-bottom-3 display-block"
-                text={
-                  <TextWithIcon
-                    text="Visit OEC's website"
-                    Icon={ArrowRight}
-                    direction="right"
-                    iconSide="right"
-                    className="text-underline"
-                  />
-                }
-              />
-              <h3>Learn how ECE Reporter collects and stores data</h3>
-              <Button
-                appearance="unstyled"
-                href="/privacy-policy"
-                className="margin-bottom-3 display-block"
-                text={
-                  <TextWithIcon
-                    text="See the privacy policy"
-                    Icon={ArrowRight}
-                    direction="right"
-                    iconSide="right"
-                    className="text-underline"
-                  />
-                }
-              />
-            </div>
           </div>
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              2
+            </div>
+            Download the data template
+          </h3>
+          <div className="margin-left-6">
+            <p>
+              You'll need to enter data in this file to upload in ECE Reporter.
+            </p>
+            <p>
+              <Link className="usa-button usa-button--unstyled" to="/template/">
+                <TextWithIcon
+                  text="Download the template"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
+            </p>
+          </div>
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              3
+            </div>
+            Prepare your data
+          </h3>
+          <div className="margin-left-6">
+            <p>Get instructions on how to enter data into OEC's template.</p>
+            <p>
+              {
+                // TODO: Check that this link is the right one to use here / is ready to go
+              }
+              <Link
+                className="usa-button usa-button--unstyled"
+                to="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
+              >
+                <TextWithIcon
+                  text="See the how-to guide"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
+            </p>
+          </div>
+          <h3 className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
+            <div className="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1">
+              4
+            </div>
+            Upload your data
+          </h3>
+          <div className="margin-left-6">
+            <p>
+              Once your template is filled out, you'll upload the data to ECE
+              Reporter.
+            </p>
+            <p>
+              <Link className="usa-button usa-button--unstyled" to="/upload/">
+                <TextWithIcon
+                  text="Go to file upload"
+                  Icon={Arrow}
+                  iconSide="right"
+                />
+              </Link>
+            </p>
+          </div>
+        </div>
+        <div className="tablet:grid-col-4" role="presentation">
+          <Image />
         </div>
       </div>
-      <footer className={cx('bg-base-lightest', 'padding-y-6', 'footer')}>
-        <div className="grid-container">
-          <div className="grid-row flex-justify flex-align-center">
-            <div className="grid-col-10">
-              <h2 className="text-primary text-light margin-y-3">
-                Have feedback about OEC's data collection process?
-              </h2>
-              <p>
-                Feedback from providers like you helps make this tool even
-                better.
-              </p>
-              <p>
-                Send us your feedback at <MailToLink />
-              </p>
-            </div>
-          </div>
-          <div className="grid-col-2">
-            {/* TODO: Add icon of message bubbles */}
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };

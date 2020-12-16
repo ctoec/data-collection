@@ -45,11 +45,12 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
     );
   }
 
-  if (user) {
+  if (user && filteredColumnMetadata.length) {
     const siteRow = filteredColumnMetadata.find(
       (row) => row.propertyName === 'site'
     );
     siteRow!.columnFormatters = getSiteFormatters(user.sites || []);
+
     const providerRow = filteredColumnMetadata.find(
       (row) => row.propertyName === 'providerName'
     );
