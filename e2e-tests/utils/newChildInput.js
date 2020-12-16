@@ -93,7 +93,7 @@ module.exports = {
     },
     {
       id: 'determination-date--year',
-      newValue: '2020',
+      newValue: '2018',
     },
   ],
   enrollmentFundingFields: [
@@ -111,7 +111,7 @@ module.exports = {
     },
     {
       id: 'start-date-year',
-      newValue: '2020',
+      newValue: '2018',
     },
     {
       id: 'In-person',
