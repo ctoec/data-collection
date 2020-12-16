@@ -10,9 +10,6 @@ import { RequirementLevelFilter } from './RequirementLevelFilter';
 import { TableColumns } from './TableColumns';
 import useSWR, { responseInterface } from 'swr';
 import {
-  isFirstReportingPeriodRow,
-  FIRST_REPORTING_PERIOD_ALERT_ROW,
-  isFirstReportingPeriodAlertRow,
   EnhancedColumnMetadata,
   getSiteFormatters,
   getProviderFormatters,
@@ -22,13 +19,11 @@ import UserContext from '../../contexts/UserContext/UserContext';
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
   showRequirementLevelLegendAndFilter?: boolean;
-  addFirstReportingPeriodAlert?: boolean;
 };
 
 const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   headerLevel,
   showRequirementLevelLegendAndFilter = false,
-  addFirstReportingPeriodAlert = false,
 }) => {
   const Heading = headerLevel;
   const { user } = useContext(UserContext);
@@ -47,24 +42,6 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
       (m) =>
         m.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.REQUIRED ||
         m.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL
-    );
-  }
-
-  const firstReportingPeriodRowIdx = filteredColumnMetadata.findIndex(
-    isFirstReportingPeriodRow
-  );
-  const firstReportingPeriodAlertRowIdx = filteredColumnMetadata.findIndex(
-    isFirstReportingPeriodAlertRow
-  );
-  if (
-    addFirstReportingPeriodAlert &&
-    firstReportingPeriodRowIdx > -1 &&
-    firstReportingPeriodAlertRowIdx === -1
-  ) {
-    filteredColumnMetadata.splice(
-      firstReportingPeriodRowIdx + 1,
-      0,
-      FIRST_REPORTING_PERIOD_ALERT_ROW
     );
   }
 
@@ -111,7 +88,7 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
                   id={`data-requirements-${sectionName.replace(' ', '-')}`}
                   data={sectionData}
                   rowKey={(row) => (row ? row.formattedName : '')}
-                  columns={TableColumns(addFirstReportingPeriodAlert)}
+                  columns={TableColumns}
                   defaultSortColumn={0}
                 />
               </div>

@@ -58,7 +58,6 @@ const DataRequirements: React.FC = () => {
       <DataDefinitionsTable
         headerLevel="h3"
         showRequirementLevelLegendAndFilter
-        addFirstReportingPeriodAlert
       />
     </div>
   );
