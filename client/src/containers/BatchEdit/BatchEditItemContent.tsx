@@ -15,8 +15,6 @@ import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Link } from 'react-router-dom';
 import { getCurrentEnrollment } from '../../utils/models';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import { stringify } from 'query-string';
 import { mutateCallback } from 'swr/dist/types';
 
 type BatchEditItemContentProps = {
