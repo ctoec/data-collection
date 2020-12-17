@@ -67,7 +67,7 @@ exports[`Home matches snapshot 1`] = `
           <p>
             <a
               class="usa-button usa-button--unstyled"
-              href="/data-requirements/"
+              href="/data-requirements"
             >
               <span
                 class="oec-text-with-icon"
