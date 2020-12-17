@@ -9,7 +9,6 @@ import UserContext from '../../contexts/UserContext/UserContext';
 const Home: React.FC = () => {
   const { user } = useContext(UserContext);
   const h1Ref = getH1RefForTitle();
-  const org = (user?.organizations || [])[0] || {};
 
   return (
     <div className="grid-container margin-top-4">
@@ -22,14 +21,19 @@ const Home: React.FC = () => {
             make informed program and policy decisions affecting young children
             and families.
           </p>
-          <h2>Sites you manage at {org.providerName}:</h2>
-          <ul>
-            {(user?.sites || []).map((site) => (
-              <li key={site.siteName} className="line-height-body-4">
-                {site.siteName}
-              </li>
-            ))}
-          </ul>
+          {(user?.organizations || []).map((org) => (
+            <>
+              <h2>Sites you manage at {org.providerName}:</h2>
+              <ul>
+                {(user?.sites || []).map((site) => (
+                  <li key={site.siteName} className="line-height-body-4">
+                    {site.siteName}
+                  </li>
+                ))}
+              </ul>
+            </>
+          ))}
+
           <h2>How to use ECE Reporter</h2>
           <p>
             These instructions guide you through the file upload process to add
