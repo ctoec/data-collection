@@ -1,22 +1,24 @@
 import { useEffect } from 'react';
 import { useAlerts } from '../../../hooks/useAlerts';
-import { drillReactNodeForText } from '../../../utils/getValidationStatus';
 import { AlertProps } from '@ctoec/component-library';
 import React from 'react';
 import pluralize from 'pluralize';
 import { Link } from 'react-router-dom';
 import { stringify } from 'query-string';
+import { drillReactNodeForText } from '../../../utils/drillReactNodeForText';
 
 export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
   childrenWithErrorsCount: number,
   withdrawnChildrenCount: number,
+  alertType: 'warning' | 'error' = 'warning',
   organizationId?: string
 ) => {
   const { alertElements, setAlerts, alerts } = useAlerts();
   const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
     childrenWithErrorsCount,
     withdrawnChildrenCount,
+    alertType,
     organizationId
   );
   useEffect(() => {
@@ -44,7 +46,7 @@ export const useChildrenWithErrorsAlert = (
         childrenWithErrorsAlert,
       ]);
     }
-  }, [childrenWithErrorsCount, isLoading]);
+  }, [childrenWithErrorsCount, isLoading, alertType]);
 
   return { alertElements };
 };
@@ -56,6 +58,7 @@ export const useChildrenWithErrorsAlert = (
 function getChildrenWithErrorsAlertProps(
   numberOfChildrenWithErrors: number,
   numberOfWithdrawnChildrenWithErrors: number,
+  alertType: 'warning' | 'error',
   organizationId?: string
 ): AlertProps {
   let alertText = `You'll need to add required info for
@@ -84,6 +87,6 @@ function getChildrenWithErrorsAlertProps(
       </span>
     ),
     heading: 'Update roster before submitting',
-    type: 'warning',
+    type: alertType,
   };
 }

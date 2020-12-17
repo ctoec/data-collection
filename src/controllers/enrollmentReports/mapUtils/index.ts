@@ -7,4 +7,3 @@ export * from './fundingTime';
 export * from './incomeDetermination';
 export * from './organization';
 export * from './site';
-export * from './shared';

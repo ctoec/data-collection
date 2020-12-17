@@ -1,5 +1,5 @@
-import { parseEnrollmentReportRow } from './';
-import { EnrollmentReportRow } from '../../template';
+import { parseEnrollmentReportRow } from '..';
+import { EnrollmentReportRow } from '../../../template';
 
 describe('controllers', () => {
   describe('enrollmentReports', () => {

@@ -145,6 +145,7 @@ export const ChildIdentifiersForm = ({
       )}
       {showFieldOrFieldset(child, ['birthdate']) && <DateOfBirthField />}
       {showFieldOrFieldset(child, [
+        'birthCertificateType',
         'birthCertificateId',
         'birthTown',
         'birthState',

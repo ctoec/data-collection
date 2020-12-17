@@ -14,10 +14,9 @@ export function FundingAgeGroupMatchesEnrollment(
       propertyName: propertyName,
       options: { message: ageGroupsMustAgree, ...validationOptions },
       validator: {
-        validate(_, { object: enrollment }) {
+        validate(allFundings, { object: enrollment }) {
           if (!enrollment) return true;
           const enrollmentAgeGroup = (enrollment as Enrollment).ageGroup;
-          const allFundings = (enrollment as Enrollment).fundings;
           if (!allFundings) return true;
           return allFundings.every(
             (f) => f?.fundingSpace?.ageGroup === enrollmentAgeGroup

@@ -48,6 +48,7 @@ export const changeEnrollment = async (
   return getManager().transaction(async (tManager) => {
     // Update current enrollment, if exists
     const currentEnrollment = (child.enrollments || []).find((e) => !e.exit);
+
     if (currentEnrollment) {
       const currentFunding = (currentEnrollment.fundings || []).find(
         (f) => !f.lastReportingPeriod
@@ -159,6 +160,9 @@ async function createNewEnrollment(
 
   let enrollment = {
     ...newEnrollment,
+    // Rather than creating a funding here, use the logic below to create it
+    // so that we may take advantage of the funding space check
+    fundings: undefined,
     child,
     updateMetaData: { author: user } as UpdateMetaData,
   } as Enrollment;
