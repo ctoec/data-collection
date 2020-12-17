@@ -20,6 +20,7 @@ export function FundingDoesNotOverlap(
         validate(_, { object: funding }) {
           const allFundings = (funding as any).allFundings;
           if (!allFundings) return true;
+
           const allExceptThisFunding = [
             ...allFundings.filter((f) => f.id !== (funding as Funding).id),
           ];
@@ -32,6 +33,7 @@ export function FundingDoesNotOverlap(
             firstReportingPeriod: validatingFirstPeriod,
             lastReportingPeriod: validatingLastPeriod,
           } = funding as Funding;
+
           if (!validatingFirstPeriod) {
             return true;
           }

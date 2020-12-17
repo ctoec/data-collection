@@ -62,6 +62,8 @@ export const FundingForm: React.FC<FundingFormProps> = ({
     throw new Error('Funding form rendered without enrollment');
   }
 
+  // TODO: is an additional funding still created when a user enters incomplete info in create child, then enters different info and saves?
+  // If so it's maybe bc we're not using the right funding here to fill in the info the second time around/not updating the right funding
   const funding = fundingId
     ? enrollment?.fundings?.find((f) => f.id === fundingId)
     : getCurrentFunding({ enrollment });
@@ -138,23 +140,23 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       />
     </Form>
   ) : (
-    <Form<Funding>
-      id={id}
-      className="usa-form"
-      data={funding}
-      onSubmit={onSubmit}
-      hideStatus={errorsHidden}
-    >
-      <NewFundingField<Funding>
-        getEnrollment={() => enrollment}
-        organizationId={child.organization.id}
-        isEdit={true}
-      />
-      {AdditionalButton}
-      <FormSubmitButton
-        text={loading ? 'Saving...' : 'Save'}
-        disabled={loading}
-      />
-    </Form>
-  );
+      <Form<Funding>
+        id={id}
+        className="usa-form"
+        data={funding}
+        onSubmit={onSubmit}
+        hideStatus={errorsHidden}
+      >
+        <NewFundingField<Funding>
+          getEnrollment={() => enrollment}
+          organizationId={child.organization.id}
+          isEdit={true}
+        />
+        {AdditionalButton}
+        <FormSubmitButton
+          text={loading ? 'Saving...' : 'Save'}
+          disabled={loading}
+        />
+      </Form>
+    );
 };
