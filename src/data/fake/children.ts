@@ -89,11 +89,11 @@ const completeChildren: Child[] = children.map((c, i) => {
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;
   const birthCertDetails = isUSBirthCert
     ? {
-      birthTown: address.city(),
-      birthState: weightedBoolean(80) ? 'CT' : address.stateAbbr(),
-      birthCertificateId:
-        random.number({ min: 10000000000, max: 99999999999 }) + '',
-    }
+        birthTown: address.city(),
+        birthState: weightedBoolean(80) ? 'CT' : address.stateAbbr(),
+        birthCertificateId:
+          random.number({ min: 10000000000, max: 99999999999 }) + '',
+      }
     : {};
   const childRace = random
     .arrayElements(
@@ -119,7 +119,9 @@ const completeChildren: Child[] = children.map((c, i) => {
     family: {
       ...family,
       incomeDeterminations:
-        c.foster === UndefinableBoolean.Yes ? [] : [getFakeIncomeDet(i, family)],
+        c.foster === UndefinableBoolean.Yes
+          ? []
+          : [getFakeIncomeDet(i, family)],
     },
     enrollments: makeFakeEnrollments(i, c, site),
     cascadeDeleteEnrollments: null,
