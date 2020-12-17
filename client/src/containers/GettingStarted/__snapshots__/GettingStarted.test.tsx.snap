@@ -55,11 +55,11 @@ exports[`GettingStarted matches snapshot 1`] = `
           <li
             class="how-to-step"
           >
-            <p
+            <h3
               class="how-to-header"
             >
               Review the data requirements
-            </p>
+            </h3>
             <p
               class="how-to-body"
             >
@@ -88,11 +88,11 @@ exports[`GettingStarted matches snapshot 1`] = `
           <li
             class="how-to-step"
           >
-            <p
+            <h3
               class="how-to-header"
             >
               Download the data template
-            </p>
+            </h3>
             <p
               class="how-to-body"
             >
@@ -121,11 +121,11 @@ exports[`GettingStarted matches snapshot 1`] = `
           <li
             class="how-to-step"
           >
-            <p
+            <h3
               class="how-to-header"
             >
               Prepare your data
-            </p>
+            </h3>
             <p
               class="how-to-body"
             >
@@ -154,11 +154,11 @@ exports[`GettingStarted matches snapshot 1`] = `
           <li
             class="how-to-step"
           >
-            <p
+            <h3
               class="how-to-header"
             >
               Upload your data
-            </p>
+            </h3>
             <p
               class="how-to-body"
             >

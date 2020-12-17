@@ -17,7 +17,7 @@ export const HowToUseStep: React.FC<HowToUseStepProps> = ({
 }) => {
   return (
     <>
-      <p className="how-to-header">{stepHeader}</p>
+      <h3 className="how-to-header">{stepHeader}</h3>
       <p className="how-to-body">{paragraphText}</p>
       <p className="how-to-button">
         {/* Need to use an a tag to get href for an external link,
