@@ -30,7 +30,7 @@ import moment, { Moment } from 'moment';
 
 export class EnrollmentReportRow {
   @ColumnMetadata({
-    formattedName: 'First Name',
+    formattedName: 'first name',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: "Legal name as it appears on the child's birth certificate.",
     reason:
@@ -42,7 +42,7 @@ export class EnrollmentReportRow {
   firstName?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Middle Name',
+    formattedName: 'middle name',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition: "Legal name as it appears on the child's birth certificate.",
     reason:
@@ -54,7 +54,7 @@ export class EnrollmentReportRow {
   middleName?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Last Name',
+    formattedName: 'last name',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: "Legal name as it appears on the child's birth certificate.",
     reason:
@@ -66,7 +66,7 @@ export class EnrollmentReportRow {
   lastName?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Suffix',
+    formattedName: 'suffix',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition: "Legal name as it appears on the child's birth certificate.",
     reason:
@@ -78,7 +78,7 @@ export class EnrollmentReportRow {
   suffix?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'SASID / Unique Identifier',
+    formattedName: 'SASID / unique identifier',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition:
       'A unique number used to identify children.  Either an SDE-backed SASID created from the PSIS system, or another unique identifier from a system of record such as Childplus.',
@@ -90,7 +90,7 @@ export class EnrollmentReportRow {
   sasidUniqueId?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Date of birth',
+    formattedName: 'date of birth',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: "Date of birth as it appears on the child's birth certificate",
     reason:
@@ -102,7 +102,7 @@ export class EnrollmentReportRow {
   birthdate?: Moment = moment.invalid();
 
   @ColumnMetadata({
-    formattedName: 'Birth certificate type',
+    formattedName: 'birth certificate type',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition: 'Type of birth certificate based on country of issue',
     reason:
@@ -116,7 +116,7 @@ export class EnrollmentReportRow {
   birthCertificateType?: BirthCertificateType = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Birth certificate ID #',
+    formattedName: 'birth certificate ID #',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     requirementString: REQUIRED_IF_US_BORN,
     definition: "The identification number on the child's birth certificate.",
@@ -129,7 +129,7 @@ export class EnrollmentReportRow {
   birthCertificateId?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Town of birth',
+    formattedName: 'town of birth',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     requirementString: REQUIRED_IF_US_BORN,
     definition:
@@ -142,7 +142,7 @@ export class EnrollmentReportRow {
   birthTown?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'State of birth',
+    formattedName: 'state of birth',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     requirementString: REQUIRED_IF_US_BORN,
     definition:
@@ -155,7 +155,7 @@ export class EnrollmentReportRow {
   birthState?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Race: American Indian or Alaska Native',
+    formattedName: 'race: American Indian or Alaska Native',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -167,7 +167,7 @@ export class EnrollmentReportRow {
   americanIndianOrAlaskaNative?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Race: Asian',
+    formattedName: 'race: Asian',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -179,7 +179,7 @@ export class EnrollmentReportRow {
   asian?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Race: Black or African American',
+    formattedName: 'race: Black or African American',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -191,7 +191,7 @@ export class EnrollmentReportRow {
   blackOrAfricanAmerican?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Race: Native Hawaiian or Pacific Islander',
+    formattedName: 'race: Native Hawaiian or Pacific Islander',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -203,7 +203,7 @@ export class EnrollmentReportRow {
   nativeHawaiianOrPacificIslander?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Race: White',
+    formattedName: 'race: white',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -215,7 +215,7 @@ export class EnrollmentReportRow {
   white?: boolean = false;
 
   @ColumnMetadata({
-    formattedName: 'Race Not Disclosed',
+    formattedName: 'race not disclosed',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     requirementString: REQUIRED_AT_LEAST_ONE,
     definition: "The child's race, as identified by the family.",
@@ -227,7 +227,7 @@ export class EnrollmentReportRow {
   raceNotDisclosed?: boolean = true;
 
   @ColumnMetadata({
-    formattedName: 'Hispanic or Latinx Ethnicity',
+    formattedName: 'Hispanic or Latinx ethnicity',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: "The child's ethnicity, has identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
@@ -238,7 +238,7 @@ export class EnrollmentReportRow {
   hispanicOrLatinxEthnicity?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Gender',
+    formattedName: 'gender',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition:
       "The child's gender, as identified by the family (not as it appears on the birth certificate).",
@@ -250,7 +250,7 @@ export class EnrollmentReportRow {
   gender?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Dual language learner',
+    formattedName: 'dual language learner',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition:
       'Children who have a home language other than English and are learning to or more languages at the same time, or learning a second language while continuing to develop their first language.',
@@ -262,7 +262,7 @@ export class EnrollmentReportRow {
   dualLanguageLearner?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Receiving Disability Services',
+    formattedName: 'receiving disability services',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition:
       'Children receiving services for Autism, emotional disturbance, intellectual disability, learning disability, speech-language impairment, and other disabilities.',
@@ -274,7 +274,7 @@ export class EnrollmentReportRow {
   receivesDisabilityServices?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Street address',
+    formattedName: 'street address',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The primary residence of the family.',
     reason: GEOGRAPHIC_REPORTING_REASON,
@@ -285,7 +285,7 @@ export class EnrollmentReportRow {
   streetAddress?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Town',
+    formattedName: 'town',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The primary residence of the family.',
     reason: GEOGRAPHIC_REPORTING_REASON,
@@ -296,7 +296,7 @@ export class EnrollmentReportRow {
   town?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'State',
+    formattedName: 'state',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The primary residence of the family.',
     reason: GEOGRAPHIC_REPORTING_REASON,
@@ -307,7 +307,7 @@ export class EnrollmentReportRow {
   state?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Zipcode',
+    formattedName: 'zipcode',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The primary residence of the family.',
     reason: GEOGRAPHIC_REPORTING_REASON,
@@ -318,7 +318,7 @@ export class EnrollmentReportRow {
   zipCode?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Lives with foster family',
+    formattedName: 'lives with foster family',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition: 'Whether the child lives with a foster family.',
     reason:
@@ -330,7 +330,7 @@ export class EnrollmentReportRow {
   foster?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Experiencing homelessness or housing insecurity',
+    formattedName: 'experiencing homelessness or housing insecurity',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition:
       "Children and youth who lack a fixed, regular, and adequate nighttime residence. See [Decision-making Tool to Determine a Family's Homeless Situation](https://eclkc.ohs.acf.hhs.gov/sites/default/files/learning-modules/homelessness-v2/module-4/story_content/external_files/HL%20Module%204%20Decision-Tool_Final%204_20_18.pdf) for definitions and guidance.",
@@ -343,7 +343,7 @@ export class EnrollmentReportRow {
   homelessness?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Household size',
+    formattedName: 'household size',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_NOT_FOSTER,
     definition:
@@ -357,7 +357,7 @@ export class EnrollmentReportRow {
   numberOfPeople?: number = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Annual household income',
+    formattedName: 'annual household income',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_NOT_FOSTER,
     definition: 'The documented household income, for eligibility purposes.',
@@ -370,7 +370,7 @@ export class EnrollmentReportRow {
   income?: number = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Determination date',
+    formattedName: 'determination date',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_NOT_FOSTER,
     definition:
@@ -384,7 +384,7 @@ export class EnrollmentReportRow {
   determinationDate?: Moment = moment.invalid();
 
   @ColumnMetadata({
-    formattedName: 'Provider',
+    formattedName: 'provider',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The provider from which the child is receiving services.',
     reason: 'Used to link child information to provider data.',
@@ -395,7 +395,7 @@ export class EnrollmentReportRow {
   providerName?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Site',
+    formattedName: 'site',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The location at which the child receives ECE services.',
     reason: 'Used to link with other data like ECIS and PSIS.',
@@ -406,7 +406,7 @@ export class EnrollmentReportRow {
   site?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Care Model',
+    formattedName: 'care model',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition:
       'The type of services received by the child.  \n__In-Person__: In-school learning for all students on a full-time basis.  \n__Hybrid__: A combination of both in-person and remote learning support resulting in a limited student population on school premises at any given time.  \n__Distance__: Learning opportunities in which students and educators are not physically present in a classroom environment.',
@@ -418,7 +418,7 @@ export class EnrollmentReportRow {
   model?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Age Group',
+    formattedName: 'age group',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition:
       'The type of service being provided, as described by the age of the participating children.',
@@ -430,7 +430,7 @@ export class EnrollmentReportRow {
   ageGroup?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Enrollment Start Date',
+    formattedName: 'enrollment start date',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The first date the child attended the program.',
     reason: REPORTING_REASON,
@@ -441,7 +441,7 @@ export class EnrollmentReportRow {
   entry?: Moment = moment.invalid();
 
   @ColumnMetadata({
-    formattedName: 'Enrollment End Date',
+    formattedName: 'enrollment end date',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_IF_CHANGED_ENROLLMENT,
     definition:
@@ -454,7 +454,7 @@ export class EnrollmentReportRow {
   exit?: Moment = moment.invalid();
 
   @ColumnMetadata({
-    formattedName: 'Enrollment Exit Reason',
+    formattedName: 'enrollment exit reason',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_IF_CHANGED_ENROLLMENT,
     definition: 'The reason for ending an enrollment.',
@@ -466,7 +466,7 @@ export class EnrollmentReportRow {
   exitReason?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Funding Type',
+    formattedName: 'funding type',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition:
       'The type of service being provided, as described by the funding source',
@@ -478,7 +478,7 @@ export class EnrollmentReportRow {
   fundingSpace?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'Space type',
+    formattedName: 'space type',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition: 'The contract space type that funds an enrollment.',
     reason: UTILIZATION_REPORTING_REASON,
@@ -490,7 +490,7 @@ export class EnrollmentReportRow {
   time?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'First funding period',
+    formattedName: 'first funding period',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition:
       "The first reporting period (roughly equal to a month) during which the child occupied the funded space. The first funding period is often the same as the child's enrollment start month.",
@@ -502,7 +502,7 @@ export class EnrollmentReportRow {
   firstReportingPeriod?: Moment = moment.invalid();
 
   @ColumnMetadata({
-    formattedName: 'Last funding period',
+    formattedName: 'last funding period',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_IF_CHANGED_ENROLLMENT_FUNDING,
     definition:

@@ -32,7 +32,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad = false,
+  hideErrorsOnFirstLoad,
   setAlerts,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);

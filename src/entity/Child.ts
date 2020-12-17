@@ -46,14 +46,14 @@ export class Child implements ChildInterface {
   uniqueId?: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'First name is required' })
+  @IsNotEmpty()
   firstName?: string;
 
   @Column({ nullable: true })
   middleName?: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'Last name is required' })
+  @IsNotEmpty()
   lastName?: string;
 
   @Column({ nullable: true })
@@ -64,11 +64,11 @@ export class Child implements ChildInterface {
   @MomentComparison({
     compareFunc: (birthdate: Moment) =>
       birthdate.isSameOrAfter(moment().add(-12, 'years')),
-    message: 'Birth date must be within last 12 years',
+    message: 'Birthdate must be within last 12 years.',
   })
   @MomentComparison({
     compareFunc: (birthdate: Moment) => birthdate.isBefore(moment()),
-    message: 'Birth date must be in the past',
+    message: 'Birthdate cannot be in the future.',
   })
   birthdate?: Moment;
 
@@ -163,7 +163,8 @@ export class Child implements ChildInterface {
 
   @ValidateNested()
   @ValidateIf((child) => {
-    if (child.family) child.family.childIsFoster = child.foster;
+    if (child.family)
+      child.family.childIsFoster = child.foster === UndefinableBoolean.Yes;
     // This value is used in family to conditionally validate income determinations and then removed
     return true;
   })

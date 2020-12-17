@@ -86,7 +86,7 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
         id="status-firstReportingPeriod"
         role="alert"
       >
-         First reporting period is required for OEC reporting.
+         Field is required for OEC reporting.
       </span>
       <select
         aria-describedby="status-firstReportingPeriod"
