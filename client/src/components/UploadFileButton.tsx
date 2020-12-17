@@ -1,5 +1,6 @@
 import React from 'react';
-import { DownloadArrow, TextWithIcon } from '@ctoec/component-library';
+import cx from 'classnames';
+import { Button, DownloadArrow, TextWithIcon } from '@ctoec/component-library';
 import { Link } from 'react-router-dom';
 
 type UploadFileButtonProps = {
@@ -9,12 +10,22 @@ type UploadFileButtonProps = {
 export const UploadFileButton: React.FC<UploadFileButtonProps> = ({
   className,
 }) => {
+  // Use block display to ensure correct inline format
+  // (e.g. spacing with other buttons and text)
+  const formattedClassName = cx('display-block', className);
   return (
-    <Link
-      to="/upload"
-      className={className + ' usa-button usa-button--unstyled'}
-    >
-      <TextWithIcon Icon={DownloadArrow} text="Upload a file" />
-    </Link>
+    <Button
+      appearance="unstyled"
+      className={formattedClassName}
+      text={
+        <Link to="/upload">
+          <TextWithIcon
+            Icon={DownloadArrow}
+            direction="left"
+            text="Upload a file"
+          />
+        </Link>
+      }
+    />
   );
 };

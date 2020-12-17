@@ -18,10 +18,10 @@ export const EmptyRosterCard: React.FC<EmptyRosterCardProps> = ({
             <DoubleClipboard />
           </div>
           <p className="grid-row text-bold font-body-lg">{boldText}</p>
-          <span className="grid-row line-height-body-4">
-            To update your roster, &nbsp;{' '}
+          <div className="grid-row line-height-body-4">
+            To update your roster, &nbsp;
             <AddRecordButton id="empty-roster-add-buton" /> &nbsp; individually
-          </span>
+          </div>
           <span className="grid-row line-height-body-4">
             or &nbsp; <UploadFileButton /> &nbsp; with many records at once.
           </span>

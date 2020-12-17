@@ -60,7 +60,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 id="add-record-in-actions"
               >
                 <button
-                  class="usa-button usa-button--unstyled margin-right-2"
+                  class="usa-button usa-button--unstyled display-block margin-right-2"
                   type="button"
                 >
                   <div
@@ -804,16 +804,20 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             <div
               class="display-flex"
             >
-              <a
-                class="margin-right-2"
-                href="/create-record"
+              <button
+                class="usa-button usa-button--unstyled display-block margin-right-2"
+                type="button"
               >
-                <span
-                  class="oec-text-with-icon"
+                <a
+                  href="/create-record"
                 >
-                  Add a record
-                </span>
-              </a>
+                  <span
+                    class="oec-text-with-icon"
+                  >
+                    Add a record
+                  </span>
+                </a>
+              </button>
               <button
                 class="usa-button usa-button--unstyled text-bold display-block"
                 type="button"
@@ -1517,16 +1521,20 @@ exports[`Roster matches snapshot for site level user 1`] = `
             <div
               class="display-flex"
             >
-              <a
-                class="margin-right-2"
-                href="/create-record"
+              <button
+                class="usa-button usa-button--unstyled display-block margin-right-2"
+                type="button"
               >
-                <span
-                  class="oec-text-with-icon"
+                <a
+                  href="/create-record"
                 >
-                  Add a record
-                </span>
-              </a>
+                  <span
+                    class="oec-text-with-icon"
+                  >
+                    Add a record
+                  </span>
+                </a>
+              </button>
               <button
                 class="usa-button usa-button--unstyled text-bold display-block"
                 type="button"

@@ -91,7 +91,6 @@ const Roster: React.FC = () => {
   // but site filtering needs to happen in the client-side, if a
   // site is requested
   const siteFilteredChildren = applySiteFilter(displayChildren, query.site);
-  const siteIsEmpty = (siteFilteredChildren || []).length === 0;
 
   // Get props for tabNav, h1Text, and subHeaderText, superHeaderText, and subSubHeader
   // based on user access (i.e. user's sites and org permissions)
@@ -103,6 +102,7 @@ const Roster: React.FC = () => {
   } = useOrgSiteProps(loading, displayChildren.length);
 
   const siteChildCount = (siteFilteredChildren || []).length;
+  const siteIsEmpty = siteChildCount === 0;
   const rosterH2 = getRosterH2(siteChildCount, user?.sites, query);
   // Get roster content as accordion props
   const accordionProps = siteFilteredChildren
@@ -158,14 +158,29 @@ const Roster: React.FC = () => {
     rosterH2,
   };
 
-  const rosterContent = tabNavProps ? (
+  let rosterContent = tabNavProps ? (
     <TabNav {...tabNavProps}>
-      {rosterH2}
-      <RosterContent {...rosterContentProps} />
+      {siteIsEmpty ? <></> : rosterH2}
+      {
+        // Decide if site is empty here to keep site-switching
+        // controls available
+        siteIsEmpty ? (
+          <EmptyRosterCard boldText="This site doesn't have any records yet" />
+        ) : (
+          <RosterContent {...rosterContentProps} />
+        )
+      }
     </TabNav>
   ) : (
     <RosterContent {...rosterContentProps} />
   );
+  // Replace all content and disable all switching if there's
+  // nothing in roster at all
+  if (rosterIsEmpty) {
+    rosterContent = (
+      <EmptyRosterCard boldText="There aren't any records in your roster yet" />
+    );
+  }
 
   const buttonTable = !query.withdrawn && (
     <RosterButtonsTable
@@ -215,13 +230,7 @@ const Roster: React.FC = () => {
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
           {rosterIsEmpty ? <></> : buttonTable}
           <LoadingWrapper text="Loading your roster..." loading={loading}>
-            {rosterIsEmpty ? (
-              <EmptyRosterCard
-                boldText={"There aren't any records in your roster yet"}
-              />
-            ) : (
-              rosterContent
-            )}
+            {rosterContent}
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
