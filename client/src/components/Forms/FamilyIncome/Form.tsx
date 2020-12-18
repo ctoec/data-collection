@@ -33,7 +33,7 @@ export const doesFamilyIncomeFormHaveErrors = (
   child?: Child,
   determinationId?: number
 ) => {
-  if (child?.foster) {
+  if (child?.foster === UndefinableBoolean.Yes) {
     return false;
   }
 
@@ -111,14 +111,14 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   }
 
   let determination: IncomeDetermination;
+  const dets = child?.family?.incomeDeterminations || [];
   if (inCreateFlow) {
-    const dets = child?.family?.incomeDeterminations || [];
     determination = dets[0] || ({} as IncomeDetermination);
   } else {
     determination =
-      child?.family?.incomeDeterminations?.find(
+      dets.find(
         (d) => d.id === incomeDeterminationId
-      ) || ({} as IncomeDetermination);
+      ) || dets[0] || ({} as IncomeDetermination);
   }
 
   const createDetermination = async (updatedData: IncomeDetermination) =>

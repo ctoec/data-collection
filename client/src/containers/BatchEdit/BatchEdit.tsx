@@ -129,7 +129,7 @@ const BatchEdit: React.FC = () => {
             activeItemId={activeRecordId}
             items={fixedRecordsForDisplay.map((record) => ({
               id: record.id,
-              onClick: () => setActiveRecordId(record.id),
+              onClick: () => setActiveRecordId(record?.id),
               title: (
                 <span>
                   {nameFormatter(record)}

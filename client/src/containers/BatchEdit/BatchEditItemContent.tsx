@@ -5,6 +5,7 @@ import {
   StepList,
   Button,
   InlineIcon,
+  LoadingWrapper,
 } from '@ctoec/component-library';
 import { RecordFormProps } from '../../components/Forms/types';
 import { listSteps } from './listSteps';
@@ -103,7 +104,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     afterSaveSuccess: () => setTriggerRefetchCount((r) => r + 1),
     setAlerts,
     hideHeader: true,
-    hideErrorsOnFirstLoad: () => false,
+    hideErrorsOnFirstLoad: false,
     showFieldOrFieldset: showFieldInBatchEditForm,
     AdditionalButton: (
       <Button
@@ -126,7 +127,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   );
 
   if (!child) {
-    return <></>;
+    return <LoadingWrapper loading={true} />;
   }
 
   const currentEnrollment = getCurrentEnrollment(child);
@@ -156,8 +157,8 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
             activeStep={activeStepKey || ''}
           />
         ) : (
-          AllComplete
-        )}
+            AllComplete
+          )}
       </div>
     </>
   );
