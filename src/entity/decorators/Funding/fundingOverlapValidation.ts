@@ -1,35 +1,42 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
-import { Enrollment } from '../../Enrollment';
 import { Funding } from '../../Funding';
 
 // Make sure first reporting period of a funding is after the last reporting period of the previous funding
 
-const fundingPeriodOverlap = 'Cannot claim a child twice in a reporting period';
+const fundingPeriodOverlap =
+  'Cannot claim a child twice in a reporting period.';
 
 export function FundingDoesNotOverlap(
   validationOptions?: ValidationOptions
 ): PropertyDecorator {
-  return function (object: Object, propertyName: string) {
+  return function (object: Funding, propertyName: string) {
     registerDecorator({
       name: 'fundingOverlap',
       target: object.constructor,
-      propertyName: propertyName,
+      propertyName,
       options: { message: fundingPeriodOverlap, ...validationOptions },
       constraints: [{ fundingPeriod: fundingPeriodOverlap }],
       validator: {
-        validate(validatingFunding, { object: enrollment }) {
-          const allFundings = (enrollment as Enrollment).fundings;
-          if (!validatingFunding) return true;
+        validate(_, { object: funding }) {
+          const allFundings = (funding as any).allFundings;
+          if (!allFundings) return true;
+
+          const allExceptThisFunding = [
+            ...allFundings.filter((f) => f.id !== (funding as Funding).id),
+          ];
+
+          if (!allExceptThisFunding.length) {
+            return true;
+          }
+
           const {
             firstReportingPeriod: validatingFirstPeriod,
             lastReportingPeriod: validatingLastPeriod,
-          } = validatingFunding as Funding;
+          } = funding as Funding;
+
           if (!validatingFirstPeriod) {
             return true;
           }
-          const allExceptThisFunding = allFundings.filter(
-            (f) => f.id !== validatingFunding.id
-          );
 
           let overlap = false;
           allExceptThisFunding.forEach((_funding) => {
@@ -50,6 +57,7 @@ export function FundingDoesNotOverlap(
               } else {
                 const _lastPeriod = _funding.lastReportingPeriod;
                 if (
+                  !!_lastPeriod &&
                   validatingFirstPeriod.periodStart.isSameOrBefore(
                     _lastPeriod.periodEnd
                   )
@@ -60,10 +68,11 @@ export function FundingDoesNotOverlap(
               }
             } else {
               // If this funding period starts after the validating funding period start
-              if (!validatingFirstPeriod.periodEnd) {
+              if (!validatingFirstPeriod?.periodEnd) {
                 // The validating period must have an end
                 overlap = true;
               } else if (
+                validatingLastPeriod &&
                 _firstPeriod.periodStart.isSameOrBefore(
                   validatingLastPeriod.periodEnd
                 )

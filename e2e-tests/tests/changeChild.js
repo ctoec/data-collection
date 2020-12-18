@@ -30,6 +30,10 @@ module.exports = {
     );
 
     await navigateToRoster(browser);
+    await browser.waitForElementVisible(
+      'xpath',
+      `//*/a[contains(., '${newFirstNameText}')]`
+    );
 
     // We've changed/expanded the table header, so access the
     // changed child and check if the form field has the

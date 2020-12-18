@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useAlerts } from '../../../hooks/useAlerts';
-import { drillReactNodeForText } from '../../../utils/getValidationStatus';
 import { AlertProps } from '@ctoec/component-library';
 import React from 'react';
 import pluralize from 'pluralize';
 import { Link } from 'react-router-dom';
 import { stringify } from 'query-string';
+import { drillReactNodeForText } from '../../../utils/drillReactNodeForText';
 
 export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
