@@ -13,12 +13,14 @@ const TEST_OPTS: ApiOpts = {
 };
 
 describe('integration', () => {
-  describe('api', async () => {
+  describe('api', () => {
     // Used for update and create income dets
+    let childToUpdate: Child | undefined;
     let familyToUpdate: Family | undefined;
     let detToUpdate: IncomeDetermination | undefined;
 
     // Used for delete income det
+    let childToDeleteFrom: Child | undefined;
     let familyToDeleteFrom: Family | undefined;
     let detToDelete: IncomeDetermination | undefined;
 
@@ -28,15 +30,15 @@ describe('integration', () => {
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
       const children: Child[] = await apiGet('children', '', TEST_OPTS);
-      const childrenWithDets = children.filter(
+      const childrenWithDets = (children || []).filter(
         (c) => !!c.family?.incomeDeterminations?.length
       );
 
-      const childToUpdate = childrenWithDets[0];
+      childToUpdate = childrenWithDets[0];
       familyToUpdate = childToUpdate.family;
       detToUpdate = familyToUpdate?.incomeDeterminations?.[0];
 
-      const childToDeleteFrom = childrenWithDets[1];
+      childToDeleteFrom = childrenWithDets[1];
       familyToDeleteFrom = childToDeleteFrom.family;
       detToDelete = familyToDeleteFrom?.incomeDeterminations?.[0];
     });
@@ -47,7 +49,7 @@ describe('integration', () => {
 
     describe('income determinations', () => {
       it('PUT /:familyId/income-determinations/:determinationId', async () => {
-        if (!familyToUpdate || !detToUpdate)
+        if (!childToUpdate || !familyToUpdate || !detToUpdate)
           throw new Error('no income det to update');
 
         const newIncome = 33599;
@@ -59,19 +61,21 @@ describe('integration', () => {
         );
         expect(res.status).toEqual(200);
 
-        const updatedFamily: Family = await apiGet(
-          `families/${familyToUpdate.id}`,
+        const updatedChild: Child = await apiGet(
+          `children/${childToUpdate.id}`,
           '',
           TEST_OPTS
         );
-        const updatedDet = updatedFamily?.incomeDeterminations?.find(
+        const updatedDet = updatedChild?.family?.incomeDeterminations?.find(
           (d) => d.id === detToUpdate?.id
         );
         expect(updatedDet?.income).toEqual(newIncome);
       });
 
       it('POST /:familyId/income-determinations', async () => {
-        if (!familyToUpdate) throw new Error('no family to add income det to');
+        if (!childToUpdate || !familyToUpdate)
+          throw new Error('no family to add income det to');
+
         const newDet = {
           numberOfPeople: 13,
           income: 33773,
@@ -84,21 +88,22 @@ describe('integration', () => {
           newDet,
           TEST_OPTS
         );
+        console.log(res)
         expect(res.status).toEqual(200);
 
-        const updatedFamily: Family = await apiGet(
-          `families/${familyToUpdate.id}`,
+        const updatedChild: Child = await apiGet(
+          `children/${childToUpdate.id}`,
           '',
           TEST_OPTS
         );
-        const createdDet = updatedFamily?.incomeDeterminations?.find(
+        const createdDet = updatedChild?.family?.incomeDeterminations?.find(
           (d) => d.income === newDet.income
         );
         expect(createdDet).toBeDefined;
       });
 
       it('DELETE /:familyId/income-determinations/:determinationId', async () => {
-        if (!familyToDeleteFrom || !detToDelete)
+        if (!childToDeleteFrom || !familyToDeleteFrom || !detToDelete)
           throw new Error('no income det to delete');
         const res = await apiDelete(
           `families/${familyToDeleteFrom.id}/income-determinations/${detToDelete.id}`,
@@ -106,13 +111,13 @@ describe('integration', () => {
         );
         expect(res.status).toEqual(200);
 
-        const updatedFamily: Family = await apiGet(
-          `families/${familyToDeleteFrom.id}`,
+        const updatedChild: Child = await apiGet(
+          `children/${childToDeleteFrom.id}`,
           '',
           TEST_OPTS
         );
 
-        const deletedDet = updatedFamily?.incomeDeterminations?.find(
+        const deletedDet = updatedChild?.family?.incomeDeterminations?.find(
           (d) => d.id === detToDelete?.id
         );
         expect(deletedDet).toBeUndefined;

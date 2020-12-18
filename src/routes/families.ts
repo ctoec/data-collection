@@ -51,7 +51,8 @@ familyRouter.put(
         req.body
       );
 
-      await getManager().save(IncomeDetermination, mergedEntity);
+      const updated = await getManager().save(IncomeDetermination, mergedEntity);
+      console.log({ updated })
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
