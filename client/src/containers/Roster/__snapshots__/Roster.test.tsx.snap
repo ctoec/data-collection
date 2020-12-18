@@ -6,7 +6,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
     class="Roster grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 text-bold"
       type="button"
     >
       <span
@@ -17,7 +17,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
         >
           arrowRight.svg
         </svg>
-        Back to getting started
+        Back
       </span>
     </button>
     <div
@@ -755,7 +755,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
     class="Roster grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 text-bold"
       type="button"
     >
       <span
@@ -766,7 +766,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
         >
           arrowRight.svg
         </svg>
-        Back to getting started
+        Back
       </span>
     </button>
     <div
@@ -1463,7 +1463,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
     class="Roster grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 text-bold"
       type="button"
     >
       <span
@@ -1474,7 +1474,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         >
           arrowRight.svg
         </svg>
-        Back to getting started
+        Back
       </span>
     </button>
     <div

@@ -3,177 +3,198 @@
 exports[`Home matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="Home"
+    class="Home grid-container margin-top-4"
   >
     <div
-      class="usa-hero"
+      class="grid-row grid-gap"
     >
       <div
-        class="grid-container"
+        class="tablet:grid-col-8"
       >
-        <h1
-          class="margin-bottom-2"
-        >
-          Welcome to ECE Reporter
+        <h1>
+          Hello Voldy!
         </h1>
-        <a
-          class="usa-button usa-button--base btn--inverse"
-          href="/login"
-        >
-          Log in
-        </a>
-      </div>
-    </div>
-    <div
-      class="grid-container margin-top-4"
-    >
-      <div
-        class="grid-row grid-gap"
-      >
-        <div
-          class="tablet:grid-col-3"
-        >
-          <img
-            alt=""
-            class="hero-bubble"
-            src="homeCareerBubble.png"
-          />
-        </div>
-        <div
-          class="tablet:grid-col-6"
-        >
-          <h2
-            class="text-primary text-light margin-y-3"
+        <p>
+          ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). OEC uses this data to make informed program and policy decisions affecting young children and families.
+        </p>
+        <h2>
+          Sites you manage at Mort School For Dark-Inclined Wizards:
+        </h2>
+        <ul>
+          <li
+            class="line-height-body-4"
           >
-            We support affordable child care in Connecticut
-          </h2>
-          <p
-            class="line-height-sans-5"
+            Students of Salazaar
+          </li>
+          <li
+            class="line-height-body-4"
           >
-            Publicly-funded early care and education programs use ECE Reporter to share data with the Connecticut Office of Early Childhood (OEC).
-          </p>
-          <p>
-            The Office of Early Childhood uses this data to pay programs and help families access quality care.
-          </p>
-          <div
-            class="margin-bottom-4"
+            Karkaroff Kids
+          </li>
+          <li
+            class="line-height-body-4"
           >
-            <h2
-              class="text-primary text-light margin-y-3"
+            Nocturn Alley Nargles
+          </li>
+        </ul>
+        <h2>
+          How to use ECE Reporter
+        </h2>
+        <p>
+          These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually, 
+          <a
+            href="/roster/"
+          >
+             you can add them on your roster
+          </a>
+          .
+        </p>
+        <ol
+          class="how-to-list"
+        >
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
             >
-              Learn more
-            </h2>
-            <h3>
-              See the data collected by ECE Reporter
+              Review the data requirements
             </h3>
-            <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
-              href="/data-requirements"
+            <p
+              class="how-to-body"
             >
-              <span
-                class="oec-text-with-icon text-underline"
-              >
-                Learn the data requirements
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                >
-                  arrowForward.svg
-                </svg>
-              </span>
-            </a>
-            <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
-              href="/template"
-            >
-              <span
-                class="oec-text-with-icon text-underline"
-              >
-                See the latest data template
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                >
-                  arrowForward.svg
-                </svg>
-              </span>
-            </a>
-            <h3>
-              Learn more about OEC
-            </h3>
-            <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
-              href="https://ctoec.org"
-            >
-              <span
-                class="oec-text-with-icon text-underline"
-              >
-                Visit OEC's website
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                >
-                  arrowForward.svg
-                </svg>
-              </span>
-            </a>
-            <h3>
-              Learn how ECE Reporter collects and stores data
-            </h3>
-            <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
-              href="/privacy-policy"
-            >
-              <span
-                class="oec-text-with-icon text-underline"
-              >
-                See the privacy policy
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                >
-                  arrowForward.svg
-                </svg>
-              </span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <footer
-      class="bg-base-lightest padding-y-6 footer"
-    >
-      <div
-        class="grid-container"
-      >
-        <div
-          class="grid-row flex-justify flex-align-center"
-        >
-          <div
-            class="grid-col-10"
-          >
-            <h2
-              class="text-primary text-light margin-y-3"
-            >
-              Have feedback about OEC's data collection process?
-            </h2>
-            <p>
-              Feedback from providers like you helps make this tool even better.
+              Learn more about the data elements ECE Reporter collects for each enrollment.
             </p>
-            <p>
-              Send us your feedback at 
+            <p
+              class="how-to-button"
+            >
               <a
                 class="usa-button usa-button--unstyled"
-                href="mailto:oec-data-pilot@skylight.digital?subject=Data%20collection%20bug"
-                rel="noopener noreferrer"
-                target="_blank"
+                href="/data-requirements/"
               >
-                oec-data-pilot@skylight.digital
+                <span
+                  class="oec-text-with-icon"
+                >
+                  See required data
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
               </a>
             </p>
-          </div>
-        </div>
-        <div
-          class="grid-col-2"
-        />
+          </li>
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
+            >
+              Download the data template
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              You'll need to enter data in this file to upload in ECE Reporter.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/template/"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Download the template
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
+            >
+              Prepare your data
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Get instructions on how to enter data into OEC's template.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  See the how-to guide
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
+            >
+              Upload your data
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Once your template is filled out, you'll upload the data to ECE Reporter.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/upload/"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Go to file upload
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+        </ol>
       </div>
-    </footer>
+      <div
+        class="tablet:grid-col-4"
+        role="presentation"
+      >
+        <svg>
+          PersonWithSpreadsheet.svg
+        </svg>
+      </div>
+    </div>
   </div>
 </DocumentFragment>
 `;
