@@ -6,7 +6,6 @@ import {
   FundingForm,
   EnrollmentForm,
 } from '../../../components/Forms';
-import { Enrollment } from '../../../shared/models';
 
 /**
  * Special Enrollment / Funding form for batch edit,
@@ -48,8 +47,6 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     }
   );
 
-  console.log(child.enrollments, enrollmentsWithValidationErrors)
-
   return (
     <>
       {enrollmentsWithValidationErrors?.map((enrollment) => {
@@ -63,6 +60,14 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                     Funding source: {funding.fundingSpace.source}
                   </div>
                 )}
+                {enrollment?.entry && (
+                  <div className="text-bold font-body-md">
+                    {' '}
+                    Enrollment start: {enrollment?.entry.format(
+                      'MM/D/YYYY'
+                    )}{' '}
+                  </div>
+                )}
                 <FundingForm
                   id={`batch-edit-funding-${funding.id}`}
                   fundingId={funding.id}
@@ -74,9 +79,10 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                 />
               </>
             ))}
-            {doesEnrollmentFormHaveErrors(child, enrollment?.id, {
-              excludeFundings: true,
-            }) && (
+            {(!enrollment?.fundings?.length ||
+              doesEnrollmentFormHaveErrors(child, enrollment?.id, {
+                excludeFundings: true,
+              })) && (
                 <>
                   {/* If enrollment has site, then display siteName for context (if no site, then site field will be displayed) */}
                   {enrollment?.site && (
