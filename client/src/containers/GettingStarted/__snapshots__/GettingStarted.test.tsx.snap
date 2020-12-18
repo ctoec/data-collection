@@ -3,7 +3,7 @@
 exports[`GettingStarted matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="grid-container margin-top-4"
+    class="GettingStarted grid-container margin-top-4"
   >
     <div
       class="grid-row grid-gap"
@@ -41,149 +41,150 @@ exports[`GettingStarted matches snapshot 1`] = `
           How to use ECE Reporter
         </h2>
         <p>
-          These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually,
+          These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually, 
           <a
             href="/roster/"
           >
-             you can add them on your roster.
+             you can add them on your roster
           </a>
+          .
         </p>
-        <h3
-          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
+        <ol
+          class="how-to-list"
         >
-          <div
-            class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
+          <li
+            class="how-to-step"
           >
-            1
-          </div>
-          Review the data requirements
-        </h3>
-        <div
-          class="margin-left-6"
-        >
-          <p>
-            Learn more about the data elements ECE Reporter collects for each enrollment.
-          </p>
-          <p>
-            <a
-              class="usa-button usa-button--unstyled"
-              href="/data-requirements/"
+            <h3
+              class="how-to-header"
             >
-              <span
-                class="oec-text-with-icon"
+              Review the data requirements
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Learn more about the data elements ECE Reporter collects for each enrollment.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/data-requirements/"
               >
-                See required data
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                <span
+                  class="oec-text-with-icon"
                 >
-                  arrowRight.svg
-                </svg>
-              </span>
-            </a>
-          </p>
-        </div>
-        <h3
-          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
-        >
-          <div
-            class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
+                  See required data
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
           >
-            2
-          </div>
-          Download the data template
-        </h3>
-        <div
-          class="margin-left-6"
-        >
-          <p>
-            You'll need to enter data in this file to upload in ECE Reporter.
-          </p>
-          <p>
-            <a
-              class="usa-button usa-button--unstyled"
-              href="/template/"
+            <h3
+              class="how-to-header"
             >
-              <span
-                class="oec-text-with-icon"
+              Download the data template
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              You'll need to enter data in this file to upload in ECE Reporter.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/template/"
               >
-                Download the template
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                <span
+                  class="oec-text-with-icon"
                 >
-                  arrowRight.svg
-                </svg>
-              </span>
-            </a>
-          </p>
-        </div>
-        <h3
-          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
-        >
-          <div
-            class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
+                  Download the template
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
           >
-            3
-          </div>
-          Prepare your data
-        </h3>
-        <div
-          class="margin-left-6"
-        >
-          <p>
-            Get instructions on how to enter data into OEC's template.
-          </p>
-          <p>
-            <a
-              class="usa-button usa-button--unstyled"
-              href="/https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
+            <h3
+              class="how-to-header"
             >
-              <span
-                class="oec-text-with-icon"
+              Prepare your data
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Get instructions on how to enter data into OEC's template.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
               >
-                See the how-to guide
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                <span
+                  class="oec-text-with-icon"
                 >
-                  arrowRight.svg
-                </svg>
-              </span>
-            </a>
-          </p>
-        </div>
-        <h3
-          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
-        >
-          <div
-            class="text-white text-bold text-center bg-primary width-5 radius-pill margin-right-1"
+                  See the how-to guide
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
           >
-            4
-          </div>
-          Upload your data
-        </h3>
-        <div
-          class="margin-left-6"
-        >
-          <p>
-            Once your template is filled out, you'll upload the data to ECE Reporter.
-          </p>
-          <p>
-            <a
-              class="usa-button usa-button--unstyled"
-              href="/upload/"
+            <h3
+              class="how-to-header"
             >
-              <span
-                class="oec-text-with-icon"
+              Upload your data
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Once your template is filled out, you'll upload the data to ECE Reporter.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/upload/"
               >
-                Go to file upload
-                <svg
-                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                <span
+                  class="oec-text-with-icon"
                 >
-                  arrowRight.svg
-                </svg>
-              </span>
-            </a>
-          </p>
-        </div>
+                  Go to file upload
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+        </ol>
       </div>
       <div
         class="tablet:grid-col-4"
