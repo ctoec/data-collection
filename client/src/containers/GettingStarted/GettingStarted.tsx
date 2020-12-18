@@ -38,14 +38,12 @@ const GettingStarted: React.FC = () => {
           </p>
           <ol className="how-to-list">
             <li key="review-requirements" className="how-to-step">
-              {
-                <HowToUseStep
-                  stepHeader="Review the data requirements"
-                  paragraphText="Learn more about the data elements ECE Reporter collects for each enrollment."
-                  buttonText="See required data"
-                  linkTo="/data-requirements/"
-                />
-              }
+              <HowToUseStep
+                stepHeader="Review the data requirements"
+                paragraphText="Learn more about the data elements ECE Reporter collects for each enrollment."
+                buttonText="See required data"
+                linkTo="/data-requirements/"
+              />
             </li>
             <li key="download-template" className="how-to-step">
               {
