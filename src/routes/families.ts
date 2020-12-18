@@ -8,7 +8,6 @@ import {
   NotFoundError,
   ApiError,
 } from '../middleware/error/errors';
-import * as controller from '../controllers/incomeDeterminations';
 
 export const familyRouter = express.Router();
 
@@ -44,15 +43,29 @@ familyRouter.put(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const detToModify = await controller.getDetermination(req);
+      const famId = parseInt(req.params['familyId']);
+      const detId = parseInt(req.params['determinationId']);
+      const readOrgIds = await getReadAccessibleOrgIds(req.user);
+
+      const detToModify = await getManager().findOne(
+        IncomeDetermination,
+        {
+          id: detId,
+          familyId: famId,
+        },
+        {
+          where: { family: { organization: { id: In(readOrgIds) } } },
+        }
+      );
+      if (!detToModify) throw new NotFoundError();
+
       const mergedEntity = getManager().merge(
         IncomeDetermination,
         detToModify,
         req.body
       );
 
-      const updated = await getManager().save(IncomeDetermination, mergedEntity);
-      console.log({ updated })
+      await getManager().save(IncomeDetermination, mergedEntity);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -99,7 +112,8 @@ familyRouter.delete(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const det = await controller.getDetermination(req);
+      const detId = parseInt(req.params['determinationId']);
+      const det = await getManager().find(IncomeDetermination, { id: detId });
       await getManager().softRemove(det);
       res.sendStatus(200);
     } catch (err) {
