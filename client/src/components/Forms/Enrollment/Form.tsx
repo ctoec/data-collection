@@ -26,11 +26,12 @@ export const doesEnrollmentFormHaveErrors = (
 ) => {
   if (enrollmentId) {
     const enrollment = child?.enrollments?.find((e) => e.id === enrollmentId);
+    if (enrollment && !enrollment.fundings?.length) return true;
     return enrollment
       ? !!getValidationStatusForFields(
-          enrollment,
-          opts.excludeFundings ? enrollmentFields : enrollmentFundingFields
-        )
+        enrollment,
+        opts.excludeFundings ? enrollmentFields : enrollmentFundingFields
+      )
       : false;
   }
 

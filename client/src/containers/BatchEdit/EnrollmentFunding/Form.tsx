@@ -6,6 +6,7 @@ import {
   FundingForm,
   EnrollmentForm,
 } from '../../../components/Forms';
+import { Enrollment } from '../../../shared/models';
 
 /**
  * Special Enrollment / Funding form for batch edit,
@@ -21,7 +22,17 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   setAlerts,
   showFieldOrFieldset,
 }) => {
-  const enrollmentsWithValidationErrors = child?.enrollments?.map(
+  if (!child?.enrollments?.length) {
+    return (
+      <EnrollmentForm
+        child={child}
+        afterSaveSuccess={afterSaveSuccess}
+        setAlerts={setAlerts}
+      />
+    );
+  }
+
+  let enrollmentsWithValidationErrors = child?.enrollments?.map(
     (enrollment) => {
       // will return true if enrollment has validation errors,
       // including if any fundings have validation errors
@@ -37,47 +48,24 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     }
   );
 
+  console.log(child.enrollments, enrollmentsWithValidationErrors)
+
   return (
     <>
       {enrollmentsWithValidationErrors?.map((enrollment) => {
-        if (!enrollment) return <> </>;
-
-        const fundingForms = enrollment?.fundings?.map((funding) => (
-          <>
-            {/* If funding has fundingSpace, then display funding source for context */}
-            {funding.fundingSpace && (
-              <div className="text-bold font-body-md">
-                Funding source: {funding.fundingSpace.source}
-              </div>
-            )}
-            <FundingForm
-              id={`batch-edit-funding-${funding.id}`}
-              fundingId={funding.id}
-              enrollmentId={enrollment.id}
-              child={child}
-              afterSaveSuccess={afterSaveSuccess}
-              setAlerts={setAlerts}
-              showFieldOrFieldset={showFieldOrFieldset}
-            />
-          </>
-        ));
-
         return (
           <>
-            {fundingForms}
-            {doesEnrollmentFormHaveErrors(child, enrollment.id, {
-              excludeFundings: true,
-            }) && (
+            {enrollment?.fundings?.map((funding) => (
               <>
-                {/* If enrollment has site, then display siteName for context (if no site, then site field will be displayed) */}
-                {enrollment.site && (
+                {/* If funding has fundingSpace, then display funding source for context */}
+                {funding.fundingSpace && (
                   <div className="text-bold font-body-md">
-                    {' '}
-                    Site: {enrollment.site.siteName}{' '}
+                    Funding source: {funding.fundingSpace.source}
                   </div>
                 )}
-                <EnrollmentForm
-                  id={`batch-edit-enrollment-${enrollment.id}`}
+                <FundingForm
+                  id={`batch-edit-funding-${funding.id}`}
+                  fundingId={funding.id}
                   enrollmentId={enrollment.id}
                   child={child}
                   afterSaveSuccess={afterSaveSuccess}
@@ -85,7 +73,28 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                   showFieldOrFieldset={showFieldOrFieldset}
                 />
               </>
-            )}
+            ))}
+            {doesEnrollmentFormHaveErrors(child, enrollment?.id, {
+              excludeFundings: true,
+            }) && (
+                <>
+                  {/* If enrollment has site, then display siteName for context (if no site, then site field will be displayed) */}
+                  {enrollment?.site && (
+                    <div className="text-bold font-body-md">
+                      {' '}
+                    Site: {enrollment?.site.siteName}{' '}
+                    </div>
+                  )}
+                  <EnrollmentForm
+                    id={`batch-edit-enrollment-${enrollment?.id}`}
+                    enrollmentId={enrollment?.id}
+                    child={child}
+                    afterSaveSuccess={afterSaveSuccess}
+                    setAlerts={setAlerts}
+                    showFieldOrFieldset={showFieldOrFieldset}
+                  />
+                </>
+              )}
           </>
         );
       })}
