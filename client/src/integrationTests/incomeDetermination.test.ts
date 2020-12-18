@@ -73,7 +73,7 @@ describe('integration', () => {
       });
 
       it('POST /:familyId/income-determinations', async () => {
-        if (!childToUpdate || !familyToUpdate)
+        if (!childToUpdate || !familyToUpdate || !detToUpdate)
           throw new Error('no family to add income det to');
 
         const newDet = {
@@ -88,8 +88,7 @@ describe('integration', () => {
           newDet,
           TEST_OPTS
         );
-        console.log(res)
-        expect(res.status).toEqual(200);
+        expect(res.id).toBeGreaterThan(detToUpdate?.id);
 
         const updatedChild: Child = await apiGet(
           `children/${childToUpdate.id}`,
