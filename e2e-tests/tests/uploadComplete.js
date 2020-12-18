@@ -2,7 +2,7 @@ const { login } = require('../utils/login');
 const { uploadFile } = require('../utils/uploadFile');
 
 module.exports = {
-  '@tags': ['upload'],
+  '@tags': ['upload', 'complete'],
   // uploadWrongFormat: async function (browser) {},
   // uploadMissingInfo: async function (browser) {},
   uploadCompleteInfo: async function (browser) {
