@@ -35,6 +35,22 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
       </span>
       <div />
     </fieldset>
+    <fieldset
+      aria-labelledby="fieldset-legend-funding-source"
+      class="usa-fieldset"
+      id="funding-source"
+    >
+      <legend
+        id="fieldset-legend-funding-source"
+      >
+        <span
+          class="usa-label"
+        >
+          Funding source options
+        </span>
+      </legend>
+      <div />
+    </fieldset>
     <input
       class="usa-button"
       type="submit"
@@ -45,6 +61,11 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
     class="text-bold font-body-md"
   >
     Funding source: CDC - Child Day Care
+  </div>
+  <div
+    class="text-bold font-body-md"
+  >
+     Enrollment start: 09/3/2019 
   </div>
   <form
     class="usa-form usa-form"
@@ -131,6 +152,36 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
       value="Save"
     />
   </form>
-   
+  <div
+    class="text-bold font-body-md"
+  >
+     Site: Site A 
+  </div>
+  <form
+    class="usa-form"
+    id="batch-edit-enrollment-3"
+  >
+    <fieldset
+      aria-labelledby="fieldset-legend-funding-source"
+      class="usa-fieldset"
+      id="funding-source"
+    >
+      <legend
+        id="fieldset-legend-funding-source"
+      >
+        <span
+          class="usa-label"
+        >
+          Funding source options
+        </span>
+      </legend>
+      <div />
+    </fieldset>
+    <input
+      class="usa-button"
+      type="submit"
+      value="Save"
+    />
+  </form>
 </DocumentFragment>
 `;

@@ -52,9 +52,9 @@ export const doesFamilyIncomeFormHaveErrors = (
   const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
     ?.length
     ? !!getValidationStatusForFields(
-      child.family.incomeDeterminations,
-      incomeDeterminationFields
-    )
+        child.family.incomeDeterminations,
+        incomeDeterminationFields
+      )
     : false;
 
   return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
@@ -80,7 +80,7 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
   }
-
+  console.log(child.family);
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
   const { errorsHidden, setErrorsHidden } = useValidationErrors(
@@ -116,9 +116,9 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     determination = dets[0] || ({} as IncomeDetermination);
   } else {
     determination =
-      dets.find(
-        (d) => d.id === incomeDeterminationId
-      ) || dets[0] || ({} as IncomeDetermination);
+      dets.find((d) => d.id === incomeDeterminationId) ||
+      dets[0] ||
+      ({} as IncomeDetermination);
   }
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
@@ -136,8 +136,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
 
   const saveData = determination.id ? updateDetermination : createDetermination;
-
-  console.log({ determination })
 
   const onFinally = () => {
     if (isMounted()) {

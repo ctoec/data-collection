@@ -118,12 +118,12 @@ const BatchEdit: React.FC = () => {
                 incomplete info required to submit your data
               </>
             ) : (
-                <>
-                  {/* TODO make it possible to make this icon big */}
-                  <InlineIcon className="height-4 width-4" icon="complete" /> All
+              <>
+                {/* TODO make it possible to make this icon big */}
+                <InlineIcon className="height-4 width-4" icon="complete" /> All
                 enrollments are complete
               </>
-              )}
+            )}
           </div>
           <SideNav
             activeItemId={activeRecordId}
@@ -151,21 +151,21 @@ const BatchEdit: React.FC = () => {
                 />
               </ErrorBoundary>
             ) : (
-                <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
-                  <InlineIcon icon="complete" />
-                  <p className="font-body-lg text-bold margin-y-1">
-                    All records are complete!
+              <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
+                <InlineIcon icon="complete" />
+                <p className="font-body-lg text-bold margin-y-1">
+                  All records are complete!
                 </p>
-                  <Link to="/roster">
-                    <TextWithIcon
-                      text="Back to roster"
-                      iconSide="right"
-                      Icon={ArrowRight}
-                      direction="right"
-                    />
-                  </Link>
-                </div>
-              )}
+                <Link to="/roster">
+                  <TextWithIcon
+                    text="Back to roster"
+                    iconSide="right"
+                    Icon={ArrowRight}
+                    direction="right"
+                  />
+                </Link>
+              </div>
+            )}
           </SideNav>
         </ErrorBoundary>
       </LoadingWrapper>
