@@ -60,9 +60,9 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             )}
             {enrollment?.entry && (
               <div className="text-bold font-body-md">
-                Enrollment dates: {enrollment?.entry.format(
-                'MM/D/YYYY'
-              )}{enrollment?.exit && ` - ${enrollment?.exit?.format('MM/D/YYYY')}`}
+                Enrollment dates: {enrollment?.entry.format('MM/D/YYYY')}
+                {enrollment?.exit &&
+                  ` - ${enrollment?.exit?.format('MM/D/YYYY')}`}
               </div>
             )}
             {enrollment?.fundings?.map((funding) => (
@@ -88,17 +88,17 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
               doesEnrollmentFormHaveErrors(child, enrollment?.id, {
                 excludeFundings: true,
               })) && (
-                <>
-                  <EnrollmentForm
-                    id={`batch-edit-enrollment-${enrollment?.id}`}
-                    enrollmentId={enrollment?.id}
-                    child={child}
-                    afterSaveSuccess={afterSaveSuccess}
-                    setAlerts={setAlerts}
-                    showFieldOrFieldset={showFieldOrFieldset}
-                  />
-                </>
-              )}
+              <>
+                <EnrollmentForm
+                  id={`batch-edit-enrollment-${enrollment?.id}`}
+                  enrollmentId={enrollment?.id}
+                  child={child}
+                  afterSaveSuccess={afterSaveSuccess}
+                  setAlerts={setAlerts}
+                  showFieldOrFieldset={showFieldOrFieldset}
+                />
+              </>
+            )}
           </>
         );
       })}

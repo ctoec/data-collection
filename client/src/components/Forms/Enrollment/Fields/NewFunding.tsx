@@ -67,7 +67,7 @@ export const NewFundingField = <
       id,
       value: id,
       text: fundingSource,
-      onChange: () => { },
+      onChange: () => {},
       expansion: (
         <>
           <ContractSpaceField<T>
