@@ -96,7 +96,7 @@ describe('integration', () => {
           TEST_OPTS
         );
         const createdDet = updatedChild?.family?.incomeDeterminations?.find(
-          (d) => d.income === newDet.income
+          (d) => d.id === res.id
         );
         expect(createdDet).toBeDefined;
       });
