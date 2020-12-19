@@ -52,20 +52,25 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
       {enrollmentsWithValidationErrors?.map((enrollment) => {
         return (
           <>
+            {/* If enrollment has site, then display siteName for context (if no site, then site field will be displayed) */}
+            {enrollment?.site && (
+              <div className="text-bold font-body-md">
+                Site: {enrollment?.site.siteName}{' '}
+              </div>
+            )}
+            {enrollment?.entry && (
+              <div className="text-bold font-body-md">
+                Enrollment dates: {enrollment?.entry.format(
+                'MM/D/YYYY'
+              )}{enrollment?.exit && ` - ${enrollment?.exit?.format('MM/D/YYYY')}`}
+              </div>
+            )}
             {enrollment?.fundings?.map((funding) => (
               <>
                 {/* If funding has fundingSpace, then display funding source for context */}
                 {funding.fundingSpace && (
                   <div className="text-bold font-body-md">
                     Funding source: {funding.fundingSpace.source}
-                  </div>
-                )}
-                {enrollment?.entry && (
-                  <div className="text-bold font-body-md">
-                    {' '}
-                    Enrollment start: {enrollment?.entry.format(
-                      'MM/D/YYYY'
-                    )}{' '}
                   </div>
                 )}
                 <FundingForm
@@ -83,24 +88,17 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
               doesEnrollmentFormHaveErrors(child, enrollment?.id, {
                 excludeFundings: true,
               })) && (
-              <>
-                {/* If enrollment has site, then display siteName for context (if no site, then site field will be displayed) */}
-                {enrollment?.site && (
-                  <div className="text-bold font-body-md">
-                    {' '}
-                    Site: {enrollment?.site.siteName}{' '}
-                  </div>
-                )}
-                <EnrollmentForm
-                  id={`batch-edit-enrollment-${enrollment?.id}`}
-                  enrollmentId={enrollment?.id}
-                  child={child}
-                  afterSaveSuccess={afterSaveSuccess}
-                  setAlerts={setAlerts}
-                  showFieldOrFieldset={showFieldOrFieldset}
-                />
-              </>
-            )}
+                <>
+                  <EnrollmentForm
+                    id={`batch-edit-enrollment-${enrollment?.id}`}
+                    enrollmentId={enrollment?.id}
+                    child={child}
+                    afterSaveSuccess={afterSaveSuccess}
+                    setAlerts={setAlerts}
+                    showFieldOrFieldset={showFieldOrFieldset}
+                  />
+                </>
+              )}
           </>
         );
       })}

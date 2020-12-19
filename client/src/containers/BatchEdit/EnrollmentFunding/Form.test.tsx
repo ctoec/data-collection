@@ -116,7 +116,8 @@ describe('BatchEdit', () => {
       // For now, we can only deduce presence of forms based on their submit
       // buttons (TODO: add some headings to the forms?)
       const formSubmitButtons = await renderResult.findAllByText('Save');
-      expect(formSubmitButtons).toHaveLength(2);
+      // There should be three buttons bc one enrollment in the example data doesn't have any fundings
+      expect(formSubmitButtons).toHaveLength(3);
     });
   });
 });

@@ -5,7 +5,12 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
   <div
     class="text-bold font-body-md"
   >
-     Site: Site A 
+    Site: Site A 
+  </div>
+  <div
+    class="text-bold font-body-md"
+  >
+    Enrollment dates: 09/3/2020
   </div>
   <form
     class="usa-form"
@@ -36,12 +41,12 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
       <div />
     </fieldset>
     <fieldset
-      aria-labelledby="fieldset-legend-funding-source"
+      aria-labelledby="fieldset-legend-funding-source-1"
       class="usa-fieldset"
-      id="funding-source"
+      id="funding-source-1"
     >
       <legend
-        id="fieldset-legend-funding-source"
+        id="fieldset-legend-funding-source-1"
       >
         <span
           class="usa-label"
@@ -60,12 +65,17 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
   <div
     class="text-bold font-body-md"
   >
-    Funding source: CDC - Child Day Care
+    Site: Site B 
   </div>
   <div
     class="text-bold font-body-md"
   >
-     Enrollment start: 09/3/2019 
+    Enrollment dates: 09/3/2019 - 08/1/2020
+  </div>
+  <div
+    class="text-bold font-body-md"
+  >
+    Funding source: CDC - Child Day Care
   </div>
   <form
     class="usa-form usa-form"
@@ -155,19 +165,24 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
   <div
     class="text-bold font-body-md"
   >
-     Site: Site A 
+    Site: Site A 
+  </div>
+  <div
+    class="text-bold font-body-md"
+  >
+    Enrollment dates: 09/3/2018 - 08/1/2019
   </div>
   <form
     class="usa-form"
     id="batch-edit-enrollment-3"
   >
     <fieldset
-      aria-labelledby="fieldset-legend-funding-source"
+      aria-labelledby="fieldset-legend-funding-source-3"
       class="usa-fieldset"
-      id="funding-source"
+      id="funding-source-3"
     >
       <legend
-        id="fieldset-legend-funding-source"
+        id="fieldset-legend-funding-source-3"
       >
         <span
           class="usa-label"

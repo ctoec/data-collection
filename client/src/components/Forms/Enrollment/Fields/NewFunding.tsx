@@ -101,7 +101,7 @@ export const NewFundingField = <
     <RadioButtonGroup
       // The radio buttons only really control what expansions are shown
       // They don't change any form data on their own
-      id="funding-source"
+      id={`funding-source-${enrollment?.id}`}
       inputName="fundingSource"
       legend="Funding source options"
       showLegend
