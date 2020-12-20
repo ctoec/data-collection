@@ -6,7 +6,7 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
     class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 text-bold"
       type="button"
     >
       <span
@@ -124,7 +124,7 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
     class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 text-bold"
       type="button"
     >
       <span

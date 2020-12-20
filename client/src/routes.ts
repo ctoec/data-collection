@@ -1,10 +1,10 @@
 import React from 'react';
-import Home from './containers/Home/Home';
+import Landing from './containers/Landing/Landing';
 import TemplateDownload from './containers/TemplateDownload/TemplateDownload';
 import Login from './containers/Login/Login';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
 import Upload from './containers/Upload/Upload';
-import GettingStarted from './containers/GettingStarted/GettingStarted';
+import Home from './containers/Home/Home';
 import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
@@ -28,7 +28,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/',
     exact: true,
-    component: Home,
+    component: Landing,
     unauthorized: true,
   },
   {
@@ -48,8 +48,8 @@ export const routes: RouteConfig[] = [
     unauthorized: true,
   },
   {
-    path: '/getting-started',
-    component: GettingStarted,
+    path: '/home',
+    component: Home,
     unauthorized: false,
   },
   {
