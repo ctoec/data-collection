@@ -36,6 +36,7 @@ import {
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { RosterContent } from './RosterContent';
+import { EmptyRosterCard } from './EmptyRosterCard';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -70,6 +71,7 @@ const Roster: React.FC = () => {
     active: activeChildren,
     withdrawn: withdrawnChildren,
   } = filterChildrenByWithdrawn(allChildren || []);
+  const rosterIsEmpty = (allChildren || []).length === 0;
   const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
   const isSingleSiteView = query.site ? true : false;
 
@@ -105,6 +107,7 @@ const Roster: React.FC = () => {
   } = useOrgSiteProps(loading, displayChildren.length);
 
   const siteChildCount = (siteFilteredChildren || []).length;
+  const siteIsEmpty = siteChildCount === 0;
   const rosterH2 = getRosterH2(siteChildCount, user?.sites, query);
   // Get roster content as accordion props
   const accordionProps = siteFilteredChildren
@@ -170,6 +173,38 @@ const Roster: React.FC = () => {
     rosterH2,
   };
 
+  let rosterContent = tabNavProps ? (
+    <TabNav {...tabNavProps}>
+      {siteIsEmpty ? <></> : rosterH2}
+      {
+        // Decide if site is empty here to keep site-switching
+        // controls available
+        siteIsEmpty ? (
+          <EmptyRosterCard boldText="This site doesn't have any records yet" />
+        ) : (
+          <RosterContent {...rosterContentProps} />
+        )
+      }
+    </TabNav>
+  ) : (
+    <RosterContent {...rosterContentProps} />
+  );
+  // Replace all content and disable all switching if there's
+  // nothing in roster at all
+  if (rosterIsEmpty) {
+    rosterContent = (
+      <EmptyRosterCard boldText="There aren't any records in your roster yet" />
+    );
+  }
+
+  const buttonTable = !query.withdrawn && (
+    <RosterButtonsTable
+      filterByMonth={queryMonth}
+      setFilterByMonth={updateActiveMonth}
+      updateWithdrawnOnly={updateWithdrawnOnly}
+    />
+  );
+
   return (
     <>
       <div className="Roster grid-container">
@@ -211,22 +246,9 @@ const Roster: React.FC = () => {
           </div>
         </div>
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-          {!query.withdrawn && (
-            <RosterButtonsTable
-              filterByMonth={queryMonth}
-              setFilterByMonth={updateActiveMonth}
-              updateWithdrawnOnly={updateWithdrawnOnly}
-            />
-          )}
+          {rosterIsEmpty ? <></> : buttonTable}
           <LoadingWrapper text="Loading your roster..." loading={loading}>
-            {tabNavProps ? (
-              <TabNav {...tabNavProps}>
-                {rosterH2}
-                <RosterContent {...rosterContentProps} />
-              </TabNav>
-            ) : (
-              <RosterContent {...rosterContentProps} />
-            )}
+            {rosterContent}
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
