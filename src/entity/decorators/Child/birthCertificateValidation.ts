@@ -6,6 +6,13 @@ const birthTownMessage =
 const birthStateMessage =
   'Birth state must be provided or unknown for US birth certificates.';
 
+function isBirthCertificateFieldValid(child: Child, field: string) {
+  return (
+    child[field] === null || // null -> unknown
+    child[field] !== ''
+  ); // otherwise, value is required
+}
+
 export function ChildBirthCertificateSpecified(
   validationOptions?: ValidationOptions
 ): PropertyDecorator {
@@ -21,7 +28,7 @@ export function ChildBirthCertificateSpecified(
       },
       validator: {
         validate(_, { object: child }) {
-          return !!child[propertyName];
+          return isBirthCertificateFieldValid(child as Child, propertyName);
         },
       },
     });
