@@ -33,22 +33,22 @@ export class Family implements FamilyInterface {
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   streetAddress?: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   town?: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   state?: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   zipCode?: string;
 
   @Column({

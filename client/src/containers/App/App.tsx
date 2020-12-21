@@ -27,7 +27,7 @@ const App: React.FC = () => {
             {
               type: 'primary',
               text: 'Home',
-              path: '/getting-started',
+              path: '/home',
             },
             {
               type: 'primary',

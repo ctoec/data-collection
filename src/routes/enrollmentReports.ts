@@ -57,7 +57,6 @@ enrollmentReportsRouter.post(
             };
           })
         );
-
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
@@ -134,16 +133,14 @@ enrollmentReportsRouter.post(
         let numActive = 0,
           numWithdrawn = 0;
         reportChildren.forEach((child) => {
-          child.enrollments?.forEach((e) => {
-            if (e.exit) numWithdrawn += 1;
-            else numActive += 1;
-          });
+          if (child.enrollments?.every((e) => e.exit)) numWithdrawn += 1;
+          else numActive += 1;
         });
 
         res.status(201).json({
           id: report.id,
-          activeEnrollments: numActive,
-          withdrawnEnrollments: numWithdrawn,
+          active: numActive,
+          withdrawn: numWithdrawn,
         } as BatchUpload);
       } catch (err) {
         if (err instanceof ApiError) throw err;

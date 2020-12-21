@@ -1,52 +1,12 @@
-import { readFile, utils, WorkSheet } from 'xlsx';
 import moment, { Moment } from 'moment';
+import { WorkSheet, utils } from 'xlsx';
 import {
+  getAllColumnMetadata,
   EnrollmentReportRow,
   DATE_FORMATS,
   REPORTING_PERIOD_FORMATS,
-} from '../../template';
-import { TEMPLATE_SECTIONS } from '../../../client/src/shared/constants';
-import { BadRequestError } from '../../middleware/error/errors';
-import { getAllColumnMetadata } from '../../template';
-
-/**
- * Parses the uploaded file into:
- * 	- an array of column header strings from the uploaded template
- *  - an array of EnrollmentReportRows
- * Also checks that supplied headers match headers from template.
- * @param file
- */
-export function parseUploadedTemplate(file: Express.Multer.File) {
-  const fileData = readFile(file.path);
-  const sheet = Object.values(fileData.Sheets)[0];
-
-  updateSheetRange(sheet);
-
-  const {
-    propertyNames,
-    expectedHeaders,
-  } = getPropertyNamesAndExpectedHeaders();
-  const { headers, data } = parseSheet(sheet, propertyNames);
-
-  const excessInvalidHeadersError = getInvalidHeadersError(
-    headers,
-    expectedHeaders
-  );
-  if (excessInvalidHeadersError) {
-    throw new BadRequestError(excessInvalidHeadersError);
-  }
-
-  if (!data.length) {
-    throw new BadRequestError(
-      'You uploaded an empty file\nCheck to make sure your file has enrollment data in it.'
-    );
-  }
-
-  const { booleanProperties, dateProperties } = getSpecialProperties();
-  return data.map((rawRow) =>
-    parseEnrollmentReportRow(rawRow, booleanProperties, dateProperties)
-  );
-}
+} from '../../../template';
+import { TEMPLATE_SECTIONS } from '../../../../client/src/shared/constants';
 
 /************************ HELPER FUNCTIONS *****************************/
 /**
@@ -56,7 +16,7 @@ export function parseUploadedTemplate(file: Express.Multer.File) {
  * Returned as on object containing `propertyNames` and `expectedHeaders`, which
  * are both string arrays.
  */
-function getPropertyNamesAndExpectedHeaders() {
+export function getPropertyNamesAndExpectedHeaders() {
   const [properties, headers] = getAllColumnMetadata()
     // remove any columns without data definitions, as these are not present in the template
     .filter((dataDefinition) => !!dataDefinition)
@@ -82,7 +42,7 @@ function getPropertyNamesAndExpectedHeaders() {
  * it incorrectly reports a much larger size than it actually is.
  * @param sheet
  */
-function updateSheetRange(sheet: WorkSheet) {
+export function updateSheetRange(sheet: WorkSheet) {
   var range = { s: { r: Infinity, c: Infinity }, e: { r: 0, c: 0 } };
   Object.keys(sheet)
     .filter(function (x) {
@@ -107,7 +67,8 @@ function updateSheetRange(sheet: WorkSheet) {
  * @param sheet
  * @param objectProperties
  */
-function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
+
+export function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
   const parsedSheet = utils.sheet_to_json<EnrollmentReportRow>(sheet, {
     header: objectProperties,
   });
@@ -129,7 +90,7 @@ function parseSheet(sheet: WorkSheet, objectProperties: string[]) {
  * template has section headers, and is excel template.
  * @param sheet
  */
-function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
+export function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
   return sheet['B1']?.v === TEMPLATE_SECTIONS.CHILD_IDENT ? 'xlxs' : 'csv';
 }
 
@@ -139,7 +100,7 @@ function getSheetType(sheet: WorkSheet): 'xlxs' | 'csv' {
  * row parsing). Currently, returns a list of boolean properties
  * and date properties.
  */
-function getSpecialProperties() {
+export function getSpecialProperties() {
   const booleanProperties: string[] = [];
   const dateProperties: string[] = [];
   Object.entries(new EnrollmentReportRow()).forEach(([prop, value]) => {
@@ -192,7 +153,7 @@ export function parseEnrollmentReportRow(
  * Other values return true.
  * @param value
  */
-function getBoolean(value: string): boolean {
+export function getBoolean(value: string): boolean {
   if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
   else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
   return null;
@@ -209,7 +170,7 @@ function getBoolean(value: string): boolean {
  * to moments using a helper function to convert excel serial
  * date number to Moment date (excelDateToDate)
  */
-function getDate(value: string | number, prop: string): Moment {
+export function getDate(value: string | number, prop: string): Moment {
   let parsedDate: Moment;
   if (typeof value === 'string') {
     const m = moment.utc(value, [...DATE_FORMATS, ...REPORTING_PERIOD_FORMATS]);
@@ -229,7 +190,7 @@ function getDate(value: string | number, prop: string): Moment {
  * Convert proprietary excel date serial number to Moment,
  * inspired by https://stackoverflow.com/questions/16229494/converting-excel-date-serial-number-to-date-using-javascript
  */
-function excelDateToDate(excelDate: number) {
+export function excelDateToDate(excelDate: number) {
   const SERIAL_UNIX_DAY_DIFF = 25569;
   const DAY_TO_SECONDS = 60 * 60 * 24;
 
@@ -247,7 +208,7 @@ function excelDateToDate(excelDate: number) {
  * they are truncated to return just the first 5 digits.
  * @param value
  */
-function getZipCode(value: any) {
+export function getZipCode(value: any) {
   const stringValue = value.toString();
   if (stringValue.length === 4) {
     return `0${stringValue}`;
@@ -266,8 +227,10 @@ function getZipCode(value: any) {
  * @param invalidColumns - Array of columns that are invalid
  * @param invalidReason - Single word describing why columns are invalid
  */
-function getInvalidColumnData(invalidColumns: string[]): [string, string] {
-  const invalidMessage = 'missing or incorrectly formatted';
+const invalidMessage = 'missing or incorrectly formatted';
+export function getInvalidColumnData(
+  invalidColumns: string[]
+): [string, string] {
   if (invalidColumns.length == 1) {
     const invalidString = `"${invalidColumns[0]}" is ${invalidMessage}.`;
     const invalidNumber = `1 ${invalidMessage} column`;
@@ -286,13 +249,14 @@ function getInvalidColumnData(invalidColumns: string[]): [string, string] {
  * @param headers
  * @param expectedHeaders
  */
-function getInvalidHeadersError(
+export function getInvalidHeadersError(
   headers: (string | undefined)[],
   expectedHeaders: string[]
 ): string {
   const missingHeaders = expectedHeaders.filter(
     (expectedHeader, idx) =>
-      !headers[idx] || !headers[idx].includes(expectedHeader)
+      !headers[idx] ||
+      !headers[idx].toLowerCase().includes(expectedHeader.toLowerCase())
   );
   const [missingMessage, missingNumber] = getInvalidColumnData(missingHeaders);
 

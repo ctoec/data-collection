@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Moment } from 'moment';
 import {
   TabNav,
   HeadingLevel,
   LoadingWrapper,
   ErrorBoundary,
+  // Button,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
@@ -76,14 +77,18 @@ const Roster: React.FC = () => {
 
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
+  const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
+  const activeChildrenWithErrorsCount = activeChildren.filter(
+    (child) => child?.validationErrors && child.validationErrors.length
+  ).length;
+  const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
+    (child) => child?.validationErrors && child.validationErrors.length
+  ).length;
   const { alertElements } = useChildrenWithErrorsAlert(
     loading,
-    activeChildren.filter(
-      (child) => child?.validationErrors && child.validationErrors.length
-    ).length,
-    withdrawnChildren.filter(
-      (child) => child?.validationErrors && child.validationErrors.length
-    ).length,
+    activeChildrenWithErrorsCount,
+    withdrawnChildrenWithErrorsCount,
+    alertType,
     query.organization
   );
 
@@ -118,6 +123,16 @@ const Roster: React.FC = () => {
 
   // Function to submit data to OEC, to pass down into submit button
   async function submitToOEC() {
+    // Block submit if there are incomplete records / records with errors
+    // Scroll to top of page and change alert to error, not warning
+    if (
+      activeChildrenWithErrorsCount + withdrawnChildrenWithErrorsCount !==
+      0
+    ) {
+      window.scrollTo(0, 0);
+      setAlertType('error');
+      return;
+    }
     // If there's an active org submit
     if (query.organization) {
       await apiPut(`oec-report/${query.organization}`, undefined, {
@@ -194,8 +209,11 @@ const Roster: React.FC = () => {
     <>
       <div className="Roster grid-container">
         <BackButton
-          text="Back to getting started"
-          location="/getting-started"
+          location={
+            query.month || query.withdrawn
+              ? `/roster?organization=${query.organization}`
+              : '/'
+          }
         />
         {alertElements}
         <div className="grid-row flex-align-center">
@@ -234,7 +252,8 @@ const Roster: React.FC = () => {
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
-      {/* // TODO: Re-enable the bottom bar once we're in January and using the app
+      {/* {// TODO: Re-enable the bottom bar once we're in January and using the app
+      children?.length && 
       <FixedBottomBar>
         <Button
           text="Back to getting started"
@@ -252,7 +271,7 @@ const Roster: React.FC = () => {
             disabled={!query.organization}
           />
         )}
-      </FixedBottomBar> */}
+      </FixedBottomBar>} */}
     </>
   );
 };

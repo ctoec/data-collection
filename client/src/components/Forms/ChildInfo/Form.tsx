@@ -40,7 +40,7 @@ export const ChildInfoForm = ({
   child,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad = false,
+  hideErrorsOnFirstLoad,
   showFieldOrFieldset = () => true,
   setAlerts,
 }: RecordFormProps) => {

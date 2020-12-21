@@ -4,7 +4,7 @@ import moment from 'moment';
 // TODO: add pre-merge hook that updates these values (probably put them in a diff file)
 // automatically when this file gets updated
 export const TEMPLATE_VERSION = 1;
-export const TEMPLATE_LAST_UPDATED = moment.utc('11-24-2020', ['MM-DD-YYYY']);
+export const TEMPLATE_LAST_UPDATED = moment.utc('12-16-2020', ['MM-DD-YYYY']);
 
 // Formats
 export const BOOLEAN_FORMATS = ['Yes', 'Y', 'No', 'N', 'Not collected'];

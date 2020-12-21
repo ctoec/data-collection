@@ -28,7 +28,9 @@ const BatchEdit: React.FC = () => {
 
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
-  const { data: children, isValidating, error } = useAuthenticatedSWR<Child[]>(
+  const { data: children, isValidating, mutate, error } = useAuthenticatedSWR<
+    Child[]
+  >(
     childId
       ? null // no need to fetch all children for single record batch edit
       : `children?${stringify({ organizationId, 'missing-info': true })}`
@@ -58,7 +60,7 @@ const BatchEdit: React.FC = () => {
       setActiveRecordId(fixedRecordsForDisplayIds[0]);
   }, [fixedRecordsForDisplayIds.length]);
 
-  const moveNextRecord = () => {
+  const moveNextRecord = (updatedRecords?: Child[]) => {
     const activeRecordIdx = fixedRecordsForDisplayIds.findIndex(
       (id) => id === activeRecordId
     );
@@ -66,9 +68,12 @@ const BatchEdit: React.FC = () => {
     // If active record is last record in the list
     if (activeRecordIdx === fixedRecordsForDisplayIds.length - 1) {
       // Then look for the first record that is still missing info
-      const firstStillMissingInformationRecord = fixedRecordsForDisplay.find(
-        hasValidationError
-      );
+      // (in `updatedRecords` - the most up-to-date version of the records passed as function arg,
+      // or in `fixedRecordsForDisplay` the local state var holding those records here in this component,
+      // which for some reason is not being updated until the next render loop)
+      const firstStillMissingInformationRecord = (
+        updatedRecords || fixedRecordsForDisplay
+      ).find(hasValidationError);
 
       // And set the active record id to that record, if it exists
       // otherwise to undefined, which indicates the complete state
@@ -139,6 +144,7 @@ const BatchEdit: React.FC = () => {
                   childId={activeRecordId}
                   moveNextRecord={moveNextRecord}
                   organizationId={organizationId}
+                  mutate={mutate}
                 />
               </ErrorBoundary>
             ) : (

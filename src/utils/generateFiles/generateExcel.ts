@@ -1,7 +1,7 @@
 import { WorkBook, utils, ColInfo, WorkSheet } from 'xlsx';
 import { ColumnMetadata } from '../../../client/src/shared/models';
-import { wrapText } from '../string';
-import { getAllColumnMetadata, EnrollmentReportRow } from '../../template';
+import { wrapText } from '../wrapText';
+import { getAllColumnMetadata } from '../../template';
 import { getFormattedColumnHeader } from './getFormattedColumnHeader';
 
 export function generateExcelWorkbook(rows?: string[][]): WorkBook {

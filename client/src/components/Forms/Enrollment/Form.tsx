@@ -111,7 +111,6 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
     ) {
       updatedData.site.id = parseInt(updatedData.site.id);
     }
-
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {

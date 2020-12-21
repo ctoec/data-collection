@@ -1,7 +1,8 @@
 import { Child } from '../../entity';
-import { ColumnMetadata } from '../../../client/src/shared/models';
-import { EnrollmentReportRow, getAllColumnMetadata } from '../../template';
 import { ValidationError } from 'class-validator';
+import { ColumnMetadata } from '../../../client/src/shared/models';
+import { getAllColumnMetadata } from '../../template';
+import { sentenceCase } from '../../utils/generateFiles/getFormattedColumnHeader';
 
 /**
  * Function that recursively determines the lowest level from
@@ -56,7 +57,7 @@ export const checkErrorsInChildren = async (children: Child[]) => {
   // Start the count of each type of error at 0 overall
   cols.map((c) => {
     errorDict[c.propertyName] = 0;
-    propertyNameToFormattedName[c.propertyName] = c.formattedName;
+    propertyNameToFormattedName[c.propertyName] = sentenceCase(c.formattedName);
     errorOccursIn[c.propertyName] = [];
   });
 

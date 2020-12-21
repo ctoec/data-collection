@@ -14,7 +14,7 @@ const DataRequirements: React.FC = () => {
   }) as responseInterface<TemplateMetadata, string>;
 
   return (
-    <div className="grid-container margin-top-4">
+    <div className="grid-container">
       <BackButton />
       <h1 className="margin-bottom-0" ref={h1Ref}>
         OEC's enrollment data requirements
@@ -58,7 +58,6 @@ const DataRequirements: React.FC = () => {
       <DataDefinitionsTable
         headerLevel="h3"
         showRequirementLevelLegendAndFilter
-        addFirstReportingPeriodAlert
       />
     </div>
   );
