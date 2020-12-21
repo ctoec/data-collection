@@ -56,23 +56,27 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
               class="display-flex"
             >
               <div
-                class="oec-drop-button"
-                id="add-record-in-actions"
+                class="display-inline-block"
               >
-                <button
-                  class="usa-button usa-button--unstyled display-block margin-right-2"
-                  type="button"
+                <div
+                  class="oec-drop-button"
+                  id="add-record-in-actions"
                 >
-                  <div
-                    class="button-content display-flex"
+                  <button
+                    class="usa-button usa-button--unstyled margin-right-2"
+                    type="button"
                   >
-                    <span
-                      class="oec-text-with-icon"
+                    <div
+                      class="button-content display-flex"
                     >
-                      Add a record
-                    </span>
-                  </div>
-                </button>
+                      <span
+                        class="oec-text-with-icon"
+                      >
+                        Add a record
+                      </span>
+                    </div>
+                  </button>
+                </div>
               </div>
               <button
                 class="usa-button usa-button--unstyled text-bold display-block"
@@ -804,11 +808,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             <div
               class="display-flex"
             >
-              <button
-                class="usa-button usa-button--unstyled display-block margin-right-2"
-                type="button"
+              <div
+                class="display-inline-block"
               >
                 <a
+                  class="usa-button usa-button--unstyled margin-right-2"
                   href="/create-record"
                 >
                   <span
@@ -817,7 +821,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                     Add a record
                   </span>
                 </a>
-              </button>
+              </div>
               <button
                 class="usa-button usa-button--unstyled text-bold display-block"
                 type="button"
@@ -1521,11 +1525,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
             <div
               class="display-flex"
             >
-              <button
-                class="usa-button usa-button--unstyled display-block margin-right-2"
-                type="button"
+              <div
+                class="display-inline-block"
               >
                 <a
+                  class="usa-button usa-button--unstyled margin-right-2"
                   href="/create-record"
                 >
                   <span
@@ -1534,7 +1538,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     Add a record
                   </span>
                 </a>
-              </button>
+              </div>
               <button
                 class="usa-button usa-button--unstyled text-bold display-block"
                 type="button"

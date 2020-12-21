@@ -1,7 +1,5 @@
 import React from 'react';
-import cx from 'classnames';
 import { Button, DownloadArrow, TextWithIcon } from '@ctoec/component-library';
-import { Link } from 'react-router-dom';
 
 type UploadFileButtonProps = {
   className?: string;
@@ -10,22 +8,23 @@ type UploadFileButtonProps = {
 export const UploadFileButton: React.FC<UploadFileButtonProps> = ({
   className,
 }) => {
-  // Use block display to ensure correct inline format
-  // (e.g. spacing with other buttons and text)
-  const formattedClassName = cx('display-block', className);
   return (
-    <Button
-      appearance="unstyled"
-      className={formattedClassName}
-      text={
-        <Link to="/upload">
+    // Wrap href button in an inline block element so that the
+    // whole result is forced into the same vertical plane
+    // as the surrounding text
+    <div className="display-inline-block">
+      <Button
+        appearance="unstyled"
+        className={className}
+        text={
           <TextWithIcon
             Icon={DownloadArrow}
             direction="left"
             text="Upload a file"
           />
-        </Link>
-      }
-    />
+        }
+        href="/upload"
+      />
+    </div>
   );
 };
