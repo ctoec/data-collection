@@ -6,6 +6,12 @@ const birthTownMessage =
 const birthStateMessage =
   'Birth state must be provided or unknown for US birth certificates.';
 
+/**
+ * Null represents the "not collected state"; an empty string indicates this data
+ * is plain old missing
+ * @param child
+ * @param field
+ */
 function isBirthCertificateFieldValid(child: Child, field: string) {
   return (
     child[field] === null || // null -> unknown

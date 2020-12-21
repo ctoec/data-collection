@@ -104,7 +104,12 @@ describe('integration', () => {
           // Update to have US birth cert
           await apiPut(
             `children/${id}`,
-            { ...child, birthCertificateType: BirthCertificateType.US },
+            {
+              ...child,
+              birthCertificateType: BirthCertificateType.US,
+              birthState: '',
+              birthTown: '',
+            },
             TEST_OPTS
           );
           child = await apiGet(`children/${id}`, '', TEST_OPTS);
