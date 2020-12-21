@@ -126,6 +126,7 @@ export class Child implements ChildInterface {
     nullable: true,
     transformer: enumTransformer(UndefinableBoolean),
   })
+  @IsNotEmpty()
   hispanicOrLatinxEthnicity?: UndefinableBoolean;
 
   @Column({
@@ -143,6 +144,7 @@ export class Child implements ChildInterface {
     nullable: true,
     transformer: enumTransformer(UndefinableBoolean),
   })
+  @IsNotEmpty()
   dualLanguageLearner?: UndefinableBoolean;
 
   @Column({
@@ -151,6 +153,7 @@ export class Child implements ChildInterface {
     nullable: true,
     transformer: enumTransformer(UndefinableBoolean),
   })
+  @IsNotEmpty()
   foster?: UndefinableBoolean;
 
   @Column({
@@ -159,6 +162,7 @@ export class Child implements ChildInterface {
     nullable: true,
     transformer: enumTransformer(UndefinableBoolean),
   })
+  @IsNotEmpty()
   receivesDisabilityServices?: UndefinableBoolean;
 
   @ValidateNested()
@@ -168,6 +172,7 @@ export class Child implements ChildInterface {
     // This value is used in family to conditionally validate income determinations and then removed
     return true;
   })
+  @IsNotEmpty()
   @ManyToOne(() => Family)
   family?: Family;
 
