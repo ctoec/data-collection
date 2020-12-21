@@ -31,13 +31,13 @@ export class IncomeDetermination implements IncomeDeterminationInterface {
   @IsNotEmpty()
   determinationDate?: Moment;
 
-  @ManyToOne((type) => Family, { nullable: false })
+  @ManyToOne((_) => Family, { nullable: false })
   family: Family;
 
   @Column()
   familyId: number;
 
-  @Column((type) => UpdateMetaData, { prefix: false })
+  @Column((_) => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;
 
   @DeleteDateColumn()
