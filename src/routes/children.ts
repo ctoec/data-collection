@@ -106,7 +106,6 @@ childrenRouter.post(
   passAsyncError(async (req, res) => {
     try {
       const child = await controller.createChild(req.body, req.user);
-      // Send child because we need access to the validation errors
       res.status(201).send({ id: child.id });
     } catch (err) {
       if (err instanceof ApiError) throw err;
