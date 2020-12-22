@@ -7,7 +7,6 @@ import {
   Child,
   Organization,
   User,
-  Site,
   BirthCertificateType,
 } from '../shared/models';
 import moment from 'moment';

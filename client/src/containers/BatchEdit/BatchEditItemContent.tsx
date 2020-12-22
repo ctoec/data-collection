@@ -15,26 +15,22 @@ import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Link } from 'react-router-dom';
 import { getCurrentEnrollment } from '../../utils/models';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import { stringify } from 'query-string';
+import { mutateCallback } from 'swr/dist/types';
 
 type BatchEditItemContentProps = {
   childId: string;
   organizationId?: string;
-  moveNextRecord: () => void;
+  moveNextRecord: (_?: Child[]) => void;
+  mutate?: (_: mutateCallback<Child[]>, __: boolean) => void;
 };
 
 export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   childId,
   organizationId,
   moveNextRecord,
+  mutate,
 }) => {
   const [child, setChild] = useState<Child>();
-  const { mutate } = useAuthenticatedSWR<Child[]>(
-    organizationId
-      ? `children?${stringify({ organizationId, 'missing-info': true })}`
-      : null // no organizationId means this is single-record batch edit, so no need to update cache
-  );
 
   const { setAlerts } = useAlerts();
 
@@ -64,12 +60,12 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   }, [child?.id]);
 
   // Function to progress to next step
-  const moveNextStep = () => {
+  const moveNextStep = (records?: Child[]) => {
     if (!activeStepKey || !steps) return;
 
     const activeStepIdx = steps.findIndex((step) => step.key === activeStepKey);
     if (activeStepIdx === steps.length - 1) {
-      moveNextRecord();
+      moveNextRecord(records);
     } else {
       setActiveStep(steps[activeStepIdx + 1].key);
     }
@@ -82,20 +78,20 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        // Presence of orgId indicates multi-record batch edit
-        // so cache must be updated
-        if (organizationId) {
+        let updatedChildren: Child[] = [];
+        if (mutate) {
           mutate((children: Child[]) => {
             if (children) {
-              const idx = children.findIndex((c) => c.id === childId);
-              if (idx > -1) children.splice(idx, 1, updatedChild);
-              return children;
+              updatedChildren = [...children];
+              const idx = updatedChildren.findIndex((c) => c.id === childId);
+              if (idx > -1) updatedChildren.splice(idx, 1, updatedChild);
+              return updatedChildren;
             }
             return children;
           }, false);
         }
 
-        if (triggerRefetchCount) moveNextStep();
+        if (triggerRefetchCount) moveNextStep(updatedChildren);
       })
       .catch((err) => {
         throw new Error(err);
@@ -110,7 +106,11 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     hideErrorsOnFirstLoad: () => false,
     showFieldOrFieldset: showFieldInBatchEditForm,
     AdditionalButton: (
-      <Button text="Skip" onClick={moveNextStep} appearance="outline" />
+      <Button
+        text="Skip"
+        onClick={() => moveNextRecord()}
+        appearance="outline"
+      />
     ),
   };
 

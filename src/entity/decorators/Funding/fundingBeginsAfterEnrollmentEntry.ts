@@ -15,6 +15,11 @@ export function FundingBeginsAfterEnrollmentEntry(
       constraints: [],
       validator: {
         validate(reportingPeriod: ReportingPeriod, { object: funding }) {
+          // Handle edge case of undefined object
+          // This can happen if a record has no age group, in which case
+          // we still want to create and save the funding so that other
+          // fields get saved. Missing age group will already be flagged.
+          if (!reportingPeriod) return true;
           const { entry } = (funding as Funding)?.enrollment;
           const endFirstReportingPeriod = reportingPeriod.periodEnd;
           if (!entry || !endFirstReportingPeriod) return true;

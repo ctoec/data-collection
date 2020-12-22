@@ -3,10 +3,10 @@
 exports[`DataRequirements matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="grid-container margin-top-4"
+    class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 text-bold"
       type="button"
     >
       <span

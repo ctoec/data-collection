@@ -24,16 +24,24 @@ module.exports = {
     await browser.click(...saveButtonArgs);
     await scrollToElement(browser, ['css selector', 'header']);
     // TODO: change if we change alert header level
-    await browser.waitForElementVisible('xpath', "//*/h2[contains(., 'Record updated')]");
+    await browser.waitForElementVisible(
+      'xpath',
+      "//*/h2[contains(., 'Record updated')]"
+    );
 
     await navigateToRoster(browser);
-    await browser.waitForElementVisible('xpath', `//*/a[contains(., '${newFirstNameText}')]`);
+    await browser.waitForElementVisible(
+      'xpath',
+      `//*/a[contains(., '${newFirstNameText}')]`
+    );
 
     // We've changed/expanded the table header, so access the
     // changed child and check if the form field has the
     // correct value isntead
     await clickOnChildInRoster(browser);
-    browser.expect.element('input#firstName').to.have.value.which.contains(newFirstNameText);
+    browser.expect
+      .element('input#firstName')
+      .to.have.value.which.contains(newFirstNameText);
     browser.end();
   },
 };

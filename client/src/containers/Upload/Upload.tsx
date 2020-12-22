@@ -1,15 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import cx from 'classnames';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   FileInput,
-  TextWithIcon,
   Alert,
   LoadingWrapper,
   ErrorBoundary,
 } from '@ctoec/component-library';
-import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost, apiGet } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
@@ -22,6 +20,7 @@ import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { BatchUpload } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
+import { BackButton } from '../../components/BackButton';
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -88,10 +87,10 @@ const Upload: React.FC = () => {
         .then((resp: BatchUpload) => {
           // Clear all children records from data cache
           clearChildrenCaches();
-          let uploadText = `You uploaded ${resp.activeEnrollments} active enrollments`;
+          let uploadText = `You uploaded ${resp.active} active records`;
           uploadText +=
-            resp.withdrawnEnrollments > 0
-              ? ` and ${resp.withdrawnEnrollments} withdrawn enrollments.`
+            resp.withdrawn > 0
+              ? ` and ${resp.withdrawn} withdrawn records.`
               : `.`;
           history.push(`/roster`, {
             alerts: [
@@ -173,7 +172,9 @@ const Upload: React.FC = () => {
   };
 
   return (
-    <div className="grid-container margin-top-4">
+    <div className="grid-container">
+      <BackButton location="/" />
+
       <ErrorModal
         isOpen={errorModalOpen}
         toggleIsOpen={() => setErrorModalOpen((o) => !o)}
@@ -219,19 +220,11 @@ const Upload: React.FC = () => {
           />
         </div>
       )}
-      <div className="margin-bottom-2 text-bold">
-        <Link className="usa-button usa-button--unstyled" to="/">
-          <TextWithIcon
-            text="Back"
-            Icon={Arrow}
-            direction="left"
-            iconSide="left"
-          />
-        </Link>
-      </div>
 
       <div className="grid-row">
-        <h1 ref={h1Ref}>Upload your enrollment data</h1>
+        <h1 ref={h1Ref} className="margin-bottom-0">
+          Upload your enrollment data
+        </h1>
         <p>
           After you've entered all state funded enrollment data in the
           spreadsheet template, upload the file here.
