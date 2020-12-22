@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import {
   Child,
   IncomeDetermination,
@@ -22,7 +23,6 @@ import {
 import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
-import { useLocation } from 'react-router-dom';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -33,7 +33,7 @@ export const doesFamilyIncomeFormHaveErrors = (
   child?: Child,
   determinationId?: number
 ) => {
-  if (child?.foster) {
+  if (child?.foster === UndefinableBoolean.Yes) {
     return false;
   }
 
@@ -52,9 +52,9 @@ export const doesFamilyIncomeFormHaveErrors = (
   const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
     ?.length
     ? !!getValidationStatusForFields(
-        child.family.incomeDeterminations,
-        incomeDeterminationFields
-      )
+      child.family.incomeDeterminations,
+      incomeDeterminationFields
+    )
     : false;
 
   return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
@@ -80,7 +80,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
   }
-
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
   const { errorsHidden, setErrorsHidden } = useValidationErrors(
@@ -111,14 +110,14 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   }
 
   let determination: IncomeDetermination;
+  const dets = child?.family?.incomeDeterminations || [];
   if (inCreateFlow) {
-    const dets = child?.family?.incomeDeterminations || [];
     determination = dets[0] || ({} as IncomeDetermination);
   } else {
     determination =
-      child?.family?.incomeDeterminations?.find(
-        (d) => d.id === incomeDeterminationId
-      ) || ({} as IncomeDetermination);
+      dets.find((d) => d.id === incomeDeterminationId) ||
+      dets[0] ||
+      ({} as IncomeDetermination);
   }
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
