@@ -4,6 +4,7 @@ import {
   Funding,
   Enrollment,
   FundingSpace,
+  EnrichedValidationError,
 } from '../../../../shared/models';
 import {
   RadioButtonGroup,
@@ -23,6 +24,7 @@ type FundingFieldProps<T> = {
   getEnrollment: (_: TObjectDriller<T>) => Enrollment;
   organizationId: number;
   isEdit?: boolean;
+  missingFundedEnrollmentError?: EnrichedValidationError;
 };
 
 /**
@@ -36,6 +38,7 @@ export const NewFundingField = <
   getEnrollment,
   organizationId,
   isEdit,
+  missingFundedEnrollmentError,
 }: FundingFieldProps<T>) => {
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
@@ -105,8 +108,17 @@ export const NewFundingField = <
       inputName="fundingSource"
       legend="Funding source options"
       showLegend
-      // TODO: figure out how to display the "enrollment must have at least one funding" validation error
-      status={getValidationStatusForFields(enrollment, ['fundings'])}
+      status={
+        getValidationStatusForFields(enrollment, ['fundings']) ||
+        getValidationStatusForFields(
+          {
+            validationErrors: missingFundedEnrollmentError
+              ? [missingFundedEnrollmentError]
+              : [],
+          },
+          ['enrollments']
+        )
+      }
       options={options}
     />
   );

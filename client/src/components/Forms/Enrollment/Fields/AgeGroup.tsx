@@ -29,7 +29,7 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
           const id = ageGroup.replace(/\s/g, '-');
           return {
             id,
-            value: id,
+            value: ageGroup,
             text: ageGroup,
             getValue: (data) => enrollmentAccessor(data).at('ageGroup'),
             parseOnChangeEvent: (e) => e.target.value as AgeGroup,

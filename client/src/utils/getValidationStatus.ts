@@ -1,6 +1,5 @@
 import { FormStatusProps, TObjectDriller } from '@ctoec/component-library';
 import { ValidationError } from 'class-validator';
-import { ReactNode } from 'react';
 import {
   EnrichedValidationError,
   ObjectWithValidationErrors,
@@ -42,11 +41,11 @@ export function getValidationStatusForFieldInFieldset<
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
-  fieldProps: any & { label: string }
+  _: any // TODO: clean this up -- no longer used now that property names come from validation error metadata
 ): FormStatusProps | undefined {
   // TODO: do we actually want to do this?
   // Are there any cases where we want to show the error for each field in a fieldset?
-  return getValidationStatusForField(objectDriller, path, fieldProps, {
+  return getValidationStatusForField(objectDriller, path, _, {
     message: undefined,
   });
 }
@@ -72,7 +71,7 @@ export function getValidationStatusForField<
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
-  _: any & { label: string | ReactNode },
+  _: any, // TODO: clean this up -- no longer user now that property names come from validation error metadata (but still expected by FormField status)
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   const splitPath = path.split('.');
