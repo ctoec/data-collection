@@ -33,6 +33,7 @@ describe('integration', () => {
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
+      console.log('CURRENT HOST', util.getCurrentHost());
       const user: User = await apiGet('users/current', '', TEST_OPTS);
       organization = user?.organizations?.shift() as Organization;
       site = user?.sites?.find(
@@ -280,7 +281,7 @@ describe('integration', () => {
       });
 
       describe('enrollment', () => {
-        it.only('has missing info errors', async () => {
+        it('has missing info errors', async () => {
           const { id } = await apiPost(
             'children',
             childWithIdentifiers,

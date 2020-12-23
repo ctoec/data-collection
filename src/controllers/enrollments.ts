@@ -45,12 +45,15 @@ export const changeFunding = async (
   const enrollment = await getEnrollment(id, user, true);
   enrollment.fundings = removeDeletedElements(enrollment.fundings);
 
+  console.log('enrollment', enrollment);
   return getManager().transaction(async (tManager) => {
     // Update current funding, if exists
     const currentFunding = (enrollment.fundings || []).find(
       (f) => !f.lastReportingPeriod
     );
 
+    console.log('CHANGE FUNDING');
+    console.log('current funding', currentFunding);
     if (currentFunding) {
       const oldFundingLastReportingPeriod =
         changeFundingData.oldFunding?.lastReportingPeriod;
