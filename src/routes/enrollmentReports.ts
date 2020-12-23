@@ -36,18 +36,32 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (tManager) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
+
+        console.log('parsed uploaded template');
+
         const reportChildren: Child[] = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
           { save: false }
         );
+
+        console.log('mapped rows');
+
         // Need this line to create entities as the DB would see them.
         // Since only given properties are copied into the entities,
         // anything that winds up with missing info will set off
         // validation errors, which we need to find nested errors in
         // e.g. family address, enrollments, income dets, etc.
         const dbChildren = tManager.create(Child, reportChildren);
+
+        console.log('created db children');
+
+        dbChildren.forEach((dbc) =>
+          console.log('child family is ', dbc.family)
+        );
+        // console.log(dbChildren);
+
         const childrenWithErrors = await Promise.all(
           dbChildren.map(async (child) => {
             return {
@@ -57,6 +71,9 @@ enrollmentReportsRouter.post(
             };
           })
         );
+
+        console.log('validated db children');
+
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );

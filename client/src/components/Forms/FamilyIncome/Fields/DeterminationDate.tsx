@@ -1,8 +1,16 @@
 import React from 'react';
-import { FormField, DateInput, DateInputProps } from '@ctoec/component-library';
+import {
+  DateInput,
+  DateInputProps,
+  FormContext,
+  FormField,
+  useGenericContext,
+} from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../shared/models';
 import { Moment } from 'moment';
 import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
+import { set } from 'lodash';
+import produce from 'immer';
 
 /**
  * Component that holds a date picker calendar object that
@@ -12,15 +20,31 @@ import { getValidationStatusForFieldInFieldset } from '../../../../utils/getVali
  * a moment but the function expects a simple date.
  */
 export const DeterminationDateField: React.FC = () => {
+  const {
+    data: determination,
+    dataDriller,
+    updateData,
+  } = useGenericContext<IncomeDetermination>(FormContext);
   return (
     <FormField<IncomeDetermination, DateInputProps, Moment | null>
-      getValue={(data) => data.at('determinationDate')}
+      getValue={() => {
+        console.log(dataDriller.at('determinationDate'));
+        return dataDriller.at('determinationDate');
+      }}
       defaultValue={null}
-      parseOnChangeEvent={(e: any) => e}
+      parseOnChangeEvent={(e: any) => {
+        updateData(
+          produce<IncomeDetermination>(determination, (draft) =>
+            set(draft, dataDriller.at('determinationDate').path, e)
+          )
+        );
+        return e;
+      }}
       inputComponent={DateInput}
       id="determination-date-"
       label="Determination date"
       status={getValidationStatusForFieldInFieldset}
+      disabled={dataDriller.at('incomeNotDisclosed').value}
     />
   );
 };

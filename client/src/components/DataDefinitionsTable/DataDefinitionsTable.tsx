@@ -107,7 +107,7 @@ const getSectionCopy = (section: string) => {
   if (section === TEMPLATE_SECTIONS.CHILD_INFO)
     return "Data on children's circumstances. This data is used to ensure children from different backgrounds are equitably served by ECE programs.";
   if (section === TEMPLATE_SECTIONS.FAMILY_INCOME)
-    return 'This data is collected to assess eligibility for public funding by calculating state median income percentage. Income determinations must be updated at least once a year.';
+    return 'This data is collected to assess eligibility for public funding by calculating state median income percentage. Income determinations must be updated at least once a year. For the July 1 to Dec 31 data collection: If a child has had multiple income determinations, you only need to enter the most recent determination.';
   if (section === TEMPLATE_SECTIONS.FAMILY_ADDRESS)
     return 'One or more children that share the same address and household income.';
   if (section === TEMPLATE_SECTIONS.ENROLLMENT_FUNDING)
