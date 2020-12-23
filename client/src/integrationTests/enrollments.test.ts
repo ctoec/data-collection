@@ -30,10 +30,12 @@ describe('integration', () => {
       );
       const children: Child[] = await apiGet('children', '', TEST_OPTS);
       const child = children.find((c) =>
-        c.enrollments?.some((e) => !e?.exit && !!e?.fundings?.length)
+        c.enrollments?.some(
+          (e) => !!e.site && !e?.exit && !!e?.fundings?.length
+        )
       );
       enrollment = child?.enrollments?.find(
-        (e) => !e?.exit && !!e?.fundings?.length
+        (e) => !!e.site && !e?.exit && !!e?.fundings?.length
       );
       reportingPeriods = await apiGet(`reporting-periods`, '', TEST_OPTS);
     });
