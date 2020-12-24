@@ -163,6 +163,15 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
             fundingAccessor={(data) => data.at('fundings').at(0)}
             getEnrollment={(data) => data.value}
             organizationId={child?.organization?.id}
+            // Special child-level validation that needs to be displayed on the new funding field
+            // but only if hideErrors = false
+            missingFundedEnrollmentError={
+              errorsHidden
+                ? undefined
+                : child.validationErrors?.find(
+                    (e) => !!e.constraints?.fundedEnrollment
+                  )
+            }
           />
         )}
         {AdditionalButton}

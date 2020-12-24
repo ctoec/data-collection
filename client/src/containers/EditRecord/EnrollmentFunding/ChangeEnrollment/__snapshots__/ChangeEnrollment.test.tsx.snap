@@ -1493,7 +1493,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   id="School-aged"
                   name="ageGroup"
                   type="radio"
-                  value="School-aged"
+                  value="School aged"
                 />
                 <label
                   class="usa-radio__label"
