@@ -5,15 +5,17 @@ import {
   Organization,
   BirthCertificateType,
   Enrollment,
-  UndefinableBoolean,
   ReportingPeriod,
+  UndefinableBoolean,
+  Site,
 } from '../shared/models';
+import moment from 'moment';
+import { ChangeEnrollment } from '../shared/payloads';
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
 jest.mock('../utils/getCurrentHost');
 import * as util from '../utils/getCurrentHost';
-import moment from 'moment';
-import { ChangeEnrollment } from '../shared/payloads';
+
 const utilMock = util as jest.Mocked<typeof util>;
 
 const TEST_OPTS: ApiOpts = {
@@ -24,14 +26,19 @@ const TEST_OPTS: ApiOpts = {
 describe('integration', () => {
   describe('api', () => {
     let organization: Organization;
+    let site: Site;
     let childWithIdentifiers: Child;
     beforeAll(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
+      console.log('CURRENT HOST', util.getCurrentHost());
       const user: User = await apiGet('users/current', '', TEST_OPTS);
       organization = user?.organizations?.shift() as Organization;
+      site = user?.sites?.find(
+        (site) => site.organizationId === organization.id
+      ) as Site;
       childWithIdentifiers = {
         organization,
         firstName: 'first',
@@ -188,7 +195,138 @@ describe('integration', () => {
         });
       });
 
-      describe('family', () => {});
+      describe('family', () => {
+        it('has missing info errors', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          expect(child?.family).toHaveProperty('validationErrors');
+          expect(child?.family?.validationErrors).not.toHaveLength(0);
+          [
+            'streetAddress',
+            'town',
+            'state',
+            'zipCode',
+            'incomeDeterminations',
+          ].forEach((prop) => {
+            const err = child?.family?.validationErrors?.find(
+              (e) => e.property === prop
+            );
+            expect(err?.property).toEqual(prop);
+          });
+        });
+        it('does not have missing address errors if homeless', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          ['streetAddress', 'town', 'state', 'zipCode'].forEach((prop) => {
+            const err = child?.validationErrors?.find(
+              (e) => e.property === prop
+            );
+            expect(err).toBeUndefined();
+          });
+        });
+        it('does not have missing income determination errors if child is foster', async () => {
+          const { id } = await apiPost(
+            'children',
+            {
+              ...childWithIdentifiers,
+              foster: UndefinableBoolean.Yes,
+            },
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          const incomeDeterminationError = child?.validationErrors?.find(
+            (e) => e.property === 'incomeDeterminations'
+          );
+          expect(incomeDeterminationError).toBeUndefined();
+        });
+      });
+
+      describe('income determination', () => {
+        it('has missing info errors', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          // Add empty income determination
+          await apiPost(
+            `families/${child.family?.id}/income-determinations`,
+            {},
+            TEST_OPTS
+          );
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          expect(child?.family?.incomeDeterminations).toHaveLength(1);
+          const incomeDetermination = child?.family?.incomeDeterminations?.pop();
+
+          expect(incomeDetermination).toHaveProperty('validationErrors');
+          ['numberOfPeople', 'income', 'determinationDate'].forEach((prop) => {
+            const err = incomeDetermination?.validationErrors?.find(
+              (e) => e.property === prop
+            );
+            expect(err?.property).toEqual(prop);
+          });
+        });
+      });
+
+      describe('enrollment', () => {
+        it('has missing info errors', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {} as Enrollment,
+          };
+
+          // Add empty enrollment
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          const enrollment = child?.enrollments?.pop();
+          ['site', 'model', 'ageGroup', 'entry'].forEach((prop) => {
+            const err = enrollment?.validationErrors?.find(
+              (e) => e.property === prop
+            );
+            expect(err?.property).toEqual(prop);
+          });
+        });
+
+        // it('has missing exit reason error if exited', async() => {
+        // 	const { id } = await apiPost(
+        // 		'children',
+        // 		childWithIdentifiers,
+        // 		TEST_OPTS
+        // 	);
+        // 	let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+        // 	const changeEnrollment: ChangeEnrollment = {
+        // 		newEnrollment: {
+        // 			siteId: site.id,
+        // 			entry: moment(),
+        // 			exit: moment(),
+        // 		} as Enrollment
+        // 	};
+
+        // });
+      });
     });
   });
 });
