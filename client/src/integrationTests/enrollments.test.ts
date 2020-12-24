@@ -125,7 +125,7 @@ describe('integration', () => {
         expect(updatedEnrollment?.siteId).toEqual(site?.id);
       });
 
-      it.only('POST /enrollments/id/change-funding', async () => {
+      it('POST /enrollments/id/change-funding', async () => {
         if (!enrollment) throw new Error('no enrollment');
         const organizationId = enrollment?.site?.organizationId;
         const [fundingSpace] = (await apiGet(
