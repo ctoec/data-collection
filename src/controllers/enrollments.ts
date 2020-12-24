@@ -69,8 +69,8 @@ export const changeFunding = async (
       // on that value
       if (
         !oldFundingLastReportingPeriod &&
-        newFundingFirstReportingPeriod.id &&
-        !newFundingFirstReportingPeriod.period
+        newFundingFirstReportingPeriod?.id &&
+        !newFundingFirstReportingPeriod?.period
       ) {
         newFundingFirstReportingPeriod.period = (
           await tManager.findOne(
@@ -80,11 +80,10 @@ export const changeFunding = async (
         ).period;
       }
 
-      // Check that the reporting period prior to the new funding reporting period
-      // is not before July 2020 (the first date supported in the app)
       let periodBeforeNewFundingFirst = newFundingFirstReportingPeriod.period
         .clone()
         .add(-1, 'month');
+
       const lastReportingPeriod =
         oldFundingLastReportingPeriod ||
         (await tManager.findOne(ReportingPeriod, {
