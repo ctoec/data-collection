@@ -1,8 +1,5 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 import { apiGet, apiPost, ApiOpts, apiPut, apiDelete } from '../utils/api';
-
-jest.mock('../utils/getCurrentHost');
-import * as util from '../utils/getCurrentHost';
 import {
   Child,
   Enrollment,
@@ -12,6 +9,9 @@ import {
 } from '../shared/models';
 import moment from 'moment';
 import { ChangeFunding, Withdraw, ChangeEnrollment } from '../shared/payloads';
+
+jest.mock('../utils/getCurrentHost');
+import * as util from '../utils/getCurrentHost';
 const utilMock = util as jest.Mocked<typeof util>;
 
 const TEST_OPTS: ApiOpts = {
@@ -119,7 +119,7 @@ describe('integration', () => {
         const updatedEnrollment = updatedChild?.enrollments?.find(
           (e) => e.id === sitelessEnrollment.id
         );
-        expect(updatedEnrollment).not.toBeUndefined;
+        expect(updatedEnrollment).not.toBeUndefined();
         expect(updatedEnrollment?.siteId).toEqual(site?.id);
       });
 
@@ -184,7 +184,7 @@ describe('integration', () => {
               changeFunding.newFunding?.firstReportingPeriod?.id &&
             f.fundingSpace?.id === changeFunding.newFunding?.fundingSpace?.id
         );
-        expect(newFunding).not.toBeUndefined;
+        expect(newFunding).not.toBeUndefined();
       });
 
       it('POST /enrollments/id/withdraw', async () => {
@@ -250,7 +250,7 @@ describe('integration', () => {
         const updatedEnrollment = updatedChild.enrollments?.find(
           (e) => e.id === enrollment?.id
         );
-        expect(updatedEnrollment).toBeUndefined;
+        expect(updatedEnrollment).toBeUndefined();
       });
     });
   });

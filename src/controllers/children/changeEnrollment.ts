@@ -173,7 +173,7 @@ async function createNewEnrollment(
   if (newEnrollment.fundings && newEnrollment.fundings.length) {
     const matchingFundingSpace: FundingSpace = await tManager.findOne(
       FundingSpace,
-      newEnrollment.fundings[0].fundingSpace.id,
+      newEnrollment.fundings[0]?.fundingSpace?.id,
       { where: { organizationId: child.organizationId } }
     );
 

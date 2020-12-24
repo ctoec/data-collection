@@ -3,7 +3,6 @@ import { getManager, In, IsNull } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
-import moment from 'moment';
 
 export const getEnrollment = async (
   id: number | string,
@@ -86,11 +85,6 @@ export const changeFunding = async (
       let periodBeforeNewFundingFirst = newFundingFirstReportingPeriod.period
         .clone()
         .add(-1, 'month');
-      const EARLIEST_PERIOD = moment.utc('07-01-2020', ['DD-MM-YYYY']);
-      if (periodBeforeNewFundingFirst < EARLIEST_PERIOD) {
-        // If it is prior to July 2020, use that date instead
-        periodBeforeNewFundingFirst = EARLIEST_PERIOD;
-      }
       const lastReportingPeriod =
         oldFundingLastReportingPeriod ||
         (await tManager.findOne(ReportingPeriod, {

@@ -1,8 +1,5 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 import { apiGet, apiPost, ApiOpts } from '../utils/api';
-
-jest.mock('../utils/getCurrentHost');
-import * as util from '../utils/getCurrentHost';
 import {
   Child,
   Organization,
@@ -10,6 +7,9 @@ import {
   BirthCertificateType,
 } from '../shared/models';
 import moment from 'moment';
+
+jest.mock('../utils/getCurrentHost');
+import * as util from '../utils/getCurrentHost';
 const utilMock = util as jest.Mocked<typeof util>;
 
 const TEST_OPTS: ApiOpts = {
@@ -61,7 +61,7 @@ describe('integration', () => {
           TEST_OPTS
         );
         missingInfoChildren.forEach((child) => {
-          expect(child.validationErrors).not.toBeUndefined;
+          expect(child.validationErrors).not.toBeUndefined();
           expect(child.validationErrors).not.toHaveLength(0);
         });
       });
@@ -83,7 +83,7 @@ describe('integration', () => {
           TEST_OPTS
         );
         activeInMonthChildren.forEach((child) => {
-          expect(child.enrollments).not.toBeUndefined;
+          expect(child.enrollments).not.toBeUndefined();
           expect(child.enrollments).not.toHaveLength(0);
           expect(
             child.enrollments?.every((enrollment) =>
@@ -103,7 +103,7 @@ describe('integration', () => {
         } as Child;
 
         const { id } = await apiPost('children', newChild, TEST_OPTS);
-        expect(id).not.toBeUndefined;
+        expect(id).not.toBeUndefined();
         newChild.id = id;
         child = newChild;
       });
