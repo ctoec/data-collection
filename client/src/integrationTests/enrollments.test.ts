@@ -6,12 +6,16 @@ import {
   FundingSpace,
   Funding,
   ReportingPeriod,
+  Organization,
+  User,
+  Site,
 } from '../shared/models';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import { ChangeFunding, Withdraw, ChangeEnrollment } from '../shared/payloads';
 
 jest.mock('../utils/getCurrentHost');
 import * as util from '../utils/getCurrentHost';
+import { createChild, createEnrollment } from './utils';
 const utilMock = util as jest.Mocked<typeof util>;
 
 const TEST_OPTS: ApiOpts = {
@@ -23,11 +27,19 @@ describe('integration', () => {
   describe('api', () => {
     let enrollment: Enrollment | undefined;
     let reportingPeriods: ReportingPeriod[] | undefined;
+    let organization: Organization;
+    let site: Site;
     beforeAll(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
+
+      const user: User = await apiGet('users/current', '', TEST_OPTS);
+      organization = user?.organizations?.shift() as Organization;
+      site = user?.sites?.find(
+        (s) => s.organizationId === organization.id
+      ) as Site;
       const children: Child[] = await apiGet('children', '', TEST_OPTS);
       const child = children.find((c) =>
         c.enrollments?.some(
@@ -126,21 +138,19 @@ describe('integration', () => {
       });
 
       it('POST /enrollments/id/change-funding', async () => {
-        if (!enrollment) throw new Error('no enrollment');
-        const organizationId = enrollment?.site?.organizationId;
-        const [fundingSpace] = (await apiGet(
-          `funding-spaces?organizationId=${organizationId}`,
-          '',
-          TEST_OPTS
-        )) as FundingSpace[];
+        const { id: childId } = await createChild(organization);
+        await createEnrollment(site, childId, { withFunding: true });
 
+        let child: Child = await apiGet(`children/${childId}`, '', TEST_OPTS);
+        const enrollment = child.enrollments?.pop() as Enrollment;
+        const currentFunding = (enrollment.fundings as Funding[])[0];
         const period = reportingPeriods?.find(
-          (rp) => rp.period > moment('07-01-2020', ['MM-DD-YYYY'])
+          (rp) =>
+            rp.period > (currentFunding.firstReportingPeriod?.period as Moment)
         );
         const changeFunding: ChangeFunding = {
           newFunding: {
             firstReportingPeriod: period,
-            fundingSpace: fundingSpace,
           } as Funding,
         };
         const res = await apiPost(
@@ -163,22 +173,17 @@ describe('integration', () => {
           (enrollment.fundings?.length || 0) + 1
         );
 
-        const previouslyCurrentFunding = enrollment.fundings?.find(
-          (f) => !f.lastReportingPeriod
+        const updatedFunding = updatedEnrollment?.fundings?.find(
+          (f) => f.id === currentFunding.id
         );
-        if (previouslyCurrentFunding) {
-          const updatedFunding = updatedEnrollment?.fundings?.find(
-            (f) => f.id === previouslyCurrentFunding.id
-          );
 
-          expect(
-            updatedFunding?.lastReportingPeriod?.period.format('MM-YYYY')
-          ).toEqual(
-            changeFunding.newFunding?.firstReportingPeriod?.period
-              .add(-1, 'month')
-              .format('MM-YYYY')
-          );
-        }
+        expect(
+          updatedFunding?.lastReportingPeriod?.period.format('MM-YYYY')
+        ).toEqual(
+          changeFunding.newFunding?.firstReportingPeriod?.period
+            .add(-1, 'month')
+            .format('MM-YYYY')
+        );
 
         const newFunding = updatedEnrollment?.fundings?.find(
           (f) =>
