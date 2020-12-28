@@ -1,23 +1,10 @@
 import React, { useContext, useState } from 'react';
-import {
-  Child,
-  Family,
-  IncomeDetermination,
-  UndefinableBoolean,
-} from '../../../shared/models';
+import { Child, IncomeDetermination } from '../../../shared/models';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
-import {
-  Form,
-  FormSubmitButton,
-  FormFieldSet,
-  Button,
-  Checkbox,
-  useGenericContext,
-  FormContext,
-} from '@ctoec/component-library';
+import { Form, FormSubmitButton, FormFieldSet } from '@ctoec/component-library';
 import {
   HouseholdSizeField,
   AnnualHouseholdIncomeField,
@@ -26,9 +13,8 @@ import {
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { useLocation } from 'react-router-dom';
-import { set } from 'lodash';
-import produce from 'immer';
 import { NotDisclosedField } from './Fields/NotDisclosed';
+import Divider from '@material-ui/core/Divider';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
@@ -40,10 +26,6 @@ export const doesFamilyIncomeFormHaveErrors = (
   child?: Child,
   determinationId?: number
 ) => {
-  if (child?.foster) {
-    return false;
-  }
-
   if (determinationId) {
     const determination = child?.family?.incomeDeterminations?.find(
       (f) => f.id === determinationId
@@ -101,22 +83,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   const isMounted = useIsMounted();
 
-  // if (child?.foster === UndefinableBoolean.Yes) {
-  //   // New child and batch edit both use this form directly
-  //   // So this alert will show for those two forms
-  //   // Edit child conditionally shows this form, so this alert is in that container too
-  //   return (
-  //     <div>
-  //       <FosterIncomeNotRequiredAlert />
-  //       <Button
-  //         text="Next"
-  //         onClick={afterSaveSuccess}
-  //         className="margin-top-3"
-  //       />
-  //     </div>
-  //   );
-  // }
-
   let determination: IncomeDetermination;
   if (inCreateFlow) {
     const dets = child?.family?.incomeDeterminations || [];
@@ -166,22 +132,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
       .finally(onFinally);
   };
 
-  // console.log(child.family);
-  console.log(determination);
-
-  // Use state to control clearing input when one component or the other is manipulated
-  // const { data: family, dataDriller: familyDriller, updateData: updateFamily } = useGenericContext<Family>(
-  //   FormContext
-  // );
-  // const { data: det, dataDriller, updateData } = useGenericContext<IncomeDetermination>(FormContext);
-  // updateData(
-  //   produce<IncomeDetermination>(determination, (draft) => draft)
-  // );
-  // console.log(det);
-  // const [notDisclosed, setNotDisclosed] = useState<boolean | undefined>(determination.incomeNotDisclosed);
-  // console.log(notDisclosed);
-  // const [det, setDet] = useState<IncomeDetermination>(determination);
-
   return (
     <Form<IncomeDetermination>
       id={id}
@@ -206,6 +156,9 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
         </div>
         <div>
           <DeterminationDateField />
+        </div>
+        <div className="margin-top-4 margin-bottom-4">
+          <Divider />
         </div>
         <div>
           <NotDisclosedField />

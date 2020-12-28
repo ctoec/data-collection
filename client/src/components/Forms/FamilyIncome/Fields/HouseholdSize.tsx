@@ -14,6 +14,8 @@ import produce from 'immer';
  * of a household size number for an income determination.
  */
 export const HouseholdSizeField: React.FC = () => {
+  // Use a driller to keep clearing state synched between data
+  // and the 'income not disclosed' box
   const {
     data: determination,
     dataDriller,

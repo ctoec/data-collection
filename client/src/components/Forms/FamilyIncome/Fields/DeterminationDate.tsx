@@ -20,6 +20,8 @@ import produce from 'immer';
  * a moment but the function expects a simple date.
  */
 export const DeterminationDateField: React.FC = () => {
+  // Use a driller to keep clearing state synched between data
+  // and the 'income not disclosed' box
   const {
     data: determination,
     dataDriller,

@@ -9,6 +9,8 @@ import { set } from 'lodash';
 import produce from 'immer';
 
 export const NotDisclosedField: React.FC = () => {
+  // Need to track this as if it were state, so use a driller to
+  // keep everything properly updated when manipulating the object
   const {
     data: determination,
     dataDriller,
@@ -24,6 +26,7 @@ export const NotDisclosedField: React.FC = () => {
         const updatedDet = produce<IncomeDetermination>(
           determination,
           (draft) => {
+            // Bulk update to avoid synchronization issues
             set(draft, dataDriller.at('incomeNotDisclosed').path, check);
             set(draft, dataDriller.at('numberOfPeople').path, null);
             set(draft, dataDriller.at('income').path, null);

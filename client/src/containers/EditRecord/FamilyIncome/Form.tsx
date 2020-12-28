@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { RecordFormProps } from '../../../components/Forms';
-import {
-  IncomeDetermination,
-  UndefinableBoolean,
-} from '../../../shared/models';
+import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
 import { Button } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
-// import { FosterIncomeNotRequiredAlert } from '../../../components/Forms/FamilyIncome/FosterIncomeNotRequiredAlert';
 
 /**
  * Component enabling user to edit the family income portion of a child
