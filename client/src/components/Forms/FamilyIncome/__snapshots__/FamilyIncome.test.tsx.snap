@@ -1344,6 +1344,31 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
             </div>
           </fieldset>
         </div>
+        <div
+          class="margin-top-4 margin-bottom-4"
+        >
+          <hr
+            class="MuiDivider-root"
+          />
+        </div>
+        <div>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="income-not-disclosed-checkbox"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="income-not-disclosed-checkbox"
+            >
+              Income not disclosed
+            </label>
+          </div>
+        </div>
       </div>
     </fieldset>
     <input
