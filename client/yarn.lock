@@ -1163,10 +1163,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@1.0.10":
+"@ctoec/component-library@https://github.com/ctoec/component-library#457-svg-imports":
   version "1.0.10"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.0.10.tgz#7d69cc600ab596d94593f940282d905c0f611d44"
-  integrity sha512-LfUqyOIgO7rvT6N0VcoVENv/TXfmSr4AZe5LIu5tziAOnvjie9komyCA/I8A5m9H5V0lHFd25I4DkhuW57Ezyg==
+  resolved "https://github.com/ctoec/component-library#9462b51c6554f447c559e7750bf171a6fef52a43"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
