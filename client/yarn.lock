@@ -1165,7 +1165,7 @@
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#457-svg-imports":
   version "1.0.11"
-  resolved "https://github.com/ctoec/component-library#9bbce8e043c08fe7f5632244c1aab581a65cdc57"
+  resolved "https://github.com/ctoec/component-library#eef17c5f37cbd81a5f9b70cdd4b804bbc2f35f92"
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"

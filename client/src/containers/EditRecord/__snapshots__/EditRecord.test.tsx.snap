@@ -154,6 +154,11 @@ exports[`EditRecord matches snapshot 1`] = `
                       class="oec-text-with-icon svg-gold-20v"
                     >
                       Enrollment and funding
+                      <svg
+                        class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                      >
+                        info.svg
+                      </svg>
                     </span>
                   </span>
                 </button>

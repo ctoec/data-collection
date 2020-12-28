@@ -26,6 +26,11 @@ exports[`EditRecord DeleteRecord matches snapshot 1`] = `
         <div
           class="display-flex flex-column flex-align-center"
         >
+          <svg
+            class="height-3 text-base-darker"
+          >
+            x.svg
+          </svg>
           <p
             class="margin-y-05"
           >

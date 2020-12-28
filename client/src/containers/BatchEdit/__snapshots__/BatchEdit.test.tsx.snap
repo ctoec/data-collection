@@ -38,6 +38,9 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
           <span
             class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
           >
+            <svg>
+              success.svg
+            </svg>
             <span
               class="usa-sr-only"
             >
@@ -65,6 +68,9 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
               <span
                 class="oec-inline-icon oec-inline-icon--complete"
               >
+                <svg>
+                  success.svg
+                </svg>
                 <span
                   class="usa-sr-only"
                 >
@@ -83,6 +89,11 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
                   class="oec-text-with-icon"
                 >
                   Back to roster
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
                 </span>
               </a>
             </div>
@@ -156,6 +167,9 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
           <span
             class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
           >
+            <svg>
+              success.svg
+            </svg>
             <span
               class="usa-sr-only"
             >
@@ -183,6 +197,9 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
               <span
                 class="oec-inline-icon oec-inline-icon--complete"
               >
+                <svg>
+                  success.svg
+                </svg>
                 <span
                   class="usa-sr-only"
                 >
@@ -201,6 +218,11 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
                   class="oec-text-with-icon"
                 >
                   Back to roster
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
                 </span>
               </a>
             </div>

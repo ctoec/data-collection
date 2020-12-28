@@ -143,7 +143,13 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
                   title="open calendar"
                   type="button"
-                />
+                >
+                  <svg
+                    class="oec-calendar-toggle__icon"
+                  >
+                    calendar.svg
+                  </svg>
+                </button>
                 <div
                   class="oec-calendar-dropdown__calendar position-absolute z-top"
                   hidden=""

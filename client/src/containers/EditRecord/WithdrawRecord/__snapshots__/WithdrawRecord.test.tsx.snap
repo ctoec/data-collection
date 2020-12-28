@@ -27,6 +27,11 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
         <div
           class="display-flex flex-column flex-align-center"
         >
+          <svg
+            class="height-3 text-base-darker"
+          >
+            x.svg
+          </svg>
           <p
             class="margin-y-05"
           >
@@ -153,7 +158,13 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
                 class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
                 title="open calendar"
                 type="button"
-              />
+              >
+                <svg
+                  class="oec-calendar-toggle__icon"
+                >
+                  calendar.svg
+                </svg>
+              </button>
               <div
                 class="oec-calendar-dropdown__calendar position-absolute z-top"
                 hidden=""

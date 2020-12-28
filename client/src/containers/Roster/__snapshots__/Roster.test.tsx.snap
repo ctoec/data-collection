@@ -72,8 +72,18 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <span
                         class="oec-text-with-icon"
                       >
+                        <svg
+                          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                        >
+                          plusCircle.svg
+                        </svg>
                         Add a record
                       </span>
+                      <svg
+                        class="arrow"
+                      >
+                        angleArrowDown.svg
+                      </svg>
                     </div>
                   </button>
                 </div>
@@ -85,6 +95,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 <span
                   class="oec-text-with-icon text-underline"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    fileDownload.svg
+                  </svg>
                   Export roster
                 </span>
               </button>
@@ -108,6 +123,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    history.svg
+                  </svg>
                   Withdrawn records
                 </span>
               </button>
@@ -118,6 +138,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    calendar.svg
+                  </svg>
                   Past enrollments
                 </span>
               </button>
@@ -241,6 +266,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       class="oec-accordion__heading-expand"
                     >
                       Hide Infant/toddler roster
+                      <svg
+                        class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                      >
+                        angleArrowDown.svg
+                      </svg>
                     </div>
                   </div>
                 </button>
@@ -270,7 +300,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Name
                           <div
                             class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -287,7 +321,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Missing info
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -304,7 +342,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Birthdate
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -321,7 +363,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Funding type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -338,7 +384,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Space type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -355,7 +405,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Site
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -372,7 +426,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Organization
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -389,7 +447,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Enrollment date
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                     </tr>
@@ -518,6 +580,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       class="oec-accordion__heading-expand"
                     >
                       Hide Preschool roster
+                      <svg
+                        class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                      >
+                        angleArrowDown.svg
+                      </svg>
                     </div>
                   </div>
                 </button>
@@ -547,7 +614,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Name
                           <div
                             class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -564,7 +635,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Missing info
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -581,7 +656,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Birthdate
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -598,7 +677,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Funding type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -615,7 +698,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Space type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -632,7 +719,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Site
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -649,7 +740,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Organization
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -666,7 +761,11 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                           Enrollment date
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                     </tr>
@@ -818,6 +917,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                   <span
                     class="oec-text-with-icon"
                   >
+                    <svg
+                      class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                    >
+                      plusCircle.svg
+                    </svg>
                     Add a record
                   </span>
                 </a>
@@ -829,6 +933,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 <span
                   class="oec-text-with-icon text-underline"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    fileDownload.svg
+                  </svg>
                   Export roster
                 </span>
               </button>
@@ -852,6 +961,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    history.svg
+                  </svg>
                   Withdrawn records
                 </span>
               </button>
@@ -862,6 +976,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    calendar.svg
+                  </svg>
                   Past enrollments
                 </span>
               </button>
@@ -996,6 +1115,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       class="oec-accordion__heading-expand"
                     >
                       Hide Infant/toddler roster
+                      <svg
+                        class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                      >
+                        angleArrowDown.svg
+                      </svg>
                     </div>
                   </div>
                 </button>
@@ -1025,7 +1149,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Name
                           <div
                             class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1042,7 +1170,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Missing info
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1059,7 +1191,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Birthdate
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1076,7 +1212,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Funding type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1093,7 +1233,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Space type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1110,7 +1254,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Site
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1127,7 +1275,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Enrollment date
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                     </tr>
@@ -1250,6 +1402,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       class="oec-accordion__heading-expand"
                     >
                       Hide Preschool roster
+                      <svg
+                        class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                      >
+                        angleArrowDown.svg
+                      </svg>
                     </div>
                   </div>
                 </button>
@@ -1279,7 +1436,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Name
                           <div
                             class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1296,7 +1457,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Missing info
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1313,7 +1478,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Birthdate
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1330,7 +1499,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Funding type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1347,7 +1520,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Space type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1364,7 +1541,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Site
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -1381,7 +1562,11 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                           Enrollment date
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg>
+                              downArrowCircle.svg
+                            </svg>
+                          </div>
                         </button>
                       </th>
                     </tr>
@@ -1535,6 +1720,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   <span
                     class="oec-text-with-icon"
                   >
+                    <svg
+                      class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                    >
+                      plusCircle.svg
+                    </svg>
                     Add a record
                   </span>
                 </a>
@@ -1546,6 +1736,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 <span
                   class="oec-text-with-icon text-underline"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    fileDownload.svg
+                  </svg>
                   Export roster
                 </span>
               </button>
@@ -1569,6 +1764,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    history.svg
+                  </svg>
                   Withdrawn records
                 </span>
               </button>
@@ -1579,6 +1779,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                  >
+                    calendar.svg
+                  </svg>
                   Past enrollments
                 </span>
               </button>
@@ -1639,6 +1844,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   class="oec-accordion__heading-expand"
                 >
                   Hide Infant/toddler roster
+                  <svg
+                    class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                  >
+                    angleArrowDown.svg
+                  </svg>
                 </div>
               </div>
             </button>
@@ -1668,7 +1878,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Name
                       <div
                         class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1685,7 +1899,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Missing info
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1702,7 +1920,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Birthdate
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1719,7 +1941,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Funding type
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1736,7 +1962,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Space type
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1753,7 +1983,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Site
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1770,7 +2004,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Enrollment date
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                 </tr>
@@ -1893,6 +2131,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   class="oec-accordion__heading-expand"
                 >
                   Hide Preschool roster
+                  <svg
+                    class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                  >
+                    angleArrowDown.svg
+                  </svg>
                 </div>
               </div>
             </button>
@@ -1922,7 +2165,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Name
                       <div
                         class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1939,7 +2186,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Missing info
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1956,7 +2207,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Birthdate
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1973,7 +2228,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Funding type
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -1990,7 +2249,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Space type
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -2007,7 +2270,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Site
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                   <th
@@ -2024,7 +2291,11 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       Enrollment date
                       <div
                         class="oec-table__sort-controls"
-                      />
+                      >
+                        <svg>
+                          downArrowCircle.svg
+                        </svg>
+                      </div>
                     </button>
                   </th>
                 </tr>
