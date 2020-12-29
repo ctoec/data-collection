@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ctoec/component-library": "1.0.11",
+    "@ctoec/component-library": "https://github.com/ctoec/component-library#457-retake",
     "@openid/appauth": "^1.2.7",
     "@testing-library/dom": "^7.24.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -38,7 +38,7 @@
     "sass": "^1.27.0",
     "swr": "^0.3.6",
     "typescript": "^3.9.5",
-    "uswds": "^2.8.0"
+    "uswds": "2.9.0"
   },
   "scripts": {
     "start": "react-scripts start",
