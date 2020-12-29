@@ -1493,7 +1493,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   id="School-aged"
                   name="ageGroup"
                   type="radio"
-                  value="School-aged"
+                  value="School aged"
                 />
                 <label
                   class="usa-radio__label"
@@ -1506,12 +1506,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
-          aria-labelledby="fieldset-legend-funding-source"
+          aria-labelledby="fieldset-legend-funding-source-undefined"
           class="usa-fieldset"
-          id="funding-source"
+          id="funding-source-undefined"
         >
           <legend
-            id="fieldset-legend-funding-source"
+            id="fieldset-legend-funding-source-undefined"
           >
             <span
               class="usa-label"

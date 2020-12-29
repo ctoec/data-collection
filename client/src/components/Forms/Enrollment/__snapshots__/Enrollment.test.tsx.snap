@@ -1460,7 +1460,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
               id="School-aged"
               name="ageGroup"
               type="radio"
-              value="School-aged"
+              value="School aged"
             />
             <label
               class="usa-radio__label"
@@ -1473,12 +1473,12 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      aria-labelledby="fieldset-legend-funding-source"
+      aria-labelledby="fieldset-legend-funding-source-1"
       class="usa-fieldset"
-      id="funding-source"
+      id="funding-source-1"
     >
       <legend
-        id="fieldset-legend-funding-source"
+        id="fieldset-legend-funding-source-1"
       >
         <span
           class="usa-label"

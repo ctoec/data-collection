@@ -5,10 +5,22 @@ const {
 } = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
-  uploadFile: async function (browser) {
+  uploadFile: async function (browser, whichFile = 'complete') {
     // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
     const FILE_PATH = `${process.cwd()}/upload.csv`;
-    const DOWNLOAD_URL = `${launch_url}/api/template/example/csv`;
+
+    // Pick the download url based on which kind of upload test we want to run
+    let DOWNLOAD_URL = `${launch_url}`;
+    if (whichFile === 'complete') {
+      DOWNLOAD_URL += '/api/template/example/csv';
+    } else if (whichFile === 'missingSome') {
+      DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingSome';
+    } else if (whichFile === 'missingOne') {
+      DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingOne';
+    }
+
+    const isCompleteTestRun = whichFile === 'complete';
+
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 
     // Go to file upload
@@ -32,15 +44,24 @@ module.exports = {
     await acceptModal(
       browser,
       'Upload and correct in roster',
-      'No error modal appearing'
+      'No error modal appearing',
+      !isCompleteTestRun
     );
 
     // Accept the replace thing if there is one
     await acceptModal(browser, 'Replace data', 'No replace data button');
 
-    await browser.waitForElementVisible(
-      'xpath',
-      `//*/p[contains(text(),"20 children enrolled")]`
-    );
+    // Resulting alert will depend on whether we uploaded complete or incomplete data
+    if (isCompleteTestRun) {
+      await browser.waitForElementVisible(
+        'xpath',
+        `//*/p[contains(text(),"20 children enrolled")]`
+      );
+    } else {
+      await browser.waitForElementVisible(
+        'xpath',
+        `//*/h2[contains(.,'Update roster before submitting')]`
+      );
+    }
   },
 };

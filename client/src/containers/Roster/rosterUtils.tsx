@@ -18,7 +18,10 @@ export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
 export const filterChildrenByWithdrawn = (children: Child[]) => {
   return children.reduce(
     (filteredChildren, child) => {
-      if (child.enrollments?.every((enrollment) => !!enrollment.exit)) {
+      if (
+        child.enrollments?.length &&
+        child.enrollments?.every((enrollment) => !!enrollment.exit)
+      ) {
         filteredChildren.withdrawn.push(child);
       } else {
         filteredChildren.active.push(child);

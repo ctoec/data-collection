@@ -188,12 +188,12 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
         id="change-funding-form"
       >
         <fieldset
-          aria-labelledby="fieldset-legend-funding-source"
+          aria-labelledby="fieldset-legend-funding-source-1"
           class="usa-fieldset"
-          id="funding-source"
+          id="funding-source-1"
         >
           <legend
-            id="fieldset-legend-funding-source"
+            id="fieldset-legend-funding-source-1"
           >
             <span
               class="usa-label"
@@ -290,12 +290,12 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
         id="change-funding-form"
       >
         <fieldset
-          aria-labelledby="fieldset-legend-funding-source"
+          aria-labelledby="fieldset-legend-funding-source-1"
           class="usa-fieldset"
-          id="funding-source"
+          id="funding-source-1"
         >
           <legend
-            id="fieldset-legend-funding-source"
+            id="fieldset-legend-funding-source-1"
           >
             <span
               class="usa-label"
@@ -392,12 +392,12 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
         id="change-funding-form"
       >
         <fieldset
-          aria-labelledby="fieldset-legend-funding-source"
+          aria-labelledby="fieldset-legend-funding-source-1"
           class="usa-fieldset"
-          id="funding-source"
+          id="funding-source-1"
         >
           <legend
-            id="fieldset-legend-funding-source"
+            id="fieldset-legend-funding-source-1"
           >
             <span
               class="usa-label"
@@ -466,12 +466,12 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
         id="change-funding-form"
       >
         <fieldset
-          aria-labelledby="fieldset-legend-funding-source"
+          aria-labelledby="fieldset-legend-funding-source-1"
           class="usa-fieldset"
-          id="funding-source"
+          id="funding-source-1"
         >
           <legend
-            id="fieldset-legend-funding-source"
+            id="fieldset-legend-funding-source-1"
           >
             <span
               class="usa-label"

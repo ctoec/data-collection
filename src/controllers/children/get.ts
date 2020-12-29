@@ -72,8 +72,8 @@ export const getChildren = async (
     // Do not return children withouth active enrollment during or before that month
     return children.filter((c) => {
       // filter out enrollments after the current month filter
-      c.enrollments = c.enrollments?.filter((e) =>
-        e.entry.isSameOrBefore(activeMonth.endOf('month'))
+      c.enrollments = c.enrollments?.filter(
+        (e) => e.entry && e.entry.isSameOrBefore(activeMonth.endOf('month'))
       );
 
       // filter out children with no qualifying enrollments

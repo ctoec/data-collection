@@ -26,6 +26,8 @@ export const doesEnrollmentFormHaveErrors = (
 ) => {
   if (enrollmentId) {
     const enrollment = child?.enrollments?.find((e) => e.id === enrollmentId);
+    if (!opts.excludeFundings && enrollment && !enrollment.fundings?.length)
+      return true;
     return enrollment
       ? !!getValidationStatusForFields(
           enrollment,
@@ -155,11 +157,21 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
         {showFieldOrFieldset(enrollment, ['ageGroup']) && (
           <AgeGroupField<Enrollment> />
         )}
-        {showFieldOrFieldset(enrollment, ['fundings']) && (
+        {(!enrollment?.fundings?.length ||
+          showFieldOrFieldset(enrollment, ['fundings'])) && (
           <NewFundingField<Enrollment>
             fundingAccessor={(data) => data.at('fundings').at(0)}
             getEnrollment={(data) => data.value}
             organizationId={child?.organization?.id}
+            // Special child-level validation that needs to be displayed on the new funding field
+            // but only if hideErrors = false
+            missingFundedEnrollmentError={
+              errorsHidden
+                ? undefined
+                : child.validationErrors?.find(
+                    (e) => !!e.constraints?.fundedEnrollment
+                  )
+            }
           />
         )}
         {AdditionalButton}

@@ -19,12 +19,14 @@ import { getBatchEditErrorDetailsString } from './listSteps';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 import { stringify, parse } from 'query-string';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const BatchEdit: React.FC = () => {
   const { childId } = useParams() as { childId: string };
   const { organizationId } = parse(useLocation().search) as {
     organizationId: string;
   };
+  const { alertElements } = useAlerts();
 
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
@@ -99,6 +101,7 @@ const BatchEdit: React.FC = () => {
   return (
     <div className="grid-container">
       <BackButton text="Back to roster" location="/roster" />
+      {alertElements}
       <h1 ref={h1Ref} className="margin-bottom-1">
         Add needed information
       </h1>
@@ -126,7 +129,7 @@ const BatchEdit: React.FC = () => {
             activeItemId={activeRecordId}
             items={fixedRecordsForDisplay.map((record) => ({
               id: record.id,
-              onClick: () => setActiveRecordId(record.id),
+              onClick: () => setActiveRecordId(record?.id),
               title: (
                 <span>
                   {nameFormatter(record)}

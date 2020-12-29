@@ -3,13 +3,11 @@ const { uploadFile } = require('../utils/uploadFile');
 
 module.exports = {
   '@tags': ['upload'],
-  // uploadWrongFormat: async function (browser) {},
-  // uploadMissingInfo: async function (browser) {},
-  uploadCompleteInfo: async function (browser) {
+  uploadMissingSome: async function (browser) {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await uploadFile(browser);
+    await uploadFile(browser, 'missingSome');
     browser.end();
   },
 };
