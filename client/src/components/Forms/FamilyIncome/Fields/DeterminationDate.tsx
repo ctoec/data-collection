@@ -30,7 +30,6 @@ export const DeterminationDateField: React.FC = () => {
   return (
     <FormField<IncomeDetermination, DateInputProps, Moment | null>
       getValue={() => {
-        console.log(dataDriller.at('determinationDate'));
         return dataDriller.at('determinationDate');
       }}
       defaultValue={null}

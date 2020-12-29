@@ -41,9 +41,9 @@ export const doesFamilyIncomeFormHaveErrors = (
   const incomeDeterminationsHaveError = child?.family?.incomeDeterminations
     ?.length
     ? !!getValidationStatusForFields(
-      child.family.incomeDeterminations,
-      incomeDeterminationFields
-    )
+        child.family.incomeDeterminations,
+        incomeDeterminationFields
+      )
     : false;
 
   return familyHasIncomeDeterminationError || incomeDeterminationsHaveError;
@@ -101,7 +101,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
 
   const updateDetermination = async (updatedData: IncomeDetermination) => {
-    console.log('updated det is ', updatedData);
     apiPut(
       `families/${child?.family?.id}/income-determinations/${determination.id}`,
       updatedData,

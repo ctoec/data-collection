@@ -20,7 +20,6 @@ export const AnnualHouseholdIncomeField: React.FC = () => {
     dataDriller,
     updateData,
   } = useGenericContext<IncomeDetermination>(FormContext);
-  console.log(determination);
   return (
     <TextInput
       value={dataDriller.at('income').value}
