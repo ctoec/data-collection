@@ -69,8 +69,6 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
       .finally(onFinally);
   };
 
-  console.log({ errorsHidden });
-
   return (
     <Form<Family>
       className="FamilyAddressForm"
