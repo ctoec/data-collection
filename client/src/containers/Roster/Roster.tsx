@@ -1,18 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Moment } from 'moment';
 import {
   TabNav,
   HeadingLevel,
   LoadingWrapper,
   ErrorBoundary,
-  // Button,
+  Button,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
 import UserContext from '../../contexts/UserContext/UserContext';
-// TODO: Uncomment this import when you want to reactivate the
-// bottom bar with buttons
-// import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
+import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useHistory } from 'react-router-dom';
 import { apiPut } from '../../utils/api';
@@ -75,6 +73,17 @@ const Roster: React.FC = () => {
   const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
   const isSingleSiteView = query.site ? true : false;
 
+  // Parameters for displaying the submit success info alert.
+  // Use state so that we can show persistent alert after clicking
+  // without needing a refresh
+  const [dataSubmitted, setDataSubmitted] = useState<boolean>();
+  useEffect(() => {
+    const orgOnPage = userOrganizations.find(
+      (o) => String(o.id) === query.organization
+    );
+    setDataSubmitted(orgOnPage?.submittedData);
+  }, [query.organization]);
+
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
@@ -89,6 +98,7 @@ const Roster: React.FC = () => {
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,
     alertType,
+    dataSubmitted,
     query.organization
   );
 
@@ -137,10 +147,8 @@ const Roster: React.FC = () => {
     if (query.organization) {
       await apiPut(`oec-report/${query.organization}`, undefined, {
         accessToken,
-      });
-      history.push('/success');
+      }).then(() => setDataSubmitted(true));
     }
-    // Otherwise, do nothing (button should be disabled)
   }
 
   // Function to update active month, to pass down into month filter buttons
@@ -252,26 +260,26 @@ const Roster: React.FC = () => {
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
-      {/* {// TODO: Re-enable the bottom bar once we're in January and using the app
-      children?.length && 
-      <FixedBottomBar>
-        <Button
-          text="Back to getting started"
-          href="/getting-started"
-          appearance="outline"
-        />
-        {!isSiteLevelUser && (
+      {!rosterIsEmpty && (
+        <FixedBottomBar>
           <Button
-            text={
-              isSiteLevelUser
-                ? 'Organization permissions required to submit'
-                : 'Send to OEC'
-            }
-            onClick={submitToOEC}
-            disabled={!query.organization}
+            text="Back to getting started"
+            href="/getting-started"
+            appearance="outline"
           />
-        )}
-      </FixedBottomBar>} */}
+          {!isSiteLevelUser && (
+            <Button
+              text={
+                isSiteLevelUser
+                  ? 'Organization permissions required to submit'
+                  : 'My Jul-Dec data is complete'
+              }
+              onClick={submitToOEC}
+              disabled={!query.organization}
+            />
+          )}
+        </FixedBottomBar>
+      )}
     </>
   );
 };

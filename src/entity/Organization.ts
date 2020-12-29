@@ -43,4 +43,7 @@ export class Organization implements OrganizationInterface {
 
   @Column({ nullable: true })
   communityId?: number;
+
+  @Column({ nullable: true })
+  submittedData?: boolean;
 }

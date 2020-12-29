@@ -7,14 +7,34 @@ import { Link } from 'react-router-dom';
 import { stringify } from 'query-string';
 import { drillReactNodeForText } from '../../../utils/drillReactNodeForText';
 
+// Define a constant for the alert that shows once an organization
+// has submitted its data to OEC
+const SUBMITTED: AlertProps = {
+  text: (
+    <span>
+      Make revisions and updates, such as new enrollments, directly in your ECE
+      reporter roster.
+    </span>
+  ),
+  heading: 'You completed your July to December data collection!',
+  type: 'info',
+};
+
 export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
   childrenWithErrorsCount: number,
   withdrawnChildrenCount: number,
   alertType: 'warning' | 'error' = 'warning',
+  submitted: boolean = false,
   organizationId?: string
 ) => {
   const { alertElements, setAlerts, alerts } = useAlerts();
+  // Make sure the submitted alert is always the top alert on the page
+  if (submitted) {
+    if (alerts.find((a) => a.heading === SUBMITTED.heading) === undefined) {
+      setAlerts([SUBMITTED, ...alerts]);
+    }
+  }
   const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
     childrenWithErrorsCount,
     withdrawnChildrenCount,
