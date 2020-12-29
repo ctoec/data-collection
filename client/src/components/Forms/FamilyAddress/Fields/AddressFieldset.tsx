@@ -29,7 +29,7 @@ export const AddressFieldset: React.FC = () => {
           data,
           ['streetAddress', 'town', 'state', 'zipCode'],
           {
-            message: 'Family address is required for OEC reporting.',
+            message: 'Address is required for OEC reporting.',
           }
         )
       }
