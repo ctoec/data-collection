@@ -72,9 +72,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
     throw new Error('Funding form rendered without funding');
   }
 
-  const { errorsHidden } = useValidationErrors(
-    hideErrors
-  );
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
   const { accessToken } = useContext(AuthenticationContext);
   const [loading, setLoading] = useState(false);
@@ -139,23 +137,23 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       />
     </Form>
   ) : (
-      <Form<Funding>
-        id={id}
-        className="usa-form"
-        data={funding}
-        onSubmit={onSubmit}
-        hideStatus={errorsHidden}
-      >
-        <NewFundingField<Funding>
-          getEnrollment={() => enrollment}
-          organizationId={child.organization.id}
-          isEdit={true}
-        />
-        {AdditionalButton}
-        <FormSubmitButton
-          text={loading ? 'Saving...' : 'Save'}
-          disabled={loading}
-        />
-      </Form>
-    );
+    <Form<Funding>
+      id={id}
+      className="usa-form"
+      data={funding}
+      onSubmit={onSubmit}
+      hideStatus={errorsHidden}
+    >
+      <NewFundingField<Funding>
+        getEnrollment={() => enrollment}
+        organizationId={child.organization.id}
+        isEdit={true}
+      />
+      {AdditionalButton}
+      <FormSubmitButton
+        text={loading ? 'Saving...' : 'Save'}
+        disabled={loading}
+      />
+    </Form>
+  );
 };

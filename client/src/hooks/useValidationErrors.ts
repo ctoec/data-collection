@@ -12,8 +12,8 @@ export function useValidationErrors(hideErrors?: HideErrors) {
     if (hideErrors instanceof Function) {
       hide = hideErrors(hash);
     }
-    setErrorsHidden(!!hide)
-  }, [hideErrors, hash])
+    setErrorsHidden(!!hide);
+  }, [hideErrors, hash]);
 
   return {
     errorsHidden,

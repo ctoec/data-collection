@@ -100,9 +100,12 @@ const CreateRecord: React.FC = () => {
 
   const { alertElements, setAlerts } = useAlerts();
 
-  const hideErrors = useMemo(() => (_hash: string) => {
-    return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
-  }, [stepsVisited])
+  const hideErrors = useMemo(
+    () => (_hash: string) => {
+      return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
+    },
+    [stepsVisited]
+  );
 
   const commonFormProps: RecordFormProps = {
     child,
@@ -112,7 +115,7 @@ const CreateRecord: React.FC = () => {
     },
     setAlerts,
     hideHeader: true,
-    hideErrors
+    hideErrors,
   };
 
   return (

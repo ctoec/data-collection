@@ -45,10 +45,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
 
   const { family = {} as Family } = child;
 
-  const { errorsHidden } = useValidationErrors(
-    hideErrors
-  );
-
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
   const onFinally = () => {
     if (isMounted()) {
@@ -72,7 +69,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
       .finally(onFinally);
   };
 
-  console.log({ errorsHidden })
+  console.log({ errorsHidden });
 
   return (
     <Form<Family>

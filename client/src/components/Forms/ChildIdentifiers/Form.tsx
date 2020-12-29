@@ -53,9 +53,7 @@ export const ChildIdentifiersForm = ({
   useEffect(() => {
     updateChild(inputChild);
   }, [inputChild]);
-  const { errorsHidden } = useValidationErrors(
-    hideErrors
-  );
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
   const onFinally = () => {
     if (isMounted()) {
@@ -116,31 +114,31 @@ export const ChildIdentifiersForm = ({
             <UniqueIdField />
           </div>
         ) : (
-              <></>
-            ))}
+          <></>
+        ))}
       {showFieldOrFieldset(child, [
         'firstName',
         'lastName',
         'middleName',
         'suffix',
       ]) && (
-          <>
+        <>
+          <div className="mobile-lg:grid-col-9">
+            <FirstNameField />
+          </div>
+          <div className="mobile-lg:grid-col-9">
+            <MiddleNameField />
+          </div>
+          <div className="display-flex flex-row flex-align-end grid-row grid-gap">
             <div className="mobile-lg:grid-col-9">
-              <FirstNameField />
+              <LastNameField />
             </div>
-            <div className="mobile-lg:grid-col-9">
-              <MiddleNameField />
+            <div className="mobile-lg:grid-col-3">
+              <SuffixField />
             </div>
-            <div className="display-flex flex-row flex-align-end grid-row grid-gap">
-              <div className="mobile-lg:grid-col-9">
-                <LastNameField />
-              </div>
-              <div className="mobile-lg:grid-col-3">
-                <SuffixField />
-              </div>
-            </div>
-          </>
-        )}
+          </div>
+        </>
+      )}
       {showFieldOrFieldset(child, ['birthdate']) && <DateOfBirthField />}
       {showFieldOrFieldset(child, [
         'birthCertificateType',

@@ -155,8 +155,8 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
             activeStep={activeStepKey || ''}
           />
         ) : (
-            AllComplete
-          )}
+          AllComplete
+        )}
       </div>
     </>
   );
