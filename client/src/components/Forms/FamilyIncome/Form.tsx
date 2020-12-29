@@ -75,15 +75,15 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   CancelButton,
   afterSaveSuccess,
   setAlerts,
-  hideErrorsOnFirstLoad,
+  hideErrors
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
   }
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
-  const { errorsHidden, setErrorsHidden } = useValidationErrors(
-    hideErrorsOnFirstLoad
+  const { errorsHidden } = useValidationErrors(
+    hideErrors
   );
 
   // Determine if we're in the create flow: affects how we
@@ -138,7 +138,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   const onFinally = () => {
     if (isMounted()) {
-      setErrorsHidden(false);
       setLoading(false);
     }
   };

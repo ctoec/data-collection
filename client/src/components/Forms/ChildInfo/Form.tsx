@@ -40,7 +40,7 @@ export const ChildInfoForm = ({
   child,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad,
+  hideErrors,
   showFieldOrFieldset = () => true,
   setAlerts,
 }: RecordFormProps) => {
@@ -52,13 +52,12 @@ export const ChildInfoForm = ({
     throw new Error('Child info rendered without child');
   }
 
-  const { errorsHidden, setErrorsHidden } = useValidationErrors(
-    hideErrorsOnFirstLoad
+  const { errorsHidden } = useValidationErrors(
+    hideErrors
   );
 
   const onFinally = () => {
     if (isMounted()) {
-      setErrorsHidden(false);
       setSaving(false);
     }
   };
@@ -93,11 +92,11 @@ export const ChildInfoForm = ({
         ...RACE_FIELDS,
         'hispanixOrLatinxEthnicity',
       ]) && (
-        <>
-          <RaceField />
-          <EthnicityField />
-        </>
-      )}
+          <>
+            <RaceField />
+            <EthnicityField />
+          </>
+        )}
       {showFieldOrFieldset(child, ['gender']) && <GenderField />}
       <br />
 

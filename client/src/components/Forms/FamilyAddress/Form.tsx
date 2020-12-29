@@ -32,12 +32,12 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad,
+  hideErrors,
   setAlerts,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState<boolean>();
 
   if (!child) {
     throw new Error('Family info rendered without child');
@@ -45,14 +45,14 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
 
   const { family = {} as Family } = child;
 
-  const { errorsHidden, setErrorsHidden } = useValidationErrors(
-    hideErrorsOnFirstLoad
+  const { errorsHidden } = useValidationErrors(
+    hideErrors
   );
+
 
   const onFinally = () => {
     if (isMounted()) {
       setSaving(false);
-      setErrorsHidden(false);
     }
   };
 
@@ -71,6 +71,8 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
       })
       .finally(onFinally);
   };
+
+  console.log({ errorsHidden })
 
   return (
     <Form<Family>

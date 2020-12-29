@@ -27,8 +27,7 @@ export const AddressFieldset: React.FC = () => {
       status={(data) =>
         getValidationStatusForFields(
           data,
-          ['streetAddress', 'town', 'state', 'zipCode'],
-          { message: 'Address is required for OEC reporting.' }
+          ['streetAddress', 'town', 'state', 'zipCode']
         )
       }
     >

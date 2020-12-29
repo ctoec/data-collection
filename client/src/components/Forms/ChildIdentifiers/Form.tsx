@@ -36,7 +36,7 @@ export const ChildIdentifiersForm = ({
   child: inputChild,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad,
+  hideErrors,
   showFieldOrFieldset = () => true,
   setAlerts,
 }: RecordFormProps) => {
@@ -53,14 +53,12 @@ export const ChildIdentifiersForm = ({
   useEffect(() => {
     updateChild(inputChild);
   }, [inputChild]);
-  const { errorsHidden, setErrorsHidden } = useValidationErrors(
-    hideErrorsOnFirstLoad
+  const { errorsHidden } = useValidationErrors(
+    hideErrors
   );
 
-  // This will prevent the flashing of errors
   const onFinally = () => {
     if (isMounted()) {
-      setErrorsHidden(false);
       setSaving(false);
     }
   };
@@ -118,31 +116,31 @@ export const ChildIdentifiersForm = ({
             <UniqueIdField />
           </div>
         ) : (
-          <></>
-        ))}
+              <></>
+            ))}
       {showFieldOrFieldset(child, [
         'firstName',
         'lastName',
         'middleName',
         'suffix',
       ]) && (
-        <>
-          <div className="mobile-lg:grid-col-9">
-            <FirstNameField />
-          </div>
-          <div className="mobile-lg:grid-col-9">
-            <MiddleNameField />
-          </div>
-          <div className="display-flex flex-row flex-align-end grid-row grid-gap">
+          <>
             <div className="mobile-lg:grid-col-9">
-              <LastNameField />
+              <FirstNameField />
             </div>
-            <div className="mobile-lg:grid-col-3">
-              <SuffixField />
+            <div className="mobile-lg:grid-col-9">
+              <MiddleNameField />
             </div>
-          </div>
-        </>
-      )}
+            <div className="display-flex flex-row flex-align-end grid-row grid-gap">
+              <div className="mobile-lg:grid-col-9">
+                <LastNameField />
+              </div>
+              <div className="mobile-lg:grid-col-3">
+                <SuffixField />
+              </div>
+            </div>
+          </>
+        )}
       {showFieldOrFieldset(child, ['birthdate']) && <DateOfBirthField />}
       {showFieldOrFieldset(child, [
         'birthCertificateType',
