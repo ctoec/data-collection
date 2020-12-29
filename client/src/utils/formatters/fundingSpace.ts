@@ -16,8 +16,10 @@ export const fundingSpaceFormatter = (fundingSpace: FundingSpace) => {
   const partTimeWeeks = timeSplit.partTimeWeeks;
   if (!fullTimeWeeks || !partTimeWeeks) {
     // TODO: change this once we have this data
-    console.warn('Part time full time split display needs to be updated when data is available')
-    return `${FundingTime.PartTime} / ${FundingTime.FullTime}`
+    console.warn(
+      'Part time full time split display needs to be updated when data is available'
+    );
+    return `${FundingTime.PartTime} / ${FundingTime.FullTime}`;
   }
 
   const fullTimeFirst = fullTimeWeeks > partTimeWeeks;
