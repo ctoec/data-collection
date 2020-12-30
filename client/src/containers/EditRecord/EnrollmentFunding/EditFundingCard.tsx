@@ -15,7 +15,7 @@ import {
 } from '@ctoec/component-library';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 import { RecordFormProps } from '../../../components/Forms';
-import { fundingBeginsAfterEnrollmentEntry } from '../../../utils/fundingBeginsAfterEnrollmentEntry';
+import { hasValidationErrorForField } from '../../../utils/hasValidationError';
 
 type EditFundingCardProps = {
   child: Child;
@@ -117,7 +117,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')
               : 'present'}
-            {fundingBeginsAfterEnrollmentEntry(funding) && (
+            {hasValidationErrorForField(funding, 'firstReportingPeriod') && (
               <>
                 {' '}
                 <InlineIcon icon="incomplete" />
