@@ -22,7 +22,7 @@ export const useChildrenWithErrorsAlert = (
     organizationId
   );
   useEffect(() => {
-    if (isLoading || !childrenWithErrorsCount) {
+    if (isLoading) {
       // TODO: This line for some reason needs to exist so that Roster.test.tsx can
       // pass with the jestFunc() apiMock call, but it in theory shouldn't need to.
       // Investigate weirdness later.
@@ -37,17 +37,26 @@ export const useChildrenWithErrorsAlert = (
       (a) => a.heading === childrenWithErrorsAlert.heading
     );
     const existingAlertText = drillReactNodeForText(existingAlert?.text);
+    const otherAlerts = alerts.filter(
+      (a) => a.heading !== childrenWithErrorsAlert.heading
+    );
+
+    if (!childrenWithErrorsCount) {
+      // If there are no longer children with errors, we need to ditch that alert without overwriting alerts that may have come from other pages (ie. after delete child)
+      setAlerts(otherAlerts);
+      return;
+    }
+
     if (
       !existingAlert ||
       !existingAlertText.includes(`${childrenWithErrorsCount}`)
     ) {
-      setAlerts([
-        ...alerts.filter((a) => a.heading !== childrenWithErrorsAlert.heading),
-        childrenWithErrorsAlert,
-      ]);
+      setAlerts([...otherAlerts, childrenWithErrorsAlert]);
     }
   }, [childrenWithErrorsCount, isLoading, alertType]);
 
+  // If data is loading, we shouldn't display any alerts
+  if (isLoading) return {};
   return { alertElements };
 };
 
