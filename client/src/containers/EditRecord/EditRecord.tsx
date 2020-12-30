@@ -70,7 +70,7 @@ const EditRecord: React.FC = () => {
           updatedChild
         );
         if (missingFundedEnrollmentAlertProps) {
-          newAlerts.push(missingFundedEnrollmentAlertProps);
+          newAlerts.splice(0, 1, missingFundedEnrollmentAlertProps);
         }
 
         // Only set success alert on a GET that happens after an update (refetch count > 0)
