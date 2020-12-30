@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { BackButton } from '../../components/BackButton';
 import { ErrorBoundary, StepList } from '@ctoec/component-library';
 import { Organization, Child } from '../../shared/models';
@@ -69,12 +69,12 @@ const CreateRecord: React.FC = () => {
           ],
         });
       } else {
+        history.replace({ hash: steps[indexOfCurrentStep + 1].key });
         updateStepsVisited((oldSteps) => {
           const newSteps = [...oldSteps];
           newSteps[indexOfCurrentStep].visited = true;
           return newSteps;
         });
-        history.replace({ hash: steps[indexOfCurrentStep + 1].key });
       }
     };
     apiGet(`children/${childId}`, accessToken)
@@ -100,7 +100,14 @@ const CreateRecord: React.FC = () => {
 
   const { alertElements, setAlerts } = useAlerts();
 
-  const commonFormProps = {
+  const hideErrors = useMemo(
+    () => (_hash: string) => {
+      return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
+    },
+    [stepsVisited]
+  );
+
+  const commonFormProps: RecordFormProps = {
     child,
     afterSaveSuccess: () => {
       triggerRefetchChild();
@@ -108,9 +115,7 @@ const CreateRecord: React.FC = () => {
     },
     setAlerts,
     hideHeader: true,
-    hideErrorsOnFirstLoad: (_hash: string) => {
-      return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
-    },
+    hideErrors,
   };
 
   return (

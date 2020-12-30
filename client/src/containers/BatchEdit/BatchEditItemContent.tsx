@@ -27,7 +27,6 @@ type BatchEditItemContentProps = {
 
 export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   childId,
-  organizationId,
   moveNextRecord,
   mutate,
 }) => {
@@ -104,7 +103,6 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     afterSaveSuccess: () => setTriggerRefetchCount((r) => r + 1),
     setAlerts,
     hideHeader: true,
-    hideErrorsOnFirstLoad: false,
     showFieldOrFieldset: showFieldInBatchEditForm,
     AdditionalButton: (
       <Button
