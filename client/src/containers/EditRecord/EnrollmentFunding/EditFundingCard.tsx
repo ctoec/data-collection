@@ -117,8 +117,12 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')
               : 'present'}
-            {fundingBeginsAfterEnrollmentEntry(funding) &&
-              InlineIcon({ icon: 'incomplete' })}
+            {fundingBeginsAfterEnrollmentEntry(funding) && (
+              <>
+                {' '}
+                <InlineIcon icon="incomplete" />
+              </>
+            )}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">
