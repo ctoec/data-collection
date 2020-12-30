@@ -15,6 +15,7 @@ import {
 } from '@ctoec/component-library';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 import { RecordFormProps } from '../../../components/Forms';
+import { fundingBeginsAfterEnrollmentEntry } from '../../../utils/fundingBeginsAfterEnrollmentEntry';
 
 type EditFundingCardProps = {
   child: Child;
@@ -116,6 +117,8 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')
               : 'present'}
+            {fundingBeginsAfterEnrollmentEntry(funding) &&
+              InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">

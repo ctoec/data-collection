@@ -12,7 +12,7 @@ export function FundingBeginsAfterEnrollmentEntry(
       target: object.constructor,
       propertyName,
       options: { message, ...validationOptions },
-      constraints: [],
+      constraints: [{ fundingBeforeEnrollment: message }],
       validator: {
         validate(reportingPeriod: ReportingPeriod, { object: funding }) {
           // Handle edge case of undefined object
