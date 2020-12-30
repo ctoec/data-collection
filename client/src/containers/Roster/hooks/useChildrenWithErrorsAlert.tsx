@@ -30,11 +30,6 @@ export const useChildrenWithErrorsAlert = (
       return;
     }
 
-    if (!childrenWithErrorsCount) {
-      setAlerts([]);
-      return;
-    }
-
     // set alert if:
     // - no existing matching alert OR
     // - existing matching alert has different number (i.e. was displaying content for a different organization)
@@ -42,18 +37,26 @@ export const useChildrenWithErrorsAlert = (
       (a) => a.heading === childrenWithErrorsAlert.heading
     );
     const existingAlertText = drillReactNodeForText(existingAlert?.text);
+    const otherAlerts = alerts.filter(
+      (a) => a.heading !== childrenWithErrorsAlert.heading
+    );
+
+    if (!childrenWithErrorsCount) {
+      // If there are no longer children with errors, we need to ditch that alert without overwriting alerts that may have come from other pages (ie. after delete child)
+      setAlerts(otherAlerts);
+      return;
+    }
+
     if (
       !existingAlert ||
       !existingAlertText.includes(`${childrenWithErrorsCount}`)
     ) {
-      setAlerts([
-        ...alerts.filter((a) => a.heading !== childrenWithErrorsAlert.heading),
-        childrenWithErrorsAlert,
-      ]);
+      setAlerts([...otherAlerts, childrenWithErrorsAlert]);
     }
   }, [childrenWithErrorsCount, isLoading, alertType]);
 
-  if (isLoading || !childrenWithErrorsCount) return {};
+  // If data is loading, we shouldn't display any alerts
+  if (isLoading) return {};
   return { alertElements };
 };
 
