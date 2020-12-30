@@ -171,16 +171,5 @@ export const showFieldInBatchEditForm = (
   fields: string[]
 ) => {
   if (!formData) return false;
-  for (let i = 0; i < fields.length; i++) {
-    if (
-      // special case to account for separation of
-      // enrollment and funding forms in batch edit flow
-      // (the 'fundings' field in enrollment form shoud never be shown)
-      fields[i] !== 'fundings' &&
-      hasValidationErrorForField(formData, fields[i])
-    ) {
-      return true;
-    }
-  }
-  return false;
+  return fields.some((f) => hasValidationErrorForField(formData, f)) || false;
 };

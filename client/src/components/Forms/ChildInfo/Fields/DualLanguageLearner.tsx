@@ -7,7 +7,7 @@ export const DualLanguageLearner: React.FC = () => (
   <TripleBooleanRadio<Child>
     field="dualLanguageLearner"
     id="duallanguage-button-group"
-    legend="Dual Language Learner"
+    legend="Dual language learner"
     trueOption={{
       id: 'dual-yes',
       label: 'Is a dual language learner',

@@ -90,7 +90,7 @@ export const ChildInfoForm = ({
       {!hideHeader && <Heading level={topHeadingLevel}>Child info</Heading>}
       {showFieldOrFieldset(child, [
         ...RACE_FIELDS,
-        'hispanixOrLatinxEthnicity',
+        'hispanicOrLatinxEthnicity',
       ]) && (
         <>
           <RaceField />
