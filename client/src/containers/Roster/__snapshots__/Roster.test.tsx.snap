@@ -103,7 +103,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 </div>
               </div>
               <button
-                class="usa-button usa-button--unstyled text-bold display-block"
+                class="usa-button usa-button--unstyled display-block"
                 type="button"
               >
                 <span
@@ -175,7 +175,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       fill="currentColor"
                     />
                   </svg>
-                  Past enrollments
+                  Roster for a past month
                 </span>
               </button>
             </div>
@@ -1284,7 +1284,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 </a>
               </div>
               <button
-                class="usa-button usa-button--unstyled text-bold display-block"
+                class="usa-button usa-button--unstyled display-block"
                 type="button"
               >
                 <span
@@ -1356,7 +1356,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       fill="currentColor"
                     />
                   </svg>
-                  Past enrollments
+                  Roster for a past month
                 </span>
               </button>
             </div>
@@ -2392,7 +2392,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 </a>
               </div>
               <button
-                class="usa-button usa-button--unstyled text-bold display-block"
+                class="usa-button usa-button--unstyled display-block"
                 type="button"
               >
                 <span
@@ -2464,7 +2464,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                       fill="currentColor"
                     />
                   </svg>
-                  Past enrollments
+                  Roster for a past month
                 </span>
               </button>
             </div>

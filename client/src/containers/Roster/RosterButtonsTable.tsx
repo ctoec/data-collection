@@ -49,7 +49,12 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
                 className="margin-right-2"
               />
               <Button
-                text={<TextWithIcon Icon={Calendar} text="Past enrollments" />}
+                text={
+                  <TextWithIcon
+                    Icon={Calendar}
+                    text="Roster for a past month"
+                  />
+                }
                 appearance="unstyled"
                 onClick={toggleModal}
               />
