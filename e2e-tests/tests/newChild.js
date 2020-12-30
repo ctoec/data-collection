@@ -54,5 +54,9 @@ module.exports = {
     await browser.pause(1000);
 
     // Expect three span elements with the class usa-error-message
+    await browser.elements('css selector', 'span.usa-error-message', (res) => {
+      console.log(res);
+    });
+    browser.end();
   },
 };
