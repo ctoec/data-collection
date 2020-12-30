@@ -42,4 +42,5 @@ module.exports = {
 
     browser.end();
   },
+  newIncompleteChild: async function (browser) {},
 };

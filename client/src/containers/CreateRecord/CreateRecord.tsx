@@ -26,7 +26,8 @@ const CreateRecord: React.FC = () => {
   const activeStep = hash.slice(1);
   const history = useHistory();
   const steps = listSteps(history);
-  const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep) || 0;
+  let indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
+  if (indexOfCurrentStep < 0) indexOfCurrentStep = 0;
   // Keep track of steps that have been visited at least once
   const [stepsVisited, updateStepsVisited] = useState<
     { key: string; visited: boolean; active: boolean }[]
@@ -55,7 +56,18 @@ const CreateRecord: React.FC = () => {
   // Fetch fresh child from API whenever refetch is triggered
   // And move to next step, if current step is complete (has no validation errors)
   useEffect(() => {
-    if (!childId) return;
+    const markStepVisited = () => {
+      updateStepsVisited((oldSteps) => {
+        const newSteps = [...oldSteps];
+        newSteps[indexOfCurrentStep].visited = true;
+        return newSteps;
+      });
+    };
+
+    if (!childId) {
+      markStepVisited();
+      return;
+    }
 
     const moveToNextStep = () => {
       if (indexOfCurrentStep === steps.length - 1) {
@@ -70,11 +82,6 @@ const CreateRecord: React.FC = () => {
         });
       } else {
         history.replace({ hash: steps[indexOfCurrentStep + 1].key });
-        updateStepsVisited((oldSteps) => {
-          const newSteps = [...oldSteps];
-          newSteps[indexOfCurrentStep].visited = true;
-          return newSteps;
-        });
       }
     };
     apiGet(`children/${childId}`, accessToken)
@@ -92,7 +99,8 @@ const CreateRecord: React.FC = () => {
       })
       .catch((err) => {
         throw new Error(err);
-      });
+      })
+      .finally(markStepVisited);
   }, [accessToken, childId, refetchChild]);
 
   // After child is updated, programmatically focus on the first input with an error
@@ -102,9 +110,10 @@ const CreateRecord: React.FC = () => {
 
   const hideErrors = useMemo(
     () => (_hash: string) => {
+      console.log({ stepsVisited });
       return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
     },
-    [stepsVisited]
+    [JSON.stringify(stepsVisited)]
   );
 
   const commonFormProps: RecordFormProps = {
