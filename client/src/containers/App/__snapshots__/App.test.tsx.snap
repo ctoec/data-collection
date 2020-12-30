@@ -64,7 +64,6 @@ exports[`App matches snapshot 1`] = `
             >
               <img
                 alt="close"
-                src="close.svg"
               />
             </button>
             <div

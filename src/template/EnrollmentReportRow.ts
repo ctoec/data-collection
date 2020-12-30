@@ -262,10 +262,10 @@ export class EnrollmentReportRow {
   dualLanguageLearner?: UndefinableBoolean = undefined;
 
   @ColumnMetadata({
-    formattedName: 'receiving disability services',
+    formattedName: 'receiving disability and/or special education services',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
     definition:
-      'Children receiving services for Autism, emotional disturbance, intellectual disability, learning disability, speech-language impairment, and other disabilities.',
+      'Children receiving services for Autism, emotional disturbance, intellectual disability, learning disability, speech-language impairment, and other disabilities. Includes children receiving special education services through an IEP.',
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: makeFormatOptionsList(BOOLEAN_FORMATS),
     example: 'Yes',

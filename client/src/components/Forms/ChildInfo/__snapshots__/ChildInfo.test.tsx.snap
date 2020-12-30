@@ -266,7 +266,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
         <span
           class="usa-label"
         >
-          Receiving disability services
+          Receiving disability and/or special education services
         </span>
       </legend>
       <div>
@@ -285,7 +285,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-radio__label"
               for="disability-yes"
             >
-              Receives disability services
+              Receives disability and/or special education services
             </label>
           </div>
         </span>
@@ -304,7 +304,7 @@ exports[`EditRecord ChildInfo matches snapshot 1`] = `
               class="usa-radio__label"
               for="disability-no"
             >
-              Does not receive disability services
+              Does not receive disability and/or special education services
             </label>
           </div>
         </span>
