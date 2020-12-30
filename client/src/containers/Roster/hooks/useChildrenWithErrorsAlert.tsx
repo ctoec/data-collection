@@ -22,11 +22,16 @@ export const useChildrenWithErrorsAlert = (
     organizationId
   );
   useEffect(() => {
-    if (isLoading || !childrenWithErrorsCount) {
+    if (isLoading) {
       // TODO: This line for some reason needs to exist so that Roster.test.tsx can
       // pass with the jestFunc() apiMock call, but it in theory shouldn't need to.
       // Investigate weirdness later.
       setAlerts([...alerts]);
+      return;
+    }
+
+    if (!childrenWithErrorsCount) {
+      setAlerts([]);
       return;
     }
 
@@ -48,6 +53,7 @@ export const useChildrenWithErrorsAlert = (
     }
   }, [childrenWithErrorsCount, isLoading, alertType]);
 
+  if (isLoading || !childrenWithErrorsCount) return {};
   return { alertElements };
 };
 
