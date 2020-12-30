@@ -36,7 +36,7 @@ export const ChildIdentifiersForm = ({
   child: inputChild,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad,
+  hideErrors,
   showFieldOrFieldset = () => true,
   setAlerts,
 }: RecordFormProps) => {
@@ -53,14 +53,10 @@ export const ChildIdentifiersForm = ({
   useEffect(() => {
     updateChild(inputChild);
   }, [inputChild]);
-  const { errorsHidden, setErrorsHidden } = useValidationErrors(
-    hideErrorsOnFirstLoad
-  );
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
-  // This will prevent the flashing of errors
   const onFinally = () => {
     if (isMounted()) {
-      setErrorsHidden(false);
       setSaving(false);
     }
   };

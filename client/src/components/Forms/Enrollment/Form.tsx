@@ -58,15 +58,13 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   afterSaveSuccess,
   setAlerts,
   showFieldOrFieldset = () => true,
-  hideErrorsOnFirstLoad,
+  hideErrors,
 }) => {
   if (!child) {
     throw new Error('Enrollment form rendered without child');
   }
 
-  const { errorsHidden, setErrorsHidden } = useValidationErrors(
-    hideErrorsOnFirstLoad
-  );
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
@@ -97,7 +95,6 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
 
   const onFinally = () => {
     if (isMounted()) {
-      setErrorsHidden(false);
       setLoading(false);
     }
   };
