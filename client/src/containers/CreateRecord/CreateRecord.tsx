@@ -110,7 +110,6 @@ const CreateRecord: React.FC = () => {
 
   const hideErrors = useMemo(
     () => (_hash: string) => {
-      console.log({ stepsVisited });
       return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
     },
     [JSON.stringify(stepsVisited)]
