@@ -8,6 +8,7 @@ import {
 import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
 import moment, { Moment } from 'moment';
+import { getFundingSpaceMap } from '../controllers/children';
 
 export const childrenRouter = express.Router();
 
@@ -30,6 +31,7 @@ childrenRouter.get(
     }) as Moment;
     const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
     const take = parseQueryString(req, 'take', { post: parseInt }) as number;
+    const fundingMap = parseQueryString(req, 'fundingMap');
 
     if (count && count === 'true') {
       const count = await controller.getCount(req.user);
@@ -45,7 +47,12 @@ childrenRouter.get(
       take,
     });
 
-    res.send(children);
+    if (fundingMap && fundingMap === 'true') {
+      const fundingSpacesMap = await controller.getFundingSpaceMap(children);
+      res.send({ fundingSpacesMap });
+    } else {
+      res.send(children);
+    }
   })
 );
 

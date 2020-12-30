@@ -11,11 +11,13 @@ import UserContext from '../contexts/UserContext/UserContext';
 type AddRecordButtonProps = {
   id: string;
   className?: string;
+  appearance?: 'base' | 'default' | 'secondary' | 'unstyled' | 'outline';
 };
 
 export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
   id, // Needs to be unique to associate with dropdown
   className,
+  appearance,
 }) => {
   const history = useHistory();
   const { user } = useContext(UserContext);
@@ -30,7 +32,7 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
       // the same alignment the text is
       <div className="display-inline-block">
         <Button
-          appearance="unstyled"
+          appearance={appearance || 'unstyled'}
           className={className}
           text={<TextWithIcon Icon={PlusCircle} text="Add a record" />}
           href="/create-record"

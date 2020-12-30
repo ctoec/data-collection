@@ -20,7 +20,7 @@ const SUBMITTED: AlertProps = {
   type: 'info',
 };
 
-export const useChildrenWithErrorsAlert = (
+export const useChildrenWithAlerts = (
   isLoading: boolean,
   childrenWithErrorsCount: number,
   withdrawnChildrenCount: number,

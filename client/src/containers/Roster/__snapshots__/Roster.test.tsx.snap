@@ -1199,6 +1199,30 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
       </div>
     </div>
   </div>
+  <div
+    class="fixed-bottom-bar"
+  >
+    <div
+      class="shadow-box"
+    >
+      <div
+        class="grid-container"
+      >
+        <a
+          class="usa-button usa-button--outline"
+          href="/getting-started"
+        >
+          Back to getting started
+        </a>
+        <button
+          class="usa-button"
+          type="button"
+        >
+          My Jul-Dec data is complete
+        </button>
+      </div>
+    </div>
+  </div>
 </DocumentFragment>
 `;
 
@@ -2302,6 +2326,30 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
       </div>
     </div>
   </div>
+  <div
+    class="fixed-bottom-bar"
+  >
+    <div
+      class="shadow-box"
+    >
+      <div
+        class="grid-container"
+      >
+        <a
+          class="usa-button usa-button--outline"
+          href="/getting-started"
+        >
+          Back to getting started
+        </a>
+        <button
+          class="usa-button"
+          type="button"
+        >
+          My Jul-Dec data is complete
+        </button>
+      </div>
+    </div>
+  </div>
 </DocumentFragment>
 `;
 
@@ -3331,6 +3379,24 @@ exports[`Roster matches snapshot for site level user 1`] = `
         <div>
           Loading your roster...
         </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="fixed-bottom-bar"
+  >
+    <div
+      class="shadow-box"
+    >
+      <div
+        class="grid-container"
+      >
+        <a
+          class="usa-button usa-button--outline"
+          href="/getting-started"
+        >
+          Back to getting started
+        </a>
       </div>
     </div>
   </div>

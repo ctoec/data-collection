@@ -28,7 +28,7 @@ import { RosterButtonsTable } from './RosterButtonsTable';
 import {
   useUpdateRosterParams,
   useOrgSiteProps,
-  useChildrenWithErrorsAlert,
+  useChildrenWithAlerts,
   usePaginatedChildData,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
@@ -93,7 +93,7 @@ const Roster: React.FC = () => {
   const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
   ).length;
-  const { alertElements } = useChildrenWithErrorsAlert(
+  const { alertElements } = useChildrenWithAlerts(
     loading,
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,

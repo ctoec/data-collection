@@ -5,10 +5,11 @@ import {
   FindOneOptions,
   SelectQueryBuilder,
 } from 'typeorm';
-import { User, Child } from '../../entity';
+import { User, Child, FundingSpace, Enrollment } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
+import moment from 'moment';
 import { propertyDateSorter } from '../../utils/propertyDateSorter';
 
 /**
@@ -85,12 +86,63 @@ export const getChildren = async (
   return children;
 };
 
+const getCurrentFunding = (source: {
+  child?: Child;
+  enrollment?: Enrollment;
+}) => {
+  const { enrollment, child } = source;
+
+  if (!enrollment && !child) return;
+
+  const today = moment.utc();
+  const currentEnrollment = (child.enrollments || []).find(
+    (enrollment) => !enrollment.exit || enrollment.exit.isSameOrAfter(today)
+  );
+
+  const _enrollment = enrollment || (child ? currentEnrollment : undefined);
+
+  if (!_enrollment) return;
+
+  return (_enrollment.fundings || []).find(
+    (funding) =>
+      !funding.lastReportingPeriod ||
+      funding.lastReportingPeriod.periodEnd.isSameOrAfter(today)
+  );
+};
+
 /**
  * Get count of all children the given user has access to
  */
 export const getCount = async (user: User) => {
   const opts = await getFindOpts(user);
   return getManager().count(Child, opts);
+};
+
+/**
+ * Function that accumulates the distribution of how all children in
+ * an organization are assigned to their various funding spaces
+ * across age group
+ * @param children
+ */
+export const getFundingSpaceMap = async (children: Child[]) => {
+  const fundingSpaceCounts: {
+    fundingSpace: FundingSpace;
+    count: number;
+  }[] = [];
+  children.reduce((_counts, _child) => {
+    const fundingSpace = getCurrentFunding({ child: _child })?.fundingSpace;
+    if (fundingSpace) {
+      const entry = _counts.find((e) => e.fundingSpace.id === fundingSpace.id);
+      if (entry) {
+        entry.count += 1;
+      } else {
+        _counts.push({ fundingSpace, count: 1 });
+      }
+    }
+
+    return _counts;
+  }, fundingSpaceCounts);
+  return fundingSpaceCounts;
 };
 
 /**
