@@ -103,12 +103,7 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
       className={cx('display-block', className)}
       external
       text={
-        <TextWithIcon
-          text={downloadText}
-          Icon={FileDownload}
-          iconSide="left"
-          className="text-underline"
-        />
+        <TextWithIcon text={downloadText} Icon={FileDownload} iconSide="left" />
       }
       {...buttonProps}
     />

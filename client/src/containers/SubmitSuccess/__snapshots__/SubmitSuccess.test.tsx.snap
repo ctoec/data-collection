@@ -82,7 +82,7 @@ exports[`SubmitSuccess matches snapshot 1`] = `
         type="button"
       >
         <span
-          class="oec-text-with-icon text-underline"
+          class="oec-text-with-icon"
         >
           <svg
             class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
