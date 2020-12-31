@@ -15,6 +15,7 @@ import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+import { Heading } from '../../Heading';
 
 // The fields we use to check to see if this form has errors or missing info
 const specialCircumstancesFields = [
@@ -43,6 +44,7 @@ export const ChildInfoForm = ({
   hideErrors,
   showFieldOrFieldset = () => true,
   setAlerts,
+  topHeaderLevel,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -85,7 +87,7 @@ export const ChildInfoForm = ({
       autoComplete="off"
       hideStatus={errorsHidden}
     >
-      {!hideHeader && <h2>Child info</h2>}
+      {!hideHeader && <Heading level={topHeaderLevel}>Child info</Heading>}
       {showFieldOrFieldset(child, [
         ...RACE_FIELDS,
         'hispanixOrLatinxEthnicity',

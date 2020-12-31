@@ -8,6 +8,7 @@ import { RecordFormProps } from '../types';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+import { Heading } from '../../Heading';
 
 const familyAddressFields = [
   'streetAddress',
@@ -34,6 +35,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   hideHeader = false,
   hideErrors,
   setAlerts,
+  topHeaderLevel,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -78,7 +80,11 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
       autoComplete="off"
       hideStatus={errorsHidden}
     >
-      {!hideHeader && <h2 className="grid-row">Family Address</h2>}
+      {!hideHeader && (
+        <Heading level={topHeaderLevel} className="grid-row">
+          Family Address
+        </Heading>
+      )}
       <AddressFieldset />
       <HomelessnessField />
       <div className="grid-row margin-top-2">

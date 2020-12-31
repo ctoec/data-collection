@@ -15,6 +15,7 @@ import {
   getProviderFormatters,
 } from './utils';
 import UserContext from '../../contexts/UserContext/UserContext';
+import { Heading } from '../Heading';
 
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
@@ -25,7 +26,6 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
   headerLevel,
   showRequirementLevelLegendAndFilter = false,
 }) => {
-  const Heading = headerLevel;
   const { user } = useContext(UserContext);
   const [requiredFilter, setRequiredFilter] = useState<boolean>(false);
 
@@ -83,7 +83,7 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
           {Object.entries(columnMetadataBySection).map(
             ([sectionName, sectionData]) => (
               <div key={sectionName} className="margin-top-4">
-                <Heading>{sectionName}</Heading>
+                <Heading level={headerLevel}>{sectionName}</Heading>
                 <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
                 <Table
                   id={`data-requirements-${sectionName.replace(' ', '-')}`}
