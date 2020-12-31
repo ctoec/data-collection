@@ -21,6 +21,7 @@ import {
 } from '../../components/Forms/formSections';
 import { Child } from '../../shared/models';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { HeadingLevel } from '../../components/Heading';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -94,6 +95,7 @@ const EditRecord: React.FC = () => {
     child,
     afterSaveSuccess: () => setTriggerRefetchCounter((r) => r + 1),
     setAlerts,
+    topHeaderLevel: 'h2' as HeadingLevel,
   };
   const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
   return (

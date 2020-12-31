@@ -15,7 +15,7 @@ import { apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
-import { Heading } from '../../Heading';
+import { getNextHeadingLevel, Heading } from '../../Heading';
 
 // The fields we use to check to see if this form has errors or missing info
 const specialCircumstancesFields = [
@@ -101,7 +101,12 @@ export const ChildInfoForm = ({
       <br />
 
       {showFieldOrFieldset(child, specialCircumstancesFields) && (
-        <h3 className="margin-bottom-0">Special circumstances</h3>
+        <Heading
+          level={getNextHeadingLevel(topHeaderLevel)}
+          className="margin-bottom-0"
+        >
+          Special circumstances
+        </Heading>
       )}
       {showFieldOrFieldset(child, ['receivesDisabilityServices']) && (
         <DisabilityServices />

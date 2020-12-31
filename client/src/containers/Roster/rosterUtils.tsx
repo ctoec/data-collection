@@ -134,10 +134,10 @@ export function getAccordionItems(
     hideOrgColumn: boolean;
     hideExitColumn: boolean;
   } = {
-    hideCapacity: false,
-    hideOrgColumn: true,
-    hideExitColumn: true,
-  }
+      hideCapacity: false,
+      hideOrgColumn: true,
+      hideExitColumn: true,
+    }
 ): AccordionItemProps[] {
   const childrenByAgeGroup = getChildrenByAgeGroup(children);
   const excludeColumns: ColumnNames[] = [];

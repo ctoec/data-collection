@@ -113,6 +113,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
 
       {!!currentEnrollment && activeFunding && (
         <>
+          {/* TODO HEADING */}
           <h3>Previous enrollment</h3>
           <ReportingPeriodField<ChangeEnrollment>
             accessor={(data) =>

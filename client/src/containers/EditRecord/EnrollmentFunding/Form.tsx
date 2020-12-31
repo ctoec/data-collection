@@ -33,6 +33,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
 
   return (
     <>
+      {/* TODO HEADING */}
       <h2>Enrollment and funding</h2>
       <ChangeEnrollmentCard
         {...commonProps}
@@ -40,6 +41,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
       />
       {currentEnrollment && (
         <>
+          {/* TODO HEADING */}
           <h3>Current enrollment</h3>
           <EditEnrollmentCard
             {...commonProps}
@@ -65,6 +67,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
       )}
       {!!pastEnrollments.length && (
         <>
+          {/* TODO HEADING */}
           <h3>Past enrollments</h3>
           {pastEnrollments.map((enrollment) => (
             <>

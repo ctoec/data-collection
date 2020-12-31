@@ -115,6 +115,7 @@ const CreateRecord: React.FC = () => {
     },
     setAlerts,
     hideHeader: true,
+    topHeaderLevel: 'h2',
     hideErrors,
   };
 

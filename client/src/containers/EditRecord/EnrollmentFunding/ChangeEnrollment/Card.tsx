@@ -45,15 +45,16 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
             {child.firstName} has no active enrollments
           </div>
         ) : (
-          <div className="usa-prose-body">
-            Has {child.firstName}'s age group and/or site changed?
-          </div>
-        )}
+            <div className="usa-prose-body">
+              Has {child.firstName}'s age group and/or site changed?
+            </div>
+          )}
         <ExpandCard>
           <Button text="Change enrollment" appearance="outline" />
         </ExpandCard>
       </div>
       <CardExpansion>
+        {/* TODO HEADING */}
         <h3 className="margin-top-2 margin-bottom-2">New enrollment</h3>
         <ChangeEnrollmentForm
           afterSaveSuccess={() => {

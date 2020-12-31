@@ -68,14 +68,14 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
   const onClick =
     child.validationErrors && child.validationErrors.length
       ? () =>
-          setAlerts([
-            {
-              type: 'error',
-              heading:
-                'Records cannot be withdrawn with missing or incorrect info',
-              text: 'Add required info before withdrawing.',
-            },
-          ])
+        setAlerts([
+          {
+            type: 'error',
+            heading:
+              'Records cannot be withdrawn with missing or incorrect info',
+            text: 'Add required info before withdrawing.',
+          },
+        ])
       : toggleIsOpen;
 
   return (

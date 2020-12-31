@@ -32,6 +32,7 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
       {!!visibleForm && (
         <Card>
           <>
+            {/* TODO HEADING */}
             <h3>
               {visibleForm === 'end' ? 'End current funding' : 'Change funding'}
             </h3>
