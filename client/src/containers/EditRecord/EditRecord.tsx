@@ -95,7 +95,7 @@ const EditRecord: React.FC = () => {
     child,
     afterSaveSuccess: () => setTriggerRefetchCounter((r) => r + 1),
     setAlerts,
-    topHeaderLevel: 'h2' as HeadingLevel,
+    topHeadingLevel: 'h2' as HeadingLevel,
   };
   const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
   return (

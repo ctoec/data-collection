@@ -44,7 +44,7 @@ export const ChildInfoForm = ({
   hideErrors,
   showFieldOrFieldset = () => true,
   setAlerts,
-  topHeaderLevel,
+  topHeadingLevel,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -87,7 +87,7 @@ export const ChildInfoForm = ({
       autoComplete="off"
       hideStatus={errorsHidden}
     >
-      {!hideHeader && <Heading level={topHeaderLevel}>Child info</Heading>}
+      {!hideHeader && <Heading level={topHeadingLevel}>Child info</Heading>}
       {showFieldOrFieldset(child, [
         ...RACE_FIELDS,
         'hispanixOrLatinxEthnicity',
@@ -102,7 +102,7 @@ export const ChildInfoForm = ({
 
       {showFieldOrFieldset(child, specialCircumstancesFields) && (
         <Heading
-          level={getNextHeadingLevel(topHeaderLevel)}
+          level={getNextHeadingLevel(topHeadingLevel)}
           className="margin-bottom-0"
         >
           Special circumstances

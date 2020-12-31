@@ -40,7 +40,7 @@ export const ChildIdentifiersForm = ({
   hideErrors,
   showFieldOrFieldset = () => true,
   setAlerts,
-  topHeaderLevel,
+  topHeadingLevel,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
@@ -106,7 +106,7 @@ export const ChildIdentifiersForm = ({
       hideStatus={errorsHidden}
     >
       {!hideHeader && (
-        <Heading level={topHeaderLevel}>Child's identifiers</Heading>
+        <Heading level={topHeadingLevel}>Child's identifiers</Heading>
       )}
       {showFieldOrFieldset(child, ['sasid', 'uniqueId']) &&
         (child.organization.uniqueIdType === UniqueIdType.SASID ? (

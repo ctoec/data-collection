@@ -5,11 +5,13 @@ import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
 import { Enrollment } from '../../../shared/models';
+import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   setAlerts,
+  topHeadingLevel,
 }) => {
   if (!child) {
     throw new Error('Enrollment funding form rendered without child');
@@ -33,16 +35,17 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
 
   return (
     <>
-      {/* TODO HEADING */}
-      <h2>Enrollment and funding</h2>
+      <Heading level={topHeadingLevel}>Enrollment and funding</Heading>
       <ChangeEnrollmentCard
         {...commonProps}
+        topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
         currentEnrollment={currentEnrollment}
       />
       {currentEnrollment && (
         <>
-          {/* TODO HEADING */}
-          <h3>Current enrollment</h3>
+          <Heading level={getNextHeadingLevel(topHeadingLevel)}>
+            Current enrollment
+          </Heading>
           <EditEnrollmentCard
             {...commonProps}
             key="edit-current-enrollment"
@@ -62,13 +65,16 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             {...commonProps}
             enrollment={currentEnrollment}
             orgId={child.organization.id}
+            // This heading should be nested under current enrollment
+            topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
         </>
       )}
       {!!pastEnrollments.length && (
         <>
-          {/* TODO HEADING */}
-          <h3>Past enrollments</h3>
+          <Heading level={getNextHeadingLevel(topHeadingLevel)}>
+            Past enrollments
+          </Heading>
           {pastEnrollments.map((enrollment) => (
             <>
               <EditEnrollmentCard

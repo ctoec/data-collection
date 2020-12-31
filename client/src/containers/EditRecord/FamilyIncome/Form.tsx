@@ -20,7 +20,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   setAlerts,
-  topHeaderLevel,
+  topHeadingLevel,
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
@@ -32,7 +32,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   if (child?.foster === UndefinableBoolean.Yes) {
     return (
       <>
-        <Heading level={topHeaderLevel}>Family income determination</Heading>
+        <Heading level={topHeadingLevel}>Family income determination</Heading>
         <FosterIncomeNotRequiredAlert />
       </>
     );
@@ -46,7 +46,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
 
   return (
     <>
-      <Heading level={topHeaderLevel}>Family income determination</Heading>
+      <Heading level={topHeadingLevel}>Family income determination</Heading>
       {showRedeterminationForm && (
         <RedeterminationCard
           child={child}
@@ -57,12 +57,13 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
           }}
           onCancel={() => setShowRedeterminationForm(false)}
           setAlerts={setAlerts}
+          topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
         />
       )}
       <div className="margin-top-1">
         <div className="display-flex align-center">
           <Heading
-            level={getNextHeadingLevel(topHeaderLevel)}
+            level={getNextHeadingLevel(topHeadingLevel)}
             className="font-sans-md margin-top-2 margin-bottom-2"
           >
             {currentDetermination
@@ -94,7 +95,9 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
         {!!pastDeterminations.length && (
           <>
             <div className="margin-top-1">
-              <Heading level={getNextHeadingLevel(topHeaderLevel)}>Past income determinations</Heading>
+              <Heading level={getNextHeadingLevel(topHeadingLevel)}>
+                Past income determinations
+              </Heading>
               {pastDeterminations.map((determination) => (
                 <EditDeterminationCard
                   child={child}

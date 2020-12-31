@@ -19,7 +19,10 @@ export const Heading = ({ level, children, ...props }: HeadingProps) => {
   return <H {...props}>{children}</H>;
 };
 
-export const getNextHeadingLevel = (levelUp: HeadingLevel): HeadingLevel =>
+export const getNextHeadingLevel = (
+  levelUp: HeadingLevel,
+  numberOfLevelsToAdd = 1
+): HeadingLevel =>
   orderedHeadingLevels[
-    orderedHeadingLevels.indexOf(levelUp) + 1
+    orderedHeadingLevels.indexOf(levelUp) + numberOfLevelsToAdd
   ] as HeadingLevel;

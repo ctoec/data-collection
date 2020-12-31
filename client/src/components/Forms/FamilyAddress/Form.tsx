@@ -35,7 +35,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   hideHeader = false,
   hideErrors,
   setAlerts,
-  topHeaderLevel,
+  topHeadingLevel,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
@@ -81,7 +81,7 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
       hideStatus={errorsHidden}
     >
       {!hideHeader && (
-        <Heading level={topHeaderLevel} className="grid-row">
+        <Heading level={topHeadingLevel} className="grid-row">
           Family Address
         </Heading>
       )}

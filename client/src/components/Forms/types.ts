@@ -8,7 +8,7 @@ export type RecordFormProps = {
   child: Child | undefined;
   afterSaveSuccess: () => void;
   setAlerts: Dispatch<SetStateAction<AlertProps[]>>;
-  topHeaderLevel: HeadingLevel;
+  topHeadingLevel: HeadingLevel;
   hideHeader?: boolean; // Header needs to be hidden in step list because the step list includes a header
   hideErrors?: HideErrors;
   showFieldOrFieldset?: (
