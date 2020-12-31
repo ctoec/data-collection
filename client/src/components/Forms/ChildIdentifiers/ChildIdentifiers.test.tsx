@@ -26,6 +26,7 @@ describe('EditRecord', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h2"
       />,
       { wrapInRouter: true, name: 'matches snapshot - no unique id' }
     );
@@ -38,6 +39,7 @@ describe('EditRecord', () => {
         }}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h2"
       />,
       { wrapInRouter: true, name: 'matches snapshot - other unique id' }
     );
@@ -50,6 +52,7 @@ describe('EditRecord', () => {
         }}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h2"
       />,
       { wrapInRouter: true, name: 'matches snapshot - sasid' }
     );
@@ -59,6 +62,7 @@ describe('EditRecord', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h2"
       />,
       { wrapInRouter: true }
     );

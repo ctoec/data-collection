@@ -1,5 +1,8 @@
 import React from 'react';
-import { snapshotTestHelper } from '../../../../testHelpers';
+import {
+  accessibilityTestHelper,
+  snapshotTestHelper,
+} from '../../../../testHelpers';
 import { ChangeFundingCard } from './Card';
 import {
   Child,
@@ -68,14 +71,16 @@ describe('EditRecord', () => {
             enrollment={enrollment}
             orgId={1}
             afterSaveSuccess={jest.fn()}
+            topHeadingLevel="h3"
           />,
           { before, name }
         );
-        snapshotTestHelper(
+        accessibilityTestHelper(
           <ChangeFundingCard
             enrollment={enrollment}
             orgId={1}
             afterSaveSuccess={jest.fn()}
+            topHeadingLevel="h2"
           />,
           { before, name }
         );
