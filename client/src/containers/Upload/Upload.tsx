@@ -177,7 +177,7 @@ const Upload: React.FC = () => {
 
       <ErrorModal
         isOpen={errorModalOpen}
-        toggleIsOpen={() => setErrorModalOpen((o) => !o)}
+        closeModal={() => setErrorModalOpen(false)}
         clearFile={() => {
           clearFile();
           setErrorDict(undefined);
@@ -190,7 +190,7 @@ const Upload: React.FC = () => {
       <CheckReplaceData
         isOpen={checkReplaceDataOpen}
         clearFile={clearFile}
-        toggleIsOpen={() => setCheckReplaceDataOpen((o) => !o)}
+        closeModal={() => setCheckReplaceDataOpen(false)}
         setPostUpload={setPostUpload}
         setQueryString={setQueryStringForUpload}
       />

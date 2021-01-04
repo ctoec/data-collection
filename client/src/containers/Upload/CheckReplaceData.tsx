@@ -10,14 +10,14 @@ import UserContext from '../../contexts/UserContext/UserContext';
 
 type CheckReplaceDataProps = {
   isOpen: boolean;
-  toggleIsOpen: () => void;
+  closeModal: () => void;
   clearFile: () => void;
   setPostUpload: (_: boolean) => void;
   setQueryString: (_: string) => void;
 };
 export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
   isOpen,
-  toggleIsOpen,
+  closeModal,
   clearFile,
   setPostUpload,
   setQueryString,
@@ -70,7 +70,7 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      toggleOpen={toggleIsOpen}
+      toggleOpen={closeModal}
       header={<h2> Do you want to replace your existing data? </h2>}
       showHeaderBorder
       content={
@@ -98,14 +98,14 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
               text="Cancel"
               onClick={() => {
                 clearFile();
-                toggleIsOpen();
+                closeModal();
               }}
             />
             <Button
               text="Replace data"
               onClick={() => {
                 setPostUpload(true);
-                toggleIsOpen();
+                closeModal();
               }}
             />
           </div>
