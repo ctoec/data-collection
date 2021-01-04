@@ -37,7 +37,6 @@ import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/Ro
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { RosterContent } from './RosterContent';
 import { EmptyRosterCard } from './EmptyRosterCard';
-import { cache } from 'swr';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 export type RosterQueryParams = {
