@@ -15,6 +15,7 @@ import * as serviceWorker from './serviceWorker';
 import '@ctoec/component-library/dist/assets/styles/index.scss';
 import './index.scss';
 import { apiGet } from './utils/api';
+import { RosterProvider } from './contexts/RosterContext/RosterContext';
 
 const render = (Component: React.FC) =>
   ReactDOM.render(
@@ -41,7 +42,9 @@ const render = (Component: React.FC) =>
                 fetcher: apiGet,
               }}
             >
-              <Component />
+              <RosterProvider>
+                <Component />
+              </RosterProvider>
             </SWRConfig>
           </UserProvider>
         </AuthenticationProvider>

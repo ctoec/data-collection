@@ -17,6 +17,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { Link } from 'react-router-dom';
 import { getCurrentEnrollment } from '../../utils/models';
 import { mutateCallback } from 'swr/dist/types';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 type BatchEditItemContentProps = {
   childId: string;
@@ -39,6 +40,8 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
 
   const { accessToken } = useContext(AuthenticationContext);
   const [triggerRefetchCount, setTriggerRefetchCount] = useState(0);
+
+  const { updateCurrentRosterCache } = useContext(RosterContext);
 
   // Reset state when new child
   useEffect(() => {
@@ -90,6 +93,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
             return children;
           }, false);
         }
+        updateCurrentRosterCache(updatedChild);
 
         if (triggerRefetchCount) moveNextStep(updatedChildren);
       })
