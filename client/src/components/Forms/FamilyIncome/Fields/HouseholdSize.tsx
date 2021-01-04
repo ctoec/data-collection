@@ -27,11 +27,17 @@ export const HouseholdSizeField: React.FC = () => {
       type="input"
       onChange={(e) => {
         const size = parseInt(e.target.value, 10) || null;
-        updateData(
-          produce<IncomeDetermination>(determination, (draft) =>
-            set(draft, dataDriller.at('numberOfPeople').path, size)
-          )
+        // Make sure to set not disclosed to false if we've entered info for
+        // a partial det--prefer values over not disclosed
+        const updatedDet = produce<IncomeDetermination>(
+          determination,
+          (draft) => {
+            set(draft, dataDriller.at('numberOfPeople').path, size);
+            set(draft, dataDriller.at('incomeNotDisclosed').path, false);
+          }
         );
+        updateData(updatedDet);
+        return size;
       }}
       id="number-of-people"
       label="Household size"

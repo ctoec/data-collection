@@ -26,11 +26,16 @@ export const AnnualHouseholdIncomeField: React.FC = () => {
       type="input"
       onChange={(e) => {
         const income = parseCurrencyFromString(e.target.value);
-        updateData(
-          produce<IncomeDetermination>(determination, (draft) =>
-            set(draft, dataDriller.at('income').path, income)
-          )
+        // Make sure to set not disclosed to false if we've entered info for
+        // a partial det--prefer values over not disclosed
+        const updatedDet = produce<IncomeDetermination>(
+          determination,
+          (draft) => {
+            set(draft, dataDriller.at('income').path, income);
+            set(draft, dataDriller.at('incomeNotDisclosed').path, false);
+          }
         );
+        updateData(updatedDet);
         return income;
       }}
       id="income-determination"

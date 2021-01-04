@@ -34,11 +34,16 @@ export const DeterminationDateField: React.FC = () => {
       }}
       defaultValue={null}
       parseOnChangeEvent={(e: any) => {
-        updateData(
-          produce<IncomeDetermination>(determination, (draft) =>
-            set(draft, dataDriller.at('determinationDate').path, e)
-          )
+        // Make sure to set not disclosed to false if we've entered info for
+        // a partial det--prefer values over not disclosed
+        const updatedDet = produce<IncomeDetermination>(
+          determination,
+          (draft) => {
+            set(draft, dataDriller.at('determinationDate').path, e);
+            set(draft, dataDriller.at('incomeNotDisclosed').path, false);
+          }
         );
+        updateData(updatedDet);
         return e;
       }}
       inputComponent={DateInput}

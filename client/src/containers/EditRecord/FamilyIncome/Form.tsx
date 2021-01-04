@@ -25,6 +25,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
 
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted
+  console.log(determinations);
   const currentDetermination: IncomeDetermination | undefined =
     determinations[0];
   const pastDeterminations: IncomeDetermination[] = determinations.slice(1);
