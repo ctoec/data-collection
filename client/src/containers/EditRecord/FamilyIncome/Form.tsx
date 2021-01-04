@@ -89,6 +89,8 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
             isCurrent={true}
             currentIsNew={currentIsNew}
             setAlerts={setAlerts}
+            // This is nested under the current income det header
+            topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
         )}
 
@@ -104,6 +106,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
                   determinationId={determination.id}
                   afterSaveSuccess={afterSaveSuccess}
                   setAlerts={setAlerts}
+                  topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
                 />
               ))}
             </div>

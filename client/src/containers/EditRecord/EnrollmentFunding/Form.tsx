@@ -51,6 +51,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             key="edit-current-enrollment"
             isCurrent={true}
             enrollmentId={currentEnrollment.id}
+            topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingCard
@@ -59,6 +60,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
               isCurrent={true}
               fundingId={funding.id}
               enrollmentId={currentEnrollment.id}
+              topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
             />
           ))}
           <ChangeFundingCard
@@ -81,6 +83,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                 {...commonProps}
                 key={enrollment.id}
                 enrollmentId={enrollment.id}
+                topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingCard
@@ -88,6 +91,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                   key={funding.id}
                   fundingId={funding.id}
                   enrollmentId={enrollment.id}
+                  topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
                 />
               ))}
             </>

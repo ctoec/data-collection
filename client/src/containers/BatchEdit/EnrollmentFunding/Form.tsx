@@ -20,6 +20,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   afterSaveSuccess,
   setAlerts,
   showFieldOrFieldset,
+  topHeadingLevel,
 }) => {
   if (!child?.enrollments?.length) {
     return (
@@ -27,6 +28,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
         child={child}
         afterSaveSuccess={afterSaveSuccess}
         setAlerts={setAlerts}
+        topHeadingLevel={topHeadingLevel}
       />
     );
   }
@@ -81,6 +83,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                   afterSaveSuccess={afterSaveSuccess}
                   setAlerts={setAlerts}
                   showFieldOrFieldset={showFieldOrFieldset}
+                  topHeadingLevel={topHeadingLevel}
                 />
               </>
             ))}
@@ -96,6 +99,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                   afterSaveSuccess={afterSaveSuccess}
                   setAlerts={setAlerts}
                   showFieldOrFieldset={showFieldOrFieldset}
+                  topHeadingLevel={topHeadingLevel}
                 />
               </>
             )}
