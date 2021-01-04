@@ -61,7 +61,6 @@ const Upload: React.FC = () => {
           handleJWTError(history, (err) => {
             setError(err);
             clearFile();
-            setErrorDict(undefined);
           })
         )
         .finally(() => setLoading(false));
@@ -157,6 +156,7 @@ const Upload: React.FC = () => {
   const clearFile = () => {
     // When the file is cleared, change the key to force the file component to rerender/reset
     setFile(undefined);
+    setErrorDict(undefined);
     setFileKey((oldKey) => oldKey + 1);
   };
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -178,10 +178,7 @@ const Upload: React.FC = () => {
       <ErrorModal
         isOpen={errorModalOpen}
         closeModal={() => setErrorModalOpen(false)}
-        clearFile={() => {
-          clearFile();
-          setErrorDict(undefined);
-        }}
+        clearFile={clearFile}
         errorDict={errorDict || []}
         nextFunc={
           userRosterCount === 0 ? advanceToPostUpload : advanceToCheckReplace

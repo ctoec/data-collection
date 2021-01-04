@@ -28,7 +28,11 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      toggleOpen={closeModal}
+      onModalClose={closeModal}
+      onXClick={() => {
+        clearFile();
+        closeModal();
+      }}
       header={<h2> Your upload has missing or incorrect data </h2>}
       showHeaderBorder
       content={
@@ -56,10 +60,7 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
                 closeModal();
               }}
             />
-            <Button
-              text="Upload and correct in roster"
-              onClick={nextFunc}
-            />
+            <Button text="Upload and correct in roster" onClick={nextFunc} />
           </div>
         </div>
       }

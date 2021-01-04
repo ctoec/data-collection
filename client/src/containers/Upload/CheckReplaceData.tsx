@@ -70,8 +70,12 @@ export const CheckReplaceData: React.FC<CheckReplaceDataProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      toggleOpen={closeModal}
-      header={<h2> Do you want to replace your existing data? </h2>}
+      onModalClose={closeModal}
+      onXClick={() => {
+        clearFile();
+        closeModal();
+      }}
+      header={<h2> Do you want to replace your existing data ? </h2>}
       showHeaderBorder
       content={
         <div>
