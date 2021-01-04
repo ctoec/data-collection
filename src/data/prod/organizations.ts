@@ -6,7 +6,7 @@ import {
   FundingTime,
   UniqueIdType,
 } from '../../../client/src/shared/models';
-import { FundingSpace, Organization } from '../../entity';
+import { FundingSpace, Organization, FundingTimeSplit } from '../../entity';
 import { parse } from './utils';
 
 class OrganizationRow {
@@ -15,9 +15,11 @@ class OrganizationRow {
   CDC_InfantToddler_FullTime: number = 0;
   CDC_InfantToddler_PartTime: number = 0;
   CDC_InfantToddler_SplitTime: number = 0;
+  WEEKS_CDC_InfactToddler_Split: string;
   CDC_Preschool_FullTime: number = 0;
   CDC_Preschool_PartTime: number = 0;
   CDC_Preschool_SplitTime: number = 0;
+  WEEKS_CDC_Preschool_Split: string;
   PSR_Preschool_FullDay: number = 0;
   PSR_Preschool_School: number = 0;
   PSR_Preschool_PartDay: number = 0;
@@ -29,6 +31,7 @@ class OrganizationRow {
   CDC_SchoolAge_FullTime: number = 0;
   CDC_SchoolAge_PartTime: number = 0;
   CDC_SchoolAge_SplitTime: number = 0;
+  WEEKS_CDC_SchoolAge_Split: string;
   SHS__AdditionalFull: string = '';
   SHS__AdditionalSchool: string = '';
   SHS__AdditionalExtendedSchool: string = '';
@@ -72,7 +75,7 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
         (prop) =>
           row[prop] &&
           parseInt(row[prop]) > 0 &&
-          Object.keys(FundingSource).some((fs) => prop.includes(fs))
+          Object.keys(FundingSource).some((fs) => prop.startsWith(fs))
       );
 
       for (const fundingProp of fundingProps) {
@@ -87,6 +90,9 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
         await createFundingSpace(
           org.id,
           row[fundingProp],
+          fundingSource === 'CDC' && fundingTimeKey === 'SplitTime'
+            ? row[`WEEKS_${fundingSourceKey}_${ageGroupKey}_${fundingTimeKey}`]
+            : undefined,
           fundingSource,
           ageGroup,
           fundingTime
@@ -103,18 +109,18 @@ export const createOrganizationData = async (sheetData: WorkSheet) => {
 async function createFundingSpace(
   orgId: number,
   capacity: number,
+  split?: string,
   fundingSource?: FundingSource,
   ageGroup?: AgeGroup,
   time?: FundingTime
 ) {
   // Handle SS special case:
-  // - funded on a classroom basis, where 1 classroom = 15 slots
   // - always preschool
   // - always "school" time
   if (fundingSource === FundingSource.SS) {
     await _createFundingSpace(
       orgId,
-      capacity * 15,
+      capacity,
       fundingSource,
       AgeGroup.Preschool,
       FundingTime.School
@@ -134,7 +140,17 @@ async function createFundingSpace(
   }
 
   // Normal case for CDC, PSR, CSR
-  await _createFundingSpace(orgId, capacity, fundingSource, ageGroup, time);
+  const { id: fundingSpaceId } = await _createFundingSpace(
+    orgId,
+    capacity,
+    fundingSource,
+    ageGroup,
+    time
+  );
+  if (split) {
+    const [part, full] = split.split('/').map((weeks) => parseInt(weeks));
+    await createFundingTimeSplit(fundingSpaceId, part, full);
+  }
 }
 
 async function _createFundingSpace(
@@ -157,10 +173,34 @@ async function _createFundingSpace(
     console.log(
       `\t\tCreated funding space ${fs.source} - ${fs.ageGroup} - ${fs.time} with capacity ${fs.capacity}`
     );
+    return fs;
   } catch (err) {
     console.error(
       `\t\tFailed to create funding space ${fundingSource} - ${ageGroup} - ${time} with capacity ${capacity}`,
       err
+    );
+  }
+}
+
+async function createFundingTimeSplit(
+  fundingSpaceId: number,
+  partTimeWeeks: number,
+  fullTimeWeeks: number
+) {
+  const fundingTimeSplit = getManager('script').create(FundingTimeSplit, {
+    fundingSpace: { id: fundingSpaceId },
+    partTimeWeeks,
+    fullTimeWeeks,
+  });
+
+  try {
+    const fts = await getManager('script').save(fundingTimeSplit);
+    console.log(
+      `\t\t\tCreated funding time split ${partTimeWeeks}/${fullTimeWeeks} parttime/fulltime for funding space ${fundingSpaceId}`
+    );
+  } catch (err) {
+    console.error(
+      `\t\t\tFailed to create funding time split for funding space ${fundingSpaceId}`
     );
   }
 }

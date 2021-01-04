@@ -18,17 +18,23 @@ import {
   CommunityPermission,
   ReportingPeriod,
 } from '../../entity';
-import { read } from './utils';
+import { read, parse } from './utils';
 import { createOrganizationData } from './organizations';
 import { createSiteData } from './sites';
 import {
   createUserData,
   DBConnectionOpts,
   SiteConnectionOpts,
+  USER_ROW_PROPS,
+  UserRow,
 } from './users/create';
 import { createReportingPeriodData } from './reportingPeriods';
+import { invite } from './invite';
 
-const optionDefns = [{ name: 'config', type: String }];
+const optionDefns = [
+  { name: 'config', type: String },
+  { name: 'invite', type: Boolean },
+];
 const options = commandLineArgs(optionDefns);
 
 type Config = {
@@ -84,6 +90,13 @@ if (!orgFile && !siteFile && !userFile && !reportingPeriodFile) {
   process.exit(1);
 }
 
+const doInvite = options.invite as boolean;
+if (doInvite && !userFile) {
+  console.error(
+    'If --invite flag is passed, userFile must be supplied in config'
+  );
+}
+
 let wingedKeysDBConnOpts: DBConnectionOpts;
 let wingedKeysSiteConnOpts: SiteConnectionOpts;
 
@@ -111,7 +124,12 @@ if (userFile) {
 }
 
 const appDBConnOpts = config.app.db;
-create();
+if (doInvite) {
+  const userRows = parse<UserRow>(read(userFile), USER_ROW_PROPS);
+  invite(userRows, wingedKeysSiteConnOpts);
+} else {
+  create();
+}
 
 async function create() {
   try {
