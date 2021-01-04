@@ -1,7 +1,6 @@
 import { Child } from '../../shared/models';
 
-export const firstNameMissingText = '(first name missing)';
-export const lastNameMissingText = '(last name missing)';
+export const firstNameMissingText = '(name missing)';
 
 export const nameFormatter = (
   child?: Child,

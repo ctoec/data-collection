@@ -84,9 +84,9 @@ const EditRecord: React.FC = () => {
           newAlerts.push({
             type: 'success',
             heading: 'Record updated',
-            text: `Your changes to ${nameFormatter(
-              updatedChild
-            )}'s record have been saved.`,
+            text: `Your changes to ${nameFormatter(updatedChild, {
+              missingFirstNameText: firstNameMissingText,
+            })}'s record have been saved.`,
           });
         }
         setAlerts(newAlerts);
@@ -113,7 +113,11 @@ const EditRecord: React.FC = () => {
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
             <span className="h2 h2--lighter">Edit record </span>
-            {child ? `${nameFormatter(child)}` : 'Loading...'}
+            {child
+              ? `${nameFormatter(child, {
+                missingFirstNameText: firstNameMissingText,
+              })}`
+              : 'Loading...'}
           </h1>
         </div>
         {child && (
