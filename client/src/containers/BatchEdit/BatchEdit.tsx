@@ -132,7 +132,7 @@ const BatchEdit: React.FC = () => {
               onClick: () => setActiveRecordId(record?.id),
               title: (
                 <span>
-                  {nameFormatter(record)}
+                  {nameFormatter(record, { lastNameFirst: true })}
                   {!hasValidationError(record) && (
                     <InlineIcon icon="complete" />
                   )}

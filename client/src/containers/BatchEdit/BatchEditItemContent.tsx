@@ -124,7 +124,9 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
         <InlineIcon icon="complete" />
       </div>
       <div className="text-center text-bold font-body-lg">
-        {`${child?.firstName}'s record is now complete!`}
+        {`${nameFormatter(child, {
+          firstOnly: true,
+        })}'s record is now complete!`}
       </div>
     </div>
   );
@@ -138,7 +140,9 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     <>
       <div className="padding-left-2 padding-right-2 padding-bottom-3">
         <div className="display-flex flex-row flex-justify flex-align-end">
-          <h2 className="margin-bottom-0">{nameFormatter(child)}</h2>
+          <h2 className="margin-bottom-0">
+            {nameFormatter(child, { lastNameFirst: true })}
+          </h2>
           <div className="text-baseline text-base">
             Date of birth: {child.birthdate?.format('MM/DD/YYYY') || 'Missing'}
           </div>
