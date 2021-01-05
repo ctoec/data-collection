@@ -30,15 +30,15 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
     <div
       class="oec-card-cell oec-card-expansion"
     >
-      <h3
-        class="margin-top-2 margin-bottom-2"
-      >
-        New enrollment
-      </h3>
       <form
         class="usa-form usa-form"
         id="change-enrollment-form"
       >
+        <h2
+          class="margin-top-2 margin-bottom-2"
+        >
+          New enrollment
+        </h2>
         <fieldset
           aria-labelledby="fieldset-legend-site-radiogroup"
           class="usa-fieldset"
@@ -1534,9 +1534,9 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </legend>
           <div />
         </fieldset>
-        <h3>
+        <h2>
           Previous enrollment
-        </h3>
+        </h2>
         <div
           class="usa-form-group"
         >

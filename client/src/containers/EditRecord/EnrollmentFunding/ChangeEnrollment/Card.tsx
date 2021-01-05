@@ -8,12 +8,18 @@ import {
 import { Enrollment, Child } from '../../../../shared/models';
 import { ChangeEnrollmentForm } from './Form';
 import { RecordFormProps } from '../../../../components/Forms';
+import {
+  getNextHeadingLevel,
+  Heading,
+  HeadingLevel,
+} from '../../../../components/Heading';
 
 type ChangeEnrollmentCardProps = {
   child: Child;
   currentEnrollment?: Enrollment;
   afterSaveSuccess: () => void;
   setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -26,6 +32,7 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
   currentEnrollment,
   afterSaveSuccess,
   setAlerts,
+  topHeadingLevel,
 }) => {
   const [closeCard, setCloseCard] = useState(false);
 
@@ -54,8 +61,9 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
         </ExpandCard>
       </div>
       <CardExpansion>
-        <h3 className="margin-top-2 margin-bottom-2">New enrollment</h3>
         <ChangeEnrollmentForm
+          // No headings in this card component so just pass the value straight through
+          topHeadingLevel={topHeadingLevel}
           afterSaveSuccess={() => {
             setCloseCard(true);
             afterSaveSuccess();

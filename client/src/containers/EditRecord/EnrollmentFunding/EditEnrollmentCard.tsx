@@ -14,6 +14,7 @@ import { apiDelete } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
 import { RecordFormProps } from '../../../components/Forms';
+import { HeadingLevel } from '../../../components/Heading';
 
 type EditEnrollmentCardProps = {
   child: Child;
@@ -21,6 +22,7 @@ type EditEnrollmentCardProps = {
   afterSaveSuccess: () => void;
   isCurrent?: boolean;
   setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -35,6 +37,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   isCurrent = false,
   afterSaveSuccess,
   setAlerts,
+  topHeadingLevel,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -131,6 +134,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
             setCloseCard(true);
             afterSaveSuccess();
           }}
+          topHeadingLevel={topHeadingLevel}
           setAlerts={setAlerts}
           AdditionalButton={
             <ExpandCard>

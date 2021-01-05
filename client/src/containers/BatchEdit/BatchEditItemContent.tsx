@@ -103,6 +103,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     afterSaveSuccess: () => setTriggerRefetchCount((r) => r + 1),
     setAlerts,
     hideHeader: true,
+    topHeadingLevel: 'h4', // needed bc we still need the headers within the forms to be accurately nested
     showFieldOrFieldset: showFieldInBatchEditForm,
     AdditionalButton: (
       <Button
@@ -153,6 +154,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
             steps={steps}
             props={props}
             activeStep={activeStepKey || ''}
+            headerLevel="h3"
           />
         ) : (
           AllComplete

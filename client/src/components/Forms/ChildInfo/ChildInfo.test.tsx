@@ -20,6 +20,7 @@ describe('EditRecord', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h2"
       />,
       { wrapInRouter: true }
     );
@@ -29,6 +30,7 @@ describe('EditRecord', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h3"
       />,
       { wrapInRouter: true }
     );

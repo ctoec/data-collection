@@ -14,6 +14,7 @@ import { currencyFormatter } from '../../../utils/formatters';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
 import { FamilyIncomeForm, RecordFormProps } from '../../../components/Forms';
+import { HeadingLevel } from '../../../components/Heading';
 
 type EditDeterminationCardProps = {
   child: Child;
@@ -22,6 +23,7 @@ type EditDeterminationCardProps = {
   isCurrent?: boolean;
   currentIsNew?: boolean;
   setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -36,6 +38,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
   isCurrent,
   currentIsNew,
   setAlerts,
+  topHeadingLevel,
 }) => {
   const determination = child?.family?.incomeDeterminations?.find(
     (d) => d.id === determinationId
@@ -128,6 +131,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
             afterSaveSuccess();
           }}
           setAlerts={setAlerts}
+          topHeadingLevel={topHeadingLevel}
         />
       </CardExpansion>
     </Card>

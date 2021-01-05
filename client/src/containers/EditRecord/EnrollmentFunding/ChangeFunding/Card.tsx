@@ -3,12 +3,14 @@ import { Card, Button, Alert } from '@ctoec/component-library';
 import { Enrollment } from '../../../../shared/models';
 import { ChangeFundingForm } from './Form';
 import { RecordFormProps } from '../../../../components/Forms';
+import { Heading, HeadingLevel } from '../../../../components/Heading';
 
 type ChangeFundingCardProps = {
   enrollment: Enrollment;
   orgId: number;
   afterSaveSuccess: () => void;
   setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -22,6 +24,7 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
   orgId,
   afterSaveSuccess,
   setAlerts,
+  topHeadingLevel,
 }) => {
   const [visibleForm, setVisibleForm] = useState<'end' | 'start'>();
   const activeFunding = (enrollment.fundings || []).find(
@@ -32,9 +35,9 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
       {!!visibleForm && (
         <Card>
           <>
-            <h3>
+            <Heading level={topHeadingLevel}>
               {visibleForm === 'end' ? 'End current funding' : 'Change funding'}
-            </h3>
+            </Heading>
             <ChangeFundingForm
               afterSaveSuccess={() => {
                 setVisibleForm(undefined);

@@ -61,6 +61,7 @@ describe('EditRecord', () => {
           child={child}
           currentEnrollment={enrollment}
           afterSaveSuccess={jest.fn()}
+          topHeadingLevel="h2"
         />,
         { before: waitExpandChangeEnrollment }
       );
@@ -70,6 +71,7 @@ describe('EditRecord', () => {
           child={child}
           currentEnrollment={enrollment}
           afterSaveSuccess={jest.fn()}
+          topHeadingLevel="h2"
         />,
         { before: waitExpandChangeEnrollment }
       );
