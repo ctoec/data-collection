@@ -30,9 +30,9 @@ export const doesEnrollmentFormHaveErrors = (
       return true;
     return enrollment
       ? !!getValidationStatusForFields(
-          enrollment,
-          opts.excludeFundings ? enrollmentFields : enrollmentFundingFields
-        )
+        enrollment,
+        opts.excludeFundings ? enrollmentFields : enrollmentFundingFields
+      )
       : false;
   }
 
@@ -124,6 +124,8 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       .finally(onFinally);
   };
 
+  console.log({ enrollment })
+
   return (
     <>
       {!enrollment.id && (
@@ -156,21 +158,21 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
         )}
         {(!enrollment?.fundings?.length ||
           showFieldOrFieldset(enrollment, ['fundings'])) && (
-          <NewFundingField<Enrollment>
-            fundingAccessor={(data) => data.at('fundings').at(0)}
-            getEnrollment={(data) => data.value}
-            organizationId={child?.organization?.id}
-            // Special child-level validation that needs to be displayed on the new funding field
-            // but only if hideErrors = false
-            missingFundedEnrollmentError={
-              errorsHidden
-                ? undefined
-                : child.validationErrors?.find(
+            <NewFundingField<Enrollment>
+              fundingAccessor={(data) => data.at('fundings').at(0)}
+              getEnrollment={(data) => data.value}
+              organizationId={child?.organization?.id}
+              // Special child-level validation that needs to be displayed on the new funding field
+              // but only if hideErrors = false
+              missingFundedEnrollmentError={
+                errorsHidden
+                  ? undefined
+                  : child.validationErrors?.find(
                     (e) => !!e.constraints?.fundedEnrollment
                   )
-            }
-          />
-        )}
+              }
+            />
+          )}
         {AdditionalButton}
         <FormSubmitButton
           text={loading ? 'Saving...' : 'Save'}
