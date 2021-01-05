@@ -8,6 +8,7 @@ module.exports = {
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
     await uploadFile(browser, 'missingSome');
+    // TODO: expect missing info icons in roster
     browser.end();
   },
 };
