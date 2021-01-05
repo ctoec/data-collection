@@ -162,6 +162,10 @@ const paginatedChildDataMock = paginatedChildData as jest.Mocked<
   typeof paginatedChildData
 >;
 
+jest.mock('../../utils/api');
+import * as api from '../../utils/api';
+const apiMock = api as jest.Mocked<typeof api>;
+
 const helperOpts = {
   wrapInRouter: true,
   wrapInSWRConfig: true,
@@ -175,6 +179,9 @@ describe('Roster', () => {
       mutate: async () => undefined,
       error: undefined,
     });
+    apiMock.apiGet.mockReturnValue(
+      new Promise((resolve) => resolve({ submitted: false }))
+    );
   });
 
   snapshotTestHelper(
@@ -204,6 +211,22 @@ describe('Roster', () => {
     {
       ...helperOpts,
       name: 'matches snapshot for multi-org user',
+    }
+  );
+
+  snapshotTestHelper(
+    <UserContext.Provider value={{ ...commonUserProvider, user: oneOrgUser }}>
+      <Roster />
+    </UserContext.Provider>,
+    {
+      ...helperOpts,
+      before: async () => {
+        apiMock.apiGet.mockReturnValue(
+          new Promise((resolve) => resolve({ submitted: true }))
+        );
+        return waitFor(() => expect(apiMock.apiGet).toBeCalled());
+      },
+      name: 'matches snapshot for user at a submitted org',
     }
   );
 

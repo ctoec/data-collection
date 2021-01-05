@@ -5,12 +5,12 @@ import {
   FindOneOptions,
   SelectQueryBuilder,
 } from 'typeorm';
-import { User, Child, FundingSpace, Enrollment } from '../../entity';
+import { User, Child } from '../../entity';
 import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
-import moment from 'moment';
 import { propertyDateSorter } from '../../utils/propertyDateSorter';
+import { getCurrentFunding } from '../../utils/getCurrentFunding';
 
 /**
  * Get child by id, with related family and related
@@ -86,30 +86,6 @@ export const getChildren = async (
   return children;
 };
 
-const getCurrentFunding = (source: {
-  child?: Child;
-  enrollment?: Enrollment;
-}) => {
-  const { enrollment, child } = source;
-
-  if (!enrollment && !child) return;
-
-  const today = moment.utc();
-  const currentEnrollment = (child.enrollments || []).find(
-    (enrollment) => !enrollment.exit || enrollment.exit.isSameOrAfter(today)
-  );
-
-  const _enrollment = enrollment || (child ? currentEnrollment : undefined);
-
-  if (!_enrollment) return;
-
-  return (_enrollment.fundings || []).find(
-    (funding) =>
-      !funding.lastReportingPeriod ||
-      funding.lastReportingPeriod.periodEnd.isSameOrAfter(today)
-  );
-};
-
 /**
  * Get count of all children the given user has access to
  */
@@ -119,30 +95,77 @@ export const getCount = async (user: User) => {
 };
 
 /**
+ * Simple structs that hold minimum amount of information necessary
+ * to partition the children across funding spaces in a nice formatted
+ * display.
+ */
+type enrollmentTime = {
+  timeType: string;
+  filled: number;
+  capacity: number;
+};
+type enrolledAgeGroup = {
+  ageGroup: string;
+  includedTimes: enrollmentTime[];
+};
+
+/**
  * Function that accumulates the distribution of how all children in
  * an organization are assigned to their various funding spaces
- * across age group
+ * across age groups and enrollment times. Handles partitioning for
+ * displaying so that the front end just has to spit this back out.
  * @param children
  */
 export const getFundingSpaceMap = async (children: Child[]) => {
-  const fundingSpaceCounts: {
-    fundingSpace: FundingSpace;
-    count: number;
+  // Structure to hold accumulated display information about each funding space
+  const fundingSpacesDisplay: {
+    sourceName: string;
+    includedAgeGroups: enrolledAgeGroup[];
   }[] = [];
-  children.reduce((_counts, _child) => {
-    const fundingSpace = getCurrentFunding({ child: _child })?.fundingSpace;
-    if (fundingSpace) {
-      const entry = _counts.find((e) => e.fundingSpace.id === fundingSpace.id);
-      if (entry) {
-        entry.count += 1;
-      } else {
-        _counts.push({ fundingSpace, count: 1 });
-      }
-    }
 
-    return _counts;
-  }, fundingSpaceCounts);
-  return fundingSpaceCounts;
+  children.forEach((child) => {
+    const fundingSpace = getCurrentFunding({ child: child })?.fundingSpace;
+
+    if (fundingSpace) {
+      // Start with overall funding source, since it's the header
+      const source = fundingSpace.source;
+      let matchingSource = fundingSpacesDisplay.find(
+        (fsd) => fsd.sourceName === source
+      );
+      if (matchingSource === undefined) {
+        matchingSource = { sourceName: source, includedAgeGroups: [] };
+        fundingSpacesDisplay.push(matchingSource);
+      }
+
+      // Then the age group, since a source is made up of a list of these
+      const ageGroup = fundingSpace.ageGroup;
+      let matchingGroup = matchingSource.includedAgeGroups.find(
+        (ag) => ag.ageGroup === ageGroup
+      );
+      if (matchingGroup === undefined) {
+        matchingGroup = { ageGroup, includedTimes: [] };
+        matchingSource.includedAgeGroups.push(matchingGroup);
+      }
+
+      // Then go to the times within each age group, because that's the
+      // last sub-list
+      const timeType = fundingSpace.time;
+      let matchingTime = matchingGroup.includedTimes.find(
+        (t) => t.timeType === timeType
+      );
+      if (matchingTime === undefined) {
+        matchingTime = {
+          timeType,
+          filled: 0,
+          capacity: fundingSpace.capacity,
+        };
+        matchingGroup.includedTimes.push(matchingTime);
+      }
+      matchingTime.filled += 1;
+    }
+  });
+
+  return fundingSpacesDisplay;
 };
 
 /**

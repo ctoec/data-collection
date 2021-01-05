@@ -8,7 +8,6 @@ import {
 import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
 import moment, { Moment } from 'moment';
-import { getFundingSpaceMap } from '../controllers/children';
 
 export const childrenRouter = express.Router();
 
@@ -47,6 +46,8 @@ childrenRouter.get(
       take,
     });
 
+    // Send back a nice pretty display structure for the user's home
+    // page if they've submitted their data
     if (fundingMap && fundingMap === 'true') {
       const fundingSpacesMap = await controller.getFundingSpaceMap(children);
       res.send({ fundingSpacesMap });

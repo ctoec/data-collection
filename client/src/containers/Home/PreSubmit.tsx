@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import UserContext from '../../contexts/UserContext/UserContext';
 import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
-import { HomeProps } from './Home';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { HowToUseStep } from './HowToUseStep';
 
-export const PreSubmitHome: React.FC<HomeProps> = ({ user, h1Ref }) => {
+export const PreSubmitHome: React.FC = () => {
+  const { user } = useContext(UserContext);
+  const h1Ref = getH1RefForTitle();
+
   return (
     <div className="Home grid-container margin-top-4">
       <div className="grid-row grid-gap">

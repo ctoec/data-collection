@@ -30,9 +30,39 @@ const HomeWithUserProvider = (
   </UserContext.Provider>
 );
 
+jest.mock('../../utils/api');
+import * as api from '../../utils/api';
+import { waitFor } from '@testing-library/react';
+const apiMock = api as jest.Mocked<typeof api>;
+
 describe('Home', () => {
-  snapshotTestHelper(HomeWithUserProvider, { wrapInRouter: true });
+  snapshotTestHelper(HomeWithUserProvider, {
+    before: async () => {
+      apiMock.apiGet.mockReturnValue(
+        new Promise((resolve) => resolve({ submitted: false }))
+      );
+      return waitFor(() => expect(apiMock.apiGet).toBeCalled());
+    },
+    wrapInRouter: true,
+    name: 'snapshot matches pre-submit user',
+  });
+
+  snapshotTestHelper(HomeWithUserProvider, {
+    before: async () => {
+      apiMock.apiGet.mockReturnValue(
+        new Promise((resolve) => resolve({ submitted: true }))
+      );
+      return waitFor(() => expect(apiMock.apiGet).toBeCalled());
+    },
+    wrapInRouter: true,
+    name: 'snapshot matches post-submit user',
+  });
+
   accessibilityTestHelper(HomeWithUserProvider, {
     wrapInRouter: true,
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 });

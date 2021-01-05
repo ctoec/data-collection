@@ -8,6 +8,14 @@ export async function createOecReport(
   user: User,
   organizationId: number
 ): Promise<void> {
+  // Verify that the user has org permissions for the org they're
+  // trying to submit for
+  // const readOrgIds = await getReadAccessibleOrgIds(user);
+  if (!user.orgPermissions.some((p) => p.organizationId === organizationId)) {
+    throw new BadRequestError(
+      "You don't have permission to submit data for this organization"
+    );
+  }
   const report: OECReportInterface = await getManager().create(OECReport, {
     organizationId,
     updateMetaData: {
@@ -15,21 +23,4 @@ export async function createOecReport(
     },
   });
   await getManager().save(report);
-}
-
-export async function markDataSubmittedForOrg(
-  user: User,
-  organizationId: number
-) {
-  // Verify that the user has org permissions for the org they're
-  // trying to submit for
-  const readOrgIds = await getReadAccessibleOrgIds(user);
-  if (!readOrgIds.includes(String(organizationId))) {
-    throw new BadRequestError(
-      "You don't have permission to submit data for this organization"
-    );
-  }
-  const org = await getManager().findOne(Organization, String(organizationId));
-  org.submittedData = true;
-  await getManager().save(org);
 }

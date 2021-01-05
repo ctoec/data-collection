@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import {
+  ButtonProps,
   Button,
   ButtonWithDropdown,
   PlusCircle,
@@ -8,11 +9,11 @@ import {
 import { useHistory } from 'react-router-dom';
 import UserContext from '../contexts/UserContext/UserContext';
 
+// Need to require an ID for the dropdown, so don't let it be undefined like
+// it could be in a buttonn
 type AddRecordButtonProps = {
   id: string;
-  className?: string;
-  appearance?: 'base' | 'default' | 'secondary' | 'unstyled' | 'outline';
-};
+} & Pick<ButtonProps, 'className' | 'appearance'>;
 
 export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
   id, // Needs to be unique to associate with dropdown

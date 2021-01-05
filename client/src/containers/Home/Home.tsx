@@ -1,27 +1,26 @@
-import React, { useContext } from 'react';
-import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import React, { useContext, useEffect } from 'react';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { PreSubmitHome } from './PreSubmit';
-import { User } from '../../shared/models';
 import { PostSubmitHome } from './PostSubmit';
-
-export type HomeProps = {
-  user: User | null;
-  h1Ref: ((h1Node: HTMLHeadingElement) => void) | null;
-};
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
+import { apiGet } from '../../utils/api';
 
 const Home: React.FC = () => {
   const { user } = useContext(UserContext);
-  const h1Ref = getH1RefForTitle();
-  const orgs = user?.organizations || [];
-  let submitted = false;
-  if (orgs.length !== 0 && orgs[0].submittedData) submitted = true;
+  const { accessToken } = useContext(AuthenticationContext);
+  let isPostSubmit = true;
+  useEffect(() => {
+    user?.organizations?.forEach((org) => {
+      apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
+        if (!res.submitted) {
+          isPostSubmit = false;
+          return;
+        }
+      });
+    });
+  }, [user, accessToken]);
 
-  return submitted ? (
-    <PostSubmitHome user={user} h1Ref={h1Ref} />
-  ) : (
-    <PreSubmitHome user={user} h1Ref={h1Ref} />
-  );
+  return isPostSubmit ? <PostSubmitHome /> : <PreSubmitHome />;
 };
 
 export default Home;

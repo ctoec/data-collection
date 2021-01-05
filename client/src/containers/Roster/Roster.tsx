@@ -6,6 +6,7 @@ import {
   LoadingWrapper,
   ErrorBoundary,
   Button,
+  AlertProps,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
@@ -13,7 +14,7 @@ import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useHistory } from 'react-router-dom';
-import { apiPut } from '../../utils/api';
+import { apiGet, apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   getAccordionItems,
@@ -35,6 +36,7 @@ import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/Ro
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { RosterContent } from './RosterContent';
 import { EmptyRosterCard } from './EmptyRosterCard';
+import { useAlerts } from '../../hooks/useAlerts';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -42,6 +44,22 @@ export type RosterQueryParams = {
   month?: string;
   withdrawn?: boolean;
 };
+
+// Define a constant for the alert that shows once an organization
+// has submitted its data to OEC
+const SUBMITTED: AlertProps = {
+  text:
+    'Make revisions and updates, such as new enrollments, directly in your ECE reporter roster.',
+  heading: 'You completed your July to December data collection!',
+  type: 'info',
+};
+
+// // Make sure the submitted alert is always the top alert on the page
+// if (opts.submitted) {
+//   if (alerts.find((a) => a.heading === SUBMITTED.heading) === undefined) {
+//     setAlerts([SUBMITTED, ...alerts]);
+//   }
+// }
 
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -73,15 +91,17 @@ const Roster: React.FC = () => {
   const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
   const isSingleSiteView = query.site ? true : false;
 
-  // Parameters for displaying the submit success info alert.
-  // Use state so that we can show persistent alert after clicking
-  // without needing a refresh
-  const [dataSubmitted, setDataSubmitted] = useState<boolean>();
+  // Determine if we need to show the successful submit alert when loading
+  // page (the alert is persistent and should appear at the top of the roster
+  // any time after submitting until the end of the collection period)
+  let { alertElements, setAlerts } = useAlerts();
   useEffect(() => {
-    const orgOnPage = userOrganizations.find(
-      (o) => String(o.id) === query.organization
-    );
-    setDataSubmitted(orgOnPage?.submittedData);
+    apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
+      if (res.submitted) {
+        console.log('submitted is true');
+        setAlerts([SUBMITTED]);
+      }
+    });
   }, [query.organization]);
 
   // Get alerts for page, including alert for children with errors
@@ -93,14 +113,17 @@ const Roster: React.FC = () => {
   const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
   ).length;
-  const { alertElements } = useChildrenWithAlerts(
+  const hookOpts = {
+    alertType,
+    organizationId: query.organization,
+  };
+  const { alertElements: missingInfoAlerts } = useChildrenWithAlerts(
     loading,
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,
-    alertType,
-    dataSubmitted,
-    query.organization
+    hookOpts
   );
+  alertElements.concat(missingInfoAlerts);
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
@@ -147,7 +170,7 @@ const Roster: React.FC = () => {
     if (query.organization) {
       await apiPut(`oec-report/${query.organization}`, undefined, {
         accessToken,
-      }).then(() => setDataSubmitted(true));
+      }).then(() => setAlerts([SUBMITTED]));
     }
   }
 
