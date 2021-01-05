@@ -43,7 +43,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input"
+              class="usa-input oec-text-input"
               id="street-address"
               type="text"
               value=""
@@ -67,7 +67,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
               </label>
               <input
                 aria-required="true"
-                class="usa-input"
+                class="usa-input oec-text-input"
                 id="town"
                 type="text"
                 value=""
@@ -135,7 +135,7 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input"
+              class="usa-input oec-text-input"
               id="zip"
               type="text"
               value=""

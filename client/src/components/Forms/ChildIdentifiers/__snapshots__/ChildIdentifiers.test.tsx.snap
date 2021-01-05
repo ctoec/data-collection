@@ -24,7 +24,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
         </label>
         <input
           aria-required="true"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="firstName"
           type="text"
           value="First"
@@ -50,7 +50,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
         </label>
         <input
           aria-required="false"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="middleName"
           type="text"
           value=""
@@ -74,7 +74,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
           </label>
           <input
             aria-required="true"
-            class="usa-input"
+            class="usa-input oec-text-input"
             id="lastName"
             type="text"
             value="Last"
@@ -100,7 +100,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
           </label>
           <input
             aria-required="false"
-            class="usa-input"
+            class="usa-input oec-text-input"
             id="suffix"
             type="text"
             value=""
@@ -143,7 +143,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-month"
               max="12"
               min="1"
@@ -162,7 +162,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-day"
               max="31"
               min="1"
@@ -181,7 +181,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-year"
               max="2200"
               min="1000"
@@ -304,7 +304,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
         </label>
         <input
           aria-required="false"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="unique-id"
           type="text"
           value=""
@@ -325,7 +325,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
         </label>
         <input
           aria-required="true"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="firstName"
           type="text"
           value="First"
@@ -351,7 +351,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
         </label>
         <input
           aria-required="false"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="middleName"
           type="text"
           value=""
@@ -375,7 +375,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
           </label>
           <input
             aria-required="true"
-            class="usa-input"
+            class="usa-input oec-text-input"
             id="lastName"
             type="text"
             value="Last"
@@ -401,7 +401,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
           </label>
           <input
             aria-required="false"
-            class="usa-input"
+            class="usa-input oec-text-input"
             id="suffix"
             type="text"
             value=""
@@ -444,7 +444,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-month"
               max="12"
               min="1"
@@ -463,7 +463,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-day"
               max="31"
               min="1"
@@ -482,7 +482,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-year"
               max="2200"
               min="1000"
@@ -605,7 +605,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
         </label>
         <input
           aria-required="false"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="sasid"
           type="text"
           value=""
@@ -626,7 +626,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
         </label>
         <input
           aria-required="true"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="firstName"
           type="text"
           value="First"
@@ -652,7 +652,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
         </label>
         <input
           aria-required="false"
-          class="usa-input"
+          class="usa-input oec-text-input"
           id="middleName"
           type="text"
           value=""
@@ -676,7 +676,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
           </label>
           <input
             aria-required="true"
-            class="usa-input"
+            class="usa-input oec-text-input"
             id="lastName"
             type="text"
             value="Last"
@@ -702,7 +702,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
           </label>
           <input
             aria-required="false"
-            class="usa-input"
+            class="usa-input oec-text-input"
             id="suffix"
             type="text"
             value=""
@@ -745,7 +745,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-month"
               max="12"
               min="1"
@@ -764,7 +764,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-day"
               max="31"
               min="1"
@@ -783,7 +783,7 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="dateOfBirth-picker-year"
               max="2200"
               min="1000"
