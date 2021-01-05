@@ -28,6 +28,7 @@ export const invite = async (
       await page.goto(`${siteConnection.url}/Admin/InviteUser`);
       await page.type('#Username', _user.email);
       await page.click('button[type="submit"]');
+      await page.waitForTimeout(3000);
 
       const resultElement = await page.$('strong');
       const result = (await (

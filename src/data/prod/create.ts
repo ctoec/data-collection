@@ -95,6 +95,7 @@ if (doInvite && !userFile) {
   console.error(
     'If --invite flag is passed, userFile must be supplied in config'
   );
+  process.exit(1);
 }
 
 let wingedKeysDBConnOpts: DBConnectionOpts;
