@@ -78,11 +78,11 @@ exports[`SubmitSuccess matches snapshot 1`] = `
       class="grid-row margin-top-1 margin-bottom-2"
     >
       <button
-        class="usa-button usa-button--unstyled text-bold display-block"
+        class="usa-button usa-button--unstyled display-block"
         type="button"
       >
         <span
-          class="oec-text-with-icon text-underline"
+          class="oec-text-with-icon"
         >
           <svg
             class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"

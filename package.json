@@ -16,7 +16,7 @@
     "@types/multer": "^1.4.3",
     "@types/node": "^14.0.24",
     "@types/uuid": "^8.3.0",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "class-validator": "^0.12.2",
     "concurrently": "^5.2.0",
     "del": "^5.1.0",
@@ -28,10 +28,10 @@
     "idx": "^2.5.6",
     "jest": "^26.6.0",
     "jsonwebtoken": "^8.5.1",
-    "jwks-rsa": "^1.8.1",
+    "jwks-rsa": "^1.12.1",
     "moment": "^2.27.0",
     "morgan": "^1.10.0",
-    "mssql": "^6.2.1",
+    "mssql": "^6.3.1",
     "multer": "^1.4.2",
     "nodemon": "^2.0.6",
     "pg": "^7.3.0",
@@ -39,10 +39,13 @@
     "ts-jest": "^26.4.1",
     "ts-node": "^8.10.2",
     "tsoa": "^3.2.1",
-    "typeorm": "0.2.25",
+    "typeorm": "^0.2.29",
     "typescript": "^3.9.7",
     "uuid": "^8.3.0",
     "xlsx": "^0.16.4"
+  },
+  "resolutions": {
+    "mssql/**/axios": "0.21.1"
   },
   "scripts": {
     "build": "rm -rf dist/ && npm run build-ts",
