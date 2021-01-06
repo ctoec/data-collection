@@ -8,7 +8,7 @@ import {
   DateOfBirthField,
   BirthCertificateFieldSet,
 } from './Fields';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
+import { Form, FormSubmitButton, Header } from '@ctoec/component-library';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { Child, UniqueIdType } from '../../../shared/models';
@@ -18,6 +18,7 @@ import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { useHistory } from 'react-router-dom';
 import { UniqueIdField } from './Fields/UniqueId';
+import { Heading } from '../../Heading';
 
 // The fields we use to check to see if this form has errors or missing info
 const childIdentifiersFields = [
@@ -39,6 +40,7 @@ export const ChildIdentifiersForm = ({
   hideErrors,
   showFieldOrFieldset = () => true,
   setAlerts,
+  topHeadingLevel,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
@@ -103,7 +105,9 @@ export const ChildIdentifiersForm = ({
       autoComplete="off"
       hideStatus={errorsHidden}
     >
-      {!hideHeader && <h2>Child's identifiers</h2>}
+      {!hideHeader && (
+        <Heading level={topHeadingLevel}>Child's identifiers</Heading>
+      )}
       {showFieldOrFieldset(child, ['sasid', 'uniqueId']) &&
         (child.organization.uniqueIdType === UniqueIdType.SASID ? (
           <div className="mobile-lg:grid-col-12">

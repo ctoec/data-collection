@@ -1,12 +1,11 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
 const { enterFormSection } = require('../utils/enterFormSection');
-const { headerMatch } = require('../utils/headerMatch');
 const newChildInput = require('../utils/newChildInput');
 
 module.exports = {
-  '@tags': ['child', 'new'],
-  newChild: async function (browser) {
+  '@tags': ['child', 'new', 'incomplete'],
+  newIncompleteChild: async function (browser) {
     // Initializes with the launch_url value set in config
     await browser.init();
     // Log in
@@ -18,20 +17,15 @@ module.exports = {
     await browser.waitForElementVisible('body');
     browser.assert.title('Add a child record');
 
-    const setsOfInfo = Object.values(newChildInput);
+    // All but the first name
+    const childInfoSection = newChildInput.childIdentFields.slice(1);
+    await enterFormSection(browser, childInfoSection);
+    // Click save and wait
+    await browser.click('css selector', 'input[value^=Save]');
+    await browser.pause(1000);
 
-    // For each of the sets of data
-    for (let j = 0; j < setsOfInfo.length; j++) {
-      const setOfFields = setsOfInfo[j];
-      await enterFormSection(browser, setOfFields);
-      // Click save and wait
-      await browser.click('css selector', 'input[value^=Save]');
-      await browser.pause(1000);
-    }
-
-    await browser.waitForElementVisible('main');
-    await headerMatch(browser, 'Hogwarts Childcare');
-
+    // Expect one span element with the class usa-error-message
+    browser.expect.elements('span.usa-error-message').count.to.equal(1);
     browser.end();
   },
 };

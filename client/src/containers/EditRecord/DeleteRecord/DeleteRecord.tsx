@@ -59,7 +59,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
       />
       <Modal
         isOpen={isOpen}
-        toggleOpen={toggleIsOpen}
+        onModalClose={toggleIsOpen}
         // Shorten to accomodate modal close button in a
         // nice looking way
         header={

@@ -246,7 +246,7 @@ const Roster: React.FC = () => {
           </div>
         </div>
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-          {rosterIsEmpty ? <></> : buttonTable}
+          {!rosterIsEmpty && buttonTable}
           <LoadingWrapper text="Loading your roster..." loading={loading}>
             {rosterContent}
           </LoadingWrapper>

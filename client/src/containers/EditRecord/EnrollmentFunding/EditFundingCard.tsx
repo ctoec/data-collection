@@ -15,6 +15,8 @@ import {
 } from '@ctoec/component-library';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 import { RecordFormProps } from '../../../components/Forms';
+import { hasValidationErrorForField } from '../../../utils/hasValidationError';
+import { HeadingLevel } from '../../../components/Heading';
 
 type EditFundingCardProps = {
   child: Child;
@@ -23,6 +25,7 @@ type EditFundingCardProps = {
   isCurrent?: boolean;
   afterSaveSuccess: () => void;
   setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -38,6 +41,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   isCurrent,
   afterSaveSuccess: _afterSaveSuccess,
   setAlerts,
+  topHeadingLevel,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -116,6 +120,12 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')
               : 'present'}
+            {hasValidationErrorForField(funding, 'firstReportingPeriod') && (
+              <>
+                {' '}
+                <InlineIcon icon="incomplete" />
+              </>
+            )}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">
@@ -144,6 +154,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
           enrollmentId={enrollment.id}
           afterSaveSuccess={afterSaveSuccess}
           setAlerts={setAlerts}
+          topHeadingLevel={topHeadingLevel}
         />
       </CardExpansion>
     </Card>
