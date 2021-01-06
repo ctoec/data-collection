@@ -171,5 +171,9 @@ export const showFieldInBatchEditForm = (
   fields: string[]
 ) => {
   if (!formData) return false;
-  return fields.some((f) => hasValidationErrorForField(formData, f)) || false;
+  return (
+    fields.some(
+      (f) => f !== 'fundings' && hasValidationErrorForField(formData, f)
+    ) || false
+  );
 };
