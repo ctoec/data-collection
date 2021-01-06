@@ -87,18 +87,17 @@ const Roster: React.FC = () => {
   // Determine if we need to show the successful submit alert when loading
   // page (the alert is persistent and should appear at the top of the roster
   // any time after submitting until the end of the collection period)
-  let { alertElements, setAlerts } = useAlerts();
+  const { alertElements, alerts, setAlerts } = useAlerts();
   useEffect(() => {
     apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
       if (res.submitted) {
-        setAlerts([SUBMITTED]);
+        setAlerts([SUBMITTED, ...alerts]);
       }
     });
   }, [query.organization, accessToken]);
 
   // Get other alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
-  // and add them after the submit success alert (if it's there)
   const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
   const activeChildrenWithErrorsCount = activeChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
@@ -110,13 +109,12 @@ const Roster: React.FC = () => {
     alertType,
     organizationId: query.organization,
   };
-  const { alertElements: missingInfoAlerts } = useChildrenWithAlerts(
+  useChildrenWithAlerts(
     loading,
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,
     hookOpts
   );
-  alertElements.concat(missingInfoAlerts);
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a

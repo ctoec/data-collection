@@ -34,7 +34,8 @@ export const useChildrenWithAlerts = (
 
     // set alert if:
     // - no existing matching alert OR
-    // - existing matching alert has different number (i.e. was displaying content for a different organization)
+    // - existing matching alert has different number (i.e.
+    // was displaying content for a different organization)
     const existingAlert = alerts.find(
       (a) => a.heading === childrenWithErrorsAlert.heading
     );
@@ -44,7 +45,9 @@ export const useChildrenWithAlerts = (
     );
 
     if (!childrenWithErrorsCount) {
-      // If there are no longer children with errors, we need to ditch that alert without overwriting alerts that may have come from other pages (ie. after delete child)
+      // If there are no longer children with errors, we need to
+      // ditch that alert without overwriting alerts that may have
+      // come from other pages (ie. after delete child)
       setAlerts(otherAlerts);
       return;
     }
@@ -53,13 +56,11 @@ export const useChildrenWithAlerts = (
       !existingAlert ||
       !existingAlertText.includes(`${childrenWithErrorsCount}`)
     ) {
+      // This filter func only picks out missing info alerts, so it leaves
+      // the persistent success alert safely untouched
       setAlerts([...otherAlerts, childrenWithErrorsAlert]);
     }
   }, [childrenWithErrorsCount, isLoading, opts.alertType]);
-
-  // If data is loading, we shouldn't display any alerts
-  if (isLoading) return {};
-  return { alertElements };
 };
 
 /**
