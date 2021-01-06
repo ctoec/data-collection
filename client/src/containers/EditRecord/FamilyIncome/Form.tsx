@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { RecordFormProps } from '../../../components/Forms';
-import {
-  IncomeDetermination,
-  UndefinableBoolean,
-} from '../../../shared/models';
+import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
 import { Button } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
-import { FosterIncomeNotRequiredAlert } from '../../../components/Forms/FamilyIncome/FosterIncomeNotRequiredAlert';
 import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 
 /**
@@ -29,17 +25,9 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
-  if (child?.foster === UndefinableBoolean.Yes) {
-    return (
-      <>
-        <Heading level={topHeadingLevel}>Family income determination</Heading>
-        <FosterIncomeNotRequiredAlert />
-      </>
-    );
-  }
-
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted
+  console.log(determinations);
   const currentDetermination: IncomeDetermination | undefined =
     determinations[0];
   const pastDeterminations: IncomeDetermination[] = determinations.slice(1);

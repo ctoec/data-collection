@@ -25,6 +25,7 @@ import {
   UTILIZATION_REPORTING_REASON,
   REQUIRED_IF_CHANGED_ENROLLMENT,
   REQUIRED_IF_CHANGED_ENROLLMENT_FUNDING,
+  REQUIRED_IF_INCOME_DISCLOSED,
 } from './constants';
 import moment, { Moment } from 'moment';
 
@@ -345,7 +346,7 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'household size',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
-    requirementString: REQUIRED_NOT_FOSTER,
+    requirementString: REQUIRED_IF_INCOME_DISCLOSED,
     definition:
       'The number of people in the household, for income eligibility purposes.',
     reason:
@@ -359,7 +360,7 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'annual household income',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
-    requirementString: REQUIRED_NOT_FOSTER,
+    requirementString: REQUIRED_IF_INCOME_DISCLOSED,
     definition: 'The documented household income, for eligibility purposes.',
     reason:
       'Allows for demographic reporting an automated calculation of funding eligibility.',
@@ -372,7 +373,7 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'determination date',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
-    requirementString: REQUIRED_NOT_FOSTER,
+    requirementString: REQUIRED_IF_INCOME_DISCLOSED,
     definition:
       "The date the provider received documentation of the family's income.",
     reason:
@@ -382,6 +383,18 @@ export class EnrollmentReportRow {
     section: TEMPLATE_SECTIONS.FAMILY_INCOME,
   })
   determinationDate?: Moment = moment.invalid();
+
+  @ColumnMetadata({
+    formattedName: 'income not disclosed',
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
+    definition:
+      "Indicate that the child's record does not have a documented income determination. Reasons may include children living with foster families, receiving special education/disability services, or other circumstances.",
+    reason: 'Indicates records where income is not collected',
+    format: makeFormatOptionsList(BOOLEAN_FORMATS),
+    example: 'Yes',
+    section: TEMPLATE_SECTIONS.FAMILY_INCOME,
+  })
+  incomeNotDisclosed?: boolean = undefined;
 
   @ColumnMetadata({
     formattedName: 'provider',

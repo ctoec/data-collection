@@ -49,7 +49,10 @@ const processErrorsInFields = (
  * @param children Array of DB-view child objects to analyze
  */
 export const checkErrorsInChildren = async (children: Child[]) => {
-  const cols: ColumnMetadata[] = getAllColumnMetadata();
+  // Exclude income not disclosed since it's an optional switch parameter
+  const cols: ColumnMetadata[] = getAllColumnMetadata().filter(
+    (col) => col.formattedName !== 'income not disclosed'
+  );
   const propertyNameToFormattedName = {};
   let errorDict = {};
   let errorOccursIn = {};

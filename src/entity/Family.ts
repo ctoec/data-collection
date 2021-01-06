@@ -62,12 +62,6 @@ export class Family implements FamilyInterface {
   @OneToMany(() => IncomeDetermination, (det) => det.family)
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
-  @ValidateIf((family) => {
-    // This value is set in child validation of family
-    const childIsFoster = family.childIsFoster;
-    delete family.childIsFoster;
-    return !childIsFoster;
-  })
   incomeDeterminations?: Array<IncomeDetermination>;
 
   @OneToMany(() => Child, (child) => child.family)
