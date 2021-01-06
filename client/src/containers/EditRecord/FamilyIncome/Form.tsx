@@ -4,6 +4,7 @@ import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
 import { Button } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
+import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 
 /**
  * Component enabling user to edit the family income portion of a child
