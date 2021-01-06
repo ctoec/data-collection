@@ -22,6 +22,7 @@ import {
 import { Child } from '../../shared/models';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { HeadingLevel } from '../../components/Heading';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -51,12 +52,15 @@ const EditRecord: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const { updateCurrentRosterCache } = useContext(RosterContext);
+
   // Child re-fetch
   const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
+        updateCurrentRosterCache(updatedChild);
 
         const newAlerts: AlertProps[] = [];
         const missingInfoAlertProps = getMissingInfoAlertProps(updatedChild);
