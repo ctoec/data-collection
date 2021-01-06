@@ -6,6 +6,8 @@ From csv data with formats defined [here](https://docs.google.com/spreadsheets/d
 - Users and their permissions
 - Reporting periods
 
+Alternatively, script can generate and send invite emails (through the winged-keys app) to users so they can set passwords and use the tool!
+
 ## Configuration
 Configuration is supplied as a JSON file like:
 ```
@@ -45,15 +47,18 @@ Configuration is supplied as a JSON file like:
 
 ## Usage
 ```
-$ yarn ts-node src/data/prod/create.ts --config [CONFIG_FILE_PATH]
+$ yarn ts-node src/data/prod/create.ts --config [CONFIG_FILE_PATH] [--invite]
 ```
-where `CONFIG_FILE_PATH` is an absolute path to the config file
+where:
+- `CONFIG_FILE_PATH` is an absolute path to the config file
+- `--invite` flag means all data creation is skipped, and invite emails are generated and sent to all users in `userFile`
 
 example:
 ```
 $ cp src/data/prod/config.example.json ./config.json
 $ vim config.json // edit config to contain real values!
 $ yarn ts-node src/data/prod/create.ts --config `pwd`/config.json
+$ yarn ts-node src/data/prod/create.ts --config `pwd`/config.json --invite
 ```
 
 ## Docker
