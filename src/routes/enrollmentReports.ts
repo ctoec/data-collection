@@ -42,6 +42,7 @@ enrollmentReportsRouter.post(
           req.user,
           { save: false }
         );
+
         // Need this line to create entities as the DB would see them.
         // Since only given properties are copied into the entities,
         // anything that winds up with missing info will set off

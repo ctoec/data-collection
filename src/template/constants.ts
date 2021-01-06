@@ -4,7 +4,7 @@ import moment from 'moment';
 // TODO: add pre-merge hook that updates these values (probably put them in a diff file)
 // automatically when this file gets updated
 export const TEMPLATE_VERSION = 1;
-export const TEMPLATE_LAST_UPDATED = moment.utc('12-16-2020', ['MM-DD-YYYY']);
+export const TEMPLATE_LAST_UPDATED = moment.utc('01-04-2021', ['MM-DD-YYYY']);
 
 // Formats
 export const BOOLEAN_FORMATS = ['Yes', 'Y', 'No', 'N', 'Not collected'];
@@ -34,6 +34,8 @@ export const REQUIRED_IF_US_BORN = 'Required if child was born in the U.S.';
 export const REQUIRED_AT_LEAST_ONE = 'At least one race option required';
 export const REQUIRED_NOT_FOSTER =
   'Required if child is not living with foster family';
+export const REQUIRED_IF_INCOME_DISCLOSED =
+  'Required unless the "income not disclosed" field has a value of "Yes"';
 export const REQUIRED_IF_CHANGED_ENROLLMENT =
   'Only required for children who:  \n- Withdrew  \n- Changed age group and/or site'; // double-spaces are required for front-end Markdown formatting
 export const REQUIRED_IF_CHANGED_ENROLLMENT_FUNDING =
