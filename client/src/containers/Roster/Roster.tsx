@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Moment } from 'moment';
 import {
   TabNav,
@@ -37,6 +37,7 @@ import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps
 import { RosterContent } from './RosterContent';
 import { EmptyRosterCard } from './EmptyRosterCard';
 import { useAlerts } from '../../hooks/useAlerts';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -70,6 +71,12 @@ const Roster: React.FC = () => {
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
+
+  // Track roster query so we can update cache appropriately and navigate back to it
+  const { setRosterQuery } = useContext(RosterContext);
+  useEffect(() => {
+    if (query) setRosterQuery(query);
+  }, [query?.organization, query?.month]);
 
   // TODO: handle fetching error
   const {
