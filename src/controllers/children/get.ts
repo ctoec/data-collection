@@ -11,7 +11,6 @@ import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
 import { propertyDateSorter } from '../../utils/propertyDateSorter';
 import { getCurrentFunding } from '../../utils/getCurrentFunding';
-import { stringify } from 'uuid';
 import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
 
 /**
@@ -170,6 +169,14 @@ export const getFundingSpaceMap = async (children: Child[]) => {
   return fundingSpacesDisplay;
 };
 
+/**
+ * Function that determines the distribution of children across sites.
+ * Counts the children at each site and stores the result in a data
+ * structure that pairs this count with id properties of the site
+ * so that the front-end can send useres directly to a particular
+ * site roster.
+ * @param children
+ */
 export const getSiteCountMap = async (children: Child[]) => {
   const siteCounts: {
     siteName: string;

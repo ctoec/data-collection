@@ -90,15 +90,15 @@ const Roster: React.FC = () => {
   let { alertElements, setAlerts } = useAlerts();
   useEffect(() => {
     apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
-      console.log(res);
       if (res.submitted) {
         setAlerts([SUBMITTED]);
       }
     });
   }, [query.organization, accessToken]);
 
-  // Get alerts for page, including alert for children with errors
+  // Get other alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
+  // and add them after the submit success alert (if it's there)
   const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
   const activeChildrenWithErrorsCount = activeChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length

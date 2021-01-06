@@ -6,7 +6,6 @@ import { AddRecordButton } from '../../components/AddRecordButton';
 import { Link, useHistory } from 'react-router-dom';
 import {
   ArrowRight,
-  Button,
   Card,
   InlineIcon,
   TextWithIcon,
@@ -14,11 +13,9 @@ import {
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { stringify } from 'query-string';
 
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
-  const history = useHistory();
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const orgAccess = user?.accessType === 'organization';
@@ -26,8 +23,6 @@ export const PostSubmitHome: React.FC = () => {
   const showFundings = orgAccess && userOrgs.length == 1;
 
   // Count how many children are in the roster so we can format the display
-  // Also obtain the funding spaces map if the user has the appropriate
-  // org permissions
   const [userRosterCount, setUserRosterCount] = useState(undefined);
   const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
   const [siteCountDisplay, setSiteCountDisplay] = useState();
@@ -38,6 +33,8 @@ export const PostSubmitHome: React.FC = () => {
         throw new Error(err);
       });
 
+    // Get the site count data structure, too, so we can divide up
+    // user-accessible sites into individual cards
     apiGet('children?siteMap=true', accessToken)
       .then((res) => setSiteCountDisplay(res.siteCountMap))
       .catch((err) => {
@@ -57,15 +54,13 @@ export const PostSubmitHome: React.FC = () => {
     }
   }, [accessToken]);
 
-  console.log(siteCountDisplay);
-
   // Map each calculated funding space distribution into a card
   // element that we can format for display
   let fundingCards = (fundingSpacesDisplay || []).map((fsd: any) => (
     <div className="desktop:grid-col-4 three-column-card">
       <Card>
         <div className="padding-0">
-          <div className="text-bold font-body-lg">{fsd.sourceName}</div>
+          <h3>{fsd.sourceName}</h3>
           {fsd.includedAgeGroups.map((ag: any) => (
             <>
               <div>
@@ -73,6 +68,7 @@ export const PostSubmitHome: React.FC = () => {
               </div>
               <>
                 {ag.includedTimes.map((t: any) => {
+                  // Account for fundings that have negative capacities stored
                   let spaceNumbers = `${t.filled}`;
                   if (t.capacity !== -1) spaceNumbers += `/${t.capacity} `;
                   else spaceNumbers += ` `;
@@ -104,12 +100,14 @@ export const PostSubmitHome: React.FC = () => {
     </>
   );
 
-  // Create site cards
+  // Use same flexbox styling to create and distribute site cards
+  // that show enrollment counts by site as well as view site
+  // rosters
   let siteCards = (siteCountDisplay || []).map((s: any) => (
     <div className="desktop:grid-col-4 three-column-card">
       <Card>
         <div className="padding-0">
-          <div className="text-bold font-body-lg">{s.siteName}</div>
+          <h3>{s.siteName}</h3>
           <p className="text-base-darker">
             {pluralize('enrollment', s.count, true)}
           </p>

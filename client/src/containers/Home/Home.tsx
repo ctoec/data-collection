@@ -8,11 +8,14 @@ import { apiGet } from '../../utils/api';
 const Home: React.FC = () => {
   const { user } = useContext(UserContext);
   const { accessToken } = useContext(AuthenticationContext);
+
+  // Want to show the presubmit page unless every org the user represents
+  // has submitted their data (corner case cuz there's only one user who
+  // has multiple orgs)
   const [isPostSubmit, setIsPostSubmit] = useState<boolean>(true);
   useEffect(() => {
     user?.organizations?.forEach((org) => {
       apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
-        console.log(res);
         if (!res.submitted) {
           setIsPostSubmit(false);
           return;
