@@ -6,7 +6,7 @@ import { tableColumns } from './TableColumns';
 
 type ErrorModalProps = {
   isOpen: boolean;
-  toggleIsOpen: () => void;
+  closeModal: () => void;
   clearFile: () => void;
   errorDict: ErrorObjectForTable[];
   nextFunc: () => void;
@@ -20,7 +20,7 @@ type ErrorModalProps = {
  */
 export const ErrorModal: React.FC<ErrorModalProps> = ({
   isOpen,
-  toggleIsOpen,
+  closeModal,
   clearFile,
   errorDict,
   nextFunc,
@@ -28,7 +28,11 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
   return (
     <Modal
       isOpen={isOpen}
-      toggleOpen={toggleIsOpen}
+      onModalClose={closeModal}
+      onXClick={() => {
+        clearFile();
+        closeModal();
+      }}
       header={<h2> Your upload has missing or incorrect data </h2>}
       showHeaderBorder
       content={
@@ -53,15 +57,10 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
               text="Cancel upload"
               onClick={() => {
                 clearFile();
-                toggleIsOpen();
+                closeModal();
               }}
             />
-            <Button
-              text="Upload and correct in roster"
-              onClick={() => {
-                nextFunc();
-              }}
-            />
+            <Button text="Upload and correct in roster" onClick={nextFunc} />
           </div>
         </div>
       }

@@ -49,7 +49,7 @@ export const MonthFilterModal: React.FC<MonthFilterModal> = ({
   return (
     <Modal
       isOpen={isModalOpen}
-      toggleOpen={toggleModal}
+      onModalClose={toggleModal}
       header={<h2>View past enrollments</h2>}
       content={
         <>
