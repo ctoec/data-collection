@@ -11,6 +11,8 @@ import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
 import { propertyDateSorter } from '../../utils/propertyDateSorter';
 import { getCurrentFunding } from '../../utils/getCurrentFunding';
+import { stringify } from 'uuid';
+import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
 
 /**
  * Get child by id, with related family and related
@@ -166,6 +168,36 @@ export const getFundingSpaceMap = async (children: Child[]) => {
   });
 
   return fundingSpacesDisplay;
+};
+
+export const getSiteCountMap = async (children: Child[]) => {
+  const siteCounts: {
+    siteName: string;
+    count: number;
+    orgId: number;
+    siteId: number;
+  }[] = [];
+
+  children.forEach((c) => {
+    const enrollment = getCurrentEnrollment(c);
+    if (enrollment) {
+      let match = siteCounts.find(
+        (sc) => sc.siteName === enrollment.site.siteName
+      );
+      if (match === undefined) {
+        match = {
+          siteName: enrollment.site.siteName,
+          count: 0,
+          orgId: enrollment.site.organizationId,
+          siteId: enrollment.site.id,
+        };
+        siteCounts.push(match);
+      }
+      match.count += 1;
+    }
+  });
+
+  return siteCounts.sort((a, b) => (a.siteName > b.siteName ? 1 : -1));
 };
 
 /**

@@ -53,7 +53,10 @@
   flex-direction: row;
   flex: 1;
   align-items: flex-start;
-  // flex-wrap: wrap;
-  // width: 33%;
-  // flex-flow: wrap;
+}
+
+.three-column-card {
+  margin: 0.5em;
+  width: 30%;
+  max-width: 30%;
 }

@@ -54,13 +54,6 @@ const SUBMITTED: AlertProps = {
   type: 'info',
 };
 
-// // Make sure the submitted alert is always the top alert on the page
-// if (opts.submitted) {
-//   if (alerts.find((a) => a.heading === SUBMITTED.heading) === undefined) {
-//     setAlerts([SUBMITTED, ...alerts]);
-//   }
-// }
-
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
@@ -97,12 +90,12 @@ const Roster: React.FC = () => {
   let { alertElements, setAlerts } = useAlerts();
   useEffect(() => {
     apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
+      console.log(res);
       if (res.submitted) {
-        console.log('submitted is true');
         setAlerts([SUBMITTED]);
       }
     });
-  }, [query.organization]);
+  }, [query.organization, accessToken]);
 
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
@@ -285,11 +278,7 @@ const Roster: React.FC = () => {
       </div>
       {!rosterIsEmpty && (
         <FixedBottomBar>
-          <Button
-            text="Back to getting started"
-            href="/getting-started"
-            appearance="outline"
-          />
+          <Button text="Back to home" href="/home" appearance="outline" />
           {!isSiteLevelUser && (
             <Button
               text={

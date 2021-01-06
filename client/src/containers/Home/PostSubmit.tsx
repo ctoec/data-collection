@@ -3,9 +3,10 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { apiGet } from '../../utils/api';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import {
   ArrowRight,
+  Button,
   Card,
   InlineIcon,
   TextWithIcon,
@@ -13,9 +14,11 @@ import {
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { stringify } from 'query-string';
 
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
+  const history = useHistory();
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const orgAccess = user?.accessType === 'organization';
@@ -27,9 +30,16 @@ export const PostSubmitHome: React.FC = () => {
   // org permissions
   const [userRosterCount, setUserRosterCount] = useState(undefined);
   const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
+  const [siteCountDisplay, setSiteCountDisplay] = useState();
   useEffect(() => {
     apiGet('children?count=true', accessToken)
       .then((res) => setUserRosterCount(res.count))
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    apiGet('children?siteMap=true', accessToken)
+      .then((res) => setSiteCountDisplay(res.siteCountMap))
       .catch((err) => {
         throw new Error(err);
       });
@@ -47,10 +57,12 @@ export const PostSubmitHome: React.FC = () => {
     }
   }, [accessToken]);
 
+  console.log(siteCountDisplay);
+
   // Map each calculated funding space distribution into a card
   // element that we can format for display
   let fundingCards = (fundingSpacesDisplay || []).map((fsd: any) => (
-    <div className="desktop:grid-col-4 margin-1" style={{ width: '30%' }}>
+    <div className="desktop:grid-col-4 three-column-card">
       <Card>
         <div className="padding-0">
           <div className="text-bold font-body-lg">{fsd.sourceName}</div>
@@ -91,6 +103,28 @@ export const PostSubmitHome: React.FC = () => {
       </div>
     </>
   );
+
+  // Create site cards
+  let siteCards = (siteCountDisplay || []).map((s: any) => (
+    <div className="desktop:grid-col-4 three-column-card">
+      <Card>
+        <div className="padding-0">
+          <div className="text-bold font-body-lg">{s.siteName}</div>
+          <p className="text-base-darker">
+            {pluralize('enrollment', s.count, true)}
+          </p>
+          <Link to={`/roster?organization=${s.orgId}&site=${s.siteId}`}>
+            <TextWithIcon
+              text="View site roster"
+              iconSide="right"
+              Icon={ArrowRight}
+              direction="right"
+            />
+          </Link>
+        </div>
+      </Card>
+    </div>
+  ));
 
   return (
     <div className="grid-container margin-top-4">
@@ -159,6 +193,7 @@ export const PostSubmitHome: React.FC = () => {
       </div>
       {showFundings && fundingSection}
       <h2>Sites</h2>
+      <div className="three-column-layout">{siteCards}</div>
     </div>
   );
 };

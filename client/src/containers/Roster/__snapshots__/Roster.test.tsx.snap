@@ -1210,9 +1210,9 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
       >
         <a
           class="usa-button usa-button--outline"
-          href="/getting-started"
+          href="/home"
         >
-          Back to getting started
+          Back to home
         </a>
         <button
           class="usa-button"
@@ -2337,9 +2337,9 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
       >
         <a
           class="usa-button usa-button--outline"
-          href="/getting-started"
+          href="/home"
         >
-          Back to getting started
+          Back to home
         </a>
         <button
           class="usa-button"
@@ -3393,9 +3393,9 @@ exports[`Roster matches snapshot for site level user 1`] = `
       >
         <a
           class="usa-button usa-button--outline"
-          href="/getting-started"
+          href="/home"
         >
-          Back to getting started
+          Back to home
         </a>
       </div>
     </div>
@@ -4123,9 +4123,9 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
       >
         <a
           class="usa-button usa-button--outline"
-          href="/getting-started"
+          href="/home"
         >
-          Back to getting started
+          Back to home
         </a>
         <button
           class="usa-button"

@@ -17,7 +17,7 @@ export async function getSites(
     where.organizationId = organizationId;
   }
 
-  return getManager().find(Site, {
+  return await getManager().find(Site, {
     where,
     relations: ['organization'],
   });

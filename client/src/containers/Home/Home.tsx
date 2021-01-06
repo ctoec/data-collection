@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { PreSubmitHome } from './PreSubmit';
 import { PostSubmitHome } from './PostSubmit';
@@ -8,12 +8,13 @@ import { apiGet } from '../../utils/api';
 const Home: React.FC = () => {
   const { user } = useContext(UserContext);
   const { accessToken } = useContext(AuthenticationContext);
-  let isPostSubmit = true;
+  const [isPostSubmit, setIsPostSubmit] = useState<boolean>(true);
   useEffect(() => {
     user?.organizations?.forEach((org) => {
       apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
+        console.log(res);
         if (!res.submitted) {
-          isPostSubmit = false;
+          setIsPostSubmit(false);
           return;
         }
       });
