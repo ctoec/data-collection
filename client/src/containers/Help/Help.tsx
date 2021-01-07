@@ -48,8 +48,8 @@ const Help: React.FC = () => {
 
             <Button
               text="View guides"
-              // TODO: Replace this with an actual link once we have it
-              onClick={() => {}}
+              href="https://ece-reporter.ctoec.org/help"
+              external={true}
             />
           </Card>
         </div>
@@ -63,11 +63,7 @@ const Help: React.FC = () => {
               Reach out to the ECE Reporter team. We'll reply within 1 business
               day.
             </p>
-            <Button
-              text="Send a request"
-              // TODO: Replace this with an actual link once we have it
-              onClick={() => {}}
-            />
+            <Button text="Send a request" href="/support" />
           </Card>
         </div>
       </div>

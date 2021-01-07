@@ -55,25 +55,23 @@ const App: React.FC = () => {
               path: '/data-requirements',
             },
             {
-              text: 'Feedback',
+              text: 'Help',
               type: 'secondary',
-              path: mailToLinkProps.href,
-              target: mailToLinkProps.target,
-              external: true,
+              path: '/help',
             },
           ]}
           userFirstName={user?.firstName}
         />
-        <main id="main-content">
-          <ErrorBoundary alertProps={defaultErrorBoundaryProps}>
-            <Switch>
-              {routes.map((route, index) => (
-                <MakeRouteWithSubRoutes key={index} {...route} />
-              ))}
-            </Switch>
-          </ErrorBoundary>
-        </main>
       </ErrorBoundary>
+      <main id="main-content">
+        <ErrorBoundary alertProps={defaultErrorBoundaryProps}>
+          <Switch>
+            {routes.map((route, index) => (
+              <MakeRouteWithSubRoutes key={index} {...route} />
+            ))}
+          </Switch>
+        </ErrorBoundary>
+      </main>
     </div>
   );
 };
