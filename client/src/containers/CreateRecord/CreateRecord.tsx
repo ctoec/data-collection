@@ -11,7 +11,7 @@ import { RecordFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
-import { firstNameMissingText, nameFormatter } from '../../utils/formatters';
+import { nameFormatter } from '../../utils/formatters';
 
 type LocationType = Location & {
   state: {
@@ -77,9 +77,7 @@ const CreateRecord: React.FC = () => {
             {
               type: 'success',
               heading: 'Record added',
-              text: `${nameFormatter(child, {
-                missingFirstNameText: firstNameMissingText,
-              })}'s record was added to your roster.`,
+              text: `${nameFormatter(child)}'s record was added to your roster.`,
             },
           ],
         });
