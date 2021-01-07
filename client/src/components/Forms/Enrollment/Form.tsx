@@ -7,6 +7,7 @@ import {
   CareModelField,
   AgeGroupField,
   NewFundingField,
+  EnrollmentEndDateField,
 } from './Fields';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { RecordFormProps } from '../types';
@@ -16,6 +17,7 @@ import { getCurrentEnrollment } from '../../../utils/models';
 import { apiPost, apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { ExitReasonField } from '../../../containers/EditRecord/WithdrawRecord/Fields/ExitReason';
 
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'model'];
 const enrollmentFundingFields = [...enrollmentFields, 'fundings'];
@@ -145,11 +147,14 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
             )}
           />
         )}
-        {showFieldOrFieldset(enrollment, ['entry', 'model']) && (
-          <>
-            <EnrollmentStartDateField<Enrollment> />
-            <CareModelField<Enrollment> />
-          </>
+        {showFieldOrFieldset(enrollment, ['entry']) && (
+          <EnrollmentStartDateField<Enrollment> />
+        )}
+        {showFieldOrFieldset(enrollment, ['exit']) && (
+          <EnrollmentEndDateField<Enrollment> />
+        )}
+        {showFieldOrFieldset(enrollment, ['model']) && (
+          <CareModelField<Enrollment> />
         )}
         {showFieldOrFieldset(enrollment, ['ageGroup']) && (
           <AgeGroupField<Enrollment> />
