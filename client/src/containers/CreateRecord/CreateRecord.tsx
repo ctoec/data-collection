@@ -138,6 +138,13 @@ const CreateRecord: React.FC = () => {
     hideHeader: true,
     topHeadingLevel: 'h2',
     hideErrors,
+    showFieldOrFieldset: (_, fields) => {
+      // special case to hide enrollment exit field in create flow
+      if (fields.includes('exit')) {
+        return false;
+      }
+      return true;
+    },
   };
 
   return (
