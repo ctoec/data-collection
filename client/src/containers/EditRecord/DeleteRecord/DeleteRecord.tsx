@@ -38,9 +38,9 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
               {
                 type: 'success',
                 heading: 'Record deleted',
-              text: `${nameFormatter(child, {
-                capitalize: true,
-              })}'s record was deleted from your roster.`,
+                text: `${nameFormatter(child, {
+                  capitalize: true,
+                })}'s record was deleted from your roster.`,
               },
             ],
           },
@@ -51,7 +51,10 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
         setAlerts([
           {
             type: 'error',
-            text: 'Unable to delete record',
+            text: `Unable to delete ${nameFormatter(child, {
+              firstOnly: true,
+              capitalize: true,
+            })}'s record`,
           },
         ]);
       })
