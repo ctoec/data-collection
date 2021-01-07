@@ -15,6 +15,7 @@ import { ReportingPeriodField } from '../../../components/Forms/Enrollment/Fundi
 import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
 import { useAlerts } from '../../../hooks/useAlerts';
+import { nameFormatter } from '../../../utils/formatters';
 
 type WithdrawProps = {
   child: Child;
@@ -45,7 +46,10 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
             {
               type: 'success',
               heading: 'Record withdrawn',
-              text: `${child.firstName} has been withdrawn from your program`,
+              text: `${nameFormatter(child, {
+                firstOnly: true,
+                capitalize: true,
+              })} has been withdrawn from your program`,
             },
           ],
         });
@@ -53,7 +57,12 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       .catch((err) => {
         console.error(err);
         setAlerts([
-          { type: 'error', text: `Unable to withdraw ${child.firstName}` },
+          {
+            type: 'error',
+            text: `Unable to withdraw ${nameFormatter(child, {
+              firstOnly: true,
+            })}`,
+          },
         ]);
       })
       .finally(() => setIsSaving(false));
@@ -68,14 +77,14 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
   const onClick =
     child.validationErrors && child.validationErrors.length
       ? () =>
-        setAlerts([
-          {
-            type: 'error',
-            heading:
-              'Records cannot be withdrawn with missing or incorrect info',
-            text: 'Add required info before withdrawing.',
-          },
-        ])
+          setAlerts([
+            {
+              type: 'error',
+              heading:
+                'Records cannot be withdrawn with missing or incorrect info',
+              text: 'Add required info before withdrawing.',
+            },
+          ])
       : toggleIsOpen;
 
   return (
@@ -92,7 +101,9 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
         header={
           <>
             {alertElements}
-            <h2 className="margin-bottom-0">Withdraw {child.firstName}</h2>
+            <h2 className="margin-bottom-0">
+              Withdraw {nameFormatter(child, { firstOnly: true })}
+            </h2>
           </>
         }
         content={
