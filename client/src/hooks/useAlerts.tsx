@@ -23,13 +23,11 @@ export const useAlerts = (initialAlerts: AlertProps[] = []) => {
     window.scrollTo(0, 0);
   }
 
-  console.log('alerts', alerts);
   const alertElements = alerts
     .filter((alertProps) => !!alertProps)
     .map((alertProps, i) => (
       <Alert {...(alertProps as AlertProps)} key={`alerts-${i}`} />
     ));
 
-  console.log('els', alertElements);
   return { alertElements, alerts, setAlerts };
 };

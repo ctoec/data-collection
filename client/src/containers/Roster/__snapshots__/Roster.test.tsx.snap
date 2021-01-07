@@ -3468,17 +3468,39 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                   <span
                     class="oec-text-with-icon"
                   >
+                    <svg
+                      class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                      data-icon="plus-circle"
+                      data-prefix="fas"
+                      viewBox="0 0 512 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+                        fill="currentColor"
+                      />
+                    </svg>
                     Add a record
                   </span>
                 </a>
               </div>
               <button
-                class="usa-button usa-button--unstyled text-bold display-block"
+                class="usa-button usa-button--unstyled display-block"
                 type="button"
               >
                 <span
-                  class="oec-text-with-icon text-underline"
+                  class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                    viewBox="0 0 384 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm76.45 211.36l-96.42 95.7c-6.65 6.61-17.39 6.61-24.04 0l-96.42-95.7C73.42 337.29 80.54 320 94.82 320H160v-80c0-8.84 7.16-16 16-16h32c8.84 0 16 7.16 16 16v80h65.18c14.28 0 21.4 17.29 11.27 27.36zM377 105L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128v-6.1c0-6.3-2.5-12.4-7-16.9z"
+                      fill="currentColor"
+                    />
+                  </svg>
                   Export roster
                 </span>
               </button>
@@ -3502,6 +3524,17 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                    viewBox="0 0 56 56"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M56 27.947C56.03 43.374 43.447 55.99 28.02 56a27.883 27.883 0 0 1-17.592-6.2 2.708 2.708 0 0 1-.208-4.02l1.272-1.272c.972-.972 2.524-1.078 3.6-.224A20.69 20.69 0 0 0 28 48.774c11.483 0 20.774-9.293 20.774-20.774 0-11.483-9.293-20.774-20.774-20.774a20.702 20.702 0 0 0-14.233 5.637l5.73 5.73c1.138 1.139.332 3.084-1.277 3.084H1.806A1.806 1.806 0 0 1 0 19.871V3.458c0-1.61 1.946-2.415 3.084-1.277l5.574 5.574A27.905 27.905 0 0 1 28 0c15.446 0 27.971 12.507 28 27.947zm-20.426 8.895l1.11-1.426a2.71 2.71 0 0 0-.476-3.802l-4.595-3.575V16.26a2.71 2.71 0 0 0-2.71-2.71h-1.806a2.71 2.71 0 0 0-2.71 2.71v15.315l7.385 5.743a2.71 2.71 0 0 0 3.802-.475z"
+                      fill="currentColor"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
                   Withdrawn records
                 </span>
               </button>
@@ -3512,7 +3545,19 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                 <span
                   class="oec-text-with-icon"
                 >
-                  Past enrollments
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                    data-icon="calendar"
+                    data-prefix="far"
+                    viewBox="0 0 448 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M400 64h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V160h352v298c0 3.3-2.7 6-6 6z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  Roster for a past month
                 </span>
               </button>
             </div>
@@ -3646,6 +3691,18 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                       class="oec-accordion__heading-expand"
                     >
                       Hide Infant/toddler roster
+                      <svg
+                        class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                        fill="currentColor"
+                        height="39"
+                        viewBox="0 0 64 39"
+                        width="64"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M63.36 4.004L60.155.741c-.427-.436-.919-.654-1.475-.654-.555 0-1.047.218-1.475.654L32 26.4 6.798.74C6.37.306 5.878.088 5.323.088c-.556 0-1.048.218-1.476.654L.642 4.005C.213 4.44 0 4.941 0 5.507c0 .565.214 1.066.642 1.501l29.883 30.427c.427.435.92.652 1.475.652.556 0 1.047-.217 1.474-.652L63.361 7.008c.427-.435.639-.936.639-1.501 0-.566-.212-1.067-.64-1.503z"
+                        />
+                      </svg>
                     </div>
                   </div>
                 </button>
@@ -3675,7 +3732,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Name
                           <div
                             class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3692,7 +3772,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Missing info
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3709,7 +3812,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Birthdate
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3726,7 +3852,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Funding type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3743,7 +3892,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Space type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3760,7 +3932,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Site
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3777,7 +3972,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Enrollment date
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                     </tr>
@@ -3900,6 +4118,18 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                       class="oec-accordion__heading-expand"
                     >
                       Hide Preschool roster
+                      <svg
+                        class="oec-accordion__button-icon oec-accordion__button-icon--expanded"
+                        fill="currentColor"
+                        height="39"
+                        viewBox="0 0 64 39"
+                        width="64"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M63.36 4.004L60.155.741c-.427-.436-.919-.654-1.475-.654-.555 0-1.047.218-1.475.654L32 26.4 6.798.74C6.37.306 5.878.088 5.323.088c-.556 0-1.048.218-1.476.654L.642 4.005C.213 4.44 0 4.941 0 5.507c0 .565.214 1.066.642 1.501l29.883 30.427c.427.435.92.652 1.475.652.556 0 1.047-.217 1.474-.652L63.361 7.008c.427-.435.639-.936.639-1.501 0-.566-.212-1.067-.64-1.503z"
+                        />
+                      </svg>
                     </div>
                   </div>
                 </button>
@@ -3929,7 +4159,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Name
                           <div
                             class="oec-table__sort-controls oec-table__sort-controls--ascending"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3946,7 +4199,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Missing info
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3963,7 +4239,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Birthdate
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3980,7 +4279,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Funding type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -3997,7 +4319,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Space type
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -4014,7 +4359,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Site
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                       <th
@@ -4031,7 +4399,30 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                           Enrollment date
                           <div
                             class="oec-table__sort-controls"
-                          />
+                          >
+                            <svg
+                              height="16"
+                              viewBox="0 0 16 16"
+                              width="16"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <g
+                                fill="none"
+                                fill-rule="evenodd"
+                              >
+                                <circle
+                                  cx="8"
+                                  cy="8"
+                                  fill="currentColor"
+                                  r="8"
+                                />
+                                <path
+                                  d="M11.955 7.43l-3.209 2.957V3H7.254v7.387L4.045 7.431 3 8.394 8 13l5-4.606z"
+                                  fill="#FFF"
+                                />
+                              </g>
+                            </svg>
+                          </div>
                         </button>
                       </th>
                     </tr>

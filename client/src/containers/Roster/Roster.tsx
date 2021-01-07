@@ -30,7 +30,6 @@ import {
   useUpdateRosterParams,
   useOrgSiteProps,
   usePaginatedChildData,
-  getChildrenWithErrorsAlertProps,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
@@ -38,6 +37,7 @@ import { RosterContent } from './RosterContent';
 import { EmptyRosterCard } from './EmptyRosterCard';
 import { useAlerts } from '../../hooks/useAlerts';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
+import { getChildrenWithErrorsAlert } from '../../utils/getChildrenWithErrorsAlert';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -112,29 +112,26 @@ const Roster: React.FC = () => {
   useEffect(() => {
     apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
       setIsSubmitted(!!res?.submitted);
-      // if (res.submitted) {
-      // setAlerts([SUBMITTED, ...alerts]);
-      // }
     });
   }, [query.organization, accessToken]);
 
-  // get alert for missing info children
-
+  // Now get the alert for missing info, if applicable, and set all the
+  // alerts at once
   const { setAlerts, alertElements } = useAlerts();
   useEffect(() => {
-    const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
+    const childrenWithErrorsAlert = getChildrenWithErrorsAlert(
       activeChildrenWithErrorsCount,
       withdrawnChildrenWithErrorsCount,
       alertType,
       query.organization
     );
     setAlerts((_alerts) => [
+      isSubmitted ? SUBMITTED : undefined,
       ..._alerts.filter(
         (a) =>
           a?.heading !== childrenWithErrorsAlert?.heading &&
           a?.heading !== SUBMITTED.heading
       ),
-      isSubmitted ? SUBMITTED : undefined,
       childrenWithErrorsAlert,
     ]);
   }, [
@@ -306,7 +303,7 @@ const Roster: React.FC = () => {
       {!rosterIsEmpty && (
         <FixedBottomBar>
           <Button text="Back to home" href="/home" appearance="outline" />
-          {!isSiteLevelUser && (
+          {!isSiteLevelUser && !isSubmitted && (
             <Button
               text={
                 isSiteLevelUser

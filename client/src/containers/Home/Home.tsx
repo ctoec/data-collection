@@ -19,9 +19,11 @@ const Home: React.FC = () => {
       apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
         if (!res.submitted) {
           setIsPostSubmit(false);
+          return;
         }
       });
     });
+    setIsPostSubmit(true);
   }, [user, accessToken]);
 
   return (
