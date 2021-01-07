@@ -4,7 +4,7 @@ import { Alert, AlertProps } from '@ctoec/component-library';
 
 type LocationType = Location & {
   state: {
-    alerts: AlertProps[];
+    alerts: (AlertProps | undefined)[];
   };
 };
 
@@ -23,8 +23,13 @@ export const useAlerts = (initialAlerts: AlertProps[] = []) => {
     window.scrollTo(0, 0);
   }
 
-  const alertElements = alerts.map((alertProps, i) => (
-    <Alert {...alertProps} key={`alerts-${i}`} />
-  ));
+  console.log('alerts', alerts);
+  const alertElements = alerts
+    .filter((alertProps) => !!alertProps)
+    .map((alertProps, i) => (
+      <Alert {...(alertProps as AlertProps)} key={`alerts-${i}`} />
+    ));
+
+  console.log('els', alertElements);
   return { alertElements, alerts, setAlerts };
 };

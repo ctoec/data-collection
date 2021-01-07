@@ -29,8 +29,8 @@ import { RosterButtonsTable } from './RosterButtonsTable';
 import {
   useUpdateRosterParams,
   useOrgSiteProps,
-  useChildrenWithAlerts,
   usePaginatedChildData,
+  getChildrenWithErrorsAlertProps,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
@@ -91,18 +91,6 @@ const Roster: React.FC = () => {
   const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
   const isSingleSiteView = query.site ? true : false;
 
-  // Determine if we need to show the successful submit alert when loading
-  // page (the alert is persistent and should appear at the top of the roster
-  // any time after submitting until the end of the collection period)
-  const { alertElements, alerts, setAlerts } = useAlerts();
-  useEffect(() => {
-    apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
-      if (res.submitted) {
-        setAlerts([SUBMITTED, ...alerts]);
-      }
-    });
-  }, [query.organization, accessToken]);
-
   // Get other alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
@@ -116,12 +104,46 @@ const Roster: React.FC = () => {
     alertType,
     organizationId: query.organization,
   };
-  useChildrenWithAlerts(
-    loading,
+
+  // Determine if we need to show the successful submit alert when loading
+  // page (the alert is persistent and should appear at the top of the roster
+  // any time after submitting until the end of the collection period)
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  useEffect(() => {
+    apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
+      setIsSubmitted(!!res?.submitted);
+      // if (res.submitted) {
+      // setAlerts([SUBMITTED, ...alerts]);
+      // }
+    });
+  }, [query.organization, accessToken]);
+
+  // get alert for missing info children
+
+  const { setAlerts, alertElements } = useAlerts();
+  useEffect(() => {
+    const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
+      activeChildrenWithErrorsCount,
+      withdrawnChildrenWithErrorsCount,
+      alertType,
+      query.organization
+    );
+    setAlerts((_alerts) => [
+      ..._alerts.filter(
+        (a) =>
+          a?.heading !== childrenWithErrorsAlert?.heading &&
+          a?.heading !== SUBMITTED.heading
+      ),
+      isSubmitted ? SUBMITTED : undefined,
+      childrenWithErrorsAlert,
+    ]);
+  }, [
+    isSubmitted,
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,
-    hookOpts
-  );
+    alertType,
+    query.organization,
+  ]);
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
