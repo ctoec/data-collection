@@ -40,6 +40,7 @@ export const mapRows = async (
         row,
         organizations,
         sites,
+        user,
         opts.save,
         childToUpdate
       );
@@ -65,6 +66,7 @@ const mapRow = async (
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
+  user: User,
   save: boolean,
   childToUpdate?: Child
 ) => {
@@ -83,7 +85,14 @@ const mapRow = async (
 
   // Case where this row creates a brand new child
   if (!childToUpdate) {
-    return await createNewChild(transaction, source, organization, site, save);
+    return await createNewChild(
+      transaction,
+      source,
+      organization,
+      site,
+      user,
+      save
+    );
   }
 
   // If we're here, we're modifying an existing child's
@@ -93,6 +102,8 @@ const mapRow = async (
     source,
     organization,
     site,
-    childToUpdate
+    childToUpdate,
+    user,
+    save
   );
 };

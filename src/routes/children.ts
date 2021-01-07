@@ -7,6 +7,7 @@ import {
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
+import moment, { Moment } from 'moment';
 
 export const childrenRouter = express.Router();
 
@@ -24,7 +25,9 @@ childrenRouter.get(
     }) as string[];
     const count = parseQueryString(req, 'count');
     const missingInfo = parseQueryString(req, 'missing-info') as string;
-    const withdrawnOnly = parseQueryString(req, 'withdrawn') as string;
+    const activeMonth = parseQueryString(req, 'month', {
+      post: (monthStr) => moment.utc(monthStr, 'MMM-YYYY'),
+    }) as Moment;
     const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
     const take = parseQueryString(req, 'take', { post: parseInt }) as number;
 
@@ -36,10 +39,10 @@ childrenRouter.get(
 
     const children = await controller.getChildren(req.user, {
       organizationIds,
-      missingInfo,
+      missingInfoOnly: missingInfo === 'true',
+      activeMonth,
       skip,
       take,
-      withdrawnOnly,
     });
 
     res.send(children);
@@ -103,7 +106,6 @@ childrenRouter.post(
   passAsyncError(async (req, res) => {
     try {
       const child = await controller.createChild(req.body, req.user);
-      // Send child because we need access to the validation errors
       res.status(201).send({ id: child.id });
     } catch (err) {
       if (err instanceof ApiError) throw err;

@@ -85,7 +85,8 @@ describe('BatchEdit', () => {
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
         showFieldOrFieldset={showFieldInBatchEditForm}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     accessibilityTestHelper(
@@ -94,7 +95,8 @@ describe('BatchEdit', () => {
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
         showFieldOrFieldset={showFieldInBatchEditForm}
-      />
+      />,
+      { wrapInRouter: true }
     );
 
     it('only shows forms for enrollments or fundings with validationErrors', async () => {
@@ -104,7 +106,8 @@ describe('BatchEdit', () => {
           afterSaveSuccess={jest.fn}
           setAlerts={jest.fn()}
           showFieldOrFieldset={showFieldInBatchEditForm}
-        />
+        />,
+        { wrapInRouter: true }
       );
 
       // Assert there are only forms for objects with validation errors:
@@ -113,7 +116,8 @@ describe('BatchEdit', () => {
       // For now, we can only deduce presence of forms based on their submit
       // buttons (TODO: add some headings to the forms?)
       const formSubmitButtons = await renderResult.findAllByText('Save');
-      expect(formSubmitButtons).toHaveLength(2);
+      // There should be three buttons bc one enrollment in the example data doesn't have any fundings
+      expect(formSubmitButtons).toHaveLength(3);
     });
   });
 });

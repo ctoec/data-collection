@@ -1,36 +1,31 @@
 import React, { useContext, useState } from 'react';
 import { Child, IncomeDetermination } from '../../../shared/models';
+import { useLocation } from 'react-router-dom';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
-import idx from 'idx';
-import {
-  Form,
-  FormSubmitButton,
-  FormFieldSet,
-  Button,
-} from '@ctoec/component-library';
+import { Form, FormSubmitButton, FormFieldSet } from '@ctoec/component-library';
 import {
   HouseholdSizeField,
   AnnualHouseholdIncomeField,
   DeterminationDateField,
 } from './Fields';
-import { FosterIncomeNotRequiredAlert } from './FosterIncomeNotRequiredAlert';
+import useIsMounted from '../../../hooks/useIsMounted';
+import { useValidationErrors } from '../../../hooks/useValidationErrors';
+import { NotDisclosedField } from './Fields/NotDisclosed';
+import Divider from '@material-ui/core/Divider';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
   'income',
   'determinationDate',
+  'incomeNotDisclosed',
 ];
 export const doesFamilyIncomeFormHaveErrors = (
   child?: Child,
   determinationId?: number
 ) => {
-  if (child?.foster) {
-    return false;
-  }
-
   if (determinationId) {
     const determination = child?.family?.incomeDeterminations?.find(
       (f) => f.id === determinationId
@@ -69,36 +64,32 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   CancelButton,
   afterSaveSuccess,
   setAlerts,
+  hideErrors,
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
   }
-
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
-  if (child?.foster) {
-    // New child is and batch edit both use this form directly
-    // So this alert will show for those two forms
-    // Edit child conditionally shows this form, so this alert is in that container too
-    return (
-      <div>
-        <FosterIncomeNotRequiredAlert />
-        <Button
-          text="Next"
-          onClick={afterSaveSuccess}
-          className="margin-top-3"
-        />
-      </div>
-    );
+  // Determine if we're in the create flow: affects how we
+  // retrieve income determinations
+  const { pathname: path } = useLocation();
+  const inCreateFlow = path.includes('create-record');
+
+  const isMounted = useIsMounted();
+
+  let determination: IncomeDetermination;
+  const dets = child?.family?.incomeDeterminations || [];
+  if (inCreateFlow) {
+    determination = dets[0] || ({} as IncomeDetermination);
+  } else {
+    determination =
+      dets.find((d) => d.id === incomeDeterminationId) ||
+      dets[0] ||
+      ({} as IncomeDetermination);
   }
-
-  const determination =
-    child?.family?.incomeDeterminations?.find(
-      (d) => d.id === incomeDeterminationId
-    ) ||
-    idx(child, (_) => _.family.incomeDeterminations[0]) ||
-    ({} as IncomeDetermination);
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
     apiPost(
@@ -107,29 +98,42 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
       { accessToken }
     );
 
-  const updateDetermination = async (updatedData: IncomeDetermination) =>
+  const updateDetermination = async (updatedData: IncomeDetermination) => {
     apiPut(
       `families/${child?.family?.id}/income-determinations/${determination.id}`,
       updatedData,
       { accessToken }
     );
+  };
 
   const saveData = determination.id ? updateDetermination : createDetermination;
+
+  const onFinally = () => {
+    if (isMounted()) {
+      setLoading(false);
+    }
+  };
+
   const onSubmit = (updatedData: IncomeDetermination) => {
     setLoading(true);
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setAlerts([
           { type: 'error', text: 'Unable to save family income determination' },
         ]);
       })
-      .finally(() => setLoading(false));
+      .finally(onFinally);
   };
 
   return (
-    <Form<IncomeDetermination> id={id} data={determination} onSubmit={onSubmit}>
+    <Form<IncomeDetermination>
+      id={id}
+      data={determination}
+      onSubmit={onSubmit}
+      hideStatus={errorsHidden}
+    >
       <FormFieldSet<IncomeDetermination>
         id={`${id}-fieldset`}
         legend={legend}
@@ -147,6 +151,12 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
         </div>
         <div>
           <DeterminationDateField />
+        </div>
+        <div className="margin-top-4 margin-bottom-4">
+          <Divider />
+        </div>
+        <div>
+          <NotDisclosedField />
         </div>
       </FormFieldSet>
       {CancelButton}

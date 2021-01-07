@@ -1,0 +1,28 @@
+.data-definitions {
+  .required-tag {
+    display: block;
+    text-align: center;
+    max-width: 7rem;
+    font-size: 16px;
+    &--required {
+      background-color: purple !important;
+    }
+    &--conditional {
+      background-color: #005ea2 !important;
+    }
+  }
+
+  table {
+    ul {
+      padding-left: 1.2rem;
+    }
+    .hide-bottom-border {
+      border-color: white;
+    }
+  }
+
+  // For formatting filter field radio group
+  fieldset {
+    margin-top: 0 !important;
+  }
+}

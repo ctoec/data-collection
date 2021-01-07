@@ -4,12 +4,13 @@
   "description": "End to end tests for OEC data collection tool",
   "main": "login.js",
   "scripts": {
-    "test": "node_modules/nightwatch/bin/nightwatch -e default",
-    "test-edge": "node_modules/nightwatch/bin/nightwatch -e edge --skiptags skip-edge"
+    "test": "node_modules/nightwatch/bin/nightwatch -e default --retries 3 --suiteRetries 3",
+    "test-edge": "node_modules/nightwatch/bin/nightwatch -e edge --skiptags skip-edge --retries 3 --suiteRetries 3",
+    "test-ie": "node_modules/nightwatch/bin/nightwatch -e ie --skiptags skip-edge --retries 3 --suiteRetries 3"
   },
   "license": "MIT",
   "dependencies": {
     "adm-zip": "^0.4.16",
-    "nightwatch": "^1.4.3"
+    "nightwatch": "^1.5.1"
   }
 }

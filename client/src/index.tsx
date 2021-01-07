@@ -1,6 +1,7 @@
 // https://stackoverflow.com/questions/56421417/react-app-not-working-in-internet-explorer-11
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
+import 'formdata-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -14,6 +15,7 @@ import * as serviceWorker from './serviceWorker';
 import '@ctoec/component-library/dist/assets/styles/index.scss';
 import './index.scss';
 import { apiGet } from './utils/api';
+import { RosterProvider } from './contexts/RosterContext/RosterContext';
 
 const render = (Component: React.FC) =>
   ReactDOM.render(
@@ -31,6 +33,7 @@ const render = (Component: React.FC) =>
           extras={{
             // NOTE: Required for refresh tokens
             access_type: 'offline',
+            max_age: 60,
           }}
         >
           <UserProvider>
@@ -39,7 +42,9 @@ const render = (Component: React.FC) =>
                 fetcher: apiGet,
               }}
             >
-              <Component />
+              <RosterProvider>
+                <Component />
+              </RosterProvider>
             </SWRConfig>
           </UserProvider>
         </AuthenticationProvider>

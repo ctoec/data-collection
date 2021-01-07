@@ -4,7 +4,7 @@ import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
 import { Button } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
-import { FosterIncomeNotRequiredAlert } from '../../../components/Forms/FamilyIncome/FosterIncomeNotRequiredAlert';
+import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 
 /**
  * Component enabling user to edit the family income portion of a child
@@ -15,6 +15,8 @@ import { FosterIncomeNotRequiredAlert } from '../../../components/Forms/FamilyIn
 export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
+  setAlerts,
+  topHeadingLevel,
 }) => {
   if (!child?.family) {
     throw new Error('Family income form rendered without family');
@@ -23,24 +25,16 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
-  if (child?.foster) {
-    return (
-      <>
-        <h2>Family income determination</h2>
-        <FosterIncomeNotRequiredAlert />
-      </>
-    );
-  }
-
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted
+  console.log(determinations);
   const currentDetermination: IncomeDetermination | undefined =
     determinations[0];
   const pastDeterminations: IncomeDetermination[] = determinations.slice(1);
 
   return (
     <>
-      <h2>Family income determination</h2>
+      <Heading level={topHeadingLevel}>Family income determination</Heading>
       {showRedeterminationForm && (
         <RedeterminationCard
           child={child}
@@ -50,15 +44,20 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
             afterSaveSuccess();
           }}
           onCancel={() => setShowRedeterminationForm(false)}
+          setAlerts={setAlerts}
+          topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
         />
       )}
       <div className="margin-top-1">
         <div className="display-flex align-center">
-          <h3 className="font-sans-md margin-top-2 margin-bottom-2">
+          <Heading
+            level={getNextHeadingLevel(topHeadingLevel)}
+            className="font-sans-md margin-top-2 margin-bottom-2"
+          >
             {currentDetermination
               ? 'Current income determination'
               : 'No income information on record'}
-          </h3>
+          </Heading>
           {!showRedeterminationForm && (
             <Button
               className="margin-left-1"
@@ -77,18 +76,25 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
             afterSaveSuccess={afterSaveSuccess}
             isCurrent={true}
             currentIsNew={currentIsNew}
+            setAlerts={setAlerts}
+            // This is nested under the current income det header
+            topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
         )}
 
         {!!pastDeterminations.length && (
           <>
             <div className="margin-top-1">
-              <h3>Past income determinations</h3>
+              <Heading level={getNextHeadingLevel(topHeadingLevel)}>
+                Past income determinations
+              </Heading>
               {pastDeterminations.map((determination) => (
                 <EditDeterminationCard
                   child={child}
                   determinationId={determination.id}
                   afterSaveSuccess={afterSaveSuccess}
+                  setAlerts={setAlerts}
+                  topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
                 />
               ))}
             </div>

@@ -1,19 +1,36 @@
 import React from 'react';
 import pluralize from 'pluralize';
 import idx from 'idx';
-import { InlineIcon, Table } from '@ctoec/component-library';
-import { AgeGroup, Child } from '../../shared/models';
+import { ErrorBoundary, InlineIcon, Table } from '@ctoec/component-library';
+import { AgeGroup, Child, Site } from '../../shared/models';
 import { RosterSectionHeader } from './RosterSectionHeader';
 import { ColumnNames, tableColumns } from './tableColumns';
 import { Moment } from 'moment';
 import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
-import {
-  getCurrentEnrollment,
-  childHasEnrollmentsActiveInMonth,
-} from '../../utils/models';
+import { getCurrentEnrollment } from '../../utils/models';
+import { getLastEnrollment } from '../../utils/models/getLastEnrollment';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { RosterQueryParams } from './Roster';
 
 const MAX_LENGTH_EXPANDED = 50;
 export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
+
+export const filterChildrenByWithdrawn = (children: Child[]) => {
+  return children.reduce(
+    (filteredChildren, child) => {
+      if (
+        child.enrollments?.length &&
+        child.enrollments?.every((enrollment) => !!enrollment.exit)
+      ) {
+        filteredChildren.withdrawn.push(child);
+      } else {
+        filteredChildren.active.push(child);
+      }
+      return filteredChildren;
+    },
+    { active: [] as Child[], withdrawn: [] as Child[] }
+  );
+};
 
 /**
  * Get month param in query string month format
@@ -30,20 +47,20 @@ export const getQueryMonthFormat = (month?: Moment) => {
  * @param site
  * @param month
  */
-export function applyClientSideFilters(
-  allChildren: Child[],
+export function applySiteFilter(
+  allChildren: Child[] | undefined,
   site?: string,
-  month?: Moment
-): Child[] {
+  withdrawn?: boolean
+) {
+  if (!allChildren) return;
+
   let filteredChildren: Child[] = allChildren;
-  if (month) {
-    filteredChildren = filteredChildren.filter((child) => {
-      return childHasEnrollmentsActiveInMonth(child, month);
-    });
-  }
   if (site) {
+    const getEnrollmentFunc = withdrawn
+      ? getLastEnrollment
+      : getCurrentEnrollment;
     filteredChildren = filteredChildren.filter(
-      (child) => getCurrentEnrollment(child)?.site?.id.toString() === site
+      (child) => getEnrollmentFunc(child)?.site?.id.toString() === site
     );
   }
   return filteredChildren;
@@ -107,22 +124,32 @@ export function getChildrenByAgeGroup(
 /**
  * Returns array of AccordionItemProps, used to render the roster
  * age group accordion sections.
- * @param childrenByAgeGroup
+ * @param children
  * @param opts
  */
 export function getAccordionItems(
-  childrenByAgeGroup: ChildrenByAgeGroup,
-  opts: { hideCapacity: boolean; excludeColumns: ColumnNames[] } = {
+  children: Child[],
+  opts: {
+    hideCapacity: boolean;
+    hideOrgColumn: boolean;
+    hideExitColumn: boolean;
+  } = {
     hideCapacity: false,
-    excludeColumns: [ColumnNames.ORGANIZATION, ColumnNames.EXIT],
+    hideOrgColumn: true,
+    hideExitColumn: true,
   }
 ): AccordionItemProps[] {
+  const childrenByAgeGroup = getChildrenByAgeGroup(children);
+  const excludeColumns: ColumnNames[] = [];
+  if (opts.hideOrgColumn) excludeColumns.push(ColumnNames.ORGANIZATION);
+  if (opts.hideExitColumn) excludeColumns.push(ColumnNames.EXIT);
+
   return Object.entries(childrenByAgeGroup)
     .filter(
       ([_, ageGroupChildren]) => ageGroupChildren && ageGroupChildren.length
     )
     .map(([ageGroup, ageGroupChildren = []]) => ({
-      id: ageGroup,
+      id: ageGroup.replace(' ', '-'),
       title: (
         <>
           {ageGroup === NoAgeGroup && <InlineIcon icon="attentionNeeded" />}
@@ -149,16 +176,38 @@ export function getAccordionItems(
       expandText: `Show ${ageGroup} roster`,
       collapseText: `Hide ${ageGroup} roster`,
       content: (
-        <Table<Child>
-          className="margin-bottom-4"
-          id={`roster-table-${ageGroup}`}
-          rowKey={(row) => row.id}
-          data={ageGroupChildren}
-          columns={tableColumns(opts.excludeColumns)}
-          defaultSortColumn={0}
-          defaultSortOrder="ascending"
-        />
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+          <Table<Child>
+            className="margin-bottom-4"
+            id={`roster-table-${ageGroup}`}
+            rowKey={(row) => row?.id}
+            data={ageGroupChildren}
+            columns={tableColumns(excludeColumns)}
+            defaultSortColumn={0}
+            defaultSortOrder="ascending"
+          />
+        </ErrorBoundary>
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
+}
+
+export function getRosterH2(
+  childCount: number,
+  sites?: Site[],
+  query?: RosterQueryParams
+) {
+  if (!sites || sites?.length === 1) return;
+  const siteText = query?.site
+    ? sites.find((s) => `${s.id}` === query.site)?.siteName
+    : 'All sites';
+  return (
+    <h2>
+      {siteText}
+      <span className="text-light">
+        {' '}
+        {pluralize('child', childCount, true)}
+      </span>
+    </h2>
+  );
 }

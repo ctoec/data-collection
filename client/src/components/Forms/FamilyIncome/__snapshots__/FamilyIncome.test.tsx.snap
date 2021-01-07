@@ -33,7 +33,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--small"
+              class="usa-input oec-text-input usa-input--small"
               id="number-of-people"
               type="text"
               value="3"
@@ -52,7 +52,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input"
+              class="usa-input oec-text-input"
               id="income-determination"
               type="text"
               value="50000"
@@ -95,7 +95,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                   </label>
                   <input
                     aria-required="true"
-                    class="usa-input usa-input--inline"
+                    class="usa-input oec-text-input usa-input--inline"
                     id="determination-date--month"
                     max="12"
                     min="1"
@@ -114,7 +114,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                   </label>
                   <input
                     aria-required="true"
-                    class="usa-input usa-input--inline"
+                    class="usa-input oec-text-input usa-input--inline"
                     id="determination-date--day"
                     max="31"
                     min="1"
@@ -133,7 +133,7 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                   </label>
                   <input
                     aria-required="true"
-                    class="usa-input usa-input--inline"
+                    class="usa-input oec-text-input usa-input--inline"
                     id="determination-date--year"
                     max="2200"
                     min="1000"
@@ -148,7 +148,20 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
                     class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
                     title="open calendar"
                     type="button"
-                  />
+                  >
+                    <svg
+                      class="oec-calendar-toggle__icon"
+                      data-icon="calendar"
+                      data-prefix="far"
+                      viewBox="0 0 448 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M400 64h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V160h352v298c0 3.3-2.7 6-6 6z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </button>
                   <div
                     class="oec-calendar-dropdown__calendar position-absolute z-top"
                     hidden=""
@@ -1343,6 +1356,31 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
               </div>
             </div>
           </fieldset>
+        </div>
+        <div
+          class="margin-top-4 margin-bottom-4"
+        >
+          <hr
+            class="MuiDivider-root"
+          />
+        </div>
+        <div>
+          <div
+            class="usa-checkbox"
+          >
+            <input
+              class="usa-checkbox__input"
+              id="income-not-disclosed-checkbox"
+              type="checkbox"
+              value=""
+            />
+            <label
+              class="usa-checkbox__label"
+              for="income-not-disclosed-checkbox"
+            >
+              Income not disclosed
+            </label>
+          </div>
         </div>
       </div>
     </fieldset>

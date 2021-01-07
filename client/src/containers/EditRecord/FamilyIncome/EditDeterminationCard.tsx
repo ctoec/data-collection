@@ -2,18 +2,19 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Child } from '../../../shared/models';
 import {
   Card,
-  InlineIcon,
   ExpandCard,
   Button,
   TextWithIcon,
   Pencil,
   TrashCan,
   CardExpansion,
+  InlineIcon,
 } from '@ctoec/component-library';
 import { currencyFormatter } from '../../../utils/formatters';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
-import { FamilyIncomeForm } from '../../../components/Forms';
+import { FamilyIncomeForm, RecordFormProps } from '../../../components/Forms';
+import { HeadingLevel } from '../../../components/Heading';
 
 type EditDeterminationCardProps = {
   child: Child;
@@ -21,6 +22,8 @@ type EditDeterminationCardProps = {
   afterSaveSuccess: () => void;
   isCurrent?: boolean;
   currentIsNew?: boolean;
+  setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -34,6 +37,8 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
   afterSaveSuccess,
   isCurrent,
   currentIsNew,
+  setAlerts,
+  topHeadingLevel,
 }) => {
   const determination = child?.family?.incomeDeterminations?.find(
     (d) => d.id === determinationId
@@ -55,8 +60,51 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       { accessToken }
     )
       .then(afterSaveSuccess)
-      .catch((err) => console.error('Unable to delete determination'));
+      .catch((err) => {
+        console.error(err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to delete determination',
+          },
+        ]);
+      });
   };
+
+  // Assign the card text options to variables for cleanliness
+  // of showing it in the return statement below
+  const notDisclosedCardText = (
+    <div className="flex-1">
+      <p className="text-bold">Income not disclosed</p>
+    </div>
+  );
+
+  const incomeInfoText = (
+    <>
+      <div className="flex-1">
+        <p>Household size</p>
+        <p className="text-bold">
+          {determination.numberOfPeople || InlineIcon({ icon: 'incomplete' })}
+        </p>
+      </div>
+      <div className="flex-1">
+        <p>Income</p>
+        <p className="text-bold">
+          {determination.income
+            ? currencyFormatter(determination.income)
+            : InlineIcon({ icon: 'incomplete' })}
+        </p>
+      </div>
+      <div className="flex-2">
+        <p>Determined on</p>
+        <p className="text-bold">
+          {determination.determinationDate
+            ? determination.determinationDate.format('MM/DD/YYYY')
+            : InlineIcon({ icon: 'incomplete' })}
+        </p>
+      </div>
+    </>
+  );
 
   return (
     <Card
@@ -67,28 +115,9 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       showTag={currentIsNew}
     >
       <div className="display-flex flex-justify">
-        <div className="flex-1">
-          <p>Household size</p>
-          <p className="text-bold">
-            {determination.numberOfPeople || InlineIcon({ icon: 'incomplete' })}
-          </p>
-        </div>
-        <div className="flex-1">
-          <p>Income</p>
-          <p className="text-bold">
-            {determination.income
-              ? currencyFormatter(determination.income)
-              : InlineIcon({ icon: 'incomplete' })}
-          </p>
-        </div>
-        <div className="flex-2">
-          <p>Determined on</p>
-          <p className="text-bold">
-            {determination.determinationDate
-              ? determination.determinationDate.format('MM/DD/YYYY')
-              : InlineIcon({ icon: 'incomplete' })}
-          </p>
-        </div>
+        {determination.incomeNotDisclosed
+          ? notDisclosedCardText
+          : incomeInfoText}
         <div className="display-flex align-center flex-space-between">
           <div className="display-flex align-center margin-right-2">
             <ExpandCard>
@@ -117,7 +146,8 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
             setCloseCard(true);
             afterSaveSuccess();
           }}
-          setAlerts={() => {}}
+          setAlerts={setAlerts}
+          topHeadingLevel={topHeadingLevel}
         />
       </CardExpansion>
     </Card>

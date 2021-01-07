@@ -11,6 +11,7 @@ import {
 } from '../../../../utils/models';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { NewFundingField } from '../Fields';
+import { useValidationErrors } from '../../../../hooks/useValidationErrors';
 
 const fundingFields = [
   'fundingSpace',
@@ -47,6 +48,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   AdditionalButton,
   setAlerts,
   afterSaveSuccess,
+  hideErrors,
 }) => {
   if (!child) {
     throw new Error('Funding form rendered without child');
@@ -60,6 +62,8 @@ export const FundingForm: React.FC<FundingFormProps> = ({
     throw new Error('Funding form rendered without enrollment');
   }
 
+  // TODO: is an additional funding still created when a user enters incomplete info in create child, then enters different info and saves?
+  // If so it's maybe bc we're not using the right funding here to fill in the info the second time around/not updating the right funding
   const funding = fundingId
     ? enrollment?.fundings?.find((f) => f.id === fundingId)
     : getCurrentFunding({ enrollment });
@@ -67,6 +71,8 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   if (!funding) {
     throw new Error('Funding form rendered without funding');
   }
+
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
   const { accessToken } = useContext(AuthenticationContext);
   const [loading, setLoading] = useState(false);
@@ -77,7 +83,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
     })
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         setAlerts([
           {
             type: 'error',
@@ -85,7 +91,9 @@ export const FundingForm: React.FC<FundingFormProps> = ({
           },
         ]);
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   // If the funding has a funding space, render
@@ -101,6 +109,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       className="usa-form"
       data={funding}
       onSubmit={onSubmit}
+      hideStatus={errorsHidden}
     >
       <ContractSpaceField<Funding>
         ageGroup={enrollment.ageGroup}
@@ -133,6 +142,7 @@ export const FundingForm: React.FC<FundingFormProps> = ({
       className="usa-form"
       data={funding}
       onSubmit={onSubmit}
+      hideStatus={errorsHidden}
     >
       <NewFundingField<Funding>
         getEnrollment={() => enrollment}

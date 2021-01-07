@@ -6,10 +6,13 @@ import {
   Enrollment,
   Funding,
   Organization,
+  User,
 } from '../../../entity';
 import {
   Gender,
   BirthCertificateType,
+  UniqueIdType,
+  UndefinableBoolean,
 } from '../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../template';
 import {
@@ -26,14 +29,23 @@ export const createNewChild = async (
   source: EnrollmentReportRow,
   organization: Organization,
   site: Site,
+  user: User,
   save: boolean
 ) => {
-  const family = await mapFamily(transaction, source, organization, save);
-  const child = await mapChild(transaction, source, organization, family, save);
+  const family = await mapFamily(transaction, source, organization, user, save);
+  const child = await mapChild(
+    transaction,
+    source,
+    organization,
+    family,
+    user,
+    save
+  );
   const incomeDetermination = await mapIncomeDetermination(
     transaction,
     source,
     family,
+    user,
     save
   );
   const enrollment = await mapEnrollment(
@@ -41,6 +53,7 @@ export const createNewChild = async (
     source,
     site,
     child,
+    user,
     save
   );
   const funding = await mapFunding(
@@ -48,6 +61,7 @@ export const createNewChild = async (
     source,
     organization,
     enrollment,
+    user,
     save
   );
   family.incomeDeterminations = [incomeDetermination];
@@ -63,7 +77,9 @@ export const updateChild = async (
   source: EnrollmentReportRow,
   organization: Organization,
   site: Site,
-  child: Child
+  child: Child,
+  user: User,
+  save: boolean
 ) => {
   let enrollment = getExistingEnrollmentOnChild(source, child);
   const modifyingExistingEnrollment = enrollment !== undefined;
@@ -72,13 +88,15 @@ export const updateChild = async (
     source,
     site,
     child,
-    enrollment === undefined
+    user,
+    save && enrollment === undefined
   );
 
   // Apply any needed enrollment info updates before going to funding
   // TODO: this pattern is unnecessary because save updates an entity if it existed before-- we should refactor to just save
-  if (modifyingExistingEnrollment) {
+  if (save && modifyingExistingEnrollment) {
     await transaction.update(Enrollment, enrollment.id, enrollmentUpdate);
+    enrollmentUpdate.id = enrollment.id;
   }
 
   let funding = getExistingFundingForEnrollment(source, enrollment);
@@ -88,12 +106,13 @@ export const updateChild = async (
     source,
     organization,
     enrollmentUpdate,
-    funding === undefined
+    user,
+    save && funding === undefined
   );
 
   if (modifyingExistingEnrollment) {
     // Either modifying existing funding or attaching brand new funding
-    if (modifyingExistingFunding) {
+    if (save && modifyingExistingFunding) {
       await transaction.update(Funding, funding.id, fundingUpdate);
     } else {
       enrollment.fundings.push(fundingUpdate);
@@ -117,6 +136,7 @@ export const mapChild = (
   source: EnrollmentReportRow,
   organization: Organization,
   family: Family,
+  user: User,
   save: boolean
 ) => {
   // Gender
@@ -128,11 +148,46 @@ export const mapChild = (
     source.birthCertificateType
   );
 
+  // Ethnicity
+  const hispanicOrLatinxEthnicity: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.hispanicOrLatinxEthnicity,
+    { isUndefineableBoolean: true }
+  );
+
+  // Dual Language Learner
+  const dualLanguageLearner: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.dualLanguageLearner,
+    { isUndefineableBoolean: true }
+  );
+
+  // Foster
+  const foster: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.foster,
+    { isUndefineableBoolean: true }
+  );
+
+  // Receives Disability Services
+  const receivesDisabilityServices: UndefinableBoolean = mapEnum(
+    UndefinableBoolean,
+    source.receivesDisabilityServices,
+    { isUndefineableBoolean: true }
+  );
+
   // TODO: Could do city/state verification here for birth cert location
   // TODO: Could do birthdate verification (post-20??)
 
-  let child = {
-    sasid: source.sasid,
+  let child: Child = {
+    sasid:
+      organization.uniqueIdType === UniqueIdType.SASID
+        ? source.sasidUniqueId
+        : undefined,
+    uniqueId:
+      organization.uniqueIdType === UniqueIdType.Other
+        ? source.sasidUniqueId
+        : undefined,
     firstName: source.firstName,
     middleName: source.middleName,
     lastName: source.lastName,
@@ -148,17 +203,24 @@ export const mapChild = (
     nativeHawaiianOrPacificIslander: source.nativeHawaiianOrPacificIslander,
     white: source.white,
     raceNotDisclosed: !getRaceIndicated(source),
-    hispanicOrLatinxEthnicity: source.hispanicOrLatinxEthnicity,
+    hispanicOrLatinxEthnicity,
     gender,
-    dualLanguageLearner: source.dualLanguageLearner,
-    foster: source.foster,
-    receivesDisabilityServices: source.receivesDisabilityServices,
+    dualLanguageLearner,
+    foster,
+    receivesDisabilityServices,
     organization,
     family: family,
   } as Child;
 
+  // Need to create child in all cases, even if unsaved, so that
+  // instanceof in the identifiers match can check the proper
+  // prototype constructor name instead of just getting 'Object'
+  child = transaction.create(Child, {
+    ...child,
+    updateMetaData: { author: user },
+  });
+
   if (save) {
-    child = transaction.create(Child, child);
     return transaction.save(child);
   }
 
@@ -209,7 +271,7 @@ export const getExistingEnrollmentOnChild = (
   if (!child.enrollments) return undefined;
   return child.enrollments.find((e) => {
     return (
-      e.site.siteName === row.site &&
+      e.site?.siteName === row.site &&
       e.entry.format('MM/DD/YYYY') === row.entry.format('MM/DD/YYYY')
     );
   });
@@ -226,12 +288,22 @@ export const isIdentifierMatch = (
   child: Child | EnrollmentReportRow,
   other: EnrollmentReportRow
 ) => {
-  const match =
+  let match =
     child.firstName === other.firstName &&
     child.lastName === other.lastName &&
     child.birthdate &&
     child.birthdate?.format('MM/DD/YYYY') ===
-      other.birthdate?.format('MM/DD/YYYY') &&
-    child.sasid === other.sasid;
+      other.birthdate?.format('MM/DD/YYYY');
+
+  if (child instanceof Child) {
+    match =
+      match &&
+      // NOTE: use == to evaluate undefined from 'other' and
+      // null from 'child' to be equivalent
+      (child.sasid == other.sasidUniqueId ||
+        child.uniqueId == other.sasidUniqueId);
+  } else {
+    match = match && child.sasidUniqueId === other.sasidUniqueId;
+  }
   return match;
 };

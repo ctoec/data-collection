@@ -1,7 +1,8 @@
 import { Child } from '../../entity';
+import { ValidationError } from 'class-validator';
 import { ColumnMetadata } from '../../../client/src/shared/models';
 import { getAllColumnMetadata } from '../../template';
-import { ValidationError } from 'class-validator';
+import { sentenceCase } from '../../utils/generateFiles/getFormattedColumnHeader';
 
 /**
  * Function that recursively determines the lowest level from
@@ -13,15 +14,31 @@ import { ValidationError } from 'class-validator';
  * @param error
  * @param errorDict
  */
-const processErrorsInFields = (error: ValidationError, errorDict: Object) => {
+const processErrorsInFields = (
+  child: Child,
+  error: ValidationError,
+  errorDict: Object,
+  errorOccursIn: Object
+) => {
   // Base case: error is not in a nested field
   if (error.children.length === 0) {
-    errorDict[error.property] += 1;
+    // There are some validation errors that aren't related to
+    // fields in the spreadsheet, so this conditional ensures
+    // the error modal only reports actual _sheet_ errors as
+    // present in the spreadsheet
+    if (errorDict.hasOwnProperty(error.property)) {
+      errorDict[error.property] += 1;
+      errorOccursIn[error.property].push(
+        (child.firstName || '') + ' ' + (child.lastName || '')
+      );
+    }
   }
   // Recursive case: validation errors live on children
   // of initial error
   else {
-    error.children.map((e) => processErrorsInFields(e, errorDict));
+    error.children.map((e) =>
+      processErrorsInFields(child, e, errorDict, errorOccursIn)
+    );
   }
 };
 
@@ -32,21 +49,26 @@ const processErrorsInFields = (error: ValidationError, errorDict: Object) => {
  * @param children Array of DB-view child objects to analyze
  */
 export const checkErrorsInChildren = async (children: Child[]) => {
-  const cols: ColumnMetadata[] = getAllColumnMetadata();
+  // Exclude income not disclosed since it's an optional switch parameter
+  const cols: ColumnMetadata[] = getAllColumnMetadata().filter(
+    (col) => col.formattedName !== 'income not disclosed'
+  );
   const propertyNameToFormattedName = {};
   let errorDict = {};
+  let errorOccursIn = {};
 
   // Start the count of each type of error at 0 overall
   cols.map((c) => {
     errorDict[c.propertyName] = 0;
-    propertyNameToFormattedName[c.propertyName] = c.formattedName;
+    propertyNameToFormattedName[c.propertyName] = sentenceCase(c.formattedName);
+    errorOccursIn[c.propertyName] = [];
   });
 
   await Promise.all(
     children.map(async (child) => {
-      // Accumulate counts across all children (don't need to
-      // differentiate errors by individual child)
-      child.validationErrors.map((e) => processErrorsInFields(e, errorDict));
+      child.validationErrors.map((e) =>
+        processErrorsInFields(child, e, errorDict, errorOccursIn)
+      );
     })
   );
 
@@ -58,6 +80,7 @@ export const checkErrorsInChildren = async (children: Child[]) => {
       property: k,
       formattedName: propertyNameToFormattedName[k],
       count: errorDict[k],
+      affectedRows: errorOccursIn[k],
     };
   });
 

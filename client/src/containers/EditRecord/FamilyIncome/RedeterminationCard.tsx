@@ -1,12 +1,19 @@
 import React from 'react';
-import { FamilyIncomeForm } from '../../../components/Forms';
+import { FamilyIncomeForm, RecordFormProps } from '../../../components/Forms';
 import { Child } from '../../../shared/models';
 import { Card, Button } from '@ctoec/component-library';
+import {
+  getNextHeadingLevel,
+  Heading,
+  HeadingLevel,
+} from '../../../components/Heading';
 
 type RedeterminationCardProps = {
   child: Child;
   afterSaveSuccess: () => void;
   onCancel: () => void;
+  setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -17,18 +24,23 @@ export const RedeterminationCard: React.FC<RedeterminationCardProps> = ({
   child,
   afterSaveSuccess,
   onCancel,
+  setAlerts,
+  topHeadingLevel,
 }) => {
   return (
     <>
-      <h3>Redetermine family income</h3>
+      <Heading level={topHeadingLevel}>Redetermine family income</Heading>
       <Card>
         <FamilyIncomeForm
           id={'redetermine-family-income'}
           legend={'Redetermine family income'}
           child={child}
           afterSaveSuccess={afterSaveSuccess}
-          setAlerts={() => {}}
-          CancelButton={<Button text="Cancel" onChange={onCancel} />}
+          setAlerts={setAlerts}
+          CancelButton={
+            <Button text="Cancel" appearance="outline" onClick={onCancel} />
+          }
+          topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
         />
       </Card>
     </>

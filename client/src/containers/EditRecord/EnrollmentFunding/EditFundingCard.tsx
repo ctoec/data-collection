@@ -10,11 +10,13 @@ import {
   TextWithIcon,
   Pencil,
   CardExpansion,
-  Alert,
   TrashCan,
   InlineIcon,
 } from '@ctoec/component-library';
 import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
+import { RecordFormProps } from '../../../components/Forms';
+import { hasValidationErrorForField } from '../../../utils/hasValidationError';
+import { HeadingLevel } from '../../../components/Heading';
 
 type EditFundingCardProps = {
   child: Child;
@@ -22,6 +24,8 @@ type EditFundingCardProps = {
   enrollmentId: number;
   isCurrent?: boolean;
   afterSaveSuccess: () => void;
+  setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -36,6 +40,8 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   enrollmentId,
   isCurrent,
   afterSaveSuccess: _afterSaveSuccess,
+  setAlerts,
+  topHeadingLevel,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -49,7 +55,6 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
 
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
-  const [error, setError] = useState<string>();
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
@@ -61,7 +66,6 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   });
 
   const afterSaveSuccess = () => {
-    setError(undefined);
     setCloseCard(true);
     _afterSaveSuccess();
   };
@@ -75,6 +79,12 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       })
       .catch((err) => {
         console.error('Unable to delete enrollment', err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to delete enrollment',
+          },
+        ]);
       });
   }
 
@@ -91,27 +101,31 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
           {funding.fundingSpace ? (
             <Tag className="margin-top-0" text={funding.fundingSpace.source} />
           ) : (
-            <InlineIcon icon="incomplete" />
+            InlineIcon({ icon: 'incomplete' })
           )}
         </div>
         <div className="flex-1">
           <p className="margin-bottom-0">Space type</p>
           <p className="text-bold margin-top-0">
-            {funding.fundingSpace?.time || <InlineIcon icon="incomplete" />}
+            {funding.fundingSpace?.time || InlineIcon({ icon: 'incomplete' })}
           </p>
         </div>
         <div className="flex-2">
           <p className="margin-bottom-0">Reporting periods</p>
           <p className="text-bold margin-top-0">
-            {funding.firstReportingPeriod ? (
-              funding.firstReportingPeriod.period.format('MMMM YYYY')
-            ) : (
-              <InlineIcon icon="incomplete" />
-            )}{' '}
+            {funding.firstReportingPeriod
+              ? funding.firstReportingPeriod.period.format('MMMM YYYY')
+              : InlineIcon({ icon: 'incomplete' })}{' '}
             -{' '}
             {funding.lastReportingPeriod
               ? funding.lastReportingPeriod.period.format('MMMM YYYY')
               : 'present'}
+            {hasValidationErrorForField(funding, 'firstReportingPeriod') && (
+              <>
+                {' '}
+                <InlineIcon icon="incomplete" />
+              </>
+            )}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">
@@ -133,14 +147,14 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         </div>
       </div>
       <CardExpansion>
-        {error && <Alert type="error" text={error} />}
         <FundingForm
           id={`edit-funding-form-${funding.id}`}
           child={child}
           fundingId={funding.id}
           enrollmentId={enrollment.id}
           afterSaveSuccess={afterSaveSuccess}
-          setAlerts={() => setError('Unable to save funding')}
+          setAlerts={setAlerts}
+          topHeadingLevel={topHeadingLevel}
         />
       </CardExpansion>
     </Card>

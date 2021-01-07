@@ -57,7 +57,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="start-date-month"
               max="12"
               min="1"
@@ -76,7 +76,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="start-date-day"
               max="31"
               min="1"
@@ -95,7 +95,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             </label>
             <input
               aria-required="true"
-              class="usa-input usa-input--inline"
+              class="usa-input oec-text-input usa-input--inline"
               id="start-date-year"
               max="2200"
               min="1000"
@@ -110,7 +110,20 @@ exports[`Forms Enrollment matches snapshot 1`] = `
               class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
               title="open calendar"
               type="button"
-            />
+            >
+              <svg
+                class="oec-calendar-toggle__icon"
+                data-icon="calendar"
+                data-prefix="far"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M400 64h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V160h352v298c0 3.3-2.7 6-6 6z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
             <div
               class="oec-calendar-dropdown__calendar position-absolute z-top"
               hidden=""
@@ -1460,7 +1473,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
               id="School-aged"
               name="ageGroup"
               type="radio"
-              value="School-aged"
+              value="School aged"
             />
             <label
               class="usa-radio__label"
@@ -1473,12 +1486,12 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      aria-labelledby="fieldset-legend-funding-source"
+      aria-labelledby="fieldset-legend-funding-source-1"
       class="usa-fieldset"
-      id="funding-source"
+      id="funding-source-1"
     >
       <legend
-        id="fieldset-legend-funding-source"
+        id="fieldset-legend-funding-source-1"
       >
         <span
           class="usa-label"
@@ -1486,28 +1499,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
           Funding source options
         </span>
       </legend>
-      <div>
-        <span>
-          <div
-            class="usa-radio"
-          >
-            <input
-              checked=""
-              class="usa-radio__input"
-              id="Unfunded"
-              name="fundingSource"
-              type="radio"
-              value="Unfunded"
-            />
-            <label
-              class="usa-radio__label"
-              for="Unfunded"
-            >
-              Unfunded
-            </label>
-          </div>
-        </span>
-      </div>
+      <div />
     </fieldset>
     <input
       class="usa-button"

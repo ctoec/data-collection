@@ -61,9 +61,54 @@ The application has a SQL Server backend. We use [typeORM](https://typeorm.io/) 
 
 ### Testing
 
-Testing on the front end is run through react-scripts and jest to compare rendered pages to stored snapshots. Running `docker-compose exec client yarn run test` will run all test and only pass if all rendered pages match the expected snapshots. Adding a `-u` flag to the end of the command will update all snapshots to be the results of the current code.
+#### Unit/Integration testing
 
-To run the e2e tests on browserstack against the staging environment, `yarn install` in the e2e-tests directory, add your credentials in a `.env` file, and then `yarn test` from the e2e directory.
+Frontend and backend unit/integration tests exist, and can be run with `yarn test` in either the `src` or `client/src` directories.
+
+```
+$ cd src
+$ yarn test
+$ cd ../client/src
+$ yarn test
+```
+
+or in docker-compose
+
+```
+$ docker-compose exec server yarn test
+$ docker-compose exec client yarn test
+```
+
+Frontend tests include snapshot matching tests. If a change was made that creates a legitimate change to a snapshot, or snapshots need to be deleted, created, or renamed, run tests with `-u` flag
+
+#### Integration/End-to-end testing
+
+We do two types of full-stack testing which encompass the client <-> server interactions and server <-> database interactions.
+Because we don't mock or instantiate a SQL Server instance for our unit/integration tests, these tests can only be run against a full stack of the app (either a local docker-compose stack, or a deployed stack)
+
+1. **API Tests**: perhaps a bit confusingly, API integration tests are written in the `client` dir, because we already have a util for calling the api there! find them [here](client/src/integrationTests)
+
+   To run these tests:
+
+   ```
+   $ cd client
+   $ yarn test-integration
+
+   ```
+
+   Set `TEST_API_PATH` env var to run them against an environment other than the default `http://localhost:5001`
+
+2. **End-to-end Tests**: these [nightwatch](https://nightwatchjs.org/)-powered selemnium tests run in Browserstack. Thus, they can only be run against a deployed stack (for now, there are ways to set up Browserstack for local apps but we haven't done that). They live [here](e2e-tests), and there's more info about them [here](e2e-tests/README.md)
+
+   To run the e2e tests:
+   **NOTE**: Be sure to add browserstack credentials to a .env file or export them as env vars
+
+   ```
+   $ cd e2e-tests
+   $ yarn test
+   ```
+
+   Set `LAUNCH_URL` env var to run them against an environment other than the default `https://staging.ece-fawkes.ctoecskylight.com`
 
 ## Deploy
 

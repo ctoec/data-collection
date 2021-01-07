@@ -8,6 +8,7 @@ import { RecordFormProps } from '../types';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
+import { Heading } from '../../Heading';
 
 const familyAddressFields = [
   'streetAddress',
@@ -32,53 +33,66 @@ export const FamilyAddressForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad = false,
+  hideErrors,
+  setAlerts,
+  topHeadingLevel,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const isMounted = useIsMounted();
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState<boolean>();
 
   if (!child) {
     throw new Error('Family info rendered without child');
   }
 
-  const { family: inputFamily = {} as Family } = child;
+  const { family = {} as Family } = child;
 
-  const { obj: family, setErrorsHidden } = useValidationErrors<Family>(
-    inputFamily,
-    hideErrorsOnFirstLoad
-  );
+  const { errorsHidden } = useValidationErrors(hideErrors);
+
+  const onFinally = () => {
+    if (isMounted()) {
+      setSaving(false);
+    }
+  };
 
   const onSubmit = (newState: Family) => {
-    setErrorsHidden(false);
     setSaving(true);
     apiPut(`families/${family.id}`, newState, { accessToken })
       .then(afterSaveSuccess)
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        setAlerts([
+          {
+            type: 'error',
+            text: 'Unable to save family address',
+          },
+        ]);
       })
-      .finally(() => (isMounted() ? setSaving(false) : null));
+      .finally(onFinally);
   };
 
   return (
-    <div className="grid-container margin-top-2">
-      {!hideHeader && <h2 className="grid-row">Family Address</h2>}
-      <Form<Family>
-        className="FamilyAddressForm"
-        data={family}
-        onSubmit={onSubmit}
-        noValidate
-        autoComplete="off"
-      >
-        <AddressFieldset />
-        <HomelessnessField />
-        <div className="grid-row margin-top-2">
-          <FormSubmitButton
-            text={saving ? 'Saving...' : 'Save edits'}
-            disabled={saving}
-          />
-        </div>
-      </Form>
-    </div>
+    <Form<Family>
+      className="FamilyAddressForm"
+      data={family}
+      onSubmit={onSubmit}
+      noValidate
+      autoComplete="off"
+      hideStatus={errorsHidden}
+    >
+      {!hideHeader && (
+        <Heading level={topHeadingLevel} className="grid-row">
+          Family Address
+        </Heading>
+      )}
+      <AddressFieldset />
+      <HomelessnessField />
+      <div className="grid-row margin-top-2">
+        <FormSubmitButton
+          text={saving ? 'Saving...' : 'Save'}
+          disabled={saving}
+        />
+      </div>
+    </Form>
   );
 };

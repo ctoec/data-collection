@@ -35,14 +35,20 @@ export const changeEnrollment = async (
   changeEnrollmentData: ChangeEnrollment,
   user: User
 ) => {
+  console.debug('changeEnrollment() invoked');
+
   const child = await getChildById(id, user);
 
   if (!child) throw new NotFoundError();
+  console.debug(
+    `Matching child found for ${id}.  Initiating enrollment change...`
+  );
 
   // Get current enrollment
   return getManager().transaction(async (tManager) => {
     // Update current enrollment, if exists
     const currentEnrollment = (child.enrollments || []).find((e) => !e.exit);
+
     if (currentEnrollment) {
       const currentFunding = (currentEnrollment.fundings || []).find(
         (f) => !f.lastReportingPeriod
@@ -136,7 +142,12 @@ async function createNewEnrollment(
   tManager: EntityManager,
   user: User
 ): Promise<void> {
+  console.debug('createNewEnrollment() invoked');
+
   if (newEnrollment.site) {
+    console.debug(
+      `Looking up matching enrollment site for ${newEnrollment.site.id}`
+    );
     const matchingSite = await tManager.findOne(Site, newEnrollment.site.id);
 
     if (!matchingSite || matchingSite.organizationId !== child.organizationId) {
@@ -149,6 +160,9 @@ async function createNewEnrollment(
 
   let enrollment = {
     ...newEnrollment,
+    // Rather than creating a funding here, use the logic below to create it
+    // so that we may take advantage of the funding space check
+    fundings: undefined,
     child,
     updateMetaData: { author: user } as UpdateMetaData,
   } as Enrollment;
@@ -159,7 +173,7 @@ async function createNewEnrollment(
   if (newEnrollment.fundings && newEnrollment.fundings.length) {
     const matchingFundingSpace: FundingSpace = await tManager.findOne(
       FundingSpace,
-      newEnrollment.fundings[0].fundingSpace.id,
+      newEnrollment.fundings[0]?.fundingSpace?.id,
       { where: { organizationId: child.organizationId } }
     );
 

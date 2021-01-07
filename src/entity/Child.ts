@@ -20,6 +20,7 @@ import {
   Child as ChildInterface,
   Gender,
   BirthCertificateType,
+  UndefinableBoolean,
 } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
@@ -31,6 +32,7 @@ import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
 import { ChildBirthCertificateSpecified } from './decorators/Child/birthCertificateValidation';
+import { FundedEnrollmentValidation } from './decorators/Child/fundedEnrollmentValidation';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -44,14 +46,14 @@ export class Child implements ChildInterface {
   uniqueId?: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'First name is required' })
+  @IsNotEmpty()
   firstName?: string;
 
   @Column({ nullable: true })
   middleName?: string;
 
   @Column({ nullable: true })
-  @IsNotEmpty({ message: 'Last name is required' })
+  @IsNotEmpty()
   lastName?: string;
 
   @Column({ nullable: true })
@@ -62,11 +64,11 @@ export class Child implements ChildInterface {
   @MomentComparison({
     compareFunc: (birthdate: Moment) =>
       birthdate.isSameOrAfter(moment().add(-12, 'years')),
-    message: 'Birth date must be within last 12 years',
+    message: 'Birthdate must be within last 12 years.',
   })
   @MomentComparison({
     compareFunc: (birthdate: Moment) => birthdate.isBefore(moment()),
-    message: 'Birth date must be in the past',
+    message: 'Birthdate cannot be in the future.',
   })
   birthdate?: Moment;
 
@@ -94,32 +96,38 @@ export class Child implements ChildInterface {
   @IsNotEmpty()
   birthCertificateId?: string;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   americanIndianOrAlaskaNative?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   asian?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   blackOrAfricanAmerican?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   nativeHawaiianOrPacificIslander?: boolean;
 
-  @Column({ nullable: true, default: false })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   white?: boolean;
 
-  @Column({ nullable: true, default: true })
+  @Column({ nullable: true })
   @ChildRaceIndicated()
   raceNotDisclosed?: boolean;
 
-  @Column({ nullable: true, default: null })
-  hispanicOrLatinxEthnicity?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  @IsNotEmpty()
+  hispanicOrLatinxEthnicity?: UndefinableBoolean;
 
   @Column({
     type: 'varchar',
@@ -130,21 +138,35 @@ export class Child implements ChildInterface {
   @ChildGenderSpecified()
   gender?: Gender;
 
-  @Column({ nullable: true, default: null })
-  dualLanguageLearner?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  @IsNotEmpty()
+  dualLanguageLearner?: UndefinableBoolean;
 
-  @Column({ nullable: true, default: null })
-  foster?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  @IsNotEmpty()
+  foster?: UndefinableBoolean;
 
-  @Column({ nullable: true, default: null })
-  receivesDisabilityServices?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  @IsNotEmpty()
+  receivesDisabilityServices?: UndefinableBoolean;
 
   @ValidateNested()
-  @ValidateIf((child) => {
-    if (child.family) child.family.childIsFoster = child.foster;
-    // This value is used in family to conditionally validate income determinations and then removed
-    return true;
-  })
+  @IsNotEmpty()
   @ManyToOne(() => Family)
   family?: Family;
 
@@ -156,6 +178,7 @@ export class Child implements ChildInterface {
 
   @ValidateNested({ each: true })
   @OneToMany(() => Enrollment, (enrollment) => enrollment.child)
+  @FundedEnrollmentValidation()
   enrollments?: Array<Enrollment>;
 
   @Column(() => UpdateMetaData, { prefix: false })

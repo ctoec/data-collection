@@ -2,6 +2,7 @@
 
 exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
 <div
+  aria-modal="true"
   class="ReactModal__Content ReactModal__Content--after-open"
   role="dialog"
   style="position: absolute; top: 50%; left: 50%; right: 40px; border: 1px solid #ccc; background: rgb(255, 255, 255); overflow: auto; border-radius: 4px; outline: none; padding: 20px; transform: translate(-50%, -50%); max-height: 100%; overflow-y: scroll;"
@@ -26,6 +27,18 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
         <div
           class="display-flex flex-column flex-align-center"
         >
+          <svg
+            class="height-3 text-base-darker"
+            data-icon="times"
+            data-prefix="fas"
+            fill="currentColor"
+            viewBox="0 0 352 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"
+            />
+          </svg>
           <p
             class="margin-y-05"
           >
@@ -97,12 +110,12 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
               </label>
               <input
                 aria-required="true"
-                class="usa-input usa-input--inline"
+                class="usa-input oec-text-input usa-input--inline"
                 id="end-date-month"
                 max="12"
                 min="1"
                 type="number"
-                value="6"
+                value=""
               />
             </div>
             <div
@@ -117,12 +130,12 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
               </label>
               <input
                 aria-required="true"
-                class="usa-input usa-input--inline"
+                class="usa-input oec-text-input usa-input--inline"
                 id="end-date-day"
                 max="31"
                 min="1"
                 type="number"
-                value="22"
+                value=""
               />
             </div>
             <div
@@ -137,12 +150,12 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
               </label>
               <input
                 aria-required="true"
-                class="usa-input usa-input--inline"
+                class="usa-input oec-text-input usa-input--inline"
                 id="end-date-year"
                 max="2200"
                 min="1000"
                 type="number"
-                value="2008"
+                value=""
               />
             </div>
             <div
@@ -152,7 +165,20 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
                 class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
                 title="open calendar"
                 type="button"
-              />
+              >
+                <svg
+                  class="oec-calendar-toggle__icon"
+                  data-icon="calendar"
+                  data-prefix="far"
+                  viewBox="0 0 448 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M400 64h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V160h352v298c0 3.3-2.7 6-6 6z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
               <div
                 class="oec-calendar-dropdown__calendar position-absolute z-top"
                 hidden=""
@@ -875,8 +901,8 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
                                     <tr>
                                       <td
                                         aria-disabled="false"
-                                        aria-label="Selected. Sunday, June 22, 2008"
-                                        class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3 CalendarDay__selected CalendarDay__selected_4"
+                                        aria-label="Sunday, June 22, 2008"
+                                        class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
                                         role="button"
                                         style="width: 39px; height: 38px;"
                                         tabindex="-1"

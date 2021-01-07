@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   SasidField,
   FirstNameField,
@@ -8,23 +8,22 @@ import {
   DateOfBirthField,
   BirthCertificateFieldSet,
 } from './Fields';
-import { Form, FormSubmitButton } from '@ctoec/component-library';
+import { Form, FormSubmitButton, Header } from '@ctoec/component-library';
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { Child } from '../../../shared/models';
+import { Child, UniqueIdType } from '../../../shared/models';
 import { apiPost, apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { getValidationStatusForFields } from '../../../utils/getValidationStatus';
 import { useHistory } from 'react-router-dom';
+import { UniqueIdField } from './Fields/UniqueId';
+import { Heading } from '../../Heading';
 
 // The fields we use to check to see if this form has errors or missing info
 const childIdentifiersFields = [
-  'sasid',
   'firstName',
-  'middleName',
   'lastName',
-  'suffix',
   'birthdate',
   'birthCertificateType',
   'birthTown',
@@ -38,8 +37,10 @@ export const ChildIdentifiersForm = ({
   child: inputChild,
   afterSaveSuccess,
   hideHeader = false,
-  hideErrorsOnFirstLoad,
+  hideErrors,
   showFieldOrFieldset = () => true,
+  setAlerts,
+  topHeadingLevel,
 }: RecordFormProps) => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
@@ -50,17 +51,14 @@ export const ChildIdentifiersForm = ({
     throw new Error('Child info rendered without child');
   }
   // Must keep track of child locally in case creation fails
-  const [localChild, updateLocalChild] = useState(inputChild);
-  const { obj: child, setErrorsHidden } = useValidationErrors<Child>(
-    localChild,
-    hideErrorsOnFirstLoad
-  );
+  const [child, updateChild] = useState(inputChild);
+  useEffect(() => {
+    updateChild(inputChild);
+  }, [inputChild]);
+  const { errorsHidden } = useValidationErrors(hideErrors);
 
-  // This will prevent the flashing of errors
-  // TODO: replicate this in the other forms
   const onFinally = () => {
     if (isMounted()) {
-      setErrorsHidden(false);
       setSaving(false);
     }
   };
@@ -77,9 +75,12 @@ export const ChildIdentifiersForm = ({
         })
         .catch((err) => {
           if (err.data) {
-            updateLocalChild(err.data);
+            updateChild(err.data);
           }
           console.error(err);
+          setAlerts([
+            { type: 'error', text: 'Unable to save child identifiers' },
+          ]);
         })
         .finally(onFinally);
     } else {
@@ -87,6 +88,9 @@ export const ChildIdentifiersForm = ({
         .then(afterSaveSuccess)
         .catch((err) => {
           console.error(err);
+          setAlerts([
+            { type: 'error', text: 'Unable to save child identifiers' },
+          ]);
         })
         .finally(onFinally);
     }
@@ -99,13 +103,23 @@ export const ChildIdentifiersForm = ({
       onSubmit={onFormSubmit}
       noValidate
       autoComplete="off"
+      hideStatus={errorsHidden}
     >
-      {!hideHeader && <h2>Child's identifiers</h2>}
-      {showFieldOrFieldset(child, ['sasid']) && (
-        <div className="mobile-lg:grid-col-12">
-          <SasidField />
-        </div>
+      {!hideHeader && (
+        <Heading level={topHeadingLevel}>Child's identifiers</Heading>
       )}
+      {showFieldOrFieldset(child, ['sasid', 'uniqueId']) &&
+        (child.organization.uniqueIdType === UniqueIdType.SASID ? (
+          <div className="mobile-lg:grid-col-12">
+            <SasidField />
+          </div>
+        ) : child.organization.uniqueIdType === UniqueIdType.Other ? (
+          <div className="mobile-lg:grid-col-12">
+            <UniqueIdField />
+          </div>
+        ) : (
+          <></>
+        ))}
       {showFieldOrFieldset(child, [
         'firstName',
         'lastName',
@@ -131,10 +145,11 @@ export const ChildIdentifiersForm = ({
       )}
       {showFieldOrFieldset(child, ['birthdate']) && <DateOfBirthField />}
       {showFieldOrFieldset(child, [
+        'birthCertificateType',
         'birthCertificateId',
         'birthTown',
         'birthState',
-      ]) && <BirthCertificateFieldSet child={child} />}
+      ]) && <BirthCertificateFieldSet />}
       <FormSubmitButton
         text={saving ? 'Saving...' : 'Save'}
         disabled={saving}

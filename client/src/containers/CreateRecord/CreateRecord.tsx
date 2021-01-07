@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { BackButton } from '../../components/BackButton';
-import { StepList } from '@ctoec/component-library';
+import { ErrorBoundary, StepList } from '@ctoec/component-library';
 import { Organization, Child } from '../../shared/models';
-import { apiGet, apiPost } from '../../utils/api';
+import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
@@ -10,6 +10,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { RecordFormProps } from '../../components/Forms/types';
 import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 type LocationType = Location & {
   state: {
@@ -25,7 +26,8 @@ const CreateRecord: React.FC = () => {
   const activeStep = hash.slice(1);
   const history = useHistory();
   const steps = listSteps(history);
-  const indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep) || 0;
+  let indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
+  if (indexOfCurrentStep < 0) indexOfCurrentStep = 0;
   // Keep track of steps that have been visited at least once
   const [stepsVisited, updateStepsVisited] = useState<
     { key: string; visited: boolean; active: boolean }[]
@@ -54,7 +56,18 @@ const CreateRecord: React.FC = () => {
   // Fetch fresh child from API whenever refetch is triggered
   // And move to next step, if current step is complete (has no validation errors)
   useEffect(() => {
-    if (!childId) return;
+    const markStepVisited = () => {
+      updateStepsVisited((oldSteps) => {
+        const newSteps = [...oldSteps];
+        newSteps[indexOfCurrentStep].visited = true;
+        return newSteps;
+      });
+    };
+
+    if (!childId) {
+      markStepVisited();
+      return;
+    }
 
     const moveToNextStep = () => {
       if (indexOfCurrentStep === steps.length - 1) {
@@ -68,21 +81,15 @@ const CreateRecord: React.FC = () => {
           ],
         });
       } else {
-        updateStepsVisited((oldSteps) => {
-          const newSteps = [...oldSteps];
-          newSteps[indexOfCurrentStep].visited = true;
-          return newSteps;
-        });
         history.replace({ hash: steps[indexOfCurrentStep + 1].key });
       }
     };
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        const currentStepStatus = steps[indexOfCurrentStep].status({
+        const currentStepStatus = steps[indexOfCurrentStep]?.status({
           child: updatedChild,
         } as RecordFormProps);
-
         if (
           currentStepStatus === 'complete' ||
           currentStepStatus === 'exempt'
@@ -91,8 +98,9 @@ const CreateRecord: React.FC = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
-      });
+        throw new Error(err);
+      })
+      .finally(markStepVisited);
   }, [accessToken, childId, refetchChild]);
 
   // After child is updated, programmatically focus on the first input with an error
@@ -100,19 +108,24 @@ const CreateRecord: React.FC = () => {
 
   const { alertElements, setAlerts } = useAlerts();
 
-  const commonFormProps = {
-    child,
-    afterSaveSuccess: triggerRefetchChild,
-    setAlerts,
-    hideHeader: true,
-    hideErrorsOnFirstLoad: (_hash: string) => {
+  const hideErrors = useMemo(
+    () => (_hash: string) => {
       return !stepsVisited.find((s) => s.key === _hash.slice(1))?.visited;
     },
-  };
+    [JSON.stringify(stepsVisited)]
+  );
 
-  if (!child) {
-    return <>Loading...</>;
-  }
+  const commonFormProps: RecordFormProps = {
+    child,
+    afterSaveSuccess: () => {
+      triggerRefetchChild();
+      setAlerts([]);
+    },
+    setAlerts,
+    hideHeader: true,
+    topHeadingLevel: 'h2',
+    hideErrors,
+  };
 
   return (
     <div className="grid-container">
@@ -122,7 +135,13 @@ const CreateRecord: React.FC = () => {
       <p className="usa-hint">
         Information is required unless otherwise specified.
       </p>
-      <StepList steps={steps} props={commonFormProps} activeStep={activeStep} />
+      <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+        <StepList
+          steps={steps}
+          props={commonFormProps}
+          activeStep={activeStep}
+        />
+      </ErrorBoundary>
     </div>
   );
 };

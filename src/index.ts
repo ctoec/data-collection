@@ -6,9 +6,10 @@ import { createConnection, getConnectionOptions } from 'typeorm';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';
 import { router as apiRouter } from './routes';
-import { initialize } from './data/initialize';
+import { initialize } from './data/fake/initialize';
 import { QueryLogger } from './loggers/QueryLogger';
 import { isProdLike } from './utils/isProdLike';
+import { requestLogger } from './loggers/RequestLogger';
 
 getConnectionOptions().then((connectionOptions) => {
   createConnection(
@@ -27,10 +28,11 @@ getConnectionOptions().then((connectionOptions) => {
       // Instantiate the application server
       const app = express();
 
+      app.use(requestLogger);
       // Register pre-processing middlewares
       const dateReviver = (_: any, value: string) => {
         if (typeof value === 'string') {
-          const parsedDate = moment.utc(value, undefined, true);
+          const parsedDate = moment.utc(value, moment.ISO_8601, true);
           if (parsedDate.isValid()) return parsedDate;
         }
         return value;

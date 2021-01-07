@@ -1,12 +1,12 @@
 import { BookType } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
 import { Child, Enrollment } from '../entity';
-import { getAllColumnMetadata } from '../template/getAllColumnMetadata';
 import { Response } from 'express';
 import { isMoment } from 'moment';
-import { streamTabularData } from '../utils/streamTabularData';
-import { SECTIONS } from '../template';
+import { streamTabularData } from '../utils/generateFiles/streamTabularData';
+import { TEMPLATE_SECTIONS } from '../../client/src/shared/constants';
 import { reportingPeriodToString } from './reportingPeriods';
+import { getAllColumnMetadata } from '../template';
 
 /**
  * Function to send the created workbook of information back
@@ -39,42 +39,6 @@ export async function streamUploadedChildren(
     }
   });
   streamTabularData(response, format, childStrings);
-}
-
-/**
- * Helper function that transforms the various non-String data
- * of various Child fields into appropriate formats to display
- * in cells of the CSV to export.
- * @param value
- */
-function formatProperty(value: any, propertyName: string) {
-  // Check for absent values before invoking type check
-  if (value === null || value === undefined) return '';
-  // Check for specific property names
-  if (propertyName === 'fundingSpace') {
-    return value.source;
-  }
-  if (propertyName === 'site') {
-    return value.siteName;
-  }
-  if (
-    propertyName === 'firstReportingPeriod' ||
-    propertyName === 'lastReportingPeriod'
-  ) {
-    return reportingPeriodToString(value);
-  }
-  if (typeof value === 'boolean') {
-    return value ? 'Yes' : 'No';
-  }
-  if (typeof value === 'string') {
-    return value || '';
-  }
-  if (typeof value === 'number') {
-    return value.toString();
-  }
-  if (isMoment(value)) {
-    return value.format('MM/DD/YYYY');
-  }
 }
 
 /**
@@ -121,8 +85,8 @@ function flattenChild(
     const { propertyName, section } = column;
     if (
       skipInfoForPastEnrollments &&
-      section !== SECTIONS.CHILD_IDENTIFIER &&
-      section !== SECTIONS.ENROLLMENT_FUNDING
+      section !== TEMPLATE_SECTIONS.CHILD_IDENT &&
+      section !== TEMPLATE_SECTIONS.ENROLLMENT_FUNDING
     ) {
       childString.push('');
       return;
@@ -140,4 +104,45 @@ function flattenChild(
     }
   });
   return childString;
+}
+
+/**
+ * Helper function that transforms the various non-String data
+ * of various Child fields into appropriate formats to display
+ * in cells of the CSV to export.
+ * @param value
+ */
+function formatProperty(value: any, propertyName: string) {
+  // Check for absent values before invoking type check
+  if (value === null || value === undefined) return '';
+  // Check for specific property names
+  if (propertyName === 'fundingSpace') {
+    return value.source;
+  }
+  if (propertyName === 'site') {
+    return value.siteName;
+  }
+  if (
+    propertyName === 'firstReportingPeriod' ||
+    propertyName === 'lastReportingPeriod'
+  ) {
+    return reportingPeriodToString(value);
+  }
+  if (typeof value === 'boolean') {
+    if (value === true) {
+      return 'Yes';
+    } else if (value === false) {
+      return 'No';
+    }
+    return '';
+  }
+  if (typeof value === 'string') {
+    return value || '';
+  }
+  if (typeof value === 'number') {
+    return value.toString();
+  }
+  if (isMoment(value)) {
+    return value.format('MM/DD/YYYY');
+  }
 }

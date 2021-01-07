@@ -1,14 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react';
 import cx from 'classnames';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   FileInput,
-  TextWithIcon,
   Alert,
   LoadingWrapper,
+  ErrorBoundary,
 } from '@ctoec/component-library';
-import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { apiPost, apiGet } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
@@ -18,22 +17,12 @@ import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton'
 import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 import { clearChildrenCaches } from '../Roster/hooks';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { BatchUpload } from '../../shared/payloads';
+import { getFormDataBlob } from '../../utils/getFormDataBlob';
+import { BackButton } from '../../components/BackButton';
 
 const Upload: React.FC = () => {
-  // USWDS File Input is managed by JS (not exclusive CSS)
-  // We need to import the distributed JS code. It runs immediately
-  // after being parsed, and searches for DOM elements with the
-  // appriopriate HTML attributes. React constantly mounts/unmounts
-  // DOM nodes. To get around this, we dynamically import USWDS every
-  // render. However, browsers cache the module and so subsequent
-  // imports don't trigger the code to execute again. To get around
-  // this, we must delete the module from the cache.
-  useEffect(() => {
-    delete require.cache[require.resolve('uswds/dist/js/uswds')];
-    // @ts-ignore
-    import('uswds/dist/js/uswds');
-  }, []);
-
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
@@ -41,9 +30,11 @@ const Upload: React.FC = () => {
   // Count how many children are in the roster so we can determine if we're writing over that data
   const [userRosterCount, setUserRosterCount] = useState(undefined);
   useEffect(() => {
-    apiGet('children?count=true', accessToken).then((res) =>
-      setUserRosterCount(res.count)
-    );
+    apiGet('children?count=true', accessToken)
+      .then((res) => setUserRosterCount(res.count))
+      .catch((err) => {
+        throw new Error(err);
+      });
   }, [accessToken]);
 
   const [error, setError] = useState<string>();
@@ -56,10 +47,10 @@ const Upload: React.FC = () => {
     // Haven't yet determined how many errors of each type there are
     if (file && errorDict === undefined) {
       setLoading(true);
-      const formData = new FormData();
-      formData.set('file', file);
+      const formData = getFormDataBlob(file);
       apiPost(`enrollment-reports/check`, formData, {
         accessToken,
+        headers: { 'content-type': formData.type },
         rawBody: true,
       })
         // Back end sends back an object whose fields are error table obj.
@@ -69,8 +60,7 @@ const Upload: React.FC = () => {
         .catch(
           handleJWTError(history, (err) => {
             setError(err);
-            setFile(undefined);
-            setErrorDict(undefined);
+            clearFile();
           })
         )
         .finally(() => setLoading(false));
@@ -84,21 +74,37 @@ const Upload: React.FC = () => {
   useEffect(() => {
     if (file && postUpload) {
       setLoading(true);
-      const formData = new FormData();
-      formData.set('file', file);
+      const formData = getFormDataBlob(file);
       apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
         accessToken,
+        headers: { 'content-type': formData.type },
         rawBody: true,
       })
-        .then(() => {
+        // Response contains id of created enrollmentReport,
+        // number of active enrollments, and num withdrawn enrollments
+        // via BatchUpload payload
+        .then((resp: BatchUpload) => {
           // Clear all children records from data cache
           clearChildrenCaches();
-          history.push(`/roster`);
+          let uploadText = `You uploaded ${resp.active} active records`;
+          uploadText +=
+            resp.withdrawn > 0
+              ? ` and ${resp.withdrawn} withdrawn records.`
+              : `.`;
+          history.push(`/roster`, {
+            alerts: [
+              {
+                type: 'success',
+                heading: 'Your records have been uploaded!',
+                text: uploadText,
+              },
+            ],
+          });
         })
         .catch(
           handleJWTError(history, (err) => {
             setError(err);
-            setFile(undefined);
+            clearFile();
           })
         )
         // Reset this flag to false so the upload can be subsequently re-triggered
@@ -146,29 +152,33 @@ const Upload: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, userRosterCount, errorDict]);
 
+  const [fileKey, setFileKey] = useState(0);
+  const clearFile = () => {
+    // When the file is cleared, change the key to force the file component to rerender/reset
+    setFile(undefined);
+    setErrorDict(undefined);
+    setFileKey((oldKey) => oldKey + 1);
+  };
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const file = e?.target?.files?.[0];
-    if (!file) {
+    const _file = e?.target?.files?.[0];
+    if (!_file) {
+      clearFile();
       return setError('No file selected for upload');
     }
-    setFile(file);
+    setFile(_file);
     setError(undefined);
-
-    // set target.files = null to ensure change event is properly triggered
-    // even if file with same name is re-uploaded
-    e.target.files = null;
+    setErrorDict(undefined);
   };
 
   return (
-    <div className="grid-container margin-top-4">
+    <div className="grid-container">
+      <BackButton location="/" />
+
       <ErrorModal
         isOpen={errorModalOpen}
-        toggleIsOpen={() => setErrorModalOpen((o) => !o)}
-        clearFile={() => {
-          setFile(undefined);
-          setErrorDict(undefined);
-        }}
+        closeModal={() => setErrorModalOpen(false)}
+        clearFile={clearFile}
         errorDict={errorDict || []}
         nextFunc={
           userRosterCount === 0 ? advanceToPostUpload : advanceToCheckReplace
@@ -176,8 +186,8 @@ const Upload: React.FC = () => {
       />
       <CheckReplaceData
         isOpen={checkReplaceDataOpen}
-        clearFile={() => setFile(undefined)}
-        toggleIsOpen={() => setCheckReplaceDataOpen((o) => !o)}
+        clearFile={clearFile}
+        closeModal={() => setCheckReplaceDataOpen(false)}
         setPostUpload={setPostUpload}
         setQueryString={setQueryStringForUpload}
       />
@@ -207,39 +217,34 @@ const Upload: React.FC = () => {
           />
         </div>
       )}
-      <div className="margin-bottom-2 text-bold">
-        <Link className="usa-button usa-button--unstyled" to="/">
-          <TextWithIcon
-            text="Back"
-            Icon={Arrow}
-            direction="left"
-            iconSide="left"
-          />
-        </Link>
-      </div>
 
       <div className="grid-row">
-        <h1 ref={h1Ref}>Upload your enrollment data</h1>
+        <h1 ref={h1Ref} className="margin-bottom-0">
+          Upload your enrollment data
+        </h1>
         <p>
           After you've entered all state funded enrollment data in the
           spreadsheet template, upload the file here.
         </p>
       </div>
-      <div className="grid-row">
-        <form
-          className={cx('usa-form', {
-            'display-none': checkReplaceDataOpen || errorModalOpen,
-          })}
-        >
-          <LoadingWrapper text="Uploading your file..." loading={loading}>
-            <FileInput
-              id="report"
-              label="Choose a file"
-              onChange={fileUpload}
-            />
-          </LoadingWrapper>
-        </form>
-      </div>
+      <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+        <div className="grid-row">
+          <form
+            className={cx('usa-form', {
+              'display-none': checkReplaceDataOpen || errorModalOpen,
+            })}
+          >
+            <LoadingWrapper text="Uploading your file..." loading={loading}>
+              <FileInput
+                key={fileKey}
+                id="report"
+                label="Choose a file"
+                onChange={fileUpload}
+              />
+            </LoadingWrapper>
+          </form>
+        </div>
+      </ErrorBoundary>
     </div>
   );
 };

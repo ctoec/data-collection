@@ -1,10 +1,11 @@
-import { normalizeString, processedStringsMatch } from '.';
+import { normalizeString } from '../../../utils/normalizeString';
 import {
   Gender,
   AgeGroup,
   FundingSource,
   CareModel,
   BirthCertificateType,
+  UndefinableBoolean,
 } from '../../../../client/src/shared/models';
 
 /**
@@ -27,12 +28,20 @@ export const mapEnum = <T>(
     | typeof Gender
     | typeof CareModel
     | typeof AgeGroup
-    | typeof FundingSource,
+    | typeof FundingSource
+    | typeof UndefinableBoolean,
   value: string | undefined,
   opts: {
     isFundingSource?: boolean;
+    isUndefineableBoolean?: boolean;
   } = {}
 ) => {
+  // Handle special case of blanks in undefineable boolean columns
+  // right upfront
+  if (!value && opts.isUndefineableBoolean) {
+    return (UndefinableBoolean.NotCollected as unknown) as T;
+  }
+
   if (!value) return;
   const normalizedInput = normalizeString(value);
   let ret: T;
@@ -51,11 +60,9 @@ export const mapEnum = <T>(
     // the acronym (i.e. CDC), full name (i.e. Child day care)
     // or full combined (i.e. CDC - Child day care) version
     if (!ret && opts.isFundingSource) {
-      let normalizedReferences = normalizeString(refString, true);
-      if (!Array.isArray(normalizedReferences)) {
-        // Make typescript happy
-        normalizedReferences = [normalizedReferences];
-      }
+      let normalizedReferences = refString
+        .split('-')
+        .map((stringPart) => normalizeString(stringPart));
       normalizedReferences.forEach((_normalizedReference) => {
         if (processedStringsMatch(normalizedInput, _normalizedReference)) {
           ret = ref;
@@ -68,3 +75,10 @@ export const mapEnum = <T>(
   }
   return ret;
 };
+
+function processedStringsMatch(str1: string, str2: string) {
+  if (str1.startsWith(str2) || str2.startsWith(str1)) {
+    return true;
+  }
+  return false;
+}

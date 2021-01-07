@@ -10,6 +10,8 @@ import {
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
+import fs from 'fs';
+import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -40,14 +42,15 @@ enrollmentReportsRouter.post(
           req.user,
           { save: false }
         );
-        const schemaChildren: Child[] = await Promise.all(
-          reportChildren.map(async (child) => {
-            // Create object as the DB would see it without saving
-            return getManager().create(Child, child);
-          })
-        );
+
+        // Need this line to create entities as the DB would see them.
+        // Since only given properties are copied into the entities,
+        // anything that winds up with missing info will set off
+        // validation errors, which we need to find nested errors in
+        // e.g. family address, enrollments, income dets, etc.
+        const dbChildren = tManager.create(Child, reportChildren);
         const childrenWithErrors = await Promise.all(
-          schemaChildren.map(async (child) => {
+          dbChildren.map(async (child) => {
             return {
               ...child,
               validationErrors: await validate(child),
@@ -58,6 +61,7 @@ enrollmentReportsRouter.post(
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
+
         res.send(errorDict);
       } catch (err) {
         if (err instanceof ApiError) throw err;
@@ -69,6 +73,8 @@ enrollmentReportsRouter.post(
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
+      } finally {
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
       }
     });
   })
@@ -124,7 +130,19 @@ enrollmentReportsRouter.post(
         const report = await tManager.save(
           tManager.create(EnrollmentReport, { children: reportChildren })
         );
-        res.status(201).json({ id: report.id });
+
+        let numActive = 0,
+          numWithdrawn = 0;
+        reportChildren.forEach((child) => {
+          if (child.enrollments?.every((e) => e.exit)) numWithdrawn += 1;
+          else numActive += 1;
+        });
+
+        res.status(201).json({
+          id: report.id,
+          active: numActive,
+          withdrawn: numWithdrawn,
+        } as BatchUpload);
       } catch (err) {
         if (err instanceof ApiError) throw err;
 
@@ -132,6 +150,8 @@ enrollmentReportsRouter.post(
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
+      } finally {
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
       }
     });
   })

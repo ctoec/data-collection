@@ -7,14 +7,14 @@ export const DisabilityServices: React.FC = () => (
   <TripleBooleanRadio<Child>
     field="receivesDisabilityServices"
     id="disability-button-group"
-    legend="Receiving disability services"
+    legend="Receiving disability and/or special education services"
     trueOption={{
       id: 'disability-yes',
-      label: 'Receives disability services',
+      label: 'Receives disability and/or special education services',
     }}
     falseOption={{
       id: 'disability-no',
-      label: 'Does not receive disability services',
+      label: 'Does not receive disability and/or special education services',
     }}
     unknownOption={{
       id: 'disability-unknown',

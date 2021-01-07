@@ -2,11 +2,7 @@ import express, { Request, Response } from 'express';
 import { getManager } from 'typeorm';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { Enrollment, Funding } from '../entity';
-import {
-  NotFoundError,
-  ApiError,
-  BadRequestError,
-} from '../middleware/error/errors';
+import { ApiError, BadRequestError } from '../middleware/error/errors';
 import * as controller from '../controllers/enrollments';
 
 export const enrollmentsRouter = express.Router();
@@ -15,11 +11,12 @@ enrollmentsRouter.put(
   '/:enrollmentId',
   passAsyncError(async (req, res) => {
     try {
-      const id = req.params['enrollmentId'];
-      let enrollment = await getManager().findOne(Enrollment, id);
-
-      if (!enrollment) throw new NotFoundError();
-
+      const enrollmentId = req.params['enrollmentId'];
+      const enrollment = await controller.getEnrollment(
+        enrollmentId,
+        req.user,
+        true
+      );
       await getManager().save(
         getManager().merge(Enrollment, enrollment, req.body)
       );
@@ -38,7 +35,7 @@ enrollmentsRouter.post(
   passAsyncError(async (req, res) => {
     const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      await controller.changeFunding(enrollmentId, req.body);
+      await controller.changeFunding(enrollmentId, req.user, req.body);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -56,7 +53,7 @@ enrollmentsRouter.post(
   passAsyncError(async (req, res) => {
     const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      await controller.withdraw(enrollmentId, req.body);
+      await controller.withdraw(enrollmentId, req.user, req.body);
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -71,11 +68,10 @@ enrollmentsRouter.post(
 enrollmentsRouter.delete(
   '/:enrollmentId',
   passAsyncError(async (req: Request, res: Response) => {
-    const enrollmentId = parseInt(req.params['enrollmentId']);
     try {
-      const enrollment = await getManager().find(Enrollment, {
-        id: enrollmentId,
-      });
+      const enrollmentId = parseInt(req.params['enrollmentId']);
+      const enrollment = await controller.getEnrollment(enrollmentId, req.user);
+
       await getManager().softRemove(enrollment);
       res.sendStatus(200);
     } catch (err) {
@@ -90,11 +86,13 @@ enrollmentsRouter.put(
   '/:enrollmentId/fundings/:fundingId',
   passAsyncError(async (req, res) => {
     try {
-      const id = req.params['fundingId'];
-      const funding = await getManager().findOne(Funding, id);
-
-      if (!funding) throw new NotFoundError();
-
+      const enrollmentId = req.params['enrollmentId'];
+      const fundingId = req.params['fundingId'];
+      const funding = await controller.getFunding(
+        enrollmentId,
+        fundingId,
+        req.user
+      );
       await getManager().save(getManager().merge(Funding, funding, req.body));
 
       res.sendStatus(200);
@@ -111,8 +109,14 @@ enrollmentsRouter.delete(
   '/:enrollmentId/fundings/:fundingId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const fundingId = parseInt(req.params['fundingId']);
-      const funding = await getManager().find(Funding, { id: fundingId });
+      const enrollmentId = req.params['enrollmentId'];
+      const fundingId = req.params['fundingId'];
+      const funding = await controller.getFunding(
+        enrollmentId,
+        fundingId,
+        req.user
+      );
+
       await getManager().softRemove(funding);
       res.sendStatus(200);
     } catch (err) {

@@ -1,25 +1,32 @@
 import { useEffect } from 'react';
 import { useAlerts } from '../../../hooks/useAlerts';
-import { drillReactNodeForText } from '../../../utils/getValidationStatus';
 import { AlertProps } from '@ctoec/component-library';
 import React from 'react';
 import pluralize from 'pluralize';
 import { Link } from 'react-router-dom';
 import { stringify } from 'query-string';
+import { drillReactNodeForText } from '../../../utils/drillReactNodeForText';
 
 export const useChildrenWithErrorsAlert = (
   isLoading: boolean,
   childrenWithErrorsCount: number,
+  withdrawnChildrenCount: number,
+  alertType: 'warning' | 'error' = 'warning',
   organizationId?: string
 ) => {
   const { alertElements, setAlerts, alerts } = useAlerts();
   const childrenWithErrorsAlert = getChildrenWithErrorsAlertProps(
     childrenWithErrorsCount,
+    withdrawnChildrenCount,
+    alertType,
     organizationId
   );
   useEffect(() => {
-    if (isLoading || !childrenWithErrorsCount) {
-      setAlerts([]);
+    if (isLoading) {
+      // TODO: This line for some reason needs to exist so that Roster.test.tsx can
+      // pass with the jestFunc() apiMock call, but it in theory shouldn't need to.
+      // Investigate weirdness later.
+      setAlerts([...alerts]);
       return;
     }
 
@@ -30,17 +37,26 @@ export const useChildrenWithErrorsAlert = (
       (a) => a.heading === childrenWithErrorsAlert.heading
     );
     const existingAlertText = drillReactNodeForText(existingAlert?.text);
+    const otherAlerts = alerts.filter(
+      (a) => a.heading !== childrenWithErrorsAlert.heading
+    );
+
+    if (!childrenWithErrorsCount) {
+      // If there are no longer children with errors, we need to ditch that alert without overwriting alerts that may have come from other pages (ie. after delete child)
+      setAlerts(otherAlerts);
+      return;
+    }
+
     if (
       !existingAlert ||
       !existingAlertText.includes(`${childrenWithErrorsCount}`)
     ) {
-      setAlerts([
-        ...alerts.filter((a) => a.heading !== childrenWithErrorsAlert.heading),
-        childrenWithErrorsAlert,
-      ]);
+      setAlerts([...otherAlerts, childrenWithErrorsAlert]);
     }
-  }, [childrenWithErrorsCount, isLoading]);
+  }, [childrenWithErrorsCount, isLoading, alertType]);
 
+  // If data is loading, we shouldn't display any alerts
+  if (isLoading) return {};
   return { alertElements };
 };
 
@@ -50,14 +66,27 @@ export const useChildrenWithErrorsAlert = (
  */
 function getChildrenWithErrorsAlertProps(
   numberOfChildrenWithErrors: number,
+  numberOfWithdrawnChildrenWithErrors: number,
+  alertType: 'warning' | 'error',
   organizationId?: string
 ): AlertProps {
+  let alertText = `You'll need to add required info for
+        ${pluralize('record', numberOfChildrenWithErrors, true)} before
+        submitting your data to OEC. Update with `;
+  if (numberOfWithdrawnChildrenWithErrors > 0) {
+    alertText = `You'll need to add required info for ${numberOfChildrenWithErrors} active ${pluralize(
+      'record',
+      numberOfChildrenWithErrors
+    )} and ${numberOfWithdrawnChildrenWithErrors} withdrawn ${pluralize(
+      'record',
+      numberOfWithdrawnChildrenWithErrors
+    )} before
+        submitting your data to OEC. Update all records that need info with `;
+  }
   return {
     text: (
       <span>
-        You'll need to add required info for{' '}
-        {pluralize('record', numberOfChildrenWithErrors, true)} before
-        submitting your data to OEC. Update with{' '}
+        {alertText}
         <Link
           className="usa-button usa-button--unstyled"
           to={`/batch-edit?${stringify({ organizationId })}`}
@@ -67,6 +96,6 @@ function getChildrenWithErrorsAlertProps(
       </span>
     ),
     heading: 'Update roster before submitting',
-    type: 'warning',
+    type: alertType,
   };
 }

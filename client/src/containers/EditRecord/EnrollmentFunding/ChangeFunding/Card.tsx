@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import { Card, Button, Alert } from '@ctoec/component-library';
 import { Enrollment } from '../../../../shared/models';
 import { ChangeFundingForm } from './Form';
+import { RecordFormProps } from '../../../../components/Forms';
+import { Heading, HeadingLevel } from '../../../../components/Heading';
 
 type ChangeFundingCardProps = {
   enrollment: Enrollment;
   orgId: number;
   afterSaveSuccess: () => void;
+  setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -19,8 +23,9 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
   enrollment,
   orgId,
   afterSaveSuccess,
+  setAlerts,
+  topHeadingLevel,
 }) => {
-  const [error, setError] = useState<string>();
   const [visibleForm, setVisibleForm] = useState<'end' | 'start'>();
   const activeFunding = (enrollment.fundings || []).find(
     (f) => !f.lastReportingPeriod
@@ -30,21 +35,23 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
       {!!visibleForm && (
         <Card>
           <>
-            <h3>
+            <Heading level={topHeadingLevel}>
               {visibleForm === 'end' ? 'End current funding' : 'Change funding'}
-            </h3>
-            {error && <Alert type="error" text={error} />}
+            </Heading>
             <ChangeFundingForm
               afterSaveSuccess={() => {
-                setError(undefined);
                 setVisibleForm(undefined);
                 afterSaveSuccess();
               }}
               afterSaveFailure={(err) => {
-                console.log(err);
-                setError(
-                  'Unable to change funding. Make sure all required information is provided'
-                );
+                console.error(err);
+                setAlerts([
+                  {
+                    type: 'error',
+                    text:
+                      'Unable to change funding. Make sure all required information is provided',
+                  },
+                ]);
               }}
               changeType={visibleForm}
               enrollment={enrollment}

@@ -22,8 +22,9 @@ import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer, enumTransformer } from './transformers';
-import { FundingDoesNotOverlap } from './decorators/Enrollment/fundingOverlapValidation';
 import { FundingAgeGroupMatchesEnrollment } from './decorators/Enrollment/fundingAgeGroupValidation';
+import { MomentComparison } from './decorators/momentValidators';
+import moment from 'moment';
 
 @Entity()
 export class Enrollment implements EnrollmentInterface {
@@ -63,9 +64,17 @@ export class Enrollment implements EnrollmentInterface {
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
   @IsNotEmpty()
+  @MomentComparison({
+    compareFunc: (entry: Moment) => entry.isBefore(moment()),
+    message: 'Entry cannot be in the future.',
+  })
   entry?: Moment;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  @MomentComparison({
+    compareFunc: (exit: Moment) => exit.isBefore(moment()),
+    message: 'Exit cannot be in the future.',
+  })
   exit?: Moment;
 
   @Column({ nullable: true })
@@ -74,12 +83,28 @@ export class Enrollment implements EnrollmentInterface {
   exitReason?: string;
 
   @OneToMany(() => Funding, (funding) => funding.enrollment, {
+    // We need to cascade updates so that if a user adds an enrollment in the create flow with a funding, saves with errors, and needs to correct those errors, they can re-save and have the funding update too
+    cascade: true,
     onDelete: 'CASCADE',
+    eager: true,
   })
   @ValidateNested({ each: true })
-  @FundingDoesNotOverlap()
   @FundingAgeGroupMatchesEnrollment()
   @IsNotEmpty()
+  @ValidateIf((enrollment) => {
+    // This is used by each funding and then deleted
+    // See similar pattern between child and family
+    enrollment.fundings.forEach((funding) => {
+      // Fundings must be undefined or we have circular json
+      funding.enrollment = { ...enrollment, fundings: undefined };
+      // But we still need access to the other fundings
+      funding.allFundings = enrollment.fundings.map((f) => ({
+        ...f,
+        enrollment: undefined,
+      }));
+    });
+    return true;
+  })
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })

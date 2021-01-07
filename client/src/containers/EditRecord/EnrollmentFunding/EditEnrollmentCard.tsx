@@ -1,25 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Card,
-  InlineIcon,
   ExpandCard,
   Button,
   TextWithIcon,
   Pencil,
   CardExpansion,
-  Alert,
   TrashCan,
+  InlineIcon,
 } from '@ctoec/component-library';
 import { Enrollment, Child } from '../../../shared/models';
 import { apiDelete } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
+import { RecordFormProps } from '../../../components/Forms';
+import { HeadingLevel } from '../../../components/Heading';
 
 type EditEnrollmentCardProps = {
   child: Child;
   enrollmentId: number;
-  isCurrent?: boolean;
   afterSaveSuccess: () => void;
+  isCurrent?: boolean;
+  setAlerts: RecordFormProps['setAlerts'];
+  topHeadingLevel: HeadingLevel;
 };
 
 /**
@@ -33,6 +36,8 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   enrollmentId,
   isCurrent = false,
   afterSaveSuccess,
+  setAlerts,
+  topHeadingLevel,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -41,7 +46,6 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
 
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
-  const [error, setError] = useState<string>();
 
   // Explicitly don't want `closeCard` as a dep, as this
   // needs to be triggered on render caused by child refetch
@@ -56,11 +60,15 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
     apiDelete(`enrollments/${enrollmentId}`, {
       accessToken,
     })
-      .then(() => {
-        afterSaveSuccess();
-      })
+      .then(afterSaveSuccess)
       .catch((err) => {
         console.error('Unable to delete enrollment', err);
+        setAlerts([
+          {
+            type: 'error',
+            text: err,
+          },
+        ]);
       });
   }
 
@@ -118,17 +126,16 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         </div>
       </div>
       <CardExpansion>
-        {error && <Alert type="error" text={error} />}
         <EnrollmentForm
           id={`edit-enrollment-${enrollment.id}`}
           child={child}
           enrollmentId={enrollment.id}
           afterSaveSuccess={() => {
-            setError(undefined);
             setCloseCard(true);
             afterSaveSuccess();
           }}
-          setAlerts={() => {}}
+          topHeadingLevel={topHeadingLevel}
+          setAlerts={setAlerts}
           AdditionalButton={
             <ExpandCard>
               <Button text="Cancel" appearance="outline" />

@@ -4,11 +4,11 @@ import { Request, Response, NextFunction } from 'express';
 import { getManager, In } from 'typeorm';
 import { User, Organization, Site, OrganizationPermission } from '../entity';
 import { passAsyncError } from './error/passAsyncError';
-
 import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
 import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
+import { organizations } from '../data/fake/organizations';
 
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
@@ -37,22 +37,17 @@ const decodeClaim = jwt({
  */
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
-    if (req.claims.sub) {
+    if (req.claims?.sub) {
       let fawkesUser = await getUser(req.claims.sub);
 
-      // We should only create users with full permissions in environments without actual data
+      // Only automatically create app user in test environments
       if (!fawkesUser && !isProdLike()) {
         const res: AxiosResponse<any> = await getUserFromWingedKeys(
           req.headers.authorization
         );
 
-        if (
-          res &&
-          res.data &&
-          res.data.sub &&
-          res.data.sub === req.claims.sub
-        ) {
-          fawkesUser = await createUserWithFullPermissions(
+        if (res?.data?.sub === req.claims.sub) {
+          fawkesUser = await createUserWithSingleOrgPermissions(
             req.claims.sub,
             res.data
           );
@@ -110,6 +105,11 @@ const getUser = async (wingedKeysId: string) => {
   return user;
 };
 
+/**
+ * Fetches a user object from winged-keys, for test env automatic
+ * app user creation flow
+ * @param bearerToken
+ */
 async function getUserFromWingedKeys(
   bearerToken: string
 ): Promise<AxiosResponse<any>> {
@@ -123,7 +123,14 @@ async function getUserFromWingedKeys(
   });
 }
 
-async function createUserWithFullPermissions(
+/**
+ * For test environments. Incoming requests from legit
+ * wingek-keys users get an application user created for them,
+ * with org-level permissions for a single test org
+ * @param wingedKeysId
+ * @param wingedKeysUser
+ */
+async function createUserWithSingleOrgPermissions(
   wingedKeysId: string,
   wingedKeysUser: { given_name: string; family_name: string }
 ): Promise<User> {
@@ -134,19 +141,19 @@ async function createUserWithFullPermissions(
       wingedKeysId,
       firstName: wingedKeysUser.given_name,
       lastName: wingedKeysUser.family_name,
+      confidentialityAgreedDate: null,
     });
 
     user = await manager.save(_user);
 
-    const orgs: Organization[] = await manager.find(Organization);
-    if (orgs.length) {
-      const orgPermsForUser = manager.create(
-        OrganizationPermission,
-        orgs.map((org) => ({
-          user,
-          organizationId: org.id,
-        }))
-      );
+    const org: Organization = await manager.findOne(Organization, {
+      where: { providerName: organizations[0].providerName },
+    });
+    if (org) {
+      const orgPermsForUser = manager.create(OrganizationPermission, {
+        user,
+        organizationId: org.id,
+      });
       await manager.save(orgPermsForUser);
     }
   });
@@ -155,8 +162,33 @@ async function createUserWithFullPermissions(
 }
 
 /**
- * Full authentication middleware chains together decodeClaim and addUser,
+ * A conditional wrapper around the real authentication logic to decode the
+ * jwt claim. If `x-test-no-authenticate` header is set, and the request is
+ * being processed in a non-prod environment, then skip token decode. Instead,
+ * add the default "voldemort" user to the request and continue down the
+ * middlewares chain
+ * @param req
+ * @param res
+ * @param next
+ */
+const decodeOrMockClaim = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!isProdLike() && req.headers['x-test-no-authenticate']) {
+    const user = await getManager().findOne(User, {
+      where: { firstName: 'voldemort' },
+    });
+    req.claims = { sub: user.wingedKeysId };
+    return next();
+  }
+
+  decodeClaim(req, res, next);
+};
+/**
+ * Full authentication middleware chains together decodeOrMockClaim and addUser,
  * so that any authenticated route gets the user, looked up via decoded JWT
  * "sub" claim, added to the request
  */
-export const authenticate = [decodeClaim, addUser];
+export const authenticate = [decodeOrMockClaim, addUser];

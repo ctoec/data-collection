@@ -1,12 +1,14 @@
 import express, { Request, Response } from 'express';
-import { getManager } from 'typeorm';
+import { getManager, In } from 'typeorm';
 import { Family, IncomeDetermination } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
+import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 import {
   BadRequestError,
   NotFoundError,
   ApiError,
 } from '../middleware/error/errors';
+import * as controller from '../controllers/incomeDeterminations';
 
 export const familyRouter = express.Router();
 
@@ -18,7 +20,10 @@ familyRouter.put(
   passAsyncError(async (req: Request, res: Response) => {
     const familyId = req.params['familyId'];
     try {
-      const family = await getManager().findOne(Family, familyId);
+      const readOrgIds = await getReadAccessibleOrgIds(req.user);
+      const family = await getManager().findOne(Family, familyId, {
+        where: { organization: { id: In(readOrgIds) } },
+      });
       if (!family) throw new NotFoundError();
 
       await getManager().save(getManager().merge(Family, family, req.body));
@@ -39,15 +44,7 @@ familyRouter.put(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const famId = parseInt(req.params['familyId']);
-      const detId = parseInt(req.params['determinationId']);
-
-      const detToModify = await getManager().findOne(IncomeDetermination, {
-        id: detId,
-        familyId: famId,
-      });
-      if (!detToModify) throw new NotFoundError();
-
+      const detToModify = await controller.getDetermination(req);
       const mergedEntity = getManager().merge(
         IncomeDetermination,
         detToModify,
@@ -72,7 +69,14 @@ familyRouter.post(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const famId = parseInt(req.params['familyId']);
-      const family = await getManager().findOne(Family, { id: famId });
+      const readOrgIds = await getReadAccessibleOrgIds(req.user);
+      const family = await getManager().findOne(
+        Family,
+        { id: famId },
+        {
+          where: { organization: { id: In(readOrgIds) } },
+        }
+      );
 
       const determination = await getManager().save(
         getManager().create(IncomeDetermination, {
@@ -94,8 +98,7 @@ familyRouter.delete(
   '/:familyId/income-determinations/:determinationId',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const detId = parseInt(req.params['determinationId']);
-      const det = await getManager().find(IncomeDetermination, { id: detId });
+      const det = await controller.getDetermination(req);
       await getManager().softRemove(det);
       res.sendStatus(200);
     } catch (err) {

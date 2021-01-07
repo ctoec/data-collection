@@ -30,15 +30,15 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
     <div
       class="oec-card-cell oec-card-expansion"
     >
-      <h3
-        class="margin-top-2 margin-bottom-2"
-      >
-        New enrollment
-      </h3>
       <form
         class="usa-form usa-form"
         id="change-enrollment-form"
       >
+        <h2
+          class="margin-top-2 margin-bottom-2"
+        >
+          New enrollment
+        </h2>
         <fieldset
           aria-labelledby="fieldset-legend-site-radiogroup"
           class="usa-fieldset"
@@ -90,12 +90,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 </label>
                 <input
                   aria-required="true"
-                  class="usa-input usa-input--inline"
+                  class="usa-input oec-text-input usa-input--inline"
                   id="start-date-month"
                   max="12"
                   min="1"
                   type="number"
-                  value="6"
+                  value=""
                 />
               </div>
               <div
@@ -109,12 +109,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 </label>
                 <input
                   aria-required="true"
-                  class="usa-input usa-input--inline"
+                  class="usa-input oec-text-input usa-input--inline"
                   id="start-date-day"
                   max="31"
                   min="1"
                   type="number"
-                  value="22"
+                  value=""
                 />
               </div>
               <div
@@ -128,12 +128,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                 </label>
                 <input
                   aria-required="true"
-                  class="usa-input usa-input--inline"
+                  class="usa-input oec-text-input usa-input--inline"
                   id="start-date-year"
                   max="2200"
                   min="1000"
                   type="number"
-                  value="2008"
+                  value=""
                 />
               </div>
               <div
@@ -143,7 +143,20 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
                   title="open calendar"
                   type="button"
-                />
+                >
+                  <svg
+                    class="oec-calendar-toggle__icon"
+                    data-icon="calendar"
+                    data-prefix="far"
+                    viewBox="0 0 448 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M400 64h-48V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H160V12c0-6.6-5.4-12-12-12h-40c-6.6 0-12 5.4-12 12v52H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48zm-6 400H54c-3.3 0-6-2.7-6-6V160h352v298c0 3.3-2.7 6-6 6z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </button>
                 <div
                   class="oec-calendar-dropdown__calendar position-absolute z-top"
                   hidden=""
@@ -866,8 +879,8 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                                       <tr>
                                         <td
                                           aria-disabled="false"
-                                          aria-label="Selected. Sunday, June 22, 2008"
-                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3 CalendarDay__selected CalendarDay__selected_4"
+                                          aria-label="Sunday, June 22, 2008"
+                                          class="CalendarDay CalendarDay_1 CalendarDay__default CalendarDay__default_2 CalendarDay__firstDayOfWeek CalendarDay__firstDayOfWeek_3"
                                           role="button"
                                           style="width: 39px; height: 38px;"
                                           tabindex="-1"
@@ -1493,7 +1506,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
                   id="School-aged"
                   name="ageGroup"
                   type="radio"
-                  value="School-aged"
+                  value="School aged"
                 />
                 <label
                   class="usa-radio__label"
@@ -1506,12 +1519,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
-          aria-labelledby="fieldset-legend-funding-source"
+          aria-labelledby="fieldset-legend-funding-source-undefined"
           class="usa-fieldset"
-          id="funding-source"
+          id="funding-source-undefined"
         >
           <legend
-            id="fieldset-legend-funding-source"
+            id="fieldset-legend-funding-source-undefined"
           >
             <span
               class="usa-label"
@@ -1519,32 +1532,11 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
               Funding source options
             </span>
           </legend>
-          <div>
-            <span>
-              <div
-                class="usa-radio"
-              >
-                <input
-                  checked=""
-                  class="usa-radio__input"
-                  id="Unfunded"
-                  name="fundingSource"
-                  type="radio"
-                  value="Unfunded"
-                />
-                <label
-                  class="usa-radio__label"
-                  for="Unfunded"
-                >
-                  Unfunded
-                </label>
-              </div>
-            </span>
-          </div>
+          <div />
         </fieldset>
-        <h3>
+        <h2>
           Previous enrollment
-        </h3>
+        </h2>
         <div
           class="usa-form-group"
         >

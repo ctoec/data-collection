@@ -4,7 +4,7 @@ module.exports = {
   navigateToDataTemplate: async function (browser) {
     await makeSureNavIsOpen(browser);
     await browser.click('xpath', "//*/a[contains(@href,'/template')]");
-    const templatePageTitle = 'Batch upload data template';
+    const templatePageTitle = 'File upload template';
     await browser.waitForElementVisible(
       'xpath',
       `//*/h1[contains(text(), '${templatePageTitle}')]`

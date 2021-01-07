@@ -4,6 +4,10 @@ module.exports = {
   navigateToRoster: async function (browser) {
     await makeSureNavIsOpen(browser);
     await browser.click('xpath', "//*/a[contains(@href,'/roster')]");
-    await browser.waitForElementVisible('css selector', 'body');
+    const rosterHeaderArgs = [
+      'xpath',
+      '//*/p[contains(text()," children enrolled at ")]',
+    ];
+    await browser.waitForElementVisible(...rosterHeaderArgs);
   },
 };

@@ -5,6 +5,8 @@ import {
   TextWithIcon,
   ArrowRight,
   InlineIcon,
+  ErrorBoundary,
+  LoadingWrapper,
 } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
 import { hasValidationError } from '../../utils/hasValidationError';
@@ -16,20 +18,26 @@ import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 import { stringify, parse } from 'query-string';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const BatchEdit: React.FC = () => {
   const { childId } = useParams() as { childId: string };
   const { organizationId } = parse(useLocation().search) as {
     organizationId: string;
   };
+  const { alertElements } = useAlerts();
 
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
-  const { data: children, isValidating } = useAuthenticatedSWR<Child[]>(
+  const { data: children, isValidating, mutate, error } = useAuthenticatedSWR<
+    Child[]
+  >(
     childId
       ? null // no need to fetch all children for single record batch edit
       : `children?${stringify({ organizationId, 'missing-info': true })}`
   );
+  const loading = !children && !error;
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
   >([]);
@@ -54,7 +62,7 @@ const BatchEdit: React.FC = () => {
       setActiveRecordId(fixedRecordsForDisplayIds[0]);
   }, [fixedRecordsForDisplayIds.length]);
 
-  const moveNextRecord = () => {
+  const moveNextRecord = (updatedRecords?: Child[]) => {
     const activeRecordIdx = fixedRecordsForDisplayIds.findIndex(
       (id) => id === activeRecordId
     );
@@ -62,9 +70,12 @@ const BatchEdit: React.FC = () => {
     // If active record is last record in the list
     if (activeRecordIdx === fixedRecordsForDisplayIds.length - 1) {
       // Then look for the first record that is still missing info
-      const firstStillMissingInformationRecord = fixedRecordsForDisplay.find(
-        hasValidationError
-      );
+      // (in `updatedRecords` - the most up-to-date version of the records passed as function arg,
+      // or in `fixedRecordsForDisplay` the local state var holding those records here in this component,
+      // which for some reason is not being updated until the next render loop)
+      const firstStillMissingInformationRecord = (
+        updatedRecords || fixedRecordsForDisplay
+      ).find(hasValidationError);
 
       // And set the active record id to that record, if it exists
       // otherwise to undefined, which indicates the complete state
@@ -90,13 +101,12 @@ const BatchEdit: React.FC = () => {
   return (
     <div className="grid-container">
       <BackButton text="Back to roster" location="/roster" />
+      {alertElements}
       <h1 ref={h1Ref} className="margin-bottom-1">
         Add needed information
       </h1>
-      {isValidating ? (
-        <>Loading</>
-      ) : (
-        <>
+      <LoadingWrapper loading={loading}>
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
           <div className="display-flex font-body-lg height-5 line-height-body-6 margin-y-0">
             {currentlyMissingInfoCount ? (
               <>
@@ -119,7 +129,7 @@ const BatchEdit: React.FC = () => {
             activeItemId={activeRecordId}
             items={fixedRecordsForDisplay.map((record) => ({
               id: record.id,
-              onClick: () => setActiveRecordId(record.id),
+              onClick: () => setActiveRecordId(record?.id),
               title: (
                 <span>
                   {nameFormatter(record)}
@@ -132,11 +142,14 @@ const BatchEdit: React.FC = () => {
             }))}
           >
             {activeRecordId !== undefined ? (
-              <BatchEditItemContent
-                childId={activeRecordId}
-                moveNextRecord={moveNextRecord}
-                organizationId={organizationId}
-              />
+              <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+                <BatchEditItemContent
+                  childId={activeRecordId}
+                  moveNextRecord={moveNextRecord}
+                  organizationId={organizationId}
+                  mutate={mutate}
+                />
+              </ErrorBoundary>
             ) : (
               <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
                 <InlineIcon icon="complete" />
@@ -154,8 +167,8 @@ const BatchEdit: React.FC = () => {
               </div>
             )}
           </SideNav>
-        </>
-      )}
+        </ErrorBoundary>
+      </LoadingWrapper>
     </div>
   );
 };

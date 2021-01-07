@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Child, ObjectWithValidationErrors } from '../../shared/models';
-import { StepProps, StepList, Button } from '@ctoec/component-library';
+import {
+  StepProps,
+  StepList,
+  Button,
+  InlineIcon,
+  LoadingWrapper,
+} from '@ctoec/component-library';
 import { RecordFormProps } from '../../components/Forms/types';
 import { listSteps } from './listSteps';
 import { nameFormatter } from '../../utils/formatters';
@@ -10,26 +16,22 @@ import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Link } from 'react-router-dom';
 import { getCurrentEnrollment } from '../../utils/models';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import { stringify } from 'query-string';
+import { mutateCallback } from 'swr/dist/types';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 type BatchEditItemContentProps = {
   childId: string;
   organizationId?: string;
-  moveNextRecord: () => void;
+  moveNextRecord: (_?: Child[]) => void;
+  mutate?: (_: mutateCallback<Child[]>, __: boolean) => void;
 };
 
 export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   childId,
-  organizationId,
   moveNextRecord,
+  mutate,
 }) => {
   const [child, setChild] = useState<Child>();
-  const { mutate } = useAuthenticatedSWR<Child[]>(
-    organizationId
-      ? `children?${stringify({ organizationId, 'missing-info': true })}`
-      : null // no organizationId means this is single-record batch edit, so no need to update cache
-  );
 
   const { setAlerts } = useAlerts();
 
@@ -38,6 +40,8 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
 
   const { accessToken } = useContext(AuthenticationContext);
   const [triggerRefetchCount, setTriggerRefetchCount] = useState(0);
+
+  const { updateCurrentRosterCache } = useContext(RosterContext);
 
   // Reset state when new child
   useEffect(() => {
@@ -59,12 +63,12 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   }, [child?.id]);
 
   // Function to progress to next step
-  const moveNextStep = () => {
+  const moveNextStep = (records?: Child[]) => {
     if (!activeStepKey || !steps) return;
 
     const activeStepIdx = steps.findIndex((step) => step.key === activeStepKey);
     if (activeStepIdx === steps.length - 1) {
-      moveNextRecord();
+      moveNextRecord(records);
     } else {
       setActiveStep(steps[activeStepIdx + 1].key);
     }
@@ -77,23 +81,24 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        // Presence of orgId indicates multi-record batch edit
-        // so cache must be updated
-        if (organizationId) {
+        let updatedChildren: Child[] = [];
+        if (mutate) {
           mutate((children: Child[]) => {
             if (children) {
-              const idx = children.findIndex((c) => c.id === childId);
-              if (idx > -1) children.splice(idx, 1, updatedChild);
-              return children;
+              updatedChildren = [...children];
+              const idx = updatedChildren.findIndex((c) => c.id === childId);
+              if (idx > -1) updatedChildren.splice(idx, 1, updatedChild);
+              return updatedChildren;
             }
             return children;
           }, false);
         }
+        updateCurrentRosterCache(updatedChild);
 
-        if (triggerRefetchCount) moveNextStep();
+        if (triggerRefetchCount) moveNextStep(updatedChildren);
       })
       .catch((err) => {
-        console.log(err);
+        throw new Error(err);
       });
   }, [accessToken, triggerRefetchCount, !!child]);
 
@@ -102,45 +107,58 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     afterSaveSuccess: () => setTriggerRefetchCount((r) => r + 1),
     setAlerts,
     hideHeader: true,
-    hideErrorsOnFirstLoad: () => false,
+    topHeadingLevel: 'h4', // needed bc we still need the headers within the forms to be accurately nested
     showFieldOrFieldset: showFieldInBatchEditForm,
     AdditionalButton: (
-      <Button text="Skip" onClick={moveNextStep} appearance="outline" />
+      <Button
+        text="Skip"
+        onClick={() => moveNextRecord()}
+        appearance="outline"
+      />
     ),
   };
 
   const AllComplete = (
-    <div className="margin-y-2 display-flex flex-center">All complete!</div>
+    <div className="margin-y-2">
+      <div className="text-center font-body-xl">
+        <InlineIcon icon="complete" />
+      </div>
+      <div className="text-center text-bold font-body-lg">
+        {`${child?.firstName}'s record is now complete!`}
+      </div>
+    </div>
   );
 
   if (!child) {
-    return <></>;
+    return <LoadingWrapper loading={true} />;
   }
 
   const currentEnrollment = getCurrentEnrollment(child);
   return (
     <>
-      <div className="padding-x-2 padding-bottom-3">
+      <div className="padding-left-2 padding-right-2 padding-bottom-3">
         <div className="display-flex flex-row flex-justify flex-align-end">
           <h2 className="margin-bottom-0">{nameFormatter(child)}</h2>
           <div className="text-baseline text-base">
-            Date of birth: {child.birthdate?.format('MM/DD/YYYY')}
+            Date of birth: {child.birthdate?.format('MM/DD/YYYY') || 'Missing'}
           </div>
         </div>
         <div className="margin-top-1 display-flex flex-row flex-justify">
           <Link to={`/edit-record/${child.id}`}>View full profile</Link>
           <div className="text-base">
-            {currentEnrollment?.ageGroup} — {currentEnrollment?.site?.siteName}
+            {currentEnrollment?.ageGroup || 'Missing age group'} —{' '}
+            {currentEnrollment?.site?.siteName || 'Missing site'}
           </div>
         </div>
       </div>
-      <div className="padding-top-1 border-top-1px border-base-light">
+      <div className="padding-1 border-top-1px border-base-light">
         {steps && steps.length ? (
           <StepList<RecordFormProps>
             key={child.id}
             steps={steps}
             props={props}
             activeStep={activeStepKey || ''}
+            headerLevel="h3"
           />
         ) : (
           AllComplete

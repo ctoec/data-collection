@@ -4,6 +4,7 @@ import { Gender } from '../';
 import { Moment } from 'moment';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 import { BirthCertificateType } from '../BirthCertificateType';
+import { UndefinableBoolean } from '../UndefinableBoolean';
 
 export const RACE_FIELDS = [
   'americanIndianOrAlaskaNative',
@@ -32,11 +33,11 @@ export interface Child extends ObjectWithValidationErrors {
   nativeHawaiianOrPacificIslander?: boolean;
   white?: boolean;
   raceNotDisclosed?: boolean;
-  hispanicOrLatinxEthnicity?: boolean;
+  hispanicOrLatinxEthnicity?: UndefinableBoolean;
   gender?: Gender;
-  dualLanguageLearner?: boolean;
-  foster?: boolean;
-  receivesDisabilityServices?: boolean;
+  dualLanguageLearner?: UndefinableBoolean;
+  foster?: UndefinableBoolean;
+  receivesDisabilityServices?: UndefinableBoolean;
   family?: Family;
   organization: Organization;
   enrollments?: Array<Enrollment>;

@@ -1,25 +1,56 @@
 import { removeDeletedElements } from '../utils/filterSoftRemoved';
-import { getManager } from 'typeorm';
+import { getManager, In, IsNull } from 'typeorm';
 import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
-import { Enrollment, ReportingPeriod, Funding } from '../entity';
+import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
+
+export const getEnrollment = async (
+  id: number | string,
+  user: User,
+  withFundings?: boolean
+) => {
+  const enrollment = await getManager().findOne(Enrollment, {
+    where: [
+      { siteId: In(user.siteIds), id },
+      { siteId: IsNull(), id },
+    ],
+    relations: withFundings ? ['fundings'] : undefined,
+  });
+
+  if (!enrollment) throw new NotFoundError();
+  return enrollment;
+};
+
+export const getFunding = async (
+  enrollmentId: number | string,
+  fundingId: number | string,
+  user: User
+) => {
+  // To assert that the user has access to the enrollment
+  await getEnrollment(enrollmentId, user);
+  const funding = await getManager().findOne(Funding, fundingId, {
+    where: { enrollmentId: enrollmentId },
+  });
+
+  if (!funding) throw new NotFoundError();
+
+  return funding;
+};
 
 export const changeFunding = async (
   id: number,
+  user: User,
   changeFundingData: ChangeFunding
 ) => {
-  let enrollment = await getManager().findOne(Enrollment, id, {
-    relations: ['fundings'],
-  });
-  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
-
-  if (!enrollment) throw new NotFoundError();
+  const enrollment = await getEnrollment(id, user, true);
+  enrollment.fundings = removeDeletedElements(enrollment.fundings);
 
   return getManager().transaction(async (tManager) => {
     // Update current funding, if exists
     const currentFunding = (enrollment.fundings || []).find(
       (f) => !f.lastReportingPeriod
     );
+
     if (currentFunding) {
       const oldFundingLastReportingPeriod =
         changeFundingData.oldFunding?.lastReportingPeriod;
@@ -38,8 +69,8 @@ export const changeFunding = async (
       // on that value
       if (
         !oldFundingLastReportingPeriod &&
-        newFundingFirstReportingPeriod.id &&
-        !newFundingFirstReportingPeriod.period
+        newFundingFirstReportingPeriod?.id &&
+        !newFundingFirstReportingPeriod?.period
       ) {
         newFundingFirstReportingPeriod.period = (
           await tManager.findOne(
@@ -49,11 +80,15 @@ export const changeFunding = async (
         ).period;
       }
 
+      let periodBeforeNewFundingFirst = newFundingFirstReportingPeriod.period
+        .clone()
+        .add(-1, 'month');
+
       const lastReportingPeriod =
         oldFundingLastReportingPeriod ||
         (await tManager.findOne(ReportingPeriod, {
           where: {
-            period: newFundingFirstReportingPeriod.period.add(-1, 'month'),
+            period: periodBeforeNewFundingFirst,
             type: currentFunding.fundingSpace.source,
           },
         }));
@@ -74,13 +109,14 @@ export const changeFunding = async (
   });
 };
 
-export const withdraw = async (id: number, withdrawData: Withdraw) => {
-  let enrollment = await getManager().findOne(Enrollment, id, {
-    relations: ['fundings'],
-  });
-  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
+export const withdraw = async (
+  id: number,
+  user: User,
+  withdrawData: Withdraw
+) => {
+  const enrollment = await getEnrollment(id, user, true);
 
-  if (!enrollment) throw new NotFoundError();
+  enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
 
   return getManager().transaction(async (tManager) => {
     const currentFunding = (enrollment.fundings || []).find(
@@ -98,13 +134,13 @@ export const withdraw = async (id: number, withdrawData: Withdraw) => {
       await tManager.save(currentFunding);
     }
 
-    if (!withdrawData.exitDate || !withdrawData.exitReason) {
+    if (!withdrawData.exit || !withdrawData.exitReason) {
       throw new BadRequestError(
         'Exit date and exit reason must be provided to withdraw'
       );
     }
 
-    enrollment.exit = withdrawData.exitDate;
+    enrollment.exit = withdrawData.exit;
     enrollment.exitReason = withdrawData.exitReason;
     await tManager.save(enrollment);
   });

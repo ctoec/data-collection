@@ -1,30 +1,32 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Moment } from 'moment';
 import {
-  Accordion,
-  Button,
   TabNav,
   HeadingLevel,
   LoadingWrapper,
+  ErrorBoundary,
+  // Button,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
+// TODO: Uncomment this import when you want to reactivate the
+// bottom bar with buttons
+// import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useHistory } from 'react-router-dom';
 import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   getAccordionItems,
-  getChildrenByAgeGroup,
   getQueryMonthFormat,
   QUERY_STRING_MONTH_FORMAT,
-  applyClientSideFilters,
+  applySiteFilter,
+  getRosterH2,
+  filterChildrenByWithdrawn,
 } from './rosterUtils';
 import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
-import { NoRecordsAlert } from './NoRecordsAlert';
 import {
   useUpdateRosterParams,
   useOrgSiteProps,
@@ -32,7 +34,10 @@ import {
   usePaginatedChildData,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
-import { ColumnNames } from './tableColumns';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { RosterContent } from './RosterContent';
+import { EmptyRosterCard } from './EmptyRosterCard';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -57,62 +62,84 @@ const Roster: React.FC = () => {
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
-  const { withdrawn: showOnlyWithdrawnEnrollments } = query;
 
-  const { children, error } = usePaginatedChildData(
-    query.organization,
-    showOnlyWithdrawnEnrollments
-  );
+  // Track roster query so we can update cache appropriately and navigate back to it
+  const { setRosterQuery } = useContext(RosterContext);
+  useEffect(() => {
+    if (query) setRosterQuery(query);
+  }, [query?.organization, query?.month]);
+
+  // TODO: handle fetching error
+  const {
+    children: allChildren,
+    stillFetching: loading,
+  } = usePaginatedChildData(query);
+  const {
+    active: activeChildren,
+    withdrawn: withdrawnChildren,
+  } = filterChildrenByWithdrawn(allChildren || []);
+  const rosterIsEmpty = (allChildren || []).length === 0;
+  const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
+  const isSingleSiteView = query.site ? true : false;
+
   // Get alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
+  const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
+  const activeChildrenWithErrorsCount = activeChildren.filter(
+    (child) => child?.validationErrors && child.validationErrors.length
+  ).length;
+  const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
+    (child) => child?.validationErrors && child.validationErrors.length
+  ).length;
   const { alertElements } = useChildrenWithErrorsAlert(
-    !children,
-    (children || []).filter(
-      (child) => child?.validationErrors && child.validationErrors.length
-    ).length,
+    loading,
+    activeChildrenWithErrorsCount,
+    withdrawnChildrenWithErrorsCount,
+    alertType,
     query.organization
   );
-  const loading = !children && !error;
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
   // site is requested
-  const clientSideFilteredChildren = applyClientSideFilters(
-    children || [],
-    // TODO: MAKE INTO OPTS
-    query.site,
-    queryMonth
-  );
+  const siteFilteredChildren = applySiteFilter(displayChildren, query.site);
 
-  const childrenByAgeGroup = getChildrenByAgeGroup(clientSideFilteredChildren);
-  let columnsToHide = [];
-  if (!isMultiOrgUser) {
-    columnsToHide.push(ColumnNames.ORGANIZATION);
-  }
-  if (!showOnlyWithdrawnEnrollments) {
-    columnsToHide.push(ColumnNames.EXIT);
-  }
-  const accordionProps = {
-    items: getAccordionItems(childrenByAgeGroup, {
-      hideCapacity: isSiteLevelUser,
-      excludeColumns: columnsToHide,
-    }),
-    titleHeadingLevel: 'h2' as HeadingLevel,
-  };
-
-  // Get props for tabNav, h1Text, and subHeaderText based on user access (i.e. user's sites and org permissions)
+  // Get props for tabNav, h1Text, and subHeaderText, superHeaderText, and subSubHeader
+  // based on user access (i.e. user's sites and org permissions)
   const {
     tabNavProps,
     h1Text,
     subHeaderText,
     superHeaderText,
-  } = useOrgSiteProps(
-    !children || !query.organization,
-    clientSideFilteredChildren.length
-  );
+  } = useOrgSiteProps(loading, displayChildren.length);
+
+  const siteChildCount = (siteFilteredChildren || []).length;
+  const siteIsEmpty = siteChildCount === 0;
+  const rosterH2 = getRosterH2(siteChildCount, user?.sites, query);
+  // Get roster content as accordion props
+  const accordionProps = siteFilteredChildren
+    ? {
+        items: getAccordionItems(siteFilteredChildren, {
+          hideCapacity: isSiteLevelUser || isSingleSiteView,
+          hideOrgColumn: !isMultiOrgUser,
+          hideExitColumn: !query.withdrawn,
+        }),
+        titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
+      }
+    : undefined;
 
   // Function to submit data to OEC, to pass down into submit button
   async function submitToOEC() {
+    // Block submit if there are incomplete records / records with errors
+    // Scroll to top of page and change alert to error, not warning
+    if (
+      activeChildrenWithErrorsCount + withdrawnChildrenWithErrorsCount !==
+      0
+    ) {
+      window.scrollTo(0, 0);
+      setAlertType('error');
+      return;
+    }
     // If there's an active org submit
     if (query.organization) {
       await apiPut(`oec-report/${query.organization}`, undefined, {
@@ -146,18 +173,54 @@ const Roster: React.FC = () => {
     });
   };
 
-  let rosterContent = <NoRecordsAlert />;
-  if (children?.length && accordionProps.items.length)
-    rosterContent = <Accordion {...accordionProps} />;
-  if (tabNavProps)
-    rosterContent = <TabNav {...tabNavProps}>{rosterContent}</TabNav>;
+  const rosterContentProps = {
+    query,
+    childRecords: displayChildren,
+    accordionProps,
+    rosterH2,
+  };
+
+  let rosterContent = tabNavProps ? (
+    <TabNav {...tabNavProps}>
+      {siteIsEmpty ? <></> : rosterH2}
+      {
+        // Decide if site is empty here to keep site-switching
+        // controls available
+        siteIsEmpty ? (
+          <EmptyRosterCard boldText="This site doesn't have any records yet" />
+        ) : (
+          <RosterContent {...rosterContentProps} />
+        )
+      }
+    </TabNav>
+  ) : (
+    <RosterContent {...rosterContentProps} />
+  );
+  // Replace all content and disable all switching if there's
+  // nothing in roster at all
+  if (rosterIsEmpty) {
+    rosterContent = (
+      <EmptyRosterCard boldText="There aren't any records in your roster yet" />
+    );
+  }
+
+  const buttonTable = !query.withdrawn && (
+    <RosterButtonsTable
+      filterByMonth={queryMonth}
+      setFilterByMonth={updateActiveMonth}
+      updateWithdrawnOnly={updateWithdrawnOnly}
+    />
+  );
 
   return (
     <>
       <div className="Roster grid-container">
         <BackButton
-          text="Back to getting started"
-          location="/getting-started"
+          location={
+            query.month || query.withdrawn
+              ? `/roster?organization=${query.organization}`
+              : '/'
+          }
         />
         {alertElements}
         <div className="grid-row flex-align-center">
@@ -180,7 +243,7 @@ const Roster: React.FC = () => {
                 icon="calendar"
               />
             )}
-            {showOnlyWithdrawnEnrollments && (
+            {!!query.withdrawn && (
               <RosterFilterIndicator
                 filterTitleText="Withdrawn enrollments"
                 reset={() => updateWithdrawnOnly(false)}
@@ -189,17 +252,15 @@ const Roster: React.FC = () => {
             )}
           </div>
         </div>
-        {!showOnlyWithdrawnEnrollments && (
-          <RosterButtonsTable
-            filterByMonth={queryMonth}
-            setFilterByMonth={updateActiveMonth}
-            updateWithdrawnOnly={updateWithdrawnOnly}
-          />
-        )}
-        <LoadingWrapper text="Loading your roster..." loading={loading}>
-          {rosterContent}
-        </LoadingWrapper>
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+          {!rosterIsEmpty && buttonTable}
+          <LoadingWrapper text="Loading your roster..." loading={loading}>
+            {rosterContent}
+          </LoadingWrapper>
+        </ErrorBoundary>
       </div>
+      {/* {// TODO: Re-enable the bottom bar once we're in January and using the app
+      children?.length && 
       <FixedBottomBar>
         <Button
           text="Back to getting started"
@@ -217,7 +278,7 @@ const Roster: React.FC = () => {
             disabled={!query.organization}
           />
         )}
-      </FixedBottomBar>
+      </FixedBottomBar>} */}
     </>
   );
 };

@@ -2,27 +2,36 @@ import express from 'express';
 import { Response, Request } from 'express';
 import { BookType } from 'xlsx/types';
 
-import { streamTabularData } from '../utils/streamTabularData';
+import { streamTabularData } from '../utils/generateFiles/streamTabularData';
 import { getAllColumnMetadata } from '../template';
+import { TEMPLATE_VERSION, TEMPLATE_LAST_UPDATED } from '../template/constants';
 import { InternalServerError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import {
   completeChildren,
   childrenAllMissingOneField,
   childrenMissingSomeInfo,
-} from '../data/children';
+} from '../data/fake/children';
 import { streamUploadedChildren } from '../controllers/export';
 import { parseQueryString } from '../utils/parseQueryString';
+import { TemplateMetadata } from '../../client/src/shared/payloads';
 
 export const templateRouter = express.Router();
 /**
- * /template/column-metadata GET
+ * /template/metadata GET
  *
- * Returns all column metadata from the FlattenedEnrollment model,
- * as an array of ColumnMetadata objects
+ * Returns a TemplateMetadata object, including:
+ * 	- template version
+ * 	- template update date
+ * 	- column metadata from the FlattenedEnrollment model
  */
-templateRouter.get('/column-metadata', (_, res) => {
-  res.send(getAllColumnMetadata());
+templateRouter.get('/metadata', (_, res) => {
+  const templateMetadata: TemplateMetadata = {
+    version: TEMPLATE_VERSION,
+    lastUpdated: TEMPLATE_LAST_UPDATED,
+    columnMetadata: getAllColumnMetadata(),
+  };
+  res.send(templateMetadata);
 });
 
 /**
@@ -60,9 +69,7 @@ templateRouter.get(
       } else if (whichFakeChildren === 'missingOne') {
         fakeChildren = childrenAllMissingOneField;
       }
-      res.send(
-        await streamUploadedChildren(res, fakeChildren, fileType as BookType)
-      );
+      await streamUploadedChildren(res, fakeChildren, fileType as BookType);
     } catch (err) {
       console.error('Unable to download example', err);
       throw new InternalServerError('Could not download example file: ' + err);

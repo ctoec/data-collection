@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { getCurrentHost } from './getCurrentHost';
 
-type ApiOpts = {
+export type ApiOpts = {
   accessToken?: string | null;
   jsonParse?: boolean;
   rawBody?: boolean;
@@ -19,7 +19,12 @@ export function apiGet(
   accessToken?: string | null,
   opts?: ApiOpts
 ) {
-  return api(path, undefined, 'GET', { accessToken, ...opts });
+  // Need to add some headers for IE to cache properly
+  const getOpts = opts || {};
+  getOpts['headers'] = opts?.headers || {};
+  getOpts.headers['Pragma'] = 'no-cache';
+  getOpts.headers['Cache-Control'] = 'no-cache';
+  return api(path, undefined, 'GET', { accessToken, ...getOpts });
 }
 
 /**
@@ -121,7 +126,7 @@ async function api(
 
 const dateReviver = (_: any, value: string) => {
   if (typeof value === 'string') {
-    const parsedDate = moment.utc(value, undefined, true);
+    const parsedDate = moment.utc(value, moment.ISO_8601, true);
     if (parsedDate.isValid()) return parsedDate;
   }
   return value;

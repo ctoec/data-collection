@@ -4,7 +4,8 @@ export interface ColumnMetadata {
   format: string;
   reason: string;
   definition: string;
-  required: string;
+  requirementLevel: string;
+  requirementString?: string;
   formattedName: string;
   propertyName: string;
 }

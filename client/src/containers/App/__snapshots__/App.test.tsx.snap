@@ -64,7 +64,6 @@ exports[`App matches snapshot 1`] = `
             >
               <img
                 alt="close"
-                src="close.svg"
               />
             </button>
             <div
@@ -121,7 +120,39 @@ exports[`App matches snapshot 1`] = `
     </div>
     <main
       id="main-content"
-    />
+    >
+      <div
+        class="oec-loading-wrapper"
+      >
+        <div
+          aria-hidden="true"
+          class="opacity-0"
+        />
+        <div
+          class="oec-loading-wrapper__indicator bg-white"
+        >
+          <div
+            class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
+            role="progressbar"
+            style="width: 40px; height: 40px;"
+          >
+            <svg
+              class="MuiCircularProgress-svg"
+              viewBox="22 22 44 44"
+            >
+              <circle
+                class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
+                cx="44"
+                cy="44"
+                fill="none"
+                r="20.2"
+                stroke-width="3.6"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 </DocumentFragment>
 `;

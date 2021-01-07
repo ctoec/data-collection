@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { waitFor } from '@testing-library/react';
 import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 import Roster from './Roster';
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -15,6 +16,12 @@ import {
   User,
   FundingTime,
 } from '../../shared/models';
+
+const commonUserProvider = {
+  loading: false,
+  confidentialityAgreedDate: moment.utc(),
+  setConfidentialityAgreedDate: () => {},
+};
 
 const _child = {
   firstName: '',
@@ -149,72 +156,63 @@ jest.mock('react-router-dom', () => ({
   }),
 }));
 
-jest.mock('../../utils/api');
-import * as api from '../../utils/api';
-import { waitFor } from '@testing-library/react';
-const apiMock = api as jest.Mocked<typeof api>;
+jest.mock('./hooks/usePaginatedChildData');
+import * as paginatedChildData from './hooks/usePaginatedChildData';
+const paginatedChildDataMock = paginatedChildData as jest.Mocked<
+  typeof paginatedChildData
+>;
 
-// For reasons I cannot explain, clearing the cache does not work
-// ( apparantly, `cache.clear()` should reset the swr cache), and so
-// if more than one tests gets the `before` func, the subsequent tests
-// fail because the apiGet call is never made. I cannot be bothered
-// spending more time trying to figure this out right now, so only
-// one test is doing the awaiting for the apiGet call to be made,
-// and other tests are using the cache results.
-const waitGetChildren = async () => {
-  return waitFor(() => expect(apiMock.apiGet).toBeCalled());
+const helperOpts = {
+  wrapInRouter: true,
+  wrapInSWRConfig: true,
 };
 
 describe('Roster', () => {
   beforeAll(async () => {
-    apiMock.apiGet
-      .mockReturnValueOnce(new Promise((resolve) => resolve(children)))
-      .mockReturnValueOnce(new Promise((resolve) => resolve([])));
+    paginatedChildDataMock.usePaginatedChildData.mockReturnValue({
+      children,
+      stillFetching: false,
+      mutate: async () => undefined,
+      error: undefined,
+    });
   });
 
   snapshotTestHelper(
-    <UserContext.Provider value={{ user: oneSiteUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: oneSiteUser }}>
       <Roster />
     </UserContext.Provider>,
     {
-      wrapInRouter: true,
-      wrapInSWRConfig: true,
+      ...helperOpts,
       name: 'matches snapshot for site level user',
-      before: waitGetChildren,
     }
   );
 
   snapshotTestHelper(
-    <UserContext.Provider value={{ user: oneOrgUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: oneOrgUser }}>
       <Roster />
     </UserContext.Provider>,
     {
-      wrapInRouter: true,
-      wrapInSWRConfig: true,
+      ...helperOpts,
       name: 'matches snapshot for one-org, multi-site user',
     }
   );
 
   snapshotTestHelper(
-    <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: multiOrgUser }}>
       <Roster />
     </UserContext.Provider>,
     {
-      wrapInRouter: true,
-      wrapInSWRConfig: true,
+      ...helperOpts,
       name: 'matches snapshot for multi-org user',
     }
   );
 
   accessibilityTestHelper(
-    <UserContext.Provider value={{ user: multiOrgUser, loading: false }}>
+    <UserContext.Provider value={{ ...commonUserProvider, user: multiOrgUser }}>
       <Roster />
     </UserContext.Provider>,
-    {
-      wrapInSWRConfig: true,
-      wrapInRouter: true,
-    }
+    helperOpts
   );
 
-  afterEach(() => jest.clearAllMocks());
+  afterAll(() => jest.clearAllMocks());
 });

@@ -1,8 +1,35 @@
-import React from 'react';
 import { FormStatusProps, TObjectDriller } from '@ctoec/component-library';
 import { ValidationError } from 'class-validator';
-import { ReactNode } from 'react';
-import { ObjectWithValidationErrors } from '../shared/models/ObjectWithValidationErrors';
+import {
+  EnrichedValidationError,
+  ObjectWithValidationErrors,
+} from '../shared/models/ObjectWithValidationErrors';
+import { capitalizeFirstLetter } from './formatters/sentenceCase';
+
+const getIsRequiredMessage = (fieldName: string) =>
+  `${fieldName} is required for OEC reporting.`;
+
+function getValidationErrorMessage(validationError: EnrichedValidationError) {
+  // Constraints i.e. { isNotEmpty: 'Error message from the backend about the field being empty' }
+  const { constraints } = validationError || {};
+  const fieldName = capitalizeFirstLetter(
+    validationError?.metadata?.formattedName || 'Field'
+  );
+  // Use the is required error message as a default to make typescript happy
+  // There is probably not acctually a case where there is an error but no constraints
+  // unless someone writes a custom validation and forgets
+  if (!constraints) return getIsRequiredMessage(fieldName);
+
+  return Object.keys(constraints).reduce((prev, current) => {
+    // Returns a string of sentences, one for each validation error
+    let appendMessage = constraints[current];
+    if (current === 'isNotEmpty') {
+      appendMessage = getIsRequiredMessage(fieldName);
+    }
+    if (!prev) return appendMessage;
+    return `${prev} ${appendMessage}`;
+  }, '');
+}
 
 /**
  * Wrapper function around getValidationStatusForField that passes in option
@@ -14,9 +41,11 @@ export function getValidationStatusForFieldInFieldset<
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
-  fieldProps: any & { label: string }
+  _: any // TODO: clean this up -- no longer used now that property names come from validation error metadata
 ): FormStatusProps | undefined {
-  return getValidationStatusForField(objectDriller, path, fieldProps, {
+  // TODO: do we actually want to do this?
+  // Are there any cases where we want to show the error for each field in a fieldset?
+  return getValidationStatusForField(objectDriller, path, _, {
     message: undefined,
   });
 }
@@ -26,15 +55,6 @@ export type ValidationStatusOptions = {
   id?: string;
   message?: string;
 };
-
-export function drillReactNodeForText(inputNode: ReactNode | string): string {
-  if (typeof inputNode === 'string') {
-    return inputNode;
-  } else if (React.isValidElement(inputNode)) {
-    return drillReactNodeForText(inputNode.props.children);
-  }
-  return '';
-}
 
 /**
  * The form field passes object driller and path to the validation function,
@@ -51,7 +71,7 @@ export function getValidationStatusForField<
 >(
   objectDriller: TObjectDriller<NonNullable<T>>,
   path: string,
-  fieldProps: any & { label: string | ReactNode },
+  _: any, // TODO: clean this up -- no longer user now that property names come from validation error metadata (but still expected by FormField status)
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
   const splitPath = path.split('.');
@@ -72,9 +92,7 @@ export function getValidationStatusForField<
   return {
     type: 'error',
     id: `status-${field}`,
-    message: `${drillReactNodeForText(
-      fieldProps.label || fieldProps.legend
-    )} is required for OEC reporting.`,
+    message: getValidationErrorMessage(validationError),
     ...options,
   };
 }
@@ -111,7 +129,14 @@ export function getValidationStatusForFields<
     fields.includes(v.property)
   );
   if (!validationErrors.length) return;
-  const message = 'This information is required for OEC reporting.';
+  const message = validationErrors.reduce((prev, current) => {
+    // Result from get validation error message is a string of sentences.
+    // This chains those together.
+    // Override this default with a custom message in options if you don't want this.
+    const newMessage = getValidationErrorMessage(current);
+    if (!prev) return newMessage;
+    return `${prev} ${newMessage}`;
+  }, '');
 
   return {
     type: 'error',

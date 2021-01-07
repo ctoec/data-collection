@@ -5,7 +5,7 @@ import { ErrorObjectForTable } from './ErrorObjectForTable';
 /**
  * Tabular column formatter that displays a dictionary of
  * counts of validation errors as a formatted table within
- * a batch upload modal.
+ * a file upload modal.
  */
 export const tableColumns: () => Column<ErrorObjectForTable>[] = () => {
   const columns: Column<ErrorObjectForTable>[] = [
@@ -19,11 +19,27 @@ export const tableColumns: () => Column<ErrorObjectForTable>[] = () => {
       ),
     },
     {
-      name: '# of records with errors',
+      name: '# of errors',
       sort: (row) => row.property || '',
       cell: ({ row }) => (
         <th scope="row" className="font-body-2xs">
           <p>{row.count}</p>
+        </th>
+      ),
+    },
+    {
+      name: 'Child records with errors',
+      sort: (row) => row.property || '',
+      cell: ({ row }) => (
+        <th scope="row" className="font-body-2xs">
+          <p>
+            {row.affectedRows.length > 5
+              ? row.affectedRows.slice(0, 5).join(', ') +
+                ', and ' +
+                (row.affectedRows.length - 5).toString() +
+                ' more'
+              : row.affectedRows.join(', ')}
+          </p>
         </th>
       ),
     },

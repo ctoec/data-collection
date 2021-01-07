@@ -9,7 +9,10 @@ import {
   getManager,
 } from 'typeorm';
 
-import { Family as FamilyInterface } from '../../client/src/shared/models';
+import {
+  Family as FamilyInterface,
+  UndefinableBoolean,
+} from '../../client/src/shared/models';
 
 import { Organization } from './Organization';
 import { IncomeDetermination } from './IncomeDetermination';
@@ -21,6 +24,7 @@ import {
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
+import { enumTransformer } from './transformers';
 
 @Entity()
 export class Family implements FamilyInterface {
@@ -29,36 +33,35 @@ export class Family implements FamilyInterface {
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   streetAddress?: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   town?: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   state?: string;
 
   @Column({ nullable: true })
   @IsNotEmpty()
-  @ValidateIf((f) => !f.homelessness)
+  @ValidateIf((f) => f.homelessness !== UndefinableBoolean.Yes)
   zipCode?: string;
 
-  @Column({ nullable: true, default: null })
-  homelessness?: boolean;
+  @Column({
+    type: 'varchar',
+    length: 20,
+    nullable: true,
+    transformer: enumTransformer(UndefinableBoolean),
+  })
+  homelessness?: UndefinableBoolean;
 
   @OneToMany(() => IncomeDetermination, (det) => det.family)
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
-  @ValidateIf((family) => {
-    // This value is set in child validation of family
-    const childIsFoster = family.childIsFoster;
-    delete family.childIsFoster;
-    return !childIsFoster;
-  })
   incomeDeterminations?: Array<IncomeDetermination>;
 
   @OneToMany(() => Child, (child) => child.family)

@@ -5,10 +5,13 @@ import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
 import { Enrollment } from '../../../shared/models';
+import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
   afterSaveSuccess,
+  setAlerts,
+  topHeadingLevel,
 }) => {
   if (!child) {
     throw new Error('Enrollment funding form rendered without child');
@@ -24,59 +27,71 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
 
+  const commonProps = {
+    afterSaveSuccess,
+    child,
+    setAlerts,
+  };
+
   return (
     <>
-      <h2>Enrollment and funding</h2>
+      <Heading level={topHeadingLevel}>Enrollment and funding</Heading>
       <ChangeEnrollmentCard
-        child={child}
+        {...commonProps}
+        topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
         currentEnrollment={currentEnrollment}
-        afterSaveSuccess={afterSaveSuccess}
       />
       {currentEnrollment && (
         <>
-          <h3>Current enrollment</h3>
+          <Heading level={getNextHeadingLevel(topHeadingLevel)}>
+            Current enrollment
+          </Heading>
           <EditEnrollmentCard
+            {...commonProps}
             key="edit-current-enrollment"
             isCurrent={true}
-            child={child}
             enrollmentId={currentEnrollment.id}
-            afterSaveSuccess={afterSaveSuccess}
+            topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
           {currentEnrollment.fundings?.map((funding) => (
             <EditFundingCard
+              {...commonProps}
               key={funding.id}
               isCurrent={true}
-              child={child}
               fundingId={funding.id}
               enrollmentId={currentEnrollment.id}
-              afterSaveSuccess={afterSaveSuccess}
+              topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
             />
           ))}
           <ChangeFundingCard
+            {...commonProps}
             enrollment={currentEnrollment}
             orgId={child.organization.id}
-            afterSaveSuccess={afterSaveSuccess}
+            // This heading should be nested under current enrollment
+            topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
         </>
       )}
       {!!pastEnrollments.length && (
         <>
-          <h3>Past enrollments</h3>
+          <Heading level={getNextHeadingLevel(topHeadingLevel)}>
+            Past enrollments
+          </Heading>
           {pastEnrollments.map((enrollment) => (
             <>
               <EditEnrollmentCard
+                {...commonProps}
                 key={enrollment.id}
-                child={child}
                 enrollmentId={enrollment.id}
-                afterSaveSuccess={afterSaveSuccess}
+                topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
               />
               {enrollment.fundings?.map((funding) => (
                 <EditFundingCard
+                  {...commonProps}
                   key={funding.id}
-                  child={child}
                   fundingId={funding.id}
                   enrollmentId={enrollment.id}
-                  afterSaveSuccess={afterSaveSuccess}
+                  topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
                 />
               ))}
             </>

@@ -12,6 +12,6 @@
     "WingedKeysUri": "https://localhost:5050"
   },
   "prod": {
-    "WingedKeysUri": "https://prod.ece-wingedkeys.ctoecskylight.com"
+    "WingedKeysUri": "https://ece-login.ctoec.org"
   }
 }

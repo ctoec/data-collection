@@ -1,46 +1,48 @@
 .Home {
-  .usa-hero {
-    background-image: url('~@ctoec/component-library/dist/assets/images/hero.svg');
+  .how-to-list {
+    list-style: none;
+    list-style-type: none;
+    counter-reset: item;
+    padding: 0;
+    margin: 0;
+  }
+
+  .how-to-step::before {
+    content: counter(item);
+    line-height: 2.5rem;
+    background: #61366f;
     color: white;
-    padding: 3em 0;
-    margin-bottom: 1em;
-
-    div {
-      max-width: 64em;
-      margin: 0 auto;
-      padding-left: 2em;
-      padding-right: 2em;
-    }
-
-    .btn--inverse {
-      color: black;
-      background-color: white;
-      width: 10em;
-      height: 3em;
-      line-height: 150%;
-    }
+    font-size: x-large;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 50%;
+    position: absolute;
+    height: 2.5rem;
+    width: 2.5rem;
+    left: 0;
+    display: block;
   }
 
-  .hero-bubble {
-    width: 13em;
-  }
+  .how-to-step {
+    counter-increment: item;
+    position: relative;
+    padding-left: 3.5rem;
 
-  .footer {
-    margin-top: -1em;
-    margin-bottom: -10em;
-    fill: white;
-
-    div {
-      height: 100%;
-      width: 100%;
-      max-width: 64em;
-      margin: 0 auto;
-      padding-left: 2em;
-      padding-right: 2em;
+    .how-to-header {
+      line-height: 2.5rem;
+      font-size: x-large;
+      font-weight: bold;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
 
-    .usa-button:hover {
-      background-color: #2378c3;
+    .how-to-body {
+      margin-top: 0.25rem;
+      margin-bottom: -0.5rem;
+    }
+
+    .how-to-button {
+      margin-bottom: 2rem;
     }
   }
 }

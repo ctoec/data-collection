@@ -2,6 +2,7 @@ import { stringify } from 'query-string';
 import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR';
 import { Child } from '../../../shared/models';
 import { cache } from 'swr';
+import { RosterQueryParams } from '../Roster';
 
 const PAGE_SIZE = 100;
 
@@ -10,10 +11,7 @@ const PAGE_SIZE = 100;
  * automatically requesting the next page of data while it exists
  * by incrementing useSWRInfinite "page size".
  */
-export const usePaginatedChildData = (
-  organization: string | undefined,
-  withdrawnEnrollmentsOnly?: boolean
-) => {
+export const usePaginatedChildData = (query: RosterQueryParams) => {
   let stillFetching = true;
   // Fetch child data, filtered by organization and month
   const {
@@ -30,12 +28,12 @@ export const usePaginatedChildData = (
     }
 
     // Paginated api query (but only once we have organizationId param)
-    return organization
+    return query.organization
       ? `/children?${stringify({
-          organizationId: organization,
+          organizationId: query.organization,
           skip: index * PAGE_SIZE,
           take: PAGE_SIZE,
-          withdrawn: withdrawnEnrollmentsOnly,
+          month: query.month,
         })}`
       : null;
   });
@@ -44,12 +42,16 @@ export const usePaginatedChildData = (
   // - we've completed the first fetch (childrenArrays != undefined)
   // - we've completed our most recently triggered fetch (childrenArrays.length == size)
   // - there's more data to fetch (most recent page has records)
-  if (
-    childrenArrays &&
-    childrenArrays.length === size &&
-    childrenArrays[childrenArrays.length - 1].length
-  ) {
-    setSize(size + 1);
+  // Or set fetching to false
+  if (childrenArrays) {
+    if (
+      childrenArrays.length === size &&
+      childrenArrays[childrenArrays?.length - 1]?.length
+    ) {
+      setSize(size + 1);
+    } else {
+      stillFetching = false;
+    }
   }
 
   return {

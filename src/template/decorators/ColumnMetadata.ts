@@ -1,46 +1,6 @@
 import 'reflect-metadata';
 import { ColumnMetadata as ColumnMetadataInterface } from '../../../client/src/shared/models';
 
-// Formats
-export const BOOLEAN_FORMAT = 'Yes, Y, No, N';
-// Note: The Moment parser ignores separator characters in format strings, so don't
-// need multiple copies with '/' and '-'. Also, formats earlier in the array are
-// given priority, so this ordering matters. See:
-// https://momentjs.com/docs/#/parsing/string-format/ and
-// https://momentjs.com/docs/#/parsing/string-formats/
-export const DATE_FORMATS = [
-  'MM/YY',
-  'MMM/YY',
-  'MM/YYYY',
-  'MMM/YYYY',
-  'MM/DD/YYYY',
-  'MM/DD/YY',
-  'YYYY/MM/DD',
-];
-export const DATE_FORMAT = DATE_FORMATS.join(', ');
-export const REPORTING_PERIOD_FORMATS = [
-  'MM/YY',
-  'MMM/YY',
-  'MM/YYYY',
-  'MM/DD/YYYY',
-];
-export const REPORTING_PERIOD_FORMAT = REPORTING_PERIOD_FORMATS.join(', ');
-
-// Requirements
-export const REQUIRED = 'Required';
-export const REQUIRED_IF_US_BORN = 'Required if child was born in the U.S.';
-export const REQUIRED_AT_LEAST_ONE = 'At least one required';
-export const REQUIRED_NOT_FOSTER =
-  'Required if child is not living with foster family';
-export const OPTIONAL = 'Optional';
-
-// Reasons
-export const REPORTING_REASON = 'Used for reporting.';
-export const DEMOGRAPHIC_REPORTING_REASON = 'Used for demographic reporting.';
-export const GEOGRAPHIC_REPORTING_REASON = 'Used for geographic reporting.';
-export const UTILIZATION_REPORTING_REASON =
-  'Used for reporting on the utilization of state funded spaces.';
-
 const DATA_DEFINITION_KEY = Symbol('definitionMetadata');
 
 /**

@@ -18,12 +18,14 @@ import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Fu
 import UserContext from '../../../../contexts/UserContext/UserContext';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { Heading, HeadingLevel } from '../../../../components/Heading';
 
 type ChangeEnrollmentFormProps = {
   afterSaveSuccess: () => void;
   afterSaveFailure: (err: any) => void;
   child: Child;
   currentEnrollment?: Enrollment;
+  topHeadingLevel: HeadingLevel;
 };
 
 export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
@@ -31,6 +33,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   afterSaveFailure,
   child,
   currentEnrollment,
+  topHeadingLevel,
 }) => {
   const { user } = useContext(UserContext);
   const sites = (user?.sites || []).filter(
@@ -42,6 +45,20 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   const [loading, setLoading] = useState(false);
   const onSubmit = (updatedData: ChangeEnrollment) => {
     setLoading(true);
+
+    //  Because the radio group for the Site field broadcasts ID as a string,
+    //  but the API is expecting a number (as it should)
+    if (
+      !!updatedData.newEnrollment &&
+      !!updatedData.newEnrollment.site &&
+      !!updatedData.newEnrollment.site.id &&
+      typeof updatedData.newEnrollment.site.id === 'string'
+    ) {
+      updatedData.newEnrollment.site.id = parseInt(
+        updatedData.newEnrollment.site.id
+      );
+    }
+
     apiPost(`children/${child.id}/change-enrollment`, updatedData, {
       accessToken,
       jsonParse: false,
@@ -76,6 +93,9 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       data={{ newEnrollment: {} as Enrollment }}
       onSubmit={onSubmit}
     >
+      <Heading level={topHeadingLevel} className="margin-top-2 margin-bottom-2">
+        New enrollment
+      </Heading>
       <SiteField<ChangeEnrollment>
         sites={sites}
         enrollmentAccessor={(data) => data.at('newEnrollment')}
@@ -99,7 +119,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
 
       {!!currentEnrollment && activeFunding && (
         <>
-          <h3>Previous enrollment</h3>
+          <Heading level={topHeadingLevel}>Previous enrollment</Heading>
           <ReportingPeriodField<ChangeEnrollment>
             accessor={(data) =>
               data.at('oldEnrollment').at('funding').at('lastReportingPeriod')

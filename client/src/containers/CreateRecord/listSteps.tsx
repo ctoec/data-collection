@@ -13,6 +13,7 @@ import {
   SECTION_KEYS,
   formSections,
 } from '../../components/Forms/formSections';
+import { UndefinableBoolean } from '../../shared/models';
 
 export const newForms = [
   { key: SECTION_KEYS.IDENT, form: ChildIdentifiersForm },
@@ -31,9 +32,6 @@ export const listSteps: (_: any) => StepProps<RecordFormProps>[] = (
       key,
       name,
       status: ({ child }) => {
-        if (key === SECTION_KEYS.INCOME) {
-          if (child?.foster) return 'exempt';
-        }
         return child && hasError(child) ? 'incomplete' : 'complete';
       },
       EditComponent: () => (

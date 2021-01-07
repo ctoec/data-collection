@@ -1,4 +1,4 @@
-export { parseUploadedTemplate } from './parse';
+export { parseUploadedTemplate, parseEnrollmentReportRow } from './parse';
 export { mapRows } from './map';
 export * from './removeExisting';
 export * from './checkErrors';

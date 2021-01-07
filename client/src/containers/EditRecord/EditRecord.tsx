@@ -1,6 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams, useLocation, useHistory } from 'react-router-dom';
-import { AlertProps, TabNav } from '@ctoec/component-library';
+import { useParams, useLocation, useHistory, Link } from 'react-router-dom';
+import {
+  AlertProps,
+  ErrorBoundary,
+  LoadingWrapper,
+  TabNav,
+} from '@ctoec/component-library';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiGet } from '../../utils/api';
 import { BackButton } from '../../components/BackButton';
@@ -15,6 +20,9 @@ import {
   formSections,
 } from '../../components/Forms/formSections';
 import { Child } from '../../shared/models';
+import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { HeadingLevel } from '../../components/Heading';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -27,9 +35,11 @@ const EditRecord: React.FC = () => {
 
   // Persist active tab in URL hash
   const activeTab = useLocation().hash.slice(1);
-  // Clear any previously displayed alerts from other tabs
+  // Clear any previously displayed success alerts
   useEffect(() => {
-    setAlerts([]);
+    setAlerts((alerts) => [
+      ...alerts.filter((alert) => alert.type === 'error'),
+    ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
   const history = useHistory();
@@ -42,46 +52,54 @@ const EditRecord: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const { updateCurrentRosterCache } = useContext(RosterContext);
+
   // Child re-fetch
   const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
   useEffect(() => {
-    apiGet(`children/${childId}`, accessToken).then((updatedChild) => {
-      setChild(updatedChild);
+    apiGet(`children/${childId}`, accessToken)
+      .then((updatedChild) => {
+        setChild(updatedChild);
+        updateCurrentRosterCache(updatedChild);
 
-      // On initial fetch, refetch = 0 AND we do not want to create alerts
-      if (triggerRefetchCounter > 0) {
-        const newAlerts: AlertProps[] = [
-          {
+        const newAlerts: AlertProps[] = [];
+        const missingInfoAlertProps = getMissingInfoAlertProps(updatedChild);
+        // Always set missing info alert, if one exists
+        if (missingInfoAlertProps) {
+          newAlerts.push(missingInfoAlertProps);
+        }
+
+        // TODO: remove this banner alert error, and replace with funding card with
+        // missing info icons - https://github.com/ctoec/data-collection/pull/795#issuecomment-729150524
+        const missingFundedEnrollmentAlertProps = getMissingFundedEnrollmentAlertProps(
+          updatedChild
+        );
+        if (missingFundedEnrollmentAlertProps) {
+          newAlerts.splice(0, 1, missingFundedEnrollmentAlertProps);
+        }
+
+        // Only set success alert on a GET that happens after an update (refetch count > 0)
+        if (triggerRefetchCounter > 0) {
+          newAlerts.push({
             type: 'success',
             heading: 'Record updated',
             text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
-          },
-        ];
-        const formStepInfo = formSections.find((s) => s.key === activeTab);
-        const incomplete = formStepInfo?.hasError(updatedChild);
-        const formName = formStepInfo?.name.toLowerCase();
-        if (incomplete) {
-          newAlerts.push({
-            type: 'error',
-            heading: 'This record has missing or incorrect info',
-            text: `You'll need to add the needed info in ${formName} before submitting your data to OEC.`,
           });
         }
         setAlerts(newAlerts);
-      }
-    });
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
   }, [accessToken, childId, triggerRefetchCounter]);
 
   useFocusFirstError([child]);
-
-  if (!child) {
-    return <></>;
-  }
 
   const commonFormProps = {
     child,
     afterSaveSuccess: () => setTriggerRefetchCounter((r) => r + 1),
     setAlerts,
+    topHeadingLevel: 'h2' as HeadingLevel,
   };
   const activeEnrollment = (child?.enrollments || []).find((e) => !e.exit);
   return (
@@ -92,33 +110,82 @@ const EditRecord: React.FC = () => {
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
             <span className="h2 h2--lighter">Edit record </span>
-            {child.firstName} {child.lastName}
+            {child ? `${child.firstName} ${child.lastName}` : 'Loading...'}
           </h1>
         </div>
-        <div className="display-flex flex-col flex-align-center">
-          {!!activeEnrollment && (
-            <>
-              <WithdrawRecord
-                setAlerts={setAlerts}
-                child={child}
-                enrollment={activeEnrollment}
-              />
-            </>
-          )}
-          <DeleteRecord child={child} />
-        </div>
+        {child && (
+          <div className="display-flex flex-col flex-align-center">
+            {!!activeEnrollment && (
+              <>
+                <WithdrawRecord child={child} enrollment={activeEnrollment} />
+              </>
+            )}
+            <DeleteRecord child={child} setAlerts={setAlerts} />
+          </div>
+        )}
       </div>
-      <TabNav
-        items={getTabItems(commonFormProps)}
-        activeId={activeTab}
-        onClick={(tabId) => {
-          history.replace({ hash: tabId });
-        }}
-      >
-        {getTabContent(activeTab, commonFormProps)}
-      </TabNav>
+      <div className="grid-col">
+        <LoadingWrapper loading={!child}>
+          <TabNav
+            items={getTabItems(commonFormProps)}
+            activeId={activeTab}
+            onClick={(tabId) => {
+              history.replace({ hash: tabId });
+            }}
+          >
+            <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+              {child ? getTabContent(activeTab, commonFormProps) : <></>}
+            </ErrorBoundary>
+          </TabNav>
+        </LoadingWrapper>
+      </div>
     </div>
   );
+};
+
+const MISSING_INFO_ALERT_HEADING = 'This record has missing or incorrect info';
+const getMissingInfoAlertProps: (child: Child) => AlertProps | undefined = (
+  child: Child
+) => {
+  const formsWithErrors = formSections.filter((section) =>
+    section.hasError(child)
+  );
+  if (!formsWithErrors.length) return;
+
+  return {
+    heading: MISSING_INFO_ALERT_HEADING,
+    type: 'error',
+    text: `Add required info in ${formsWithErrors
+      .map((form) => form.name.toLowerCase())
+      .join(', ')} before submitting your data to OEC.`,
+  };
+};
+
+const getMissingFundedEnrollmentAlertProps: (
+  _: Child
+) => AlertProps | undefined = (child: Child) => {
+  const missingFundingError = child.validationErrors?.find(
+    (err) =>
+      err.property === 'enrollments' &&
+      err.constraints &&
+      err.constraints['fundedEnrollment']
+  );
+
+  if (missingFundingError) {
+    return {
+      type: 'error',
+      heading: 'This record is missing funding information',
+      text: (
+        <>
+          Records must have at least one current or past funded enrollment to be
+          submitted to OEC. Add funding info in the{' '}
+          <Link to={`/edit-record/${child.id}#${SECTION_KEYS.ENROLLMENT}`}>
+            enrollment and funding section
+          </Link>
+        </>
+      ),
+    };
+  }
 };
 
 export default EditRecord;
