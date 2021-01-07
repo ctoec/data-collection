@@ -32,9 +32,6 @@ export const listSteps: (_: any) => StepProps<RecordFormProps>[] = (
       key,
       name,
       status: ({ child }) => {
-        if (key === SECTION_KEYS.INCOME) {
-          if (child?.foster === UndefinableBoolean.Yes) return 'exempt';
-        }
         return child && hasError(child) ? 'incomplete' : 'complete';
       },
       EditComponent: () => (

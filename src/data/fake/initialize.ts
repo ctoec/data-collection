@@ -14,6 +14,7 @@ import {
   EnrollmentReport,
   User,
   OECReport,
+  FundingTimeSplit,
 } from '../../entity';
 import { FundingSource, Region } from '../../../client/src/shared/models';
 import {
@@ -57,6 +58,11 @@ export const initialize = async () => {
     await getManager().createQueryBuilder().delete().from(OECReport).execute();
     await getManager().createQueryBuilder().delete().from(User).execute();
     await getManager().createQueryBuilder().delete().from(Site).execute();
+    await getManager()
+      .createQueryBuilder()
+      .delete()
+      .from(FundingTimeSplit)
+      .execute();
     await getManager()
       .createQueryBuilder()
       .delete()

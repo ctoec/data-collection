@@ -1,5 +1,4 @@
 import React from 'react';
-import cx from 'classnames';
 import ReactMarkdown from 'react-markdown';
 import { Column } from '@ctoec/component-library';
 import {

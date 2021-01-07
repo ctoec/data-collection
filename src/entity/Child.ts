@@ -166,12 +166,6 @@ export class Child implements ChildInterface {
   receivesDisabilityServices?: UndefinableBoolean;
 
   @ValidateNested()
-  @ValidateIf((child) => {
-    if (child.family)
-      child.family.childIsFoster = child.foster === UndefinableBoolean.Yes;
-    // This value is used in family to conditionally validate income determinations and then removed
-    return true;
-  })
   @IsNotEmpty()
   @ManyToOne(() => Family)
   family?: Family;

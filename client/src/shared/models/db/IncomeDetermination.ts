@@ -7,5 +7,6 @@ export interface IncomeDetermination extends ObjectWithValidationErrors {
   numberOfPeople?: number;
   income?: number;
   determinationDate?: Moment;
+  incomeNotDisclosed?: boolean;
   family: Family;
 }

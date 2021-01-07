@@ -71,6 +71,41 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       });
   };
 
+  // Assign the card text options to variables for cleanliness
+  // of showing it in the return statement below
+  const notDisclosedCardText = (
+    <div className="flex-1">
+      <p className="text-bold">Income not disclosed</p>
+    </div>
+  );
+
+  const incomeInfoText = (
+    <>
+      <div className="flex-1">
+        <p>Household size</p>
+        <p className="text-bold">
+          {determination.numberOfPeople || InlineIcon({ icon: 'incomplete' })}
+        </p>
+      </div>
+      <div className="flex-1">
+        <p>Income</p>
+        <p className="text-bold">
+          {determination.income
+            ? currencyFormatter(determination.income)
+            : InlineIcon({ icon: 'incomplete' })}
+        </p>
+      </div>
+      <div className="flex-2">
+        <p>Determined on</p>
+        <p className="text-bold">
+          {determination.determinationDate
+            ? determination.determinationDate.format('MM/DD/YYYY')
+            : InlineIcon({ icon: 'incomplete' })}
+        </p>
+      </div>
+    </>
+  );
+
   return (
     <Card
       className="margin-bottom-2"
@@ -80,28 +115,9 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       showTag={currentIsNew}
     >
       <div className="display-flex flex-justify">
-        <div className="flex-1">
-          <p>Household size</p>
-          <p className="text-bold">
-            {determination.numberOfPeople || InlineIcon({ icon: 'incomplete' })}
-          </p>
-        </div>
-        <div className="flex-1">
-          <p>Income</p>
-          <p className="text-bold">
-            {determination.income
-              ? currencyFormatter(determination.income)
-              : InlineIcon({ icon: 'incomplete' })}
-          </p>
-        </div>
-        <div className="flex-2">
-          <p>Determined on</p>
-          <p className="text-bold">
-            {determination.determinationDate
-              ? determination.determinationDate.format('MM/DD/YYYY')
-              : InlineIcon({ icon: 'incomplete' })}
-          </p>
-        </div>
+        {determination.incomeNotDisclosed
+          ? notDisclosedCardText
+          : incomeInfoText}
         <div className="display-flex align-center flex-space-between">
           <div className="display-flex align-center margin-right-2">
             <ExpandCard>
