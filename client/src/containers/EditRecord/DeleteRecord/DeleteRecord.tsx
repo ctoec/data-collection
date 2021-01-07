@@ -1,11 +1,13 @@
 import React, { useContext, useState } from 'react';
+import { stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
+import { Button, Modal } from '@ctoec/component-library';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
-import { Button, Modal } from '@ctoec/component-library';
 import { RecordFormProps } from '../../../components/Forms';
 import { nameFormatter } from '../../../utils/formatters';
+import RosterContext from '../../../contexts/RosterContext/RosterContext';
 
 type DeleteProps = {
   child: Child;
@@ -18,24 +20,30 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
 
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
-
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const { rosterQuery, updateCurrentRosterCache } = useContext(RosterContext);
 
   function deleteRecord() {
     setIsDeleting(true);
     apiDelete(`children/${child.id}`, { accessToken })
       .then(() => {
+        updateCurrentRosterCache(child, { remove: true });
         toggleIsOpen();
-        history.push('/roster', {
-          alerts: [
-            {
-              type: 'success',
-              heading: 'Record deleted',
+        history.push({
+          pathname: '/roster',
+          search: stringify(rosterQuery || {}),
+          state: {
+            alerts: [
+              {
+                type: 'success',
+                heading: 'Record deleted',
               text: `${nameFormatter(child, {
                 capitalize: true,
               })}'s record was deleted from your roster.`,
-            },
-          ],
+              },
+            ],
+          },
         });
       })
       .catch((err) => {
