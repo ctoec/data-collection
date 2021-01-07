@@ -43,7 +43,7 @@ export const tableColumns: (
               pathname: `/edit-record/${row?.id}`,
             }}
           >
-            {nameFormatter(row, { lastNameFirst: true })}{' '}
+            {nameFormatter(row, { lastNameFirst: true, capitalize: true })}{' '}
           </Link>
         </th>
       ),

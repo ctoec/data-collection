@@ -77,7 +77,9 @@ const CreateRecord: React.FC = () => {
             {
               type: 'success',
               heading: 'Record added',
-              text: `${nameFormatter(child)}'s record was added to your roster.`,
+              text: `${nameFormatter(child, {
+                capitalize: true,
+              })}'s record was added to your roster.`,
             },
           ],
         });

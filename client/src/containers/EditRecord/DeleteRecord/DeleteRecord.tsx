@@ -5,7 +5,7 @@ import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
 import { Button, Modal } from '@ctoec/component-library';
 import { RecordFormProps } from '../../../components/Forms';
-import { firstNameMissingText, nameFormatter } from '../../../utils/formatters';
+import { nameFormatter } from '../../../utils/formatters';
 
 type DeleteProps = {
   child: Child;
@@ -32,7 +32,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
               type: 'success',
               heading: 'Record deleted',
               text: `${nameFormatter(child, {
-                missingFirstNameText: firstNameMissingText,
+                capitalize: true,
               })}'s record was deleted from your roster.`,
             },
           ],
@@ -65,13 +65,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
         onModalClose={toggleIsOpen}
         // Shorten to accomodate modal close button in a
         // nice looking way
-        header={
-          <h2>
-            {`Delete enrollment for ${nameFormatter(child, {
-              missingFirstNameText: firstNameMissingText,
-            })}?`}
-          </h2>
-        }
+        header={<h2>{`Delete enrollment for ${nameFormatter(child)}?`}</h2>}
         content={
           <>
             <div className="grid-row">

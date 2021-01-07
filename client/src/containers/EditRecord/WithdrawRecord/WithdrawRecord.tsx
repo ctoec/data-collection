@@ -48,6 +48,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               heading: 'Record withdrawn',
               text: `${nameFormatter(child, {
                 firstOnly: true,
+                capitalize: true,
               })} has been withdrawn from your program`,
             },
           ],

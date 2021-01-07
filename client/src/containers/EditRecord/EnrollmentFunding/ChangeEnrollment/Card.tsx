@@ -50,15 +50,15 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
       <div className="display-flex flex-justify flex-row flex-align-center">
         {!currentEnrollment ? (
           <div className="usa-prose-body">
-            {nameFormatter(child, { firstOnly: true })} has no active
-            enrollments
+            {nameFormatter(child, { firstOnly: true, capitalize: true })} has no
+            active enrollments
           </div>
         ) : (
-            <div className="usa-prose-body">
-              Has {nameFormatter(child, { firstOnly: true })}'s age group and/or
+          <div className="usa-prose-body">
+            Has {nameFormatter(child, { firstOnly: true })}'s age group and/or
             site changed?
-            </div>
-          )}
+          </div>
+        )}
         <ExpandCard>
           <Button text="Change enrollment" appearance="outline" />
         </ExpandCard>
