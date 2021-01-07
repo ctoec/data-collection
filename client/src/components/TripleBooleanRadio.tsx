@@ -66,7 +66,7 @@ export const TripleBooleanRadio = <T extends {}>({
       )}
       status={(data) =>
         getValidationStatusForFields(data, [field as string], {
-          message: `${legend} status is required for OEC reporting.`,
+          message: `${legend} indication is required for OEC reporting.`,
         })
       }
     />
