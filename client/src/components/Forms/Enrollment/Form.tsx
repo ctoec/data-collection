@@ -17,7 +17,6 @@ import { getCurrentEnrollment } from '../../../utils/models';
 import { apiPost, apiPut } from '../../../utils/api';
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
-import { ExitReasonField } from '../../../containers/EditRecord/WithdrawRecord/Fields/ExitReason';
 
 const enrollmentFields = ['site', 'ageGroup', 'entry', 'model'];
 const enrollmentFundingFields = [...enrollmentFields, 'fundings'];
