@@ -35,7 +35,6 @@ export class IncomeDetermination implements IncomeDeterminationInterface {
   determinationDate?: Moment;
 
   @Column({ nullable: true })
-  @IsNotEmpty()
   incomeNotDisclosed?: boolean;
 
   @ManyToOne((_) => Family, { nullable: false })
