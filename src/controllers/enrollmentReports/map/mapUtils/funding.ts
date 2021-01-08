@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, getManager } from 'typeorm';
 import {
   Enrollment,
   Funding,
@@ -6,12 +6,12 @@ import {
   FundingSpace,
   ReportingPeriod,
   User,
-} from '../../../entity';
+} from '../../../../entity';
 import {
   FundingSource,
   FundingTime,
-} from '../../../../client/src/shared/models';
-import { EnrollmentReportRow } from '../../../template';
+} from '../../../../../client/src/shared/models';
+import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum, mapFundingTime } from '.';
 
 /**
@@ -27,9 +27,7 @@ export const mapFunding = async (
   transaction: EntityManager,
   source: EnrollmentReportRow,
   organization: Organization,
-  enrollment: Enrollment,
-  user: User,
-  save: boolean
+  enrollment: Enrollment
 ) => {
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
@@ -82,23 +80,12 @@ export const mapFunding = async (
     source.firstReportingPeriod ||
     source.lastReportingPeriod
   ) {
-    let funding = {
+    return getManager().create(Funding, {
       firstReportingPeriod,
       lastReportingPeriod,
       fundingSpace,
-      enrollmentId: enrollment.id,
-    } as Funding;
-
-    funding = transaction.create(Funding, {
-      ...funding,
-      updateMetaData: {
-        author: user,
-      },
+      enrollment,
     });
-    if (save) {
-      return transaction.save(funding);
-    }
-    return funding;
   }
 };
 

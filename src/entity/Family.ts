@@ -21,6 +21,7 @@ import {
   IsNotEmpty,
   ValidateIf,
   ValidateNested,
+  isNotEmpty,
 } from 'class-validator';
 import { enumTransformer } from './transformers';
 
@@ -62,6 +63,7 @@ export class Family implements FamilyInterface {
   })
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
+  @IsNotEmpty()
   incomeDeterminations?: Array<IncomeDetermination>;
 
   @OneToMany(() => Child, (child) => child.family)

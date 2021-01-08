@@ -1,6 +1,6 @@
-import { EnrollmentReportRow } from '../../template';
-import { Organization, Site, Enrollment, User } from '../../entity';
-import { BadRequestError } from '../../middleware/error/errors';
+import { EnrollmentReportRow } from '../../../template';
+import { Organization, Site, Enrollment, User } from '../../../entity';
+import { BadRequestError } from '../../../middleware/error/errors';
 import {
   BirthCertificateType,
   Gender,
@@ -9,8 +9,8 @@ import {
   FundingSource,
   FundingTime,
   FundingSourceTime,
-} from '../../../client/src/shared/models';
-import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
+} from '../../../../client/src/shared/models';
+import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
 import moment from 'moment';
 import { EntityManager } from 'typeorm';
 import {
@@ -303,9 +303,7 @@ describe('controllers', () => {
             transaction,
             source as EnrollmentReportRow,
             {} as Organization,
-            {} as Enrollment,
-            {} as User,
-            true
+            {} as Enrollment
           );
           expect(transaction.create).toBeCalledTimes(doesCreateFunding ? 1 : 0);
           expect(transaction.save).toBeCalledTimes(doesCreateFunding ? 1 : 0);
