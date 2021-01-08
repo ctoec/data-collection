@@ -1,12 +1,12 @@
 import { TabItem } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import { useHistory } from 'react-router-dom';
-import React, { useContext, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import moment from 'moment';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { Site, Organization } from '../../../shared/models';
 import { RosterQueryParams } from '../Roster';
-import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils';
+import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils/';
 import pluralize from 'pluralize';
 
 const ALL_SITES = 'all-sites';

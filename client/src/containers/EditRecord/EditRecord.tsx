@@ -39,7 +39,7 @@ const EditRecord: React.FC = () => {
   // Clear any previously displayed success alerts
   useEffect(() => {
     setAlerts((alerts) => [
-      ...alerts.filter((alert) => alert.type === 'error'),
+      ...alerts.filter((alert) => alert?.type === 'error'),
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);

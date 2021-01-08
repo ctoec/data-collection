@@ -5,17 +5,16 @@ import {
   HeadingLevel,
   LoadingWrapper,
   ErrorBoundary,
-  // Button,
+  Button,
+  AlertProps,
 } from '@ctoec/component-library';
 import { stringify, parse } from 'query-string';
 import moment from 'moment';
 import UserContext from '../../contexts/UserContext/UserContext';
-// TODO: Uncomment this import when you want to reactivate the
-// bottom bar with buttons
-// import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
+import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { useHistory } from 'react-router-dom';
-import { apiPut } from '../../utils/api';
+import { apiGet, apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   getAccordionItems,
@@ -30,20 +29,30 @@ import { RosterButtonsTable } from './RosterButtonsTable';
 import {
   useUpdateRosterParams,
   useOrgSiteProps,
-  useChildrenWithErrorsAlert,
   usePaginatedChildData,
 } from './hooks';
 import { RosterFilterIndicator } from '../../components/RosterFilterIndicator/RosterFilterIndicator';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { RosterContent } from './RosterContent';
 import { EmptyRosterCard } from './EmptyRosterCard';
+import { useAlerts } from '../../hooks/useAlerts';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
+import { getChildrenWithErrorsAlert } from './rosterUtils/getChildrenWithErrorsAlert';
 
 export type RosterQueryParams = {
   organization?: string;
   site?: string;
   month?: string;
   withdrawn?: boolean;
+};
+
+// Define a constant for the alert that shows once an organization
+// has submitted its data to OEC
+const SUBMITTED: AlertProps = {
+  text:
+    'Make revisions and updates, such as new enrollments, directly in your ECE reporter roster.',
+  heading: 'You completed your July to December data collection!',
+  type: 'info',
 };
 
 const Roster: React.FC = () => {
@@ -82,7 +91,7 @@ const Roster: React.FC = () => {
   const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
   const isSingleSiteView = query.site ? true : false;
 
-  // Get alerts for page, including alert for children with errors
+  // Get other alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
   const activeChildrenWithErrorsCount = activeChildren.filter(
@@ -91,13 +100,43 @@ const Roster: React.FC = () => {
   const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
   ).length;
-  const { alertElements } = useChildrenWithErrorsAlert(
-    loading,
+
+  // Determine if we need to show the successful submit alert when loading
+  // page (the alert is persistent and should appear at the top of the roster
+  // any time after submitting until the end of the collection period)
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  useEffect(() => {
+    apiGet(`oec-report/${query.organization}`, accessToken).then((res) => {
+      setIsSubmitted(!!res?.submitted);
+    });
+  }, [query.organization, accessToken]);
+
+  // Now get the alert for missing info, if applicable, and set all the
+  // alerts at once
+  const { setAlerts, alertElements } = useAlerts();
+  useEffect(() => {
+    const childrenWithErrorsAlert = getChildrenWithErrorsAlert(
+      activeChildrenWithErrorsCount,
+      withdrawnChildrenWithErrorsCount,
+      alertType,
+      query.organization
+    );
+    setAlerts((_alerts) => [
+      isSubmitted ? SUBMITTED : undefined,
+      ..._alerts.filter(
+        (a) =>
+          a?.heading !== childrenWithErrorsAlert?.heading &&
+          a?.heading !== SUBMITTED.heading
+      ),
+      childrenWithErrorsAlert,
+    ]);
+  }, [
+    isSubmitted,
     activeChildrenWithErrorsCount,
     withdrawnChildrenWithErrorsCount,
     alertType,
-    query.organization
-  );
+    query.organization,
+  ]);
 
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
@@ -144,10 +183,8 @@ const Roster: React.FC = () => {
     if (query.organization) {
       await apiPut(`oec-report/${query.organization}`, undefined, {
         accessToken,
-      });
-      history.push('/success');
+      }).then(() => setIsSubmitted(true));
     }
-    // Otherwise, do nothing (button should be disabled)
   }
 
   // Function to update active month, to pass down into month filter buttons
@@ -259,26 +296,18 @@ const Roster: React.FC = () => {
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
-      {/* {// TODO: Re-enable the bottom bar once we're in January and using the app
-      children?.length && 
-      <FixedBottomBar>
-        <Button
-          text="Back to getting started"
-          href="/getting-started"
-          appearance="outline"
-        />
-        {!isSiteLevelUser && (
-          <Button
-            text={
-              isSiteLevelUser
-                ? 'Organization permissions required to submit'
-                : 'Send to OEC'
-            }
-            onClick={submitToOEC}
-            disabled={!query.organization}
-          />
-        )}
-      </FixedBottomBar>} */}
+      {!rosterIsEmpty && !isSubmitted && (
+        <FixedBottomBar>
+          <Button text="Back to home" href="/home" appearance="outline" />
+          {!isSiteLevelUser && (
+            <Button
+              text="My Jul-Dec data is complete"
+              onClick={submitToOEC}
+              disabled={!query.organization}
+            />
+          )}
+        </FixedBottomBar>
+      )}
     </>
   );
 };
