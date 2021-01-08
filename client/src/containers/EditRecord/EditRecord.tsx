@@ -23,6 +23,7 @@ import { Child } from '../../shared/models';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { HeadingLevel } from '../../components/Heading';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
+import { nameFormatter } from '../../utils/formatters';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -83,7 +84,9 @@ const EditRecord: React.FC = () => {
           newAlerts.push({
             type: 'success',
             heading: 'Record updated',
-            text: `Your changes to ${updatedChild?.firstName} ${updatedChild?.lastName}'s record have been saved.`,
+            text: `Your changes to ${nameFormatter(
+              updatedChild
+            )}'s record have been saved.`,
           });
         }
         setAlerts(newAlerts);
@@ -110,7 +113,9 @@ const EditRecord: React.FC = () => {
         <div>
           <h1 ref={h1Ref} className="margin-top-0">
             <span className="h2 h2--lighter">Edit record </span>
-            {child ? `${child.firstName} ${child.lastName}` : 'Loading...'}
+            {child
+              ? `${nameFormatter(child, { capitalize: true })}`
+              : 'Loading...'}
           </h1>
         </div>
         {child && (

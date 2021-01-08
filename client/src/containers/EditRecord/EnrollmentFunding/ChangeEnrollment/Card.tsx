@@ -13,6 +13,7 @@ import {
   Heading,
   HeadingLevel,
 } from '../../../../components/Heading';
+import { nameFormatter } from '../../../../utils/formatters';
 
 type ChangeEnrollmentCardProps = {
   child: Child;
@@ -49,11 +50,13 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
       <div className="display-flex flex-justify flex-row flex-align-center">
         {!currentEnrollment ? (
           <div className="usa-prose-body">
-            {child.firstName} has no active enrollments
+            {nameFormatter(child, { firstOnly: true, capitalize: true })} has no
+            active enrollments
           </div>
         ) : (
           <div className="usa-prose-body">
-            Has {child.firstName}'s age group and/or site changed?
+            Has {nameFormatter(child, { firstOnly: true })}'s age group and/or
+            site changed?
           </div>
         )}
         <ExpandCard>

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Column } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 import { IncompleteIcon } from '../../components/IncompleteIcon';
+import { nameFormatter } from '../../utils/formatters';
 
 export enum ColumnNames {
   NAME = 'Name',
@@ -42,7 +43,7 @@ export const tableColumns: (
               pathname: `/edit-record/${row?.id}`,
             }}
           >
-            {row?.lastName}, {row?.firstName}{' '}
+            {nameFormatter(row, { lastNameFirst: true, capitalize: true })}{' '}
           </Link>
         </th>
       ),

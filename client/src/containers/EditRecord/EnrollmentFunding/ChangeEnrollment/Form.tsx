@@ -19,6 +19,7 @@ import UserContext from '../../../../contexts/UserContext/UserContext';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { Heading, HeadingLevel } from '../../../../components/Heading';
+import { nameFormatter } from '../../../../utils/formatters';
 
 type ChangeEnrollmentFormProps = {
   afterSaveSuccess: () => void;
@@ -77,7 +78,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       <div>
         <p>
           Add missing enrollment and/or funding information before you can
-          change {child.firstName}'s enrollment
+          change {nameFormatter(child, { firstOnly: true })}'s enrollment
         </p>
         <ExpandCard>
           <Button text="Cancel" appearance="outline" />

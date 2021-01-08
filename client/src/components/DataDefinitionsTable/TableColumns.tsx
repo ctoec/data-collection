@@ -7,6 +7,7 @@ import {
   EnhancedColumnMetadata,
 } from './utils';
 import { TEMPLATE_REQUIREMENT_LEVELS } from '../../shared/constants';
+import { capitalizeFirstLetter } from '../../utils/formatters/sentenceCase';
 
 export enum DATA_DEF_COLUMN_NAMES {
   fieldName = 'Field name',
@@ -24,7 +25,9 @@ export const TableColumns: Column<EnhancedColumnMetadata>[] = [
         <></>
       ) : (
         <th scope="row">
-          <span className="text-bold">{row.formattedName}</span>
+          <span className="text-bold">
+            {capitalizeFirstLetter(row.formattedName)}
+          </span>
         </th>
       ),
     width: '18%',
