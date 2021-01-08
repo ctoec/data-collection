@@ -64,7 +64,7 @@ const Home: React.FC = () => {
                   stepHeader="Prepare your data"
                   paragraphText="Get instructions on how to enter data into OEC's template."
                   buttonText="See the how-to guide"
-                  linkTo="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
+                  linkTo="https://help.ece-reporter.ctoec.org//prepare-your-data/"
                 />
               }
             </li>
