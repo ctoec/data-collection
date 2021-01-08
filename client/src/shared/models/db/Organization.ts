@@ -8,5 +8,4 @@ export interface Organization {
   sites?: Array<Site>;
   fundingSpaces?: Array<FundingSpace>;
   communityId?: number;
-  submittedData?: boolean;
 }

@@ -37,7 +37,7 @@ import { RosterContent } from './RosterContent';
 import { EmptyRosterCard } from './EmptyRosterCard';
 import { useAlerts } from '../../hooks/useAlerts';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
-import { getChildrenWithErrorsAlert } from '../../utils/getChildrenWithErrorsAlert';
+import { getChildrenWithErrorsAlert } from './rosterUtils/getChildrenWithErrorsAlert';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -100,10 +100,6 @@ const Roster: React.FC = () => {
   const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
     (child) => child?.validationErrors && child.validationErrors.length
   ).length;
-  const hookOpts = {
-    alertType,
-    organizationId: query.organization,
-  };
 
   // Determine if we need to show the successful submit alert when loading
   // page (the alert is persistent and should appear at the top of the roster
@@ -187,7 +183,7 @@ const Roster: React.FC = () => {
     if (query.organization) {
       await apiPut(`oec-report/${query.organization}`, undefined, {
         accessToken,
-      }).then(() => setAlerts([SUBMITTED]));
+      }).then(() => setIsSubmitted(true));
     }
   }
 
@@ -300,16 +296,12 @@ const Roster: React.FC = () => {
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
-      {!rosterIsEmpty && (
+      {!rosterIsEmpty && !isSubmitted && (
         <FixedBottomBar>
           <Button text="Back to home" href="/home" appearance="outline" />
-          {!isSiteLevelUser && !isSubmitted && (
+          {!isSiteLevelUser && (
             <Button
-              text={
-                isSiteLevelUser
-                  ? 'Organization permissions required to submit'
-                  : 'My Jul-Dec data is complete'
-              }
+              text="My Jul-Dec data is complete"
               onClick={submitToOEC}
               disabled={!query.organization}
             />
