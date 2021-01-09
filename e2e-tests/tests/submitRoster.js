@@ -19,13 +19,14 @@ module.exports = {
     await scrollToElement(browser, submitButtonArgs);
     await browser.waitForElementVisible(submitButtonArgs);
 
-    // const location = await browser.getLocation(...submitButtonArgs);
-    // const { x, y } = location.value;
+    const location = await browser.getLocation(...submitButtonArgs);
+    const { x, y } = location.value;
 
     // await browser.click('css selector', 'button#submit-button');
-    await browser.execute(
-      `document.querySelector('button#confidentiality-checkbox').click()`
-    );
+    // await browser.execute(
+    //   `document.querySelector('button#confidentiality-checkbox').click()`
+    // );
+    await browser.execute(`window.click(${x},${y});`);
     // await browser.click(...submitButtonArgs);
     await browser.waitForElementVisible(
       'xpath',
