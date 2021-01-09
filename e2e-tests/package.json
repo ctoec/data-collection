@@ -4,7 +4,7 @@
   "description": "End to end tests for OEC data collection tool",
   "main": "login.js",
   "scripts": {
-    "test": "node_modules/nightwatch/bin/nightwatch -e default --retries 3 --suiteRetries 3",
+    "test": "node_modules/nightwatch/bin/nightwatch -e default",
     "test-edge": "node_modules/nightwatch/bin/nightwatch -e edge --skiptags skip-edge --retries 3 --suiteRetries 3",
     "test-ie": "node_modules/nightwatch/bin/nightwatch -e ie --skiptags skip-edge --retries 3 --suiteRetries 3"
   },

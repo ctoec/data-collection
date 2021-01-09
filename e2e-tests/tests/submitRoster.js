@@ -14,10 +14,15 @@ module.exports = {
     // Find and click the submit button
     const submitButtonArgs = [
       'xpath',
-      "//*/button[contains(., 'data is complete')]",
+      "//*/button[contains(., 'My Jul-Dec data is complete')]",
     ];
     await scrollToElement(browser, submitButtonArgs);
-    await browser.click(submitButtonArgs);
+    await browser.waitForElementVisible(submitButtonArgs);
+
+    // const location = await browser.getLocation(...submitButtonArgs);
+    // const { x, y } = location.value;
+
+    await browser.click('css selector', 'button#submit-button');
     await browser.waitForElementVisible(
       'xpath',
       "//*/h2[contains(., 'You completed your')]"

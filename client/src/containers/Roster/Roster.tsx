@@ -301,6 +301,7 @@ const Roster: React.FC = () => {
           <Button text="Back to home" href="/home" appearance="outline" />
           {!isSiteLevelUser && (
             <Button
+              id="submit-button"
               text="My Jul-Dec data is complete"
               onClick={submitToOEC}
               disabled={!query.organization}
