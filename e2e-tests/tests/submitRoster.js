@@ -22,7 +22,11 @@ module.exports = {
     // const location = await browser.getLocation(...submitButtonArgs);
     // const { x, y } = location.value;
 
-    await browser.click('css selector', 'button#submit-button');
+    // await browser.click('css selector', 'button#submit-button');
+    await browser.execute(
+      `document.querySelector('button#confidentiality-checkbox').click()`
+    );
+    // await browser.click(...submitButtonArgs);
     await browser.waitForElementVisible(
       'xpath',
       "//*/h2[contains(., 'You completed your')]"
