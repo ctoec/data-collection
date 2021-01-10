@@ -10,6 +10,8 @@ import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
 import { propertyDateSorter } from '../../utils/propertyDateSorter';
+import { getCurrentFunding } from '../../utils/getCurrentFunding';
+import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
 
 /**
  * Get child by id, with related family and related
@@ -91,6 +93,118 @@ export const getChildren = async (
 export const getCount = async (user: User) => {
   const opts = await getFindOpts(user);
   return getManager().count(Child, opts);
+};
+
+/**
+ * Simple structs that hold minimum amount of information necessary
+ * to partition the children across funding spaces in a nice formatted
+ * display.
+ */
+type enrollmentTime = {
+  timeType: string;
+  filled: number;
+  capacity: number;
+};
+type enrolledAgeGroup = {
+  ageGroup: string;
+  includedTimes: enrollmentTime[];
+};
+
+/**
+ * Function that accumulates the distribution of how all children in
+ * an organization are assigned to their various funding spaces
+ * across age groups and enrollment times. Handles partitioning for
+ * displaying so that the front end just has to spit this back out.
+ * @param children
+ */
+export const getFundingSpaceMap = async (children: Child[]) => {
+  // Structure to hold accumulated display information about each funding space
+  const fundingSpacesDisplay: {
+    sourceName: string;
+    includedAgeGroups: enrolledAgeGroup[];
+  }[] = [];
+
+  children.forEach((child) => {
+    const fundingSpace = getCurrentFunding({ child: child })?.fundingSpace;
+
+    if (fundingSpace) {
+      // Start with overall funding source, since it's the header
+      const source = fundingSpace.source;
+      let matchingSource = fundingSpacesDisplay.find(
+        (fsd) => fsd.sourceName === source
+      );
+      if (matchingSource === undefined) {
+        matchingSource = { sourceName: source, includedAgeGroups: [] };
+        fundingSpacesDisplay.push(matchingSource);
+      }
+
+      // Then the age group, since a source is made up of a list of these
+      const ageGroup = fundingSpace.ageGroup;
+      let matchingGroup = matchingSource.includedAgeGroups.find(
+        (ag) => ag.ageGroup === ageGroup
+      );
+      if (matchingGroup === undefined) {
+        matchingGroup = { ageGroup, includedTimes: [] };
+        matchingSource.includedAgeGroups.push(matchingGroup);
+      }
+
+      // Then go to the times within each age group, because that's the
+      // last sub-list
+      const timeType = fundingSpace.time;
+      let matchingTime = matchingGroup.includedTimes.find(
+        (t) => t.timeType === timeType
+      );
+      if (matchingTime === undefined) {
+        matchingTime = {
+          timeType,
+          filled: 0,
+          capacity: fundingSpace.capacity,
+        };
+        matchingGroup.includedTimes.push(matchingTime);
+      }
+      matchingTime.filled += 1;
+    }
+  });
+
+  return fundingSpacesDisplay;
+};
+
+/**
+ * Function that determines the distribution of children across sites.
+ * Counts the children at each site and stores the result in a data
+ * structure that pairs this count with id properties of the site
+ * so that the front-end can send useres directly to a particular
+ * site roster.
+ * @param children
+ */
+export const getSiteCountMap = async (children: Child[]) => {
+  const siteCounts: {
+    siteName: string;
+    count: number;
+    orgId: number;
+    siteId: number;
+  }[] = [];
+
+  children.forEach((c) => {
+    const enrollment = getCurrentEnrollment(c);
+    if (enrollment) {
+      let match = siteCounts.find(
+        (sc) => sc.siteName === enrollment.site.siteName
+      );
+      if (match === undefined) {
+        match = {
+          siteName: enrollment.site.siteName,
+          count: 0,
+          orgId: enrollment.site.organizationId,
+          siteId: enrollment.site.id,
+        };
+        siteCounts.push(match);
+      }
+      match.count += 1;
+    }
+  });
+
+  return siteCounts.sort((a, b) => (a.siteName > b.siteName ? 1 : -1));
 };
 
 /**

@@ -14,6 +14,8 @@ import Roster from './containers/Roster/Roster';
 import BatchEdit from './containers/BatchEdit/BatchEdit';
 import DevUtility from './containers/DevUtility/DevUtility';
 import PrivacyPolicy from './containers/PrivacyPolicy/PrivacyPolicy';
+import Help from './containers/Help/Help';
+import SupportRequest from './containers/Help/SupportRequest';
 
 export type RouteConfig = {
   path: string;
@@ -60,6 +62,16 @@ export const routes: RouteConfig[] = [
   {
     path: '/privacy',
     component: PrivacyPolicy,
+    unauthorized: true,
+  },
+  {
+    path: '/help',
+    component: Help,
+    unauthorized: true,
+  },
+  {
+    path: '/support',
+    component: SupportRequest,
     unauthorized: true,
   },
   {
