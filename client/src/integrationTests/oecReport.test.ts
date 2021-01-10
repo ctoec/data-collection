@@ -23,11 +23,8 @@ describe('integration', () => {
       const user: User = await apiGet('/users/current', '', TEST_OPTS);
       organization = user?.organizations?.shift() as Organization;
     });
-    afterAll(() => {
-      enableFetchMocks();
-    });
-    describe('oecReport', () => {
-      it('GET /oecReport/:organizationId for fresh org', async () => {
+    describe('oec-report', () => {
+      it('GET /oec-report/:organizationId for fresh org', async () => {
         const report = await apiGet(
           `oecReport/${organization.id}`,
           '',
@@ -35,7 +32,7 @@ describe('integration', () => {
         );
         expect(report).toBeFalsy();
       });
-      it('POST /oecReport/:organizationId to submit for org', async () => {
+      it('POST /oec-report/:organizationId to submit for org', async () => {
         const res = await apiPost(
           `oecReport/${organization.id}`,
           undefined,
@@ -43,7 +40,7 @@ describe('integration', () => {
         );
         expect(res.status).toEqual(200);
       });
-      it('GET /oecReport/:organizationId for submitted org', async () => {
+      it('GET /oec-report/:organizationId for submitted org', async () => {
         const report = await apiGet(
           `oecReport/${organization.id}`,
           '',
@@ -51,6 +48,9 @@ describe('integration', () => {
         );
         expect(report).toBeTruthy();
       });
+    });
+    afterAll(() => {
+      enableFetchMocks();
     });
   });
 });

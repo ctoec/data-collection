@@ -14,16 +14,25 @@ const Home: React.FC = () => {
   // has submitted their data (corner case cuz there's only one user who
   // has multiple orgs)
   const [isPostSubmit, setIsPostSubmit] = useState<boolean | undefined>();
+  const [finishedOrgCheck, setFinishedOrgCheck] = useState<boolean>(false);
   useEffect(() => {
-    user?.organizations?.forEach((org) => {
-      apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
-        if (!res.submitted) {
-          setIsPostSubmit(false);
-          return;
-        }
+    if (user && accessToken) {
+      user?.organizations?.forEach((org) => {
+        apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
+          if (!res.submitted) {
+            setIsPostSubmit(false);
+          }
+        });
       });
-    });
-    setIsPostSubmit(true);
+      // Need this second state variable because the timing of React executing
+      // checks vs the dispatch of setting postSubmit after the API call leads
+      // to flashing if isPostSubmit can be altered after it's already been
+      // set
+      setFinishedOrgCheck(true);
+      if (isPostSubmit === undefined && finishedOrgCheck) {
+        setIsPostSubmit(true);
+      }
+    }
   }, [user, accessToken]);
 
   return (
