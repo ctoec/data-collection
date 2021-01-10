@@ -16,22 +16,20 @@ const Home: React.FC = () => {
   const [isPostSubmit, setIsPostSubmit] = useState<boolean | undefined>();
   const [finishedOrgCheck, setFinishedOrgCheck] = useState<boolean>(false);
   useEffect(() => {
-    if (user && accessToken) {
-      user?.organizations?.forEach((org) => {
-        apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
-          if (!res.submitted) {
-            setIsPostSubmit(false);
-          }
-        });
+    user?.organizations?.forEach((org) => {
+      apiGet(`oec-report/${org.id}`, accessToken).then((res) => {
+        if (!res.submitted) {
+          setIsPostSubmit(false);
+        }
       });
-      // Need this second state variable because the timing of React executing
-      // checks vs the dispatch of setting postSubmit after the API call leads
-      // to flashing if isPostSubmit can be altered after it's already been
-      // set
-      setFinishedOrgCheck(true);
-      if (isPostSubmit === undefined && finishedOrgCheck) {
-        setIsPostSubmit(true);
-      }
+    });
+    // Need this second state variable because the timing of React executing
+    // checks vs the dispatch of setting postSubmit after the API call leads
+    // to flashing if isPostSubmit can be altered after it's already been
+    // set
+    setFinishedOrgCheck(true);
+    if (isPostSubmit === undefined && finishedOrgCheck) {
+      setIsPostSubmit(true);
     }
   }, [user, accessToken]);
 
