@@ -26,7 +26,7 @@ describe('integration', () => {
     describe('oec-report', () => {
       it('GET /oec-report/:organizationId for fresh org', async () => {
         const report = await apiGet(
-          `oecReport/${organization.id}`,
+          `oec-report/${organization.id}`,
           '',
           TEST_OPTS
         );
@@ -34,7 +34,7 @@ describe('integration', () => {
       });
       it('POST /oec-report/:organizationId to submit for org', async () => {
         const res = await apiPost(
-          `oecReport/${organization.id}`,
+          `oec-report/${organization.id}`,
           undefined,
           TEST_OPTS
         );
@@ -42,7 +42,7 @@ describe('integration', () => {
       });
       it('GET /oec-report/:organizationId for submitted org', async () => {
         const report = await apiGet(
-          `oecReport/${organization.id}`,
+          `oec-report/${organization.id}`,
           '',
           TEST_OPTS
         );
