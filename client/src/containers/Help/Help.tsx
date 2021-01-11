@@ -49,6 +49,7 @@ const Help: React.FC = () => {
             <a
               className="usa-button usa-button--unstyled"
               href="https://help.ece-reporter.ctoec.org/"
+              target="_blank"
             >
               <TextWithIcon
                 text="View guides"
