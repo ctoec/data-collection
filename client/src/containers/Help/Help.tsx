@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-  Button,
   Alert,
   QuestionIllustration,
   Card,
   HowToIcon,
   SupportIcon,
+  TextWithIcon,
 } from '@ctoec/component-library';
+import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/arrowRight.svg';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { BackButton } from '../../components/BackButton';
 
@@ -45,12 +46,18 @@ const Help: React.FC = () => {
             </div>
             <h2>How-to guides</h2>
             <p>Find your answers to common tasks and questions.</p>
-
-            <Button
-              text="View guides"
-              href="https://ece-reporter.ctoec.org/help"
-              external={true}
-            />
+            <a
+              className="usa-button usa-button--unstyled"
+              href="https://help.ece-reporter.ctoec.org/"
+              target="_blank"
+            >
+              <TextWithIcon
+                text="View guides"
+                Icon={Arrow}
+                direction="right"
+                iconSide="right"
+              />
+            </a>
           </Card>
         </div>
         <div className="desktop:grid-col-5">
@@ -63,7 +70,14 @@ const Help: React.FC = () => {
               Reach out to the ECE Reporter team. We'll reply within 1 business
               day.
             </p>
-            <Button text="Send a request" href="/support" />
+            <a className="usa-button usa-button--unstyled" href="/support">
+              <TextWithIcon
+                text="Send a request"
+                Icon={Arrow}
+                direction="right"
+                iconSide="right"
+              />
+            </a>
           </Card>
         </div>
       </div>

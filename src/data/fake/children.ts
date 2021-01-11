@@ -120,8 +120,8 @@ const completeChildren: Child[] = children.map((c, i) => {
       ...family,
       incomeDeterminations:
         c.foster === UndefinableBoolean.Yes
-          ? []
-          : [getFakeIncomeDet(i, family)],
+          ? [getFakeIncomeDet(i, family, true)]
+          : [getFakeIncomeDet(i, family, false)],
     },
     enrollments: makeFakeEnrollments(i, c, site),
     cascadeDeleteEnrollments: null,

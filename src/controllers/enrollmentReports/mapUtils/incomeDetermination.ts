@@ -35,6 +35,7 @@ export const mapIncomeDetermination = (
   else if (source.incomeNotDisclosed) {
     incomeDetermination = {
       incomeNotDisclosed: true,
+      familyId: family.id,
     } as IncomeDetermination;
   }
 
