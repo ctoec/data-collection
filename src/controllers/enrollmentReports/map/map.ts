@@ -1,4 +1,4 @@
-import { EntityManager, In } from 'typeorm';
+import { EntityManager, In, EntitySchema } from 'typeorm';
 import {
   Child,
   Site,
@@ -8,6 +8,8 @@ import {
   Funding,
   FundingSpace,
   ReportingPeriod,
+  Family,
+  IncomeDetermination,
 } from '../../../entity';
 import { UpdateMetaData } from '../../../entity/embeddedColumns/UpdateMetaData';
 import {
@@ -55,7 +57,6 @@ export async function mapRows(
   for (const row of rows) {
     try {
       await mapRow(
-        transaction,
         row,
         organizations,
         sites,
@@ -85,7 +86,8 @@ export async function mapRows(
 
   // Otherwise, create entities in DB
   // Create families
-  const createdFamilies = await transaction.save(
+  const createdFamilies = await doBatchedInsert<Family>(
+    transaction,
     children.map((child) => {
       child.family.updateMetaData = { author: user } as UpdateMetaData;
       return child.family;
@@ -93,7 +95,8 @@ export async function mapRows(
   );
 
   // Create dets with updated family references
-  await transaction.save(
+  await doBatchedInsert<IncomeDetermination>(
+    transaction,
     children.map((child, idx) => {
       const det = child.family.incomeDeterminations[0];
       det.family = undefined;
@@ -104,7 +107,8 @@ export async function mapRows(
   );
 
   // Create children with updated family references
-  const createdChildren = await transaction.save(
+  const createdChildren = await doBatchedInsert<Child>(
+    transaction,
     children.map((child, idx) => {
       child.family = createdFamilies[idx];
       child.updateMetaData = { author: user } as UpdateMetaData;
@@ -133,9 +137,10 @@ export async function mapRows(
     return flatEnrollments;
   }, []) as Enrollment[];
 
-  const createdEnrollments = await transaction.save(enrollments);
+  const createdEnrollments = await doBatchedInsert(transaction, enrollments);
 
-  const createdFundings = await transaction.save(
+  const createdFundings = await doBatchedInsert(
+    transaction,
     fundings.reduce((flatFundings, fundings, enrollmentIdx) => {
       fundings?.forEach((funding) => {
         funding.enrollment = undefined;
@@ -171,7 +176,6 @@ export async function mapRows(
  * @param source
  */
 const mapRow = async (
-  transaction: EntityManager,
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
@@ -244,3 +248,18 @@ const mapRow = async (
 
   return child;
 };
+
+async function doBatchedInsert<T>(transaction: EntityManager, entities: T[]) {
+  const parametersPerEntity = Object.keys(entities[0]).length;
+
+  const batchSize = 2000 / parametersPerEntity;
+  const numberOfBatches = Math.ceil(entities.length / batchSize);
+
+  const createdData: any[] = [];
+  for (let b = 0; b < numberOfBatches; b++) {
+    const batch = entities.slice(b, b + batchSize);
+    createdData.push(...(await transaction.save<T>(batch)));
+  }
+
+  return createdData;
+}
