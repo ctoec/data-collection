@@ -11,6 +11,7 @@ const TEST_OPTS: ApiOpts = {
   accessToken: '',
 };
 
+let ALLOWED_ORGS: Organization[];
 describe('integration', () => {
   describe('api', () => {
     let organization: Organization;
@@ -21,16 +22,17 @@ describe('integration', () => {
       );
 
       const user: User = await apiGet('/users/current', '', TEST_OPTS);
-      organization = user?.organizations?.shift() as Organization;
+      ALLOWED_ORGS = user.organizations as Organization[];
+      organization = ALLOWED_ORGS[0];
     });
     describe('oec-report', () => {
-      it('GET /oec-report/:organizationId for fresh org', async () => {
+      it('GET /oec-report/:organizationId for unsubmitted org', async () => {
         const report = await apiGet(
           `oec-report/${organization.id}`,
           '',
           TEST_OPTS
         );
-        expect(report).toBeFalsy();
+        expect(report.submitted).toBeFalsy();
       });
       it('POST /oec-report/:organizationId to submit for org', async () => {
         const res = await apiPost(
@@ -46,7 +48,7 @@ describe('integration', () => {
           '',
           TEST_OPTS
         );
-        expect(report).toBeTruthy();
+        expect(report.submitted).toBeTruthy();
       });
     });
     afterAll(() => {
