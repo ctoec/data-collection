@@ -23,11 +23,12 @@ import { mapEnum, mapFundingTime } from '.';
  * @param organization
  * @param enrollment
  */
-export const mapFunding = async (
-  transaction: EntityManager,
+export const mapFunding = (
   source: EnrollmentReportRow,
   organization: Organization,
-  enrollment: Enrollment
+  enrollment: Enrollment,
+  fundingSpaces: FundingSpace[],
+  reportingPeriods: ReportingPeriod[]
 ) => {
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
@@ -40,37 +41,33 @@ export const mapFunding = async (
 
   let fundingSpace: FundingSpace;
   if (fundingSource && fundingTime) {
-    // Get the FundingSpace with associated funding source and agegroup for the given organization
-    // TODO: Cache FundingSpace, as they'll be reused a lot
-    const fundingSpaces = await transaction.find(FundingSpace, {
-      where: {
-        source: fundingSource,
-        ageGroup: enrollment.ageGroup,
-        organization,
-      },
-    });
-    fundingSpace = fundingSpaces.find((space) => space.time === fundingTime);
-
-    // If no direct match on time and source === CDC, look for a split
-    if (!fundingSpace && fundingSource === FundingSource.CDC) {
-      fundingSpace = fundingSpaces.find(
-        (space) => space.time === FundingTime.SplitTime
-      );
-    }
+    fundingSpace = fundingSpaces.find(
+      (fs) =>
+        fs.organizationId === organization.id &&
+        fs.source === fundingSource &&
+        fs.time === fundingTime &&
+        fs.ageGroup === enrollment.ageGroup
+    );
   }
 
   // TODO: Cache ReportingPeriods, as they'll be reused a lot
   let firstReportingPeriod: ReportingPeriod,
     lastReportingPeriod: ReportingPeriod;
   if (source.firstReportingPeriod) {
-    firstReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.firstReportingPeriod },
-    });
+    firstReportingPeriod = reportingPeriods.find(
+      (rp) =>
+        rp.type === fundingSource &&
+        rp.period.format('MM-YYYY') ===
+          source.firstReportingPeriod.format('MM-YYYY')
+    );
   }
   if (source.lastReportingPeriod) {
-    lastReportingPeriod = await transaction.findOne(ReportingPeriod, {
-      where: { type: fundingSource, period: source.lastReportingPeriod },
-    });
+    lastReportingPeriod = reportingPeriods.find(
+      (rp) =>
+        rp.type === fundingSource &&
+        rp.period.format('MM-YYYY') ===
+          source.lastReportingPeriod.format('MM-YYYY')
+    );
   }
 
   // If the user supplied _any_ funding-related fields, create the funding.
@@ -87,27 +84,4 @@ export const mapFunding = async (
       enrollment,
     });
   }
-};
-
-/**
- * Finds a funding for the given enrollment that matches the
- * characteristics of an enrollment report row from an
- * uploaded sheet. Two fundings match if they are from the
- * same source, have the same time, and cover the same dates.
- * @param row
- * @param enrollment
- */
-export const getExistingFundingForEnrollment = (
-  row: EnrollmentReportRow,
-  enrollment: Enrollment
-) => {
-  if (!enrollment || !enrollment.fundings) return undefined;
-  return enrollment.fundings.find((f) => {
-    return (
-      row.firstReportingPeriod.format('MM/DD/YYYY') ===
-        f.firstReportingPeriod.periodStart.format('MM/DD/YYYY') &&
-      row.fundingSpace === f.fundingSpace.source &&
-      row.time === f.fundingSpace.time
-    );
-  });
 };

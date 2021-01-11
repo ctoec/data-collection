@@ -1,4 +1,4 @@
-import { EntityManager } from 'typeorm';
+import { EntityManager, In } from 'typeorm';
 import {
   Child,
   Site,
@@ -6,6 +6,8 @@ import {
   User,
   Enrollment,
   Funding,
+  FundingSpace,
+  ReportingPeriod,
 } from '../../../entity';
 import { UpdateMetaData } from '../../../entity/embeddedColumns/UpdateMetaData';
 import {
@@ -35,15 +37,32 @@ export async function mapRows(
   opts: { save: boolean } = { save: false }
 ): Promise<Child[]> {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
-  const [organizations, sites] = await Promise.all([
+  const [
+    organizations,
+    sites,
+    fundingSpaces,
+    reportingPeriods,
+  ] = await Promise.all([
     transaction.findByIds(Organization, readAccessibleOrgIds),
     transaction.findByIds(Site, user.siteIds),
+    transaction.find(FundingSpace, {
+      where: { organizationId: In(readAccessibleOrgIds) },
+    }),
+    transaction.find(ReportingPeriod),
   ]);
 
   const children: Child[] = [];
   for (const row of rows) {
     try {
-      await mapRow(transaction, row, organizations, sites, children);
+      await mapRow(
+        transaction,
+        row,
+        organizations,
+        sites,
+        fundingSpaces,
+        reportingPeriods,
+        children
+      );
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error occured while parsing row: ', err);
@@ -156,6 +175,8 @@ const mapRow = async (
   source: EnrollmentReportRow,
   userOrganizations: Organization[],
   userSites: Site[],
+  userFundingSpaces: FundingSpace[],
+  userReportingPeriods: ReportingPeriod[],
   children: Child[]
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
@@ -205,11 +226,12 @@ const mapRow = async (
   }
 
   // Create funding
-  const funding = await mapFunding(
-    transaction,
+  const funding = mapFunding(
     source,
     organization,
-    enrollment
+    enrollment,
+    userFundingSpaces,
+    userReportingPeriods
   );
   // And add to enrollment
   if (funding) {

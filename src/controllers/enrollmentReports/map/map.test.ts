@@ -300,13 +300,13 @@ describe('controllers', () => {
           transaction.save = jest.fn();
 
           await mapFunding(
-            transaction,
             source as EnrollmentReportRow,
             {} as Organization,
-            {} as Enrollment
+            {} as Enrollment,
+            [],
+            []
           );
           expect(transaction.create).toBeCalledTimes(doesCreateFunding ? 1 : 0);
-          expect(transaction.save).toBeCalledTimes(doesCreateFunding ? 1 : 0);
         }
       );
     });
