@@ -29,8 +29,6 @@ export const EnrollmentStartDateField = <
         return enrollmentAccessor(data).at('entry');
       }}
       parseOnChangeEvent={(e) => {
-        // Why is event firing on load?
-        console.log({ e })
         return (e as unknown) as Moment;
       }}
       inputComponent={DateInput}
