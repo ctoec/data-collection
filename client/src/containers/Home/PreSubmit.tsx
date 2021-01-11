@@ -77,7 +77,13 @@ export const PreSubmitHome: React.FC = () => {
       <h2 className="pre-submit-h2">Your managed sites and funding spaces</h2>
       <Alert
         type="info"
-        text="Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through this form."
+        text={
+          <span>
+            Are your sites and/or funding spaces incorrect? Reach out to the ECE
+            Reporter team through &nbsp;
+            <Link to="/revision">this form.</Link>
+          </span>
+        }
       />
       {showFundingsAndSites && siteSection}
       {showFundingsAndSites && fundingSection}

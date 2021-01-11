@@ -5,7 +5,7 @@ import * as controller from '../controllers/fundingSpaces';
 export const fundingSpacesRouter = express.Router();
 
 fundingSpacesRouter.get(
-  '/',
+  '/:organizationId',
   passAsyncError(async (req, res) => {
     const organizationId = req.query['organizationId'];
     const organizationIds = !organizationId
