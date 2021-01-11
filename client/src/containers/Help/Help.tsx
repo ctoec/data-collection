@@ -48,7 +48,7 @@ const Help: React.FC = () => {
             <p>Find your answers to common tasks and questions.</p>
             <a
               className="usa-button usa-button--unstyled"
-              href="https://ece-reporter.ctoec.org/help"
+              href="https://help.ece-reporter.ctoec.org/"
             >
               <TextWithIcon
                 text="View guides"
