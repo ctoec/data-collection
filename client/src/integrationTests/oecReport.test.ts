@@ -1,5 +1,5 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
-import { apiGet, apiPost, ApiOpts } from '../utils/api';
+import { apiGet, ApiOpts, apiPut } from '../utils/api';
 import { Organization, User } from '../shared/models';
 
 jest.mock('../utils/getCurrentHost');
@@ -34,15 +34,15 @@ describe('integration', () => {
         );
         expect(report.submitted).toBeFalsy();
       });
-      it('POST /oec-report/:organizationId to submit for org', async () => {
-        const res = await apiPost(
+      it('POST oec-report/:organizationId to submit for org', async () => {
+        const res = await apiPut(
           `oec-report/${organization.id}`,
           undefined,
           TEST_OPTS
         );
         expect(res.status).toEqual(200);
       });
-      it('GET /oec-report/:organizationId for submitted org', async () => {
+      it('GET oec-report/:organizationId for submitted org', async () => {
         const report = await apiGet(
           `oec-report/${organization.id}`,
           '',
