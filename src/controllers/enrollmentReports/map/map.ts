@@ -7,6 +7,7 @@ import {
   Enrollment,
   Funding,
 } from '../../../entity';
+import { UpdateMetaData } from '../../../entity/embeddedColumns/UpdateMetaData';
 import {
   lookUpOrganization,
   lookUpSite,
@@ -67,7 +68,7 @@ export async function mapRows(
   // Create families
   const createdFamilies = await transaction.save(
     children.map((child) => {
-      child.family.updateMetaData.author = user;
+      child.family.updateMetaData = { author: user } as UpdateMetaData;
       return child.family;
     })
   );
@@ -78,7 +79,7 @@ export async function mapRows(
       const det = child.family.incomeDeterminations[0];
       det.family = undefined;
       det.familyId = createdFamilies[idx].id;
-      det.updateMetaData.author = user;
+      det.updateMetaData = { author: user } as UpdateMetaData;
       return det;
     })
   );
@@ -87,7 +88,7 @@ export async function mapRows(
   const createdChildren = await transaction.save(
     children.map((child, idx) => {
       child.family = createdFamilies[idx];
-      child.updateMetaData.author = user;
+      child.updateMetaData = { author: user } as UpdateMetaData;
       return child;
     })
   );
@@ -107,7 +108,7 @@ export async function mapRows(
       enrollment.fundings = undefined;
 
       // Add processed enrollment to array
-      enrollment.updateMetaData.author = user;
+      enrollment.updateMetaData = { author: user } as UpdateMetaData;
       flatEnrollments.push(enrollment);
     });
     return flatEnrollments;
@@ -121,7 +122,7 @@ export async function mapRows(
         funding.enrollment = undefined;
         funding.enrollmentId = createdEnrollments[enrollmentIdx].id;
 
-        funding.updateMetaData.author = user;
+        funding.updateMetaData = { author: user } as UpdateMetaData;
         flatFundings.push(funding);
       });
       return flatFundings;
