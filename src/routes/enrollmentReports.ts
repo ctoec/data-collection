@@ -44,12 +44,10 @@ enrollmentReportsRouter.post(
         );
 
         const childrenWithErrors = await Promise.all(
-          reportChildren.map(async (child) => {
-            return {
-              ...child,
-              validationErrors: await validate(child),
-            } as Child;
-          })
+          reportChildren.map(async (child) => ({
+            ...child,
+            validationErrors: await validate(child),
+          }))
         );
 
         const errorDict = await controller.checkErrorsInChildren(
@@ -121,9 +119,11 @@ enrollmentReportsRouter.post(
           { save: true }
         );
 
-        const report = await tManager.save(
-          tManager.create(EnrollmentReport, { children: reportChildren })
-        );
+        // This insert was failing due to too many params, and we don't use it
+        // at all so just commenting out for now
+        // const report = await tManager.save(
+        //   tManager.create(EnrollmentReport, { children: reportChildren })
+        // );
 
         let numActive = 0,
           numWithdrawn = 0;
@@ -133,7 +133,6 @@ enrollmentReportsRouter.post(
         });
 
         res.status(201).json({
-          id: report.id,
           active: numActive,
           withdrawn: numWithdrawn,
         } as BatchUpload);
