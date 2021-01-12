@@ -76,7 +76,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
           optional={changeType === 'start'}
         />
       )}
-      <div>
+      <div className="funding-form-buttons">
         <Button text="Cancel" appearance="outline" onClick={hideForm} />
         <FormSubmitButton
           text={
