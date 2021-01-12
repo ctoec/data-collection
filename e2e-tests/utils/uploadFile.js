@@ -1,6 +1,8 @@
 const { launch_url } = require('../nightwatch.conf');
 const { acceptModal } = require('../utils/acceptModal');
-const { downloadFileToTestRunnerHost } = require('../utils/downloadFileToTestRunnerHost');
+const {
+  downloadFileToTestRunnerHost,
+} = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
   uploadFile: async function (browser, whichFile = 'complete') {
@@ -22,7 +24,10 @@ module.exports = {
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 
     // Go to file upload
-    await browser.waitForElementVisible('xpath', '//*/h1[contains(.,"Hello Voldemort")]');
+    await browser.waitForElementVisible(
+      'xpath',
+      '//*/h1[contains(.,"Hello Voldemort")]'
+    );
     await browser.execute(function () {
       document.querySelector('a[href="/upload"]').click();
     });
@@ -53,7 +58,10 @@ module.exports = {
         `//*/p[contains(text(),"20 children enrolled")]`
       );
     } else {
-      await browser.waitForElementVisible('xpath', `//*/h2[contains(.,'Update your roster')]`);
+      await browser.waitForElementVisible(
+        'xpath',
+        `//*/h2[contains(.,'Update your roster')]`
+      );
     }
   },
 };
