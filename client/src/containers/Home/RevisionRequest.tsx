@@ -18,9 +18,30 @@ import { Site } from '../../shared/models';
 import { Revision } from '../../shared/models/db/Revision';
 import { apiGet } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { HowToUseStep } from './HowToUseStep';
-import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
-import { SiteName } from './revisionFields/SiteName';
+
+const FUNDING_SPACE_FORM_TYPES = {
+  infant: [
+    'Child Day Care - Part Time',
+    'Child Day Care - Full Time',
+    'Child Day Care - Part Time/Full Time',
+  ],
+  preschool: [
+    'Child Day Care - Part Time',
+    'Child Day Care - Full Time',
+    'Child Day Care - Part Time/Full Time',
+    'School Readiness - Full Day',
+    'School Readiness - School Day',
+    'School Readiness - Part Day',
+    'School Readiness - Extended Day',
+    'Smart Start',
+  ],
+  school: [
+    'Child Day Care - Part Time',
+    'Child Day Care - Full Time',
+    'Child Day Care - Part Time/Full Time',
+  ],
+  headstart: ['Some enrollments are funded by the State Headstart Supplement'],
+};
 
 export const RevisionRequest: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -40,77 +61,291 @@ export const RevisionRequest: React.FC = () => {
   });
   const [editingSite, setEditingSite] = useState<Site | null>(null);
 
-  // useEffect(() => {
-  //   apiGet(`funding-spaces/${userOrgs[0].id}`, accessToken)
-  //     .then((res) => {
-  //       setRevisionRequest((o: any) => {
-  //         o.fundingSpaceTypes = res;
-  //       })
-  //     })
-  //     .catch((err) => {
-  //       throw new Error(err);
-  //     });
-  // }, [user, accessToken]);
-
   console.log(revisionRequest);
+
+  const siteSection = (
+    <>
+      <div className="grid-row grid-gap margin-bottom-1">
+        <div className="tablet:grid-col-4 text-bold">Site name</div>
+        <div className="tablet:grid-col-3 text-bold">Request updated name</div>
+        <div className="tablet:grid-col-3 text-bold">
+          Request removal from your account
+        </div>
+      </div>
+      {(user?.sites || []).map((s) => (
+        <>
+          <div className="grid-row grid-gap margin-bottom-1">
+            <div className="tablet:grid-col-4">
+              <p>{s.siteName}</p>
+              <p className="usa-hint">
+                <b>License #: </b> {` ${s.licenseNumber || 'Exempt'} `}{' '}
+                <b>NAEYC ID: </b> {` ${s.naeycId || 'None'} `}{' '}
+                <b>Registry ID: </b> {` ${s.registryId || 'None'} `}
+              </p>
+            </div>
+            <div className="tablet:grid-col-3 display-flex flex-align-center">
+              <TextInput
+                label=""
+                id={`${s.siteName}-rename`}
+                type="input"
+                onChange={(e) => {
+                  const changeReq = `CHANGE ${s.siteName} TO ${e.target.value}`;
+                  setRevisionRequest((o: any) => {
+                    let newSites = o.siteNameChanges.filter(
+                      (elt: string) => !elt.includes(s.siteName)
+                    );
+                    newSites.push(changeReq);
+                    o.siteNameChanges = newSites;
+                    return o;
+                  });
+                  return e.target.value;
+                }}
+              />
+            </div>
+            <div className="tablet:grid-col-3 display-flex flex-align-center">
+              <Checkbox
+                id={`${s.siteName}-remove-checkbox`}
+                text=""
+                onChange={(e) => {
+                  const checked = e.target.checked;
+                  const changeReq = `REMOVE ${s.siteName}`;
+                  setRevisionRequest((o: any) => {
+                    let newSites = o.siteNameChanges.filter(
+                      (elt: string) => !elt.includes(s.siteName)
+                    );
+                    if (checked) newSites.push(changeReq);
+                    o.siteNameChanges = newSites;
+                    return o;
+                  });
+                  return checked;
+                }}
+              />
+            </div>
+          </div>
+          <div className="tablet:grid-col-10 margin-top-1 margin-bottom-1">
+            <Divider />
+          </div>
+        </>
+      ))}
+    </>
+  );
 
   const siteEdit = () => {
     if (editingSite === null) return <></>;
-    return <SiteName editingSite={editingSite} />;
+    return (
+      <>
+        <p className="usa-hint">
+          <b>License #: </b> {` ${editingSite.licenseNumber || 'Exempt'} `}{' '}
+          <b>NAEYC ID: </b> {` ${editingSite.naeycId || 'None'} `}{' '}
+          <b>Registry ID: </b> {` ${editingSite.registryId || 'None'} `}
+        </p>
+        <TextInput
+          label="Request a new site name"
+          id={`${editingSite}-rename`}
+          type="input"
+          onChange={(e) => {
+            const changeReq = `CHANGE ${editingSite.siteName} TO ${e.target.value}`;
+            setRevisionRequest((o: any) => {
+              let newSites = o.siteNameChanges.filter(
+                (elt: string) => !elt.includes(editingSite.siteName)
+              );
+              newSites.push(changeReq);
+              o.siteNameChanges = newSites;
+              return o;
+            });
+            return e.target.value;
+          }}
+        />
+        <Checkbox
+          id={`${editingSite}-remove-checkbox`}
+          text="Request that this site be removed from your account"
+          onChange={(e) => {
+            const checked = e.target.checked;
+            const changeReq = `REMOVE ${editingSite.siteName}`;
+            setRevisionRequest((o: any) => {
+              let newSites = o.siteNameChanges.filter(
+                (elt: string) => !elt.includes(editingSite.siteName)
+              );
+              if (checked) newSites.push(changeReq);
+              o.siteNameChanges = newSites;
+              return o;
+            });
+            return checked;
+          }}
+        />
+      </>
+    );
+  };
+
+  const getFundingSpaceCheckbox = (ageGroup: string, space: string) => {
+    return (
+      <Checkbox
+        id={`funding-space-check-${ageGroup}-${space}`}
+        text={space}
+        onChange={(e) => {
+          const checked = e.target.checked;
+          const spaceUpdate = `${ageGroup} ${space}`;
+          setRevisionRequest((o: any) => {
+            let newSpaces = o.fundingSpaceTypes.filter(
+              (elt: string) => elt !== spaceUpdate
+            );
+            if (checked) newSpaces.push(spaceUpdate);
+            o.fundingSpaceTypes = newSpaces;
+            return o;
+          });
+          return checked;
+        }}
+      />
+    );
   };
 
   return (
     <div className="grid-container margin-top-4">
       <BackButton />
-      <Form<Revision> data={revisionRequest} onSubmit={() => {}}>
-        <h1 ref={h1Ref}>Request site and funding changes</h1>
-        <p>
-          The ECE Reporter team will review any requested updates made in this
-          form. Any updates or follow-up questions will be sent to the email
-          associated with your ECE Reporter account.
-        </p>
-        <h2>Managed sites</h2>
-        {user?.sites?.map((s) => (
-          <>
-            <div className="grid-row grid-gap margin-bottom-1">
-              <div className="tablet:grid-col-3">{s.siteName}</div>
-              <div className="tablet:grid-col-3">
-                <Button
-                  text={<TextWithIcon text="Request updates" Icon={Pencil} />}
-                  appearance="unstyled"
-                  onClick={() => setEditingSite(s)}
-                />
-              </div>
-            </div>
-            <div className="tablet:grid-col-6 margin-top-1 margin-bottom-1">
-              <Divider />
-            </div>
-          </>
-        ))}
-        {siteEdit()}
-        <div className="tablet:grid-col-6 margin-top-4 margin-bottom-4">
+      <h1 ref={h1Ref}>Request site and funding changes</h1>
+      <p>
+        The ECE Reporter team will review any requested updates made in this
+        form. Any updates or follow-up questions will be sent to the email
+        associated with your ECE Reporter account.
+      </p>
+      <h2>Managed sites</h2>
+      {siteSection}
+      {/* {user?.sites?.map((s) => (
+        <>
+        <div className="grid-row grid-gap margin-bottom-1">
+          <div className="tablet:grid-col-3">{s.siteName}</div>
+          <div className="tablet:grid-col-3">
+            <Button
+              text={<TextWithIcon text="Request updates" Icon={Pencil}/>}
+              appearance="unstyled"
+              onClick={() => setEditingSite(s)}
+            />
+          </div>
+        </div>
+        <div className="tablet:grid-col-6 margin-top-1 margin-bottom-1">
           <Divider />
         </div>
-        <div className="tablet:grid-col-6">
-          <h2>Request a new site</h2>
-          <p className="usa-hint">
-            Fill out this section if your program manages a site not included in
-            your ECE Reporter account.
-          </p>
-          <TextInput
-            label="New site name"
-            id="New-site-name"
-            type="input"
-            onChange={(e) => {
-              setRevisionRequest((o: any) => {
-                o.newSiteName = e.target.value;
-                return o;
-              });
-              return e.target.value;
-            }}
-          />
-        </div>
-      </Form>
+        </>
+      ))}
+      {siteEdit()}    */}
+      {/* <div className="tablet:grid-col-6 margin-top-4 margin-bottom-4">
+          <Divider />
+      </div> */}
+      <div className="tablet:grid-col-6">
+        <h2>Request a new site</h2>
+        <p className="usa-hint">
+          Fill out this section if your program manages a site not included in
+          your ECE Reporter account.
+        </p>
+        <TextInput
+          label="New site name"
+          id="New-site-name"
+          type="input"
+          onChange={(e) => {
+            setRevisionRequest((o: any) => {
+              o.newSiteName = e.target.value;
+              return o;
+            });
+            return e.target.value;
+          }}
+        />
+        <TextInput
+          label="License ID"
+          id="New-site-license"
+          type="input"
+          onChange={(e) => {
+            setRevisionRequest((o: any) => {
+              o.newSiteLicense = e.target.value;
+              return o;
+            });
+            return e.target.value;
+          }}
+        />
+        <Checkbox
+          id="new-site-license-exempt-check"
+          text="This site is license exempt"
+          onChange={(e) => {
+            setRevisionRequest((o: any) => {
+              o.newSiteLicenseExempt = e.target.checked;
+              return o;
+            });
+            return e.target.checked;
+          }}
+        />
+        <TextInput
+          label="NAEYC ID"
+          id="New-site-naeyc"
+          type="input"
+          onChange={(e) => {
+            setRevisionRequest((o: any) => {
+              o.newSiteNaeycId = e.target.value;
+              return o;
+            });
+            return e.target.value;
+          }}
+        />
+        <Checkbox
+          id="new-site-headstart-check"
+          text="Headstart"
+          onChange={(e) => {
+            setRevisionRequest((o: any) => {
+              o.newSiteIsHeadstart = e.target.checked;
+              return o;
+            });
+            return e.target.checked;
+          }}
+        />
+        <Checkbox
+          id="new-site-no-naeyc-check"
+          text="New - Doesn't have NAEYC ID yet"
+          onChange={(e) => {
+            setRevisionRequest((o: any) => {
+              o.newSiteNoNaeyc = e.target.checked;
+              return o;
+            });
+            return e.target.checked;
+          }}
+        />
+        <TextInput
+          label="Registry ID"
+          id="New-site-registry"
+          type="input"
+          onChange={(e) => {
+            const change = e.target.value;
+            setRevisionRequest((o: any) => {
+              o.newSiteRegistryId = change;
+              return o;
+            });
+            return change;
+          }}
+        />
+      </div>
+      <div className="tablet:grid-col-6 margin-top-4 margin-bottom-4">
+        <Divider />
+      </div>
+      <div className="tablet:grid-col-6">
+        <h2>Funding space types</h2>
+        <p className="usa-hint">
+          Request correction to the funding types received by your program in
+          the section below.
+        </p>
+        <p className="text-bold">Infant/toddler</p>
+        {FUNDING_SPACE_FORM_TYPES.infant.map((type) =>
+          getFundingSpaceCheckbox('Infant/toddler', type)
+        )}
+        <p className="text-bold">Preschool</p>
+        {FUNDING_SPACE_FORM_TYPES.preschool.map((type) =>
+          getFundingSpaceCheckbox('Preschool', type)
+        )}
+        <p className="text-bold">School aged</p>
+        {FUNDING_SPACE_FORM_TYPES.school.map((type) =>
+          getFundingSpaceCheckbox('School aged', type)
+        )}
+        <p className="text-bold">State Headstart</p>
+        {FUNDING_SPACE_FORM_TYPES.headstart.map((type) =>
+          getFundingSpaceCheckbox('Headstart', type)
+        )}
+      </div>
     </div>
   );
 };
