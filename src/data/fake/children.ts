@@ -53,15 +53,13 @@ const children: Child[] = Array.from({ length: 20 }, (_, i) => {
     deletedDate: null,
     cascadeDeleteEnrollments: null,
     family: {} as Family,
+    foster: i ? UndefinableBoolean.No : UndefinableBoolean.Yes
   };
 });
 
 random
   .arrayElements(children, 5)
   .forEach((c) => (c.birthCertificateType = BirthCertificateType.NonUS));
-random
-  .arrayElements(children, 5)
-  .forEach((c) => (c.foster = UndefinableBoolean.Yes));
 random
   .arrayElements(children, 5)
   .forEach((c) => (c.dualLanguageLearner = UndefinableBoolean.Yes));
