@@ -249,16 +249,25 @@ const mapRow = async (
   return child;
 };
 
+/**
+ * SQL Server driver has an upper limit of 2100 parameters per query.
+ * Using object keys in the entity has proxy for number of parameters
+ * that'll end up in the query (couldn't find any better way to do this
+ * from typeORM), chunk the inserts into batches that will have <2000
+ * parameters per batch.
+ * @param transaction
+ * @param entities
+ */
 async function doBatchedInsert<T>(transaction: EntityManager, entities: T[]) {
   const parametersPerEntity = Object.keys(entities[0]).length;
 
-  const batchSize = 2000 / parametersPerEntity;
-  const numberOfBatches = Math.ceil(entities.length / batchSize);
+  const batchSize = Math.floor(2000 / parametersPerEntity);
 
   const createdData: any[] = [];
-  for (let b = 0; b < numberOfBatches; b++) {
+  for (let b = 0; b < entities.length; b += batchSize) {
     const batch = entities.slice(b, b + batchSize);
-    createdData.push(...(await transaction.save<T>(batch)));
+    const batchEntities = await transaction.save<T>(batch);
+    createdData.push(...batchEntities);
   }
 
   return createdData;
