@@ -12,6 +12,7 @@ import { reportingPeriodsRouter } from './reportingPeriods';
 import { templateRouter } from './template';
 import { exportRouter } from './export';
 import { oecReportRouter } from './oecReport';
+import { revisionsRouter } from './revisions';
 
 export const router = express.Router();
 
@@ -36,5 +37,7 @@ router.use('/sites', authenticate, sitesRouter);
 router.use('/reporting-periods', authenticate, reportingPeriodsRouter);
 
 router.use('/oec-report', authenticate, oecReportRouter);
+
+router.use('/revision-request', authenticate, revisionsRouter);
 
 router.use('/export', authenticate, exportRouter);

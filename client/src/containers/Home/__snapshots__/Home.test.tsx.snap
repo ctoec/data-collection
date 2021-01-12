@@ -227,176 +227,8 @@ exports[`Home snapshot matches pre-submit user 1`] = `
               Hello Voldy!
             </h1>
             <p>
-              ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). OEC uses this data to make informed program and policy decisions affecting young children and families.
+              ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). Make sure the site names and funding spaces below are accurate before you start entering data.
             </p>
-            <h2>
-              Sites you manage at Mort School For Dark-Inclined Wizards:
-            </h2>
-            <ul>
-              <li
-                class="line-height-body-4"
-              >
-                Students of Salazaar
-              </li>
-              <li
-                class="line-height-body-4"
-              >
-                Karkaroff Kids
-              </li>
-              <li
-                class="line-height-body-4"
-              >
-                Nocturn Alley Nargles
-              </li>
-            </ul>
-            <h2>
-              How to use ECE Reporter
-            </h2>
-            <p>
-              These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually, 
-              <a
-                href="/roster/"
-              >
-                 you can add them on your roster
-              </a>
-              .
-            </p>
-            <ol
-              class="how-to-list"
-            >
-              <li
-                class="how-to-step"
-              >
-                <h3
-                  class="how-to-header"
-                >
-                  Review the data requirements
-                </h3>
-                <p
-                  class="how-to-body"
-                >
-                  Learn more about the data elements ECE Reporter collects for each enrollment.
-                </p>
-                <p
-                  class="how-to-button"
-                >
-                  <a
-                    class="usa-button usa-button--unstyled"
-                    href="/data-requirements/"
-                  >
-                    <span
-                      class="oec-text-with-icon"
-                    >
-                      See required data
-                      <svg
-                        class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                      >
-                        arrowRight.svg
-                      </svg>
-                    </span>
-                  </a>
-                </p>
-              </li>
-              <li
-                class="how-to-step"
-              >
-                <h3
-                  class="how-to-header"
-                >
-                  Download the data template
-                </h3>
-                <p
-                  class="how-to-body"
-                >
-                  You'll need to enter data in this file to upload in ECE Reporter.
-                </p>
-                <p
-                  class="how-to-button"
-                >
-                  <a
-                    class="usa-button usa-button--unstyled"
-                    href="/template/"
-                  >
-                    <span
-                      class="oec-text-with-icon"
-                    >
-                      Download the template
-                      <svg
-                        class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                      >
-                        arrowRight.svg
-                      </svg>
-                    </span>
-                  </a>
-                </p>
-              </li>
-              <li
-                class="how-to-step"
-              >
-                <h3
-                  class="how-to-header"
-                >
-                  Prepare your data
-                </h3>
-                <p
-                  class="how-to-body"
-                >
-                  Get instructions on how to enter data into OEC's template.
-                </p>
-                <p
-                  class="how-to-button"
-                >
-                  <a
-                    class="usa-button usa-button--unstyled"
-                    href="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
-                  >
-                    <span
-                      class="oec-text-with-icon"
-                    >
-                      See the how-to guide
-                      <svg
-                        class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                      >
-                        arrowRight.svg
-                      </svg>
-                    </span>
-                  </a>
-                </p>
-              </li>
-              <li
-                class="how-to-step"
-              >
-                <h3
-                  class="how-to-header"
-                >
-                  Upload your data
-                </h3>
-                <p
-                  class="how-to-body"
-                >
-                  Once your template is filled out, you'll upload the data to ECE Reporter.
-                </p>
-                <p
-                  class="how-to-button"
-                >
-                  <a
-                    class="usa-button usa-button--unstyled"
-                    href="/upload/"
-                  >
-                    <span
-                      class="oec-text-with-icon"
-                    >
-                      Go to file upload
-                      <svg
-                        class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                      >
-                        arrowRight.svg
-                      </svg>
-                    </span>
-                  </a>
-                </p>
-              </li>
-            </ol>
           </div>
           <div
             class="tablet:grid-col-4"
@@ -407,6 +239,188 @@ exports[`Home snapshot matches pre-submit user 1`] = `
             </svg>
           </div>
         </div>
+        <h2
+          class="pre-submit-h2"
+        >
+          Your managed sites and funding spaces
+        </h2>
+        <div
+          class="usa-alert usa-alert--info grid-row"
+        >
+          <div
+            class="display-flex flex-fill"
+          >
+            <div
+              class="usa-alert__body grid-col flex-fill"
+            >
+              <p
+                class="usa-alert__text"
+              >
+                <span>
+                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through  
+                  <a
+                    href="/revision"
+                  >
+                    this form.
+                  </a>
+                </span>
+              </p>
+            </div>
+            <div
+              class="usa-alert__body flex-auto display-flex flex-align-center"
+            />
+          </div>
+        </div>
+        <h2
+          class="pre-submit-h2"
+        >
+          How to use ECE Reporter
+        </h2>
+        <p>
+          These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually, 
+          <a
+            href="/roster/"
+          >
+             you can add them on your roster
+          </a>
+          .
+        </p>
+        <ol
+          class="how-to-list"
+        >
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
+            >
+              Review the data requirements
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Learn more about the data elements ECE Reporter collects for each enrollment.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/data-requirements/"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  See required data
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
+            >
+              Download the data template
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              You'll need to enter data in this file to upload in ECE Reporter.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/template/"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Download the template
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
+            >
+              Prepare your data
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Get instructions on how to enter data into OEC's template.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="https://ece-reporter.documize.com/s/burrnubmbdja9sqnbh6g/ece-reporter-help/d/bv34kdhmdesjli7los1g/how-to-prepare-your-data-for-ece-reporter"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  See the how-to guide
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+          <li
+            class="how-to-step"
+          >
+            <h3
+              class="how-to-header"
+            >
+              Upload your data
+            </h3>
+            <p
+              class="how-to-body"
+            >
+              Once your template is filled out, you'll upload the data to ECE Reporter.
+            </p>
+            <p
+              class="how-to-button"
+            >
+              <a
+                class="usa-button usa-button--unstyled"
+                href="/upload/"
+              >
+                <span
+                  class="oec-text-with-icon"
+                >
+                  Go to file upload
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                  >
+                    arrowRight.svg
+                  </svg>
+                </span>
+              </a>
+            </p>
+          </li>
+        </ol>
       </div>
     </div>
     <div
@@ -432,6 +446,700 @@ exports[`Home snapshot matches pre-submit user 1`] = `
           />
         </svg>
       </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Home snapshot matches revise site request form 1`] = `
+<DocumentFragment>
+  <div
+    class="grid-container margin-top-4"
+  >
+    <button
+      class="usa-button usa-button--unstyled margin-top-2 text-bold"
+      type="button"
+    >
+      <span
+        class="oec-text-with-icon"
+      >
+        <svg
+          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
+        >
+          arrowRight.svg
+        </svg>
+        Back
+      </span>
+    </button>
+    <h1>
+      Request site and funding changes
+    </h1>
+    <p>
+      The ECE Reporter team will review any requested updates made in this form. Any updates or follow-up questions will be sent to the email associated with your ECE Reporter account.
+    </p>
+    <h2>
+      Managed sites
+    </h2>
+    <div
+      class="grid-row grid-gap margin-bottom-1"
+    >
+      <div
+        class="tablet:grid-col-4 text-bold"
+      >
+        Site name
+      </div>
+      <div
+        class="tablet:grid-col-3 text-bold"
+      >
+        Request updated name
+      </div>
+      <div
+        class="tablet:grid-col-3 text-bold"
+      >
+        Request removal from your account
+      </div>
+    </div>
+    <div
+      class="grid-row grid-gap margin-bottom-1"
+    >
+      <div
+        class="tablet:grid-col-4"
+      >
+        <p>
+          Students of Salazaar
+        </p>
+        <p
+          class="usa-hint"
+        >
+          <b>
+            License #: 
+          </b>
+            Exempt  
+          <b>
+            NAEYC ID: 
+          </b>
+            None  
+          <b>
+            Registry ID: 
+          </b>
+            None 
+        </p>
+      </div>
+      <div
+        class="tablet:grid-col-3 display-flex flex-align-center"
+      >
+        <div
+          class=" usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="Students of Salazaar-rename"
+          >
+             
+          </label>
+          <input
+            aria-required="true"
+            class="usa-input oec-text-input"
+            id="Students of Salazaar-rename"
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        class="tablet:grid-col-3 display-flex flex-align-center"
+      >
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="Students of Salazaar-remove-checkbox"
+            type="checkbox"
+            value=""
+          />
+          <label
+            class="usa-checkbox__label"
+            for="Students of Salazaar-remove-checkbox"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="tablet:grid-col-10 margin-top-1 margin-bottom-1"
+    >
+      <hr
+        class="MuiDivider-root"
+      />
+    </div>
+    <div
+      class="grid-row grid-gap margin-bottom-1"
+    >
+      <div
+        class="tablet:grid-col-4"
+      >
+        <p>
+          Karkaroff Kids
+        </p>
+        <p
+          class="usa-hint"
+        >
+          <b>
+            License #: 
+          </b>
+            Exempt  
+          <b>
+            NAEYC ID: 
+          </b>
+            None  
+          <b>
+            Registry ID: 
+          </b>
+            None 
+        </p>
+      </div>
+      <div
+        class="tablet:grid-col-3 display-flex flex-align-center"
+      >
+        <div
+          class=" usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="Karkaroff Kids-rename"
+          >
+             
+          </label>
+          <input
+            aria-required="true"
+            class="usa-input oec-text-input"
+            id="Karkaroff Kids-rename"
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        class="tablet:grid-col-3 display-flex flex-align-center"
+      >
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="Karkaroff Kids-remove-checkbox"
+            type="checkbox"
+            value=""
+          />
+          <label
+            class="usa-checkbox__label"
+            for="Karkaroff Kids-remove-checkbox"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="tablet:grid-col-10 margin-top-1 margin-bottom-1"
+    >
+      <hr
+        class="MuiDivider-root"
+      />
+    </div>
+    <div
+      class="grid-row grid-gap margin-bottom-1"
+    >
+      <div
+        class="tablet:grid-col-4"
+      >
+        <p>
+          Nocturn Alley Nargles
+        </p>
+        <p
+          class="usa-hint"
+        >
+          <b>
+            License #: 
+          </b>
+            Exempt  
+          <b>
+            NAEYC ID: 
+          </b>
+            None  
+          <b>
+            Registry ID: 
+          </b>
+            None 
+        </p>
+      </div>
+      <div
+        class="tablet:grid-col-3 display-flex flex-align-center"
+      >
+        <div
+          class=" usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="Nocturn Alley Nargles-rename"
+          >
+             
+          </label>
+          <input
+            aria-required="true"
+            class="usa-input oec-text-input"
+            id="Nocturn Alley Nargles-rename"
+            type="text"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        class="tablet:grid-col-3 display-flex flex-align-center"
+      >
+        <div
+          class="usa-checkbox"
+        >
+          <input
+            class="usa-checkbox__input"
+            id="Nocturn Alley Nargles-remove-checkbox"
+            type="checkbox"
+            value=""
+          />
+          <label
+            class="usa-checkbox__label"
+            for="Nocturn Alley Nargles-remove-checkbox"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="tablet:grid-col-10 margin-top-1 margin-bottom-1"
+    >
+      <hr
+        class="MuiDivider-root"
+      />
+    </div>
+    <div
+      class="tablet:grid-col-6"
+    >
+      <h2>
+        Request a new site
+      </h2>
+      <p
+        class="usa-hint"
+      >
+        Fill out this section if your program manages a site not included in your ECE Reporter account.
+      </p>
+      <div
+        class=" usa-form-group"
+      >
+        <label
+          class="usa-label"
+          for="New-site-name"
+        >
+          New site name 
+        </label>
+        <input
+          aria-required="true"
+          class="usa-input oec-text-input"
+          id="New-site-name"
+          type="text"
+          value=""
+        />
+      </div>
+      <div
+        class=" usa-form-group"
+      >
+        <label
+          class="usa-label"
+          for="New-site-license"
+        >
+          License ID 
+        </label>
+        <input
+          aria-required="true"
+          class="usa-input oec-text-input"
+          id="New-site-license"
+          type="text"
+          value=""
+        />
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="new-site-license-exempt-check"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="new-site-license-exempt-check"
+        >
+          This site is license exempt
+        </label>
+      </div>
+      <div
+        class=" usa-form-group"
+      >
+        <label
+          class="usa-label"
+          for="New-site-naeyc"
+        >
+          NAEYC ID 
+        </label>
+        <input
+          aria-required="true"
+          class="usa-input oec-text-input"
+          id="New-site-naeyc"
+          type="text"
+          value=""
+        />
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="new-site-headstart-check"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="new-site-headstart-check"
+        >
+          Headstart
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="new-site-no-naeyc-check"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="new-site-no-naeyc-check"
+        >
+          New - Doesn't have NAEYC ID yet
+        </label>
+      </div>
+      <div
+        class=" usa-form-group"
+      >
+        <label
+          class="usa-label"
+          for="New-site-registry"
+        >
+          Registry ID 
+        </label>
+        <input
+          aria-required="true"
+          class="usa-input oec-text-input"
+          id="New-site-registry"
+          type="text"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="tablet:grid-col-6 margin-top-4 margin-bottom-4"
+    >
+      <hr
+        class="MuiDivider-root"
+      />
+    </div>
+    <div
+      class="tablet:grid-col-6"
+    >
+      <h2>
+        Funding space types
+      </h2>
+      <p
+        class="usa-hint"
+      >
+        Request correction to the funding types received by your program in the section below.
+      </p>
+      <p
+        class="text-bold"
+      >
+        Infant/toddler
+      </p>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Infant/toddler-Child Day Care - Part Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Infant/toddler-Child Day Care - Part Time"
+        >
+          Child Day Care - Part Time
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Infant/toddler-Child Day Care - Full Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Infant/toddler-Child Day Care - Full Time"
+        >
+          Child Day Care - Full Time
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Infant/toddler-Child Day Care - Part Time/Full Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Infant/toddler-Child Day Care - Part Time/Full Time"
+        >
+          Child Day Care - Part Time/Full Time
+        </label>
+      </div>
+      <p
+        class="text-bold"
+      >
+        Preschool
+      </p>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-Child Day Care - Part Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-Child Day Care - Part Time"
+        >
+          Child Day Care - Part Time
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-Child Day Care - Full Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-Child Day Care - Full Time"
+        >
+          Child Day Care - Full Time
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-Child Day Care - Part Time/Full Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-Child Day Care - Part Time/Full Time"
+        >
+          Child Day Care - Part Time/Full Time
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-School Readiness - Full Day"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-School Readiness - Full Day"
+        >
+          School Readiness - Full Day
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-School Readiness - School Day"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-School Readiness - School Day"
+        >
+          School Readiness - School Day
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-School Readiness - Part Day"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-School Readiness - Part Day"
+        >
+          School Readiness - Part Day
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-School Readiness - Extended Day"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-School Readiness - Extended Day"
+        >
+          School Readiness - Extended Day
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Preschool-Smart Start"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Preschool-Smart Start"
+        >
+          Smart Start
+        </label>
+      </div>
+      <p
+        class="text-bold"
+      >
+        School aged
+      </p>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-School aged-Child Day Care - Part Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-School aged-Child Day Care - Part Time"
+        >
+          Child Day Care - Part Time
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-School aged-Child Day Care - Full Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-School aged-Child Day Care - Full Time"
+        >
+          Child Day Care - Full Time
+        </label>
+      </div>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-School aged-Child Day Care - Part Time/Full Time"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-School aged-Child Day Care - Part Time/Full Time"
+        >
+          Child Day Care - Part Time/Full Time
+        </label>
+      </div>
+      <p
+        class="text-bold"
+      >
+        State Headstart
+      </p>
+      <div
+        class="usa-checkbox"
+      >
+        <input
+          class="usa-checkbox__input"
+          id="funding-space-check-Headstart-Some enrollments are funded by the State Headstart Supplement"
+          type="checkbox"
+          value=""
+        />
+        <label
+          class="usa-checkbox__label"
+          for="funding-space-check-Headstart-Some enrollments are funded by the State Headstart Supplement"
+        >
+          Some enrollments are funded by the State Headstart Supplement
+        </label>
+      </div>
+    </div>
+    <div
+      class="grid-row grid-gap margin-top-2 margin-bottom-2"
+    >
+      <a
+        class="usa-button usa-button--unstyled"
+        href="/home"
+      >
+        Cancel
+      </a>
+      <button
+        class="usa-button"
+        type="button"
+      >
+        Send request
+      </button>
     </div>
   </div>
 </DocumentFragment>

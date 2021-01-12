@@ -1,22 +1,12 @@
-import {
-  Alert,
-  Button,
-  Checkbox,
-  Form,
-  Pencil,
-  TextInput,
-  TextWithIcon,
-} from '@ctoec/component-library';
+import { Button, Checkbox, TextInput } from '@ctoec/component-library';
 import Divider from '@material-ui/core/Divider';
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
-import { Site } from '../../shared/models';
 import { Revision } from '../../shared/models/db/Revision';
-import { apiGet, apiPost } from '../../utils/api';
+import { apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const FUNDING_SPACE_FORM_TYPES = {
@@ -60,9 +50,6 @@ export const RevisionRequest: React.FC = () => {
     newSiteRegistryId: '',
     fundingSpaceTypes: [],
   });
-  const [editingSite, setEditingSite] = useState<Site | null>(null);
-
-  console.log(revisionRequest);
 
   const siteSection = (
     <>
@@ -131,53 +118,6 @@ export const RevisionRequest: React.FC = () => {
     </>
   );
 
-  const siteEdit = () => {
-    if (editingSite === null) return <></>;
-    return (
-      <>
-        <p className="usa-hint">
-          <b>License #: </b> {` ${editingSite.licenseNumber || 'Exempt'} `}{' '}
-          <b>NAEYC ID: </b> {` ${editingSite.naeycId || 'None'} `}{' '}
-          <b>Registry ID: </b> {` ${editingSite.registryId || 'None'} `}
-        </p>
-        <TextInput
-          label="Request a new site name"
-          id={`${editingSite}-rename`}
-          type="input"
-          onChange={(e) => {
-            const changeReq = `CHANGE ${editingSite.siteName} TO ${e.target.value}`;
-            setRevisionRequest((o: any) => {
-              let newSites = o.siteNameChanges.filter(
-                (elt: string) => !elt.includes(editingSite.siteName)
-              );
-              newSites.push(changeReq);
-              o.siteNameChanges = newSites;
-              return o;
-            });
-            return e.target.value;
-          }}
-        />
-        <Checkbox
-          id={`${editingSite}-remove-checkbox`}
-          text="Request that this site be removed from your account"
-          onChange={(e) => {
-            const checked = e.target.checked;
-            const changeReq = `REMOVE ${editingSite.siteName}`;
-            setRevisionRequest((o: any) => {
-              let newSites = o.siteNameChanges.filter(
-                (elt: string) => !elt.includes(editingSite.siteName)
-              );
-              if (checked) newSites.push(changeReq);
-              o.siteNameChanges = newSites;
-              return o;
-            });
-            return checked;
-          }}
-        />
-      </>
-    );
-  };
-
   const getFundingSpaceCheckbox = (ageGroup: string, space: string) => {
     return (
       <Checkbox
@@ -201,7 +141,7 @@ export const RevisionRequest: React.FC = () => {
   };
 
   const submitRequest = (_revision: Revision) => {
-    apiPost(`revision-request/${userOrgs[0]}`, revisionRequest, {
+    apiPost(`revision-request/${userOrgs[0].id}`, revisionRequest, {
       accessToken,
     }).catch((err) => {
       throw new Error(err);
@@ -229,27 +169,6 @@ export const RevisionRequest: React.FC = () => {
       </p>
       <h2>Managed sites</h2>
       {siteSection}
-      {/* {user?.sites?.map((s) => (
-        <>
-        <div className="grid-row grid-gap margin-bottom-1">
-          <div className="tablet:grid-col-3">{s.siteName}</div>
-          <div className="tablet:grid-col-3">
-            <Button
-              text={<TextWithIcon text="Request updates" Icon={Pencil}/>}
-              appearance="unstyled"
-              onClick={() => setEditingSite(s)}
-            />
-          </div>
-        </div>
-        <div className="tablet:grid-col-6 margin-top-1 margin-bottom-1">
-          <Divider />
-        </div>
-        </>
-      ))}
-      {siteEdit()}    */}
-      {/* <div className="tablet:grid-col-6 margin-top-4 margin-bottom-4">
-          <Divider />
-      </div> */}
       <div className="tablet:grid-col-6">
         <h2>Request a new site</h2>
         <p className="usa-hint">
