@@ -22,10 +22,10 @@ export function getAccordionItems(
     hideOrgColumn: boolean;
     hideExitColumn: boolean;
   } = {
-    hideCapacity: false,
-    hideOrgColumn: true,
-    hideExitColumn: true,
-  }
+      hideCapacity: false,
+      hideOrgColumn: true,
+      hideExitColumn: true,
+    }
 ): AccordionItemProps[] {
   const childrenByAgeGroup = getChildrenByAgeGroup(children);
   const excludeColumns: ColumnNames[] = [];
@@ -61,8 +61,8 @@ export function getAccordionItems(
           hideCapacity={opts.hideCapacity}
         />
       ),
-      expandText: `Show ${ageGroup} roster`,
-      collapseText: `Hide ${ageGroup} roster`,
+      expandText: <>Show<span className="usa-sr-only">{` ${ageGroup} roster`}</span></>,
+      collapseText: <>Hide<span className="usa-sr-only">{` ${ageGroup} roster`}</span></>,
       content: (
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
           <Table<Child>
