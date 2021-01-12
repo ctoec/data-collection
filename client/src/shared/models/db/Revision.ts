@@ -1,5 +1,7 @@
 export interface Revision {
   id: number;
+  userId?: number;
+  orgId?: number;
   siteNameChanges?: string[];
   newSiteName?: string;
   newSiteLicense?: string;

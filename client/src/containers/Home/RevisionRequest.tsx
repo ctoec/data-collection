@@ -9,14 +9,14 @@ import {
 } from '@ctoec/component-library';
 import Divider from '@material-ui/core/Divider';
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
 import { Site } from '../../shared/models';
 import { Revision } from '../../shared/models/db/Revision';
-import { apiGet } from '../../utils/api';
+import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const FUNDING_SPACE_FORM_TYPES = {
@@ -47,6 +47,7 @@ export const RevisionRequest: React.FC = () => {
   const { user } = useContext(UserContext);
   const userOrgs = user?.organizations || [];
   const { accessToken } = useContext(AuthenticationContext);
+  const history = useHistory();
   const h1Ref = getH1RefForTitle();
   const [revisionRequest, setRevisionRequest] = useState<any>({
     siteNameChanges: [],
@@ -199,6 +200,24 @@ export const RevisionRequest: React.FC = () => {
     );
   };
 
+  const submitRequest = (_revision: Revision) => {
+    apiPost(`revision-request/${userOrgs[0]}`, revisionRequest, {
+      accessToken,
+    }).catch((err) => {
+      throw new Error(err);
+    });
+    history.push('/home', {
+      alerts: [
+        {
+          type: 'success',
+          heading: 'Request received!',
+          text:
+            'The ECE Reporter team will send any questions and status updates to the email associated with your ECE Reporter account.',
+        },
+      ],
+    });
+  };
+
   return (
     <div className="grid-container margin-top-4">
       <BackButton />
@@ -345,6 +364,14 @@ export const RevisionRequest: React.FC = () => {
         {FUNDING_SPACE_FORM_TYPES.headstart.map((type) =>
           getFundingSpaceCheckbox('Headstart', type)
         )}
+      </div>
+      <div className="grid-row grid-gap margin-top-2 margin-bottom-2">
+        <Button appearance="unstyled" text="Cancel" href="/home" />
+        <Button
+          appearance="default"
+          text="Send request"
+          onClick={() => submitRequest(revisionRequest)}
+        />
       </div>
     </div>
   );

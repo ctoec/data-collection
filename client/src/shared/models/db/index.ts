@@ -11,6 +11,7 @@ export * from './OECReport';
 export * from './Organization';
 export * from './OrganizationPermission';
 export * from './ReportingPeriod';
+export * from './Revision';
 export * from './Site';
 export * from './SitePermission';
 export * from './User';
