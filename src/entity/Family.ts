@@ -21,7 +21,6 @@ import {
   IsNotEmpty,
   ValidateIf,
   ValidateNested,
-  isNotEmpty,
 } from 'class-validator';
 import { enumTransformer } from './transformers';
 

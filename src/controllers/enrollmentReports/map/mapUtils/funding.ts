@@ -1,11 +1,10 @@
-import { EntityManager, getManager } from 'typeorm';
+import { getManager } from 'typeorm';
 import {
   Enrollment,
   Funding,
   Organization,
   FundingSpace,
   ReportingPeriod,
-  User,
 } from '../../../../entity';
 import {
   FundingSource,

@@ -1,4 +1,4 @@
-import { EntityManager, In, EntitySchema } from 'typeorm';
+import { EntityManager, In } from 'typeorm';
 import {
   Child,
   Site,
@@ -212,10 +212,11 @@ const mapRow = async (
 
   // Users can update enrollments by changing their funding, so there could
   // be multiple rows with the same enrollment
-  let enrollment = child?.enrollments?.find((e) => {
-    e.site.siteName === source.site &&
-      e.entry?.format('MM/DD/YYYY') === source.entry?.format('MM/DD/YYYY');
-  });
+  let enrollment = child?.enrollments?.find(
+    (e) =>
+      e.site.siteName === source.site &&
+      e.entry?.format('MM/DD/YYYY') === source.entry?.format('MM/DD/YYYY')
+  );
 
   // Create enrollment if it does not already exist
   if (!enrollment) {

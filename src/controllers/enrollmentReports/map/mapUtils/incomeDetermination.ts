@@ -1,4 +1,4 @@
-import { Family, User, IncomeDetermination } from '../../../../entity';
+import { Family, IncomeDetermination } from '../../../../entity';
 import { EnrollmentReportRow } from '../../../../template';
 import { getManager } from 'typeorm';
 
