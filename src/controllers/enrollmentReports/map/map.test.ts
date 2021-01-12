@@ -283,32 +283,5 @@ describe('controllers', () => {
         }
       );
     });
-
-    describe('mapFunding', () => {
-      it.each([
-        [{ fundingSpace: 'CDC' }, true],
-        [{ time: 'Full-time' }, true],
-        [{ firstReportingPeriod: moment('10/2020', 'MM/YYYY') }, true],
-        [{ lastReportingPeriod: moment('10/2020', 'MM/YYYY') }, true],
-        [{}, false],
-      ])(
-        'creates a funding if source contains source, time, firstReportingPeriod, or lastReportingPeriod',
-        async (source, doesCreateFunding) => {
-          const transaction = {} as jest.Mocked<EntityManager>;
-          transaction.findOne = jest.fn();
-          transaction.create = jest.fn();
-          transaction.save = jest.fn();
-
-          await mapFunding(
-            source as EnrollmentReportRow,
-            {} as Organization,
-            {} as Enrollment,
-            [],
-            []
-          );
-          expect(transaction.create).toBeCalledTimes(doesCreateFunding ? 1 : 0);
-        }
-      );
-    });
   });
 });
