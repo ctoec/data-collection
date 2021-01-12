@@ -84,6 +84,7 @@ function makeMiddleNameEdgeCases(num: number) {
   return _name;
 }
 const possibleSuffixes = ['Jr', 'III', 'IV'];
+
 const completeChildren: Child[] = children.map((c, i) => {
   const site = random.arrayElement(c.organization.sites);
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;

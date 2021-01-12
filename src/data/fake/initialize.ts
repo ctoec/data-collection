@@ -19,7 +19,7 @@ import {
 import { FundingSource, Region } from '../../../client/src/shared/models';
 import {
   getReportingPeriodFromDates,
-  reportingPeriods,
+  allReportingPeriods,
 } from './reportingPeriods';
 import { organizations } from './organizations';
 import { sitesByOrgName } from './sites';
@@ -123,7 +123,7 @@ export const initialize = async () => {
   if (!(await getManager().find(ReportingPeriod)).length) {
     const reportingPeriodsToAdd = [];
     for (let fundingSource of Object.values(FundingSource)) {
-      for (let dates of reportingPeriods) {
+      for (let dates of allReportingPeriods) {
         const reportingPeriod = getManager().create(
           ReportingPeriod,
           getReportingPeriodFromDates(fundingSource as FundingSource, dates)
