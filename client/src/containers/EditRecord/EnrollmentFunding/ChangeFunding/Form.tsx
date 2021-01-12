@@ -76,19 +76,21 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
           optional={changeType === 'start'}
         />
       )}
-      <Button text="Cancel" appearance="outline" onClick={hideForm} />
-      <FormSubmitButton
-        text={
-          loading
-            ? changeType === 'end'
-              ? 'Ending funding...'
-              : 'Changing funding...'
-            : changeType === 'end'
-            ? 'End current funding'
-            : 'Change current funding'
-        }
-        disabled={loading}
-      />
+      <div>
+        <Button text="Cancel" appearance="outline" onClick={hideForm} />
+        <FormSubmitButton
+          text={
+            loading
+              ? changeType === 'end'
+                ? 'Ending funding...'
+                : 'Changing funding...'
+              : changeType === 'end'
+              ? 'End current funding'
+              : 'Change current funding'
+          }
+          disabled={loading}
+        />
+      </div>
     </Form>
   );
 };
