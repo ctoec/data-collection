@@ -8,7 +8,7 @@ export const mapFundingSpacesToCards = (fundingSpacesDisplay: any) => {
     <div className="desktop:grid-col-4 three-column-card">
       <Card>
         <div className="padding-0">
-          <h3>{fsd.sourceName}</h3>
+          <h3 className="margin-top-0">{fsd.sourceName}</h3>
           {fsd.includedAgeGroups.map((ag: any) => (
             <>
               <div>

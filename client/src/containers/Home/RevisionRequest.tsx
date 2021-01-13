@@ -33,6 +33,13 @@ const FUNDING_SPACE_FORM_TYPES = {
   headstart: ['Some enrollments are funded by the State Headstart Supplement'],
 };
 
+/**
+ * Form to allow a user to request changes to their accessible sites
+ * and/or funding spaces. FormField elements aren't used here because
+ * we're not modifying an existing DB entity, only accumulating
+ * information that we'll shove into a new row in the revisions
+ * table.
+ */
 export const RevisionRequest: React.FC = () => {
   const { user } = useContext(UserContext);
   const userOrgs = user?.organizations || [];
@@ -51,6 +58,10 @@ export const RevisionRequest: React.FC = () => {
     fundingSpaceTypes: [],
   });
 
+  // Create the nice tabular format of sites the user has
+  // access to, along with the text input fields in which
+  // they can change those site names, plus the checkboxes
+  // to request no longer needing that site
   const siteSection = (
     <>
       <div className="grid-row grid-gap margin-bottom-1">
@@ -118,6 +129,8 @@ export const RevisionRequest: React.FC = () => {
     </>
   );
 
+  // Generate the checkboxes for whether a user wishes to modify
+  // their org's access to particular funding spaces
   const getFundingSpaceCheckbox = (ageGroup: string, space: string) => {
     return (
       <Checkbox
@@ -140,6 +153,7 @@ export const RevisionRequest: React.FC = () => {
     );
   };
 
+  // Send the accumulated changes to be written to the DB
   const submitRequest = (_revision: Revision) => {
     apiPost(`revision-request/${userOrgs[0].id}`, revisionRequest, {
       accessToken,

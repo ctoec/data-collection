@@ -6,6 +6,12 @@ import { Revision } from '../entity/Revision';
 
 export const revisionsRouter = express.Router();
 
+/**
+ * POST /revision-request/:organizationId
+ *
+ * Saves a change request object accumulated from a user filling out
+ * a form into the DB.
+ */
 revisionsRouter.post(
   '/:organizationId',
   passAsyncError(async (req, res) => {
@@ -28,6 +34,15 @@ revisionsRouter.post(
   })
 );
 
+/**
+ * GET /revision-request/:organizationId
+ *
+ * Retrieves all change requests associated with a particular organization
+ * from the Revision table. Currently, there's no way to call this
+ * within the app. This is just here so that the integration test can
+ * successfully determine whether revision information was properly
+ * saved and matches the requested change that we sent.
+ */
 revisionsRouter.get(
   '/:organizationId',
   passAsyncError(async (req, res) => {

@@ -60,6 +60,10 @@ describe('integration', () => {
         );
         expect(id).not.toBeUndefined();
       });
+
+      // There's no actual way within the app to invoke the get for this route,
+      // this test is just here to make sure we can retrieve the same information
+      // from the DB that we sent (just a sanity check that everything saved)
       it('GET revision-request/:organizationId for posted revision request', async () => {
         const revisions = await apiGet(
           `revision-request/${organization.id}`,
