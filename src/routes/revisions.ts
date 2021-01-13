@@ -27,3 +27,21 @@ revisionsRouter.post(
     }
   })
 );
+
+revisionsRouter.get(
+  '/:organizationId',
+  passAsyncError(async (req, res) => {
+    try {
+      const orgId = parseInt(req.params['organizationId']);
+      const revisions = await getManager().find(Revision, { where: { orgId } });
+      res.send(revisions);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error(
+        "Couldn't retrieve revision requests associated with your org: ",
+        err
+      );
+      throw new BadRequestError('Revision requests not retrieved');
+    }
+  })
+);
