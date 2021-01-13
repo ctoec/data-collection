@@ -107,7 +107,7 @@ const Landing: React.FC = () => {
               <h3>Learn how ECE Reporter collects and stores data</h3>
               <Button
                 appearance="unstyled"
-                href="/privacy-policy"
+                href="/privacy"
                 className="margin-bottom-3 display-block"
                 text={
                   <TextWithIcon
