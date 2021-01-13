@@ -221,17 +221,24 @@ exports[`Home snapshot matches pre-submit user 1`] = `
           class="grid-row grid-gap"
         >
           <div
-            class="tablet:grid-col-8"
+            class="tablet:grid-col-8 margin-top-4"
           >
-            <h1>
+            <h1
+              class="margin-top-0"
+            >
               Hello Voldy!
             </h1>
             <p>
               ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). Make sure the site names and funding spaces below are accurate before you start entering data.
             </p>
+            <h2
+              class="pre-submit-h2"
+            >
+              Your managed sites and funding spaces
+            </h2>
           </div>
           <div
-            class="tablet:grid-col-4"
+            class="tablet:grid-col-4 margin-top-4 img"
             role="presentation"
           >
             <svg>
@@ -239,11 +246,6 @@ exports[`Home snapshot matches pre-submit user 1`] = `
             </svg>
           </div>
         </div>
-        <h2
-          class="pre-submit-h2"
-        >
-          Your managed sites and funding spaces
-        </h2>
         <div
           class="usa-alert usa-alert--info grid-row"
         >
@@ -1129,7 +1131,7 @@ exports[`Home snapshot matches revise site request form 1`] = `
       class="grid-row grid-gap margin-top-2 margin-bottom-2"
     >
       <a
-        class="usa-button usa-button--unstyled"
+        class="usa-button usa-button--outline"
         href="/home"
       >
         Cancel

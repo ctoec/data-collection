@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import UserContext from '../../contexts/UserContext/UserContext';
+import { useAlerts } from '../../hooks/useAlerts';
 import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
 import { apiGet } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
@@ -18,6 +19,22 @@ export const PreSubmitHome: React.FC = () => {
   const userOrgs = user?.organizations || [];
   const showFundingsAndSites = orgAccess && userOrgs.length == 1;
 
+  // We might have a success alert pushed from the revision request
+  // form, so check whether we do (but filter so that we only show
+  // one if a user submits multiple forms)
+  const [alertFromRevision, setAlertFromRevision] = useState<boolean>();
+  const { setAlerts, alertElements } = useAlerts();
+  // let alertToShow;
+  useEffect(() => {
+    setAlerts((_alerts) => [
+      _alerts.find((a) => a?.heading === 'Request received!'),
+    ]);
+    // alertToShow = alerts.find((a) => a?.heading === "Request received!");
+    // console.log(alertToShow);
+    // if (alertToShow) setAlerts([alertToShow]);
+  }, []);
+
+  console.log(alertElements);
   const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
 
   useEffect(() => {
@@ -60,21 +77,27 @@ export const PreSubmitHome: React.FC = () => {
 
   return (
     <div className="Home grid-container margin-top-4">
+      {alertElements.length > 0 && alertElements}
       <div className="grid-row grid-gap">
-        <div className="tablet:grid-col-8">
-          <h1 ref={h1Ref}>Hello {user?.firstName}!</h1>
+        <div className="tablet:grid-col-8 margin-top-4">
+          <h1 ref={h1Ref} className="margin-top-0">
+            Hello {user?.firstName}!
+          </h1>
           <p>
             ECE Reporter will allow you to share your state-funded enrollment
             data with the Office of Early Childhood (OEC). Make sure the site
             names and funding spaces below are accurate before you start
             entering data.
           </p>
+          <h2 className="pre-submit-h2">
+            Your managed sites and funding spaces
+          </h2>
         </div>
-        <div className="tablet:grid-col-4" role="presentation">
+        <div className="tablet:grid-col-4 margin-top-4 img" role="presentation">
           <Image />
         </div>
       </div>
-      <h2 className="pre-submit-h2">Your managed sites and funding spaces</h2>
+
       <Alert
         type="info"
         text={

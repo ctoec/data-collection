@@ -299,7 +299,7 @@ export const RevisionRequest: React.FC = () => {
         )}
       </div>
       <div className="grid-row grid-gap margin-top-2 margin-bottom-2">
-        <Button appearance="unstyled" text="Cancel" href="/home" />
+        <Button appearance="outline" text="Cancel" href="/home" />
         <Button
           appearance="default"
           text="Send request"
