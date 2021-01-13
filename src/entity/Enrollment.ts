@@ -5,8 +5,6 @@ import {
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
-  AfterUpdate,
-  getManager,
 } from 'typeorm';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 
@@ -83,9 +81,10 @@ export class Enrollment implements EnrollmentInterface {
   exitReason?: string;
 
   @OneToMany(() => Funding, (funding) => funding.enrollment, {
-    // We need to cascade updates so that if a user adds an enrollment in the create flow with a funding, saves with errors, and needs to correct those errors, they can re-save and have the funding update too
-    cascade: true,
-    onDelete: 'CASCADE',
+    // We need to cascade updates so that if a user adds an enrollment in the create flow with a funding,
+    // saves with errors, and needs to correct those errors, they can re-save and have the funding update too
+    // but NOTE: this cascade does not work for creating the relations, since enrollment has an auto-incrementing PK
+    cascade: ['update', 'soft-remove'],
     eager: true,
   })
   @ValidateNested({ each: true })
@@ -112,15 +111,4 @@ export class Enrollment implements EnrollmentInterface {
 
   @DeleteDateColumn()
   deletedDate: Date;
-
-  @AfterUpdate()
-  async cascadeDeleteFundings() {
-    if (this.deletedDate !== null) {
-      await Promise.all(
-        this.fundings.map(
-          async (f) => await getManager().softRemove(Funding, f)
-        )
-      );
-    }
-  }
 }
