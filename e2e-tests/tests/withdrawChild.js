@@ -4,7 +4,7 @@ const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
 
 module.exports = {
-  '@tags': ['withdraw'],
+  '@tags': ['child', 'withdraw'],
   withdrawChild: async function (browser) {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);

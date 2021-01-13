@@ -57,7 +57,10 @@ const CreateRecord: React.FC = () => {
   } as Child);
 
   const [refetchChild, setRefetchChild] = useState<number>(0);
-  const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
+  const afterSaveSuccess = () => {
+    setRefetchChild((r) => r + 1);
+    setAlerts([]);
+  };
 
   // Fetch fresh child from API whenever refetch is triggered
   // And move to next step, if current step is complete (has no validation errors)
@@ -100,6 +103,8 @@ const CreateRecord: React.FC = () => {
       .then((updatedChild) => {
         setChild(updatedChild);
         updateCurrentRosterCache(updatedChild, { add: refetchChild < 1 });
+        if (refetchChild === 0) return;
+
         const currentStepStatus = steps[indexOfCurrentStep]?.status({
           child: updatedChild,
         } as RecordFormProps);
@@ -130,10 +135,7 @@ const CreateRecord: React.FC = () => {
 
   const commonFormProps: RecordFormProps = {
     child,
-    afterSaveSuccess: () => {
-      triggerRefetchChild();
-      setAlerts([]);
-    },
+    afterSaveSuccess,
     setAlerts,
     hideHeader: true,
     topHeadingLevel: 'h2',
@@ -157,6 +159,8 @@ const CreateRecord: React.FC = () => {
       </p>
       <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
         <StepList
+          // Force rerender after child is fetched
+          key={child?.id}
           steps={steps}
           props={commonFormProps}
           activeStep={activeStep}
