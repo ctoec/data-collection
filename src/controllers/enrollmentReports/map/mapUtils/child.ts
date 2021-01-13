@@ -111,19 +111,15 @@ export const getRaceIndicated = (source: EnrollmentReportRow) => {
  * Determine whether a given enrollment report row from an
  * uploaded sheet has demographic/identifier information matching
  * a given child.
- * @param childA
- * @param childB
+ * @param child
+ * @param other
  */
-export const isIdentifierMatch = (
-  childA: EnrollmentReportRow,
-  childB: EnrollmentReportRow
-) => {
-  return (
-    childA.firstName === childB.firstName &&
-    childA.lastName === childB.lastName &&
-    childA.birthdate &&
-    childA.birthdate?.format('MM/DD/YYYY') ===
-      childB.birthdate?.format('MM/DD/YYYY') &&
-    childA.sasidUniqueId === childB.sasidUniqueId
-  );
-};
+export const isIdentifierMatch = (child: Child, other: EnrollmentReportRow) =>
+  child.firstName === other.firstName &&
+  child.lastName === other.lastName &&
+  child.birthdate &&
+  child.birthdate?.format('MM/DD/YYYY') ===
+    other.birthdate?.format('MM/DD/YYYY') &&
+  ((child.sasid && child.sasid === other.sasidUniqueId) ||
+    (child.uniqueId && child.uniqueId === other.sasidUniqueId) ||
+    (!child.sasid && !child.uniqueId));
