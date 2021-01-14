@@ -119,11 +119,11 @@ enrollmentReportsRouter.post(
           { save: true }
         );
 
-        // This insert was failing due to too many params, and we don't use it
-        // at all so just commenting out for now
-        // const report = await tManager.save(
-        //   tManager.create(EnrollmentReport, { children: reportChildren })
-        // );
+        // TODO: Decide if there's any benefit in actually creating the EnrollmentReport entity,
+        // which maps childIds to the upload they came from.
+        // Not useful now, but may be useful when users are uploading incremental update reports
+        // and we have a need to display to the user which records were updated/added by their
+        // upload. Skip creating the report for now to save time (esp for large uploads)
 
         let numActive = 0,
           numWithdrawn = 0;
