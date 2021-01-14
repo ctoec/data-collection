@@ -1,92 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end funding 1`] = `
-<DocumentFragment>
-  <div
-    class="oec-card"
-  >
-    <div
-      class="oec-card-cell"
-    >
-      <h3>
-        End current funding
-      </h3>
-      <form
-        class="usa-form usa-form"
-        id="change-funding-form"
-      >
-        <div
-          class="usa-form-group"
-        >
-          <label
-            class="usa-label"
-            for="last-reporting-period"
-          >
-            Last reporting period for current CDC - Child Day Care - undefined funding
-          </label>
-          <select
-            aria-required="true"
-            class="usa-select"
-            id="last-reporting-period"
-            name="last-reporting-period"
-          >
-            <option
-              value=""
-            >
-              - Select -
-            </option>
-          </select>
-        </div>
-        <button
-          class="usa-button usa-button--outline"
-          type="button"
-        >
-          Cancel
-        </button>
-        <input
-          class="usa-button"
-          type="submit"
-          value="End current funding"
-        />
-      </form>
-    </div>
-    <div
-      class=""
-    />
-  </div>
-  <div
-    class="oec-card"
-  >
-    <div
-      class="oec-card-cell"
-    >
-      <div
-        class="display-flex flex-column flex-align-end"
-      >
-        <div>
-          <button
-            class="usa-button usa-button--unstyled margin-right-4"
-            type="button"
-          >
-            End current funding
-          </button>
-          <button
-            class="usa-button usa-button--unstyled"
-            type="button"
-          >
-            Start new funding
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      class=""
-    />
-  </div>
-</DocumentFragment>
-`;
-
-exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start funding 1`] = `
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - change funding 1`] = `
 <DocumentFragment>
   <div
     class="oec-card"
@@ -139,17 +53,25 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
             </option>
           </select>
         </div>
-        <button
-          class="usa-button usa-button--outline"
-          type="button"
+        <div
+          class="display-flex flex-align-center"
         >
-          Cancel
-        </button>
-        <input
-          class="usa-button"
-          type="submit"
-          value="Change current funding"
-        />
+          <button
+            class="usa-button usa-button--outline"
+            type="button"
+          >
+            Cancel
+          </button>
+          <div
+            class="margin-top-1"
+          >
+            <input
+              class="usa-button"
+              type="submit"
+              value="Change current funding"
+            />
+          </div>
+        </div>
       </form>
     </div>
     <div
@@ -176,7 +98,101 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - start fund
             class="usa-button usa-button--unstyled"
             type="button"
           >
-            Start new funding
+            Change funding
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+</DocumentFragment>
+`;
+
+exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end funding 1`] = `
+<DocumentFragment>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <h3>
+        End current funding
+      </h3>
+      <form
+        class="usa-form usa-form"
+        id="change-funding-form"
+      >
+        <div
+          class="usa-form-group"
+        >
+          <label
+            class="usa-label"
+            for="last-reporting-period"
+          >
+            Last reporting period for current CDC - Child Day Care - undefined funding
+          </label>
+          <select
+            aria-required="true"
+            class="usa-select"
+            id="last-reporting-period"
+            name="last-reporting-period"
+          >
+            <option
+              value=""
+            >
+              - Select -
+            </option>
+          </select>
+        </div>
+        <div
+          class="display-flex flex-align-center"
+        >
+          <button
+            class="usa-button usa-button--outline"
+            type="button"
+          >
+            Cancel
+          </button>
+          <div
+            class="margin-top-1"
+          >
+            <input
+              class="usa-button"
+              type="submit"
+              value="End current funding"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div
+      class=""
+    />
+  </div>
+  <div
+    class="oec-card"
+  >
+    <div
+      class="oec-card-cell"
+    >
+      <div
+        class="display-flex flex-column flex-align-end"
+      >
+        <div>
+          <button
+            class="usa-button usa-button--unstyled margin-right-4"
+            type="button"
+          >
+            End current funding
+          </button>
+          <button
+            class="usa-button usa-button--unstyled"
+            type="button"
+          >
+            Change funding
           </button>
         </div>
       </div>
@@ -219,17 +235,25 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
           </legend>
           <div />
         </fieldset>
-        <button
-          class="usa-button usa-button--outline"
-          type="button"
+        <div
+          class="display-flex flex-align-center"
         >
-          Cancel
-        </button>
-        <input
-          class="usa-button"
-          type="submit"
-          value="Change current funding"
-        />
+          <button
+            class="usa-button usa-button--outline"
+            type="button"
+          >
+            Cancel
+          </button>
+          <div
+            class="margin-top-1"
+          >
+            <input
+              class="usa-button"
+              type="submit"
+              value="Change current funding"
+            />
+          </div>
+        </div>
       </form>
     </div>
     <div

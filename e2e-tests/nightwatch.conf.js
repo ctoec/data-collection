@@ -7,6 +7,7 @@ https: nightwatch_config = {
   live_output: false,
   output: false,
   detailed_output: false,
+  end_session_on_fail: false,
   selenium: {
     start_process: false,
     host: 'hub-cloud.browserstack.com',

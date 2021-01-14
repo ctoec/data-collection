@@ -18,7 +18,7 @@ export const removeExistingEnrollmentDataForUser = async (
 ) => {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
   let allChildren = await transaction.find(Child, {
-    relations: ['enrollments'],
+    relations: ['enrollments', 'family'],
     where: { organization: { id: In(readAccessibleOrgIds) } },
   });
   allChildren.forEach((c) => {
@@ -39,4 +39,5 @@ export const removeExistingEnrollmentDataForUser = async (
       : allChildren;
 
   await transaction.softRemove(childrenToDelete);
+  await transaction.softRemove(childrenToDelete.map((child) => child.family));
 };

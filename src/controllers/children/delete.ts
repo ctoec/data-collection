@@ -11,6 +11,7 @@ import { NotFoundError } from '../../middleware/error/errors';
 export const deleteChild = async (id: string, user: User) => {
   const readOrgIds = await getReadAccessibleOrgIds(user);
   let child = await getManager().findOne(Child, id, {
+    relations: ['family'],
     where: { organization: { id: In(readOrgIds) } },
   });
 
@@ -22,4 +23,7 @@ export const deleteChild = async (id: string, user: User) => {
   }
 
   await getManager().softRemove(child);
+  // For now, also remove family since we have a 1-to-1 child-family relationship
+  // TODO: remove this when we do family look ups
+  await getManager().softRemove(child.family);
 };

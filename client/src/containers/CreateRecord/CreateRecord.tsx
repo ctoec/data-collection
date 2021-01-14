@@ -12,6 +12,8 @@ import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { nameFormatter } from '../../utils/formatters';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
+import { stringify } from 'query-string';
 
 type LocationType = Location & {
   state: {
@@ -26,6 +28,7 @@ const CreateRecord: React.FC = () => {
   const { childId } = useParams() as { childId: string };
   const activeStep = hash.slice(1);
   const history = useHistory();
+
   const steps = listSteps(history);
   let indexOfCurrentStep = steps.findIndex((s) => s.key === activeStep);
   if (indexOfCurrentStep < 0) indexOfCurrentStep = 0;
@@ -40,6 +43,8 @@ const CreateRecord: React.FC = () => {
     }))
   );
 
+  const { rosterQuery, updateCurrentRosterCache } = useContext(RosterContext);
+
   // On initial load, set url hash to first step hash
   useEffect(() => {
     if (!activeStep) {
@@ -52,7 +57,10 @@ const CreateRecord: React.FC = () => {
   } as Child);
 
   const [refetchChild, setRefetchChild] = useState<number>(0);
-  const triggerRefetchChild = () => setRefetchChild((r) => r + 1);
+  const afterSaveSuccess = () => {
+    setRefetchChild((r) => r + 1);
+    setAlerts([]);
+  };
 
   // Fetch fresh child from API whenever refetch is triggered
   // And move to next step, if current step is complete (has no validation errors)
@@ -72,16 +80,20 @@ const CreateRecord: React.FC = () => {
 
     const moveToNextStep = () => {
       if (indexOfCurrentStep === steps.length - 1) {
-        history.push('/roster', {
-          alerts: [
-            {
-              type: 'success',
-              heading: 'Record added',
-              text: `${nameFormatter(child, {
-                capitalize: true,
-              })}'s record was added to your roster.`,
-            },
-          ],
+        history.push({
+          pathname: '/roster',
+          search: stringify(rosterQuery || {}),
+          state: {
+            alerts: [
+              {
+                type: 'success',
+                heading: 'Record added',
+                text: `${nameFormatter(child, {
+                  capitalize: true,
+                })}'s record was added to your roster.`,
+              },
+            ],
+          },
         });
       } else {
         history.replace({ hash: steps[indexOfCurrentStep + 1].key });
@@ -90,6 +102,9 @@ const CreateRecord: React.FC = () => {
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
+        updateCurrentRosterCache(updatedChild, { add: refetchChild < 1 });
+        if (refetchChild === 0) return;
+
         const currentStepStatus = steps[indexOfCurrentStep]?.status({
           child: updatedChild,
         } as RecordFormProps);
@@ -120,14 +135,18 @@ const CreateRecord: React.FC = () => {
 
   const commonFormProps: RecordFormProps = {
     child,
-    afterSaveSuccess: () => {
-      triggerRefetchChild();
-      setAlerts([]);
-    },
+    afterSaveSuccess,
     setAlerts,
     hideHeader: true,
     topHeadingLevel: 'h2',
     hideErrors,
+    showFieldOrFieldset: (_, fields) => {
+      // special case to hide enrollment exit field in create flow
+      if (fields.includes('exit')) {
+        return false;
+      }
+      return true;
+    },
   };
 
   return (
@@ -140,6 +159,8 @@ const CreateRecord: React.FC = () => {
       </p>
       <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
         <StepList
+          // Force rerender after child is fetched
+          key={child?.id}
           steps={steps}
           props={commonFormProps}
           activeStep={activeStep}
