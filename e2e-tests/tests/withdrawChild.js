@@ -2,6 +2,7 @@ const { login } = require('../utils/login');
 const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
+const { scrollToElement } = require('../utils/scrollToElement');
 
 module.exports = {
   '@tags': ['child', 'withdraw'],
@@ -18,41 +19,38 @@ module.exports = {
       locateStrategy: 'xpath',
       selector: `//*/h1[contains(., '${lastName}')]`,
     });
-
     await browser.click('xpath', "//*/button[contains(., 'Withdraw')]");
+
+    // Fill out the withdraw modal form with acceptable values
     await enterFormValue(browser, 'end-date-month', 1);
     await enterFormValue(browser, 'end-date-day', 10);
-    await enterFormValue(browser, 'end-date-year', 2030);
-    await clickFormEl(browser, 'exit-reason', { clickChildIndex: 1 });
-    await browser.element(
-      'css selector',
-      '#last-reporting-period',
-      async (result) => {
-        if (result.state === 'success') {
-          await clickFormEl(browser, 'last-reporting-period', 12);
-        }
-      }
-    );
-    await browser.click('xpath', "//*/button[contains(., 'Withdraw')]");
-    // TODO: change if we change alert header level
+    await enterFormValue(browser, 'end-date-year', 2020);
+    await clickFormEl(browser, 'exit-reason', { clickChildIndex: 3 });
+    const lastReportingPeriodArgs = ['css selector', '#last-reporting-period'];
+    await scrollToElement(browser, lastReportingPeriodArgs);
+    await clickFormEl(browser, 'last-reporting-period', {
+      clickChildIndex: 12,
+    });
+
+    // Nightwatch has an issue scrolling with the modal because there's a dropdown
+    // input with options extending "over" the button so need direct injection
+    // to click it
+    await browser.execute(function () {
+      document.querySelector('input[value="Withdraw"]').click();
+    }, []);
+
+    // These two elements say the withdraw happened when the alert appears
     await browser.waitForElementVisible(
       'xpath',
       "//*/h2[contains(., 'Record withdrawn')]"
     );
-    await browser.verify.containsText(
-      { locateStrategy: 'css selector', selector: '.usa-alert' },
-      firstName
-    );
-
     await browser.waitForElementVisible(
       'xpath',
       "//*/p[contains(., '19 children enrolled')]"
     );
-    // Expect the first tab nav content to not have that link text in it
-    await browser.assert.not.containsText(
-      { locateStrategy: 'css selector', selector: '.oec-tab-nav--content' },
-      clickedChildLinkText
-    );
+
+    // This expect allows the test to end with a success code
+    browser.expect.element('p.usa-alert__text').text.to.contain(lastName);
     browser.end();
   },
 };
