@@ -24,11 +24,13 @@ export const PreSubmitHome: React.FC = () => {
             <>
               <h2>Sites you manage at {org.providerName}:</h2>
               <ul>
-                {(user?.sites || []).map((site) => (
-                  <li key={site.siteName} className="line-height-body-4">
-                    {site.siteName}
-                  </li>
-                ))}
+                {(user?.sites || [])
+                  .filter((s) => s.organizationId === org.id)
+                  .map((site) => (
+                    <li key={site.siteName} className="line-height-body-4">
+                      {site.siteName}
+                    </li>
+                  ))}
               </ul>
             </>
           ))}

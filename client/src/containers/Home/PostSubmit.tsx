@@ -3,7 +3,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import { apiGet } from '../../utils/api';
 import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   ArrowRight,
   Card,
@@ -12,11 +12,9 @@ import {
 } from '@ctoec/component-library';
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
-  const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const orgAccess = user?.accessType === 'organization';
   const userOrgs = user?.organizations || [];
@@ -126,7 +124,6 @@ export const PostSubmitHome: React.FC = () => {
 
   return (
     <div className="grid-container margin-top-4">
-      <h1 ref={h1Ref}>Your data is complete!</h1>
       {userOrgs.map((org) => (
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-10">

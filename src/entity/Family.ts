@@ -5,8 +5,6 @@ import {
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
-  AfterUpdate,
-  getManager,
 } from 'typeorm';
 
 import {
@@ -59,7 +57,9 @@ export class Family implements FamilyInterface {
   })
   homelessness?: UndefinableBoolean;
 
-  @OneToMany(() => IncomeDetermination, (det) => det.family)
+  @OneToMany(() => IncomeDetermination, (det) => det.family, {
+    cascade: ['soft-remove'],
+  })
   @ValidateNested({ each: true })
   @ArrayMinSize(1)
   incomeDeterminations?: Array<IncomeDetermination>;
@@ -75,15 +75,4 @@ export class Family implements FamilyInterface {
 
   @DeleteDateColumn()
   deletedDate: Date;
-
-  @AfterUpdate()
-  async cascadeDeleteDets() {
-    if (this.deletedDate !== null) {
-      await Promise.all(
-        this.incomeDeterminations.map(
-          async (d) => await getManager().softRemove(IncomeDetermination, d)
-        )
-      );
-    }
-  }
 }

@@ -12,7 +12,8 @@ module.exports = {
       // If we didn't go to login page, we must already be logged in
       // Just verify the correct landing page and we're done
       else if (result.value !== 'IdentityServer4') {
-        await headerMatch(browser, 'Hello Voldemort!');
+        console.log('Already logged in');
+        // At this point it will either be "Hello Voldemort" or "Your data is complete"
         return;
       }
     });
