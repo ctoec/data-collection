@@ -153,6 +153,11 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
             // Do not enable user to edit site, unless site does not exist
             if (fields.includes('site') && (enrollment as Enrollment).site)
               return false;
+
+            // Do not enable user to edit exit, unless exit exists
+            if (fields.includes('exit') && !(enrollment as Enrollment).exit)
+              return false;
+
             return true;
           }}
         />
