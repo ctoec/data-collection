@@ -57,16 +57,20 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - change fun
           class="display-flex flex-align-center"
         >
           <button
-            class="usa-button usa-button--outline margin-top-1"
+            class="usa-button usa-button--outline"
             type="button"
           >
             Cancel
           </button>
-          <input
-            class="usa-button"
-            type="submit"
-            value="Change current funding"
-          />
+          <div
+            class="margin-top-1"
+          >
+            <input
+              class="usa-button"
+              type="submit"
+              value="Change current funding"
+            />
+          </div>
         </div>
       </form>
     </div>
@@ -147,16 +151,20 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end fundin
           class="display-flex flex-align-center"
         >
           <button
-            class="usa-button usa-button--outline margin-top-1"
+            class="usa-button usa-button--outline"
             type="button"
           >
             Cancel
           </button>
-          <input
-            class="usa-button"
-            type="submit"
-            value="End current funding"
-          />
+          <div
+            class="margin-top-1"
+          >
+            <input
+              class="usa-button"
+              type="submit"
+              value="End current funding"
+            />
+          </div>
         </div>
       </form>
     </div>
@@ -231,16 +239,20 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
           class="display-flex flex-align-center"
         >
           <button
-            class="usa-button usa-button--outline margin-top-1"
+            class="usa-button usa-button--outline"
             type="button"
           >
             Cancel
           </button>
-          <input
-            class="usa-button"
-            type="submit"
-            value="Change current funding"
-          />
+          <div
+            class="margin-top-1"
+          >
+            <input
+              class="usa-button"
+              type="submit"
+              value="Change current funding"
+            />
+          </div>
         </div>
       </form>
     </div>
