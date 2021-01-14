@@ -119,7 +119,7 @@ exports[`Landing matches snapshot 1`] = `
             </h3>
             <a
               class="usa-button usa-button--unstyled margin-bottom-3 display-block"
-              href="/privacy-policy"
+              href="/privacy"
             >
               <span
                 class="oec-text-with-icon text-underline"

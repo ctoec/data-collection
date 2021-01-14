@@ -17,6 +17,5 @@ export const makeFakeFamily = (familyStub): Family => {
     ...familyAddress,
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
-    cascadeDeleteDets: null,
   };
 };
