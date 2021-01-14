@@ -57,8 +57,8 @@ describe('EditRecord', () => {
         },
         {
           enrollment: enrollmentWithFunding,
-          before: waitExpand('Start new funding'),
-          name: 'matches snapshot - start funding',
+          before: waitExpand('Change funding'),
+          name: 'matches snapshot - change funding',
         },
         {
           enrollment: enrollmentWithFunding,
