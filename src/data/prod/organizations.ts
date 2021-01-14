@@ -141,14 +141,15 @@ async function createFundingSpace(
   }
 
   // Normal case for CDC, PSR, CSR
-  const { id: fundingSpaceId } = await _createFundingSpace(
-    orgId,
-    capacity,
-    fundingSource,
-    ageGroup,
-    time
-  );
-  if (split) {
+  const { id: fundingSpaceId } =
+    (await _createFundingSpace(
+      orgId,
+      capacity,
+      fundingSource,
+      ageGroup,
+      time
+    )) || {};
+  if (split && fundingSpaceId) {
     const [part, full] = split.split('/').map((weeks) => parseInt(weeks));
     await createFundingTimeSplit(fundingSpaceId, part, full);
   }
