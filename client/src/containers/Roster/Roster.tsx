@@ -58,6 +58,7 @@ const SUBMITTED: AlertProps = {
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
+  console.log(user);
   const isSiteLevelUser = user?.accessType === 'site';
   const userOrganizations = user?.organizations || [];
   const isMultiOrgUser = userOrganizations.length > 1;
@@ -233,13 +234,6 @@ const Roster: React.FC = () => {
   ) : (
     <RosterContent {...rosterContentProps} />
   );
-  // Replace all content and disable all switching if there's
-  // nothing in roster at all
-  if (rosterIsEmpty) {
-    rosterContent = (
-      <EmptyRosterCard boldText="There aren't any records in your roster yet" />
-    );
-  }
 
   const buttonTable = !query.withdrawn && (
     <RosterButtonsTable

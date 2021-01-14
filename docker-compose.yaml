@@ -30,7 +30,9 @@ services:
       HOST: '0.0.0.0'
       NODE_ENV: development
       DB_PASSWORD: TestPassword1
-      WINGED_KEYS_HOST: "https://winged-keys:5050"
+      WINGED_KEYS_HOST: 'https://winged-keys:5050'
+      # TODO: comment this out before merging
+      MULTI_ORG_USER: 'true'
     depends_on:
       - db
 
@@ -47,8 +49,8 @@ services:
       ACCEPT_EULA: Y
   winged-keys:
     build:
-        context: .
-        dockerfile: ./winged-keys/Dockerfile
+      context: .
+      dockerfile: ./winged-keys/Dockerfile
     environment:
       ConnectionStrings__WINGEDKEYS: Server=winged-keys-db;Database=master;User=sa;Password=TestPassword1
     volumes:
@@ -61,4 +63,4 @@ services:
       - sh
       - /entrypoint.sh
     depends_on:
-    - winged-keys-db
+      - winged-keys-db
