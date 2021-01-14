@@ -58,7 +58,6 @@ const SUBMITTED: AlertProps = {
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
-  console.log(user);
   const isSiteLevelUser = user?.accessType === 'site';
   const userOrganizations = user?.organizations || [];
   const isMultiOrgUser = userOrganizations.length > 1;
@@ -159,13 +158,13 @@ const Roster: React.FC = () => {
   // Get roster content as accordion props
   const accordionProps = siteFilteredChildren
     ? {
-        items: getAccordionItems(siteFilteredChildren, {
-          hideCapacity: isSiteLevelUser || isSingleSiteView,
-          hideOrgColumn: !isMultiOrgUser,
-          hideExitColumn: !query.withdrawn,
-        }),
-        titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
-      }
+      items: getAccordionItems(siteFilteredChildren, {
+        hideCapacity: isSiteLevelUser || isSingleSiteView,
+        hideOrgColumn: !isMultiOrgUser,
+        hideExitColumn: !query.withdrawn,
+      }),
+      titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
+    }
     : undefined;
 
   // Function to submit data to OEC, to pass down into submit button
@@ -227,13 +226,13 @@ const Roster: React.FC = () => {
         siteIsEmpty ? (
           <EmptyRosterCard boldText="This site doesn't have any records yet" />
         ) : (
-          <RosterContent {...rosterContentProps} />
-        )
+            <RosterContent {...rosterContentProps} />
+          )
       }
     </TabNav>
   ) : (
-    <RosterContent {...rosterContentProps} />
-  );
+      <RosterContent {...rosterContentProps} />
+    );
 
   const buttonTable = !query.withdrawn && (
     <RosterButtonsTable
