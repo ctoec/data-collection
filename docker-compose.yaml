@@ -31,8 +31,8 @@ services:
       NODE_ENV: development
       DB_PASSWORD: TestPassword1
       WINGED_KEYS_HOST: 'https://winged-keys:5050'
-      # TODO: comment this out before merging
-      MULTI_ORG_USER: 'true'
+      # Change this to true if you want to create a test user with permissions for multiple organizations
+      MULTI_ORG_USER: 'false'
     depends_on:
       - db
 
