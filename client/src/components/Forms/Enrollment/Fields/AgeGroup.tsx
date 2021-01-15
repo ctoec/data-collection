@@ -20,6 +20,7 @@ export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
   return (
     <RadioButtonGroup<T>
       inForm
+      hint="Choose an age group to see available funding types"
       id="age-group-radiogroup"
       legend="Age group"
       inputName="ageGroup"
