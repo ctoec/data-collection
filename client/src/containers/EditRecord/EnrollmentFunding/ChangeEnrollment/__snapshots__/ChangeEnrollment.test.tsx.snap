@@ -1519,7 +1519,7 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
           </div>
         </fieldset>
         <fieldset
-          aria-labelledby="fieldset-legend-funding-source-undefined"
+          aria-labelledby="fieldset-legend-funding-source-undefined funding-source-undefined-hint"
           class="usa-fieldset"
           id="funding-source-undefined"
         >
@@ -1532,6 +1532,12 @@ exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
               Funding source options
             </span>
           </legend>
+          <span
+            class="usa-hint text-italic"
+            id="funding-source-undefined-hint"
+          >
+            Choose an age group to see available funding types
+          </span>
           <div />
         </fieldset>
         <h2>
