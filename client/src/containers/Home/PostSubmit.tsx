@@ -13,7 +13,7 @@ import {
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
+import { mapFundingSpacesToCards } from './utils/mapFundingSpacesToCards';
 
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);

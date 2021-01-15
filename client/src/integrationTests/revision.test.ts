@@ -1,6 +1,12 @@
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 import { apiGet, ApiOpts, apiPost } from '../utils/api';
-import { Organization, Revision, User } from '../shared/models';
+import {
+  AddSiteRequest,
+  ChangeFundingSpaceRequest,
+  Organization,
+  UpdateSiteRequest,
+  User,
+} from '../shared/models';
 
 jest.mock('../utils/getCurrentHost');
 import * as util from '../utils/getCurrentHost';
@@ -11,23 +17,9 @@ const TEST_OPTS: ApiOpts = {
   accessToken: '',
 };
 
-const SITE_NAME_CHANGES = [
-  'CHANGE Gryffindor Childcare TO Slytherin Childcare',
-  'CHANGE Hufflepuff Childcare TO Ravenclaw Childcare',
-  'REMOVE Diagon Alley Funzone',
-];
-const NEW_SITE_NAME = 'Nockturn Alley School for Dark Wizards';
-const NEW_SITE_LICENSE = '123456789';
-const NEW_SITE_NO_NAEYC = true;
-const NEW_SITE_REGISTRY = '321654987';
-const FUNDING_SPACE_TYPES = [
-  'Child Day Care - Full Time',
-  'Child Day Care - Part Time/Full Time',
-  'Child Day Care - Part Time/Full Time',
-  'School Readiness - Full Day',
-  'School Readiness - School Day',
-  'Child Day Care - Part Time/Full Time',
-];
+let SITE_NAME_CHANGES: UpdateSiteRequest[];
+let ADD_SITE: AddSiteRequest[];
+let FUNDING_SPACE_CHANGES: ChangeFundingSpaceRequest[];
 
 let ALLOWED_ORGS: Organization[];
 describe('integration', () => {
@@ -45,39 +37,127 @@ describe('integration', () => {
     });
     describe('revision-request/:organizationId', () => {
       it('POST revision-request/:organizationId to send a revision request object', async () => {
-        const revisionRequest = {
-          siteNameChanges: SITE_NAME_CHANGES,
-          newSiteName: NEW_SITE_NAME,
-          newSiteLicense: NEW_SITE_LICENSE,
-          newSiteNoNaeyc: NEW_SITE_NO_NAEYC,
-          newSiteRegistryId: NEW_SITE_REGISTRY,
-          fundingSpaceTypes: FUNDING_SPACE_TYPES,
-        } as Revision;
-        const { id } = await apiPost(
+        SITE_NAME_CHANGES = [
+          {
+            organizationId: organization.id,
+            siteId: 1,
+            newName: 'Gryffindor Childcare',
+          } as UpdateSiteRequest,
+          {
+            organizationId: organization.id,
+            siteId: 2,
+            newName: 'Hufflepuff Childcare',
+          } as UpdateSiteRequest,
+          {
+            organizationId: organization.id,
+            siteId: 3,
+            remove: true,
+          } as UpdateSiteRequest,
+        ];
+
+        ADD_SITE = [
+          {
+            organizationId: organization.id,
+            siteName: 'Ravenclaw Childcare',
+            licenseId: '123456789',
+            registryId: '987654321',
+          } as AddSiteRequest,
+        ];
+
+        FUNDING_SPACE_CHANGES = [
+          {
+            organizationId: organization.id,
+            fundingSpace: 'Infant/toddler - Child Day Care - Full time',
+            shouldHave: true,
+          } as ChangeFundingSpaceRequest,
+          {
+            organizationId: organization.id,
+            fundingSpace: 'Preschool - State Head Start - Extended day',
+            shouldHave: false,
+          } as ChangeFundingSpaceRequest,
+        ];
+
+        const { status } = await apiPost(
           `revision-request/${organization.id}`,
-          revisionRequest,
-          TEST_OPTS
+          {
+            updateSiteRequests: SITE_NAME_CHANGES,
+            addSiteRequests: ADD_SITE,
+            fundingSpaceRequests: FUNDING_SPACE_CHANGES,
+          },
+          { ...TEST_OPTS, jsonParse: false }
         );
-        expect(id).not.toBeUndefined();
+        expect(status).toEqual(201);
       });
 
       // There's no actual way within the app to invoke the get for this route,
       // this test is just here to make sure we can retrieve the same information
       // from the DB that we sent (just a sanity check that everything saved)
-      it('GET revision-request/:organizationId for posted revision request', async () => {
-        const revisions = await apiGet(
-          `revision-request/${organization.id}`,
+      it('GET revision-request/update-sites/:organizationId', async () => {
+        const siteRevisions = await apiGet(
+          `revision-request/update-sites/${organization.id}`,
           '',
           TEST_OPTS
         );
-        expect(revisions.length).toBeGreaterThan(0);
-        expect(revisions[0].siteNameChanges).toEqual(SITE_NAME_CHANGES);
-        expect(revisions[0].newSiteName).toEqual(NEW_SITE_NAME);
-        expect(revisions[0].newSiteNoNaeyc).toBeTruthy();
-        expect(revisions[0].newSiteRegistryId).toEqual(NEW_SITE_REGISTRY);
-        revisions[0].fundingSpaceTypes.forEach((fst: string, i: number) => {
-          expect(fst).toEqual(FUNDING_SPACE_TYPES[i]);
-        });
+        expect(siteRevisions.length).toBeGreaterThan(0);
+
+        // Use find functions to identify requests that map to the ones we sent,
+        // in case we run the tests more than once and the DB has lots of
+        // requests in it
+        const updateOne = siteRevisions.find(
+          (elt: UpdateSiteRequest) => elt.siteId === SITE_NAME_CHANGES[0].siteId
+        );
+        expect(updateOne.newName).toEqual(SITE_NAME_CHANGES[0].newName);
+        expect(updateOne.remove).toBeFalsy();
+        const updateTwo = siteRevisions.find(
+          (elt: UpdateSiteRequest) => elt.siteId === SITE_NAME_CHANGES[1].siteId
+        );
+        expect(updateTwo.newName).toEqual(SITE_NAME_CHANGES[1].newName);
+        expect(updateTwo.remove).toBeFalsy();
+        const updateThree = siteRevisions.find(
+          (elt: UpdateSiteRequest) => elt.siteId === SITE_NAME_CHANGES[2].siteId
+        );
+        expect(updateThree.remove).toBeTruthy();
+      });
+
+      it('GET revision-request/add-sites/:organizationId', async () => {
+        const siteAdditions = await apiGet(
+          `revision-request/add-sites/${organization.id}`,
+          '',
+          TEST_OPTS
+        );
+        expect(siteAdditions.length).toBeGreaterThan(0);
+
+        // Use find functions to identify requests that map to the ones we sent,
+        // in case we run the tests more than once and the DB has lots of
+        // requests in it
+        const updateOne = siteAdditions.find(
+          (elt: AddSiteRequest) => elt.registryId === ADD_SITE[0].registryId
+        );
+        expect(updateOne.siteName).toEqual(ADD_SITE[0].siteName);
+        expect(updateOne.licenseId).toEqual(ADD_SITE[0].licenseId);
+      });
+
+      it('GET revision-request/change-funding-spaces/:organizationId', async () => {
+        const fundingSpaceChanges = await apiGet(
+          `revision-request/change-funding-spaces/${organization.id}`,
+          '',
+          TEST_OPTS
+        );
+        expect(fundingSpaceChanges.length).toBeGreaterThan(0);
+
+        // Use find functions to identify requests that map to the ones we sent,
+        // in case we run the tests more than once and the DB has lots of
+        // requests in it
+        const updateOne = fundingSpaceChanges.find(
+          (elt: ChangeFundingSpaceRequest) =>
+            elt.fundingSpace === FUNDING_SPACE_CHANGES[0].fundingSpace
+        );
+        expect(updateOne.shouldHave).toBeTruthy();
+        const updateTwo = fundingSpaceChanges.find(
+          (elt: ChangeFundingSpaceRequest) =>
+            elt.fundingSpace === FUNDING_SPACE_CHANGES[1].fundingSpace
+        );
+        expect(updateTwo.remove).toBeFalsy();
       });
     });
     afterAll(() => {

@@ -1,37 +1,19 @@
 import { Button, Checkbox, TextInput } from '@ctoec/component-library';
 import Divider from '@material-ui/core/Divider';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { Revision } from '../../shared/models/db/Revision';
-import { apiPost } from '../../utils/api';
+import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
+import { AgeGroup, FundingSpace, Site } from '../../shared/models';
+import { AddSiteRequest } from '../../shared/models/db/AddSiteRequest';
+import { ChangeFundingSpaceRequest } from '../../shared/models/db/ChangeFundingSpaceRequest';
+import { UpdateSiteRequest } from '../../shared/models/db/UpdateSiteRequest';
+import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-
-const FUNDING_SPACE_FORM_TYPES = {
-  infant: [
-    'Child Day Care - Part Time',
-    'Child Day Care - Full Time',
-    'Child Day Care - Part Time/Full Time',
-  ],
-  preschool: [
-    'Child Day Care - Part Time',
-    'Child Day Care - Full Time',
-    'Child Day Care - Part Time/Full Time',
-    'School Readiness - Full Day',
-    'School Readiness - School Day',
-    'School Readiness - Part Day',
-    'School Readiness - Extended Day',
-    'Smart Start',
-  ],
-  school: [
-    'Child Day Care - Part Time',
-    'Child Day Care - Full Time',
-    'Child Day Care - Part Time/Full Time',
-  ],
-  headstart: ['Some enrollments are funded by the State Headstart Supplement'],
-};
+import { getAddNewSiteForm } from './utils/getAddNewSiteForm';
+import { getFundingSpaceCheckboxes } from './utils/getFundingSpaceCheckboxes';
 
 /**
  * Form to allow a user to request changes to their accessible sites
@@ -46,17 +28,102 @@ export const RevisionRequest: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
   const h1Ref = getH1RefForTitle();
-  const [revisionRequest, setRevisionRequest] = useState<any>({
-    siteNameChanges: [],
-    newSiteName: '',
-    newSiteLicense: '',
-    newSiteLicenseExempt: false,
-    newSiteNaeycId: '',
-    newSiteIsHeadstart: false,
-    newSiteNoNaeyc: false,
-    newSiteRegistryId: '',
-    fundingSpaceTypes: [],
-  });
+
+  const userSites = user?.sites || [];
+  const [updateRequests, setUpdateRequests] = useState<UpdateSiteRequest[]>([]);
+  useEffect(() => {
+    if (user) {
+      // Store all the sites the user works with in local state
+      // so that we can easily modify them and send a single
+      // change map to the backend
+      userSites.forEach((s) => {
+        const siteObj = {
+          siteId: s.id,
+          newName: '',
+          remove: false,
+        } as UpdateSiteRequest;
+        setUpdateRequests((o) => {
+          return [...o, siteObj];
+        });
+      });
+    }
+  }, [user]);
+
+  const [addRequests, setAddRequests] = useState<AddSiteRequest[]>([]);
+
+  // Start by determining all potential funding spaces so we know what
+  // we need to precheck
+  const [userFundingSpaces, setUserFundingSpaces] = useState<
+    ChangeFundingSpaceRequest[]
+  >([]);
+  useEffect(() => {
+    const fsOptions: ChangeFundingSpaceRequest[] = [];
+    Object.values(AgeGroup).map((ag) => {
+      FUNDING_SOURCE_TIMES.forEach((fst) => {
+        if (!fst.ageGroupLimitations || fst.ageGroupLimitations.includes(ag)) {
+          fst.fundingTimes.forEach((time) => {
+            const stringRep = ag + ' - ' + fst.displayName + ' - ' + time.value;
+            fsOptions.push({
+              fundingSpace: stringRep,
+              shouldHave: false,
+            } as ChangeFundingSpaceRequest);
+          });
+        }
+      });
+    });
+    setUserFundingSpaces((o) => fsOptions);
+  }, []);
+
+  // Now fetch all the funding spaces that the user and their org
+  // have access to, and when we generate the funding space
+  // checkboxes on the page, mark all these as true
+  const [fundingCheckboxes, setFundingCheckboxes] = useState<JSX.Element[]>();
+  useEffect(() => {
+    if (user && accessToken && userFundingSpaces.length !== 0) {
+      apiGet('funding-spaces', accessToken)
+        .then((res: FundingSpace[]) => {
+          res.forEach((fs) => {
+            const stringRep =
+              fs.ageGroup +
+              ' - ' +
+              fs.source.split('-')[1].trim() +
+              ' - ' +
+              fs.time;
+            const match = userFundingSpaces.find(
+              (fs) => fs.fundingSpace === stringRep
+            );
+            if (match) {
+              setUserFundingSpaces((o) => {
+                match.shouldHave = true;
+                return o;
+              });
+            }
+          });
+          setFundingCheckboxes(
+            getFundingSpaceCheckboxes(userFundingSpaces, setUserFundingSpaces)
+          );
+        })
+        .catch((err) => {
+          throw new Error(err);
+        });
+    }
+  }, [user, accessToken, userFundingSpaces.length]);
+
+  const updateSite = (
+    s: Site,
+    opts?: {
+      updatedName?: string;
+      removeSite?: boolean;
+    }
+  ) => {
+    const { updatedName, removeSite } = opts || {};
+    setUpdateRequests((o) => {
+      const site = updateRequests.find((_site) => _site.siteId === s.id);
+      if (site && updatedName) site.newName = updatedName;
+      if (site && removeSite) site.remove = removeSite;
+      return o;
+    });
+  };
 
   // Create the nice tabular format of sites the user has
   // access to, along with the text input fields in which
@@ -88,16 +155,9 @@ export const RevisionRequest: React.FC = () => {
                 id={`${s.siteName}-rename`}
                 type="input"
                 onChange={(e) => {
-                  const changeReq = `CHANGE ${s.siteName} TO ${e.target.value}`;
-                  setRevisionRequest((o: any) => {
-                    let newSites = o.siteNameChanges.filter(
-                      (elt: string) => !elt.includes(s.siteName)
-                    );
-                    newSites.push(changeReq);
-                    o.siteNameChanges = newSites;
-                    return o;
-                  });
-                  return e.target.value;
+                  const change = e.target.value;
+                  updateSite(s, { updatedName: change });
+                  return change;
                 }}
               />
             </div>
@@ -107,15 +167,7 @@ export const RevisionRequest: React.FC = () => {
                 text=""
                 onChange={(e) => {
                   const checked = e.target.checked;
-                  const changeReq = `REMOVE ${s.siteName}`;
-                  setRevisionRequest((o: any) => {
-                    let newSites = o.siteNameChanges.filter(
-                      (elt: string) => !elt.includes(s.siteName)
-                    );
-                    if (checked) newSites.push(changeReq);
-                    o.siteNameChanges = newSites;
-                    return o;
-                  });
+                  updateSite(s, { removeSite: checked });
                   return checked;
                 }}
               />
@@ -129,34 +181,34 @@ export const RevisionRequest: React.FC = () => {
     </>
   );
 
-  // Generate the checkboxes for whether a user wishes to modify
-  // their org's access to particular funding spaces
-  const getFundingSpaceCheckbox = (ageGroup: string, space: string) => {
-    return (
-      <Checkbox
-        id={`funding-space-check-${ageGroup}-${space}`}
-        text={space}
-        onChange={(e) => {
-          const checked = e.target.checked;
-          const spaceUpdate = `${ageGroup} ${space}`;
-          setRevisionRequest((o: any) => {
-            let newSpaces = o.fundingSpaceTypes.filter(
-              (elt: string) => elt !== spaceUpdate
-            );
-            if (checked) newSpaces.push(spaceUpdate);
-            o.fundingSpaceTypes = newSpaces;
-            return o;
-          });
-          return checked;
-        }}
-      />
-    );
+  const addNewSite = () => {
+    const newSite = {
+      siteName: '',
+      licenseId: '',
+      naeycId: '',
+      registryId: '',
+    } as AddSiteRequest;
+    setAddRequests((o) => {
+      return [...o, newSite];
+    });
   };
 
+  const addSiteSection = addRequests.map((addReq, idx) =>
+    getAddNewSiteForm(addReq, idx, setAddRequests)
+  );
+
   // Send the accumulated changes to be written to the DB
-  const submitRequest = (_revision: Revision) => {
+  const submitRequest = () => {
+    const revisionRequest = {
+      updateSiteRequests: updateRequests.filter(
+        (r) => r.newName !== '' || r.remove
+      ),
+      addSiteRequests: addRequests,
+      fundingSpaceRequests: userFundingSpaces,
+    };
     apiPost(`revision-request/${userOrgs[0].id}`, revisionRequest, {
       accessToken,
+      jsonParse: false,
     }).catch((err) => {
       throw new Error(err);
     });
@@ -189,88 +241,8 @@ export const RevisionRequest: React.FC = () => {
           Fill out this section if your program manages a site not included in
           your ECE Reporter account.
         </p>
-        <TextInput
-          label="New site name"
-          id="New-site-name"
-          type="input"
-          onChange={(e) => {
-            setRevisionRequest((o: any) => {
-              o.newSiteName = e.target.value;
-              return o;
-            });
-            return e.target.value;
-          }}
-        />
-        <TextInput
-          label="License ID"
-          id="New-site-license"
-          type="input"
-          onChange={(e) => {
-            setRevisionRequest((o: any) => {
-              o.newSiteLicense = e.target.value;
-              return o;
-            });
-            return e.target.value;
-          }}
-        />
-        <Checkbox
-          id="new-site-license-exempt-check"
-          text="This site is license exempt"
-          onChange={(e) => {
-            setRevisionRequest((o: any) => {
-              o.newSiteLicenseExempt = e.target.checked;
-              return o;
-            });
-            return e.target.checked;
-          }}
-        />
-        <TextInput
-          label="NAEYC ID"
-          id="New-site-naeyc"
-          type="input"
-          onChange={(e) => {
-            setRevisionRequest((o: any) => {
-              o.newSiteNaeycId = e.target.value;
-              return o;
-            });
-            return e.target.value;
-          }}
-        />
-        <Checkbox
-          id="new-site-headstart-check"
-          text="Headstart"
-          onChange={(e) => {
-            setRevisionRequest((o: any) => {
-              o.newSiteIsHeadstart = e.target.checked;
-              return o;
-            });
-            return e.target.checked;
-          }}
-        />
-        <Checkbox
-          id="new-site-no-naeyc-check"
-          text="New - Doesn't have NAEYC ID yet"
-          onChange={(e) => {
-            setRevisionRequest((o: any) => {
-              o.newSiteNoNaeyc = e.target.checked;
-              return o;
-            });
-            return e.target.checked;
-          }}
-        />
-        <TextInput
-          label="Registry ID"
-          id="New-site-registry"
-          type="input"
-          onChange={(e) => {
-            const change = e.target.value;
-            setRevisionRequest((o: any) => {
-              o.newSiteRegistryId = change;
-              return o;
-            });
-            return change;
-          }}
-        />
+        {addSiteSection}
+        <Button appearance="default" text="Add New Site" onClick={addNewSite} />
       </div>
       <div className="tablet:grid-col-6 margin-top-4 margin-bottom-4">
         <Divider />
@@ -278,32 +250,17 @@ export const RevisionRequest: React.FC = () => {
       <div className="tablet:grid-col-6">
         <h2>Funding space types</h2>
         <p className="usa-hint">
-          Request correction to the funding types received by your program in
+          Request corrections to the funding types received by your program in
           the section below.
         </p>
-        <p className="text-bold">Infant/toddler</p>
-        {FUNDING_SPACE_FORM_TYPES.infant.map((type) =>
-          getFundingSpaceCheckbox('Infant/toddler', type)
-        )}
-        <p className="text-bold">Preschool</p>
-        {FUNDING_SPACE_FORM_TYPES.preschool.map((type) =>
-          getFundingSpaceCheckbox('Preschool', type)
-        )}
-        <p className="text-bold">School aged</p>
-        {FUNDING_SPACE_FORM_TYPES.school.map((type) =>
-          getFundingSpaceCheckbox('School aged', type)
-        )}
-        <p className="text-bold">State Headstart</p>
-        {FUNDING_SPACE_FORM_TYPES.headstart.map((type) =>
-          getFundingSpaceCheckbox('Headstart', type)
-        )}
+        {fundingCheckboxes}
       </div>
       <div className="grid-row grid-gap margin-top-2 margin-bottom-2">
         <Button appearance="outline" text="Cancel" href="/home" />
         <Button
           appearance="default"
           text="Send request"
-          onClick={() => submitRequest(revisionRequest)}
+          onClick={submitRequest}
         />
       </div>
     </div>

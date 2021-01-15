@@ -9,7 +9,7 @@ import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg'
 import { apiGet } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { HowToUseStep } from './HowToUseStep';
-import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
+import { mapFundingSpacesToCards } from './utils/mapFundingSpacesToCards';
 
 export const PreSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
