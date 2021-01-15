@@ -47,7 +47,7 @@ const addUser = passAsyncError(
         );
 
         if (res?.data?.sub === req.claims.sub) {
-          fawkesUser = await createUserWithSingleOrgPermissions(
+          fawkesUser = await createUserWithOrgPermissions(
             req.claims.sub,
             res.data
           );
@@ -130,7 +130,7 @@ async function getUserFromWingedKeys(
  * @param wingedKeysId
  * @param wingedKeysUser
  */
-async function createUserWithSingleOrgPermissions(
+async function createUserWithOrgPermissions(
   wingedKeysId: string,
   wingedKeysUser: { given_name: string; family_name: string }
 ): Promise<User> {
@@ -146,16 +146,25 @@ async function createUserWithSingleOrgPermissions(
 
     user = await manager.save(_user);
 
-    const org: Organization = await manager.findOne(Organization, {
-      where: { providerName: organizations[0].providerName },
-    });
-    if (org) {
-      const orgPermsForUser = manager.create(OrganizationPermission, {
-        user,
-        organizationId: org.id,
-      });
-      await manager.save(orgPermsForUser);
+    let orgs: Organization[] = [];
+    if (process.env.MULTI_ORG_USER === 'true') {
+      orgs = await manager.find(Organization);
+    } else {
+      orgs = [
+        await manager.findOne(Organization, {
+          where: { providerName: organizations[0].providerName },
+        }),
+      ];
     }
+    await Promise.all(
+      orgs.map(async (org) => {
+        const orgPermsForUser = manager.create(OrganizationPermission, {
+          user,
+          organizationId: org.id,
+        });
+        return manager.save(orgPermsForUser);
+      })
+    );
   });
 
   return user;

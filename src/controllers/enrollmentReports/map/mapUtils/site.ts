@@ -1,6 +1,6 @@
-import { Site } from '../../../entity';
-import { EnrollmentReportRow } from '../../../template';
-import { normalizeString } from '../../../utils/normalizeString';
+import { Site } from '../../../../entity';
+import { EnrollmentReportRow } from '../../../../template';
+import { normalizeString } from '../../../../utils/normalizeString';
 
 /**
  * Look up site from user's sites that matches source site name,

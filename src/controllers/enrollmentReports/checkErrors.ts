@@ -21,7 +21,7 @@ const processErrorsInFields = (
   errorOccursIn: Object
 ) => {
   // Base case: error is not in a nested field
-  if (error.children.length === 0) {
+  if (!error.children?.length) {
     // There are some validation errors that aren't related to
     // fields in the spreadsheet, so this conditional ensures
     // the error modal only reports actual _sheet_ errors as

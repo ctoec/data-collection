@@ -1,6 +1,6 @@
-import { FundingSource } from '../../../../client/src/shared/models';
-import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
-import { normalizeString } from '../../../utils/normalizeString';
+import { FundingSource } from '../../../../../client/src/shared/models';
+import { FUNDING_SOURCE_TIMES } from '../../../../../client/src/shared/constants';
+import { normalizeString } from '../../../../utils/normalizeString';
 
 /**
  * Leverage funding source -> time -> format mappings from FUNDING_SOURCE_TIMES
