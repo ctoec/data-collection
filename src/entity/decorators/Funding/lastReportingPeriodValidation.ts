@@ -10,7 +10,7 @@ export function LastReportingPeriodAfterFirst(
 ): PropertyDecorator {
   return function (object: Object, propertyName: string) {
     registerDecorator({
-      name: 'lastReportingPeriod',
+      name: 'lastReportingPeriodAfterFirst',
       target: object.constructor,
       propertyName: propertyName,
       options: { message: lastReportingPeriodInvalid, ...validationOptions },
