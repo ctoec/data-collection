@@ -14,7 +14,8 @@ const EXPORTED_ORG_ROW_PROPS = Object.keys(new ExportedOrgRow());
 
 export const createSubmittedView = async () => {
   const allOrgs = await getManager().find(Organization);
-  const orgExport = allOrgs.map(async (org) => {
+  let orgExport: string[][] = [];
+  for (const org of allOrgs) {
     // Determine which orgs submitted data
     const report = await getManager().findOne(OECReport, {
       where: { organizationId: org.id },
@@ -52,15 +53,15 @@ export const createSubmittedView = async () => {
 
     // Now built the structure that holds everything so we can write
     // TODO: What should we put in the contact field?
-    const orgRow = [
+    const orgRow: string[] = [
       org.providerName,
       orgIsSubmitted ? 'Yes' : 'No',
       orgIsSubmitted ? 'Yes' : someoneLoggedIn,
       '',
       orgIsSubmitted ? enrollmentsAtSites : [],
     ];
-    return orgRow;
-  });
+    orgExport.push(orgRow);
+  }
   return orgExport;
 };
 
