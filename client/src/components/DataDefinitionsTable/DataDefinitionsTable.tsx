@@ -89,7 +89,7 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
                 <Table
                   id={`data-requirements-${sectionName.replace(' ', '-')}`}
                   data={sectionData}
-                  rowId={(row) => kebabCase(row.formattedName)}
+                  rowId={(row) => kebabCase(row.formattedName) + '-field'}
                   rowKey={(row) => (row ? row.formattedName : '')}
                   columns={TableColumns}
                   defaultSortColumn={0}
