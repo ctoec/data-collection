@@ -38,7 +38,7 @@ const DataRequirements: React.FC = () => {
       </p>
       <ul>
         {Object.values(FundingSource).map((fundingSource) => (
-          <li>{fundingSource.split('-')[1]}</li>
+          <li>{fundingSource}</li>
         ))}
       </ul>
       <p>

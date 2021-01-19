@@ -1,7 +1,7 @@
 import {
   Gender,
   AgeGroup,
-  FundingSource,
+  FUNDING_SOURCE_FULL_VALUES,
   CareModel,
   BirthCertificateType,
   ExitReason,
@@ -484,7 +484,7 @@ export class EnrollmentReportRow {
     definition:
       'The type of service being provided, as described by the funding source',
     reason: UTILIZATION_REPORTING_REASON,
-    format: makeFormatOptionsList(Object.values(FundingSource)),
+    format: makeFormatOptionsList(Object.values(FUNDING_SOURCE_FULL_VALUES)),
     example: 'CSR',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
