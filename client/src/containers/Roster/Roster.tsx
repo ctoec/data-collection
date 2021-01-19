@@ -38,7 +38,7 @@ import { EmptyRosterCard } from './EmptyRosterCard';
 import { useAlerts } from '../../hooks/useAlerts';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { getChildrenWithErrorsAlert } from './rosterUtils/getChildrenWithErrorsAlert';
-import { DataCompleteModal } from './DataComleteModal';
+import { DataCompleteModal } from './DataCompleteModal';
 
 export type RosterQueryParams = {
   organization?: string;

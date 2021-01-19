@@ -1,4 +1,4 @@
-import { Button, Modal } from '@ctoec/component-library';
+import { Button, Modal, Stars } from '@ctoec/component-library';
 import React from 'react';
 
 type DataCompleteModalProps = {
