@@ -1,6 +1,5 @@
 ---
 name: Feature request
-labels: bug
 about: Create a report to help us improve
 ---
 
@@ -11,3 +10,6 @@ A clear and concise description of what the bug is.
 
 ## Additional Context
 Add any other context about the problem here.
+
+
+## Designs (if applicable)
