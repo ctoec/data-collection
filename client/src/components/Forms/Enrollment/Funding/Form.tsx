@@ -121,8 +121,8 @@ export const FundingForm: React.FC<FundingFormProps> = ({
         accessor={(data) => data.at('firstReportingPeriod')}
         showStatus
       />
-      {/* Only display last reporting period field if a value already exists */}
-      {!!funding.lastReportingPeriod && (
+      {/* Only display last reporting period field if a value already exists OR if the owning enrollment is exited */}
+      {(!!funding.lastReportingPeriod || enrollment.exit) && (
         <ReportingPeriodField<Funding>
           fundingSource={funding.fundingSpace.source}
           accessor={(data) => data.at('lastReportingPeriod')}

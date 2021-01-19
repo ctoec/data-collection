@@ -6,16 +6,18 @@ import {
   FormSubmitButton,
   Modal,
 } from '@ctoec/component-library';
-import { Enrollment, Child, FundingSource } from '../../../shared/models';
-import { apiPost } from '../../../utils/api';
-import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
+import { stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
+import { Enrollment, Child, FundingSource } from '../../../shared/models';
+import { apiPost, apiGet } from '../../../utils/api';
+import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentEndDateField } from '../../../components/Forms/Enrollment/Fields';
 import { ReportingPeriodField } from '../../../components/Forms/Enrollment/Funding/Fields';
 import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
 import { useAlerts } from '../../../hooks/useAlerts';
 import { nameFormatter } from '../../../utils/formatters';
+import RosterContext from '../../../contexts/RosterContext/RosterContext';
 
 type WithdrawProps = {
   child: Child;
@@ -33,6 +35,8 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
 
+  const { rosterQuery, updateCurrentRosterCache } = useContext(RosterContext);
+
   const onSubmit = (withdraw: Withdraw) => {
     setIsSaving(true);
     apiPost(`enrollments/${enrollment.id}/withdraw`, withdraw, {
@@ -40,18 +44,24 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       jsonParse: false,
     })
       .then(() => {
-        toggleIsOpen();
-        history.push('/roster', {
-          alerts: [
-            {
-              type: 'success',
-              heading: 'Record withdrawn',
-              text: `${nameFormatter(child, {
-                firstOnly: true,
-                capitalize: true,
-              })} has been withdrawn from your program`,
+        apiGet(`children/${child.id}`, accessToken).then((withdrawnChild) => {
+          updateCurrentRosterCache(withdrawnChild);
+          toggleIsOpen();
+          history.push({
+            pathname: '/roster',
+            search: stringify(rosterQuery || {}),
+            state: {
+              alerts: [
+                {
+                  type: 'success',
+                  heading: 'Record withdrawn',
+                  text: `${nameFormatter(child, {
+                    capitalize: true,
+                  })} has been withdrawn from your program`,
+                },
+              ],
             },
-          ],
+          });
         });
       })
       .catch((err) => {

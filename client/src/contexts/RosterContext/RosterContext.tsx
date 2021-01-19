@@ -11,14 +11,23 @@ export type RosterQueryParams = {
   withdrawn?: boolean;
 };
 
+type UpdateCacheOpts = {
+  remove?: boolean;
+  add?: boolean;
+};
 export type RosterContextType = {
-  updateCurrentRosterCache: (updatedChild: Child) => void;
+  updateCurrentRosterCache: (
+    updatedChild: Child,
+    opts?: UpdateCacheOpts
+  ) => void;
   setRosterQuery: (_: RosterQueryParams) => void;
+  rosterQuery: RosterQueryParams | undefined;
 };
 
 const RosterContext = React.createContext<RosterContextType>({
   updateCurrentRosterCache: () => {},
   setRosterQuery: () => {},
+  rosterQuery: undefined,
 });
 
 const { Provider } = RosterContext;
@@ -34,7 +43,11 @@ const RosterProvider: React.FC = ({ children }) => {
    * changes should actually be applied, I guess? because they're not)
    * @param updatedChild
    */
-  function updateCurrentRosterCache(updatedChild: Child) {
+  function updateCurrentRosterCache(
+    updatedChild: Child,
+    opts?: UpdateCacheOpts
+  ) {
+    const { remove, add } = opts || {};
     // If user has not visited roster (there is no query stored in this context)
     // then we don't need to update a roster cache
     if (rosterQuery) {
@@ -57,14 +70,21 @@ const RosterProvider: React.FC = ({ children }) => {
       // If cache value exists, update it (immutably, with cloneDeep)
       if (key) {
         const paginatedChildren: Child[][] = cloneDeep(cache.get(key) || []);
-        for (const page of paginatedChildren) {
-          const childIdx = page.findIndex((c) => c.id === updatedChild.id);
-          if (childIdx > -1) {
-            page.splice(childIdx, 1, updatedChild);
-            break;
+        if (add) {
+          paginatedChildren[paginatedChildren.length - 1].push(updatedChild);
+        } else {
+          for (const page of paginatedChildren) {
+            const childIdx = page.findIndex((c) => c.id === updatedChild.id);
+            if (childIdx > -1) {
+              if (remove) {
+                page.splice(childIdx, 1);
+                break;
+              }
+              page.splice(childIdx, 1, updatedChild);
+              break;
+            }
           }
         }
-
         cache.set(key, paginatedChildren);
       }
     }
@@ -75,6 +95,7 @@ const RosterProvider: React.FC = ({ children }) => {
       value={{
         updateCurrentRosterCache,
         setRosterQuery,
+        rosterQuery,
       }}
     >
       {children}

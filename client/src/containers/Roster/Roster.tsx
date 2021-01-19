@@ -233,21 +233,6 @@ const Roster: React.FC = () => {
   ) : (
     <RosterContent {...rosterContentProps} />
   );
-  // Replace all content and disable all switching if there's
-  // nothing in roster at all
-  if (rosterIsEmpty) {
-    rosterContent = (
-      <EmptyRosterCard boldText="There aren't any records in your roster yet" />
-    );
-  }
-
-  const buttonTable = !query.withdrawn && (
-    <RosterButtonsTable
-      filterByMonth={queryMonth}
-      setFilterByMonth={updateActiveMonth}
-      updateWithdrawnOnly={updateWithdrawnOnly}
-    />
-  );
 
   return (
     <>
@@ -290,7 +275,13 @@ const Roster: React.FC = () => {
           </div>
         </div>
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-          {!rosterIsEmpty && buttonTable}
+          {!query.withdrawn && (
+            <RosterButtonsTable
+              filterByMonth={queryMonth}
+              setFilterByMonth={updateActiveMonth}
+              updateWithdrawnOnly={updateWithdrawnOnly}
+            />
+          )}
           <LoadingWrapper text="Loading your roster..." loading={loading}>
             {rosterContent}
           </LoadingWrapper>
@@ -301,6 +292,7 @@ const Roster: React.FC = () => {
           <Button text="Back to home" href="/home" appearance="outline" />
           {!isSiteLevelUser && (
             <Button
+              id="submit-button"
               text="My Jul-Dec data is complete"
               onClick={submitToOEC}
               disabled={!query.organization}

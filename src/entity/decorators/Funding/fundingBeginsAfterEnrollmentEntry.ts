@@ -8,7 +8,7 @@ export function FundingBeginsAfterEnrollmentEntry(
 ): PropertyDecorator {
   return function (object: Funding, propertyName: string) {
     registerDecorator({
-      name: 'firstReportingPeriod',
+      name: 'firstReportingPeriodAfterEntry',
       target: object.constructor,
       propertyName,
       options: { message, ...validationOptions },

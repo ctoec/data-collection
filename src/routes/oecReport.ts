@@ -10,7 +10,9 @@ oecReportRouter.get(
   '/:organizationId',
   passAsyncError(async (req: Request, res: Response) => {
     const organizationId: number = Number(req.params['organizationId']);
-    const foundOrg = await getManager().findOne(OECReport, organizationId);
+    const foundOrg = await getManager().findOne(OECReport, {
+      where: { organizationId },
+    });
     res.send({ submitted: foundOrg ? true : false });
   })
 );

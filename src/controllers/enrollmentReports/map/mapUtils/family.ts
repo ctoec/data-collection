@@ -1,9 +1,9 @@
-import { UndefinableBoolean } from '../../../../client/src/shared/models';
-import { EntityManager } from 'typeorm';
-import { Family, Organization, User } from '../../../entity';
+import { UndefinableBoolean } from '../../../../../client/src/shared/models';
+import { Organization, Family } from '../../../../entity';
 
-import { EnrollmentReportRow } from '../../../template';
+import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum } from './enum';
+import { getManager } from 'typeorm';
 
 /**
  * Create Family object (with IncomeDetermination) from FlattenedEnrollment
@@ -12,11 +12,8 @@ import { mapEnum } from './enum';
  * @param source
  */
 export const mapFamily = (
-  transaction: EntityManager,
   source: EnrollmentReportRow,
-  organization: Organization,
-  user: User,
-  save: boolean
+  organization: Organization
 ) => {
   const homelessness: UndefinableBoolean = mapEnum(
     UndefinableBoolean,
@@ -24,24 +21,12 @@ export const mapFamily = (
     { isUndefineableBoolean: true }
   );
 
-  let family = {
+  return getManager().create(Family, {
     streetAddress: source.streetAddress,
     town: source.town,
     state: source.state,
     zipCode: source.zipCode,
     homelessness,
     organization,
-  } as Family;
-
-  if (save) {
-    family = transaction.create(Family, {
-      ...family,
-      updateMetaData: {
-        author: user,
-      },
-    });
-    return transaction.save(family);
-  }
-
-  return family;
+  });
 };

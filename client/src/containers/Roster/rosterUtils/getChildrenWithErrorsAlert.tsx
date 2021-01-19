@@ -16,32 +16,33 @@ export function getChildrenWithErrorsAlert(
 ): AlertProps | undefined {
   if (!numberOfChildrenWithErrors && !numberOfWithdrawnChildrenWithErrors)
     return;
-  let alertText = `You'll need to add required info for
-        ${pluralize('record', numberOfChildrenWithErrors, true)} before
-        submitting your data to OEC. Update with `;
+  let alertText = `Required information is missing for
+        ${pluralize('record', numberOfChildrenWithErrors, true)}.`;
   if (numberOfWithdrawnChildrenWithErrors > 0) {
-    alertText = `You'll need to add required info for ${numberOfChildrenWithErrors} active ${pluralize(
+    alertText = `Required information is missing for ${numberOfChildrenWithErrors} active ${pluralize(
       'record',
       numberOfChildrenWithErrors
     )} and ${numberOfWithdrawnChildrenWithErrors} withdrawn ${pluralize(
       'record',
       numberOfWithdrawnChildrenWithErrors
-    )} before
-        submitting your data to OEC. Update all records that need info with `;
+    )}.`;
   }
   return {
     text: (
-      <span>
-        {alertText}
-        <Link
-          className="usa-button usa-button--unstyled"
-          to={`/batch-edit?${stringify({ organizationId })}`}
-        >
-          batch editing.
-        </Link>
-      </span>
+      <>
+        <div>{alertText}</div>
+        <div>
+          <Link
+            className="usa-button usa-button--unstyled"
+            to={`/batch-edit?${stringify({ organizationId })}`}
+          >
+            Add missing info
+          </Link>
+          &nbsp;to complete your enrollment data.
+        </div>
+      </>
     ),
-    heading: 'Update roster before submitting',
+    heading: 'Update your roster',
     type: alertType ? alertType : 'warning',
   };
 }

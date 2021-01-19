@@ -60,7 +60,7 @@ module.exports = {
     } else {
       await browser.waitForElementVisible(
         'xpath',
-        `//*/h2[contains(.,'Update roster before submitting')]`
+        `//*/h2[contains(.,'Update your roster')]`
       );
     }
   },

@@ -25,7 +25,6 @@ const TEST_OPTS: ApiOpts = {
 
 describe('integration', () => {
   describe('api', () => {
-    let enrollment: Enrollment | undefined;
     let reportingPeriods: ReportingPeriod[] | undefined;
     let organization: Organization;
     let site: Site;
@@ -40,15 +39,6 @@ describe('integration', () => {
       site = user?.sites?.find(
         (s) => s.organizationId === organization.id
       ) as Site;
-      const children: Child[] = await apiGet('children', '', TEST_OPTS);
-      const child = children.find((c) =>
-        c.enrollments?.some(
-          (e) => !!e.site && !e?.exit && !!e?.fundings?.length
-        )
-      );
-      enrollment = child?.enrollments?.find(
-        (e) => !!e.site && !e?.exit && !!e?.fundings?.length
-      );
       reportingPeriods = await apiGet(`reporting-periods`, '', TEST_OPTS);
     });
     afterAll(() => {
@@ -56,11 +46,12 @@ describe('integration', () => {
     });
     describe('enrollments', () => {
       it('PUT /enrollments/id', async () => {
-        if (!enrollment) throw new Error('no enrollment');
+        const { id: childId } = await createChild(organization);
+        await createEnrollment(childId, site);
+        let child: Child = await apiGet(`children/${childId}`, '', TEST_OPTS);
+        const enrollment = child?.enrollments?.pop() as Enrollment;
 
-        enrollment.entry = enrollment.entry
-          ? enrollment.entry.clone().add(2, 'months')
-          : moment.utc();
+        enrollment.entry = enrollment?.entry?.clone().add(2, 'months');
         const res = await apiPut(
           `enrollments/${enrollment.id}`,
           enrollment,
@@ -68,12 +59,8 @@ describe('integration', () => {
         );
         expect(res.status).toEqual(200);
 
-        const updatedChild: Child = await apiGet(
-          `children/${enrollment.childId}`,
-          '',
-          TEST_OPTS
-        );
-        const updatedEnrollment = updatedChild.enrollments?.find(
+        child = await apiGet(`children/${enrollment.childId}`, '', TEST_OPTS);
+        const updatedEnrollment = child.enrollments?.find(
           (e) => e.id === enrollment?.id
         );
         expect(updatedEnrollment?.entry?.format('YYYY-MM-DD')).toEqual(
@@ -82,56 +69,25 @@ describe('integration', () => {
       });
 
       it('PUT /enrollments/id for enrollment without siteId', async () => {
-        if (!enrollment) throw new Error('no enrollment');
-
-        const site = enrollment.site;
-
-        const newEnrollment = { ...enrollment };
-        delete newEnrollment.id;
-        delete newEnrollment.site;
-        delete newEnrollment.siteId;
-        delete newEnrollment.fundings;
-        const changeEnrollment: ChangeEnrollment = {
-          newEnrollment,
-          oldEnrollment: {
-            funding: {
-              lastReportingPeriod: reportingPeriods?.find(
-                (rp) => true
-              ) as ReportingPeriod,
-            },
-          },
-        };
-        await apiPost(
-          `children/${enrollment.childId}/change-enrollment`,
-          changeEnrollment,
-          { ...TEST_OPTS, jsonParse: false }
-        );
-        let updatedChild: Child = await apiGet(
-          `children/${enrollment.childId}`,
-          '',
-          TEST_OPTS
-        );
-
-        const sitelessEnrollment = updatedChild?.enrollments?.find(
-          (e) => !e.siteId
-        );
-        if (!sitelessEnrollment) throw new Error('change-enrollment failed');
-        sitelessEnrollment.site = site;
+        const { id: childId } = await createChild(organization);
+        // Create enrollment without site
+        await createEnrollment(childId);
+        let child: Child = await apiGet(`children/${childId}`, '', TEST_OPTS);
+        const enrollment = child?.enrollments?.pop() as Enrollment;
 
         const res = await apiPut(
-          `enrollments/${sitelessEnrollment.id}`,
-          sitelessEnrollment,
+          `enrollments/${enrollment.id}`,
+          {
+            ...enrollment,
+            site,
+          },
           TEST_OPTS
         );
         expect(res.status).toEqual(200);
 
-        updatedChild = await apiGet(
-          `children/${enrollment.childId}`,
-          '',
-          TEST_OPTS
-        );
-        const updatedEnrollment = updatedChild?.enrollments?.find(
-          (e) => e.id === sitelessEnrollment.id
+        child = await apiGet(`children/${enrollment.childId}`, '', TEST_OPTS);
+        const updatedEnrollment = child?.enrollments?.find(
+          (e) => e.id === enrollment.id
         );
         expect(updatedEnrollment).not.toBeUndefined();
         expect(updatedEnrollment?.siteId).toEqual(site?.id);
@@ -139,7 +95,7 @@ describe('integration', () => {
 
       it('POST /enrollments/id/change-funding', async () => {
         const { id: childId } = await createChild(organization);
-        await createEnrollment(site, childId, { withFunding: true });
+        await createEnrollment(childId, site, { withFunding: true });
 
         let child: Child = await apiGet(`children/${childId}`, '', TEST_OPTS);
         const enrollment = child.enrollments?.pop() as Enrollment;
@@ -148,6 +104,7 @@ describe('integration', () => {
           (rp) =>
             rp.period > (currentFunding.firstReportingPeriod?.period as Moment)
         );
+
         const changeFunding: ChangeFunding = {
           newFunding: {
             firstReportingPeriod: period,
@@ -160,13 +117,9 @@ describe('integration', () => {
         );
         expect(res.status).toEqual(200);
 
-        const updatedChild: Child = await apiGet(
-          `children/${enrollment.childId}`,
-          '',
-          TEST_OPTS
-        );
+        child = await apiGet(`children/${enrollment.childId}`, '', TEST_OPTS);
 
-        const updatedEnrollment = updatedChild.enrollments?.find(
+        const updatedEnrollment = child.enrollments?.find(
           (e) => e.id === enrollment?.id
         );
         expect(updatedEnrollment?.fundings).toHaveLength(
@@ -195,7 +148,11 @@ describe('integration', () => {
       });
 
       it('POST /enrollments/id/withdraw', async () => {
-        if (!enrollment) throw new Error('no enrollment');
+        const { id: childId } = await createChild(organization);
+        await createEnrollment(childId, site, { withFunding: true });
+
+        let child: Child = await apiGet(`children/${childId}`, '', TEST_OPTS);
+        const enrollment = child.enrollments?.pop() as Enrollment;
 
         const exit = moment().utc();
         const exitReason = 'an exit reason';
@@ -206,21 +163,19 @@ describe('integration', () => {
 
         const currentFunding = enrollment.fundings?.find(
           (f) => !f.lastReportingPeriod
-        );
+        ) as Funding;
 
-        if (currentFunding) {
-          const reportingPeriods: ReportingPeriod[] = await apiGet(
-            `reporting-periods?source=${
-              currentFunding.fundingSpace?.source.split('-')[0]
-            }`,
-            '',
-            TEST_OPTS
-          );
-          const period = reportingPeriods.find(
-            (rp) => rp.period > moment('07-01-2020', ['MM-DD-YYYY'])
-          ) as ReportingPeriod;
-          withdraw.funding = { lastReportingPeriod: period };
-        }
+        const reportingPeriods: ReportingPeriod[] = await apiGet(
+          `reporting-periods?source=${
+            currentFunding.fundingSpace?.source.split('-')[0]
+          }`,
+          '',
+          TEST_OPTS
+        );
+        const period = reportingPeriods.find(
+          (rp) => rp.period > moment('07-01-2020', ['MM-DD-YYYY'])
+        ) as ReportingPeriod;
+        withdraw.funding = { lastReportingPeriod: period };
 
         const res = await apiPost(
           `enrollments/${enrollment.id}/withdraw`,
@@ -244,7 +199,11 @@ describe('integration', () => {
       });
 
       it('DELETE /enrollments/id', async () => {
-        if (!enrollment) throw new Error('no enrollment');
+        const { id: childId } = await createChild(organization);
+        await createEnrollment(childId, site, { withFunding: true });
+
+        let child: Child = await apiGet(`children/${childId}`, '', TEST_OPTS);
+        const enrollment = child.enrollments?.pop() as Enrollment;
 
         const res = await apiDelete(`enrollments/${enrollment.id}`, TEST_OPTS);
         expect(res.status).toEqual(200);

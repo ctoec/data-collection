@@ -73,7 +73,7 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
               />
             )}
             <Button
-              text="Start new funding"
+              text={activeFunding ? 'Change funding' : 'Start new funding'}
               appearance="unstyled"
               onClick={() => setVisibleForm('start')}
             />

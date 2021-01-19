@@ -51,7 +51,6 @@ const children: Child[] = Array.from({ length: 20 }, (_, i) => {
     organizationId: org.id,
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
-    cascadeDeleteEnrollments: null,
     family: {} as Family,
   };
 });
@@ -120,21 +119,18 @@ const completeChildren: Child[] = children.map((c, i) => {
       ...family,
       incomeDeterminations:
         c.foster === UndefinableBoolean.Yes
-          ? []
-          : [getFakeIncomeDet(i, family)],
+          ? [getFakeIncomeDet(i, family, true)]
+          : [getFakeIncomeDet(i, family, false)],
     },
     enrollments: makeFakeEnrollments(i, c, site),
-    cascadeDeleteEnrollments: null,
   } as Child;
 });
 
 // Iterate through, delete keys arbitrarily
 const childrenMissingSomeInfo = completeChildren.map((c) => {
   if (random.boolean()) {
-    const randomKey = random.arrayElement(
-      Object.keys(c).filter((k) => k != 'cascadeDeleteEnrollments')
-    );
-    return { ...c, [randomKey]: undefined, cascadeDeleteEnrollments: null };
+    const randomKey = random.arrayElement(Object.keys(c));
+    return { ...c, [randomKey]: undefined };
   }
   return c;
 });
@@ -142,7 +138,7 @@ const childrenMissingSomeInfo = completeChildren.map((c) => {
 // Delete one key from all children
 // TODO: make this a func that takes a param for which key
 const childrenAllMissingOneField = completeChildren.map((c) => {
-  return { ...c, firstName: undefined, cascadeDeleteEnrollments: null };
+  return { ...c, firstName: undefined };
 });
 
 export {
