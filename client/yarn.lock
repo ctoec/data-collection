@@ -1163,9 +1163,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#760-accordion-toggle":
-  version "1.1.2"
-  resolved "https://github.com/ctoec/component-library#96e6921647639530b8e39b87103d54488fc4722a"
+"@ctoec/component-library@1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.4.tgz#597f8757ec71f31c84cac67a46b5bdeacbc56327"
+  integrity sha512-McGqUu+EB4ICiKRQLjuwMqDzJeRfZOmPJLZdLeVhFqqdnTB4OP+TrnOSxUOmLU6O4AugDf8kSVNhS9bZO/nHbA==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
