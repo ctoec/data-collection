@@ -208,7 +208,9 @@ exports[`DataRequirements matches snapshot 1`] = `
             <div
               class="margin-top-4"
             >
-              <h3>
+              <h3
+                id="section-one"
+              >
                 Section one
               </h3>
               <p
@@ -288,7 +290,9 @@ exports[`DataRequirements matches snapshot 1`] = `
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr
+                    id="favorite-color-field"
+                  >
                     <th
                       scope="row"
                     >
@@ -330,7 +334,9 @@ exports[`DataRequirements matches snapshot 1`] = `
             <div
               class="margin-top-4"
             >
-              <h3>
+              <h3
+                id="section-two"
+              >
                 Section two
               </h3>
               <p
@@ -410,7 +416,9 @@ exports[`DataRequirements matches snapshot 1`] = `
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr
+                    id="lucky-number-field"
+                  >
                     <th
                       scope="row"
                     >
