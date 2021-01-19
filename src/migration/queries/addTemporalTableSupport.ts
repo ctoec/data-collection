@@ -6,7 +6,7 @@ export const addHistorySchemaQuery = () => `
 
 // from https://docs.microsoft.com/en-us/sql/relational-databases/tables/creating-a-system-versioned-temporal-table?view=sql-server-ver15#adding-versioning-to-non-temporal-tables
 export const addSystemVersioningColumnsToTableQuery = (tableName: string) => `
-	ALTER TABLE ${tableName} ADD
+	ALTER TABLE [${tableName}] ADD
 		SysStartTime DATETIME2(0) GENERATED ALWAYS AS ROW START HIDDEN
 			CONSTRAINT DF_${tableName}_SysStart DEFAULT SYSUTCDATETIME(),
 		SysEndTime DATETIME2(0) GENERATED ALWAYS AS ROW END HIDDEN

@@ -31,8 +31,8 @@ export const createChild = async (org: Organization) => {
 };
 
 export const createEnrollment = async (
-  site: Site,
   childId: string,
+  site?: Site,
   opts?: { withFunding: boolean }
 ) => {
   const date = moment('2020-09-01', ['YYYY-MM-DD']);
@@ -43,7 +43,7 @@ export const createEnrollment = async (
     } as Enrollment,
   };
 
-  if (opts?.withFunding) {
+  if (site && opts?.withFunding) {
     const reportingPeriods: ReportingPeriod[] = await apiGet(
       'reporting-periods?source=CDC',
       '',
@@ -70,4 +70,17 @@ export const createEnrollment = async (
     ...TEST_OPTS,
     jsonParse: false,
   });
+};
+
+export const createIncomeDetermination = async (familyId: number) => {
+  return await apiPost(
+    `families/${familyId}/income-determinations`,
+    {
+      numberOfPeople: 4,
+      income: 50000,
+      determinationDate: moment(),
+      family: { id: familyId },
+    },
+    TEST_OPTS
+  );
 };

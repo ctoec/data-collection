@@ -189,7 +189,7 @@ export const getSiteCountMap = async (children: Child[]) => {
     const enrollment = getCurrentEnrollment(c);
     if (enrollment) {
       let match = siteCounts.find(
-        (sc) => sc.siteName === enrollment.site.siteName
+        (sc) => sc.siteName === enrollment?.site?.siteName
       );
       if (match === undefined) {
         match = {
