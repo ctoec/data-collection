@@ -12,6 +12,7 @@ import {
 } from '@ctoec/component-library';
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
+import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
 
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -54,36 +55,7 @@ export const PostSubmitHome: React.FC = () => {
 
   // Map each calculated funding space distribution into a card
   // element that we can format for display
-  let fundingCards = (fundingSpacesDisplay || []).map((fsd: any) => (
-    <div className="desktop:grid-col-4 three-column-card">
-      <Card>
-        <div className="padding-0">
-          <h3>{fsd.sourceName}</h3>
-          {fsd.includedAgeGroups.map((ag: any) => (
-            <>
-              <div>
-                <p className="text-bold">{ag.ageGroup}</p>
-              </div>
-              <>
-                {ag.includedTimes.map((t: any) => {
-                  // Account for fundings that have negative capacities stored
-                  let spaceNumbers = `${t.filled}`;
-                  if (t.capacity !== -1) spaceNumbers += `/${t.capacity} `;
-                  else spaceNumbers += ` `;
-                  return (
-                    <p className="text-base-darker padding-0 margin-0">
-                      <b>{spaceNumbers}</b>
-                      {` ${t.timeType}`}
-                    </p>
-                  );
-                })}
-              </>
-            </>
-          ))}
-        </div>
-      </Card>
-    </div>
-  ));
+  let fundingCards = mapFundingSpacesToCards(fundingSpacesDisplay);
 
   // Use flexbox styling to distribute the cards across three columns
   // (leaving space for some aesthetic padding), and then box the whole
