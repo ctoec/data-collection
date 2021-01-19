@@ -36,16 +36,15 @@ export const RevisionRequest: React.FC = () => {
       // Store all the sites the user works with in local state
       // so that we can easily modify them and send a single
       // change map to the backend
-      userSites.forEach((s) => {
-        const siteObj = {
-          siteId: s.id,
-          newName: '',
-          remove: false,
-        } as UpdateSiteRequest;
-        setUpdateRequests((o) => {
-          return [...o, siteObj];
-        });
-      });
+      const mappedSites = userSites.map(
+        (s) =>
+          ({
+            siteId: s.id,
+            newName: '',
+            remove: false,
+          } as UpdateSiteRequest)
+      );
+      setUpdateRequests(mappedSites);
     }
   }, [user]);
 
@@ -71,13 +70,13 @@ export const RevisionRequest: React.FC = () => {
         }
       });
     });
-    setUserFundingSpaces((o) => fsOptions);
+    setUserFundingSpaces(fsOptions);
   }, []);
 
   // Now fetch all the funding spaces that the user and their org
   // have access to, and when we generate the funding space
   // checkboxes on the page, mark all these as true
-  const [fundingCheckboxes, setFundingCheckboxes] = useState<JSX.Element[]>();
+  const [fundingCheckboxes, setFundingCheckboxes] = useState<JSX.Element[]>([]);
   useEffect(() => {
     if (user && accessToken && userFundingSpaces.length !== 0) {
       apiGet('funding-spaces', accessToken)
