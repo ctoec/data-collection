@@ -41,6 +41,33 @@ exports[`Home snapshot matches post-submit user 1`] = `
             </svg>
           </div>
         </div>
+        <div
+          class="usa-alert usa-alert--info grid-row"
+        >
+          <div
+            class="display-flex flex-fill"
+          >
+            <div
+              class="usa-alert__body grid-col flex-fill"
+            >
+              <p
+                class="usa-alert__text"
+              >
+                <span>
+                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through  
+                  <a
+                    href="/revision"
+                  >
+                    this form.
+                  </a>
+                </span>
+              </p>
+            </div>
+            <div
+              class="usa-alert__body flex-auto display-flex flex-align-center"
+            />
+          </div>
+        </div>
         <h2
           class="pre-submit-h2"
         >
@@ -259,6 +286,33 @@ exports[`Home snapshot matches pre-submit user 1`] = `
             <svg>
               PersonWithSpreadsheet.svg
             </svg>
+          </div>
+        </div>
+        <div
+          class="usa-alert usa-alert--info grid-row"
+        >
+          <div
+            class="display-flex flex-fill"
+          >
+            <div
+              class="usa-alert__body grid-col flex-fill"
+            >
+              <p
+                class="usa-alert__text"
+              >
+                <span>
+                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through  
+                  <a
+                    href="/revision"
+                  >
+                    this form.
+                  </a>
+                </span>
+              </p>
+            </div>
+            <div
+              class="usa-alert__body flex-auto display-flex flex-align-center"
+            />
           </div>
         </div>
         <h2

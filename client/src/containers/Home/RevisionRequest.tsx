@@ -181,6 +181,7 @@ export const RevisionRequest: React.FC = () => {
     </>
   );
 
+  // Add another set of new site fields to the revision form
   const addNewSite = () => {
     const newSite = {
       siteName: '',

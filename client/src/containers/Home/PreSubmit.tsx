@@ -22,19 +22,13 @@ export const PreSubmitHome: React.FC = () => {
   // We might have a success alert pushed from the revision request
   // form, so check whether we do (but filter so that we only show
   // one if a user submits multiple forms)
-  const [alertFromRevision, setAlertFromRevision] = useState<boolean>();
   const { setAlerts, alertElements } = useAlerts();
-  // let alertToShow;
   useEffect(() => {
     setAlerts((_alerts) => [
       _alerts.find((a) => a?.heading === 'Request received!'),
     ]);
-    // alertToShow = alerts.find((a) => a?.heading === "Request received!");
-    // console.log(alertToShow);
-    // if (alertToShow) setAlerts([alertToShow]);
   }, []);
 
-  console.log(alertElements);
   const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
 
   useEffect(() => {
