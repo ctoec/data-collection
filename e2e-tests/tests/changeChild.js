@@ -15,9 +15,8 @@ module.exports = {
     await navigateToRoster(browser);
     await clickOnChildInRoster(browser);
 
-    const firstNameSelectorArgs = ['css selector', 'input#firstName'];
     const newFirstNameText = 'New first name';
-    await enterFormValue(browser, firstNameSelectorArgs, newFirstNameText);
+    await enterFormValue(browser, 'firstName', newFirstNameText);
 
     const saveButtonArgs = ['xpath', "//*/input[contains(@value,'Save')]"];
     await scrollToElement(browser, saveButtonArgs);

@@ -1,6 +1,6 @@
-import { EnrollmentReportRow } from '../../template';
-import { Organization, Site, Enrollment, User } from '../../entity';
-import { BadRequestError } from '../../middleware/error/errors';
+import { EnrollmentReportRow } from '../../../template';
+import { Organization, Site, Child } from '../../../entity';
+import { BadRequestError } from '../../../middleware/error/errors';
 import {
   BirthCertificateType,
   Gender,
@@ -9,19 +9,18 @@ import {
   FundingSource,
   FundingTime,
   FundingSourceTime,
-} from '../../../client/src/shared/models';
-import { FUNDING_SOURCE_TIMES } from '../../../client/src/shared/constants';
-import moment from 'moment';
-import { EntityManager } from 'typeorm';
+} from '../../../../client/src/shared/models';
+import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
 import {
   getRaceIndicated,
   lookUpOrganization,
   lookUpSite,
   mapEnum,
-  mapFunding,
   mapFundingTime,
   MISSING_PROVIDER_ERROR,
+  isIdentifierMatch,
 } from './mapUtils';
+import moment from 'moment';
 
 describe('controllers', () => {
   describe('enrollmentReports', () => {
@@ -284,33 +283,138 @@ describe('controllers', () => {
       );
     });
 
-    describe('mapFunding', () => {
-      it.each([
-        [{ fundingSpace: 'CDC' }, true],
-        [{ time: 'Full-time' }, true],
-        [{ firstReportingPeriod: moment('10/2020', 'MM/YYYY') }, true],
-        [{ lastReportingPeriod: moment('10/2020', 'MM/YYYY') }, true],
-        [{}, false],
-      ])(
-        'creates a funding if source contains source, time, firstReportingPeriod, or lastReportingPeriod',
-        async (source, doesCreateFunding) => {
-          const transaction = {} as jest.Mocked<EntityManager>;
-          transaction.findOne = jest.fn();
-          transaction.create = jest.fn();
-          transaction.save = jest.fn();
+    describe('isIdentifierMatch', () => {
+      const SASID = '1234567890';
+      const UNIQUEID = '123-45-67890';
+      const BIRTHDATE = moment('10-20-2019', 'MM-DD-YYYY');
+      const FIRSTNAME = 'Firstname';
+      const LASTNAME = 'Lastname';
 
-          await mapFunding(
-            transaction,
-            source as EnrollmentReportRow,
-            {} as Organization,
-            {} as Enrollment,
-            {} as User,
-            true
-          );
-          expect(transaction.create).toBeCalledTimes(doesCreateFunding ? 1 : 0);
-          expect(transaction.save).toBeCalledTimes(doesCreateFunding ? 1 : 0);
-        }
-      );
+      it('is match for child with same SASID, birtdate, first name, and last name', () => {
+        const child = {
+          sasid: SASID,
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          sasidUniqueId: SASID,
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).toBeTruthy();
+      });
+
+      it('is match for child with same UniqueId, birthdate, first name and last name', () => {
+        const child = {
+          uniqueId: UNIQUEID,
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          sasidUniqueId: UNIQUEID,
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).toBeTruthy();
+      });
+
+      it('is match for child with no sasid/uniqueId, and same birthdate, firstname and last name', () => {
+        const child = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).toBeTruthy();
+      });
+
+      it('is not a match for child with different sasid', () => {
+        const child = {
+          sasid: SASID,
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
+      });
+
+      it('is not a match for child with different uniqueId', () => {
+        const child = {
+          uniqueId: UNIQUEID,
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
+      });
+
+      it('is not a match for child with different birthdate', () => {
+        const child = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          birthdate: BIRTHDATE.clone().add(2, 'month'),
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
+      });
+
+      it('is not a match for child with different first name', () => {
+        const child = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          birthdate: BIRTHDATE,
+          firstName: 'Other name',
+          lastName: LASTNAME,
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
+      });
+
+      it('is not a match for child with different last name', () => {
+        const child = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: LASTNAME,
+        } as Child;
+        const other = {
+          birthdate: BIRTHDATE,
+          firstName: FIRSTNAME,
+          lastName: 'Other name',
+        } as EnrollmentReportRow;
+
+        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
+      });
     });
   });
 });
