@@ -38,6 +38,7 @@ import { EmptyRosterCard } from './EmptyRosterCard';
 import { useAlerts } from '../../hooks/useAlerts';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { getChildrenWithErrorsAlert } from './rosterUtils/getChildrenWithErrorsAlert';
+import { DataCompleteModal } from './DataComleteModal';
 
 export type RosterQueryParams = {
   organization?: string;
@@ -167,6 +168,8 @@ const Roster: React.FC = () => {
       }
     : undefined;
 
+  const [submittedModalOpen, setSubmittedModalOpen] = useState(false);
+
   // Function to submit data to OEC, to pass down into submit button
   async function submitToOEC() {
     // Block submit if there are incomplete records / records with errors
@@ -183,7 +186,10 @@ const Roster: React.FC = () => {
     if (query.organization) {
       await apiPut(`oec-report/${query.organization}`, undefined, {
         accessToken,
-      }).then(() => setIsSubmitted(true));
+      }).then(() => {
+        setSubmittedModalOpen(true);
+        setIsSubmitted(true);
+      });
     }
   }
 
@@ -243,6 +249,10 @@ const Roster: React.FC = () => {
               ? `/roster?organization=${query.organization}`
               : '/'
           }
+        />
+        <DataCompleteModal
+          isOpen={submittedModalOpen}
+          closeModal={() => setSubmittedModalOpen(false)}
         />
         {alertElements}
         <div className="grid-row flex-align-center">
