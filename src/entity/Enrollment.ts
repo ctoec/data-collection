@@ -91,7 +91,7 @@ export class Enrollment implements EnrollmentInterface {
   @FundingAgeGroupMatchesEnrollment()
   @IsNotEmpty()
   @ValidateIf((enrollment) => {
-    // This is used by each funding and then deleted
+    // This is used by each funding
     // See similar pattern between child and family
     enrollment.fundings.forEach((funding) => {
       // Fundings must be undefined or we have circular json
