@@ -80,7 +80,7 @@ export const changeFunding = async (
         ).period;
       }
 
-      let periodBeforeNewFundingFirst = newFundingFirstReportingPeriod.period
+      let periodBeforeNewFundingFirst = newFundingFirstReportingPeriod?.period
         .clone()
         .add(-1, 'month');
 
