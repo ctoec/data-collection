@@ -1,6 +1,12 @@
 import { WorkSheet, writeFile, utils } from 'xlsx';
 import { getManager } from 'typeorm';
-import { Site, Organization, OECReport, User, Enrollment } from '../../entity';
+import {
+  Site,
+  Organization,
+  OECReport,
+  User,
+  Enrollment,
+} from '../../../entity';
 
 class ExportedOrgRow {
   orgName: string = '';

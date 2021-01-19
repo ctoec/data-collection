@@ -1,8 +1,8 @@
 import { WorkSheet } from 'xlsx';
 import { getManager } from 'typeorm';
-import { Site, Organization } from '../../entity';
-import { Region } from '../../../client/src/shared/models';
-import { parse } from './utils';
+import { Site, Organization } from '../../../entity';
+import { Region } from '../../../../client/src/shared/models';
+import { parse } from '../utils/utils';
 
 class SiteRow {
   name: string = '';

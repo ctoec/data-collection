@@ -1,5 +1,5 @@
 import puppeteer from 'puppeteer';
-import { UserRow, SiteConnectionOpts } from './users/create';
+import { UserRow, SiteConnectionOpts } from '../users/create';
 
 export const invite = async (
   userData: UserRow[],

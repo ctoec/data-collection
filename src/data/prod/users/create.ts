@@ -8,7 +8,7 @@ import {
   Organization,
   Site,
 } from '../../../entity';
-import { parse } from '../utils';
+import { parse } from '../utils/utils';
 import { createWingedKeysUsers } from './wingedKeys';
 
 export class UserRow {

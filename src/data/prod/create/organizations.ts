@@ -5,9 +5,9 @@ import {
   AgeGroup,
   FundingTime,
   UniqueIdType,
-} from '../../../client/src/shared/models';
-import { FundingSpace, Organization, FundingTimeSplit } from '../../entity';
-import { parse } from './utils';
+} from '../../../../client/src/shared/models';
+import { FundingSpace, Organization, FundingTimeSplit } from '../../../entity';
+import { parse } from '../utils/utils';
 
 class OrganizationRow {
   name: string = '';

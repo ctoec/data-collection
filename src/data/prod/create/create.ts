@@ -17,8 +17,8 @@ import {
   User,
   CommunityPermission,
   ReportingPeriod,
-} from '../../entity';
-import { read, parse } from './utils';
+} from '../../../entity';
+import { read, parse } from '../utils/utils';
 import { createOrganizationData } from './organizations';
 import { createSiteData } from './sites';
 import {
@@ -27,7 +27,7 @@ import {
   SiteConnectionOpts,
   USER_ROW_PROPS,
   UserRow,
-} from './users/create';
+} from '../users/create';
 import { createReportingPeriodData } from './reportingPeriods';
 import { invite } from './invite';
 
