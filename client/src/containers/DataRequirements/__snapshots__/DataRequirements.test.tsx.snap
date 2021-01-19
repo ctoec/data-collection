@@ -41,6 +41,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     <p>
       <span
         class="text-bold"
+        id="enrollments-to-include"
       >
         Enrollments to include
       </span>
@@ -67,6 +68,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     <p>
       <span
         class="text-bold"
+        id="data-collection-period"
       >
         Data collection period
       </span>
@@ -76,6 +78,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     <p>
       <span
         class="text-bold"
+        id="data-submission-deadline"
       >
         Data submission deadline
       </span>
@@ -84,6 +87,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     </p>
     <h2
       class="border-top border-base-lighter padding-top-1"
+      id="data-elements"
     >
       Data elements
     </h2>
@@ -97,7 +101,9 @@ exports[`DataRequirements matches snapshot 1`] = `
         <div
           class="data-definitions"
         >
-          <table>
+          <table
+            id="requirement-levels"
+          >
             <caption
               class="text-bold text-left margin-bottom-1"
             >
