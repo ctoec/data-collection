@@ -8,9 +8,13 @@ import {
   ReportingPeriod,
   UndefinableBoolean,
   Site,
+  AgeGroup,
+  FundingSource,
+  FundingSpace,
+  Funding,
 } from '../shared/models';
 import moment from 'moment';
-import { ChangeEnrollment } from '../shared/payloads';
+import { ChangeEnrollment, ChangeFunding } from '../shared/payloads';
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
 jest.mock('../utils/getCurrentHost');
@@ -33,7 +37,7 @@ describe('integration', () => {
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
       );
-      console.log('CURRENT HOST', util.getCurrentHost());
+
       const user: User = await apiGet('users/current', '', TEST_OPTS);
       organization = user?.organizations?.shift() as Organization;
       site = user?.sites?.find(
@@ -309,23 +313,360 @@ describe('integration', () => {
           });
         });
 
-        // it('has missing exit reason error if exited', async() => {
-        // 	const { id } = await apiPost(
-        // 		'children',
-        // 		childWithIdentifiers,
-        // 		TEST_OPTS
-        // 	);
-        // 	let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+        it('has missing exit reason error if exited', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
 
-        // 	const changeEnrollment: ChangeEnrollment = {
-        // 		newEnrollment: {
-        // 			siteId: site.id,
-        // 			entry: moment(),
-        // 			exit: moment(),
-        // 		} as Enrollment
-        // 	};
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {
+              siteId: site.id,
+              entry: moment(),
+              exit: moment(),
+            } as Enrollment,
+          };
 
-        // });
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          const enrollment = child?.enrollments?.pop() as Enrollment;
+          expect(enrollment.exit).not.toBeUndefined();
+          expect(
+            enrollment.validationErrors?.find(
+              (err) => err.property === 'exitReason'
+            )
+          ).not.toBeUndefined();
+        });
+
+        it('has entry and exit cannot be in the future', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {
+              siteId: site.id,
+              entry: moment('2030-09-01', 'YYYY-MM-DD'),
+              exit: moment('2031-08-01', 'YYYY-MM-DD'),
+            } as Enrollment,
+          };
+
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          const enrollment = child?.enrollments?.pop() as Enrollment;
+          const entryError = enrollment.validationErrors?.find(
+            (err) => err.property === 'entry'
+          );
+          expect(entryError).not.toBeUndefined();
+          expect((entryError?.constraints || {})['entry']).toEqual(
+            'Entry cannot be in the future.'
+          );
+          const exitError = enrollment.validationErrors?.find(
+            (err) => err.property === 'exit'
+          );
+          expect(exitError).not.toBeUndefined();
+          expect((exitError?.constraints || {})['exit']).toEqual(
+            'Exit cannot be in the future.'
+          );
+        });
+
+        it('has funding age group matches enrollment', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          const fundingSpaces: FundingSpace[] = await apiGet(
+            `funding-spaces?organizationId=${child.organization.id}`,
+            '',
+            TEST_OPTS
+          );
+          const schoolAgeFundingSpace = fundingSpaces.find(
+            (space) => space.ageGroup === AgeGroup.SchoolAge
+          );
+
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {
+              siteId: site.id,
+              entry: moment(),
+              ageGroup: AgeGroup.InfantToddler,
+              fundings: [
+                {
+                  fundingSpace: schoolAgeFundingSpace,
+                },
+              ],
+            } as Enrollment,
+          };
+
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          const enrollment = child?.enrollments?.pop() as Enrollment;
+          const fundingError = enrollment?.validationErrors?.find(
+            (err) => err.property === 'fundings'
+          );
+          expect(fundingError).not.toBeUndefined();
+          expect(
+            (fundingError?.constraints || {})['ageGroupMatch']
+          ).not.toBeUndefined();
+        });
+      });
+
+      describe('funding', () => {
+        it('has missing info errors', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {
+              fundings: [{}],
+            } as Enrollment,
+          };
+
+          // Add empty enrollment with empty funding
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          const enrollment = child?.enrollments?.pop();
+          const funding = enrollment?.fundings?.pop() as Funding;
+          ['fundingSpace', 'firstReportingPeriod'].forEach((prop) => {
+            const err = funding?.validationErrors?.find(
+              (e) => e.property === prop
+            );
+            expect(err?.property).toEqual(prop);
+          });
+        });
+
+        it('has funding begins after enrollment entry', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          const reportingPeriods: ReportingPeriod[] = await apiGet(
+            'reporting-periods',
+            '',
+            TEST_OPTS
+          );
+          const enrollmentEntry = moment('2020-09-01', 'YYYY-MM-DD');
+          const reportingPeriodBeforeEntry = reportingPeriods.find((rp) =>
+            rp.period.isBefore(enrollmentEntry)
+          );
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {
+              entry: enrollmentEntry,
+              fundings: [
+                {
+                  firstReportingPeriod: reportingPeriodBeforeEntry,
+                },
+              ],
+            } as Enrollment,
+          };
+
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          const enrollment = child?.enrollments?.pop();
+          const funding = enrollment?.fundings?.pop() as Funding;
+
+          const firstReportingPeriodErr = funding.validationErrors?.find(
+            (err) => err.property === 'firstReportingPeriod'
+          );
+          expect(firstReportingPeriodErr).not.toBeUndefined();
+          expect(
+            (firstReportingPeriodErr?.constraints || {})[
+              'firstReportingPeriodAfterEntry'
+            ]
+          ).not.toBeUndefined();
+        });
+
+        it('has fundings do not overlap', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          const reportingPeriods: ReportingPeriod[] = await apiGet(
+            'reporting-periods',
+            '',
+            TEST_OPTS
+          );
+          const enrollmentEntry = moment('2020-09-01', 'YYYY-MM-DD');
+          const reportingPeriod = reportingPeriods.find((rp) =>
+            rp.period.isAfter(enrollmentEntry)
+          );
+
+          // Create enrollment with funding
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {
+              entry: enrollmentEntry,
+              fundings: [
+                {
+                  firstReportingPeriod: reportingPeriod,
+                },
+              ],
+            } as Enrollment,
+          };
+
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          let enrollment = child?.enrollments?.pop() as Enrollment;
+
+          // Update enrollment to have second funding
+          const oldFundingLastReportingPeriod = reportingPeriods.find((rp) =>
+            rp.period.isAfter(reportingPeriod?.period.clone().add('month', 4))
+          ) as ReportingPeriod;
+          const newFundingReportingPeriod = reportingPeriods.find(
+            (rp) =>
+              rp.period.isAfter(
+                reportingPeriod?.period.clone().add('months', 2)
+              ) &&
+              rp.period.isBefore(
+                reportingPeriod?.period.clone().add('months', 4)
+              )
+          ) as ReportingPeriod;
+          const changeFunding: ChangeFunding = {
+            newFunding: {
+              firstReportingPeriod: newFundingReportingPeriod,
+            } as Funding,
+            oldFunding: {
+              lastReportingPeriod: oldFundingLastReportingPeriod,
+            },
+          };
+          await apiPost(
+            `enrollments/${enrollment.id}/change-funding`,
+            changeFunding,
+            { ...TEST_OPTS, jsonParse: false }
+          );
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          enrollment = child?.enrollments?.pop() as Enrollment;
+
+          enrollment.fundings?.forEach((funding) => {
+            const firstReportingPeriodOverlapErr = funding.validationErrors?.find(
+              (err) => err.property === 'firstReportingPeriod'
+            );
+            expect(firstReportingPeriodOverlapErr).not.toBeUndefined();
+            expect(
+              (firstReportingPeriodOverlapErr?.constraints || {})[
+                'fundingOverlap'
+              ]
+            ).not.toBeUndefined();
+
+            const lastReportingPeriodOverlapErr = funding.validationErrors?.find(
+              (err) => err.property === 'lastReportingPeriod'
+            );
+            expect(lastReportingPeriodOverlapErr).not.toBeUndefined();
+            expect(
+              (lastReportingPeriodOverlapErr?.constraints || {})[
+                'fundingOverlap'
+              ]
+            ).not.toBeUndefined();
+          });
+        });
+
+        it.only('has last reporting period is after first', async () => {
+          const { id } = await apiPost(
+            'children',
+            childWithIdentifiers,
+            TEST_OPTS
+          );
+          let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
+
+          const reportingPeriods: ReportingPeriod[] = await apiGet(
+            'reporting-periods',
+            '',
+            TEST_OPTS
+          );
+          const enrollmentEntry = moment('2020-09-01', 'YYYY-MM-DD');
+          const firstReportingPeriod = reportingPeriods.find((rp) =>
+            rp.period.isAfter(enrollmentEntry.clone().add('months', 4))
+          );
+          const lastReportingPeriod = reportingPeriods.find(
+            (rp) =>
+              rp.period.isAfter(enrollmentEntry) &&
+              rp.period.isBefore(enrollmentEntry.clone().add('month', 4))
+          ) as ReportingPeriod;
+
+          // Create enrollment with funding
+          const changeEnrollment: ChangeEnrollment = {
+            newEnrollment: {
+              entry: enrollmentEntry,
+              fundings: [
+                {
+                  firstReportingPeriod,
+                },
+              ],
+            } as Enrollment,
+          };
+
+          await apiPost(`children/${id}/change-enrollment`, changeEnrollment, {
+            ...TEST_OPTS,
+            jsonParse: false,
+          });
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          let enrollment = child?.enrollments?.pop() as Enrollment;
+          let funding = enrollment.fundings?.pop() as Funding;
+
+          const changeFunding: ChangeFunding = {
+            oldFunding: {
+              lastReportingPeriod,
+            },
+          };
+
+          await apiPost(
+            `enrollments/${enrollment.id}/change-funding`,
+            changeFunding,
+            { ...TEST_OPTS, jsonParse: false }
+          );
+          child = await apiGet(`children/${id}`, '', TEST_OPTS);
+          enrollment = child?.enrollments?.pop() as Enrollment;
+          funding = enrollment.fundings?.pop() as Funding;
+
+          const lastAfterFirstErr = funding.validationErrors?.find(
+            (err) => err.property === 'lastReportingPeriod'
+          );
+          expect(lastAfterFirstErr).not.toBeUndefined();
+          expect(
+            (lastAfterFirstErr?.constraints || {})[
+              'lastReportingPeriodAfterFirst'
+            ]
+          ).not.toBeUndefined();
+        });
       });
     });
   });
