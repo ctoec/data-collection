@@ -1163,9 +1163,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library.git#add-ids-to-table":
+"@ctoec/component-library@1.1.7":
   version "1.1.7"
-  resolved "https://github.com/ctoec/component-library.git#a6b3fe07afdd4b335d2d3a6952dea2f9e0281397"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.7.tgz#288dd1ca4f8ac598975d5eaaceaa9b14cfc43573"
+  integrity sha512-1qHmFOUZyRT7May9Ss/X+3rGxzIGaIFsxdF4jo7FmyYN+AUbR+Or64LIxoolcP8Sot2SAAF2v76hkFJBPvcIPQ==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
