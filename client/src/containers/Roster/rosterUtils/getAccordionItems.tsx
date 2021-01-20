@@ -61,8 +61,16 @@ export function getAccordionItems(
           hideCapacity={opts.hideCapacity}
         />
       ),
-      expandText: `Show ${ageGroup} roster`,
-      collapseText: `Hide ${ageGroup} roster`,
+      expandText: (
+        <>
+          Show<span className="usa-sr-only">{` ${ageGroup} roster`}</span>
+        </>
+      ),
+      collapseText: (
+        <>
+          Hide<span className="usa-sr-only">{` ${ageGroup} roster`}</span>
+        </>
+      ),
       content: (
         <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
           <Table<Child>
