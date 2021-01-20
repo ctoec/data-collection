@@ -59,6 +59,11 @@ exports[`Forms Funding matches snapshot 1`] = `
       >
         Last reporting period
       </label>
+      <span
+        class="usa-hint text-italic"
+      >
+        Last reporting period is only required if this child's funding is no longer active.
+      </span>
       <select
         aria-required="true"
         class="usa-select"
