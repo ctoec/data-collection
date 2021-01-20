@@ -2,7 +2,7 @@ import moment from 'moment';
 import { FundingSource } from '../../../client/src/shared/models';
 import { ReportingPeriod } from '../../entity';
 
-export const reportingPeriods = [
+export const allReportingPeriods: string[][] = [
   ['2019-07-01', '2019-06-29', '2019-08-02', '2019-08-21'],
   ['2019-08-01', '2019-08-03', '2019-08-30', '2019-09-18'],
   ['2019-09-01', '2019-08-31', '2019-09-27', '2019-10-16'],
@@ -28,6 +28,12 @@ export const reportingPeriods = [
   ['2021-05-01', '2021-04-27', '2021-05-31', '2021-06-19'],
   ['2021-06-01', '2021-06-01', '2021-06-28', '2021-07-17'],
 ];
+
+// Get all reporting period dates that aren't in the future
+export const getCurrentReportingPeriodDates = () => {
+  return allReportingPeriods.filter(reportingPeriod => 
+    moment().isSameOrAfter(reportingPeriod[0]));
+}
 
 export const getReportingPeriodFromDates = (
   fundingSource: FundingSource,
