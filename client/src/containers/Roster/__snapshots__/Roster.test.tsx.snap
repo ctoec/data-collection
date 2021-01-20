@@ -300,7 +300,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <span
                         class="padding-right-1"
                       >
-                        Hide Infant/toddler roster
+                        Hide
+                        <span
+                          class="usa-sr-only"
+                        >
+                           Infant/toddler roster
+                        </span>
                       </span>
                       <svg
                         class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"
@@ -777,7 +782,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <span
                         class="padding-right-1"
                       >
-                        Hide Preschool roster
+                        Hide
+                        <span
+                          class="usa-sr-only"
+                        >
+                           Preschool roster
+                        </span>
                       </span>
                       <svg
                         class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"
@@ -1524,7 +1534,12 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       <span
                         class="padding-right-1"
                       >
-                        Hide Infant/toddler roster
+                        Hide
+                        <span
+                          class="usa-sr-only"
+                        >
+                           Infant/toddler roster
+                        </span>
                       </span>
                       <svg
                         class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"
@@ -1955,7 +1970,12 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       <span
                         class="padding-right-1"
                       >
-                        Hide Preschool roster
+                        Hide
+                        <span
+                          class="usa-sr-only"
+                        >
+                           Preschool roster
+                        </span>
                       </span>
                       <svg
                         class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"
@@ -2590,7 +2610,12 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   <span
                     class="padding-right-1"
                   >
-                    Hide Infant/toddler roster
+                    Hide
+                    <span
+                      class="usa-sr-only"
+                    >
+                       Infant/toddler roster
+                    </span>
                   </span>
                   <svg
                     class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"
@@ -3021,7 +3046,12 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   <span
                     class="padding-right-1"
                   >
-                    Hide Preschool roster
+                    Hide
+                    <span
+                      class="usa-sr-only"
+                    >
+                       Preschool roster
+                    </span>
                   </span>
                   <svg
                     class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"
@@ -3717,7 +3747,12 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                       <span
                         class="padding-right-1"
                       >
-                        Hide Infant/toddler roster
+                        Hide
+                        <span
+                          class="usa-sr-only"
+                        >
+                           Infant/toddler roster
+                        </span>
                       </span>
                       <svg
                         class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"
@@ -4148,7 +4183,12 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                       <span
                         class="padding-right-1"
                       >
-                        Hide Preschool roster
+                        Hide
+                        <span
+                          class="usa-sr-only"
+                        >
+                           Preschool roster
+                        </span>
                       </span>
                       <svg
                         class="oec-accordion__button-icon width-auto oec-accordion__button-icon--expanded"

@@ -41,6 +41,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     <p>
       <span
         class="text-bold"
+        id="enrollments-to-include"
       >
         Enrollments to include
       </span>
@@ -67,6 +68,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     <p>
       <span
         class="text-bold"
+        id="data-collection-period"
       >
         Data collection period
       </span>
@@ -76,6 +78,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     <p>
       <span
         class="text-bold"
+        id="data-submission-deadline"
       >
         Data submission deadline
       </span>
@@ -84,6 +87,7 @@ exports[`DataRequirements matches snapshot 1`] = `
     </p>
     <h2
       class="border-top border-base-lighter padding-top-1"
+      id="data-elements"
     >
       Data elements
     </h2>
@@ -97,7 +101,9 @@ exports[`DataRequirements matches snapshot 1`] = `
         <div
           class="data-definitions"
         >
-          <table>
+          <table
+            id="requirement-levels"
+          >
             <caption
               class="text-bold text-left margin-bottom-1"
             >
@@ -202,7 +208,9 @@ exports[`DataRequirements matches snapshot 1`] = `
             <div
               class="margin-top-4"
             >
-              <h3>
+              <h3
+                id="section-one"
+              >
                 Section one
               </h3>
               <p
@@ -282,7 +290,9 @@ exports[`DataRequirements matches snapshot 1`] = `
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr
+                    id="favorite-color-field"
+                  >
                     <th
                       scope="row"
                     >
@@ -324,7 +334,9 @@ exports[`DataRequirements matches snapshot 1`] = `
             <div
               class="margin-top-4"
             >
-              <h3>
+              <h3
+                id="section-two"
+              >
                 Section two
               </h3>
               <p
@@ -404,7 +416,9 @@ exports[`DataRequirements matches snapshot 1`] = `
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr
+                    id="lucky-number-field"
+                  >
                     <th
                       scope="row"
                     >
