@@ -2782,7 +2782,7 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </div>
     </fieldset>
     <fieldset
-      aria-labelledby="fieldset-legend-funding-source-1"
+      aria-labelledby="fieldset-legend-funding-source-1 funding-source-1-hint"
       class="usa-fieldset"
       id="funding-source-1"
     >
@@ -2795,6 +2795,12 @@ exports[`Forms Enrollment matches snapshot 1`] = `
           Funding source options
         </span>
       </legend>
+      <span
+        class="usa-hint text-italic"
+        id="funding-source-1-hint"
+      >
+        Choose an age group to see available funding types
+      </span>
       <div />
     </fieldset>
     <input

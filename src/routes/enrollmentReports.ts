@@ -14,6 +14,7 @@ import fs from 'fs';
 import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
+const upload = multer({ dest: '/tmp/uploads' }).single('file');
 
 /**
  * /enrollment-reports/check POST
@@ -28,36 +29,27 @@ export const enrollmentReportsRouter = express.Router();
  *  - sends back an Error Dictionary mapping columns to how many errors
  *    of that kind occur in the file
  */
-const temp = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
   '/check',
-  temp,
+  upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const reportChildren: Child[] = await controller.mapRows(
+        const reportChildren = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
           { save: false }
         );
 
-        // Need this line to create entities as the DB would see them.
-        // Since only given properties are copied into the entities,
-        // anything that winds up with missing info will set off
-        // validation errors, which we need to find nested errors in
-        // e.g. family address, enrollments, income dets, etc.
-        const dbChildren = tManager.create(Child, reportChildren);
         const childrenWithErrors = await Promise.all(
-          dbChildren.map(async (child) => {
-            return {
-              ...child,
-              validationErrors: await validate(child),
-              cascadeDeleteEnrollments: null,
-            };
-          })
+          reportChildren.map(async (child) => ({
+            ...child,
+            validationErrors: await validate(child),
+          }))
         );
+
         const errorDict = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
@@ -94,7 +86,6 @@ enrollmentReportsRouter.post(
  * 		and saves that to the DB as an EnrollmentReport
  * 	- returns new EnrollmentReport on success
  */
-const upload = multer({ dest: '/tmp/uploads' }).single('file');
 enrollmentReportsRouter.post(
   '/',
   upload,
@@ -127,9 +118,12 @@ enrollmentReportsRouter.post(
           req.user,
           { save: true }
         );
-        const report = await tManager.save(
-          tManager.create(EnrollmentReport, { children: reportChildren })
-        );
+
+        // TODO: Decide if there's any benefit in actually creating the EnrollmentReport entity,
+        // which maps childIds to the upload they came from.
+        // Not useful now, but may be useful when users are uploading incremental update reports
+        // and we have a need to display to the user which records were updated/added by their
+        // upload. Skip creating the report for now to save time (esp for large uploads)
 
         let numActive = 0,
           numWithdrawn = 0;
@@ -139,7 +133,6 @@ enrollmentReportsRouter.post(
         });
 
         res.status(201).json({
-          id: report.id,
           active: numActive,
           withdrawn: numWithdrawn,
         } as BatchUpload);
