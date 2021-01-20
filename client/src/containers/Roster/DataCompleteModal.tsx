@@ -18,6 +18,7 @@ export const DataCompleteModal: React.FC<DataCompleteModalProps> = ({
       header={<h2>We've let OEC know your data is complete!</h2>}
       content={
         <div>
+          <Stars />
           <p>
             Going forward, update your roster with new enrollments or
             withdrawals, as well as age group, funding, and site changes.
@@ -27,10 +28,10 @@ export const DataCompleteModal: React.FC<DataCompleteModalProps> = ({
             then, you can make changes directly in your ECE Reporter roster.
           </p>
           <h3>How was this experience?</h3>
-          <div>
+          <p>
             Take a quick survey to let us know how we can make this tool easier
             to use and more valuable to childcare providers like you.
-          </div>
+          </p>
           <div className="margin-top-4">
             <Button
               text="Back to roster"
