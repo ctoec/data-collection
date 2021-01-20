@@ -2,10 +2,14 @@ import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import cx from 'classnames';
 import { ReactComponent as ArrowRight } from '@ctoec/component-library/dist/assets/images/arrowForward.svg';
-import { Button, LoadingWrapper, TextWithIcon } from '@ctoec/component-library';
+import {
+  Button,
+  LoadingWrapper,
+  Reviews,
+  TextWithIcon,
+} from '@ctoec/component-library';
 import HomeCareerBubbleSrc from '@ctoec/component-library/dist/assets/images/homeCareerBubble.png';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { MailToLink } from '../../components/MailToLink';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const Landing: React.FC = () => {
@@ -125,10 +129,10 @@ const Landing: React.FC = () => {
       </div>
       <footer className={cx('bg-base-lightest', 'padding-y-6', 'footer')}>
         <div className="grid-container">
-          <div className="grid-row flex-justify flex-align-center">
-            <div className="grid-col-10">
+          <div className="grid-row grid-gap">
+            <div className="grid-col-9">
               <h2 className="text-primary text-light margin-y-3">
-                Make ECE Reporter for providers like you
+                Make ECE Reporter better for providers like you
               </h2>
               <p>
                 Take a quick survey to let the team know how this tool can work
@@ -142,10 +146,11 @@ const Landing: React.FC = () => {
                 Give Feedback
               </a>
             </div>
+            <div className="grid-col-3 margin-y-3" role="presentation">
+              <Reviews />
+            </div>
           </div>
-          <div className="grid-col-2">
-            {/* TODO: Add icon of message bubbles */}
-          </div>
+          <div>{/* TODO: Add icon of message bubbles */}</div>
         </div>
       </footer>
     </div>

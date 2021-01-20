@@ -1163,10 +1163,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@1.1.7":
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.7.tgz#288dd1ca4f8ac598975d5eaaceaa9b14cfc43573"
-  integrity sha512-1qHmFOUZyRT7May9Ss/X+3rGxzIGaIFsxdF4jo7FmyYN+AUbR+Or64LIxoolcP8Sot2SAAF2v76hkFJBPvcIPQ==
+"@ctoec/component-library@1.1.8":
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.8.tgz#476910f84015911d605369d4c9820cf53cc01965"
+  integrity sha512-2gKyElSuWbiu67++xA1DTKjfxmHDaKpZX8OMZUqwTIMYc8lvrUa77/2/lGKSCcmcqnDHxvuZ51ctwErd1ltEoA==
   dependencies:
     "@material-ui/core" "^4.11.0"
     "@material-ui/icons" "^4.9.1"
