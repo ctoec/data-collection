@@ -1,8 +1,10 @@
 ## Background
 
 ## Zenhub Issue
+Add Zenhub link here.
 
 ## Associated PRs
+If applicable, add links to corrollary pull requests here.
 
 ## Testing
 
