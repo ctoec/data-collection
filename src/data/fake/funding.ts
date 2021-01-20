@@ -2,7 +2,7 @@ import { random } from 'faker';
 import { Enrollment, Funding, Organization } from '../../entity';
 import {
   getReportingPeriodFromDates,
-  previousReportingPeriods,
+  getCurrentReportingPeriodDates,
 } from './reportingPeriods';
 
 export const getFakeFunding = (
@@ -17,7 +17,7 @@ export const getFakeFunding = (
     ) || []
   );
 
-  const firstAndLastReportingPeriods = previousReportingPeriods.slice(-2).map((r) => ({
+  const firstAndLastReportingPeriods = getCurrentReportingPeriodDates().slice(-2).map((r) => ({
     id,
     ...getReportingPeriodFromDates(fundingSpace.source, r),
   }));
