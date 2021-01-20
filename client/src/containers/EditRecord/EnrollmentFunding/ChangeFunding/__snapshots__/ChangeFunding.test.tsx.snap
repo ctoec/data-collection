@@ -38,7 +38,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - change fun
             class="usa-label"
             for="last-reporting-period"
           >
-            Last reporting period for current CDC - Child Day Care - undefined funding
+            Last reporting period for current Child Day Care - undefined funding
           </label>
           <span
             class="usa-hint text-italic"
@@ -137,7 +137,7 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end fundin
             class="usa-label"
             for="last-reporting-period"
           >
-            Last reporting period for current CDC - Child Day Care - undefined funding
+            Last reporting period for current Child Day Care - undefined funding
           </label>
           <span
             class="usa-hint text-italic"

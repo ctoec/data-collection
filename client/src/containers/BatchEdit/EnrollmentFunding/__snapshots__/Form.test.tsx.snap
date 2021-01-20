@@ -81,7 +81,7 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
   <div
     class="text-bold font-body-md"
   >
-    Funding source: CDC - Child Day Care
+    Funding source: Child Day Care
   </div>
   <form
     class="usa-form usa-form"
