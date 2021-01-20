@@ -1,7 +1,6 @@
 import {
   Gender,
   AgeGroup,
-  FUNDING_SOURCE_FULL_VALUES,
   CareModel,
   BirthCertificateType,
   ExitReason,
@@ -21,11 +20,11 @@ import {
   REPORTING_REASON,
   DEMOGRAPHIC_REPORTING_REASON,
   GEOGRAPHIC_REPORTING_REASON,
-  REQUIRED_NOT_FOSTER,
   UTILIZATION_REPORTING_REASON,
   REQUIRED_IF_CHANGED_ENROLLMENT,
   REQUIRED_IF_CHANGED_ENROLLMENT_FUNDING,
   REQUIRED_IF_INCOME_DISCLOSED,
+  FUNDING_SOURCES_WITH_ACRONYMS
 } from './constants';
 import moment, { Moment } from 'moment';
 
@@ -484,7 +483,7 @@ export class EnrollmentReportRow {
     definition:
       'The type of service being provided, as described by the funding source',
     reason: UTILIZATION_REPORTING_REASON,
-    format: makeFormatOptionsList(Object.values(FUNDING_SOURCE_FULL_VALUES)),
+    format: makeFormatOptionsList(Object.values(FUNDING_SOURCES_WITH_ACRONYMS)),
     example: 'CSR',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })

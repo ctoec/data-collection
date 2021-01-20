@@ -1,10 +1,11 @@
+import { FundingSource } from '../../client/src/shared/models';
 import moment from 'moment';
 
 // UPDATE THESE IF YOU CHANGE THIS FILE!!
 // TODO: add pre-merge hook that updates these values (probably put them in a diff file)
 // automatically when this file gets updated
-export const TEMPLATE_VERSION = 1;
-export const TEMPLATE_LAST_UPDATED = moment.utc('01-04-2021', ['MM-DD-YYYY']);
+export const TEMPLATE_VERSION = 2;
+export const TEMPLATE_LAST_UPDATED = moment.utc('01-19-2021', ['MM-DD-YYYY']);
 
 // Formats
 export const BOOLEAN_FORMATS = ['Yes', 'Y', 'No', 'N', 'Not collected'];
@@ -47,3 +48,12 @@ export const DEMOGRAPHIC_REPORTING_REASON = 'Used for demographic reporting';
 export const GEOGRAPHIC_REPORTING_REASON = 'Used for geographic reporting';
 export const UTILIZATION_REPORTING_REASON =
   'Used for reporting on the utilization of state funded spaces.';
+
+export const FUNDING_SOURCES_WITH_ACRONYMS: {[ key in keyof typeof FundingSource ]: string} = {
+  CDC: 'CDC - Child Day Care',
+  CSR: 'CSR - Competitive School Readiness',
+  PSR: 'PSR - Priority School Readiness',
+  SHS: 'SHS - State Head Start',
+  SS: 'SS - Smart Start'
+};
+  
