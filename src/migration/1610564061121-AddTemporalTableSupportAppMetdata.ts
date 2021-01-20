@@ -2,9 +2,9 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { addSystemVersioningColumnsToTableQuery } from './queries/addTemporalTableSupport';
 import { dropDefaultConstraint } from './utils/dropDefaultConstraint';
 
-export class AddTemporalTableSupportAppMetadata1610564061121
+export class AddTemporalTableSupportAppMetdata1610564061121
   implements MigrationInterface {
-  name = 'AddTemporalTableSupportAppMetadata1610564061121';
+  name = 'AddTemporalTableSupportAppMetdata1610564061121';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
