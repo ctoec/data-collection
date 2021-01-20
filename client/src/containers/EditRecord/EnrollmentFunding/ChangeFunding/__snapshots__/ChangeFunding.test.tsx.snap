@@ -40,6 +40,11 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - change fun
           >
             Last reporting period for current CDC - Child Day Care - undefined funding
           </label>
+          <span
+            class="usa-hint text-italic"
+          >
+            Last reporting period is only required if this child's funding is no longer active.
+          </span>
           <select
             aria-required="false"
             class="usa-select"
@@ -134,6 +139,11 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end fundin
           >
             Last reporting period for current CDC - Child Day Care - undefined funding
           </label>
+          <span
+            class="usa-hint text-italic"
+          >
+            Last reporting period is only required if this child's funding is no longer active.
+          </span>
           <select
             aria-required="true"
             class="usa-select"

@@ -41,7 +41,7 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
       <div />
     </fieldset>
     <fieldset
-      aria-labelledby="fieldset-legend-funding-source-1"
+      aria-labelledby="fieldset-legend-funding-source-1 funding-source-1-hint"
       class="usa-fieldset"
       id="funding-source-1"
     >
@@ -54,6 +54,12 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
           Funding source options
         </span>
       </legend>
+      <span
+        class="usa-hint text-italic"
+        id="funding-source-1-hint"
+      >
+        Choose an age group to see available funding types
+      </span>
       <div />
     </fieldset>
     <input
@@ -143,6 +149,11 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
       >
         Last reporting period
       </label>
+      <span
+        class="usa-hint text-italic"
+      >
+        Last reporting period is only required if this child's funding is no longer active.
+      </span>
       <select
         aria-required="true"
         class="usa-select"
@@ -177,7 +188,7 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
     id="batch-edit-enrollment-3"
   >
     <fieldset
-      aria-labelledby="fieldset-legend-funding-source-3"
+      aria-labelledby="fieldset-legend-funding-source-3 funding-source-3-hint"
       class="usa-fieldset"
       id="funding-source-3"
     >
@@ -190,6 +201,12 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
           Funding source options
         </span>
       </legend>
+      <span
+        class="usa-hint text-italic"
+        id="funding-source-3-hint"
+      >
+        Choose an age group to see available funding types
+      </span>
       <div />
     </fieldset>
     <input

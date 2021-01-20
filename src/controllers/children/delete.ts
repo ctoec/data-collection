@@ -11,7 +11,13 @@ import { NotFoundError } from '../../middleware/error/errors';
 export const deleteChild = async (id: string, user: User) => {
   const readOrgIds = await getReadAccessibleOrgIds(user);
   let child = await getManager().findOne(Child, id, {
-    relations: ['family'],
+    // fetch family + income dets, and enrollment + fundings so they'll be soft removed
+    relations: [
+      'family',
+      'family.incomeDeterminations',
+      'enrollments',
+      'enrollments.fundings',
+    ],
     where: { organization: { id: In(readOrgIds) } },
   });
 

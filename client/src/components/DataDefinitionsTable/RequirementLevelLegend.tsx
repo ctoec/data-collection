@@ -3,7 +3,7 @@ import { TEMPLATE_REQUIREMENT_LEVELS } from '../../shared/constants';
 import { getRequiredTag } from './utils';
 
 export const RequirementLevelLegend: React.FC = () => (
-  <table>
+  <table id="requirement-levels">
     <caption className="text-bold text-left margin-bottom-1">
       Requirement levels
     </caption>

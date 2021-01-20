@@ -32,7 +32,7 @@ const DataRequirements: React.FC = () => {
         with the Office of Early Childhood (OEC).
       </p>
       <p>
-        <span className="text-bold">Enrollments to include</span>
+        <span id="enrollments-to-include" className="text-bold">Enrollments to include</span>
         <br />
         Children receiving funding through the following programs:
       </p>
@@ -42,17 +42,17 @@ const DataRequirements: React.FC = () => {
         ))}
       </ul>
       <p>
-        <span className="text-bold">Data collection period</span>
+        <span id="data-collection-period" className="text-bold">Data collection period</span>
         <br />
         The data collection period begins 07/01/2020 and continues through
         12/31/2020.
       </p>
       <p>
-        <span className="text-bold">Data submission deadline</span>
+        <span id="data-submission-deadline" className="text-bold">Data submission deadline</span>
         <br />
         You must submit your data to OEC by 03/05/2021.
       </p>
-      <h2 className="border-top border-base-lighter padding-top-1">
+      <h2 id="data-elements" className="border-top border-base-lighter padding-top-1">
         Data elements
       </h2>
       <DataDefinitionsTable
