@@ -18,7 +18,12 @@ export const removeExistingEnrollmentDataForUser = async (
 ) => {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
   let allChildren = await transaction.find(Child, {
-    relations: ['enrollments', 'family'],
+    relations: [
+      'enrollments',
+      'enrollments.fundings',
+      'family',
+      'family.incomeDeterminations',
+    ],
     where: { organization: { id: In(readAccessibleOrgIds) } },
   });
   allChildren.forEach((c) => {
