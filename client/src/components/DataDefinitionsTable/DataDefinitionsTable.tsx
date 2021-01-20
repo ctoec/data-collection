@@ -16,6 +16,7 @@ import {
 } from './utils';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { Heading } from '../Heading';
+import { kebabCase } from 'lodash';
 
 type DataDefinitionsTableProps = {
   headerLevel: HeadingLevel;
@@ -83,11 +84,12 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
           {Object.entries(columnMetadataBySection).map(
             ([sectionName, sectionData]) => (
               <div key={sectionName} className="margin-top-4">
-                <Heading level={headerLevel}>{sectionName}</Heading>
+                <Heading id={kebabCase(sectionName)} level={headerLevel}>{sectionName}</Heading>
                 <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
                 <Table
                   id={`data-requirements-${sectionName.replace(' ', '-')}`}
                   data={sectionData}
+                  rowId={(row) => kebabCase(row.formattedName) + '-field'}
                   rowKey={(row) => (row ? row.formattedName : '')}
                   columns={TableColumns}
                   defaultSortColumn={0}
