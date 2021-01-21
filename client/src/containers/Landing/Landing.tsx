@@ -150,7 +150,6 @@ const Landing: React.FC = () => {
               <Reviews />
             </div>
           </div>
-          <div>{/* TODO: Add icon of message bubbles */}</div>
         </div>
       </footer>
     </div>
