@@ -13,7 +13,15 @@ import fs from 'fs';
 import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
-const upload = multer({ dest: '/tmp/uploads' }).single('file');
+
+// Save uploaded files with timestamps so that if one fails and
+// it persists to disk, it's easier to debug
+const storage = multer.diskStorage({
+  destination: '/tmp/uploads',
+  filename: (req, file, callback) =>
+    callback(null, file.fieldname + '_' + new Date()),
+});
+const upload = multer({ storage: storage }).single('file');
 
 /**
  * /enrollment-reports/check POST
