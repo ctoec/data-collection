@@ -1,25 +1,18 @@
 ---
-name: Bug report
 labels: bug
-about: Create a report to help us improve
-
 ---
 
-## Description
-A clear and concise description of what the bug is.
+## Background
+Include a brief overview of what the problem in question is, along with the impact it's having.
 
 ## Repro Steps
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Outline all steps necessary in order to reproduce this behavior.
 
 ## Expected Behavior
-A clear and concise description of what you expected to happen.
+Provide a clear and concise description of what you _expected_ to happen.
 
 ## Actual Behavior
-A clear and concise description of what is actually happening.
+Provide a clear and concise description of what is _actually_ happening.
 
 ## Additional Context
-Add any other context about the problem here.
+If there's any other context about this bug that needs to be captured, do so here.
