@@ -34,7 +34,7 @@ export class AddTemporalTableSupportAppMetdata1610564061121
       `ALTER TABLE "child" ADD "specialEducationServicesType" varchar(20)`
     );
     await queryRunner.query(
-      `ALTER TABLE "income_determination" ADD CONSTRAINT DEFAULT 0 FOR "incomeNotDisclosed"`
+      `ALTER TABLE "income_determination" ADD CONSTRAINT DF_incomeNotDisclosed_0 DEFAULT 0 FOR "incomeNotDisclosed"`
     );
 
     await queryRunner.query(
