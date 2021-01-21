@@ -1,5 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { addSystemVersioningColumnsToTableQuery } from './queries/addTemporalTableSupport';
+import {
+  addSystemVersioningColumnsToTableQuery,
+  removeSystemVersioningColumnsFromTableQuery,
+} from './queries/addTemporalTableSupport';
 import { dropDefaultConstraint } from './utils/dropDefaultConstraint';
 
 export class AddTemporalTableSupportAppMetdata1610564061121
@@ -32,6 +35,19 @@ export class AddTemporalTableSupportAppMetdata1610564061121
     );
     await queryRunner.query(
       `ALTER TABLE "income_determination" ADD CONSTRAINT DEFAULT 0 FOR "incomeNotDisclosed"`
+    );
+
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('user')
+    );
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('organization')
+    );
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('site')
+    );
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('funding_space')
     );
   }
 }
