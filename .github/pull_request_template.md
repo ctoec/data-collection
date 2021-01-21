@@ -1,12 +1,17 @@
 ## Background
+Provide a brief overview of the work completed here.
 
 ## Zenhub Issue
-Add Zenhub link here.
+Replace this text with the link to the associated Zenhub issue.
 
 ## Associated PRs
-If applicable, add links to corrollary pull requests here.
+If applicable, replace this text with links to additional pull requests associated with this work.
 
-## Testing
+## Test Coverage
+- [ ] All unit tests are passing.
+- [ ] All e2e tests are passing.
+- [ ] Unit tests have been added to cover this changeset.
+- [ ] e2e tests have been added to cover this changeset.
 
-### Automated Test Coverage
-What unit tests were added in order to ensure the functionality you've added has been covered?  What e2e tests were added in in order to ensure the functionality you've added has been covered?
+## Additional Context
+If there's anything additional information that those reviewing or validating this work should be aware of, please specify it here.
