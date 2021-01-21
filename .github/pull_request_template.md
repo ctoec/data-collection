@@ -3,7 +3,6 @@ Provide a brief overview of the work completed here.
 
 ## Zenhub Issue
 Replace this text with the link to the associated Zenhub issue.  
-
 **NOTE: Please don't mark the issue as closed by this pull request!  Issues are to be closed manually within Zenhub upon merge & prod deploy.**
 
 ## Associated PRs

@@ -1,6 +1,5 @@
 ## Background
-Some context for the purpose of this user story.
-
+Provide a brief description of the work to be completed here, along with the problem we're attempting to solve with it.
 
 ## Acceptance Criteria
 Please supply the full set of predefined requirements that must be met in order for this ticket to be completed.
