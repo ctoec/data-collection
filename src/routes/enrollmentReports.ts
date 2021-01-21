@@ -1,7 +1,6 @@
 import express from 'express';
 import { getManager } from 'typeorm';
 import multer from 'multer';
-import { Child, EnrollmentReport } from '../entity';
 import {
   BadRequestError,
   ApiError,
@@ -14,7 +13,15 @@ import fs from 'fs';
 import { BatchUpload } from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
-const upload = multer({ dest: '/tmp/uploads' }).single('file');
+
+// Save uploaded files with timestamps so that if one fails and
+// it persists to disk, it's easier to debug
+const storage = multer.diskStorage({
+  destination: '/tmp/uploads',
+  filename: (req, file, callback) =>
+    callback(null, file.fieldname + '_' + new Date()),
+});
+const upload = multer({ storage: storage }).single('file');
 
 /**
  * /enrollment-reports/check POST
@@ -54,10 +61,12 @@ enrollmentReportsRouter.post(
           childrenWithErrors
         );
 
+        // Only remove the file from disk if we could successfully parse it
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+
         res.send(errorDict);
       } catch (err) {
         if (err instanceof ApiError) throw err;
-
         console.error(
           'Unable to determine validation errors in spreadsheet: ',
           err
@@ -65,8 +74,6 @@ enrollmentReportsRouter.post(
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
-      } finally {
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
       }
     });
   })
@@ -136,15 +143,15 @@ enrollmentReportsRouter.post(
           active: numActive,
           withdrawn: numWithdrawn,
         } as BatchUpload);
+
+        // Only remove the file from disk if we successfully parsed it
+        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
       } catch (err) {
         if (err instanceof ApiError) throw err;
-
         console.error('Error parsing uploaded enrollment report: ', err);
         throw new BadRequestError(
           'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
         );
-      } finally {
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
       }
     });
   })
