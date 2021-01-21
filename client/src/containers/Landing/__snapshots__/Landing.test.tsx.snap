@@ -280,7 +280,6 @@ exports[`Landing matches snapshot 1`] = `
             </svg>
           </div>
         </div>
-        <div />
       </div>
     </footer>
   </div>
