@@ -93,7 +93,7 @@ export class Enrollment implements EnrollmentInterface {
   @ValidateIf((enrollment) => {
     // This is used by each funding
     // See similar pattern between child and family
-    enrollment.fundings.forEach((funding) => {
+    enrollment.fundings?.forEach((funding) => {
       // Fundings must be undefined or we have circular json
       funding.enrollment = { ...enrollment, fundings: undefined };
       // But we still need access to the other fundings
