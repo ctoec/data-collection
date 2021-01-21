@@ -14,6 +14,6 @@ export const addSystemVersioningColumnsToTableQuery = (tableName: string) => `
 		PERIOD FOR SYSTEM_TIME(SysStartTime, SysEndTime)`;
 
 export const turnSystemVersioningOnForTableQuery = (tableName: string) => `
-	ALTER TABLE ${tableName}
-		SET (SYSTEM_VERSIONING = ON (HISTORY_TABLE = ${HISTORY_SCHEMA}.${tableName}))
+	ALTER TABLE [${tableName}]
+		SET (SYSTEM_VERSIONING = ON (HISTORY_TABLE = [${HISTORY_SCHEMA}].[${tableName}]))
 `;
