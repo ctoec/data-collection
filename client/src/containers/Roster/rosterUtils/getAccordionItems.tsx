@@ -55,12 +55,6 @@ export function getAccordionItems(
           )}
         </>
       ),
-      headerContent: (
-        <RosterSectionHeader
-          children={ageGroupChildren}
-          hideCapacity={opts.hideCapacity}
-        />
-      ),
       expandText: (
         <>
           Show<span className="usa-sr-only">{` ${ageGroup} roster`}</span>
@@ -72,17 +66,23 @@ export function getAccordionItems(
         </>
       ),
       content: (
-        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-          <Table<Child>
-            className="margin-bottom-4"
-            id={`roster-table-${ageGroup}`}
-            rowKey={(row) => row?.id}
-            data={ageGroupChildren}
-            columns={tableColumns(excludeColumns)}
-            defaultSortColumn={0}
-            defaultSortOrder="ascending"
-          />
-        </ErrorBoundary>
+        <>
+          <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+            <RosterSectionHeader
+              children={ageGroupChildren}
+              hideCapacity={opts.hideCapacity}
+            />
+            <Table<Child>
+              className="margin-bottom-4"
+              id={`roster-table-${ageGroup}`}
+              rowKey={(row) => row?.id}
+              data={ageGroupChildren}
+              columns={tableColumns(excludeColumns)}
+              defaultSortColumn={0}
+              defaultSortOrder="ascending"
+            />
+          </ErrorBoundary>
+        </>
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
