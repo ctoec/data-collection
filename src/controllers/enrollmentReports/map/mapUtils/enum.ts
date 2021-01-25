@@ -33,13 +33,19 @@ export const mapEnum = <T>(
   value: string | undefined,
   opts: {
     isFundingSource?: boolean;
+    isBirthCertificateType?: boolean;
     isUndefineableBoolean?: boolean;
   } = {}
 ) => {
   // Handle special case of blanks in undefineable boolean columns
-  // right upfront
+  // and the birth certificate type right upfront
+  // Note: Birth certificate is its own conditional beacuse we don't
+  // want the undefinable boolean's 'Not Collected,' we want blanks
+  // to be parsed as 'Unavailable'
   if (!value && opts.isUndefineableBoolean) {
     return (UndefinableBoolean.NotCollected as unknown) as T;
+  } else if (!value && opts.isBirthCertificateType) {
+    return (BirthCertificateType.Unavailable as unknown) as T;
   }
 
   if (!value) return;

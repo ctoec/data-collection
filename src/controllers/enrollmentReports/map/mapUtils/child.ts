@@ -25,7 +25,8 @@ export const mapChild = (
   // Birth certificate type
   const birthCertificateType: BirthCertificateType = mapEnum(
     BirthCertificateType,
-    source.birthCertificateType
+    source.birthCertificateType,
+    { isBirthCertificateType: true }
   );
 
   // Ethnicity
