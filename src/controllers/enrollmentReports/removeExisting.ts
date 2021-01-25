@@ -32,16 +32,24 @@ export const removeExistingEnrollmentDataForUser = async (
   if (!allChildren || !allChildren.length) return;
 
   const childrenToDelete =
-    siteIdsToReplace && siteIdsToReplace.length
+    // If specific site ids are supplied in API call, remove data for those sites
+    siteIdsToReplace?.length
       ? allChildren.filter(
           (child) =>
-            !child.enrollments ||
-            !child.enrollments.length ||
+            child.enrollments?.length &&
             child.enrollments.some((e) =>
               siteIdsToReplace.includes(`${e.siteId}`)
             )
         )
-      : allChildren;
+      : user.sitePermissions?.length
+      ? // If user is site-level user, only remove data for their sites
+        allChildren.filter(
+          (child) =>
+            child.enrollments?.length &&
+            child.enrollments?.some((e) => user.siteIds.includes(e.siteId))
+        )
+      : // Otherwise, remove all children for orgs
+        allChildren;
 
   await transaction.softRemove(childrenToDelete);
   await transaction.softRemove(childrenToDelete.map((child) => child.family));
