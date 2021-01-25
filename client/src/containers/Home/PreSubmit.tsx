@@ -32,11 +32,10 @@ export const PreSubmitHome: React.FC = () => {
     }
   }, [accessToken, showFundingsAndSites]);
 
-  let fundingCards = mapFundingSpacesToCards(fundingSpacesDisplay);
   const fundingSection = (
     <>
       <h3 className="pre-submit-h3">Funding spaces</h3>
-      <div className="three-column-layout">{fundingCards}</div>
+      <div className="three-column-layout">{mapFundingSpacesToCards(fundingSpacesDisplay)}</div>
       <div className="margin-top-4 margin-bottom-4">
         <Divider />
       </div>

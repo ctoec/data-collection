@@ -105,7 +105,11 @@ export const NewFundingField = <
       // The radio buttons only really control what expansions are shown
       // They don't change any form data on their own
       id={`funding-source-${enrollment?.id}`}
-      hint={ !!enrollment?.ageGroup ? undefined : "Choose an age group to see available funding types"}
+      hint={
+        !!enrollment?.ageGroup
+          ? undefined
+          : 'Choose an age group to see available funding types'
+      }
       inputName="fundingSource"
       legend="Funding source options"
       showLegend

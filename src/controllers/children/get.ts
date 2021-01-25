@@ -125,11 +125,11 @@ export const getFundingSpaceMap = async (children: Child[]) => {
   }[] = [];
 
   children.forEach((child) => {
-    const fundingSpace = getCurrentFunding({ child: child })?.fundingSpace;
+    const { fundingSpace } = getCurrentFunding({ child }) || {};
 
     if (fundingSpace) {
       // Start with overall funding source, since it's the header
-      const source = fundingSpace.source;
+      const { source, ageGroup, time: timeType } = fundingSpace;
       let matchingSource = fundingSpacesDisplay.find(
         (fsd) => fsd.sourceName === source
       );
@@ -139,7 +139,6 @@ export const getFundingSpaceMap = async (children: Child[]) => {
       }
 
       // Then the age group, since a source is made up of a list of these
-      const ageGroup = fundingSpace.ageGroup;
       let matchingGroup = matchingSource.includedAgeGroups.find(
         (ag) => ag.ageGroup === ageGroup
       );
@@ -150,7 +149,6 @@ export const getFundingSpaceMap = async (children: Child[]) => {
 
       // Then go to the times within each age group, because that's the
       // last sub-list
-      const timeType = fundingSpace.time;
       let matchingTime = matchingGroup.includedTimes.find(
         (t) => t.timeType === timeType
       );
