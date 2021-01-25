@@ -133,11 +133,19 @@ describe('controllers', () => {
         (inputBirthCertificateType, expectedBirthCertificateType) => {
           const parsed = mapEnum(
             BirthCertificateType,
-            inputBirthCertificateType
+            inputBirthCertificateType,
+            { isBirthCertificateType: true }
           );
           expect(parsed).toEqual(expectedBirthCertificateType);
         }
       );
+
+      it('can parse a blank certificate type as Unavailable, *not* as Not  Collected', () => {
+        const parsed = mapEnum(BirthCertificateType, '', {
+          isBirthCertificateType: true,
+        });
+        expect(parsed).toBe('Unavailable');
+      });
 
       it.each([
         ...Object.values(Gender).map((gender) => [gender, gender]),
