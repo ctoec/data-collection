@@ -16,7 +16,9 @@ export const mapEnrollment = (
   child: Child
 ) => {
   const ageGroup: AgeGroup = mapEnum(AgeGroup, source.ageGroup);
-  const model: CareModel = mapEnum(CareModel, source.model);
+  const model: CareModel = !source.model
+    ? CareModel.Unknown
+    : mapEnum(CareModel, source.model);
 
   return getManager().create(Enrollment, {
     site,

@@ -37,7 +37,7 @@ export const mapEnum = <T>(
   } = {}
 ) => {
   // Handle special case of blanks in undefineable boolean columns
-  // and the birth certificate type right upfront
+  // right upfront
   if (!value && opts.isUndefineableBoolean) {
     return (UndefinableBoolean.NotCollected as unknown) as T;
   }

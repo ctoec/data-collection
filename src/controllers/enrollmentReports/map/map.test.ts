@@ -1,5 +1,5 @@
 import { EnrollmentReportRow } from '../../../template';
-import { Organization, Site, Child, Family } from '../../../entity';
+import { Organization, Site, Child } from '../../../entity';
 import { BadRequestError } from '../../../middleware/error/errors';
 import {
   BirthCertificateType,
@@ -19,7 +19,6 @@ import {
   mapFundingTime,
   MISSING_PROVIDER_ERROR,
   isIdentifierMatch,
-  mapChild,
 } from './mapUtils';
 import moment from 'moment';
 
