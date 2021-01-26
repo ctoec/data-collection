@@ -317,12 +317,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Child Day Care
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Full-day
@@ -341,12 +341,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Priority School Readiness
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Full-time
@@ -840,12 +840,12 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Child Day Care
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Extended-day
@@ -1604,12 +1604,12 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Child Day Care
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Full-day
@@ -1628,12 +1628,12 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Priority School Readiness
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Full-time
@@ -2081,12 +2081,12 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Child Day Care
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Extended-day
@@ -2733,12 +2733,12 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 class="grid-row grid-gap"
               >
                 <div
-                  class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                  class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                 >
                   Child Day Care
                 </div>
                 <div
-                  class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                  class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                 >
                   <b>
                     Full-day
@@ -2757,12 +2757,12 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 class="grid-row grid-gap"
               >
                 <div
-                  class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                  class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                 >
                   Priority School Readiness
                 </div>
                 <div
-                  class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                  class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                 >
                   <b>
                     Full-time
@@ -3210,12 +3210,12 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 class="grid-row grid-gap"
               >
                 <div
-                  class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                  class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                 >
                   Child Day Care
                 </div>
                 <div
-                  class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                  class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                 >
                   <b>
                     Extended-day
@@ -3923,12 +3923,12 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Child Day Care
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Full-day
@@ -3947,12 +3947,12 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Priority School Readiness
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Full-time
@@ -4400,12 +4400,12 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                     class="grid-row grid-gap"
                   >
                     <div
-                      class="tablet:grid-col-2 font-body-sm text-bold margin-top-1"
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
                     >
                       Child Day Care
                     </div>
                     <div
-                      class="tablet:grid-col-10 font-body-sm usa-hint margin-top-1"
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
                     >
                       <b>
                         Extended-day
