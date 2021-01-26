@@ -26,11 +26,10 @@ export function useAuthenticatedSWR<T>(path: string | null) {
  * and using it in the swr infinite getKey function, along with the path from
  * provided `getPath`.
  * Additionally, enables typing casting of the response data from useSWRInfinite.
- * @param path
  */
 export function useAuthenticatedSWRInfinite<T>(
   getPath: (index: number, prevData: T | null) => string | null
-) {
+): SWRInfiniteResponseInterface<T, string> {
   const { accessToken } = useContext(AuthenticationContext);
 
   const getKey = (index: number, prevData: T | null) => {
@@ -38,5 +37,5 @@ export function useAuthenticatedSWRInfinite<T>(
     const key = !path ? null : [path, accessToken];
     return key;
   };
-  return useSWRInfinite(getKey) as SWRInfiniteResponseInterface<T, string>;
+  return useSWRInfinite(getKey);
 }

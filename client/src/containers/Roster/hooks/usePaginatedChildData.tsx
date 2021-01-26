@@ -1,8 +1,9 @@
 import { stringify } from 'query-string';
 import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR';
-import { Child } from '../../../shared/models';
 import { cache } from 'swr';
 import { RosterQueryParams } from '../Roster';
+import { ListChildReponse } from '../../../shared/payloads';
+import { Child } from '../../../shared/models';
 
 const PAGE_SIZE = 100;
 
@@ -13,16 +14,44 @@ const PAGE_SIZE = 100;
  */
 export const usePaginatedChildData = (query: RosterQueryParams) => {
   let stillFetching = true;
+
   // Fetch child data, filtered by organization and month
   const {
-    data: childrenArrays,
+    data: listChildResponses,
     mutate,
     size,
     setSize,
     error,
-  } = useAuthenticatedSWRInfinite<Child[]>((index, prevData) => {
+  } = useAuthenticatedSWRInfinite<ListChildReponse>(getCacheKeyForChildQuery);
+
+  // Trigger next fetch if
+  // - we've completed the first fetch (childrenArrays != undefined)
+  // - we've completed our most recently triggered fetch (childrenArrays.length == size)
+  // - there's more data to fetch (most recent page has records)
+  // Or set fetching to false
+  if (listChildResponses) {
+    if (listChildResponses.length === size &&
+      listChildResponses[listChildResponses?.length - 1].children.length
+    ) {
+      setSize(size + 1);
+    } else {
+      stillFetching = false;
+    }
+  }
+
+  return {
+    children: listChildResponses ? listChildResponses.map(r => r.children).flat() : [],
+    totalCount: listChildResponses ? listChildResponses[size].totalCount : 0,
+    mutate,
+    stillFetching,
+    error,
+  };
+
+  /////////////////////////////////////////////////////////////////
+
+  function getCacheKeyForChildQuery(index: number, prevData: ListChildReponse | null) {
     // Base case -- no more data to fetch when prev data length = 0
-    if (prevData && !prevData.length) {
+    if (prevData && !prevData.children.length) {
       stillFetching = false;
       return null;
     }
@@ -36,30 +65,7 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
           month: query.month,
         })}`
       : null;
-  });
-
-  // Trigger next fetch if
-  // - we've completed the first fetch (childrenArrays != undefined)
-  // - we've completed our most recently triggered fetch (childrenArrays.length == size)
-  // - there's more data to fetch (most recent page has records)
-  // Or set fetching to false
-  if (childrenArrays) {
-    if (
-      childrenArrays.length === size &&
-      childrenArrays[childrenArrays?.length - 1]?.length
-    ) {
-      setSize(size + 1);
-    } else {
-      stillFetching = false;
-    }
   }
-
-  return {
-    children: childrenArrays ? childrenArrays.flat() : childrenArrays,
-    mutate,
-    stillFetching,
-    error,
-  };
 };
 
 /**

@@ -82,6 +82,7 @@ const Roster: React.FC = () => {
   // TODO: handle fetching error
   const {
     children: allChildren,
+    totalCount,
     stillFetching: loading,
   } = usePaginatedChildData(query);
   const {
@@ -151,7 +152,7 @@ const Roster: React.FC = () => {
     h1Text,
     subHeaderText,
     superHeaderText,
-  } = useOrgSiteProps(loading, displayChildren.length);
+  } = useOrgSiteProps(loading, totalCount);
 
   const siteChildCount = (siteFilteredChildren || []).length;
   const siteIsEmpty = siteChildCount === 0;

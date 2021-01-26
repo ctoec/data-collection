@@ -57,7 +57,7 @@ childrenRouter.get(
       const siteCountMap = await controller.getSiteCountMap(response.children);
       res.send({ siteCountMap });
     } else {
-      res.send(response.children);
+      res.send(response);
     }
   })
 );
