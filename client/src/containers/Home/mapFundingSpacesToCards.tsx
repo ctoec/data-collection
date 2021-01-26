@@ -1,9 +1,12 @@
 import React from 'react';
 import { Card } from '@ctoec/component-library';
+import { NestedFundingSpaces } from '../../shared/payloads/NestedFundingSpaces';
 
 // Map each calculated funding space distribution into a card
 // element that we can format for display
-export const mapFundingSpacesToCards = (fundingSpacesDisplay: any) => {
+export const mapFundingSpacesToCards = (
+  fundingSpacesDisplay: NestedFundingSpaces
+) => {
   const fundingCards = (fundingSpacesDisplay || []).map((fsd: any) => (
     <div className="desktop:grid-col-4 three-column-card">
       <Card>

@@ -14,6 +14,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
+import { NestedFundingSpaces } from '../../shared/payloads/NestedFundingSpaces';
 
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -25,7 +26,10 @@ export const PostSubmitHome: React.FC = () => {
 
   // Count how many children are in the roster so we can format the display
   const [userRosterCount, setUserRosterCount] = useState(undefined);
-  const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
+  const [
+    fundingSpacesDisplay,
+    setFundingSpacesDisplay,
+  ] = useState<NestedFundingSpaces>();
   const [siteCountDisplay, setSiteCountDisplay] = useState();
   useEffect(() => {
     apiGet('children?count=true', accessToken)
@@ -45,7 +49,7 @@ export const PostSubmitHome: React.FC = () => {
     // Also determine the funding spaces map for the organization, if
     // the user has the permissions that enable this
     if (showFundings) {
-      apiGet('children?fundingMap=true', accessToken)
+      apiGet('funding-spaces?fundingMap=true', accessToken)
         .then((res) => {
           setFundingSpacesDisplay(res.fundingSpacesMap);
         })
@@ -125,7 +129,7 @@ export const PostSubmitHome: React.FC = () => {
       <div className="margin-top-4 margin-bottom-4">
         <Divider />
       </div>
-      {showFundings && (
+      {showFundings && fundingSpacesDisplay && (
         <>
           <h2>Funding spaces</h2>
           <div className="three-column-layout">

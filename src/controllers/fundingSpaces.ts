@@ -1,7 +1,9 @@
-import { User, FundingSpace } from '../entity';
+import { User, FundingSpace, Child } from '../entity';
 import { getManager, In } from 'typeorm';
+import { groupBy } from 'underscore';
 import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 import { getCurrentFunding } from '../utils/getCurrentFunding';
+import { NestedFundingSpaces } from '../../client/src/shared/payloads/NestedFundingSpaces';
 
 /**
  * Get all funding spaces a given user has access to,
@@ -25,74 +27,39 @@ export const getFundingSpaces = async (
   });
 };
 
-
-/**
- * Simple structs that hold minimum amount of information necessary
- * to partition the children across funding spaces in a nice formatted
- * display.
- */
-type enrollmentTime = {
-  timeType: string;
-  filled: number;
-  capacity: number;
-};
-type enrolledAgeGroup = {
-  ageGroup: string;
-  includedTimes: enrollmentTime[];
-};
 /**
  * Function that accumulates the distribution of how all children in
  * an organization are assigned to their various funding spaces
  * across age groups and enrollment times. Handles partitioning for
  * displaying so that the front end just has to spit this back out.
+ * @param fundingSpaces
  * @param children
  */
-export const getFundingSpaceMap = async () => {
-  // Structure to hold accumulated display information about each funding space
-  const fundingSpacesDisplay: {
-    sourceName: string;
-    includedAgeGroups: enrolledAgeGroup[];
-  }[] = [];
-
-  children.forEach((child) => {
-    const { fundingSpace } = getCurrentFunding({ child }) || {};
-
-    if (fundingSpace) {
-      // Start with overall funding source, since it's the header
-      const { source, ageGroup, time: timeType } = fundingSpace;
-      let matchingSource = fundingSpacesDisplay.find(
-        (fsd) => fsd.sourceName === source
+export const getFundingSpaceMap = async (
+  fundingSpaces: FundingSpace[],
+  children: Child[]
+): Promise<NestedFundingSpaces> => {
+  const fundingSpacesWithChildCount = fundingSpaces.map((fs) => ({
+    ...fs,
+    filled: children.filter(
+      (child) => getCurrentFunding({ child })?.id === fs.id
+    ).length,
+  }));
+  const fundingSpacesDisplay = groupBy(
+    fundingSpacesWithChildCount,
+    (fs: FundingSpace) => fs.source
+  );
+  for (const source in fundingSpacesDisplay) {
+    fundingSpacesDisplay[source] = groupBy(
+      fundingSpacesDisplay[source],
+      (fs: FundingSpace) => fs.ageGroup
+    );
+    for (const ageGroup in fundingSpacesDisplay[source]) {
+      fundingSpacesDisplay[source][ageGroup] = groupBy(
+        fundingSpacesDisplay[source][ageGroup],
+        (fs: FundingSpace) => fs.time
       );
-      if (matchingSource === undefined) {
-        matchingSource = { sourceName: source, includedAgeGroups: [] };
-        fundingSpacesDisplay.push(matchingSource);
-      }
-
-      // Then the age group, since a source is made up of a list of these
-      let matchingGroup = matchingSource.includedAgeGroups.find(
-        (ag) => ag.ageGroup === ageGroup
-      );
-      if (matchingGroup === undefined) {
-        matchingGroup = { ageGroup, includedTimes: [] };
-        matchingSource.includedAgeGroups.push(matchingGroup);
-      }
-
-      // Then go to the times within each age group, because that's the
-      // last sub-list
-      let matchingTime = matchingGroup.includedTimes.find(
-        (t) => t.timeType === timeType
-      );
-      if (matchingTime === undefined) {
-        matchingTime = {
-          timeType,
-          filled: 0,
-          capacity: fundingSpace.capacity,
-        };
-        matchingGroup.includedTimes.push(matchingTime);
-      }
-      matchingTime.filled += 1;
     }
-  });
-
+  }
   return fundingSpacesDisplay;
 };
