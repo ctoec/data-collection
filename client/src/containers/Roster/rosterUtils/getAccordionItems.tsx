@@ -2,7 +2,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 import { ErrorBoundary, InlineIcon, Table } from '@ctoec/component-library';
 import { Child } from '../../../shared/models';
-import { RosterSectionHeader } from '../RosterSectionHeader';
+import { RosterSectionFundingSpacesMap } from '../RosterSectionFundingSpacesMap';
 import { ColumnNames, tableColumns } from '../tableColumns';
 import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
 import { defaultErrorBoundaryProps } from '../../../utils/defaultErrorBoundaryProps';
@@ -68,7 +68,7 @@ export function getAccordionItems(
       content: (
         <>
           <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-            <RosterSectionHeader
+            <RosterSectionFundingSpacesMap
               children={ageGroupChildren}
               hideCapacity={opts.hideCapacity}
             />

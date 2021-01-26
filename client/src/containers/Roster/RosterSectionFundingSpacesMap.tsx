@@ -3,7 +3,7 @@ import Divider from '@material-ui/core/Divider';
 import { Child } from '../../shared/models';
 import { getCurrentFunding } from '../../utils/models';
 
-type RosterSectionHeaderProps = {
+type RosterSectionFundingSpacesMapProps = {
   children: Child[];
   hideCapacity: boolean;
 };
@@ -20,12 +20,11 @@ type SourceToTimes = {
 };
 
 /**
- * The header for a roster section comprised of children of a single age group.
- * While it technically serves as the header, we want to be able to hide it
- * when the accordion for this content is closed, and so it will actually live
- * in the content section.
+ * The "header" area for a roster section comprised of children of a
+ * single age group. Contains information about capacity and filled
+ * spaces of each funding group included in the children.
  */
-export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
+export const RosterSectionFundingSpacesMap: React.FC<RosterSectionFundingSpacesMapProps> = ({
   children,
   hideCapacity,
 }) => {
@@ -57,15 +56,15 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
 
   return (
     <div>
-      {fundingSpacesMap.map((st) => {
+      {fundingSpacesMap.map((sourceToTimes) => {
         let displayStr = (
           <>
-            {st.times.map((t) => (
+            {sourceToTimes.times.map((t) => (
               <>
                 <b>{t.time}</b> {t.count}
-                {hideCapacity || st.capacity === -1
+                {hideCapacity || sourceToTimes.capacity === -1
                   ? ''
-                  : `/${st.capacity}`}{' '}
+                  : `/${sourceToTimes.capacity}`}{' '}
                 &nbsp;&nbsp;
               </>
             ))}
@@ -73,9 +72,9 @@ export const RosterSectionHeader: React.FC<RosterSectionHeaderProps> = ({
         );
         return (
           <>
-            <div key={st.sourceName} className="grid-row grid-gap">
+            <div key={sourceToTimes.sourceName} className="grid-row grid-gap">
               <div className="tablet:grid-col-2 font-body-sm text-bold margin-top-1">
-                {st.sourceName.split('-')[1].trim()}
+                {sourceToTimes.sourceName.split('-')[1].trim()}
               </div>
               <div className="tablet:grid-col-10 font-body-sm usa-hint margin-top-1">
                 {displayStr}
