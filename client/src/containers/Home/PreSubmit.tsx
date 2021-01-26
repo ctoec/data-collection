@@ -35,7 +35,9 @@ export const PreSubmitHome: React.FC = () => {
   const fundingSection = (
     <>
       <h3 className="pre-submit-h3">Funding spaces</h3>
-      <div className="three-column-layout">{mapFundingSpacesToCards(fundingSpacesDisplay)}</div>
+      <div className="three-column-layout">
+        {mapFundingSpacesToCards(fundingSpacesDisplay)}
+      </div>
       <div className="margin-top-4 margin-bottom-4">
         <Divider />
       </div>
