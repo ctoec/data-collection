@@ -90,7 +90,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       <div className="flex-1">
         <p>Income</p>
         <p className="text-bold">
-          {determination.income
+          {typeof determination.income === 'number'
             ? currencyFormatter(determination.income)
             : InlineIcon({ icon: 'incomplete' })}
         </p>
