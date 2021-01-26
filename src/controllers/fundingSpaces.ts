@@ -39,27 +39,26 @@ export const getFundingSpaceMap = async (
   fundingSpaces: FundingSpace[],
   children: Child[]
 ): Promise<NestedFundingSpaces> => {
+  const fundingSpacesDisplay = {} as NestedFundingSpaces;
+
   const fundingSpacesWithChildCount = fundingSpaces.map((fs) => ({
     ...fs,
     filled: children.filter(
       (child) => getCurrentFunding({ child })?.id === fs.id
     ).length,
   }));
-  const fundingSpacesDisplay = groupBy(
+
+  const spacesBySource = groupBy(
     fundingSpacesWithChildCount,
     (fs: FundingSpace) => fs.source
   );
-  for (const source in fundingSpacesDisplay) {
+
+  for (const source in spacesBySource) {
     fundingSpacesDisplay[source] = groupBy(
-      fundingSpacesDisplay[source],
+      spacesBySource[source],
       (fs: FundingSpace) => fs.ageGroup
     );
-    for (const ageGroup in fundingSpacesDisplay[source]) {
-      fundingSpacesDisplay[source][ageGroup] = groupBy(
-        fundingSpacesDisplay[source][ageGroup],
-        (fs: FundingSpace) => fs.time
-      );
-    }
   }
+
   return fundingSpacesDisplay;
 };

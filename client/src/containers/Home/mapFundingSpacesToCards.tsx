@@ -18,13 +18,9 @@ export const mapFundingSpacesToCards = (nestedSpaces: NestedFundingSpaces) =>
                   <p className="text-bold">{ageGroup}</p>
                 </div>
                 <>
-                  {Object.keys(
-                    nestedSpaces[source as FundingSource][ageGroup as AgeGroup]
-                  ).map((fundingTime) => {
-                    const fundingSpace =
-                      nestedSpaces[source as FundingSource][
-                        ageGroup as AgeGroup
-                      ][fundingTime as FundingTime];
+                  {nestedSpaces[source as FundingSource][
+                    ageGroup as AgeGroup
+                  ].map((fundingSpace) => {
                     // Account for fundings that have negative capacities stored
                     // Also hide capacities for SR fundings, since we're less
                     // confident on those and they change a lot
@@ -38,7 +34,7 @@ export const mapFundingSpacesToCards = (nestedSpaces: NestedFundingSpaces) =>
                     return (
                       <p className="text-base-darker padding-0 margin-0">
                         <b>{spaceNumbers}</b>
-                        {` ${fundingTime}`}
+                        {` ${fundingSpace.time}`}
                       </p>
                     );
                   })}
