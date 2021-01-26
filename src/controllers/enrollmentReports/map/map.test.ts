@@ -1,5 +1,5 @@
 import { EnrollmentReportRow } from '../../../template';
-import { Organization, Site, Child } from '../../../entity';
+import { Organization, Site, Child, Family } from '../../../entity';
 import { BadRequestError } from '../../../middleware/error/errors';
 import {
   BirthCertificateType,
@@ -19,6 +19,7 @@ import {
   mapFundingTime,
   MISSING_PROVIDER_ERROR,
   isIdentifierMatch,
+  mapChild,
 } from './mapUtils';
 import moment from 'moment';
 
@@ -133,19 +134,11 @@ describe('controllers', () => {
         (inputBirthCertificateType, expectedBirthCertificateType) => {
           const parsed = mapEnum(
             BirthCertificateType,
-            inputBirthCertificateType,
-            { isBirthCertificateType: true }
+            inputBirthCertificateType
           );
           expect(parsed).toEqual(expectedBirthCertificateType);
         }
       );
-
-      it('can parse a blank certificate type as Unavailable, *not* as Not  Collected', () => {
-        const parsed = mapEnum(BirthCertificateType, '', {
-          isBirthCertificateType: true,
-        });
-        expect(parsed).toBe('Unavailable');
-      });
 
       it.each([
         ...Object.values(Gender).map((gender) => [gender, gender]),
