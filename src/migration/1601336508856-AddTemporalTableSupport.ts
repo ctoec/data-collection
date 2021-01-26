@@ -3,6 +3,9 @@ import {
   addHistorySchemaQuery,
   addSystemVersioningColumnsToTableQuery,
   turnSystemVersioningOnForTableQuery,
+  turnSystemVersioningOffForTableQuery,
+  removeSystemVersioningColumnsFromTableQuery,
+  removeHistorySchemaQuery,
 } from './queries/addTemporalTableSupport';
 
 export class AddTemporalTableSupport1601336508856
@@ -33,5 +36,34 @@ export class AddTemporalTableSupport1601336508856
     await queryRunner.query(turnSystemVersioningOnForTableQuery('child'));
   }
 
-  public async down(queryRunner: QueryRunner): Promise<void> {}
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(turnSystemVersioningOffForTableQuery('child'));
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('child')
+    );
+
+    await queryRunner.query(
+      turnSystemVersioningOffForTableQuery('income_determination')
+    );
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('income_determination')
+    );
+
+    await queryRunner.query(turnSystemVersioningOffForTableQuery('family'));
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('family')
+    );
+
+    await queryRunner.query(turnSystemVersioningOffForTableQuery('enrollment'));
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('enrollment')
+    );
+
+    await queryRunner.query(turnSystemVersioningOffForTableQuery('funding'));
+    await queryRunner.query(
+      removeSystemVersioningColumnsFromTableQuery('funding')
+    );
+
+    await queryRunner.query(removeHistorySchemaQuery());
+  }
 }

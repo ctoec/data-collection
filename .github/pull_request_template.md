@@ -8,11 +8,14 @@ Replace this text with the GitHub issue link.
 ## Associated PRs
 If applicable, replace this text with links to additional pull requests associated with this work.
 
-## Test Coverage
+## Validation Plan
+Please outline the steps you've already taken to validate this body of work, along with any additional steps that need to be taken in order to complete testing.
+
+## Automated Testing
 - [ ] All unit tests are passing.
 - [ ] All e2e tests are passing.
-- [ ] Unit tests have been added to cover this changeset.
-- [ ] e2e tests have been added to cover this changeset.
+- [ ] If applicable, unit tests have been added to cover this changeset.
+- [ ] If applicable, e2e tests have been added to cover this changeset.
 
 ## Additional Context
 If there's anything additional information that those reviewing or validating this work should be aware of, please specify it here.
