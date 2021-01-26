@@ -7,7 +7,7 @@ export type FundingSpaceWithFillCount = FundingSpace & {
 export type NestedFundingSpaces = {
   [key in FundingSource]: {
     [key in AgeGroup]: {
-      [key in FundingTime]: FundingSpaceWithFillCount[];
+      [key in FundingTime]: FundingSpaceWithFillCount;
     };
   };
 };
