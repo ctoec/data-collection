@@ -73,10 +73,10 @@ export const RosterSectionFundingSpacesMap: React.FC<RosterSectionFundingSpacesM
         return (
           <>
             <div key={sourceToTimes.sourceName} className="grid-row grid-gap">
-              <div className="tablet:grid-col-2 font-body-sm text-bold margin-top-1">
+              <div className="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2">
                 {sourceToTimes.sourceName.split('-')[1].trim()}
               </div>
-              <div className="tablet:grid-col-10 font-body-sm usa-hint margin-top-1">
+              <div className="tablet:grid-col-8 font-body-sm usa-hint margin-top-1">
                 {displayStr}
               </div>
             </div>
