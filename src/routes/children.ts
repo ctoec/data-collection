@@ -8,6 +8,7 @@ import {
 import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
 import moment, { Moment } from 'moment';
+import { ListChildReponse } from '../controllers/children';
 
 export const childrenRouter = express.Router();
 
@@ -39,24 +40,24 @@ childrenRouter.get(
       return;
     }
 
-    const children = await controller.getChildren(req.user, {
+    const response = await controller.getChildren(req.user, {
       organizationIds,
       missingInfoOnly: missingInfo === 'true',
       activeMonth,
       skip,
       take,
-    });
+    }) as ListChildReponse;
 
     // Send back a nice pretty display structure for the user's home
     // page if they've submitted their data
     if (fundingMap && fundingMap === 'true') {
-      const fundingSpacesMap = await controller.getFundingSpaceMap(children);
+      const fundingSpacesMap = await controller.getFundingSpaceMap(response.children);
       res.send({ fundingSpacesMap });
     } else if (siteMap && siteMap === 'true') {
-      const siteCountMap = await controller.getSiteCountMap(children);
+      const siteCountMap = await controller.getSiteCountMap(response.children);
       res.send({ siteCountMap });
     } else {
-      res.send(children);
+      res.send(response.children);
     }
   })
 );

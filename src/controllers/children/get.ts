@@ -25,6 +25,11 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
   return await postProcessChild(child);
 };
 
+export interface ListChildReponse {
+  children: Child[];
+  totalCount: number;
+}
+
 /**
  * Get all children the given user has access to.
  * Optionally, can filter to only return children:
@@ -39,12 +44,12 @@ export const getChildren = async (
   user: User,
   filterOpts: {
     organizationIds?: string[];
-    missingInfoOnly?: boolean;
-    activeMonth?: Moment;
+    missingInfoOnly?: boolean;  // When specified, only return children with missing information
+    activeMonth?: Moment;       // When specified, only return children enrolled prior to or during this month
     skip?: number;
     take?: number;
   } = {}
-) => {
+): Promise<ListChildReponse | Child[]> => {
   let {
     organizationIds,
     missingInfoOnly,
@@ -53,38 +58,28 @@ export const getChildren = async (
     take,
   } = filterOpts;
 
-  const opts = (await getFindOpts(user, {
+  const opts: FindManyOptions<Child> = await getFindOpts(user, {
     organizationIds,
-  })) as FindManyOptions<Child>;
-  opts.skip = skip;
-  opts.take = take;
+  });
 
-  let children = await getManager().find(Child, opts);
+  let [children, totalCount] = await getManager().findAndCount(Child, {
+    ...opts,
+    skip,
+    take
+  });
+
   children = await Promise.all(children.map(postProcessChild));
 
-  // If missing info qs param
   if (missingInfoOnly) {
-    // Return all children with missing info
     return children.filter(
       (child) => child.validationErrors && child.validationErrors.length
     );
   }
-  // Else if month qs param
-  else if (activeMonth) {
-    // Do not return children withouth active enrollment during or before that month
-    return children.filter((c) => {
-      // filter out enrollments after the current month filter
-      c.enrollments = c.enrollments?.filter(
-        (e) => e.entry && e.entry.isSameOrBefore(activeMonth.endOf('month'))
-      );
 
-      // filter out children with no qualifying enrollments
-      return c.enrollments && c.enrollments.length;
-    });
-  }
-
-  // Default return all children
-  return children;
+  return {
+    children,
+    totalCount
+  };
 };
 
 /**
@@ -220,8 +215,9 @@ const getFindOpts = async (
   filterOpts: {
     id?: string;
     organizationIds?: string[];
+    activeMonth?: Moment;
   } = {}
-) => {
+): Promise<FindManyOptions<Child> | FindOneOptions<Child>> => {
   const { id, organizationIds } = filterOpts;
   const readOrgIds = await getReadAccessibleOrgIds(user);
   const filterOrgIds =
@@ -258,6 +254,14 @@ const getFindOpts = async (
           {
             siteIds: user.siteIds,
             userId: user.id,
+          }
+        );
+      }
+
+      if (filterOpts.activeMonth) {
+        qb.andWhere('(Child__enrollment.entry <= :entry)',
+          { 
+            entry: filterOpts.activeMonth.endOf('month').format("YYYY-MM-DD") 
           }
         );
       }
