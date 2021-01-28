@@ -69,7 +69,8 @@ export const mapFunding = (
     );
   }
 
-  // If the user supplied _any_ funding-related fields, create the funding.
+  // If the user supplied _any_ funding-related fields, create
+  // a propagated funding.
   if (
     source.fundingSpace ||
     source.time ||
@@ -80,6 +81,16 @@ export const mapFunding = (
       firstReportingPeriod,
       lastReportingPeriod,
       fundingSpace,
+      enrollment,
+    });
+  }
+
+  // Otherwise, create a funding with no info in its field but
+  // still associated to the provided enrollment (this follows
+  // the same pattern as income dets and enrollments); useful
+  // for the front-end to display the funding form correctly
+  else {
+    return getManager().create(Funding, {
       enrollment,
     });
   }

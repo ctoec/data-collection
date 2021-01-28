@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { useParams, useLocation, useHistory, Link } from 'react-router-dom';
+import { useParams, useLocation, useHistory } from 'react-router-dom';
 import {
   AlertProps,
   ErrorBoundary,
@@ -68,15 +68,6 @@ const EditRecord: React.FC = () => {
         // Always set missing info alert, if one exists
         if (missingInfoAlertProps) {
           newAlerts.push(missingInfoAlertProps);
-        }
-
-        // TODO: remove this banner alert error, and replace with funding card with
-        // missing info icons - https://github.com/ctoec/data-collection/pull/795#issuecomment-729150524
-        const missingFundedEnrollmentAlertProps = getMissingFundedEnrollmentAlertProps(
-          updatedChild
-        );
-        if (missingFundedEnrollmentAlertProps) {
-          newAlerts.splice(0, 1, missingFundedEnrollmentAlertProps);
         }
 
         // Only set success alert on a GET that happens after an update (refetch count > 0)
@@ -164,33 +155,6 @@ const getMissingInfoAlertProps: (child: Child) => AlertProps | undefined = (
       .map((form) => form.name.toLowerCase())
       .join(', ')} before submitting your data to OEC.`,
   };
-};
-
-const getMissingFundedEnrollmentAlertProps: (
-  _: Child
-) => AlertProps | undefined = (child: Child) => {
-  const missingFundingError = child.validationErrors?.find(
-    (err) =>
-      err.property === 'enrollments' &&
-      err.constraints &&
-      err.constraints['fundedEnrollment']
-  );
-
-  if (missingFundingError) {
-    return {
-      type: 'error',
-      heading: 'This record is missing funding information',
-      text: (
-        <>
-          Records must have at least one current or past funded enrollment to be
-          submitted to OEC. Add funding info in the{' '}
-          <Link to={`/edit-record/${child.id}#${SECTION_KEYS.ENROLLMENT}`}>
-            enrollment and funding section
-          </Link>
-        </>
-      ),
-    };
-  }
 };
 
 export default EditRecord;

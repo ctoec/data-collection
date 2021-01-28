@@ -17,3 +17,12 @@ export type RecordFormProps = {
   ) => boolean;
   AdditionalButton?: JSX.Element; // Optional 'Cancel' (for forms in cards or card expansions) or 'Skip' (for forms in BatchEdit steplist) button
 };
+
+/**
+ * Used in some fields to supress the red styling that appears
+ * around the form element even if the form field is told to hide
+ * its status.
+ */
+export type HideErrorProps = {
+  hideStatus?: boolean;
+};

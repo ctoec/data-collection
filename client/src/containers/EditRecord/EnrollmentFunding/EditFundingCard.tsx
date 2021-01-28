@@ -53,6 +53,11 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
     throw new Error('Edit funding rendered without funding');
   }
 
+  const hasNoFundingInfo =
+    !funding.fundingSpace &&
+    !funding.firstReportingPeriod &&
+    !funding.lastReportingPeriod;
+
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
 
@@ -88,6 +93,34 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       });
   }
 
+  // Programmatically determine which error situation we're in
+  // If both reporting periods are null, we only need one incomplete
+  // icon and there's no point in validating anything else
+  let reportingPeriodDisplay;
+  if (
+    funding.firstReportingPeriod === null &&
+    funding.lastReportingPeriod === null
+  )
+    reportingPeriodDisplay = InlineIcon({ icon: 'incomplete' });
+  else
+    reportingPeriodDisplay = (
+      <>
+        {funding.firstReportingPeriod
+          ? funding.firstReportingPeriod.period.format('MMMM YYYY')
+          : InlineIcon({ icon: 'incomplete' })}{' '}
+        -{' '}
+        {funding.lastReportingPeriod
+          ? funding.lastReportingPeriod.period.format('MMMM YYYY')
+          : 'present'}
+        {hasValidationErrorForField(funding, 'firstReportingPeriod') && (
+          <>
+            {' '}
+            <InlineIcon icon="incomplete" />
+          </>
+        )}
+      </>
+    );
+
   return (
     <Card
       key={fundingId}
@@ -112,37 +145,30 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         </div>
         <div className="flex-2">
           <p className="margin-bottom-0">Reporting periods</p>
-          <p className="text-bold margin-top-0">
-            {funding.firstReportingPeriod
-              ? funding.firstReportingPeriod.period.format('MMMM YYYY')
-              : InlineIcon({ icon: 'incomplete' })}{' '}
-            -{' '}
-            {funding.lastReportingPeriod
-              ? funding.lastReportingPeriod.period.format('MMMM YYYY')
-              : 'present'}
-            {hasValidationErrorForField(funding, 'firstReportingPeriod') && (
-              <>
-                {' '}
-                <InlineIcon icon="incomplete" />
-              </>
-            )}
-          </p>
+          <p className="text-bold margin-top-0">{reportingPeriodDisplay}</p>
         </div>
         <div className="display-flex align-center flex-space-between">
           <div className="display-flex align-center margin-right-2">
             <ExpandCard>
               <Button
-                text={<TextWithIcon text="Edit" Icon={Pencil} />}
+                text={
+                  <TextWithIcon
+                    text={hasNoFundingInfo ? 'Add funding info' : 'Edit'}
+                    Icon={Pencil}
+                  />
+                }
                 appearance="unstyled"
               />
             </ExpandCard>
           </div>
           <div className="display-flex align-center margin-right-2">
-            <Button
-              text={<TextWithIcon text="Delete" Icon={TrashCan} />}
-              appearance="unstyled"
-              onClick={deleteFunding}
-            />
+            {!hasNoFundingInfo && (
+              <Button
+                text={<TextWithIcon text="Delete" Icon={TrashCan} />}
+                appearance="unstyled"
+                onClick={deleteFunding}
+              />
+            )}
           </div>
         </div>
       </div>

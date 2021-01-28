@@ -8,12 +8,15 @@ import { IncomeDetermination } from '../../../../shared/models';
 import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
 import { set } from 'lodash';
 import produce from 'immer';
+import { HideErrorProps } from '../../types';
 
 /**
  * Component that holds a field allowing the input and modification
  * of a household size number for an income determination.
  */
-export const HouseholdSizeField: React.FC = () => {
+export const HouseholdSizeField: React.FC<HideErrorProps> = ({
+  hideStatus,
+}) => {
   // Use a driller to keep clearing state synched between data
   // and the 'income not disclosed' box
   const {
@@ -21,6 +24,18 @@ export const HouseholdSizeField: React.FC = () => {
     dataDriller,
     updateData,
   } = useGenericContext<IncomeDetermination>(FormContext);
+
+  // Needed for the error state where EditRecord prompts the user for
+  // a child's first income determination; don't show field with
+  // red boundaries, in that case
+  let errorDisplay;
+  if (hideStatus) errorDisplay = undefined;
+  else
+    errorDisplay = getValidationStatusForFieldInFieldset(
+      dataDriller,
+      dataDriller.at('numberOfPeople').path,
+      {}
+    );
   return (
     <TextInput
       value={dataDriller.at('numberOfPeople').value}
@@ -42,11 +57,7 @@ export const HouseholdSizeField: React.FC = () => {
       id="number-of-people"
       label="Household size"
       small
-      status={getValidationStatusForFieldInFieldset(
-        dataDriller,
-        dataDriller.at('numberOfPeople').path,
-        {}
-      )}
+      status={errorDisplay}
       disabled={dataDriller.at('incomeNotDisclosed').value}
     />
   );

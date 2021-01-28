@@ -18,6 +18,7 @@ import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { HideErrorProps } from '../../types';
 
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
@@ -25,7 +26,7 @@ type FundingFieldProps<T> = {
   organizationId: number;
   isEdit?: boolean;
   missingFundedEnrollmentError?: EnrichedValidationError;
-};
+} & HideErrorProps;
 
 /**
  * Component for creating a new funding, either for an existing enrollment
@@ -39,6 +40,7 @@ export const NewFundingField = <
   organizationId,
   isEdit,
   missingFundedEnrollmentError,
+  hideStatus,
 }: FundingFieldProps<T>) => {
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
@@ -100,26 +102,37 @@ export const NewFundingField = <
     };
   });
 
+  // Needed for the error state where EditRecord prompts the user for
+  // a child's first enrollment/funding; don't show field with
+  // red styling, in that case
+  let errorDisplay;
+  if (hideStatus) errorDisplay = undefined;
+  else
+    errorDisplay =
+      getValidationStatusForFields(enrollment, ['fundings']) ||
+      getValidationStatusForFields(
+        {
+          validationErrors: missingFundedEnrollmentError
+            ? [missingFundedEnrollmentError]
+            : [],
+        },
+        ['enrollments']
+      );
+
   return (
     <RadioButtonGroup
       // The radio buttons only really control what expansions are shown
       // They don't change any form data on their own
       id={`funding-source-${enrollment?.id}`}
-      hint={ !!enrollment?.ageGroup ? undefined : "Choose an age group to see available funding types"}
+      hint={
+        !!enrollment?.ageGroup
+          ? undefined
+          : 'Choose an age group to see available funding types'
+      }
       inputName="fundingSource"
       legend="Funding source options"
       showLegend
-      status={
-        getValidationStatusForFields(enrollment, ['fundings']) ||
-        getValidationStatusForFields(
-          {
-            validationErrors: missingFundedEnrollmentError
-              ? [missingFundedEnrollmentError]
-              : [],
-          },
-          ['enrollments']
-        )
-      }
+      status={errorDisplay}
       options={options}
     />
   );

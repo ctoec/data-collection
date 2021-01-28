@@ -32,7 +32,12 @@ export const mapIncomeDetermination = (
       incomeNotDisclosed: true,
       family,
     });
-  } else {
+  }
+
+  // Otherwise return a det with no data whatsoever so that the
+  // front-end can parse this as a "determination unsupplied"
+  // error state
+  else {
     return getManager().create(IncomeDetermination, {
       family,
     });
