@@ -12,6 +12,7 @@ import { Moment } from 'moment';
 import { propertyDateSorter } from '../../utils/propertyDateSorter';
 import { getCurrentFunding } from '../../utils/getCurrentFunding';
 import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
+import { ListChildReponse } from '../../../client/src/shared/payloads';
 
 /**
  * Get child by id, with related family and related
@@ -24,11 +25,6 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
   const child = await getManager().findOne(Child, opts);
   return await postProcessChild(child);
 };
-
-export interface ListChildReponse {
-  children: Child[];
-  totalCount: number;
-}
 
 /**
  * Get all children the given user has access to.
@@ -49,7 +45,7 @@ export const getChildren = async (
     skip?: number;
     take?: number;
   } = {}
-): Promise<ListChildReponse | Child[]> => {
+): Promise<ListChildReponse> => {
   let {
     organizationIds,
     missingInfoOnly,
@@ -58,23 +54,35 @@ export const getChildren = async (
     take,
   } = filterOpts;
 
+  let children: Child[];
+  let totalCount: number;
+
   const opts: FindManyOptions<Child> = await getFindOpts(user, {
     organizationIds,
+    activeMonth
   });
 
-  let [children, totalCount] = await getManager().findAndCount(Child, {
+  if (missingInfoOnly) {
+    children = await getManager().find(Child, opts);
+
+    children = (await Promise.all(children.map(postProcessChild)))
+      .sort() //  TODO: Figure out what to sort by
+      .filter(child => child.validationErrors?.length);
+
+    return {
+      children: children.slice(skip, skip + take),
+      totalCount: children.length
+    };
+  }
+
+  [children, totalCount] = await getManager().findAndCount(Child, {
     ...opts,
     skip,
     take
-  });
+  })
 
-  children = await Promise.all(children.map(postProcessChild));
-
-  if (missingInfoOnly) {
-    return children.filter(
-      (child) => child.validationErrors && child.validationErrors.length
-    );
-  }
+  children = (await Promise.all(children.map(postProcessChild)))
+    .sort(); //  TODO: Figure out what to sort by
 
   return {
     children,
