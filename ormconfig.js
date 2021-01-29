@@ -12,7 +12,7 @@ module.exports = {
   database: process.env.DB_NAME || 'master',
   synchronize: false,
   migrationsRun: true,
-  logging: true,
+  // logging: true,
   entities: ['dist/src/entity/**/*.js'],
   migrations: ['dist/src/migration/*.js'],
   subscribers: ['dist/src/subscriber/**/*.js'],

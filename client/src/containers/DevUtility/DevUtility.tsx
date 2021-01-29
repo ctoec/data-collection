@@ -62,6 +62,36 @@ const DevUtility: React.FC = () => {
             queryParamsAsObject={{ whichFakeChildren: 'missingOne' }}
             downloadText="Download CSV of all children missing one field"
           />
+          <h3>Children Set Missing All Optional Fields</h3>
+          <CSVExcelDownloadButton
+            fileType="xlsx"
+            whichDownload="example"
+            className="margin-bottom-3"
+            queryParamsAsObject={{ whichFakeChildren: 'missingOptional' }}
+            downloadText="Download Excel of children each missing one optional field"
+          />
+          <CSVExcelDownloadButton
+            fileType="csv"
+            whichDownload="example"
+            className="margin-bottom-3"
+            queryParamsAsObject={{ whichFakeChildren: 'missingOptional' }}
+            downloadText="Download CSV of children each missing one optional field"
+          />
+          <h3>Children Set Missing All Conditional Fields</h3>
+          <CSVExcelDownloadButton
+            fileType="xlsx"
+            whichDownload="example"
+            className="margin-bottom-3"
+            queryParamsAsObject={{ whichFakeChildren: 'missingConditional' }}
+            downloadText="Download Excel of children each missing one conditional field"
+          />
+          <CSVExcelDownloadButton
+            fileType="csv"
+            whichDownload="example"
+            className="margin-bottom-3"
+            queryParamsAsObject={{ whichFakeChildren: 'missingConditional' }}
+            downloadText="Download CSV of children each missing one conditional field"
+          />
         </div>
       </div>
     </div>

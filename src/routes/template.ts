@@ -11,6 +11,8 @@ import {
   completeChildren,
   childrenAllMissingOneField,
   childrenMissingSomeInfo,
+  childrenMissingOptionalFields,
+  childrenMissingConditionalFields,
 } from '../data/fake/children';
 import { streamUploadedChildren } from '../controllers/export';
 import { parseQueryString } from '../utils/parseQueryString';
@@ -68,6 +70,10 @@ templateRouter.get(
         fakeChildren = childrenMissingSomeInfo;
       } else if (whichFakeChildren === 'missingOne') {
         fakeChildren = childrenAllMissingOneField;
+      } else if (whichFakeChildren === 'missingOptional') {
+        fakeChildren = childrenMissingOptionalFields;
+      } else if (whichFakeChildren === 'missingConditional') {
+        fakeChildren = childrenMissingConditionalFields;
       }
       await streamUploadedChildren(res, fakeChildren, fileType as BookType);
     } catch (err) {

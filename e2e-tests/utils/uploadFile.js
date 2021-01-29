@@ -17,9 +17,16 @@ module.exports = {
       DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingSome';
     } else if (whichFile === 'missingOne') {
       DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingOne';
+    } else if (whichFile === 'missingOptional') {
+      DOWNLOAD_URL +=
+        '/api/template/example/csv?whichFakeChildren=missingOptional';
+    } else if (whichFile === 'missingConditional') {
+      DOWNLOAD_URL +=
+        '/api/template/example/csv?whichFakeChildren=missingConditional';
     }
 
     const isCompleteTestRun = whichFile === 'complete';
+    const isMissingOptionalRun = whichFile === 'missingOptional';
 
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 
@@ -45,7 +52,7 @@ module.exports = {
       browser,
       'Upload and correct in roster',
       'No error modal appearing',
-      !isCompleteTestRun
+      !(isCompleteTestRun || isMissingOptionalRun)
     );
 
     // Accept the replace thing if there is one
@@ -56,6 +63,11 @@ module.exports = {
       await browser.waitForElementVisible(
         'xpath',
         `//*/p[contains(text(),"20 children enrolled")]`
+      );
+    } else if (isMissingOptionalRun) {
+      await browser.waitForElementVisible(
+        'xpath',
+        `//*/p[contains(text(),"10 children enrolled")]`
       );
     } else {
       await browser.waitForElementVisible(
