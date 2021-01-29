@@ -17,22 +17,29 @@ const testUser = {
   ],
 } as User;
 
+const userProps = {
+  loading: false,
+  user: testUser,
+  confidentialityAgreedDate: moment(),
+  setConfidentialityAgreedDate: () => {},
+};
+
 const HomeWithUserProvider = (
-  <UserContext.Provider
-    value={{
-      loading: false,
-      user: testUser,
-      confidentialityAgreedDate: moment(),
-      setConfidentialityAgreedDate: () => {},
-    }}
-  >
+  <UserContext.Provider value={{ ...userProps }}>
     <Home />
+  </UserContext.Provider>
+);
+
+const RevisionFormWithUserProvider = (
+  <UserContext.Provider value={{ ...userProps }}>
+    <RevisionRequest />
   </UserContext.Provider>
 );
 
 jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { waitFor } from '@testing-library/react';
+import { RevisionRequest } from './RevisionRequest';
 const apiMock = api as jest.Mocked<typeof api>;
 
 describe('Home', () => {
@@ -60,6 +67,11 @@ describe('Home', () => {
 
   accessibilityTestHelper(HomeWithUserProvider, {
     wrapInRouter: true,
+  });
+
+  snapshotTestHelper(RevisionFormWithUserProvider, {
+    wrapInRouter: true,
+    name: 'snapshot matches revise site request form',
   });
 
   afterEach(() => {

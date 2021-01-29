@@ -1,14 +1,16 @@
+import { Alert } from '@ctoec/component-library';
 import Divider from '@material-ui/core/Divider';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import UserContext from '../../contexts/UserContext/UserContext';
+import { useAlerts } from '../../hooks/useAlerts';
 import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
 import { NestedFundingSpaces } from '../../shared/payloads/NestedFundingSpaces';
 import { apiGet } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { HowToUseStep } from './HowToUseStep';
-import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
+import { mapFundingSpacesToCards } from './utils/mapFundingSpacesToCards';
 
 export const PreSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -17,6 +19,17 @@ export const PreSubmitHome: React.FC = () => {
   const orgAccess = user?.accessType === 'organization';
   const userOrgs = user?.organizations || [];
   const showFundingsAndSites = orgAccess && userOrgs.length == 1;
+
+  // We might have a success alert pushed from the revision request
+  // form, so check whether we do (but filter so that we only show
+  // one if a user submits multiple forms)
+  const { setAlerts, alertElements } = useAlerts();
+  useEffect(() => {
+    setAlerts((_alerts) => [
+      _alerts.find((a) => a?.heading === 'Request received!'),
+    ]);
+  }, []);
+
   const [
     fundingSpacesDisplay,
     setFundingSpacesDisplay,
@@ -38,6 +51,7 @@ export const PreSubmitHome: React.FC = () => {
 
   return (
     <div className="Home grid-container margin-top-4">
+      {alertElements.length > 0 && alertElements}
       <div className="grid-row grid-gap">
         <div className="tablet:grid-col-8 margin-top-4">
           <h1 ref={h1Ref} className="margin-top-0">
@@ -57,6 +71,16 @@ export const PreSubmitHome: React.FC = () => {
           <Image />
         </div>
       </div>
+      <Alert
+        type="info"
+        text={
+          <span>
+            Are your sites and/or funding spaces incorrect? Reach out to the ECE
+            Reporter team through&nbsp;
+            <Link to="/revision">this form.</Link>
+          </span>
+        }
+      />
       {showFundingsAndSites && (
         <>
           <h3 className="pre-submit-h3">Sites</h3>
