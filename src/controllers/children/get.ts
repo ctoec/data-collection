@@ -66,7 +66,6 @@ export const getChildren = async (
     children = await getManager().find(Child, opts);
 
     children = (await Promise.all(children.map(postProcessChild)))
-      .sort() //  TODO: Figure out what to sort by
       .filter(child => child.validationErrors?.length);
 
     return {
@@ -81,8 +80,7 @@ export const getChildren = async (
     take
   })
 
-  children = (await Promise.all(children.map(postProcessChild)))
-    .sort(); //  TODO: Figure out what to sort by
+  children = (await Promise.all(children.map(postProcessChild)));
 
   return {
     children,
