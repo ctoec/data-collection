@@ -27,7 +27,7 @@ export function EnrollmentDatesCannotOverlapValidation(
             (e) => e.id !== currentEnrollment.id
           );
           return pastEnrollments.every(
-            (e) => e.exit && e.exit.isBefore(currentEnrollment.entry)
+            (e) => e.exit && e.exit.isSameOrBefore(currentEnrollment.entry)
           );
         },
       },
