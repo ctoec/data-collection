@@ -41,8 +41,10 @@ export function FundingDoesNotOverlap(
           let overlap = false;
           allExceptThisFunding.forEach((_funding) => {
             const _firstPeriod = _funding.firstReportingPeriod;
+            console.log(`Fundingggggggggg: FUNDING ${_funding.id}`)
 
             if (!_firstPeriod) {
+              console.log(`WOOOOOOOO, NO FIRST PERIOD FOUND FOR ${_funding.id}`)
               return;
             }
 
