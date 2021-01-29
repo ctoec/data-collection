@@ -23,10 +23,9 @@ export const mapChild = (
   const gender: Gender = mapEnum(Gender, source.gender) || Gender.NotSpecified;
 
   // Birth certificate type
-  const birthCertificateType: BirthCertificateType = mapEnum(
-    BirthCertificateType,
-    source.birthCertificateType
-  );
+  const birthCertificateType: BirthCertificateType = !source.birthCertificateType
+    ? BirthCertificateType.Unavailable
+    : mapEnum(BirthCertificateType, source.birthCertificateType);
 
   // Ethnicity
   const hispanicOrLatinxEthnicity: UndefinableBoolean = mapEnum(
