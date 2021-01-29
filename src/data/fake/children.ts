@@ -52,7 +52,7 @@ const children: Child[] = Array.from({ length: 20 }, (_, i) => {
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
     family: {} as Family,
-    foster: i ? UndefinableBoolean.No : UndefinableBoolean.Yes
+    foster: i ? UndefinableBoolean.No : UndefinableBoolean.Yes,
   };
 });
 

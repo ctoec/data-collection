@@ -84,7 +84,9 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
           {Object.entries(columnMetadataBySection).map(
             ([sectionName, sectionData]) => (
               <div key={sectionName} className="margin-top-4">
-                <Heading id={kebabCase(sectionName)} level={headerLevel}>{sectionName}</Heading>
+                <Heading id={kebabCase(sectionName)} level={headerLevel}>
+                  {sectionName}
+                </Heading>
                 <p className="text-pre-line">{getSectionCopy(sectionName)}</p>
                 <Table
                   id={`data-requirements-${sectionName.replace(' ', '-')}`}

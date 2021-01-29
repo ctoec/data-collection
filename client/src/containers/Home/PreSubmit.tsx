@@ -6,6 +6,7 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import UserContext from '../../contexts/UserContext/UserContext';
 import { useAlerts } from '../../hooks/useAlerts';
 import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
+import { NestedFundingSpaces } from '../../shared/payloads/NestedFundingSpaces';
 import { apiGet } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { HowToUseStep } from './HowToUseStep';
@@ -29,13 +30,16 @@ export const PreSubmitHome: React.FC = () => {
     ]);
   }, []);
 
-  const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
+  const [
+    fundingSpacesDisplay,
+    setFundingSpacesDisplay,
+  ] = useState<NestedFundingSpaces>();
 
   useEffect(() => {
     // Determine the funding spaces map for the organization, if
     // the user has the permissions that enable this
     if (showFundingsAndSites) {
-      apiGet('children?fundingMap=true', accessToken)
+      apiGet('funding-spaces?fundingMap=true', accessToken)
         .then((res) => {
           setFundingSpacesDisplay(res.fundingSpacesMap);
         })
@@ -44,30 +48,6 @@ export const PreSubmitHome: React.FC = () => {
         });
     }
   }, [accessToken, showFundingsAndSites]);
-
-  let fundingCards = mapFundingSpacesToCards(fundingSpacesDisplay);
-  const fundingSection = (
-    <>
-      <h3 className="pre-submit-h3">Funding spaces</h3>
-      <div className="three-column-layout">{fundingCards}</div>
-      <div className="margin-top-4 margin-bottom-4">
-        <Divider />
-      </div>
-    </>
-  );
-
-  const siteSection = (
-    <>
-      <h3 className="pre-submit-h3">Sites</h3>
-      <ul>
-        {(user?.sites || []).map((site) => (
-          <li key={site.siteName} className="line-height-body-4">
-            {site.siteName}
-          </li>
-        ))}
-      </ul>
-    </>
-  );
 
   return (
     <div className="Home grid-container margin-top-4">
@@ -101,8 +81,29 @@ export const PreSubmitHome: React.FC = () => {
           </span>
         }
       />
-      {showFundingsAndSites && siteSection}
-      {showFundingsAndSites && fundingSection}
+      {showFundingsAndSites && (
+        <>
+          <h3 className="pre-submit-h3">Sites</h3>
+          <ul>
+            {(user?.sites || []).map((site) => (
+              <li key={site.siteName} className="line-height-body-4">
+                {site.siteName}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {showFundingsAndSites && fundingSpacesDisplay && (
+        <>
+          <h3 className="pre-submit-h3">Funding spaces</h3>
+          <div className="three-column-layout">
+            {mapFundingSpacesToCards(fundingSpacesDisplay)}
+          </div>
+          <div className="margin-top-4 margin-bottom-4">
+            <Divider />
+          </div>
+        </>
+      )}
       <h2 className="pre-submit-h2">How to use ECE Reporter</h2>
       <p>
         {
