@@ -203,7 +203,9 @@ export const RevisionRequest: React.FC = () => {
       updateSiteRequests: updateRequests.filter(
         (r) => r.newName !== '' || r.remove
       ),
-      addSiteRequests: addRequests,
+      addSiteRequests: addRequests.filter(
+        (r) => r.siteName && r.siteName !== ''
+      ),
       fundingSpaceRequests: userFundingSpaces,
     };
     apiPost(`revision-request/${userOrgs[0].id}`, revisionRequest, {

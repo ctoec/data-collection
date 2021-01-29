@@ -76,7 +76,7 @@ export const PreSubmitHome: React.FC = () => {
         text={
           <span>
             Are your sites and/or funding spaces incorrect? Reach out to the ECE
-            Reporter team through &nbsp;
+            Reporter team through&nbsp;
             <Link to="/revision">this form.</Link>
           </span>
         }

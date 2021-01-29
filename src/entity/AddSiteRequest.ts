@@ -10,6 +10,12 @@ export class AddSiteRequest implements AddSiteRequestInterface {
   organizationId: number;
 
   @Column()
+  authorId: number;
+
+  @Column()
+  createdAt: Date;
+
+  @Column()
   siteName: string;
 
   @Column({ nullable: true })

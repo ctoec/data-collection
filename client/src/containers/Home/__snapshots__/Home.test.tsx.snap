@@ -54,7 +54,7 @@ exports[`Home snapshot matches post-submit user 1`] = `
                 class="usa-alert__text"
               >
                 <span>
-                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through  
+                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through 
                   <a
                     href="/revision"
                   >
@@ -301,7 +301,7 @@ exports[`Home snapshot matches pre-submit user 1`] = `
                 class="usa-alert__text"
               >
                 <span>
-                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through  
+                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through 
                   <a
                     href="/revision"
                   >

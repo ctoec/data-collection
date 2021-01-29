@@ -20,6 +20,8 @@ revisionsRouter.post(
   passAsyncError(async (req, res) => {
     try {
       const organizationId = parseInt(req.params['organizationId']);
+      const authorId = req.user.id;
+      const createdAt = new Date();
       const {
         updateSiteRequests,
         addSiteRequests,
@@ -30,6 +32,8 @@ revisionsRouter.post(
           const dbReq = await tManager.create(UpdateSiteRequest, {
             ...r,
             organizationId,
+            authorId,
+            createdAt,
           });
           await getManager().save(dbReq);
         });
@@ -37,6 +41,8 @@ revisionsRouter.post(
           const dbReq = await tManager.create(AddSiteRequest, {
             ...r,
             organizationId,
+            authorId,
+            createdAt,
           });
           await getManager().save(dbReq);
         });
@@ -45,6 +51,8 @@ revisionsRouter.post(
             const dbReq = await tManager.create(ChangeFundingSpaceRequest, {
               ...r,
               organizationId,
+              authorId,
+              createdAt,
             });
             await getManager().save(dbReq);
           }

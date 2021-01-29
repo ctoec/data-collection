@@ -5,6 +5,7 @@ import pluralize from 'pluralize';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { Link } from 'react-router-dom';
 import {
+  Alert,
   ArrowRight,
   Card,
   InlineIcon,
@@ -99,7 +100,17 @@ export const PostSubmitHome: React.FC = () => {
         <Divider />
       </div>
       <h2>Updates and tasks</h2>
-      <div className="grid-row">
+      <Alert
+        type="info"
+        text={
+          <span>
+            Are your sites and/or funding spaces incorrect? Reach out to the ECE
+            Reporter team through&nbsp;
+            <Link to="/revision">this form.</Link>
+          </span>
+        }
+      />
+      <div className="grid-row margin-top-2">
         <Card>
           <div className="grid-container padding-0">
             <span className="grid-row font-body-lg text-bold">

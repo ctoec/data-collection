@@ -11,6 +11,12 @@ export class ChangeFundingSpaceRequest
   organizationId: number;
 
   @Column()
+  authorId: number;
+
+  @Column()
+  createdAt: Date;
+
+  @Column()
   fundingSpace: string;
 
   @Column()

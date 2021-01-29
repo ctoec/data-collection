@@ -10,6 +10,12 @@ export class UpdateSiteRequest implements UpdateSiteRequestInterface {
   organizationId: number;
 
   @Column()
+  authorId: number;
+
+  @Column()
+  createdAt: Date;
+
+  @Column()
   siteId: number;
 
   @Column({ nullable: true })
