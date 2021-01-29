@@ -40,5 +40,7 @@ export interface Child extends ObjectWithValidationErrors {
   receivesDisabilityServices?: UndefinableBoolean;
   family?: Family;
   organization: Organization;
+  organizationId: number;
   enrollments?: Array<Enrollment>;
+  deletedDate?: Date;
 }

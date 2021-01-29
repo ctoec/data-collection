@@ -5,7 +5,8 @@ import * as controller from '../controllers/export';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { InternalServerError } from '../middleware/error/errors';
 import { User } from '../entity';
-import { getChildren, ListChildReponse } from '../controllers/children';
+import { getChildren } from '../controllers/children';
+import { ListChildReponse } from '../../client/src/shared/payloads';
 
 export const exportRouter = express.Router();
 
@@ -21,7 +22,7 @@ exportRouter.get(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       const user: User = req.user;
-      const response = await getChildren(user) as ListChildReponse;
+      const response: ListChildReponse = await getChildren(user);
       res.send(controller.streamUploadedChildren(res, response.children));
     } catch (err) {
       console.error('Unable to generate CSV by user ID', err);

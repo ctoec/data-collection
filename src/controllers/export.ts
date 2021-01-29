@@ -1,6 +1,5 @@
 import { BookType } from 'xlsx';
-import { ColumnMetadata } from '../../client/src/shared/models';
-import { Child, Enrollment } from '../entity';
+import { Child, ColumnMetadata, Enrollment } from '../../client/src/shared/models';
 import { Response } from 'express';
 import { isMoment } from 'moment';
 import { streamTabularData } from '../utils/generateFiles/streamTabularData';

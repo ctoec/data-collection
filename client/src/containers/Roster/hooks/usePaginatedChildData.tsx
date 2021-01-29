@@ -3,7 +3,6 @@ import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR'
 import { cache } from 'swr';
 import { RosterQueryParams } from '../Roster';
 import { ListChildReponse } from '../../../shared/payloads';
-import { Child } from '../../../shared/models';
 
 const PAGE_SIZE = 100;
 

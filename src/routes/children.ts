@@ -8,7 +8,7 @@ import {
 import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
 import moment, { Moment } from 'moment';
-import { ListChildReponse } from '../controllers/children';
+import { ListChildReponse } from '../../client/src/shared/payloads';
 
 export const childrenRouter = express.Router();
 
@@ -40,13 +40,13 @@ childrenRouter.get(
       return;
     }
 
-    const response = await controller.getChildren(req.user, {
+    const response: ListChildReponse = await controller.getChildren(req.user, {
       organizationIds,
       missingInfoOnly: missingInfo === 'true',
       activeMonth,
       skip,
       take,
-    }) as ListChildReponse;
+    });
 
     // Send back a nice pretty display structure for the user's home
     // page if they've submitted their data
