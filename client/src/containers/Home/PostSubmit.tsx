@@ -10,6 +10,7 @@ import {
   InlineIcon,
   TextWithIcon,
 } from '@ctoec/component-library';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { mapFundingSpacesToCards } from './utils/mapFundingSpacesToCards';
@@ -17,6 +18,7 @@ import { mapFundingSpacesToCards } from './utils/mapFundingSpacesToCards';
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
   const { accessToken } = useContext(AuthenticationContext);
+  const h1Ref = getH1RefForTitle();
   const orgAccess = user?.accessType === 'organization';
   const userOrgs = user?.organizations || [];
   const showFundings = orgAccess && userOrgs.length == 1;
@@ -96,6 +98,12 @@ export const PostSubmitHome: React.FC = () => {
 
   return (
     <div className="grid-container margin-top-4">
+      <h1 ref={h1Ref} className="margin-top-0">
+        Hello {user?.firstName}!
+      </h1>
+      <div className="margin-top-3 margin-bottom-1">
+        <Divider />
+      </div>
       {userOrgs.map((org) => (
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-10">

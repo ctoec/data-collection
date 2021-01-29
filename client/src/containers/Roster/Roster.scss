@@ -23,21 +23,17 @@
     }
   }
 
-  .oec-tab-nav--content {
-    overflow-x: hidden;
-  }
-
   .break-spaces {
     white-space: break-spaces;
   }
 
   .oec-accordion__content {
-    overflow-x: scroll;
+    overflow-x: visible;
   }
 
   @include at-media('desktop-lg') {
     .oec-accordion__content {
-      overflow-x: auto;
+      overflow-x: visible;
     }
   }
 }

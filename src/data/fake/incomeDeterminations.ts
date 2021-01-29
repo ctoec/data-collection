@@ -1,32 +1,28 @@
 import { random } from 'faker';
 import moment from 'moment';
-import { IncomeDetermination } from '../../entity';
+import { Family, IncomeDetermination } from '../../entity';
 
 export const getFakeIncomeDet = (
-  id,
-  family,
-  notDisclosed: boolean
+  id: number,
+  family: Family,
+  incomeNotDisclosed: boolean
 ): IncomeDetermination => {
-  if (notDisclosed) {
-    return {
-      id,
-      incomeNotDisclosed: true,
-      familyId: family.id,
-      family,
-      updateMetaData: { updatedAt: new Date() },
-      deletedDate: null,
-    };
-  } else {
-    return {
-      id,
+  let mockIncomeDet: IncomeDetermination = {
+    id,
+    incomeNotDisclosed,
+    familyId: family.id,
+    family,
+    updateMetaData: { updatedAt: new Date() },
+    deletedDate: null,
+  };
+
+  if (!incomeNotDisclosed) {
+    mockIncomeDet = Object.assign(mockIncomeDet, {
       numberOfPeople: random.number({ min: 2, max: 8 }),
       income: random.number(60000),
       determinationDate: moment().add(-random.number(60), 'days'),
-      incomeNotDisclosed: notDisclosed,
-      familyId: family.id,
-      family,
-      updateMetaData: { updatedAt: new Date() },
-      deletedDate: null,
-    };
+    });
   }
+
+  return mockIncomeDet;
 };

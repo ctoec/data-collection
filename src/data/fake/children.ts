@@ -52,15 +52,13 @@ const children: Child[] = Array.from({ length: 20 }, (_, i) => {
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
     family: {} as Family,
+    foster: i ? UndefinableBoolean.No : UndefinableBoolean.Yes
   };
 });
 
 random
   .arrayElements(children, 5)
   .forEach((c) => (c.birthCertificateType = BirthCertificateType.NonUS));
-random
-  .arrayElements(children, 5)
-  .forEach((c) => (c.foster = UndefinableBoolean.Yes));
 random
   .arrayElements(children, 5)
   .forEach((c) => (c.dualLanguageLearner = UndefinableBoolean.Yes));
@@ -83,6 +81,7 @@ function makeMiddleNameEdgeCases(num: number) {
   return _name;
 }
 const possibleSuffixes = ['Jr', 'III', 'IV'];
+
 const completeChildren: Child[] = children.map((c, i) => {
   const site = random.arrayElement(c.organization.sites);
   const isUSBirthCert = c.birthCertificateType === BirthCertificateType.US;

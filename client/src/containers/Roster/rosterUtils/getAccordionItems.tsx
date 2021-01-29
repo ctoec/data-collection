@@ -2,7 +2,7 @@ import React from 'react';
 import pluralize from 'pluralize';
 import { ErrorBoundary, InlineIcon, Table } from '@ctoec/component-library';
 import { Child } from '../../../shared/models';
-import { RosterSectionHeader } from '../RosterSectionHeader';
+import { RosterSectionFundingSpacesMap } from '../RosterSectionFundingSpacesMap';
 import { ColumnNames, tableColumns } from '../tableColumns';
 import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
 import { defaultErrorBoundaryProps } from '../../../utils/defaultErrorBoundaryProps';
@@ -55,26 +55,34 @@ export function getAccordionItems(
           )}
         </>
       ),
-      headerContent: (
-        <RosterSectionHeader
-          children={ageGroupChildren}
-          hideCapacity={opts.hideCapacity}
-        />
+      expandText: (
+        <>
+          Show<span className="usa-sr-only">{` ${ageGroup} roster`}</span>
+        </>
       ),
-      expandText: `Show ${ageGroup} roster`,
-      collapseText: `Hide ${ageGroup} roster`,
+      collapseText: (
+        <>
+          Hide<span className="usa-sr-only">{` ${ageGroup} roster`}</span>
+        </>
+      ),
       content: (
-        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-          <Table<Child>
-            className="margin-bottom-4"
-            id={`roster-table-${ageGroup}`}
-            rowKey={(row) => row?.id}
-            data={ageGroupChildren}
-            columns={tableColumns(excludeColumns)}
-            defaultSortColumn={0}
-            defaultSortOrder="ascending"
-          />
-        </ErrorBoundary>
+        <>
+          <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+            <RosterSectionFundingSpacesMap
+              children={ageGroupChildren}
+              hideCapacity={opts.hideCapacity}
+            />
+            <Table<Child>
+              className="margin-bottom-4"
+              id={`roster-table-${ageGroup}`}
+              rowKey={(row) => row?.id}
+              data={ageGroupChildren}
+              columns={tableColumns(excludeColumns)}
+              defaultSortColumn={0}
+              defaultSortOrder="ascending"
+            />
+          </ErrorBoundary>
+        </>
       ),
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
