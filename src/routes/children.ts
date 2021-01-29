@@ -30,7 +30,6 @@ childrenRouter.get(
     }) as Moment;
     const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
     const take = parseQueryString(req, 'take', { post: parseInt }) as number;
-    const fundingMap = parseQueryString(req, 'fundingMap');
     const siteMap = parseQueryString(req, 'siteMap');
 
     if (count && count === 'true') {
@@ -49,10 +48,7 @@ childrenRouter.get(
 
     // Send back a nice pretty display structure for the user's home
     // page if they've submitted their data
-    if (fundingMap && fundingMap === 'true') {
-      const fundingSpacesMap = await controller.getFundingSpaceMap(children);
-      res.send({ fundingSpacesMap });
-    } else if (siteMap && siteMap === 'true') {
+    if (siteMap && siteMap === 'true') {
       const siteCountMap = await controller.getSiteCountMap(children);
       res.send({ siteCountMap });
     } else {

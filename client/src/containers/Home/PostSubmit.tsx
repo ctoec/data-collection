@@ -14,6 +14,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
+import { NestedFundingSpaces } from '../../shared/payloads/NestedFundingSpaces';
 
 export const PostSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -25,7 +26,10 @@ export const PostSubmitHome: React.FC = () => {
 
   // Count how many children are in the roster so we can format the display
   const [userRosterCount, setUserRosterCount] = useState(undefined);
-  const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
+  const [
+    fundingSpacesDisplay,
+    setFundingSpacesDisplay,
+  ] = useState<NestedFundingSpaces>();
   const [siteCountDisplay, setSiteCountDisplay] = useState();
   useEffect(() => {
     apiGet('children?count=true', accessToken)
@@ -45,7 +49,7 @@ export const PostSubmitHome: React.FC = () => {
     // Also determine the funding spaces map for the organization, if
     // the user has the permissions that enable this
     if (showFundings) {
-      apiGet('children?fundingMap=true', accessToken)
+      apiGet('funding-spaces?fundingMap=true', accessToken)
         .then((res) => {
           setFundingSpacesDisplay(res.fundingSpacesMap);
         })
@@ -54,47 +58,6 @@ export const PostSubmitHome: React.FC = () => {
         });
     }
   }, [accessToken]);
-
-  // Map each calculated funding space distribution into a card
-  // element that we can format for display
-  let fundingCards = mapFundingSpacesToCards(fundingSpacesDisplay);
-
-  // Use flexbox styling to distribute the cards across three columns
-  // (leaving space for some aesthetic padding), and then box the whole
-  // thing up in a section that we can show or not show
-  const fundingSection = (
-    <>
-      <h2>Funding spaces</h2>
-      <div className="three-column-layout">{fundingCards}</div>
-      <div className="margin-top-4 margin-bottom-4">
-        <Divider />
-      </div>
-    </>
-  );
-
-  // Use same flexbox styling to create and distribute site cards
-  // that show enrollment counts by site as well as view site
-  // rosters
-  let siteCards = (siteCountDisplay || []).map((s: any) => (
-    <div className="desktop:grid-col-4 three-column-card">
-      <Card>
-        <div className="padding-0">
-          <h3>{s.siteName}</h3>
-          <p className="text-base-darker">
-            {pluralize('enrollment', s.count, true)}
-          </p>
-          <Link to={`/roster?organization=${s.orgId}&site=${s.siteId}`}>
-            <TextWithIcon
-              text="View site roster"
-              iconSide="right"
-              Icon={ArrowRight}
-              direction="right"
-            />
-          </Link>
-        </div>
-      </Card>
-    </div>
-  ));
 
   return (
     <div className="grid-container margin-top-4">
@@ -166,9 +129,40 @@ export const PostSubmitHome: React.FC = () => {
       <div className="margin-top-4 margin-bottom-4">
         <Divider />
       </div>
-      {showFundings && fundingSection}
+      {showFundings && fundingSpacesDisplay && (
+        <>
+          <h2>Funding spaces</h2>
+          <div className="three-column-layout">
+            {mapFundingSpacesToCards(fundingSpacesDisplay)}
+          </div>
+          <div className="margin-top-4 margin-bottom-4">
+            <Divider />
+          </div>
+        </>
+      )}
       <h2>Sites</h2>
-      <div className="three-column-layout">{siteCards}</div>
+      <div className="three-column-layout">
+        {(siteCountDisplay || []).map((s: any) => (
+          <div className="desktop:grid-col-4 three-column-card">
+            <Card>
+              <div className="padding-0">
+                <h3>{s.siteName}</h3>
+                <p className="text-base-darker">
+                  {pluralize('enrollment', s.count, true)}
+                </p>
+                <Link to={`/roster?organization=${s.orgId}&site=${s.siteId}`}>
+                  <TextWithIcon
+                    text="View site roster"
+                    iconSide="right"
+                    Icon={ArrowRight}
+                    direction="right"
+                  />
+                </Link>
+              </div>
+            </Card>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
