@@ -79,12 +79,17 @@ const Roster: React.FC = () => {
     if (query) setRosterQuery(query);
   }, [query?.organization, query?.month]);
 
-  // TODO: handle fetching error
-  const {
+  let {
     children: allChildren,
     stillFetching: loading,
-    error: rosterError
+    error: fetchRosterError
   } = usePaginatedChildData(query);
+
+  if (fetchRosterError) {
+    loading = false;
+    throw fetchRosterError;
+  }
+
   const {
     active: activeChildren,
     withdrawn: withdrawnChildren,
