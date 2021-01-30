@@ -18,6 +18,7 @@ export function FundingDoesNotOverlap(
       constraints: [{ fundingPeriod: fundingPeriodOverlap }],
       validator: {
         validate(_, { object: funding }) {
+          console.error('hey look things happened');
           const allFundings = (funding as any).allFundings;
           if (!allFundings) return true;
 
@@ -41,10 +42,10 @@ export function FundingDoesNotOverlap(
           let overlap = false;
           allExceptThisFunding.forEach((_funding) => {
             const _firstPeriod = _funding.firstReportingPeriod;
-            console.log(`Fundingggggggggg: FUNDING ${_funding.id}`)
+            console.error(`Fundingggggggggg: FUNDING ${_funding.id}`)
 
             if (!_firstPeriod) {
-              console.log(`WOOOOOOOO, NO FIRST PERIOD FOUND FOR ${_funding.id}`)
+              console.error(`WOOOOOOOO, NO FIRST PERIOD FOUND FOR ${_funding.id}`)
               return;
             }
 
