@@ -83,6 +83,7 @@ const Roster: React.FC = () => {
   const {
     children: allChildren,
     stillFetching: loading,
+    error: rosterError
   } = usePaginatedChildData(query);
   const {
     active: activeChildren,
