@@ -248,6 +248,7 @@ const Roster: React.FC = () => {
 
   return (
     <>
+    <ErrorBoundary alertProps={defaultErrorBoundaryProps}>
       <div className="Roster grid-container">
         <BackButton
           location={
@@ -316,6 +317,7 @@ const Roster: React.FC = () => {
           )}
         </FixedBottomBar>
       )}
+      </ErrorBoundary>
     </>
   );
 };
