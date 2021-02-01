@@ -44,7 +44,6 @@ export const getChildren = async (
     take?: number;
   } = {}
 ) => {
-  throw new Error('WHOOPS');
 
   let {
     organizationIds,
