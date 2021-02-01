@@ -122,7 +122,7 @@ module.exports = {
       clickLabel: true,
     },
     {
-      id: 'CDC---Child-Day-Care',
+      id: 'CDC-Child-Day-Care',
       clickLabel: true,
     },
     {
