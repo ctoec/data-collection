@@ -11,13 +11,13 @@ import {
   useGenericContext,
   FormContext,
   TObjectDriller,
-  RadioOption,
 } from '@ctoec/component-library';
 import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
 import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { getCurrentFunding } from '../../../../utils/models';
 
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
@@ -26,6 +26,8 @@ type FundingFieldProps<T> = {
   isEdit?: boolean;
   missingFundedEnrollmentError?: EnrichedValidationError;
 };
+
+const fsToId = (fs: string) => fs.replace(/\s/g, '');
 
 /**
  * Component for creating a new funding, either for an existing enrollment
@@ -64,47 +66,21 @@ export const NewFundingField = <
     setFundingSourceOptions(Array.from(_fundingSourceOptions));
   }, [enrollment, fundingSpaces?.length]);
 
-  const options: RadioOption[] = fundingSourceOptions.map((fundingSource) => {
-    const id = fundingSource.replace(/\s/g, '-');
-    return {
-      id,
-      value: id,
-      text: fundingSource,
-      onChange: () => {},
-      expansion: (
-        <>
-          <ContractSpaceField<T>
-            ageGroup={enrollment.ageGroup}
-            fundingSource={fundingSource}
-            organizationId={organizationId}
-            fundingAccessor={fundingAccessor}
-          />
-          <ReportingPeriodField<T>
-            fundingSource={fundingSource}
-            accessor={(data) =>
-              fundingAccessor(data).at('firstReportingPeriod')
-            }
-          />
-          {/* Show last reporting period when field is editing an existing funding*/}
-          {isEdit && (
-            <ReportingPeriodField<T>
-              isLast={true}
-              fundingSource={fundingSource}
-              accessor={(data) =>
-                fundingAccessor(data).at('lastReportingPeriod')
-              }
-            />
-          )}
-        </>
-      ),
-    };
-  });
+  const currentFunding = getCurrentFunding({ enrollment });
+  const selectedSource = fundingSourceOptions.find(
+    (source: FundingSource) => source === currentFunding?.fundingSpace?.source
+  );
+  const defaultSelectedItemId = selectedSource
+    ? fsToId(selectedSource)
+    : undefined;
 
   return (
     <RadioButtonGroup
       // The radio buttons only really control what expansions are shown
       // They don't change any form data on their own
+      key={selectedSource}
       id={`funding-source-${enrollment?.id}`}
+      defaultSelectedItemId={defaultSelectedItemId}
       hint={
         !!enrollment?.ageGroup
           ? undefined
@@ -124,7 +100,41 @@ export const NewFundingField = <
           ['enrollments']
         )
       }
-      options={options}
+      options={fundingSourceOptions.map((fundingSource) => {
+        const id = fsToId(fundingSource);
+        return {
+          id,
+          value: id,
+          text: fundingSource,
+          onChange: () => { },
+          expansion: (
+            <>
+              <ContractSpaceField<T>
+                ageGroup={enrollment.ageGroup}
+                fundingSource={fundingSource}
+                organizationId={organizationId}
+                fundingAccessor={fundingAccessor}
+              />
+              <ReportingPeriodField<T>
+                fundingSource={fundingSource}
+                accessor={(data) =>
+                  fundingAccessor(data).at('firstReportingPeriod')
+                }
+              />
+              {/* Show last reporting period when field is editing an existing funding*/}
+              {isEdit && (
+                <ReportingPeriodField<T>
+                  isLast={true}
+                  fundingSource={fundingSource}
+                  accessor={(data) =>
+                    fundingAccessor(data).at('lastReportingPeriod')
+                  }
+                />
+              )}
+            </>
+          ),
+        };
+      })}
     />
   );
 };
