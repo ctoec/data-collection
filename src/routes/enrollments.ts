@@ -20,10 +20,24 @@ enrollmentsRouter.put(
       await getManager().save(
         getManager().merge(Enrollment, enrollment, req.body)
       );
+      await Promise.all(
+        req.body.fundings.map(async (funding: Funding) => {
+          if (funding.id) {
+            const existingFunding = await controller.getFunding(
+              enrollmentId,
+              funding.id,
+              req.user
+            );
+            return getManager().save(
+              getManager().merge(Funding, existingFunding, funding)
+            );
+          }
+          return getManager().save(Funding, { ...funding, enrollment });
+        })
+      );
       res.sendStatus(200);
     } catch (err) {
       if (err instanceof ApiError) throw err;
-
       console.log('Error saving changes to enrollment:', err);
       throw new BadRequestError('Enrollment not saved');
     }
