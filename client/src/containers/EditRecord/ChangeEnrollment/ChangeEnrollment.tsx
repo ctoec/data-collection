@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Button, Modal } from '@ctoec/component-library';
 import {
   ChangeEnrollmentForm,
@@ -16,6 +17,7 @@ export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
+  const history = useHistory();
 
   return (
     <>
@@ -30,8 +32,12 @@ export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
         header={<h2>Change enrollment</h2>}
         content={
           <ChangeEnrollmentForm
-            afterSaveSuccess={}
-            afterSaveFailure={}
+            afterSaveSuccess={() => {
+              // TODO: navigate to edit enrollment page with success alert
+            }}
+            afterSaveFailure={() => {
+              // TODO: show errors
+            }}
             child={child}
             currentEnrollment={currentEnrollment}
             topHeadingLevel="h3"
