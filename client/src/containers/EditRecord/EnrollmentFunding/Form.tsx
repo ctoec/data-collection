@@ -18,35 +18,6 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     throw new Error('Enrollment funding form rendered without child');
   }
 
-  // Separate enrollments into current (no end date) and past
-  // (with end date). Either may not exist
-  const enrollments: Enrollment[] = child.enrollments || [];
-  const allEnrollmentsFunded = enrollments.every(
-    (e) => e.fundings !== undefined && e.fundings.length > 0
-  );
-
-  // We create enrollments in the backend even if there's no data
-  // (so that we can check validation errors), so this always has
-  // positive length; need to check that the det has null fields
-  const noRecordedEnrollments =
-    enrollments.length === 1 &&
-    enrollments[0].site === null &&
-    enrollments[0].model === CareModel.Unknown &&
-    enrollments[0].ageGroup === undefined &&
-    enrollments[0].entry === undefined;
-  const currentEnrollment: Enrollment | undefined = enrollments.find(
-    (e) => !e.exit
-  );
-  const pastEnrollments: Enrollment[] = currentEnrollment
-    ? enrollments.filter((e) => e.id !== currentEnrollment.id)
-    : enrollments;
-
-  const commonProps = {
-    afterSaveSuccess,
-    child,
-    setAlerts,
-  };
-
   /**
    * Simple way to check if a funding was created by the backend as
    * a placeholder for the card or actually contains real info to
@@ -61,6 +32,40 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     );
   };
 
+  // Separate enrollments into current (no end date) and past
+  // (with end date). Either may not exist
+  const enrollments: Enrollment[] = child.enrollments || [];
+  const allEnrollmentsFunded = enrollments.every(
+    (e) =>
+      e.fundings !== undefined &&
+      e.fundings.length > 0 &&
+      e.fundings.some((f) => !fundingHasNoInformation(f))
+  );
+
+  // We create enrollments in the backend even if there's no data
+  // (so that we can check validation errors), so this always has
+  // positive length; need to check that the det has null fields
+  const noRecordedEnrollments =
+    enrollments.length === 0 ||
+    (enrollments.length === 1 &&
+      enrollments[0].site === null &&
+      (enrollments[0].model === CareModel.Unknown ||
+        enrollments[0].model === undefined) &&
+      enrollments[0].ageGroup === undefined &&
+      enrollments[0].entry === undefined);
+  const currentEnrollment: Enrollment | undefined = enrollments.find(
+    (e) => !e.exit
+  );
+  const pastEnrollments: Enrollment[] = currentEnrollment
+    ? enrollments.filter((e) => e.id !== currentEnrollment.id)
+    : enrollments;
+
+  const commonProps = {
+    afterSaveSuccess,
+    child,
+    setAlerts,
+  };
+
   return (
     <>
       <Heading level={topHeadingLevel}>Enrollment and funding</Heading>
@@ -70,7 +75,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
           is required for each child record.
         </p>
       )}
-      {!allEnrollmentsFunded && (
+      {!noRecordedEnrollments && !allEnrollmentsFunded && (
         <p className="usa-error-message">
           <InlineIcon icon="attentionNeeded" /> All enrollments must be
           associated with at least one funding.
