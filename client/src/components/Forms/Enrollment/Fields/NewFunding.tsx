@@ -102,23 +102,6 @@ export const NewFundingField = <
     };
   });
 
-  // Needed for the error state where EditRecord prompts the user for
-  // a child's first enrollment/funding; don't show field with
-  // red styling, in that case
-  let errorDisplay;
-  if (hideStatus) errorDisplay = undefined;
-  else
-    errorDisplay =
-      getValidationStatusForFields(enrollment, ['fundings']) ||
-      getValidationStatusForFields(
-        {
-          validationErrors: missingFundedEnrollmentError
-            ? [missingFundedEnrollmentError]
-            : [],
-        },
-        ['enrollments']
-      );
-
   return (
     <RadioButtonGroup
       // The radio buttons only really control what expansions are shown
@@ -132,7 +115,19 @@ export const NewFundingField = <
       inputName="fundingSource"
       legend="Funding source options"
       showLegend
-      status={errorDisplay}
+      status={
+        hideStatus
+          ? undefined
+          : getValidationStatusForFields(enrollment, ['fundings']) ||
+            getValidationStatusForFields(
+              {
+                validationErrors: missingFundedEnrollmentError
+                  ? [missingFundedEnrollmentError]
+                  : [],
+              },
+              ['enrollments']
+            )
+      }
       options={options}
     />
   );

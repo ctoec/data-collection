@@ -25,17 +25,6 @@ export const HouseholdSizeField: React.FC<HideErrorProps> = ({
     updateData,
   } = useGenericContext<IncomeDetermination>(FormContext);
 
-  // Needed for the error state where EditRecord prompts the user for
-  // a child's first income determination; don't show field with
-  // red boundaries, in that case
-  let errorDisplay;
-  if (hideStatus) errorDisplay = undefined;
-  else
-    errorDisplay = getValidationStatusForFieldInFieldset(
-      dataDriller,
-      dataDriller.at('numberOfPeople').path,
-      {}
-    );
   return (
     <TextInput
       value={dataDriller.at('numberOfPeople').value}
@@ -57,7 +46,15 @@ export const HouseholdSizeField: React.FC<HideErrorProps> = ({
       id="number-of-people"
       label="Household size"
       small
-      status={errorDisplay}
+      status={
+        hideStatus
+          ? undefined
+          : getValidationStatusForFieldInFieldset(
+              dataDriller,
+              dataDriller.at('numberOfPeople').path,
+              {}
+            )
+      }
       disabled={dataDriller.at('incomeNotDisclosed').value}
     />
   );

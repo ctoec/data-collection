@@ -93,33 +93,22 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       });
   }
 
-  // Programmatically determine which error situation we're in
-  // If both reporting periods are null, we only need one incomplete
-  // icon and there's no point in validating anything else
-  let reportingPeriodDisplay;
-  if (
-    funding.firstReportingPeriod === null &&
-    funding.lastReportingPeriod === null
-  )
-    reportingPeriodDisplay = InlineIcon({ icon: 'incomplete' });
-  else
-    reportingPeriodDisplay = (
-      <>
-        {funding.firstReportingPeriod
-          ? funding.firstReportingPeriod.period.format('MMMM YYYY')
-          : InlineIcon({ icon: 'incomplete' })}{' '}
-        -{' '}
-        {funding.lastReportingPeriod
-          ? funding.lastReportingPeriod.period.format('MMMM YYYY')
-          : 'present'}
-        {hasValidationErrorForField(funding, 'firstReportingPeriod') && (
-          <>
-            {' '}
-            <InlineIcon icon="incomplete" />
-          </>
-        )}
-      </>
-    );
+  // Don't want two incomplete icons if both reporting periods are
+  // missing, so see how many we need
+  let reportingPeriodDisplay = (
+    <>
+      {hasValidationErrorForField(funding, 'firstReportingPeriod') ? (
+        <InlineIcon icon="incomplete" />
+      ) : (
+        funding.firstReportingPeriod?.period.format('MMMM YYYY')
+      )}
+      {!funding.firstReportingPeriod
+        ? undefined
+        : funding.lastReportingPeriod
+        ? ` - ${funding.lastReportingPeriod.period.format('MMMM YYYY')}`
+        : ' - present'}
+    </>
+  );
 
   return (
     <Card
