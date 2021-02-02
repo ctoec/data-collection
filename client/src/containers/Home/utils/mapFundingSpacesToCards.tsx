@@ -10,7 +10,7 @@ export const mapFundingSpacesToCards = (nestedSpaces: NestedFundingSpaces) =>
     <div className="desktop:grid-col-4 three-column-card">
       <Card>
         <div className="padding-0">
-          <h3 className="margin-top-0">{source}</h3>
+          <h4 className="margin-top-0">{source}</h4>
           {Object.keys(nestedSpaces[source as FundingSource]).map(
             (ageGroup) => (
               <>

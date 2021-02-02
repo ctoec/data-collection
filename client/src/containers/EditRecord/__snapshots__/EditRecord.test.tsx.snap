@@ -6,7 +6,8 @@ exports[`EditRecord matches snapshot 1`] = `
     class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 margin-y-0 text-bold bx--btn bx--btn--primary"
+      tabindex="0"
       type="button"
     >
       <span
@@ -70,7 +71,8 @@ exports[`EditRecord matches snapshot 1`] = `
           Quick actions
         </span>
         <button
-          class="usa-button usa-button--unstyled margin-right-2"
+          class="usa-button usa-button--unstyled margin-right-2 bx--btn bx--btn--primary"
+          tabindex="0"
           type="button"
         >
           <span
@@ -85,7 +87,8 @@ exports[`EditRecord matches snapshot 1`] = `
           </span>
         </button>
         <button
-          class="usa-button usa-button--unstyled margin-right-0"
+          class="usa-button usa-button--unstyled margin-right-0 bx--btn bx--btn--primary"
+          tabindex="0"
           type="button"
         >
           <span
@@ -119,416 +122,385 @@ exports[`EditRecord matches snapshot 1`] = `
       class="grid-col"
     >
       <div
-        class="oec-loading-wrapper"
+        class="oec-tab-nav"
       >
         <div
-          aria-hidden="false"
-          class=""
+          class="oec-tab-nav--header"
         >
           <div
-            class="oec-tab-nav"
+            aria-orientation="horizontal"
+            class="grid-row oec-tab-nav--tab-container"
+            role="tablist"
           >
-            <div
-              class="oec-tab-nav--header"
+            <button
+              aria-selected="true"
+              class="oec-tab-nav--tab oec-tab-nav--tab__active"
+              id="identifiers"
+              role="tab"
+              title="Child identifiers"
+              type="button"
             >
-              <div
-                aria-orientation="horizontal"
-                class="grid-row oec-tab-nav--tab-container"
-                role="tablist"
-              >
-                <button
-                  aria-selected="true"
-                  class="oec-tab-nav--tab oec-tab-nav--tab__active"
-                  id="identifiers"
-                  role="tab"
-                  title="Child identifiers"
-                  type="button"
-                >
-                  <span>
-                    Child identifiers
-                  </span>
-                </button>
-                <button
-                  aria-selected="false"
-                  class="oec-tab-nav--tab"
-                  id="demographics"
-                  role="tab"
-                  title="Child info"
-                  type="button"
-                >
-                  <span>
-                    Child info
-                  </span>
-                </button>
-                <button
-                  aria-selected="false"
-                  class="oec-tab-nav--tab"
-                  id="family"
-                  role="tab"
-                  title="Family address"
-                  type="button"
-                >
-                  <span>
-                    Family address
-                  </span>
-                </button>
-                <button
-                  aria-selected="false"
-                  class="oec-tab-nav--tab"
-                  id="income"
-                  role="tab"
-                  title="Family income"
-                  type="button"
-                >
-                  <span>
-                    Family income
-                  </span>
-                </button>
-                <button
-                  aria-selected="false"
-                  class="oec-tab-nav--tab"
-                  id="enrollment"
-                  role="tab"
-                  title="Enrollment and funding"
-                  type="button"
-                >
-                  <span>
-                    <span
-                      class="oec-text-with-icon svg-gold-20v"
-                    >
-                      Enrollment and funding
-                      <svg
-                        class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                        height="126"
-                        viewBox="0 0 126 126"
-                        width="126"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M117.18 31.592c-5.595-9.586-13.185-17.176-22.771-22.771C84.821 3.226 74.354.429 63.001.429c-11.352 0-21.822 2.797-31.408 8.392-9.587 5.594-17.177 13.184-22.772 22.771C3.225 41.179.428 51.649.428 63c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zM52.572 16.071c0-.761.244-1.385.733-1.874.489-.488 1.114-.733 1.874-.733h15.644c.76 0 1.385.245 1.872.733.488.489.734 1.113.734 1.874v13.036c0 .76-.246 1.385-.734 1.873-.487.489-1.112.733-1.872.733H55.179c-.76 0-1.385-.244-1.874-.733-.489-.488-.733-1.113-.733-1.873V16.071zm31.285 86.036c0 .76-.246 1.385-.733 1.872-.487.489-1.112.733-1.874.733h-36.5c-.761 0-1.385-.244-1.874-.733-.489-.488-.733-1.113-.733-1.873V89.07c0-.762.244-1.385.733-1.874.489-.488 1.114-.733 1.874-.733h7.822V60.392H44.75c-.761 0-1.385-.244-1.874-.733-.489-.488-.733-1.113-.733-1.874V44.75c0-.761.244-1.385.733-1.874.489-.489 1.114-.733 1.874-.733h26.073c.76 0 1.385.244 1.872.733.488.489.734 1.113.734 1.874v41.714h7.82c.761 0 1.386.245 1.874.733.487.488.733 1.113.733 1.874v13.036h.001z"
-                          fill="#1B1B1B"
-                        />
-                      </svg>
-                    </span>
-                  </span>
-                </button>
-                <div
-                  class="oec-tab-nav--dropdown opacity-0"
-                >
-                  <button
-                    aria-expanded="false"
-                    aria-haspopup="false"
-                    aria-hidden="true"
-                    class="oec-tab-nav--tab"
-                    disabled=""
-                  >
-                    +0 tabs
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div
-              aria-labelledby="identifiers"
-              class="oec-tab-nav--content"
-              role="tabpanel"
+              <span>
+                Child identifiers
+              </span>
+            </button>
+            <button
+              aria-selected="false"
+              class="oec-tab-nav--tab"
+              id="demographics"
+              role="tab"
+              title="Child info"
+              type="button"
             >
-              <form
-                autocomplete="off"
-                class="usa-form ChildIdentifiersForm usa-form"
-                novalidate=""
+              <span>
+                Child info
+              </span>
+            </button>
+            <button
+              aria-selected="false"
+              class="oec-tab-nav--tab"
+              id="family"
+              role="tab"
+              title="Family address"
+              type="button"
+            >
+              <span>
+                Family address
+              </span>
+            </button>
+            <button
+              aria-selected="false"
+              class="oec-tab-nav--tab"
+              id="income"
+              role="tab"
+              title="Family income"
+              type="button"
+            >
+              <span>
+                Family income
+              </span>
+            </button>
+            <button
+              aria-selected="false"
+              class="oec-tab-nav--tab"
+              id="enrollment"
+              role="tab"
+              title="Enrollment and funding"
+              type="button"
+            >
+              <span>
+                <span
+                  class="oec-text-with-icon svg-gold-20v"
+                >
+                  Enrollment and funding
+                  <svg
+                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                    height="126"
+                    viewBox="0 0 126 126"
+                    width="126"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M117.18 31.592c-5.595-9.586-13.185-17.176-22.771-22.771C84.821 3.226 74.354.429 63.001.429c-11.352 0-21.822 2.797-31.408 8.392-9.587 5.594-17.177 13.184-22.772 22.771C3.225 41.179.428 51.649.428 63c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zM52.572 16.071c0-.761.244-1.385.733-1.874.489-.488 1.114-.733 1.874-.733h15.644c.76 0 1.385.245 1.872.733.488.489.734 1.113.734 1.874v13.036c0 .76-.246 1.385-.734 1.873-.487.489-1.112.733-1.872.733H55.179c-.76 0-1.385-.244-1.874-.733-.489-.488-.733-1.113-.733-1.873V16.071zm31.285 86.036c0 .76-.246 1.385-.733 1.872-.487.489-1.112.733-1.874.733h-36.5c-.761 0-1.385-.244-1.874-.733-.489-.488-.733-1.113-.733-1.873V89.07c0-.762.244-1.385.733-1.874.489-.488 1.114-.733 1.874-.733h7.822V60.392H44.75c-.761 0-1.385-.244-1.874-.733-.489-.488-.733-1.113-.733-1.874V44.75c0-.761.244-1.385.733-1.874.489-.489 1.114-.733 1.874-.733h26.073c.76 0 1.385.244 1.872.733.488.489.734 1.113.734 1.874v41.714h7.82c.761 0 1.386.245 1.874.733.487.488.733 1.113.733 1.874v13.036h.001z"
+                      fill="#1B1B1B"
+                    />
+                  </svg>
+                </span>
+              </span>
+            </button>
+            <div
+              class="oec-tab-nav--dropdown opacity-0"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="false"
+                aria-hidden="true"
+                class="oec-tab-nav--tab"
+                disabled=""
               >
-                <h2>
-                  Child's identifiers
-                </h2>
-                <div
-                  class="mobile-lg:grid-col-9"
-                >
-                  <div
-                    class=" usa-form-group"
-                  >
-                    <label
-                      class="usa-label"
-                      for="firstName"
-                    >
-                      First name 
-                    </label>
-                    <input
-                      aria-required="true"
-                      class="usa-input oec-text-input"
-                      id="firstName"
-                      type="text"
-                      value="First"
-                    />
-                  </div>
-                </div>
-                <div
-                  class="mobile-lg:grid-col-9"
-                >
-                  <div
-                    class=" usa-form-group"
-                  >
-                    <label
-                      class="usa-label"
-                      for="middleName"
-                    >
-                      Middle name 
-                      <span
-                        class="usa-hint"
-                      >
-                         (optional)
-                      </span>
-                    </label>
-                    <input
-                      aria-required="false"
-                      class="usa-input oec-text-input"
-                      id="middleName"
-                      type="text"
-                      value=""
-                    />
-                  </div>
-                </div>
-                <div
-                  class="display-flex flex-row flex-align-end grid-row grid-gap"
-                >
-                  <div
-                    class="mobile-lg:grid-col-9"
-                  >
-                    <div
-                      class=" usa-form-group"
-                    >
-                      <label
-                        class="usa-label"
-                        for="lastName"
-                      >
-                        Last name 
-                      </label>
-                      <input
-                        aria-required="true"
-                        class="usa-input oec-text-input"
-                        id="lastName"
-                        type="text"
-                        value="Last"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="mobile-lg:grid-col-3"
-                  >
-                    <div
-                      class=" usa-form-group"
-                    >
-                      <label
-                        class="usa-label"
-                        for="suffix"
-                      >
-                        Suffix 
-                        <span
-                          class="usa-hint"
-                        >
-                           (optional)
-                        </span>
-                      </label>
-                      <input
-                        aria-required="false"
-                        class="usa-input oec-text-input"
-                        id="suffix"
-                        type="text"
-                        value=""
-                      />
-                    </div>
-                  </div>
-                </div>
-                <fieldset
-                  aria-labelledby="fieldset-legend-dateOfBirth-picker dateOfBirth-picker-hint"
-                  class="usa-fieldset"
-                  id="dateOfBirth-picker"
-                >
-                  <legend
-                    id="fieldset-legend-dateOfBirth-picker"
-                  >
-                    <span
-                      class="usa-label"
-                    >
-                      Birthdate
-                    </span>
-                  </legend>
-                  <span
-                    class="usa-hint text-italic"
-                    id="dateOfBirth-picker-hint"
-                  >
-                    For example: 6 21 2008
-                  </span>
-                  <div>
-                    <div
-                      class="flex-row flex-align-end usa-memorable-date"
-                    >
-                      <div
-                        class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-                      >
-                        <label
-                          class="usa-label"
-                          for="dateOfBirth-picker-month"
-                        >
-                          Month 
-                        </label>
-                        <input
-                          aria-required="true"
-                          class="usa-input oec-text-input usa-input--inline"
-                          id="dateOfBirth-picker-month"
-                          max="12"
-                          min="1"
-                          type="number"
-                          value=""
-                        />
-                      </div>
-                      <div
-                        class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-                      >
-                        <label
-                          class="usa-label"
-                          for="dateOfBirth-picker-day"
-                        >
-                          Day 
-                        </label>
-                        <input
-                          aria-required="true"
-                          class="usa-input oec-text-input usa-input--inline"
-                          id="dateOfBirth-picker-day"
-                          max="31"
-                          min="1"
-                          type="number"
-                          value=""
-                        />
-                      </div>
-                      <div
-                        class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-                      >
-                        <label
-                          class="usa-label"
-                          for="dateOfBirth-picker-year"
-                        >
-                          Year 
-                        </label>
-                        <input
-                          aria-required="true"
-                          class="usa-input oec-text-input usa-input--inline"
-                          id="dateOfBirth-picker-year"
-                          max="2200"
-                          min="1000"
-                          type="number"
-                          value=""
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </fieldset>
-                <fieldset
-                  aria-labelledby="fieldset-legend-birth-certificate-fields"
-                  class="usa-fieldset"
-                  id="birth-certificate-fields"
-                >
-                  <legend
-                    id="fieldset-legend-birth-certificate-fields"
-                  >
-                    <span
-                      class="usa-label"
-                    >
-                      Birth certificate
-                    </span>
-                  </legend>
-                  <div>
-                    <span>
-                      <div
-                        class="usa-radio"
-                      >
-                        <input
-                          class="usa-radio__input"
-                          id="US-birth-certificate"
-                          name="birthCertificateType"
-                          type="radio"
-                          value="US birth certificate"
-                        />
-                        <label
-                          class="usa-radio__label"
-                          for="US-birth-certificate"
-                        >
-                          US birth certificate
-                        </label>
-                      </div>
-                    </span>
-                    <span>
-                      <div
-                        class="usa-radio"
-                      >
-                        <input
-                          class="usa-radio__input"
-                          id="Non-US-birth-certificate"
-                          name="birthCertificateType"
-                          type="radio"
-                          value="Non-US birth certificate"
-                        />
-                        <label
-                          class="usa-radio__label"
-                          for="Non-US-birth-certificate"
-                        >
-                          Non-US birth certificate
-                        </label>
-                      </div>
-                    </span>
-                    <span>
-                      <div
-                        class="usa-radio"
-                      >
-                        <input
-                          checked=""
-                          class="usa-radio__input"
-                          id="Unavailable"
-                          name="birthCertificateType"
-                          type="radio"
-                          value="Unavailable"
-                        />
-                        <label
-                          class="usa-radio__label"
-                          for="Unavailable"
-                        >
-                          Unavailable
-                        </label>
-                      </div>
-                    </span>
-                  </div>
-                </fieldset>
-                <input
-                  class="usa-button"
-                  type="submit"
-                  value="Save"
-                />
-              </form>
+                +0 tabs
+              </button>
             </div>
           </div>
         </div>
         <div
-          class="oec-loading-wrapper__indicator bg-white"
-          hidden=""
+          aria-labelledby="identifiers"
+          class="oec-tab-nav--content"
+          role="tabpanel"
         >
-          <div
-            class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-            role="progressbar"
-            style="width: 40px; height: 40px;"
+          <form
+            autocomplete="off"
+            class="usa-form ChildIdentifiersForm usa-form"
+            novalidate=""
           >
-            <svg
-              class="MuiCircularProgress-svg"
-              viewBox="22 22 44 44"
+            <h2>
+              Child's identifiers
+            </h2>
+            <div
+              class="mobile-lg:grid-col-9"
             >
-              <circle
-                class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-                cx="44"
-                cy="44"
-                fill="none"
-                r="20.2"
-                stroke-width="3.6"
-              />
-            </svg>
-          </div>
+              <div
+                class=" usa-form-group"
+              >
+                <label
+                  class="usa-label"
+                  for="firstName"
+                >
+                  First name 
+                </label>
+                <input
+                  aria-required="true"
+                  class="usa-input oec-text-input"
+                  id="firstName"
+                  type="text"
+                  value="First"
+                />
+              </div>
+            </div>
+            <div
+              class="mobile-lg:grid-col-9"
+            >
+              <div
+                class=" usa-form-group"
+              >
+                <label
+                  class="usa-label"
+                  for="middleName"
+                >
+                  Middle name 
+                  <span
+                    class="usa-hint"
+                  >
+                     (optional)
+                  </span>
+                </label>
+                <input
+                  aria-required="false"
+                  class="usa-input oec-text-input"
+                  id="middleName"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+            <div
+              class="display-flex flex-row flex-align-end grid-row grid-gap"
+            >
+              <div
+                class="mobile-lg:grid-col-9"
+              >
+                <div
+                  class=" usa-form-group"
+                >
+                  <label
+                    class="usa-label"
+                    for="lastName"
+                  >
+                    Last name 
+                  </label>
+                  <input
+                    aria-required="true"
+                    class="usa-input oec-text-input"
+                    id="lastName"
+                    type="text"
+                    value="Last"
+                  />
+                </div>
+              </div>
+              <div
+                class="mobile-lg:grid-col-3"
+              >
+                <div
+                  class=" usa-form-group"
+                >
+                  <label
+                    class="usa-label"
+                    for="suffix"
+                  >
+                    Suffix 
+                    <span
+                      class="usa-hint"
+                    >
+                       (optional)
+                    </span>
+                  </label>
+                  <input
+                    aria-required="false"
+                    class="usa-input oec-text-input"
+                    id="suffix"
+                    type="text"
+                    value=""
+                  />
+                </div>
+              </div>
+            </div>
+            <fieldset
+              aria-labelledby="fieldset-legend-dateOfBirth-picker dateOfBirth-picker-hint"
+              class="usa-fieldset"
+              id="dateOfBirth-picker"
+            >
+              <legend
+                id="fieldset-legend-dateOfBirth-picker"
+              >
+                <span
+                  class="usa-label"
+                >
+                  Birthdate
+                </span>
+              </legend>
+              <span
+                class="usa-hint text-italic"
+                id="dateOfBirth-picker-hint"
+              >
+                For example: 6 21 2008
+              </span>
+              <div>
+                <div
+                  class="flex-row flex-align-end usa-memorable-date"
+                >
+                  <div
+                    class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
+                  >
+                    <label
+                      class="usa-label"
+                      for="dateOfBirth-picker-month"
+                    >
+                      Month 
+                    </label>
+                    <input
+                      aria-required="true"
+                      class="usa-input oec-text-input usa-input--inline"
+                      id="dateOfBirth-picker-month"
+                      max="12"
+                      min="1"
+                      type="number"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
+                  >
+                    <label
+                      class="usa-label"
+                      for="dateOfBirth-picker-day"
+                    >
+                      Day 
+                    </label>
+                    <input
+                      aria-required="true"
+                      class="usa-input oec-text-input usa-input--inline"
+                      id="dateOfBirth-picker-day"
+                      max="31"
+                      min="1"
+                      type="number"
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
+                  >
+                    <label
+                      class="usa-label"
+                      for="dateOfBirth-picker-year"
+                    >
+                      Year 
+                    </label>
+                    <input
+                      aria-required="true"
+                      class="usa-input oec-text-input usa-input--inline"
+                      id="dateOfBirth-picker-year"
+                      max="2200"
+                      min="1000"
+                      type="number"
+                      value=""
+                    />
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset
+              aria-labelledby="fieldset-legend-birth-certificate-fields"
+              class="usa-fieldset"
+              id="birth-certificate-fields"
+            >
+              <legend
+                id="fieldset-legend-birth-certificate-fields"
+              >
+                <span
+                  class="usa-label"
+                >
+                  Birth certificate
+                </span>
+              </legend>
+              <div>
+                <span>
+                  <div
+                    class="usa-radio"
+                  >
+                    <input
+                      class="usa-radio__input"
+                      id="US-birth-certificate"
+                      name="birthCertificateType"
+                      type="radio"
+                      value="US birth certificate"
+                    />
+                    <label
+                      class="usa-radio__label"
+                      for="US-birth-certificate"
+                    >
+                      US birth certificate
+                    </label>
+                  </div>
+                </span>
+                <span>
+                  <div
+                    class="usa-radio"
+                  >
+                    <input
+                      class="usa-radio__input"
+                      id="Non-US-birth-certificate"
+                      name="birthCertificateType"
+                      type="radio"
+                      value="Non-US birth certificate"
+                    />
+                    <label
+                      class="usa-radio__label"
+                      for="Non-US-birth-certificate"
+                    >
+                      Non-US birth certificate
+                    </label>
+                  </div>
+                </span>
+                <span>
+                  <div
+                    class="usa-radio"
+                  >
+                    <input
+                      checked=""
+                      class="usa-radio__input"
+                      id="Unavailable"
+                      name="birthCertificateType"
+                      type="radio"
+                      value="Unavailable"
+                    />
+                    <label
+                      class="usa-radio__label"
+                      for="Unavailable"
+                    >
+                      Unavailable
+                    </label>
+                  </div>
+                </span>
+              </div>
+            </fieldset>
+            <button
+              class="usa-button bx--btn bx--btn--primary"
+              tabindex="0"
+              type="submit"
+            >
+              Save
+            </button>
+          </form>
         </div>
       </div>
     </div>

@@ -6,7 +6,8 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
     class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 margin-y-0 text-bold bx--btn bx--btn--primary"
+      tabindex="0"
       type="button"
     >
       <span
@@ -26,17 +27,51 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
       Add needed information
     </h1>
     <div
-      class="oec-loading-wrapper"
+      class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
+    >
+      <span
+        class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
+      >
+        <svg
+          height="126"
+          viewBox="0 0 126 126"
+          width="126"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <title>
+            Shape
+          </title>
+          <path
+            d="M116.752 31.163c-5.595-9.586-13.185-17.176-22.771-22.771C84.393 2.797 73.926 0 62.573 0 51.221 0 40.751 2.797 31.165 8.392c-9.587 5.594-17.177 13.184-22.772 22.771C2.797 40.75 0 51.22 0 62.571c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zm-13.608 19.876L58.905 95.278c-1.032 1.032-2.281 1.549-3.748 1.549-1.412 0-2.634-.517-3.666-1.549L21.997 65.786c-.977-.979-1.466-2.199-1.466-3.666 0-1.521.488-2.771 1.466-3.749l7.414-7.332c1.033-1.032 2.254-1.548 3.667-1.548 1.413 0 2.635.516 3.667 1.548l18.413 18.413 33.241-33.16c1.032-1.032 2.254-1.548 3.666-1.548 1.411 0 2.635.516 3.666 1.548l7.414 7.333c.979.977 1.467 2.226 1.467 3.747 0 1.467-.488 2.689-1.468 3.667z"
+            fill="#1B1B1B"
+          />
+        </svg>
+        <span
+          class="usa-sr-only"
+        >
+          (complete)
+        </span>
+      </span>
+       All enrollments are complete
+    </div>
+    <div
+      class="oec-sidenav grid-row"
     >
       <div
-        aria-hidden="false"
-        class=""
+        class="mobile-lg:grid-col-4"
+      >
+        <nav>
+          <ul />
+        </nav>
+      </div>
+      <div
+        class="oec-sidenav__content mobile-lg:grid-col-12"
       >
         <div
-          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
+          class="margin-x-4 margin-top-4 display-flex flex-column flex-align-center"
         >
           <span
-            class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
+            class="oec-inline-icon oec-inline-icon--complete"
           >
             <svg
               height="126"
@@ -58,98 +93,31 @@ exports[`BatchEdit matches snapshot when >0 records are missing info 1`] = `
               (complete)
             </span>
           </span>
-           All enrollments are complete
-        </div>
-        <div
-          class="oec-sidenav grid-row"
-        >
-          <div
-            class="mobile-lg:grid-col-4"
+          <p
+            class="font-body-lg text-bold margin-y-1"
           >
-            <nav>
-              <ul />
-            </nav>
-          </div>
-          <div
-            class="oec-sidenav__content mobile-lg:grid-col-12"
+            All records are complete!
+          </p>
+          <a
+            href="/roster"
           >
-            <div
-              class="margin-x-4 margin-top-4 display-flex flex-column flex-align-center"
+            <span
+              class="oec-text-with-icon"
             >
-              <span
-                class="oec-inline-icon oec-inline-icon--complete"
+              Back to roster
+              <svg
+                class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                fill="currentColor"
+                stroke="currentColor"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                  height="126"
-                  viewBox="0 0 126 126"
-                  width="126"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>
-                    Shape
-                  </title>
-                  <path
-                    d="M116.752 31.163c-5.595-9.586-13.185-17.176-22.771-22.771C84.393 2.797 73.926 0 62.573 0 51.221 0 40.751 2.797 31.165 8.392c-9.587 5.594-17.177 13.184-22.772 22.771C2.797 40.75 0 51.22 0 62.571c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zm-13.608 19.876L58.905 95.278c-1.032 1.032-2.281 1.549-3.748 1.549-1.412 0-2.634-.517-3.666-1.549L21.997 65.786c-.977-.979-1.466-2.199-1.466-3.666 0-1.521.488-2.771 1.466-3.749l7.414-7.332c1.033-1.032 2.254-1.548 3.667-1.548 1.413 0 2.635.516 3.667 1.548l18.413 18.413 33.241-33.16c1.032-1.032 2.254-1.548 3.666-1.548 1.411 0 2.635.516 3.666 1.548l7.414 7.333c.979.977 1.467 2.226 1.467 3.747 0 1.467-.488 2.689-1.468 3.667z"
-                    fill="#1B1B1B"
-                  />
-                </svg>
-                <span
-                  class="usa-sr-only"
-                >
-                  (complete)
-                </span>
-              </span>
-              <p
-                class="font-body-lg text-bold margin-y-1"
-              >
-                All records are complete!
-              </p>
-              <a
-                href="/roster"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  Back to roster
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                    fill="currentColor"
-                    stroke="currentColor"
-                    viewBox="0 0 448 512"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"
-                    />
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="oec-loading-wrapper__indicator bg-white"
-        hidden=""
-      >
-        <div
-          class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-          role="progressbar"
-          style="width: 40px; height: 40px;"
-        >
-          <svg
-            class="MuiCircularProgress-svg"
-            viewBox="22 22 44 44"
-          >
-            <circle
-              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-              cx="44"
-              cy="44"
-              fill="none"
-              r="20.2"
-              stroke-width="3.6"
-            />
-          </svg>
+                <path
+                  d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"
+                />
+              </svg>
+            </span>
+          </a>
         </div>
       </div>
     </div>
@@ -163,7 +131,8 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
     class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 margin-y-0 text-bold bx--btn bx--btn--primary"
+      tabindex="0"
       type="button"
     >
       <span
@@ -186,127 +155,31 @@ exports[`BatchEdit matches snapshot when no records are missing info 1`] = `
       class="oec-loading-wrapper"
     >
       <div
-        aria-hidden="true"
-        class="opacity-0"
+        aria-atomic="true"
+        aria-labelledby="loading-id-1"
+        aria-live="assertive"
+        class="bx--loading"
       >
-        <div
-          class="display-flex font-body-lg height-5 line-height-body-6 margin-y-0"
+        <label
+          class="bx--visually-hidden"
+          id="loading-id-1"
         >
-          <span
-            class="height-4 width-4 oec-inline-icon oec-inline-icon--complete"
-          >
-            <svg
-              height="126"
-              viewBox="0 0 126 126"
-              width="126"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>
-                Shape
-              </title>
-              <path
-                d="M116.752 31.163c-5.595-9.586-13.185-17.176-22.771-22.771C84.393 2.797 73.926 0 62.573 0 51.221 0 40.751 2.797 31.165 8.392c-9.587 5.594-17.177 13.184-22.772 22.771C2.797 40.75 0 51.22 0 62.571c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zm-13.608 19.876L58.905 95.278c-1.032 1.032-2.281 1.549-3.748 1.549-1.412 0-2.634-.517-3.666-1.549L21.997 65.786c-.977-.979-1.466-2.199-1.466-3.666 0-1.521.488-2.771 1.466-3.749l7.414-7.332c1.033-1.032 2.254-1.548 3.667-1.548 1.413 0 2.635.516 3.667 1.548l18.413 18.413 33.241-33.16c1.032-1.032 2.254-1.548 3.666-1.548 1.411 0 2.635.516 3.666 1.548l7.414 7.333c.979.977 1.467 2.226 1.467 3.747 0 1.467-.488 2.689-1.468 3.667z"
-                fill="#1B1B1B"
-              />
-            </svg>
-            <span
-              class="usa-sr-only"
-            >
-              (complete)
-            </span>
-          </span>
-           All enrollments are complete
-        </div>
-        <div
-          class="oec-sidenav grid-row"
+          Active loading indicator
+        </label>
+        <svg
+          class="bx--loading__svg"
+          viewBox="0 0 100 100"
         >
-          <div
-            class="mobile-lg:grid-col-4"
-          >
-            <nav>
-              <ul />
-            </nav>
-          </div>
-          <div
-            class="oec-sidenav__content mobile-lg:grid-col-12"
-          >
-            <div
-              class="margin-x-4 margin-top-4 display-flex flex-column flex-align-center"
-            >
-              <span
-                class="oec-inline-icon oec-inline-icon--complete"
-              >
-                <svg
-                  height="126"
-                  viewBox="0 0 126 126"
-                  width="126"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <title>
-                    Shape
-                  </title>
-                  <path
-                    d="M116.752 31.163c-5.595-9.586-13.185-17.176-22.771-22.771C84.393 2.797 73.926 0 62.573 0 51.221 0 40.751 2.797 31.165 8.392c-9.587 5.594-17.177 13.184-22.772 22.771C2.797 40.75 0 51.22 0 62.571c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zm-13.608 19.876L58.905 95.278c-1.032 1.032-2.281 1.549-3.748 1.549-1.412 0-2.634-.517-3.666-1.549L21.997 65.786c-.977-.979-1.466-2.199-1.466-3.666 0-1.521.488-2.771 1.466-3.749l7.414-7.332c1.033-1.032 2.254-1.548 3.667-1.548 1.413 0 2.635.516 3.667 1.548l18.413 18.413 33.241-33.16c1.032-1.032 2.254-1.548 3.666-1.548 1.411 0 2.635.516 3.666 1.548l7.414 7.333c.979.977 1.467 2.226 1.467 3.747 0 1.467-.488 2.689-1.468 3.667z"
-                    fill="#1B1B1B"
-                  />
-                </svg>
-                <span
-                  class="usa-sr-only"
-                >
-                  (complete)
-                </span>
-              </span>
-              <p
-                class="font-body-lg text-bold margin-y-1"
-              >
-                All records are complete!
-              </p>
-              <a
-                href="/roster"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  Back to roster
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                    fill="currentColor"
-                    stroke="currentColor"
-                    viewBox="0 0 448 512"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"
-                    />
-                  </svg>
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div
-        class="oec-loading-wrapper__indicator bg-white"
-      >
-        <div
-          class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-          role="progressbar"
-          style="width: 40px; height: 40px;"
-        >
-          <svg
-            class="MuiCircularProgress-svg"
-            viewBox="22 22 44 44"
-          >
-            <circle
-              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-              cx="44"
-              cy="44"
-              fill="none"
-              r="20.2"
-              stroke-width="3.6"
-            />
-          </svg>
-        </div>
+          <title>
+            Active loading indicator
+          </title>
+          <circle
+            class="bx--loading__stroke"
+            cx="50%"
+            cy="50%"
+            r="44"
+          />
+        </svg>
       </div>
     </div>
   </div>

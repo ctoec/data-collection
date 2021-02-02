@@ -13,7 +13,7 @@ export const BackButton = ({ text = 'Back', location }: BackButtonParams) => {
 
   return (
     <Button
-      className="margin-top-2 text-bold"
+      className="margin-top-2 margin-y-0 text-bold"
       appearance="unstyled"
       text={
         <TextWithIcon

@@ -3,246 +3,208 @@
 exports[`Home snapshot matches post-submit user 1`] = `
 <DocumentFragment>
   <div
-    class="oec-loading-wrapper"
+    class="grid-container margin-top-4"
   >
+    <h1
+      class="margin-top-0"
+    >
+      Hello Voldy!
+    </h1>
     <div
-      aria-hidden="true"
-      class="opacity-0"
+      class="margin-top-3 margin-bottom-1"
+    >
+      <hr
+        class="oec-divider"
+      />
+    </div>
+    <div
+      class="grid-row grid-gap"
     >
       <div
-        class="Home grid-container margin-top-4"
+        class="tablet:grid-col-10"
       >
-        <div
-          class="grid-row grid-gap"
-        >
-          <div
-            class="tablet:grid-col-8 margin-top-4"
-          >
-            <h1
-              class="margin-top-0"
-            >
-              Hello Voldy!
-            </h1>
-            <p>
-              ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). Make sure the site names and funding spaces below are accurate before you start entering data.
-            </p>
-            <h2
-              class="pre-submit-h2"
-            >
-              Your managed sites and funding spaces
-            </h2>
-          </div>
-          <div
-            class="tablet:grid-col-4 margin-top-4 img"
-            role="presentation"
-          >
-            <svg>
-              PersonWithSpreadsheet.svg
-            </svg>
-          </div>
-        </div>
-        <div
-          class="usa-alert usa-alert--info grid-row"
-        >
-          <div
-            class="display-flex flex-fill"
-          >
-            <div
-              class="usa-alert__body grid-col flex-fill"
-            >
-              <p
-                class="usa-alert__text"
-              >
-                <span>
-                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through 
-                  <a
-                    href="/revision"
-                  >
-                    this form.
-                  </a>
-                </span>
-              </p>
-            </div>
-            <div
-              class="usa-alert__body flex-auto display-flex flex-align-center"
-            />
-          </div>
-        </div>
-        <h2
-          class="pre-submit-h2"
-        >
-          How to use ECE Reporter
+        <h2>
+          Mort School For Dark-Inclined Wizards
         </h2>
-        <p>
-          These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually, 
-          <a
-            href="/roster/"
-          >
-             you can add them on your roster
-          </a>
-          .
-        </p>
-        <ol
-          class="how-to-list"
+        <p
+          class="font-body-lg text-base-darker"
         >
-          <li
-            class="how-to-step"
+          undefined active enrollments across 3 sites
+        </p>
+        <div
+          class="display-inline-block"
+        >
+          <a
+            class="bx--link usa-button"
+            href="/create-record"
           >
-            <h3
-              class="how-to-header"
+            <span
+              class="oec-text-with-icon"
             >
-              Review the data requirements
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              Learn more about the data elements ECE Reporter collects for each enrollment.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="/data-requirements/"
+              <svg
+                class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+                data-icon="plus-circle"
+                data-prefix="fas"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  See required data
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-          <li
-            class="how-to-step"
+                <path
+                  d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
+                  fill="currentColor"
+                />
+              </svg>
+              Add a record
+            </span>
+          </a>
+        </div>
+      </div>
+      <div
+        class="margin-top-4 tablet:grid-col-2"
+      >
+        <a
+          class="bx--link usa-button usa-button--unstyled"
+          href="/roster"
+        >
+          <span
+            class="oec-text-with-icon text-underline"
           >
-            <h3
-              class="how-to-header"
+            View roster
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+              fill="currentColor"
+              stroke="currentColor"
+              viewBox="0 0 448 512"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              Download the data template
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              You'll need to enter data in this file to upload in ECE Reporter.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="/template/"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  Download the template
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-          <li
-            class="how-to-step"
-          >
-            <h3
-              class="how-to-header"
-            >
-              Prepare your data
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              Get instructions on how to enter data into OEC's template.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="https://help.ece-reporter.ctoec.org/prepare-your-data/"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  See the how-to guide
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-          <li
-            class="how-to-step"
-          >
-            <h3
-              class="how-to-header"
-            >
-              Upload your data
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              Once your template is filled out, you'll upload the data to ECE Reporter.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="/upload/"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  Go to file upload
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-        </ol>
+              <path
+                d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"
+              />
+            </svg>
+          </span>
+        </a>
       </div>
     </div>
     <div
-      class="oec-loading-wrapper__indicator bg-white"
+      class="margin-top-4 margin-bottom-4"
+    >
+      <hr
+        class="oec-divider"
+      />
+    </div>
+    <h2>
+      Updates and tasks
+    </h2>
+    <div
+      class="usa-alert usa-alert--info grid-row"
     >
       <div
-        class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-        role="progressbar"
-        style="width: 40px; height: 40px;"
+        class="display-flex flex-fill"
       >
-        <svg
-          class="MuiCircularProgress-svg"
-          viewBox="22 22 44 44"
+        <div
+          class="usa-alert__body grid-col flex-fill"
         >
-          <circle
-            class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-            cx="44"
-            cy="44"
-            fill="none"
-            r="20.2"
-            stroke-width="3.6"
-          />
-        </svg>
+          <p
+            class="usa-alert__text"
+          >
+            <span>
+              Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through 
+              <a
+                href="/revision"
+              >
+                this form.
+              </a>
+            </span>
+          </p>
+        </div>
+        <div
+          class="usa-alert__body flex-auto display-flex flex-align-center"
+        />
       </div>
     </div>
+    <div
+      class="grid-row margin-top-2"
+    >
+      <div
+        class="oec-card"
+      >
+        <div
+          class="oec-card-cell"
+        >
+          <div
+            class="grid-container padding-0"
+          >
+            <span
+              class="grid-row font-body-lg text-bold"
+            >
+              <div
+                class="text-center"
+              >
+                <span
+                  class="oec-inline-icon oec-inline-icon--complete"
+                >
+                  <svg
+                    height="126"
+                    viewBox="0 0 126 126"
+                    width="126"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title>
+                      Shape
+                    </title>
+                    <path
+                      d="M116.752 31.163c-5.595-9.586-13.185-17.176-22.771-22.771C84.393 2.797 73.926 0 62.573 0 51.221 0 40.751 2.797 31.165 8.392c-9.587 5.594-17.177 13.184-22.772 22.771C2.797 40.75 0 51.22 0 62.571c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zm-13.608 19.876L58.905 95.278c-1.032 1.032-2.281 1.549-3.748 1.549-1.412 0-2.634-.517-3.666-1.549L21.997 65.786c-.977-.979-1.466-2.199-1.466-3.666 0-1.521.488-2.771 1.466-3.749l7.414-7.332c1.033-1.032 2.254-1.548 3.667-1.548 1.413 0 2.635.516 3.667 1.548l18.413 18.413 33.241-33.16c1.032-1.032 2.254-1.548 3.666-1.548 1.411 0 2.635.516 3.666 1.548l7.414 7.333c.979.977 1.467 2.226 1.467 3.747 0 1.467-.488 2.689-1.468 3.667z"
+                      fill="#1B1B1B"
+                    />
+                  </svg>
+                  <span
+                    class="usa-sr-only"
+                  >
+                    (complete)
+                  </span>
+                </span>
+              </div>
+              Thank you for completing your July to December 2020 data collection!
+            </span>
+            <p
+              class="grid-row"
+            >
+              OEC appreciates all that you do to improve the lives of children and families.
+            </p>
+            <h3
+              class="grid-row"
+            >
+              What's next?
+            </h3>
+            <p
+              class="grid-row margin-bottom-1em"
+            >
+              Keep your roster updated with new enrollments and withdrawals, and with age group, site, and funding changes.
+            </p>
+            <p
+              class="grid-row"
+            >
+              We're working on a feature to allow updating from excel files. Until then, you can make any needed changes directly in your ECE Reporter roster.
+            </p>
+          </div>
+        </div>
+        <div
+          class=""
+        />
+      </div>
+    </div>
+    <div
+      class="margin-top-4 margin-bottom-4"
+    >
+      <hr
+        class="oec-divider"
+      />
+    </div>
+    <h2>
+      Sites
+    </h2>
+    <div
+      class="three-column-layout"
+    />
   </div>
 </DocumentFragment>
 `;
@@ -250,247 +212,214 @@ exports[`Home snapshot matches post-submit user 1`] = `
 exports[`Home snapshot matches pre-submit user 1`] = `
 <DocumentFragment>
   <div
-    class="oec-loading-wrapper"
+    class="Home grid-container margin-top-4"
   >
     <div
-      aria-hidden="false"
-      class=""
+      class="grid-row grid-gap"
     >
       <div
-        class="Home grid-container margin-top-4"
+        class="tablet:grid-col-8 margin-top-4"
       >
-        <div
-          class="grid-row grid-gap"
+        <h1
+          class="margin-top-0"
         >
-          <div
-            class="tablet:grid-col-8 margin-top-4"
-          >
-            <h1
-              class="margin-top-0"
-            >
-              Hello Voldy!
-            </h1>
-            <p>
-              ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). Make sure the site names and funding spaces below are accurate before you start entering data.
-            </p>
-            <h2
-              class="pre-submit-h2"
-            >
-              Your managed sites and funding spaces
-            </h2>
-          </div>
-          <div
-            class="tablet:grid-col-4 margin-top-4 img"
-            role="presentation"
-          >
-            <svg>
-              PersonWithSpreadsheet.svg
-            </svg>
-          </div>
-        </div>
-        <div
-          class="usa-alert usa-alert--info grid-row"
-        >
-          <div
-            class="display-flex flex-fill"
-          >
-            <div
-              class="usa-alert__body grid-col flex-fill"
-            >
-              <p
-                class="usa-alert__text"
-              >
-                <span>
-                  Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through 
-                  <a
-                    href="/revision"
-                  >
-                    this form.
-                  </a>
-                </span>
-              </p>
-            </div>
-            <div
-              class="usa-alert__body flex-auto display-flex flex-align-center"
-            />
-          </div>
-        </div>
+          Hello Voldy!
+        </h1>
+        <p>
+          ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC). Make sure the site names and funding spaces below are accurate before you start entering data.
+        </p>
         <h2
           class="pre-submit-h2"
         >
-          How to use ECE Reporter
+          Your managed sites and funding spaces
         </h2>
-        <p>
-          These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually, 
-          <a
-            href="/roster/"
-          >
-             you can add them on your roster
-          </a>
-          .
-        </p>
-        <ol
-          class="how-to-list"
-        >
-          <li
-            class="how-to-step"
-          >
-            <h3
-              class="how-to-header"
-            >
-              Review the data requirements
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              Learn more about the data elements ECE Reporter collects for each enrollment.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="/data-requirements/"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  See required data
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-          <li
-            class="how-to-step"
-          >
-            <h3
-              class="how-to-header"
-            >
-              Download the data template
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              You'll need to enter data in this file to upload in ECE Reporter.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="/template/"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  Download the template
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-          <li
-            class="how-to-step"
-          >
-            <h3
-              class="how-to-header"
-            >
-              Prepare your data
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              Get instructions on how to enter data into OEC's template.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="https://help.ece-reporter.ctoec.org/prepare-your-data/"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  See the how-to guide
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-          <li
-            class="how-to-step"
-          >
-            <h3
-              class="how-to-header"
-            >
-              Upload your data
-            </h3>
-            <p
-              class="how-to-body"
-            >
-              Once your template is filled out, you'll upload the data to ECE Reporter.
-            </p>
-            <p
-              class="how-to-button"
-            >
-              <a
-                class="usa-button usa-button--unstyled"
-                href="/upload/"
-              >
-                <span
-                  class="oec-text-with-icon"
-                >
-                  Go to file upload
-                  <svg
-                    class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
-                  >
-                    arrowRight.svg
-                  </svg>
-                </span>
-              </a>
-            </p>
-          </li>
-        </ol>
       </div>
-    </div>
-    <div
-      class="oec-loading-wrapper__indicator bg-white"
-      hidden=""
-    >
       <div
-        class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-        role="progressbar"
-        style="width: 40px; height: 40px;"
+        class="tablet:grid-col-4 margin-top-4 img"
+        role="presentation"
       >
-        <svg
-          class="MuiCircularProgress-svg"
-          viewBox="22 22 44 44"
-        >
-          <circle
-            class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-            cx="44"
-            cy="44"
-            fill="none"
-            r="20.2"
-            stroke-width="3.6"
-          />
+        <svg>
+          PersonWithSpreadsheet.svg
         </svg>
       </div>
     </div>
+    <div
+      class="usa-alert usa-alert--info grid-row"
+    >
+      <div
+        class="display-flex flex-fill"
+      >
+        <div
+          class="usa-alert__body grid-col flex-fill"
+        >
+          <p
+            class="usa-alert__text"
+          >
+            <span>
+              Are your sites and/or funding spaces incorrect? Reach out to the ECE Reporter team through 
+              <a
+                href="/revision"
+              >
+                this form.
+              </a>
+            </span>
+          </p>
+        </div>
+        <div
+          class="usa-alert__body flex-auto display-flex flex-align-center"
+        />
+      </div>
+    </div>
+    <h2
+      class="pre-submit-h2"
+    >
+      How to use ECE Reporter
+    </h2>
+    <p>
+      These instructions guide you through the file upload process to add many records at once. If you'd like to add records manually, 
+      <a
+        href="/roster/"
+      >
+         you can add them on your roster
+      </a>
+      .
+    </p>
+    <ol
+      class="how-to-list"
+    >
+      <li
+        class="how-to-step"
+      >
+        <h3
+          class="how-to-header"
+        >
+          Review the data requirements
+        </h3>
+        <p
+          class="how-to-body"
+        >
+          Learn more about the data elements ECE Reporter collects for each enrollment.
+        </p>
+        <p
+          class="how-to-button"
+        >
+          <a
+            class="usa-button usa-button--unstyled"
+            href="/data-requirements/"
+          >
+            <span
+              class="oec-text-with-icon"
+            >
+              See required data
+              <svg
+                class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+              >
+                arrowRight.svg
+              </svg>
+            </span>
+          </a>
+        </p>
+      </li>
+      <li
+        class="how-to-step"
+      >
+        <h3
+          class="how-to-header"
+        >
+          Download the data template
+        </h3>
+        <p
+          class="how-to-body"
+        >
+          You'll need to enter data in this file to upload in ECE Reporter.
+        </p>
+        <p
+          class="how-to-button"
+        >
+          <a
+            class="usa-button usa-button--unstyled"
+            href="/template/"
+          >
+            <span
+              class="oec-text-with-icon"
+            >
+              Download the template
+              <svg
+                class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+              >
+                arrowRight.svg
+              </svg>
+            </span>
+          </a>
+        </p>
+      </li>
+      <li
+        class="how-to-step"
+      >
+        <h3
+          class="how-to-header"
+        >
+          Prepare your data
+        </h3>
+        <p
+          class="how-to-body"
+        >
+          Get instructions on how to enter data into OEC's template.
+        </p>
+        <p
+          class="how-to-button"
+        >
+          <a
+            class="usa-button usa-button--unstyled"
+            href="https://help.ece-reporter.ctoec.org/prepare-your-data/"
+          >
+            <span
+              class="oec-text-with-icon"
+            >
+              See the how-to guide
+              <svg
+                class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+              >
+                arrowRight.svg
+              </svg>
+            </span>
+          </a>
+        </p>
+      </li>
+      <li
+        class="how-to-step"
+      >
+        <h3
+          class="how-to-header"
+        >
+          Upload your data
+        </h3>
+        <p
+          class="how-to-body"
+        >
+          Once your template is filled out, you'll upload the data to ECE Reporter.
+        </p>
+        <p
+          class="how-to-button"
+        >
+          <a
+            class="usa-button usa-button--unstyled"
+            href="/upload/"
+          >
+            <span
+              class="oec-text-with-icon"
+            >
+              Go to file upload
+              <svg
+                class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+              >
+                arrowRight.svg
+              </svg>
+            </span>
+          </a>
+        </p>
+      </li>
+    </ol>
   </div>
 </DocumentFragment>
 `;
@@ -501,7 +430,8 @@ exports[`Home snapshot matches revise site request form 1`] = `
     class="grid-container margin-top-4"
   >
     <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 margin-y-0 text-bold bx--btn bx--btn--primary"
+      tabindex="0"
       type="button"
     >
       <span
@@ -613,7 +543,7 @@ exports[`Home snapshot matches revise site request form 1`] = `
       class="tablet:grid-col-10 margin-top-1 margin-bottom-1"
     >
       <hr
-        class="MuiDivider-root"
+        class="oec-divider"
       />
     </div>
     <div
@@ -686,7 +616,7 @@ exports[`Home snapshot matches revise site request form 1`] = `
       class="tablet:grid-col-10 margin-top-1 margin-bottom-1"
     >
       <hr
-        class="MuiDivider-root"
+        class="oec-divider"
       />
     </div>
     <div
@@ -759,7 +689,7 @@ exports[`Home snapshot matches revise site request form 1`] = `
       class="tablet:grid-col-10 margin-top-1 margin-bottom-1"
     >
       <hr
-        class="MuiDivider-root"
+        class="oec-divider"
       />
     </div>
     <div
@@ -774,7 +704,8 @@ exports[`Home snapshot matches revise site request form 1`] = `
         Fill out this section if your program manages a site not included in your ECE Reporter account.
       </p>
       <button
-        class="usa-button"
+        class="usa-button bx--btn bx--btn--primary"
+        tabindex="0"
         type="button"
       >
         Add New Site
@@ -784,7 +715,7 @@ exports[`Home snapshot matches revise site request form 1`] = `
       class="tablet:grid-col-6 margin-top-4 margin-bottom-4"
     >
       <hr
-        class="MuiDivider-root"
+        class="oec-divider"
       />
     </div>
     <div
@@ -803,13 +734,14 @@ exports[`Home snapshot matches revise site request form 1`] = `
       class="grid-row grid-gap margin-top-2 margin-bottom-2"
     >
       <a
-        class="usa-button usa-button--outline"
+        class="bx--link usa-button usa-button--outline"
         href="/home"
       >
         Cancel
       </a>
       <button
-        class="usa-button"
+        class="usa-button bx--btn bx--btn--primary"
+        tabindex="0"
         type="button"
       >
         Send request

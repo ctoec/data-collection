@@ -5,7 +5,12 @@ import { getValidationStatusForFields } from '../../../utils/getValidationStatus
 import { RecordFormProps } from '../types';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPost, apiPut } from '../../../utils/api';
-import { Form, FormSubmitButton, FormFieldSet } from '@ctoec/component-library';
+import {
+  Form,
+  FormSubmitButton,
+  FormFieldSet,
+  Divider,
+} from '@ctoec/component-library';
 import {
   HouseholdSizeField,
   AnnualHouseholdIncomeField,
@@ -14,7 +19,6 @@ import {
 import useIsMounted from '../../../hooks/useIsMounted';
 import { useValidationErrors } from '../../../hooks/useValidationErrors';
 import { NotDisclosedField } from './Fields/NotDisclosed';
-import Divider from '@material-ui/core/Divider';
 
 const incomeDeterminationFields = [
   'numberOfPeople',
