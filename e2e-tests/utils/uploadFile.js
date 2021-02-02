@@ -1,4 +1,5 @@
 const { launch_url } = require('../nightwatch.conf');
+const { FakeChildrenTypes } = require('../../client/src/shared/models');
 const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
@@ -13,20 +14,21 @@ module.exports = {
     let DOWNLOAD_URL = `${launch_url}`;
     if (whichFile === 'complete') {
       DOWNLOAD_URL += '/api/template/example/csv';
-    } else if (whichFile === 'missingSome') {
+    } else if (whichFile === FakeChildrenTypes.MISSING_SOME) {
       DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingSome';
-    } else if (whichFile === 'missingOne') {
+    } else if (whichFile === FakeChildrenTypes.MISSING_ONE) {
       DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingOne';
-    } else if (whichFile === 'missingOptional') {
+    } else if (whichFile === FakeChildrenTypes.MISSING_OPTIONAL) {
       DOWNLOAD_URL +=
         '/api/template/example/csv?whichFakeChildren=missingOptional';
-    } else if (whichFile === 'missingConditional') {
+    } else if (whichFile === FakeChildrenTypes.MISSING_CONDITIONAL) {
       DOWNLOAD_URL +=
         '/api/template/example/csv?whichFakeChildren=missingConditional';
     }
 
     const isCompleteTestRun = whichFile === 'complete';
-    const isMissingOptionalRun = whichFile === 'missingOptional';
+    const isMissingOptionalRun =
+      whichFile === FakeChildrenTypes.MISSING_OPTIONAL;
 
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 

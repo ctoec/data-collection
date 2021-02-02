@@ -1,3 +1,4 @@
+const { FakeChildrenTypes } = require('../../client/src/shared/models');
 const { login } = require('../utils/login');
 const { uploadFile } = require('../utils/uploadFile');
 
@@ -7,8 +8,7 @@ module.exports = {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await uploadFile(browser, 'missingOne');
-    // TODO: expect missing info icons in roster
+    await uploadFile(browser, FakeChildrenTypes.MISSING_ONE);
     browser.end();
   },
 };

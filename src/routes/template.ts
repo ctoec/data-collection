@@ -14,6 +14,7 @@ import {
   childrenMissingOptionalFields,
   childrenMissingConditionalFields,
 } from '../data/fake/children';
+import { FakeChildrenTypes } from '../../client/src/shared/models';
 import { streamUploadedChildren } from '../controllers/export';
 import { parseQueryString } from '../utils/parseQueryString';
 import { TemplateMetadata } from '../../client/src/shared/payloads';
@@ -66,13 +67,13 @@ templateRouter.get(
       const fileType = req.params['fileType'] || 'csv';
       const whichFakeChildren = parseQueryString(req, 'whichFakeChildren');
       let fakeChildren = completeChildren;
-      if (whichFakeChildren === 'missingSome') {
+      if (whichFakeChildren === FakeChildrenTypes.MISSING_SOME) {
         fakeChildren = childrenMissingSomeInfo;
-      } else if (whichFakeChildren === 'missingOne') {
+      } else if (whichFakeChildren === FakeChildrenTypes.MISSING_ONE) {
         fakeChildren = childrenAllMissingOneField;
-      } else if (whichFakeChildren === 'missingOptional') {
+      } else if (whichFakeChildren === FakeChildrenTypes.MISSING_OPTIONAL) {
         fakeChildren = childrenMissingOptionalFields;
-      } else if (whichFakeChildren === 'missingConditional') {
+      } else if (whichFakeChildren === FakeChildrenTypes.MISSING_CONDITIONAL) {
         fakeChildren = childrenMissingConditionalFields;
       }
       await streamUploadedChildren(res, fakeChildren, fileType as BookType);

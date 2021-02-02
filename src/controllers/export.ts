@@ -26,23 +26,24 @@ export async function streamUploadedChildren(
     if (!child.enrollments) {
       childStrings.push(flattenChild(columnMetadatas, child));
     } else {
-      child.enrollments?.forEach((enrollment, i) => {
+      child.enrollments?.forEach((enrollment, enrollmentIdx) => {
         if (!enrollment.fundings) {
           // Can just use 0th element of each array as the 'active'/'current'
           // value because controller.getChildById does presorting for us
           childStrings.push(
             flattenChild(columnMetadatas, child, {
               enrollment,
-              skipInfoForPastEnrollments: i !== 0,
+              skipInfoForPastEnrollments: enrollmentIdx !== 0,
             })
           );
         } else {
-          enrollment.fundings.forEach((funding, j) => {
+          enrollment.fundings.forEach((funding, fundingIdx) => {
             childStrings.push(
               flattenChild(columnMetadatas, child, {
                 enrollment,
                 funding,
-                skipInfoForPastEnrollments: i !== 0 || j !== 0,
+                skipInfoForPastEnrollments:
+                  enrollmentIdx !== 0 || fundingIdx !== 0,
               })
             );
           });
