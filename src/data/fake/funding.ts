@@ -17,10 +17,12 @@ export const getFakeFunding = (
     ) || []
   );
 
-  const firstAndLastReportingPeriods = getCurrentReportingPeriodDates().slice(-2).map((r) => ({
-    id,
-    ...getReportingPeriodFromDates(fundingSpace.source, r),
-  }));
+  const firstAndLastReportingPeriods = getCurrentReportingPeriodDates()
+    .slice(-2)
+    .map((r) => ({
+      id,
+      ...getReportingPeriodFromDates(fundingSpace.source, r),
+    }));
 
   return {
     id,
