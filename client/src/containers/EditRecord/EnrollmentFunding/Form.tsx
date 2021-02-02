@@ -4,7 +4,7 @@ import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
-import { Enrollment } from '../../../shared/models';
+import { Enrollment, Funding } from '../../../shared/models';
 import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
@@ -26,6 +26,19 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   const pastEnrollments: Enrollment[] = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
+
+  const sortFundingsByDate = (fundings: Funding[] | undefined) => {
+    if (!fundings) return [];
+    return fundings.sort((a, b) => {
+      if (
+        a.firstReportingPeriod?.period.isSameOrBefore(
+          b.firstReportingPeriod?.period
+        )
+      )
+        return 1;
+      else return -1;
+    });
+  };
 
   const commonProps = {
     afterSaveSuccess,
@@ -53,17 +66,8 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             enrollmentId={currentEnrollment.id}
             topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
-          {currentEnrollment.fundings
-            ?.sort((a, b) => {
-              if (
-                a.firstReportingPeriod?.period.isSameOrBefore(
-                  b.firstReportingPeriod?.period
-                )
-              )
-                return 1;
-              else return -1;
-            })
-            .map((funding, idx) => (
+          {sortFundingsByDate(currentEnrollment.fundings).map(
+            (funding, idx) => (
               <EditFundingCard
                 {...commonProps}
                 key={funding.id}
@@ -72,7 +76,8 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                 enrollmentId={currentEnrollment.id}
                 topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
               />
-            ))}
+            )
+          )}
           <ChangeFundingCard
             {...commonProps}
             enrollment={currentEnrollment}
@@ -95,25 +100,15 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                 enrollmentId={enrollment.id}
                 topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
               />
-              {enrollment.fundings
-                ?.sort((a, b) => {
-                  if (
-                    a.firstReportingPeriod?.period.isSameOrBefore(
-                      b.firstReportingPeriod?.period
-                    )
-                  )
-                    return 1;
-                  else return -1;
-                })
-                .map((funding) => (
-                  <EditFundingCard
-                    {...commonProps}
-                    key={funding.id}
-                    fundingId={funding.id}
-                    enrollmentId={enrollment.id}
-                    topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
-                  />
-                ))}
+              {sortFundingsByDate(enrollment.fundings).map((funding) => (
+                <EditFundingCard
+                  {...commonProps}
+                  key={funding.id}
+                  fundingId={funding.id}
+                  enrollmentId={enrollment.id}
+                  topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
+                />
+              ))}
             </>
           ))}
         </>
