@@ -53,16 +53,26 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             enrollmentId={currentEnrollment.id}
             topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
           />
-          {currentEnrollment.fundings?.map((funding) => (
-            <EditFundingCard
-              {...commonProps}
-              key={funding.id}
-              isCurrent={true}
-              fundingId={funding.id}
-              enrollmentId={currentEnrollment.id}
-              topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
-            />
-          ))}
+          {currentEnrollment.fundings
+            ?.sort((a, b) => {
+              if (
+                a.firstReportingPeriod?.period.isSameOrBefore(
+                  b.firstReportingPeriod?.period
+                )
+              )
+                return 1;
+              else return -1;
+            })
+            .map((funding, idx) => (
+              <EditFundingCard
+                {...commonProps}
+                key={funding.id}
+                isCurrent={idx === 0 ? true : false}
+                fundingId={funding.id}
+                enrollmentId={currentEnrollment.id}
+                topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
+              />
+            ))}
           <ChangeFundingCard
             {...commonProps}
             enrollment={currentEnrollment}
@@ -85,15 +95,25 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                 enrollmentId={enrollment.id}
                 topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
               />
-              {enrollment.fundings?.map((funding) => (
-                <EditFundingCard
-                  {...commonProps}
-                  key={funding.id}
-                  fundingId={funding.id}
-                  enrollmentId={enrollment.id}
-                  topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
-                />
-              ))}
+              {enrollment.fundings
+                ?.sort((a, b) => {
+                  if (
+                    a.firstReportingPeriod?.period.isSameOrBefore(
+                      b.firstReportingPeriod?.period
+                    )
+                  )
+                    return 1;
+                  else return -1;
+                })
+                .map((funding) => (
+                  <EditFundingCard
+                    {...commonProps}
+                    key={funding.id}
+                    fundingId={funding.id}
+                    enrollmentId={enrollment.id}
+                    topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
+                  />
+                ))}
             </>
           ))}
         </>
