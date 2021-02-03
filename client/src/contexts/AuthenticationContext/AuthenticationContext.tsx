@@ -238,6 +238,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
           console.error('Could not get refresh token: ', e);
         }
       })();
+      console.log('Refresh token request created successfully');
     } else {
       console.log('OOOOPPPPPPP, WE GOT A DUPE REQUEST OVER HERE');
     }
