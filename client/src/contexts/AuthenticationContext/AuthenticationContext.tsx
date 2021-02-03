@@ -92,6 +92,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
+    console.log('HEY LOOK AT US LOGGING IN AND SHIT');
     // After user successfully logs in
     setTokenResponse(resp);
     localStorage.setItem(localStorageIdTokenKey, resp.idToken || '');
@@ -179,12 +180,14 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
    * Requires that initial code-based token request has already been performed.
    */
   async function makeRefreshTokenRequest() {
+    console.log('Refresh token request triggered');
     if (!configuration) return;
     if (!tokenResponse?.refreshToken) return;
 
     // isValid includes a defaut 10 min expiration buffer.
     if (tokenResponse.isValid()) return;
 
+    console.log('Making token request');
     let req = new TokenRequest({
       client_id: clientId,
       redirect_uri: redirectUrl,
@@ -195,6 +198,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     tokenHandler
       .performTokenRequest(configuration, req)
       .then((resp) => {
+        console.log('Successfully received refresh token');
         setTokenResponse(resp);
         setAccessToken(resp.accessToken);
         // If there's an error just log the user out
@@ -207,6 +211,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
   const location = useLocation();
   useEffect(() => {
+    console.log('LOCATION CHANGE TRIGGERING REFRESH TOKEN');
     // Ensure token is always fresh by making refresh request whenever browser location changes
     // (function exits early if token is still valid)
     makeRefreshTokenRequest();
