@@ -5,6 +5,7 @@ import {
   ChangeEnrollmentForm,
   ChangeEnrollmentFormProps,
 } from '../EnrollmentFunding/ChangeEnrollment/Form';
+import { nameFormatter } from '../../../utils/formatters';
 
 export type ChangeEnrollmentProps = Omit<
   ChangeEnrollmentFormProps,
@@ -33,10 +34,23 @@ export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
         content={
           <ChangeEnrollmentForm
             afterSaveSuccess={() => {
-              // TODO: navigate to edit enrollment page with success alert
+              history.push({
+                pathname: `edit-record/${child.id}#enrollment`,
+                state: {
+                  alerts: [
+                    {
+                      type: 'success',
+                      heading: 'Record updated',
+                      text: `Your changes to ${nameFormatter(
+                        child
+                      )}'s record have been saved.`,
+                    },
+                  ],
+                },
+              });
             }}
-            afterSaveFailure={() => {
-              // TODO: show errors
+            afterSaveFailure={(err) => {
+              console.error(err);
             }}
             child={child}
             currentEnrollment={currentEnrollment}
