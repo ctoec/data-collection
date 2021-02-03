@@ -43,7 +43,6 @@ export function FundingDoesNotOverlap(
             const _firstPeriod = _funding.firstReportingPeriod;
 
             if (!_firstPeriod) {
-              console.error('AH HEY LOOK AT DIS', _funding);
               return;
             }
 
