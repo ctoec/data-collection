@@ -86,6 +86,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
 
   // If record has validation errors, onClick action is to display alert informing the user they cannot withdraw
   // Otherwise, onClick action is to display the withdraw modal
+  // TODO: since alerts are done via a hook and not a context, this isn't working
   const onClick = child?.validationErrors?.length
     ? () =>
         setAlerts([
