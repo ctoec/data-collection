@@ -39,12 +39,6 @@ const SINGLE_ENROLLMENT_CONDITIONAL_FIELDS = COLUMN_METADATA.filter(
     (col.requirementString === REQUIRED_IF_US_BORN ||
       col.requirementString === REQUIRED_IF_INCOME_DISCLOSED)
 );
-const HISTORICAL_ENROLLMENT_CONDITIONAL_FIELDS = COLUMN_METADATA.filter(
-  (col) =>
-    col.requirementLevel === TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL &&
-    (col.requirementString === REQUIRED_IF_CHANGED_ENROLLMENT ||
-      col.requirementString === REQUIRED_IF_CHANGED_ENROLLMENT_FUNDING)
-);
 
 const _organizations: Organization[] = stagingUserAllowedOrganizations.map(
   (o, i) => ({
@@ -212,7 +206,8 @@ const childrenMissingConditionalFields = SINGLE_ENROLLMENT_CONDITIONAL_FIELDS.ma
       return {
         ...testChild,
         birthCertificateType: BirthCertificateType.US,
-        [col.propertyName]: undefined,
+        birthState: undefined,
+        birthTown: undefined,
       } as Child;
     }
     if (col.requirementString === REQUIRED_IF_INCOME_DISCLOSED) {
