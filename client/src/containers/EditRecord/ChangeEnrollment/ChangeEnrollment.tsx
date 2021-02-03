@@ -26,6 +26,7 @@ export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
         appearance="unstyled"
         onClick={toggleIsOpen}
         text="Change age group and/or site"
+        className="margin-right-2"
       />
       <Modal
         isOpen={isOpen}

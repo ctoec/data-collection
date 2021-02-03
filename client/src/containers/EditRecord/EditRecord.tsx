@@ -122,7 +122,7 @@ const EditRecord: React.FC = () => {
         {child && (
           <div className="display-flex flex-col flex-align-center">
             {/* TODO: STYLE & ICONS */}
-            <span className="margin-right-1">Quick actions</span>
+            <span className="margin-right-2">Quick actions</span>
             <ChangeEnrollment
               child={child}
               currentEnrollment={activeEnrollment}
