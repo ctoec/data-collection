@@ -14,7 +14,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { hasValidationErrorForField } from '../../utils/hasValidationError';
 import { apiGet } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { getCurrentEnrollment } from '../../utils/models';
 import { mutateCallback } from 'swr/dist/types';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
@@ -24,16 +24,19 @@ type BatchEditItemContentProps = {
   organizationId?: string;
   moveNextRecord: (_?: Child[]) => void;
   mutate?: (_: mutateCallback<Child[]>, __: boolean) => void;
+  isSingleRecord?: boolean;
 };
 
 export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   childId,
   moveNextRecord,
   mutate,
+  isSingleRecord,
 }) => {
   const [child, setChild] = useState<Child>();
 
   const { setAlerts } = useAlerts();
+  const history = useHistory();
 
   const [steps, setSteps] = useState<StepProps<RecordFormProps>[]>();
   const [activeStepKey, setActiveStep] = useState<string>();
@@ -42,6 +45,25 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   const [triggerRefetchCount, setTriggerRefetchCount] = useState(0);
 
   const { updateCurrentRosterCache } = useContext(RosterContext);
+
+  // Special function for single record batch edit because we use the child's
+  // name information in an alert
+  const singleRecordSuccess = () => {
+    history.push(`/roster`, {
+      alerts: [
+        {
+          type: 'success',
+          heading: 'Changed saved!',
+          text: `${
+            child?.firstName ? child?.firstName : 'Child'
+          }'s record now has all required information.`,
+        },
+      ],
+    });
+  };
+  const afterRecordAction = isSingleRecord
+    ? singleRecordSuccess
+    : moveNextRecord;
 
   // Reset state when new child
   useEffect(() => {
@@ -68,7 +90,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
 
     const activeStepIdx = steps.findIndex((step) => step.key === activeStepKey);
     if (activeStepIdx === steps.length - 1) {
-      moveNextRecord(records);
+      afterRecordAction(records);
     } else {
       setActiveStep(steps[activeStepIdx + 1].key);
     }
@@ -112,7 +134,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
     AdditionalButton: (
       <Button
         text="Skip"
-        onClick={() => moveNextRecord()}
+        onClick={() => afterRecordAction()}
         appearance="outline"
       />
     ),
