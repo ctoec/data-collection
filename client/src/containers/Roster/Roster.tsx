@@ -82,11 +82,10 @@ const Roster: React.FC = () => {
   let {
     children: allChildren,
     stillFetching: loading,
-    error: fetchRosterError
+    error: fetchRosterError,
   } = usePaginatedChildData(query);
 
   if (fetchRosterError) {
-    loading = false;
     throw fetchRosterError;
   }
 
@@ -248,7 +247,6 @@ const Roster: React.FC = () => {
 
   return (
     <>
-    <ErrorBoundary alertProps={defaultErrorBoundaryProps}>
       <div className="Roster grid-container">
         <BackButton
           location={
@@ -317,7 +315,6 @@ const Roster: React.FC = () => {
           )}
         </FixedBottomBar>
       )}
-      </ErrorBoundary>
     </>
   );
 };
