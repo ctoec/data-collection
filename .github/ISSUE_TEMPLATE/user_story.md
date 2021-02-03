@@ -1,3 +1,8 @@
+---
+name: User Story
+about: Issue template for describing a feature addition for the application.
+---
+
 ## Background
 Provide a brief description of the work to be completed here, along with the problem we're attempting to solve with it.
 

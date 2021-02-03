@@ -29,7 +29,7 @@ export const getFunding = async (
   // To assert that the user has access to the enrollment
   await getEnrollment(enrollmentId, user);
   const funding = await getManager().findOne(Funding, fundingId, {
-    where: { enrollmentId: enrollmentId },
+    where: { enrollmentId },
   });
 
   if (!funding) throw new NotFoundError();
