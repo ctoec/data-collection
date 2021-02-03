@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Modal } from '@ctoec/component-library';
+import { Button, Modal, TextWithIcon } from '@ctoec/component-library';
 import {
   ChangeEnrollmentForm,
   ChangeEnrollmentFormProps,
 } from '../EnrollmentFunding/ChangeEnrollment/Form';
 import { nameFormatter } from '../../../utils/formatters';
+import { ReactComponent as ChangeIcon } from '../../../images/change.svg';
 
 export type ChangeEnrollmentProps = Omit<
   ChangeEnrollmentFormProps,
@@ -25,7 +26,9 @@ export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
       <Button
         appearance="unstyled"
         onClick={toggleIsOpen}
-        text="Change age group and/or site"
+        text={
+          <TextWithIcon text="Change age group and/or site" Icon={ChangeIcon} />
+        }
         className="margin-right-2"
       />
       <Modal
