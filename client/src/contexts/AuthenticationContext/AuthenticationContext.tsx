@@ -191,8 +191,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     }
 
     console.log('TOKEN RESPONSE EXPIRES IN', tokenResponse.expiresIn);
+    const authExpirationBuffer: number = 30 * 60 * -1; // 30 minute expiration buffer
 
-    // isValid includes a defaut 10 min expiration buffer.
     if (tokenResponse.isValid()) {
       console.log('Token response is still valid.  Exiting early...');
       return;
@@ -215,8 +215,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
         // If there's an error just log the user out
       })
       .catch((e) => {
-        console.error('Could not get refresh token: ', e);
-        history.push(logoutEndpoint);
+        console.error('AH SHIT - Could not get refresh token: ', e);
       });
   }
 
