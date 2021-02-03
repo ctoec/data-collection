@@ -49,12 +49,15 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   // Special function for single record batch edit because we use the child's
   // name information in an alert
   const singleRecordSuccess = () => {
+    console.log(child?.firstName);
     history.push(`/roster`, {
       alerts: [
         {
           type: 'success',
           heading: 'Changed saved!',
-          text: `${child?.firstName}'s record now has all required information.`,
+          text: `${
+            child?.firstName ? child?.firstName : 'Child'
+          }'s record now has all required information.`,
         },
       ],
     });
