@@ -23,7 +23,6 @@ export type AuthenticationContextType = {
 export type AuthenticationProviderPropsType = {
   clientId: string;
   scope: string;
-  localStorageAccessTokenKey: string;
   localStorageRefreshTokenKey: string;
   localStorageIdTokenKey: string;
   loginEndpoint?: string;
@@ -196,8 +195,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       return;
     }
 
-    //  Hopefully this never happens - if there's no refresh token present, the user
-    //  will inevitably time out and there's nothing to be done about it
+    //  Hopefully this never happens - if there's no refresh token present, there's no way to
+    //  generate a new access token, so the user will inevitably get logged out, regardless of activity
     if (!refreshToken) {
       console.log('No refresh token, sooooo exiting early?');
       return;

@@ -23,7 +23,7 @@ const render = (Component: React.FC) =>
       <BrowserRouter>
         <AuthenticationProvider
           clientId="data-collection"
-          localStorageAccessTokenKey="data-collection-key"
+          localStorageRefreshTokenKey="data-collection-key"
           localStorageIdTokenKey="data-collection-id"
           defaultOpenIdConnectUrl={
             process.env.REACT_APP_DEFAULT_WINGED_KEYS_URL
