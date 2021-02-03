@@ -175,6 +175,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     logoutEndpoint,
   });
 
+  let refreshTokenApiCall: Promise<any> | null = null;
+
   /**
    * Create and perform token refresh request.
    * Requires that initial code-based token request has already been performed.
@@ -198,25 +200,36 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       return;
     }
 
-    console.log('Making refresh token request');
-    let req = new TokenRequest({
-      client_id: clientId,
-      redirect_uri: redirectUrl,
-      grant_type: GRANT_TYPE_REFRESH_TOKEN,
-      code: undefined,
-      refresh_token: tokenResponse.refreshToken,
-    });
-    tokenHandler
-      .performTokenRequest(configuration, req)
-      .then((resp) => {
-        console.log('Successfully received refresh token');
-        setTokenResponse(resp);
-        setAccessToken(resp.accessToken);
-        // If there's an error just log the user out
-      })
-      .catch((e) => {
-        console.error('AH SHIT - Could not get refresh token: ', e);
-      });
+    if (!refreshTokenApiCall) {
+      console.log('Making refresh token request');
+
+      refreshTokenApiCall = (async () => {
+        let req = new TokenRequest({
+          client_id: clientId,
+          redirect_uri: redirectUrl,
+          grant_type: GRANT_TYPE_REFRESH_TOKEN,
+          code: undefined,
+          refresh_token: tokenResponse.refreshToken,
+        });
+
+        try {
+          const resp = await tokenHandler.performTokenRequest(
+            configuration,
+            req
+          );
+          console.log('Successfully received refresh token');
+          setTokenResponse(resp);
+          setAccessToken(resp.accessToken);
+        } catch (e) {
+          console.error('AH SHIT - Could not get refresh token: ', e);
+        }
+      })();
+    } else {
+      console.log('OOOOPPPPPPP, WE GOT A DUPE REQUEST OVER HERE');
+    }
+
+    await refreshTokenApiCall;
+    refreshTokenApiCall = null;
   }
 
   const location = useLocation();
