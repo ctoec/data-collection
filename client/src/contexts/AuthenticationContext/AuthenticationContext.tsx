@@ -24,6 +24,7 @@ export type AuthenticationProviderPropsType = {
   clientId: string;
   scope: string;
   localStorageAccessTokenKey: string;
+  localStorageRefreshTokenKey: string;
   localStorageIdTokenKey: string;
   loginEndpoint?: string;
   defaultOpenIdConnectUrl?: string | null;
@@ -66,6 +67,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     redirectEndpoint,
     scope,
     localStorageAccessTokenKey,
+    localStorageRefreshTokenKey,
     localStorageIdTokenKey,
     responseType,
     state,
@@ -90,6 +92,9 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
   // Access token is set in memory on initial auth and when refresh token is requested
   // Access token is set in local storage whenever it changes
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null | undefined>(
+    null
+  );
 
   const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
     console.log('HEY LOOK AT US LOGGING IN AND SHIT');
@@ -97,6 +102,9 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     setTokenResponse(resp);
     localStorage.setItem(localStorageIdTokenKey, resp.idToken || '');
     setAccessToken(resp.accessToken);
+
+    localStorage.setItem(localStorageRefreshTokenKey, resp.refreshToken || '');
+    setRefreshToken(resp.refreshToken);
     setLoading(false);
     history.push('/');
   };
@@ -108,27 +116,50 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     onTokenRequestSuccess: onInitialTokenRequestSuccess,
   });
 
-  // Get accessToken from localstorage on initial mount
+  // Get tokens from localstorage on initial mount
   useEffect(() => {
     const localStorageAccessToken = localStorage.getItem(
-      localStorageAccessTokenKey
-    );
-    // Update accessToken if it was present in local storage
+        localStorageAccessTokenKey
+      ),
+      localStorageRefreshToken = localStorage.getItem(
+        localStorageRefreshTokenKey
+      );
+
     if (!!localStorageAccessToken) {
-      setLoading(false);
       setAccessToken(localStorageAccessToken);
     }
-  }, [localStorageAccessTokenKey]);
+
+    if (!!localStorageRefreshToken) {
+      setRefreshToken(localStorageRefreshToken);
+    }
+
+    if (!!localStorageAccessToken || !!localStorageRefreshToken) {
+      setLoading(false);
+    }
+  }, [localStorageAccessTokenKey, localStorageRefreshTokenKey]);
 
   // Update localstorage when accessToken changes
   useEffect(() => {
     const localStorageAccessToken = localStorage.getItem(
-      localStorageAccessTokenKey
-    );
+        localStorageAccessTokenKey
+      ),
+      localStorageRefreshToken = localStorage.getItem(
+        localStorageRefreshTokenKey
+      );
+
     if (accessToken && accessToken !== localStorageAccessToken) {
       localStorage.setItem(localStorageAccessTokenKey, accessToken);
     }
-  }, [accessToken, localStorageAccessTokenKey]);
+
+    if (refreshToken && refreshToken !== localStorageRefreshToken) {
+      localStorage.setItem(localStorageRefreshTokenKey, refreshToken);
+    }
+  }, [
+    accessToken,
+    refreshToken,
+    localStorageAccessTokenKey,
+    localStorageRefreshTokenKey,
+  ]);
 
   // Make an authorization request whenever:
   // 1) the authorizationHandler is set,
@@ -193,13 +224,16 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     }
 
     console.log('TOKEN RESPONSE EXPIRES IN', tokenResponse.expiresIn);
-    const authExpirationBuffer: number = 30 * 60 * -1; // 30 minute expiration buffer
+    const authExpirationBuffer: number = 15 * 60 * -1; // 15 minute expiration buffer
 
-    if (tokenResponse.isValid()) {
+    //  Don't generate new access token if current token doesn't expire within 15 mins
+    if (tokenResponse.isValid(authExpirationBuffer)) {
       console.log('Token response is still valid.  Exiting early...');
       return;
     }
 
+    //  Only make a new access token request if one isn't currently in-flight
+    //  in order to prevent rapid, successive requests from inadvertently causing a logout
     if (!refreshTokenApiCall) {
       console.log('Making refresh token request');
 
@@ -217,19 +251,22 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
             configuration,
             req
           );
-          console.log('Successfully received refresh token');
           setTokenResponse(resp);
           setAccessToken(resp.accessToken);
+          console.log('Refresh token api call completed successfully');
         } catch (e) {
-          console.error('AH SHIT - Could not get refresh token: ', e);
+          console.error('Could not get refresh token: ', e);
         }
       })();
     } else {
       console.log('OOOOPPPPPPP, WE GOT A DUPE REQUEST OVER HERE');
     }
 
-    await refreshTokenApiCall;
-    refreshTokenApiCall = null;
+    try {
+      await refreshTokenApiCall;
+    } finally {
+      refreshTokenApiCall = null;
+    }
   }
 
   const location = useLocation();
