@@ -1,4 +1,4 @@
-const { FakeChildrenTypes } = require('../../client/src/shared/models');
+const { FakeChildrenTypes } = require('../utils/FakeChildrenTypes');
 const { login } = require('../utils/login');
 const { uploadFile } = require('../utils/uploadFile');
 

@@ -1,5 +1,5 @@
 const { launch_url } = require('../nightwatch.conf');
-const { FakeChildrenTypes } = require('../../client/src/shared/models');
+const { FakeChildrenTypes } = require('./FakeChildrenTypes');
 const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
