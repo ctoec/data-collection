@@ -46,6 +46,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   // (so that we can check validation errors), so this always has
   // positive length; need to check that the det has null fields
   const noRecordedEnrollments =
+    !enrollments ||
     enrollments.length === 0 ||
     (enrollments.length === 1 &&
       enrollments[0].site === null &&
@@ -81,7 +82,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
           associated with at least one funding.
         </p>
       )}
-      {!noRecordedEnrollments && (
+      {(!noRecordedEnrollments || !currentEnrollment) && (
         <ChangeEnrollmentCard
           {...commonProps}
           topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
