@@ -181,13 +181,22 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
    */
   async function makeRefreshTokenRequest() {
     console.log('Refresh token request triggered');
-    if (!configuration) return;
-    if (!tokenResponse?.refreshToken) return;
+    if (!configuration) {
+      console.log('No config - exiting makeRefreshTokenRequest early...');
+      return;
+    }
+    if (!tokenResponse?.refreshToken) {
+      console.log('No refresh token, sooooo exiting early?');
+      return;
+    }
 
     // isValid includes a defaut 10 min expiration buffer.
-    if (tokenResponse.isValid()) return;
+    if (tokenResponse.isValid()) {
+      console.log('Token response is still valid.  Exiting early...');
+      return;
+    }
 
-    console.log('Making token request');
+    console.log('Making refresh token request');
     let req = new TokenRequest({
       client_id: clientId,
       redirect_uri: redirectUrl,
