@@ -190,6 +190,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       return;
     }
 
+    console.log('TOKEN RESPONSE EXPIRES IN', tokenResponse.expiresIn);
+
     // isValid includes a defaut 10 min expiration buffer.
     if (tokenResponse.isValid()) {
       console.log('Token response is still valid.  Exiting early...');
