@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-labels: bug
+labels: 'bug, dev-team'
 about: Issue template for outlining a bug discovered within the application.
 ---
 
