@@ -5,6 +5,7 @@ import { RedeterminationCard } from './RedeterminationCard';
 import { Button, InlineIcon, TextWithIcon } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
 import { getNextHeadingLevel, Heading } from '../../../components/Heading';
+import { determinationHasNoInformation } from '../../../utils/determinationHasNoInformation';
 
 /**
  * Component enabling user to edit the family income portion of a child
@@ -28,15 +29,12 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted
 
-  // We create dets in the backend even if there's no data for them
-  // (so that we can check validation errors), so this always has
-  // positive length; need to check that the det has null fields
+  // Could either come from create flow (no dets if interrupted)
+  // or batch upload (at least one det associated with family)
   const noRecordedDets =
-    determinations.length === 1 &&
-    determinations[0].determinationDate === undefined &&
-    determinations[0].income === null &&
-    determinations[0].numberOfPeople === null &&
-    !determinations[0].incomeNotDisclosed;
+    determinations.length === 0 ||
+    (determinations.length === 1 &&
+      determinationHasNoInformation(determinations[0]));
 
   const currentDetermination: IncomeDetermination | undefined =
     determinations[0];

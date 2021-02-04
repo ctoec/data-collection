@@ -4,9 +4,11 @@ import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
-import { CareModel, Enrollment, Funding } from '../../../shared/models';
+import { Enrollment } from '../../../shared/models';
 import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 import { InlineIcon } from '@ctoec/component-library';
+import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
+import { enrollmentHasNoInformation } from '../../../utils/enrollmentHasNoInformation';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
@@ -18,20 +20,6 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     throw new Error('Enrollment funding form rendered without child');
   }
 
-  /**
-   * Simple way to check if a funding was created by the backend as
-   * a placeholder for the card or actually contains real info to
-   * display
-   */
-  const fundingHasNoInformation = (funding: Funding | undefined) => {
-    if (!funding) return true;
-    return (
-      !funding.fundingSpace &&
-      !funding.firstReportingPeriod &&
-      !funding.lastReportingPeriod
-    );
-  };
-
   // Separate enrollments into current (no end date) and past
   // (with end date). Either may not exist
   const enrollments: Enrollment[] = child.enrollments || [];
@@ -42,18 +30,18 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
       e.fundings.some((f) => !fundingHasNoInformation(f))
   );
 
-  // We create enrollments in the backend even if there's no data
-  // (so that we can check validation errors), so this always has
-  // positive length; need to check that the det has null fields
+  // Three cases to check:
+  // 1. Came from create flow before reaching enrollment section
+  //  (!enrollments)
+  // 2. Came from create flow after reaching enrollment section
+  // but before saving (length 0)
+  // 3. Parsed a row from an uploaded sheet that has no info
+  // (will be length 1 b/c we always have site info to create)
   const noRecordedEnrollments =
     !enrollments ||
     enrollments.length === 0 ||
-    (enrollments.length === 1 &&
-      enrollments[0].site === null &&
-      (enrollments[0].model === CareModel.Unknown ||
-        enrollments[0].model === undefined) &&
-      enrollments[0].ageGroup === undefined &&
-      enrollments[0].entry === undefined);
+    (enrollments.length === 1 && enrollmentHasNoInformation(enrollments[0]));
+
   const currentEnrollment: Enrollment | undefined = enrollments.find(
     (e) => !e.exit
   );
@@ -76,19 +64,21 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
           is required for each child record.
         </p>
       )}
-      {!noRecordedEnrollments && !allEnrollmentsFunded && (
-        <p className="usa-error-message">
-          <InlineIcon icon="attentionNeeded" /> All enrollments must be
-          associated with at least one funding.
-        </p>
-      )}
-      {(!noRecordedEnrollments || !currentEnrollment) && (
-        <ChangeEnrollmentCard
-          {...commonProps}
-          topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
-          currentEnrollment={currentEnrollment}
-        />
-      )}
+      {
+        // Only show the funding alert if we have an enrollment
+        !noRecordedEnrollments && !allEnrollmentsFunded && (
+          <p className="usa-error-message">
+            <InlineIcon icon="attentionNeeded" /> All enrollments must be
+            associated with at least one funding.
+          </p>
+        )
+      }
+      <ChangeEnrollmentCard
+        {...commonProps}
+        topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
+        currentEnrollment={currentEnrollment}
+        noRecordedEnrollments={noRecordedEnrollments}
+      />
       {currentEnrollment && (
         <>
           {!noRecordedEnrollments && (

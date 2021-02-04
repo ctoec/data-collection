@@ -17,6 +17,7 @@ import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 import { RecordFormProps } from '../../../components/Forms';
 import { hasValidationErrorForField } from '../../../utils/hasValidationError';
 import { HeadingLevel } from '../../../components/Heading';
+import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
 
 type EditFundingCardProps = {
   child: Child;
@@ -53,10 +54,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
     throw new Error('Edit funding rendered without funding');
   }
 
-  const hasNoFundingInfo =
-    !funding.fundingSpace &&
-    !funding.firstReportingPeriod &&
-    !funding.lastReportingPeriod;
+  const hasNoFundingInfo = fundingHasNoInformation(funding);
 
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
