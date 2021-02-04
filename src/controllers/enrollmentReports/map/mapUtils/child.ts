@@ -19,8 +19,6 @@ export const mapChild = (
   organization: Organization,
   family: Family
 ) => {
-  console.log('Received source row: ', source);
-
   // Gender
   const gender: Gender = mapEnum(Gender, source.gender) || Gender.NotSpecified;
 

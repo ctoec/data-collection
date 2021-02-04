@@ -206,7 +206,6 @@ const mapRow = async (
     family.incomeDeterminations = [incomeDetermination];
 
     child = mapChild(source, organization, family);
-    console.log('CREATED CHILD IS: ', child);
     child.family = family;
     children.push(child);
   }

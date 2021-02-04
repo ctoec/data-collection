@@ -23,7 +23,7 @@ module.exports = {
         '/api/template/example/csv?whichFakeChildren=missingOptional';
     } else if (whichFile === FakeChildrenTypes.MISSING_CONDITIONAL) {
       DOWNLOAD_URL +=
-        '/api/template/example/csv?whichFakeChildren=missingConditional';
+        '/api/template/example/xlsx?whichFakeChildren=missingConditional';
     }
 
     const isCompleteTestRun = whichFile === 'complete';
