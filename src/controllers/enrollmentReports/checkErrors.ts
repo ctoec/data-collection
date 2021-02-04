@@ -20,6 +20,7 @@ const processErrorsInFields = (
   errorDict: Object,
   errorOccursIn: Object
 ) => {
+  console.log('Examining error: ', error);
   // Base case: error is not in a nested field
   if (!error.children?.length) {
     // There are some validation errors that aren't related to
@@ -66,6 +67,11 @@ export const checkErrorsInChildren = async (children: Child[]) => {
 
   await Promise.all(
     children.map(async (child) => {
+      console.log(
+        `Validating modal errors in child ${
+          child.firstName ? child.firstName : '(no first name)'
+        } ${child.lastName ? child.lastName : '(no last name)'}`
+      );
       child.validationErrors.map((e) =>
         processErrorsInFields(child, e, errorDict, errorOccursIn)
       );
