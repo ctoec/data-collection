@@ -6,24 +6,22 @@ const {
 } = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
-  uploadFile: async function (browser, whichFile = 'complete') {
+  uploadFile: async function (browser, filetype, whichFile = 'complete') {
     // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
     const FILE_PATH = `${process.cwd()}/upload.csv`;
 
     // Pick the download url based on which kind of upload test we want to run
     let DOWNLOAD_URL = `${launch_url}`;
     if (whichFile === 'complete') {
-      DOWNLOAD_URL += '/api/template/example/csv';
+      DOWNLOAD_URL += `/api/template/example/${filetype}`;
     } else if (whichFile === FakeChildrenTypes.MISSING_SOME) {
-      DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingSome';
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingSome`;
     } else if (whichFile === FakeChildrenTypes.MISSING_ONE) {
-      DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingOne';
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingOne`;
     } else if (whichFile === FakeChildrenTypes.MISSING_OPTIONAL) {
-      DOWNLOAD_URL +=
-        '/api/template/example/csv?whichFakeChildren=missingOptional';
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingOptional`;
     } else if (whichFile === FakeChildrenTypes.MISSING_CONDITIONAL) {
-      DOWNLOAD_URL +=
-        '/api/template/example/xlsx?whichFakeChildren=missingConditional';
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingConditional`;
     }
 
     const isCompleteTestRun = whichFile === 'complete';
