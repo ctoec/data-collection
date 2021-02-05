@@ -14,6 +14,7 @@ import useSWR, {
  * @param path
  */
 export function useAuthenticatedSWR<T>(path: string | null) {
+  console.log('auth swr')
   const { accessToken } = useContext(AuthenticationContext);
   return useSWR(!path ? null : [path, accessToken]) as responseInterface<
     T,

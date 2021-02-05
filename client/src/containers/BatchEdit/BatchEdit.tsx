@@ -12,7 +12,7 @@ import { BackButton } from '../../components/BackButton';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
 import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
@@ -28,8 +28,8 @@ const BatchEdit: React.FC = () => {
   };
   const { alertElements } = useAlerts();
 
-  const history = useHistory();
   const h1Ref = getH1RefForTitle();
+  // TODO: write wrapper for this that sets results of use authenticatedswr as a state, and takes a dep array?
   const { data: children, isValidating, mutate, error } = useAuthenticatedSWR<
     Child[]
   >(
@@ -38,9 +38,13 @@ const BatchEdit: React.FC = () => {
       : `children?${stringify({ organizationId, 'missing-info': true })}`
   );
   const loading = !children && !error;
+  // Only children with validation errors, only set after initial fetch
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
   >([]);
+
+  console.log({ children, isValidating, error, fixedRecordsForDisplayIds })
+
   useEffect(() => {
     if (!isValidating && !!children) {
       setFixedRecordsForDisplayIds(
@@ -52,9 +56,7 @@ const BatchEdit: React.FC = () => {
   const fixedRecordsForDisplay = fixedRecordsForDisplayIds.map((id) =>
     (children || []).find((c) => c.id === id)
   ) as Child[];
-  const currentlyMissingInfoCount = fixedRecordsForDisplay.filter(
-    hasValidationError
-  ).length;
+  const currentlyMissingInfoCount = fixedRecordsForDisplay.length
 
   const [activeRecordId, setActiveRecordId] = useState<string>();
   useEffect(() => {
@@ -92,7 +94,7 @@ const BatchEdit: React.FC = () => {
       <div className="grid-container">
         <BatchEditItemContent
           childId={childId}
-          moveNextRecord={() => {}}
+          moveNextRecord={() => { }}
           isSingleRecord={true}
         />
       </div>
@@ -119,12 +121,12 @@ const BatchEdit: React.FC = () => {
                 incomplete info required to submit your data
               </>
             ) : (
-              <>
-                {/* TODO make it possible to make this icon big */}
-                <InlineIcon className="height-4 width-4" icon="complete" /> All
+                <>
+                  {/* TODO make it possible to make this icon big */}
+                  <InlineIcon className="height-4 width-4" icon="complete" /> All
                 enrollments are complete
               </>
-            )}
+              )}
           </div>
           <SideNav
             activeItemId={activeRecordId}
@@ -155,21 +157,21 @@ const BatchEdit: React.FC = () => {
                 />
               </ErrorBoundary>
             ) : (
-              <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
-                <InlineIcon icon="complete" />
-                <p className="font-body-lg text-bold margin-y-1">
-                  All records are complete!
+                <div className="margin-x-4 margin-top-4 display-flex flex-column flex-align-center">
+                  <InlineIcon icon="complete" />
+                  <p className="font-body-lg text-bold margin-y-1">
+                    All records are complete!
                 </p>
-                <Link to="/roster">
-                  <TextWithIcon
-                    text="Back to roster"
-                    iconSide="right"
-                    Icon={ArrowRight}
-                    direction="right"
-                  />
-                </Link>
-              </div>
-            )}
+                  <Link to="/roster">
+                    <TextWithIcon
+                      text="Back to roster"
+                      iconSide="right"
+                      Icon={ArrowRight}
+                      direction="right"
+                    />
+                  </Link>
+                </div>
+              )}
           </SideNav>
         </ErrorBoundary>
       </LoadingWrapper>
