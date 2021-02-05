@@ -1,6 +1,6 @@
 import { BookType } from 'xlsx';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { Child, Enrollment } from '../entity';
+import { Child, Enrollment, Funding } from '../entity';
 import { Response } from 'express';
 import { isMoment } from 'moment';
 import { streamTabularData } from '../utils/generateFiles/streamTabularData';
@@ -26,16 +26,29 @@ export async function streamUploadedChildren(
     if (!child.enrollments) {
       childStrings.push(flattenChild(columnMetadatas, child));
     } else {
-      child.enrollments?.forEach((enrollment, i) =>
-        // Can just use 0th element of each array as the 'active'/'current'
-        // value because controller.getChildById does presorting for us
-        childStrings.push(
-          flattenChild(columnMetadatas, child, {
-            enrollment,
-            skipInfoForPastEnrollments: i !== 0,
-          })
-        )
-      );
+      child.enrollments?.forEach((enrollment, enrollmentIdx) => {
+        if (!enrollment.fundings) {
+          // Can just use 0th element of each array as the 'active'/'current'
+          // value because controller.getChildById does presorting for us
+          childStrings.push(
+            flattenChild(columnMetadatas, child, {
+              enrollment,
+              skipInfoForPastEnrollments: enrollmentIdx !== 0,
+            })
+          );
+        } else {
+          enrollment.fundings.forEach((funding, fundingIdx) => {
+            childStrings.push(
+              flattenChild(columnMetadatas, child, {
+                enrollment,
+                funding,
+                skipInfoForPastEnrollments:
+                  enrollmentIdx !== 0 || fundingIdx !== 0,
+              })
+            );
+          });
+        }
+      });
     }
   });
   streamTabularData(response, format, childStrings);
@@ -55,18 +68,15 @@ function flattenChild(
   child: Child,
   opts?: {
     enrollment?: Enrollment;
+    funding?: Funding;
     skipInfoForPastEnrollments?: boolean;
   }
 ) {
   const { family } = child;
-  const { enrollment, skipInfoForPastEnrollments } = opts || {};
-  const { fundings, site } = enrollment || {};
-  const activeFunding = fundings?.[0];
-  const { fundingSpace } = activeFunding || {};
+  const { enrollment, funding, skipInfoForPastEnrollments } = opts || {};
+  const { site } = enrollment || {};
+  const { fundingSpace } = funding || {};
   const { organization } = site || {};
-  // Can just use 0th element of each array as the 'active'/'current'
-  // value because controller.getChildById does presorting for us
-
   const { incomeDeterminations } = family || {};
   const currentDetermination = incomeDeterminations?.[0];
 
@@ -79,7 +89,7 @@ function flattenChild(
     site,
     organization,
     fundingSpace,
-    activeFunding,
+    funding,
   ];
   columns.forEach((column) => {
     const { propertyName, section } = column;

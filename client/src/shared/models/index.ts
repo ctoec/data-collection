@@ -5,6 +5,7 @@ export * from './BirthCertificateType';
 export * from './CareModel';
 export * from './ColumnMetadata';
 export * from './ExitReason';
+export * from './FakeChildrenTypes';
 export * from './FundingSource';
 export * from './FundingSourceTime';
 export * from './FundingTime';
