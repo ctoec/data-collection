@@ -6,7 +6,12 @@ const {
 } = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
-  uploadFile: async function (browser, filetype, whichFile = 'complete') {
+  uploadFile: async function (
+    browser,
+    filetype,
+    whichFile = 'complete',
+    waitForHello = true
+  ) {
     // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
     const FILE_PATH = `${process.cwd()}/upload.csv`;
 
@@ -31,10 +36,12 @@ module.exports = {
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 
     // Go to file upload
-    await browser.waitForElementVisible(
-      'xpath',
-      '//*/h1[contains(.,"Hello Voldemort")]'
-    );
+    if (waitForHello) {
+      await browser.waitForElementVisible(
+        'xpath',
+        '//*/h1[contains(.,"Hello Voldemort")]'
+      );
+    }
     await browser.execute(function () {
       document.querySelector('a[href="/upload"]').click();
     });

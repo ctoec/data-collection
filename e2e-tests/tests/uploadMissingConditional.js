@@ -15,7 +15,8 @@ module.exports = {
       await uploadFile(
         browser,
         filetype,
-        FakeChildrenTypes.MISSING_CONDITIONAL
+        FakeChildrenTypes.MISSING_CONDITIONAL,
+        i === 0
       );
       // We have 8 conditional fields, so every uploaded child
       // should flag as having an error

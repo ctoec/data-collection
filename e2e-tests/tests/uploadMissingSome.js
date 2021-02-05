@@ -12,7 +12,12 @@ module.exports = {
     const filetypes = Object.values(UploadFileTypes);
     for (let i = 0; i < filetypes.length; i++) {
       const filetype = filetypes[i];
-      await uploadFile(browser, filetype, FakeChildrenTypes.MISSING_SOME);
+      await uploadFile(
+        browser,
+        filetype,
+        FakeChildrenTypes.MISSING_SOME,
+        i === 0
+      );
     }
     browser.end();
   },
