@@ -10,12 +10,13 @@ import { ReactComponent as ChangeIcon } from '../../../images/change.svg';
 
 export type ChangeEnrollmentProps = Omit<
   ChangeEnrollmentFormProps,
-  'afterSaveSuccess' | 'afterSaveFailure' | 'topHeadingLevel'
+  'afterSaveFailure' | 'topHeadingLevel'
 >;
 
 export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
   child,
   currentEnrollment,
+  afterSaveSuccess,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
@@ -38,19 +39,18 @@ export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
         content={
           <ChangeEnrollmentForm
             afterSaveSuccess={() => {
-              history.push({
-                pathname: `edit-record/${child.id}#enrollment`,
-                state: {
-                  alerts: [
-                    {
-                      type: 'success',
-                      heading: 'Record updated',
-                      text: `Your changes to ${nameFormatter(
-                        child
-                      )}'s record have been saved.`,
-                    },
-                  ],
-                },
+              afterSaveSuccess();
+              toggleIsOpen();
+              history.push(`/edit-record/${child.id}#enrollment`, {
+                alerts: [
+                  {
+                    type: 'success',
+                    heading: 'Record updated',
+                    text: `Your changes to ${nameFormatter(
+                      child
+                    )}'s record have been saved.`,
+                  },
+                ],
               });
             }}
             afterSaveFailure={(err) => {

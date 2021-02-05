@@ -99,9 +99,10 @@ const EditRecord: React.FC = () => {
 
   useFocusFirstError([child]);
 
+  const afterSaveSuccess = () => setTriggerRefetchCounter((r) => r + 1);
   const commonFormProps = {
     child,
-    afterSaveSuccess: () => setTriggerRefetchCounter((r) => r + 1),
+    afterSaveSuccess,
     setAlerts,
     topHeadingLevel: 'h2' as HeadingLevel,
   };
@@ -127,6 +128,7 @@ const EditRecord: React.FC = () => {
             <ChangeEnrollment
               child={child}
               currentEnrollment={activeEnrollment}
+              afterSaveSuccess={afterSaveSuccess}
             />
             {!!activeEnrollment && (
               <>
