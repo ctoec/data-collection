@@ -4,6 +4,7 @@ import useSWR, {
   responseInterface,
   useSWRInfinite,
   SWRInfiniteResponseInterface,
+  ConfigInterface,
 } from 'swr';
 
 /**
@@ -13,13 +14,15 @@ import useSWR, {
  * Additionally, enables typing casting of the response data from useSWR.
  * @param path
  */
-export function useAuthenticatedSWR<T>(path: string | null) {
-  console.log('auth swr')
+export function useAuthenticatedSWR<T>(
+  path: string | null,
+  config?: ConfigInterface
+) {
   const { accessToken } = useContext(AuthenticationContext);
-  return useSWR(!path ? null : [path, accessToken]) as responseInterface<
-    T,
-    string
-  >;
+  return useSWR(
+    !path ? null : [path, accessToken],
+    config
+  ) as responseInterface<T, string>;
 }
 
 /**
