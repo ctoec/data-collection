@@ -70,7 +70,7 @@ export const mapFunding = (
   }
 
   // If the user supplied _any_ funding-related fields, create
-  // a propagated funding.
+  // a populated funding.
   if (
     source.fundingSpace ||
     source.time ||

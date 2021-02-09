@@ -47,8 +47,8 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
     if (closeCard) setCloseCard(false);
   });
 
-  // Child batch uploaded without meaningful enrollment
-  // Don't show this card because the form will directly open
+  // Don't show this ChangeEnrollment card because a form to add
+  // missing info is already open
   if (noRecordedEnrollments && !!currentEnrollment) {
     return <></>;
   }

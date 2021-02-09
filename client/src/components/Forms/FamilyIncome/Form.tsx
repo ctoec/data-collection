@@ -139,18 +139,13 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
       <FormFieldSet<IncomeDetermination>
         id={`${id}-fieldset`}
         legend={legend}
-        status={(data) => {
-          // Surpress fieldset red warnings if we want to hide errors
-          if (errorsHidden) return undefined;
-          else
-            return getValidationStatusForFields(
-              data,
-              incomeDeterminationFields,
-              {
+        status={(data) =>
+          errorsHidden
+            ? undefined
+            : getValidationStatusForFields(data, incomeDeterminationFields, {
                 message: 'Income determination is required for OEC reporting.',
-              }
-            );
-        }}
+              })
+        }
       >
         <div>
           <HouseholdSizeField hideStatus={errorsHidden} />
