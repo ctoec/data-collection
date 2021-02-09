@@ -1,7 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
-import { Button, Modal } from '@ctoec/component-library';
+import {
+  Button,
+  Modal,
+  TextWithIcon,
+  TrashCan,
+} from '@ctoec/component-library';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
@@ -68,7 +73,7 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
       <Button
         appearance="unstyled"
         onClick={toggleIsOpen}
-        text="Delete record"
+        text={<TextWithIcon text="Delete record" Icon={TrashCan} />}
         className="margin-right-0"
       />
       <Modal
