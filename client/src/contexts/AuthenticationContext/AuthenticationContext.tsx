@@ -186,16 +186,21 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
   async function requestWrapper() {
     console.log('request wrapper');
+    console.log('HERE IT IS', refreshTokenApiCall);
 
     if (!refreshTokenApiCall) {
       console.log('No call, creating new refresh token request');
       refreshTokenApiCall = makeRefreshTokenRequest();
+      console.log('HERE IT IS', refreshTokenApiCall);
     } else {
       console.log('OH SHIT DUPE CALL FOUND');
     }
 
     return refreshTokenApiCall
-      .finally(() => refreshTokenApiCall = null);
+      .finally(() => {
+        console.log('DONE, RESETTING THE CALL', refreshTokenApiCall);
+        refreshTokenApiCall = null;
+      });
   }
 
   /**
