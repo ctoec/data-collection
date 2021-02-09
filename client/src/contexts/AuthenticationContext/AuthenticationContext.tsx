@@ -23,6 +23,7 @@ export type AuthenticationContextType = {
 export type AuthenticationProviderPropsType = {
   clientId: string;
   scope: string;
+  localStorageAccessTokenKey: string;
   localStorageRefreshTokenKey: string;
   localStorageIdTokenKey: string;
   loginEndpoint?: string;
@@ -65,6 +66,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     clientId,
     redirectEndpoint,
     scope,
+    localStorageAccessTokenKey,
     localStorageRefreshTokenKey,
     localStorageIdTokenKey,
     responseType,
@@ -128,6 +130,18 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     }
   }, [localStorageRefreshTokenKey]);
 
+  // Get access token from localstorage on initial mount
+  useEffect(() => {
+    const localStorageAccessToken = localStorage.getItem(
+      localStorageAccessTokenKey
+    );
+
+    if (!!localStorageAccessToken) {
+      setLoading(false);
+      setRefreshToken(localStorageAccessToken);
+    }
+  }, [localStorageAccessTokenKey]);
+
   // Update localstorage when refresh token changes
   useEffect(() => {
     const localStorageRefreshToken = localStorage.getItem(
@@ -138,6 +152,17 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       localStorage.setItem(localStorageRefreshTokenKey, refreshToken);
     }
   }, [refreshToken, localStorageRefreshTokenKey]);
+
+  // Update localstorage when access token changes
+  useEffect(() => {
+    const localStorageAccessToken = localStorage.getItem(
+      localStorageAccessTokenKey
+    );
+
+    if (accessToken && accessToken !== localStorageAccessToken) {
+      localStorage.setItem(localStorageAccessTokenKey, accessToken);
+    }
+  }, [accessToken, localStorageAccessTokenKey]);
 
   // Make an authorization request whenever:
   // 1) the authorizationHandler is set,
@@ -165,6 +190,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     idToken,
     clientId,
     scope,
+    localStorageAccessTokenKey,
     localStorageRefreshTokenKey,
     localStorageIdTokenKey,
     configuration,
@@ -245,6 +271,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
         console.log('Refresh token api call completed successfully');
       } catch (e) {
         console.error('Could not get refresh token: ', e);
+        history.push(logoutEndpoint);
       } finally {
         inFlightAccessTokenRequest.current = false;
         console.log('WE ARE DONE, LETS SET IT TO FALSE', inFlightAccessTokenRequest.current);
@@ -278,9 +305,11 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
   const handleLogout = () => {
     /*
-     * Remove the refresh token, clear react state, and navigate to main page.
+     * Remove the refresh token, access token, clear react state, and navigate to main page.
      */
     localStorage.removeItem(localStorageRefreshTokenKey);
+    localStorage.removeItem(localStorageAccessTokenKey);
+
     removeTimeoutFromLocalStorage();
     setAccessToken(null);
     setRefreshToken(null);
