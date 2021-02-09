@@ -138,7 +138,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
     if (!!localStorageAccessToken) {
       setLoading(false);
-      setRefreshToken(localStorageAccessToken);
+      setAccessToken(localStorageAccessToken);
     }
   }, [localStorageAccessTokenKey]);
 
