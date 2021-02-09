@@ -31,9 +31,10 @@ export const allReportingPeriods: string[][] = [
 
 // Get all reporting period dates that aren't in the future
 export const getCurrentReportingPeriodDates = () => {
-  return allReportingPeriods.filter(reportingPeriod => 
-    moment().isSameOrAfter(reportingPeriod[0]));
-}
+  return allReportingPeriods.filter((reportingPeriod) =>
+    moment().isSameOrAfter(reportingPeriod[0])
+  );
+};
 
 export const getReportingPeriodFromDates = (
   fundingSource: FundingSource,

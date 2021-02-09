@@ -117,7 +117,7 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'birth certificate ID #',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_IF_US_BORN,
     definition: "The identification number on the child's birth certificate.",
     reason: 'Tiebreaker for linking to SASID-backed data.',
@@ -130,7 +130,7 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'town of birth',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_IF_US_BORN,
     definition:
       "Place of birth as it appears on the child's birth certificate.",
@@ -143,7 +143,7 @@ export class EnrollmentReportRow {
 
   @ColumnMetadata({
     formattedName: 'state of birth',
-    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.OPTIONAL,
+    requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_IF_US_BORN,
     definition:
       "Place of birth as it appears on the child's birth certificate.",
@@ -393,7 +393,7 @@ export class EnrollmentReportRow {
     example: 'Yes',
     section: TEMPLATE_SECTIONS.FAMILY_INCOME,
   })
-  incomeNotDisclosed?: boolean = undefined;
+  incomeNotDisclosed?: boolean = false;
 
   @ColumnMetadata({
     formattedName: 'provider',

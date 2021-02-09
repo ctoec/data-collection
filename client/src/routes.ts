@@ -16,6 +16,7 @@ import DevUtility from './containers/DevUtility/DevUtility';
 import PrivacyPolicy from './containers/PrivacyPolicy/PrivacyPolicy';
 import Help from './containers/Help/Help';
 import SupportRequest from './containers/Help/SupportRequest';
+import { RevisionRequest } from './containers/Home/RevisionRequest';
 
 export type RouteConfig = {
   path: string;
@@ -68,6 +69,11 @@ export const routes: RouteConfig[] = [
     path: '/help',
     component: Help,
     unauthorized: true,
+  },
+  {
+    path: '/revision',
+    component: RevisionRequest,
+    unauthorized: false,
   },
   {
     path: '/support',

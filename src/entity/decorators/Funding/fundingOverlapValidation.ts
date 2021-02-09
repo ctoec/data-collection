@@ -42,6 +42,10 @@ export function FundingDoesNotOverlap(
           allExceptThisFunding.forEach((_funding) => {
             const _firstPeriod = _funding.firstReportingPeriod;
 
+            if (!_firstPeriod) {
+              return;
+            }
+
             if (
               _firstPeriod.periodStart.isSame(validatingFirstPeriod.periodStart)
             ) {
