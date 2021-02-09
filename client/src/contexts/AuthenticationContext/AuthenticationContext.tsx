@@ -184,6 +184,20 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
   let refreshTokenApiCall: Promise<any> | null = null;
 
+  async function requestWrapper() {
+    console.log('request wrapper');
+
+    if (!refreshTokenApiCall) {
+      console.log('No call, creating new refresh token request');
+      refreshTokenApiCall = makeRefreshTokenRequest();
+    } else {
+      console.log('OH SHIT DUPE CALL FOUND');
+    }
+
+    return refreshTokenApiCall
+      .finally(() => refreshTokenApiCall = null);
+  }
+
   /**
    * Create and perform token refresh request.
    * Requires that initial code-based token request has already been performed.
@@ -212,10 +226,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
     //  Only make a new access token request if one isn't currently in-flight
     //  in order to prevent rapid, successive requests from inadvertently causing a logout
-    if (!refreshTokenApiCall) {
       console.log('Making refresh token request');
 
-      refreshTokenApiCall = (async () => {
         let req = new TokenRequest({
           client_id: clientId,
           redirect_uri: redirectUrl,
@@ -224,6 +236,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
           refresh_token: refreshToken,
         });
 
+        console.log('Invoking performTokenRequest API call');
         try {
           const resp = await tokenHandler.performTokenRequest(
             configuration,
@@ -237,17 +250,6 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
         } catch (e) {
           console.error('Could not get refresh token: ', e);
         }
-      })();
-      console.log('Refresh token request created successfully');
-    } else {
-      console.log('OOOOPPPPPPP, WE GOT A DUPE REQUEST OVER HERE');
-    }
-
-    try {
-      await refreshTokenApiCall;
-    } finally {
-      refreshTokenApiCall = null;
-    }
   }
 
   const location = useLocation();
@@ -255,7 +257,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     console.log('LOCATION CHANGE TRIGGERING REFRESH TOKEN');
     // Ensure token is always fresh by making refresh request whenever browser location changes
     // (function exits early if token is still valid)
-    makeRefreshTokenRequest();
+    requestWrapper();
   }, [location]);
 
   const handleLogin = () => {
