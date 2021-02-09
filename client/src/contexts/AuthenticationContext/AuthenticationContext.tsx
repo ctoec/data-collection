@@ -211,6 +211,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       return;
     }
 
+    console.log('CHECKING inFlightAccessTokenRequest', inFlightAccessTokenRequest);
     if (inFlightAccessTokenRequest) {
       console.log('Access token request already outstanding!  Exiting early...');
       return;
@@ -220,6 +221,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     //  in order to prevent rapid, successive requests from inadvertently causing a logout
       console.log('Making refresh token request');
       inFlightAccessTokenRequest = true;
+      console.log('REQUEST UPDATED - SETTING inFlightAccessTokenRequest TO TRUE', inFlightAccessTokenRequest);
 
       let req = new TokenRequest({
         client_id: clientId,
@@ -244,6 +246,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
         console.error('Could not get refresh token: ', e);
       } finally {
         inFlightAccessTokenRequest = false;
+        console.log('WE ARE DONE, LETS SET IT TO FALSE', inFlightAccessTokenRequest);
       }
   }
 
