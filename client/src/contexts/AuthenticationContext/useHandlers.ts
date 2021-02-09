@@ -37,7 +37,6 @@ export const useHandlers = ({
   );
 
   notifier.setAuthorizationListener((req, resp, _) => {
-    console.log('Authorization listener triggered');
     if (resp) {
       let verifier: string | undefined;
       if (req && req.internal) verifier = req.internal.code_verifier;
@@ -71,13 +70,7 @@ export const useHandlers = ({
     code: string,
     verifier: string | undefined
   ) {
-    console.log('Auth code token request being made...');
-    if (!configuration) {
-      console.log(
-        'No config, exiting makeAuthorizationCodeTokenRequest early...'
-      );
-      return;
-    }
+    if (!configuration) return;
 
     let extras: StringMap | undefined = undefined;
     if (verifier) {
@@ -93,7 +86,6 @@ export const useHandlers = ({
       extras: extras,
     });
 
-    console.log('Sending auth code token request!');
     tokenHandler
       .performTokenRequest(configuration, req)
       .then(onTokenRequestSuccess)
