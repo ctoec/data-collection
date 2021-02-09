@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef, MutableRefObject } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import {
   AuthorizationRequest,
@@ -94,9 +94,10 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     null
   );
 
-  let inFlightAccessTokenRequest: MutableRefObject<Boolean> = useRef(false);
+  let inFlightAccessTokenRequest: any = useRef(false);
 
   const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
+    console.log('HEY LOOK AT US LOGGING IN AND SHIT');
     // After user successfully logs in
     setTokenResponse(resp);
     localStorage.setItem(localStorageIdTokenKey, resp.idToken || '');
@@ -188,13 +189,17 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
    * Requires that initial code-based token request has already been performed.
    */
   async function makeRefreshTokenRequest() {
+    console.log('Refresh token request triggered');
+
     if (!configuration) {
+      console.log('No config - exiting makeRefreshTokenRequest early...');
       return;
     }
 
     //  Hopefully this never happens - if there's no refresh token present, there's no way to
     //  generate a new access token, so the user will inevitably get logged out, regardless of activity
     if (!refreshToken) {
+      console.log('No refresh token, sooooo exiting early?');
       return;
     }
 
@@ -202,43 +207,53 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
     //  Don't generate new access token if current token doesn't expire within 15 mins
     if (tokenResponse?.isValid(authExpirationBuffer)) {
+      console.log('Token response is still valid.  Exiting early...');
+      return;
+    }
+
+    console.log('CHECKING inFlightAccessTokenRequest', inFlightAccessTokenRequest.current);
+    if (inFlightAccessTokenRequest.current) {
+      console.log('Access token request already outstanding!  Exiting early...');
       return;
     }
 
     //  Only make a new access token request if one isn't currently in-flight
     //  in order to prevent rapid, successive requests from inadvertently causing a logout
-    if (inFlightAccessTokenRequest.current) {
-      return;
-    }
+      console.log('Making refresh token request');
 
-    let req = new TokenRequest({
-      client_id: clientId,
-      redirect_uri: redirectUrl,
-      grant_type: GRANT_TYPE_REFRESH_TOKEN,
-      code: undefined,
-      refresh_token: refreshToken,
-    });
+      let req = new TokenRequest({
+        client_id: clientId,
+        redirect_uri: redirectUrl,
+        grant_type: GRANT_TYPE_REFRESH_TOKEN,
+        code: undefined,
+        refresh_token: refreshToken,
+      });
 
-    try {
-      inFlightAccessTokenRequest.current = true;
+      console.log('Invoking performTokenRequest API call');
+      try {
+        inFlightAccessTokenRequest.current = true;
+        console.log('REQUEST UPDATED - SETTING inFlightAccessTokenRequest TO TRUE', inFlightAccessTokenRequest.current);
 
-      const resp = await tokenHandler.performTokenRequest(
-        configuration,
-        req
-      );
+        const resp = await tokenHandler.performTokenRequest(
+          configuration,
+          req
+        );
 
-      setTokenResponse(resp);
-      setAccessToken(resp.accessToken);
-      setRefreshToken(resp.refreshToken);
-    } catch (e) {
-      console.error('Could not get refresh token: ', e);
-    } finally {
-      inFlightAccessTokenRequest.current = false;
-    }
+        setTokenResponse(resp);
+        setAccessToken(resp.accessToken);
+        setRefreshToken(resp.refreshToken);
+        console.log('Refresh token api call completed successfully');
+      } catch (e) {
+        console.error('Could not get refresh token: ', e);
+      } finally {
+        inFlightAccessTokenRequest.current = false;
+        console.log('WE ARE DONE, LETS SET IT TO FALSE', inFlightAccessTokenRequest.current);
+      }
   }
 
   const location = useLocation();
   useEffect(() => {
+    console.log('LOCATION CHANGE TRIGGERING REFRESH TOKEN');
     // Ensure token is always fresh by making refresh request whenever browser location changes
     // (function exits early if token is still valid)
     makeRefreshTokenRequest();
