@@ -60,12 +60,15 @@ export const RevisionRequest: React.FC = () => {
     Object.values(AgeGroup).map((ag) => {
       FUNDING_SOURCE_TIMES.forEach((fst) => {
         if (!fst.ageGroupLimitations || fst.ageGroupLimitations.includes(ag)) {
-          fst.fundingTimes.forEach((time) => {
-            const stringRep = ag + ' - ' + fst.displayName + ' - ' + time.value;
-            fsOptions.push({
-              fundingSpace: stringRep,
-              shouldHave: false,
-            } as ChangeFundingSpaceRequest);
+          fst.fundingSources.forEach((source) => {
+            const sourceName = source.split('-')[1].trim();
+            fst.fundingTimes.forEach((time) => {
+              const stringRep = ag + ' - ' + sourceName + ' - ' + time.value;
+              fsOptions.push({
+                fundingSpace: stringRep,
+                shouldHave: false,
+              } as ChangeFundingSpaceRequest);
+            });
           });
         }
       });
@@ -82,18 +85,16 @@ export const RevisionRequest: React.FC = () => {
       apiGet('funding-spaces', accessToken)
         .then((res: FundingSpace[]) => {
           res.forEach((fs) => {
-            const stringRep =
-              fs.ageGroup +
-              ' - ' +
-              fs.source.split('-')[1].trim() +
-              ' - ' +
-              fs.time;
+            const spaceName = fs.source.split('-')[1].trim();
+            const stringRep = fs.ageGroup + ' - ' + spaceName + ' - ' + fs.time;
             const match = userFundingSpaces.find(
               (fs) => fs.fundingSpace === stringRep
             );
             if (match) {
+              console.log(match);
               setUserFundingSpaces((o) => {
                 match.shouldHave = true;
+                match.fundingSpaceId = fs.id;
                 return o;
               });
             }
@@ -132,7 +133,9 @@ export const RevisionRequest: React.FC = () => {
     <>
       <div className="grid-row grid-gap margin-bottom-1">
         <div className="tablet:grid-col-4 text-bold">Site name</div>
-        <div className="tablet:grid-col-3 text-bold">Request updated name</div>
+        <div className="tablet:grid-col-3 text-bold">
+          Request site name changes
+        </div>
         <div className="tablet:grid-col-3 text-bold">
           Request removal from your account
         </div>

@@ -19,6 +19,9 @@ export class ChangeFundingSpaceRequest
   @Column()
   fundingSpace: string;
 
+  @Column({ nullable: true })
+  fundingSpaceId?: number;
+
   @Column()
   shouldHave: boolean;
 }
