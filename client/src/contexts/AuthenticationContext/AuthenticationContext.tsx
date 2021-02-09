@@ -94,7 +94,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     null
   );
 
-  let refreshTokenApiCall: any = {};
+  let inFlightAccessTokenRequest: boolean = false;
 
   const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
     console.log('HEY LOOK AT US LOGGING IN AND SHIT');
@@ -184,31 +184,13 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     logoutEndpoint,
   });
 
-  async function requestWrapper() {
-    console.log('request wrapper');
-    console.log('REQUEST WRAPPER CALLED HERE IT IS', refreshTokenApiCall.thing);
-
-    if (!refreshTokenApiCall.thing) {
-      console.log('No call, creating new refresh token request');
-      refreshTokenApiCall.thing = makeRefreshTokenRequest();
-      console.log('JUST MADE THE NEW refreshTokenApiCall', refreshTokenApiCall.thing);
-    } else {
-      console.log('OH SHIT DUPE CALL FOUND');
-    }
-
-    return refreshTokenApiCall.thing
-      .finally(() => {
-        console.log('DONE, RESETTING THE CALL', refreshTokenApiCall.thing);
-        refreshTokenApiCall.thing = null;
-      });
-  }
-
   /**
    * Create and perform token refresh request.
    * Requires that initial code-based token request has already been performed.
    */
   async function makeRefreshTokenRequest() {
     console.log('Refresh token request triggered');
+
     if (!configuration) {
       console.log('No config - exiting makeRefreshTokenRequest early...');
       return;
@@ -229,32 +211,40 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       return;
     }
 
+    if (inFlightAccessTokenRequest) {
+      console.log('Access token request already outstanding!  Exiting early...');
+      return;
+    }
+
     //  Only make a new access token request if one isn't currently in-flight
     //  in order to prevent rapid, successive requests from inadvertently causing a logout
       console.log('Making refresh token request');
+      inFlightAccessTokenRequest = true;
 
-        let req = new TokenRequest({
-          client_id: clientId,
-          redirect_uri: redirectUrl,
-          grant_type: GRANT_TYPE_REFRESH_TOKEN,
-          code: undefined,
-          refresh_token: refreshToken,
-        });
+      let req = new TokenRequest({
+        client_id: clientId,
+        redirect_uri: redirectUrl,
+        grant_type: GRANT_TYPE_REFRESH_TOKEN,
+        code: undefined,
+        refresh_token: refreshToken,
+      });
 
-        console.log('Invoking performTokenRequest API call');
-        try {
-          const resp = await tokenHandler.performTokenRequest(
-            configuration,
-            req
-          );
+      console.log('Invoking performTokenRequest API call');
+      try {
+        const resp = await tokenHandler.performTokenRequest(
+          configuration,
+          req
+        );
 
-          setTokenResponse(resp);
-          setAccessToken(resp.accessToken);
-          setRefreshToken(resp.refreshToken);
-          console.log('Refresh token api call completed successfully');
-        } catch (e) {
-          console.error('Could not get refresh token: ', e);
-        }
+        setTokenResponse(resp);
+        setAccessToken(resp.accessToken);
+        setRefreshToken(resp.refreshToken);
+        console.log('Refresh token api call completed successfully');
+      } catch (e) {
+        console.error('Could not get refresh token: ', e);
+      } finally {
+        inFlightAccessTokenRequest = false;
+      }
   }
 
   const location = useLocation();
@@ -262,7 +252,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     console.log('LOCATION CHANGE TRIGGERING REFRESH TOKEN');
     // Ensure token is always fresh by making refresh request whenever browser location changes
     // (function exits early if token is still valid)
-    requestWrapper();
+    makeRefreshTokenRequest();
   }, [location]);
 
   const handleLogin = () => {
