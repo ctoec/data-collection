@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import {
   AuthorizationRequest,
@@ -94,7 +94,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     null
   );
 
-  let inFlightAccessTokenRequest: boolean = false;
+  let inFlightAccessTokenRequest: any = useRef(false);
 
   const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
     console.log('HEY LOOK AT US LOGGING IN AND SHIT');
@@ -211,8 +211,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       return;
     }
 
-    console.log('CHECKING inFlightAccessTokenRequest', inFlightAccessTokenRequest);
-    if (inFlightAccessTokenRequest) {
+    console.log('CHECKING inFlightAccessTokenRequest', inFlightAccessTokenRequest.current);
+    if (inFlightAccessTokenRequest.current) {
       console.log('Access token request already outstanding!  Exiting early...');
       return;
     }
@@ -220,8 +220,6 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     //  Only make a new access token request if one isn't currently in-flight
     //  in order to prevent rapid, successive requests from inadvertently causing a logout
       console.log('Making refresh token request');
-      inFlightAccessTokenRequest = true;
-      console.log('REQUEST UPDATED - SETTING inFlightAccessTokenRequest TO TRUE', inFlightAccessTokenRequest);
 
       let req = new TokenRequest({
         client_id: clientId,
@@ -233,6 +231,9 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
       console.log('Invoking performTokenRequest API call');
       try {
+        inFlightAccessTokenRequest.current = true;
+        console.log('REQUEST UPDATED - SETTING inFlightAccessTokenRequest TO TRUE', inFlightAccessTokenRequest.current);
+
         const resp = await tokenHandler.performTokenRequest(
           configuration,
           req
@@ -245,8 +246,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       } catch (e) {
         console.error('Could not get refresh token: ', e);
       } finally {
-        inFlightAccessTokenRequest = false;
-        console.log('WE ARE DONE, LETS SET IT TO FALSE', inFlightAccessTokenRequest);
+        inFlightAccessTokenRequest.current = false;
+        console.log('WE ARE DONE, LETS SET IT TO FALSE', inFlightAccessTokenRequest.current);
       }
   }
 
