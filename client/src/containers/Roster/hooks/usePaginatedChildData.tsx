@@ -38,6 +38,10 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
       : null;
   });
 
+  if (error) {
+    stillFetching = false;
+  }
+
   // Trigger next fetch if
   // - we've completed the first fetch (childrenArrays != undefined)
   // - we've completed our most recently triggered fetch (childrenArrays.length == size)

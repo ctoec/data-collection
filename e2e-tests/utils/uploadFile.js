@@ -1,4 +1,5 @@
 const { launch_url } = require('../nightwatch.conf');
+const { FakeChildrenTypes } = require('./FakeChildrenTypes');
 const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
@@ -13,13 +14,21 @@ module.exports = {
     let DOWNLOAD_URL = `${launch_url}`;
     if (whichFile === 'complete') {
       DOWNLOAD_URL += '/api/template/example/csv';
-    } else if (whichFile === 'missingSome') {
+    } else if (whichFile === FakeChildrenTypes.MISSING_SOME) {
       DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingSome';
-    } else if (whichFile === 'missingOne') {
+    } else if (whichFile === FakeChildrenTypes.MISSING_ONE) {
       DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingOne';
+    } else if (whichFile === FakeChildrenTypes.MISSING_OPTIONAL) {
+      DOWNLOAD_URL +=
+        '/api/template/example/csv?whichFakeChildren=missingOptional';
+    } else if (whichFile === FakeChildrenTypes.MISSING_CONDITIONAL) {
+      DOWNLOAD_URL +=
+        '/api/template/example/xlsx?whichFakeChildren=missingConditional';
     }
 
     const isCompleteTestRun = whichFile === 'complete';
+    const isMissingOptionalRun =
+      whichFile === FakeChildrenTypes.MISSING_OPTIONAL;
 
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 
@@ -45,7 +54,7 @@ module.exports = {
       browser,
       'Upload and correct in roster',
       'No error modal appearing',
-      !isCompleteTestRun
+      !(isCompleteTestRun || isMissingOptionalRun)
     );
 
     // Accept the replace thing if there is one
@@ -56,6 +65,11 @@ module.exports = {
       await browser.waitForElementVisible(
         'xpath',
         `//*/p[contains(text(),"20 children enrolled")]`
+      );
+    } else if (isMissingOptionalRun) {
+      await browser.waitForElementVisible(
+        'xpath',
+        `//*/p[contains(text(),"10 children enrolled")]`
       );
     } else {
       await browser.waitForElementVisible(

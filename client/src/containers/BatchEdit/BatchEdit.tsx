@@ -92,7 +92,8 @@ const BatchEdit: React.FC = () => {
       <div className="grid-container">
         <BatchEditItemContent
           childId={childId}
-          moveNextRecord={() => history.goBack()}
+          moveNextRecord={() => {}}
+          isSingleRecord={true}
         />
       </div>
     );

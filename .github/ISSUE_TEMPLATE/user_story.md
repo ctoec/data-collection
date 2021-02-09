@@ -1,5 +1,6 @@
 ---
 name: User Story
+labels: 'dev-team'
 about: Issue template for describing a feature addition for the application.
 ---
 
