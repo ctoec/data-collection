@@ -136,6 +136,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
       localStorageAccessTokenKey
     );
 
+    // Update accessToken if it was present in local storage
     if (!!localStorageAccessToken) {
       setLoading(false);
       setAccessToken(localStorageAccessToken);
