@@ -34,8 +34,6 @@ export type AuthenticationProviderPropsType = {
   extras?: any;
 };
 
-console.log('TOP OF THE PAGE FAM');
-
 const AuthenticationContext = React.createContext<AuthenticationContextType>({
   accessToken: null,
   loading: true,
@@ -95,6 +93,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
   const [refreshToken, setRefreshToken] = useState<string | null | undefined>(
     null
   );
+
+  let refreshTokenApiCall: any = {};
 
   const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
     console.log('HEY LOOK AT US LOGGING IN AND SHIT');
@@ -184,24 +184,22 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     logoutEndpoint,
   });
 
-  let refreshTokenApiCall: Promise<any> | null = null;
-
   async function requestWrapper() {
     console.log('request wrapper');
-    console.log('REQUEST WRAPPER CALLED HERE IT IS', refreshTokenApiCall);
+    console.log('REQUEST WRAPPER CALLED HERE IT IS', refreshTokenApiCall.thing);
 
-    if (!refreshTokenApiCall) {
+    if (!refreshTokenApiCall.thing) {
       console.log('No call, creating new refresh token request');
-      refreshTokenApiCall = makeRefreshTokenRequest();
-      console.log('JUST MADE THE NEW refreshTokenApiCall', refreshTokenApiCall);
+      refreshTokenApiCall.thing = makeRefreshTokenRequest();
+      console.log('JUST MADE THE NEW refreshTokenApiCall', refreshTokenApiCall.thing);
     } else {
       console.log('OH SHIT DUPE CALL FOUND');
     }
 
-    return refreshTokenApiCall
+    return refreshTokenApiCall.thing
       .finally(() => {
-        console.log('DONE, RESETTING THE CALL', refreshTokenApiCall);
-        refreshTokenApiCall = null;
+        console.log('DONE, RESETTING THE CALL', refreshTokenApiCall.thing);
+        refreshTokenApiCall.thing = null;
       });
   }
 
