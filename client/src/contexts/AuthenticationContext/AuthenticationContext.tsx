@@ -34,6 +34,8 @@ export type AuthenticationProviderPropsType = {
   extras?: any;
 };
 
+console.log('TOP OF THE PAGE FAM');
+
 const AuthenticationContext = React.createContext<AuthenticationContextType>({
   accessToken: null,
   loading: true,
