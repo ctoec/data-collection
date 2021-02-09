@@ -86,6 +86,8 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
   const redirectUrl = `${getCurrentHost()}${redirectEndpoint}`;
   const [loading, setLoading] = useState(true);
 
+  let inFlightAccessTokenRequest: any = useRef(false);
+
   // Token response is set on initial auth and when a refresh token is requested
   const [tokenResponse, setTokenResponse] = useState<TokenResponse>();
   const { idToken } = tokenResponse || {};
@@ -96,17 +98,15 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     null
   );
 
-  let inFlightAccessTokenRequest: any = useRef(false);
-
   const onInitialTokenRequestSuccess = (resp: TokenResponse) => {
-    console.log('HEY LOOK AT US LOGGING IN AND SHIT');
     // After user successfully logs in
     setTokenResponse(resp);
     localStorage.setItem(localStorageIdTokenKey, resp.idToken || '');
-    setAccessToken(resp.accessToken);
-
     localStorage.setItem(localStorageRefreshTokenKey, resp.refreshToken || '');
+
+    setAccessToken(resp.accessToken);
     setRefreshToken(resp.refreshToken);
+    
     setLoading(false);
     history.push('/');
   };
