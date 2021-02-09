@@ -82,12 +82,11 @@ export const RevisionRequest: React.FC = () => {
       apiGet('funding-spaces', accessToken)
         .then((res: FundingSpace[]) => {
           res.forEach((fs) => {
-            const stringRep =
-              fs.ageGroup +
-              ' - ' +
-              fs.source.split('-')[1].trim() +
-              ' - ' +
-              fs.time;
+            let spaceName = fs.source.split('-')[1].trim();
+            spaceName = spaceName.includes('School Readiness')
+              ? 'School Readiness'
+              : spaceName;
+            const stringRep = fs.ageGroup + ' - ' + spaceName + ' - ' + fs.time;
             const match = userFundingSpaces.find(
               (fs) => fs.fundingSpace === stringRep
             );
