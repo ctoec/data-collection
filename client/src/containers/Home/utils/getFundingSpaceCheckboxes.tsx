@@ -3,6 +3,7 @@ import React from 'react';
 import { FUNDING_SOURCE_TIMES } from '../../../shared/constants';
 import { AgeGroup } from '../../../shared/models';
 import { ChangeFundingSpaceRequest } from '../../../shared/models/db/ChangeFundingSpaceRequest';
+import { getStrippedFundingSourceName } from './getFundingSpaceDisplayName';
 
 /**
  * Function that creates a series of checkboxes broken out by age
@@ -13,9 +14,9 @@ import { ChangeFundingSpaceRequest } from '../../../shared/models/db/ChangeFundi
  * @param setUserFundingSpaces
  */
 export const getFundingSpaceCheckboxes = (
-  userFundingSpaces: ChangeFundingSpaceRequest[],
+  userFundingSpaces: Partial<ChangeFundingSpaceRequest>[],
   setUserFundingSpaces: React.Dispatch<
-    React.SetStateAction<ChangeFundingSpaceRequest[]>
+    React.SetStateAction<Partial<ChangeFundingSpaceRequest>[]>
   >
 ) => {
   return Object.values(AgeGroup).map((ag) => (
@@ -24,7 +25,7 @@ export const getFundingSpaceCheckboxes = (
       {FUNDING_SOURCE_TIMES.map((fst) => {
         if (!fst.ageGroupLimitations || fst.ageGroupLimitations.includes(ag)) {
           return fst.fundingSources.map((source) => {
-            const sourceName = source.split('-')[1].trim();
+            const sourceName = getStrippedFundingSourceName(source);
             return fst.fundingTimes.map((time) => {
               const rep = ag + ' - ' + sourceName + ' - ' + time.value;
               return (
@@ -42,14 +43,16 @@ export const getFundingSpaceCheckboxes = (
                   onChange={(e) => {
                     const checked = e.target.checked;
                     const rep = ag + ' - ' + sourceName + ' - ' + time.value;
-                    setUserFundingSpaces((o: ChangeFundingSpaceRequest[]) => {
-                      const match = o.find(
-                        (elt: ChangeFundingSpaceRequest) =>
-                          elt.fundingSpace === rep
-                      );
-                      if (match) match.shouldHave = checked;
-                      return o;
-                    });
+                    setUserFundingSpaces(
+                      (o: Partial<ChangeFundingSpaceRequest>[]) => {
+                        const match = o.find(
+                          (elt: Partial<ChangeFundingSpaceRequest>) =>
+                            elt.fundingSpace === rep
+                        );
+                        if (match) match.shouldHave = checked;
+                        return o;
+                      }
+                    );
                     return checked;
                   }}
                 />

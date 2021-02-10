@@ -6,7 +6,7 @@ import { getManager } from 'typeorm';
 import { AddSiteRequest } from '../entity/AddSiteRequest';
 import { UpdateSiteRequest } from '../entity/UpdateSiteRequest';
 import { ChangeFundingSpaceRequest } from '../entity/ChangeFundingSpaceRequest';
-import { FundingSpace } from '../entity';
+import { getFundingSpaceDisplayName } from '../../client/src/containers/Home/utils/getFundingSpaceDisplayName';
 
 export const revisionsRouter = express.Router();
 
@@ -62,9 +62,7 @@ revisionsRouter.post(
         await fundingSpaceRequests.forEach(
           async (r: ChangeFundingSpaceRequest) => {
             const match = initialFundingSpaces.find((fs) => {
-              const spaceName = fs.source.split('-')[1].trim();
-              const stringRep =
-                fs.ageGroup + ' - ' + spaceName + ' - ' + fs.time;
+              const stringRep = getFundingSpaceDisplayName(fs);
               return stringRep === r.fundingSpace;
             });
 

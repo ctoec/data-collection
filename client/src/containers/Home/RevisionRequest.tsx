@@ -14,6 +14,10 @@ import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { getAddNewSiteForm } from './utils/getAddNewSiteForm';
 import { getFundingSpaceCheckboxes } from './utils/getFundingSpaceCheckboxes';
+import {
+  getFundingSpaceDisplayName,
+  getStrippedFundingSourceName,
+} from './utils/getFundingSpaceDisplayName';
 
 /**
  * Form to allow a user to request changes to their accessible sites
@@ -53,21 +57,21 @@ export const RevisionRequest: React.FC = () => {
   // Start by determining all potential funding spaces so we know what
   // we need to precheck
   const [userFundingSpaces, setUserFundingSpaces] = useState<
-    ChangeFundingSpaceRequest[]
+    Partial<ChangeFundingSpaceRequest>[]
   >([]);
   useEffect(() => {
-    const fsOptions: ChangeFundingSpaceRequest[] = [];
+    const fsOptions: Array<Partial<ChangeFundingSpaceRequest>> = [];
     Object.values(AgeGroup).map((ag) => {
       FUNDING_SOURCE_TIMES.forEach((fst) => {
         if (!fst.ageGroupLimitations || fst.ageGroupLimitations.includes(ag)) {
           fst.fundingSources.forEach((source) => {
-            const sourceName = source.split('-')[1].trim();
+            const sourceName = getStrippedFundingSourceName(source);
             fst.fundingTimes.forEach((time) => {
               const stringRep = ag + ' - ' + sourceName + ' - ' + time.value;
               fsOptions.push({
                 fundingSpace: stringRep,
                 shouldHave: false,
-              } as ChangeFundingSpaceRequest);
+              });
             });
           });
         }
@@ -85,13 +89,11 @@ export const RevisionRequest: React.FC = () => {
       apiGet('funding-spaces', accessToken)
         .then((res: FundingSpace[]) => {
           res.forEach((fs) => {
-            const spaceName = fs.source.split('-')[1].trim();
-            const stringRep = fs.ageGroup + ' - ' + spaceName + ' - ' + fs.time;
+            const stringRep = getFundingSpaceDisplayName(fs);
             const match = userFundingSpaces.find(
               (fs) => fs.fundingSpace === stringRep
             );
             if (match) {
-              console.log(match);
               setUserFundingSpaces((o) => {
                 match.shouldHave = true;
                 match.fundingSpaceId = fs.id;
