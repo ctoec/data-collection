@@ -1,10 +1,11 @@
-import React, { useContext, useState, Dispatch, SetStateAction } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Tag,
   Form,
   Button,
   FormSubmitButton,
   Modal,
+  TextWithIcon,
 } from '@ctoec/component-library';
 import { stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
@@ -18,6 +19,7 @@ import { Withdraw } from '../../../shared/payloads';
 import { useAlerts } from '../../../hooks/useAlerts';
 import { nameFormatter } from '../../../utils/formatters';
 import RosterContext from '../../../contexts/RosterContext/RosterContext';
+import { ReactComponent as WithdrawIcon } from '../../../images/withdraw.svg';
 
 type WithdrawProps = {
   child: Child;
@@ -84,24 +86,24 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
 
   // If record has validation errors, onClick action is to display alert informing the user they cannot withdraw
   // Otherwise, onClick action is to display the withdraw modal
-  const onClick =
-    child.validationErrors && child.validationErrors.length
-      ? () =>
-          setAlerts([
-            {
-              type: 'error',
-              heading:
-                'Records cannot be withdrawn with missing or incorrect info',
-              text: 'Add required info before withdrawing.',
-            },
-          ])
-      : toggleIsOpen;
+  // TODO: since alerts are done via a hook and not a context, this isn't working
+  const onClick = child?.validationErrors?.length
+    ? () =>
+        setAlerts([
+          {
+            type: 'error',
+            heading:
+              'Records cannot be withdrawn with missing or incorrect info',
+            text: 'Add required info before withdrawing.',
+          },
+        ])
+    : toggleIsOpen;
 
   return (
     <>
       <Button
         appearance="unstyled"
-        text="Withdraw"
+        text={<TextWithIcon text="Withdraw" Icon={WithdrawIcon} />}
         onClick={onClick}
         className="margin-right-2"
       />

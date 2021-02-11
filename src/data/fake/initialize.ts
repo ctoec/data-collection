@@ -1,4 +1,5 @@
 import { EntityManager, getManager } from 'typeorm';
+import { omit } from 'underscore';
 import {
   Organization,
   Site,
@@ -112,7 +113,7 @@ export const initialize = async () => {
       if (!(await getManager().find(FundingSpace)).length) {
         const fundingSpacesToAdd = await Promise.all(
           getFakeFundingSpaces(organization).map((fs) => {
-            return getManager().create(FundingSpace, fs);
+            return getManager().create(FundingSpace, omit(fs, 'id'));
           })
         );
         await getManager().save(fundingSpacesToAdd);
