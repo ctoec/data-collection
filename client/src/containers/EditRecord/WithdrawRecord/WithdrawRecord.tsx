@@ -12,9 +12,11 @@ import { useHistory } from 'react-router-dom';
 import { Enrollment, Child, FundingSource } from '../../../shared/models';
 import { apiPost, apiGet } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { EnrollmentEndDateField } from '../../../components/Forms/Enrollment/Fields';
+import {
+  EnrollmentEndDateField,
+  ExitReasonField,
+} from '../../../components/Forms/Enrollment/Fields';
 import { ReportingPeriodField } from '../../../components/Forms/Enrollment/Funding/Fields';
-import { ExitReasonField } from './Fields/ExitReason';
 import { Withdraw } from '../../../shared/payloads';
 import { useAlerts } from '../../../hooks/useAlerts';
 import { nameFormatter } from '../../../utils/formatters';
@@ -149,7 +151,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               className="usa-form"
             >
               <EnrollmentEndDateField<Withdraw> />
-              <ExitReasonField />
+              <ExitReasonField<Withdraw> />
               {!!activeFunding && (
                 <ReportingPeriodField<Withdraw>
                   fundingSource={

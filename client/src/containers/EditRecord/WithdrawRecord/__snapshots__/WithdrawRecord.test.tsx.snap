@@ -1382,7 +1382,11 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
           class="usa-label"
           for="exit-reason"
         >
-          Exit reason
+          <span
+            class="text-bold"
+          >
+            Exit reason
+          </span>
         </label>
         <select
           aria-required="true"
