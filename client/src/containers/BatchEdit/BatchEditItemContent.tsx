@@ -105,7 +105,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
         setChild(updatedChild);
         let updatedChildren: Child[] = [];
         if (mutate) {
-          mutate((children: Child[]) => {
+          mutate((children?: Child[]) => {
             if (children) {
               updatedChildren = [...children];
               const idx = updatedChildren.findIndex((c) => c.id === childId);

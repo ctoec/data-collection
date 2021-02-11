@@ -24,6 +24,7 @@ import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps
 import { HeadingLevel } from '../../components/Heading';
 import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { nameFormatter } from '../../utils/formatters';
+import { ChangeEnrollment } from './ChangeEnrollment/ChangeEnrollment';
 
 const EditRecord: React.FC = () => {
   const h1Ref = getH1RefForTitle('Edit record');
@@ -98,9 +99,10 @@ const EditRecord: React.FC = () => {
 
   useFocusFirstError([child]);
 
+  const afterSaveSuccess = () => setTriggerRefetchCounter((r) => r + 1);
   const commonFormProps = {
     child,
-    afterSaveSuccess: () => setTriggerRefetchCounter((r) => r + 1),
+    afterSaveSuccess,
     setAlerts,
     topHeadingLevel: 'h2' as HeadingLevel,
   };
@@ -120,6 +122,14 @@ const EditRecord: React.FC = () => {
         </div>
         {child && (
           <div className="display-flex flex-col flex-align-center">
+            <span className="margin-right-2 text-base-light">
+              Quick actions
+            </span>
+            <ChangeEnrollment
+              child={child}
+              currentEnrollment={activeEnrollment}
+              afterSaveSuccess={afterSaveSuccess}
+            />
             {!!activeEnrollment && (
               <>
                 <WithdrawRecord child={child} enrollment={activeEnrollment} />
