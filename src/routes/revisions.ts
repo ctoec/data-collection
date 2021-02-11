@@ -34,52 +34,50 @@ revisionsRouter.post(
         addSiteRequests,
         fundingSpaceRequests,
       } = req.body;
-      await getManager().transaction(async (tManager) => {
-        await updateSiteRequests.forEach(async (r: UpdateSiteRequest) => {
-          const dbReq = await tManager.create(UpdateSiteRequest, {
-            ...r,
-            organizationId,
-            authorId,
-            createdAt,
-          });
-          await getManager().save(dbReq);
+      await updateSiteRequests.forEach(async (r: UpdateSiteRequest) => {
+        const dbReq = await getManager().create(UpdateSiteRequest, {
+          ...r,
+          organizationId,
+          authorId,
+          createdAt,
         });
-        await addSiteRequests.forEach(async (r: AddSiteRequest) => {
-          const dbReq = await tManager.create(AddSiteRequest, {
-            ...r,
-            organizationId,
-            authorId,
-            createdAt,
-          });
-          await getManager().save(dbReq);
-        });
-
-        // Spaces the user starts with so we can find the diff
-        const initialFundingSpaces = await fundingSpacesController.getFundingSpaces(
-          req.user,
-          organizationIds
-        );
-        await fundingSpaceRequests.forEach(
-          async (r: ChangeFundingSpaceRequest) => {
-            const match = initialFundingSpaces.find((fs) => {
-              const stringRep = getFundingSpaceDisplayName(fs);
-              return stringRep === r.fundingSpace;
-            });
-
-            // Create if it's either a new FS or the user is saying they
-            // shouldn't have this space
-            if (!match || (match && !r.shouldHave)) {
-              const dbReq = await tManager.create(ChangeFundingSpaceRequest, {
-                ...r,
-                organizationId,
-                authorId,
-                createdAt,
-              });
-              await getManager().save(dbReq);
-            }
-          }
-        );
+        await getManager().save(dbReq);
       });
+      await addSiteRequests.forEach(async (r: AddSiteRequest) => {
+        const dbReq = await getManager().create(AddSiteRequest, {
+          ...r,
+          organizationId,
+          authorId,
+          createdAt,
+        });
+        await getManager().save(dbReq);
+      });
+
+      // Spaces the user starts with so we can find the diff
+      const initialFundingSpaces = await fundingSpacesController.getFundingSpaces(
+        req.user,
+        organizationIds
+      );
+      await fundingSpaceRequests.forEach(
+        async (r: ChangeFundingSpaceRequest) => {
+          const match = initialFundingSpaces.find((fs) => {
+            const stringRep = getFundingSpaceDisplayName(fs);
+            return stringRep === r.fundingSpace;
+          });
+
+          // Create if it's either a new FS or the user is saying they
+          // shouldn't have this space
+          if (!match || (match && !r.shouldHave)) {
+            const dbReq = await getManager().create(ChangeFundingSpaceRequest, {
+              ...r,
+              organizationId,
+              authorId,
+              createdAt,
+            });
+            await getManager().save(dbReq);
+          }
+        }
+      );
 
       res.status(201).send(201);
     } catch (err) {

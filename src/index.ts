@@ -32,7 +32,11 @@ getConnectionOptions().then((connectionOptions) => {
       // Register pre-processing middlewares
       const dateReviver = (_: any, value: string) => {
         if (typeof value === 'string') {
-          const parsedDate = moment.utc(value, moment.ISO_8601, true);
+          const parsedDate = moment.utc(
+            value,
+            'YYYY-MM-DDTHH:mm:ss.SSSZ',
+            true
+          );
           if (parsedDate.isValid()) return parsedDate;
         }
         return value;
