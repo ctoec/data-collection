@@ -3,7 +3,8 @@ import { Funding } from '../../Funding';
 
 // Make sure last reporting period is after the first
 
-const lastReportingPeriodInvalid = 'Last reporting period must be after first';
+const lastReportingPeriodInvalid =
+  'Last reporting period must be the same as or after first';
 
 export function LastReportingPeriodAfterFirst(
   validationOptions?: ValidationOptions
@@ -22,7 +23,7 @@ export function LastReportingPeriodAfterFirst(
             lastReportingPeriod,
           } = funding as Funding;
           if (!firstReportingPeriod || !lastReportingPeriod) return true;
-          return firstReportingPeriod.period.isBefore(
+          return firstReportingPeriod.period.isSameOrBefore(
             lastReportingPeriod.period
           );
         },
