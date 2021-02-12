@@ -17,6 +17,10 @@ legend .usa-label {
 }
 
 // Override some carbon defaults for now
+.usa-button {
+  min-height: unset;
+}
+
 h1,
 h2,
 h3,
