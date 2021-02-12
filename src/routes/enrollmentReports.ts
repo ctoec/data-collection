@@ -98,24 +98,6 @@ enrollmentReportsRouter.post(
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
-      // Prepare for ingestion by removing any existing data
-      try {
-        const siteIdToReplace = req.query['overwriteSites'];
-        const siteIdsToReplace = !siteIdToReplace
-          ? undefined
-          : ((Array.isArray(siteIdToReplace)
-              ? siteIdToReplace
-              : [siteIdToReplace]) as string[]);
-        await controller.removeExistingEnrollmentDataForUser(
-          tManager,
-          req.user,
-          siteIdsToReplace
-        );
-      } catch (err) {
-        console.error('Unable to delete existing data for user:', err);
-        throw new InternalServerError('Unable to remove existing roster data');
-      }
-
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);

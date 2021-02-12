@@ -27,16 +27,6 @@ const Upload: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
 
-  // Count how many children are in the roster so we can determine if we're writing over that data
-  const [userRosterCount, setUserRosterCount] = useState(undefined);
-  useEffect(() => {
-    apiGet('children?count=true', accessToken)
-      .then((res) => setUserRosterCount(res.count))
-      .catch((err) => {
-        throw new Error(err);
-      });
-  }, [accessToken]);
-
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
 
@@ -124,33 +114,14 @@ const Upload: React.FC = () => {
     setErrorModalOpen(false);
   };
 
-  // Case where the user does have an existing roster; need to
-  // open the CheckReplace modal as a next step
-  const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
-  const advanceToCheckReplace = () => {
-    setErrorModalOpen(false);
-    setCheckReplaceDataOpen(true);
-  };
   useEffect(() => {
-    // wait until we know if the user already has a roster or not
-    // before allowing them to submit data
-    if (userRosterCount === undefined) return;
-
     // If they have selected a file, then open the error checking modal.
-    // If they confirm the upload, decide if we just post the upload
-    // or we display check replace data modal
     if (file && errorDict !== undefined) {
-      if (userRosterCount === 0) {
-        // If state has an empty list, back-end found no errors
-        if (errorDict.length > 0) setErrorModalOpen(true);
-        else setPostUpload(true);
-      } else {
-        if (errorDict.length > 0) setErrorModalOpen(true);
-        else setCheckReplaceDataOpen(true);
-      }
+      if (errorDict.length > 0) setErrorModalOpen(true);
+      else setPostUpload(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, userRosterCount, errorDict]);
+  }, [file, errorDict]);
 
   const [fileKey, setFileKey] = useState(0);
   const clearFile = () => {
@@ -180,16 +151,7 @@ const Upload: React.FC = () => {
         closeModal={() => setErrorModalOpen(false)}
         clearFile={clearFile}
         errorDict={errorDict || []}
-        nextFunc={
-          userRosterCount === 0 ? advanceToPostUpload : advanceToCheckReplace
-        }
-      />
-      <CheckReplaceData
-        isOpen={checkReplaceDataOpen}
-        clearFile={clearFile}
-        closeModal={() => setCheckReplaceDataOpen(false)}
-        setPostUpload={setPostUpload}
-        setQueryString={setQueryStringForUpload}
+        nextFunc={advanceToPostUpload}
       />
       {error && (
         <div className="margin-bottom-2">
@@ -231,7 +193,7 @@ const Upload: React.FC = () => {
         <div className="grid-row">
           <form
             className={cx('usa-form', {
-              'display-none': checkReplaceDataOpen || errorModalOpen,
+              'display-none': errorModalOpen,
             })}
           >
             <LoadingWrapper text="Uploading your file..." loading={loading}>
