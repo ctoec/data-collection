@@ -21,10 +21,13 @@ import {
   mapChild,
   mapEnrollment,
   mapFunding,
+  updateBirthCertificateInfo,
+  updateFamilyAddress,
 } from './mapUtils';
 import { EnrollmentReportRow } from '../../../template';
 import { BadRequestError, ApiError } from '../../../middleware/error/errors';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
+import { CareModel } from '../../../../client/src/shared/models';
 
 /**
  * Can use optional save parameter to decide whether to persist
@@ -54,16 +57,55 @@ export async function mapRows(
   ]);
 
   const children: Child[] = [];
+  const childrenToUpdate: Child[] = [];
+  const familiesToUpdate: Family[] = [];
+  const determinationsToUpdate: IncomeDetermination[] = [];
+  const enrollmentsToUpdate: Enrollment[] = [];
+  const fundingsToUpdate: Funding[] = [];
   for (const row of rows) {
     try {
-      await mapRow(
-        row,
-        organizations,
-        sites,
-        fundingSpaces,
-        reportingPeriods,
-        children
+      // Check if this row is for a child already in the system
+      const findOpts = {
+        firstName: row.firstName,
+        lastName: row.lastName,
+      };
+      const potentialMatches = await transaction.find(Child, {
+        where: findOpts,
+        relations: ['family'],
+      });
+      const match = potentialMatches.find(
+        (c) =>
+          c.birthdate.format('MM/DD/YYYY') ===
+            row.birthdate.format('MM/DD/YYYY') &&
+          ((c.sasid && c.sasid === row.sasidUniqueId) ||
+            (c.uniqueId && c.uniqueId === row.sasidUniqueId) ||
+            (!c.sasid && !row.sasidUniqueId))
       );
+
+      // Go directly to updating the child, do not pass go or
+      // create a new child object
+      if (match)
+        await updateRecord(
+          organizations,
+          sites,
+          match,
+          row,
+          childrenToUpdate,
+          familiesToUpdate,
+          determinationsToUpdate,
+          enrollmentsToUpdate,
+          fundingsToUpdate
+        );
+      else {
+        await mapRow(
+          row,
+          organizations,
+          sites,
+          fundingSpaces,
+          reportingPeriods,
+          children
+        );
+      }
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error occured while parsing row: ', err);
@@ -85,6 +127,21 @@ export async function mapRows(
   }
 
   // Otherwise, create entities in DB
+  // Batch update all the entities we modified fields for
+  // console.log("Families to update: ", familiesToUpdate);
+  // console.log("Children to update: ", childrenToUpdate);
+  const updatedFamilies = await doBatchedInsert<Family>(
+    transaction,
+    familiesToUpdate.map((family) => {
+      family.updateMetaData = { author: user } as UpdateMetaData;
+      return family;
+    })
+  );
+  const updatedChildren = await doBatchedInsert<Child>(
+    transaction,
+    childrenToUpdate
+  );
+
   // Create families
   const createdFamilies = await doBatchedInsert<Family>(
     transaction,
@@ -168,6 +225,59 @@ export async function mapRows(
   });
   return createdChildren;
 }
+
+const updateRecord = async (
+  userOrganizations: Organization[],
+  userSites: Site[],
+  child: Child,
+  source: EnrollmentReportRow,
+  childrenToUpdate: Child[],
+  familiesToUpdate: Family[],
+  determinationsToUpdate: IncomeDetermination[],
+  enrollmentsToUpdate: Enrollment[],
+  fundingsToUpdate: Funding[]
+) => {
+  const organization = lookUpOrganization(source, userOrganizations);
+  if (!organization) {
+    const orgNames = userOrganizations.map((org) => `"${org.providerName}"`);
+    const orgNamesForError = `${orgNames
+      .slice(0, -1)
+      .join(', ')}, or ${orgNames.slice(-1)}`;
+    throw new BadRequestError(
+      `You entered invalid provider names\nCheck that your spreadsheet provider column only contains ${orgNamesForError} before uploading again.`
+    );
+  }
+  const site = lookUpSite(source, organization.id, userSites);
+
+  // Support birth cert updates and family address updates
+  updateBirthCertificateInfo(child, source, childrenToUpdate);
+  updateFamilyAddress(child.family, source, familiesToUpdate);
+
+  // Everything else involves making new entities
+  if (
+    source.income ||
+    source.numberOfPeople ||
+    source.determinationDate ||
+    source.incomeNotDisclosed
+  ) {
+    const determination = mapIncomeDetermination(source, child.family);
+    determinationsToUpdate.push(determination);
+    child.family.incomeDeterminations.push(determination);
+    // Mark the family as updated if we haven't already
+    if (!familiesToUpdate.find((f) => f.id === child.family.id))
+      familiesToUpdate.push(child.family);
+  }
+  const enrollment = mapEnrollment(source, site, child);
+  if (
+    enrollment.site ||
+    enrollment.model !== CareModel.Unknown ||
+    enrollment.ageGroup ||
+    enrollment.entry
+  ) {
+    enrollmentsToUpdate.push(enrollment);
+    child.enrollments.push(enrollment);
+  }
+};
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -260,10 +370,10 @@ const mapRow = async (
  * @param entities
  */
 async function doBatchedInsert<T>(transaction: EntityManager, entities: T[]) {
+  if (entities.length === 0) return [];
+
   const parametersPerEntity = Object.keys(entities[0]).length;
-
   const batchSize = Math.floor(2000 / parametersPerEntity);
-
   const createdData: any[] = [];
   for (let b = 0; b < entities.length; b += batchSize) {
     const batch = entities.slice(b, b + batchSize);

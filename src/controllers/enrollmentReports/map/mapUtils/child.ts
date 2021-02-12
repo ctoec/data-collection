@@ -101,6 +101,41 @@ export const mapChild = (
   });
 };
 
+export const updateBirthCertificateInfo = (
+  child: Child,
+  source: EnrollmentReportRow,
+  childrenToUpdate: Child[]
+) => {
+  let madeAChange = false;
+  if (
+    child.birthCertificateType === BirthCertificateType.Unavailable &&
+    source.birthCertificateType
+  ) {
+    const birthCertificateType: BirthCertificateType = mapEnum(
+      BirthCertificateType,
+      source.birthCertificateType
+    );
+    child.birthCertificateType = birthCertificateType;
+    madeAChange = true;
+  }
+  if (child.birthCertificateType === BirthCertificateType.US) {
+    if (!child.birthCertificateId) {
+      child.birthCertificateId = source.birthCertificateId;
+      madeAChange = true;
+    }
+    if (!child.birthState) {
+      child.birthState = source.birthState;
+      madeAChange = true;
+    }
+    if (!child.birthTown) {
+      child.birthTown = source.birthTown;
+      madeAChange = true;
+    }
+  }
+
+  if (madeAChange) childrenToUpdate.push(child);
+};
+
 /**
  * Determine if an enrollment report row has no indication of the
  * respective child's race (in which case, assume not disclosed).
