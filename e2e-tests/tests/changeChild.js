@@ -4,6 +4,7 @@ const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { scrollToElement } = require('../utils/scrollToElement');
 const { enterFormValue } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
+const { UploadFileTypes } = require('../utils/UploadFileTypes');
 
 module.exports = {
   '@tags': ['child', 'change'],
@@ -11,7 +12,7 @@ module.exports = {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await uploadFile(browser);
+    await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
     await navigateToRoster(browser);
     await clickOnChildInRoster(browser);
 
