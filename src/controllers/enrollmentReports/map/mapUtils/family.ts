@@ -46,7 +46,7 @@ export const updateFamilyAddress = (
     family.homelessness = homelessness;
     madeAChange = true;
   }
-  if (rowHasAddressInfo(source)) {
+  if (rowHasNewAddress(source, family)) {
     family.streetAddress = source.streetAddress;
     family.town = source.town;
     family.state = source.state;
@@ -56,11 +56,19 @@ export const updateFamilyAddress = (
   if (madeAChange) familiesToUpdate.push(family);
 };
 
-const rowHasAddressInfo = (source: EnrollmentReportRow) => {
+/**
+ * Util function that identifies whether the address information
+ * contained in a given EnrollmentReportRow provides new or
+ * updated information to the address fields of a particular
+ * family.
+ * @param source
+ * @param family
+ */
+const rowHasNewAddress = (source: EnrollmentReportRow, family: Family) => {
   return (
-    !!source.streetAddress ||
-    !!source.town ||
-    !!source.state ||
-    !!source.zipCode
+    (!!source.streetAddress && source.streetAddress !== family.streetAddress) ||
+    (!!source.town && source.town !== family.town) ||
+    (!!source.state && source.state !== family.state) ||
+    (!!source.zipCode && source.zipCode !== family.zipCode)
   );
 };

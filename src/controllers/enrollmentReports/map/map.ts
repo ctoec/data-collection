@@ -23,6 +23,9 @@ import {
   mapFunding,
   updateBirthCertificateInfo,
   updateFamilyAddress,
+  rowHasNewEnrollment,
+  rowHasNewFunding,
+  getExitReason,
 } from './mapUtils';
 import { EnrollmentReportRow } from '../../../template';
 import { BadRequestError, ApiError } from '../../../middleware/error/errors';
@@ -71,7 +74,12 @@ export async function mapRows(
       };
       const potentialMatches = await transaction.find(Child, {
         where: findOpts,
-        relations: ['family'],
+        relations: [
+          'family',
+          'family.incomeDeterminations',
+          'enrollments',
+          'enrollments.fundings',
+        ],
       });
       const match = potentialMatches.find(
         (c) =>
@@ -90,6 +98,8 @@ export async function mapRows(
           sites,
           match,
           row,
+          fundingSpaces,
+          reportingPeriods,
           childrenToUpdate,
           familiesToUpdate,
           determinationsToUpdate,
@@ -126,10 +136,7 @@ export async function mapRows(
     return children;
   }
 
-  // Otherwise, create entities in DB
   // Batch update all the entities we modified fields for
-  // console.log("Families to update: ", familiesToUpdate);
-  // console.log("Children to update: ", childrenToUpdate);
   const updatedFamilies = await doBatchedInsert<Family>(
     transaction,
     familiesToUpdate.map((family) => {
@@ -137,11 +144,47 @@ export async function mapRows(
       return family;
     })
   );
+  const updatedDets = await doBatchedInsert<IncomeDetermination>(
+    transaction,
+    determinationsToUpdate.map((det) => {
+      det.updateMetaData = { author: user } as UpdateMetaData;
+      return det;
+    })
+  );
   const updatedChildren = await doBatchedInsert<Child>(
     transaction,
-    childrenToUpdate
+    childrenToUpdate.map((child) => {
+      child.updateMetaData = { author: user } as UpdateMetaData;
+      return child;
+    })
+  );
+  const updatedEnrollments = await doBatchedInsert<Enrollment>(
+    transaction,
+    enrollmentsToUpdate.map((e) => {
+      if (!e.id) {
+        e.fundings = undefined;
+      }
+      e.updateMetaData = { author: user } as UpdateMetaData;
+      return e;
+    })
+  );
+  let enrollmentIdx = 0;
+  const updatedFundings = await doBatchedInsert<Funding>(
+    transaction,
+    fundingsToUpdate.map((f) => {
+      if (!f.enrollmentId) {
+        f.enrollment = undefined;
+        f.enrollmentId = updatedEnrollments[enrollmentIdx].id;
+        enrollmentIdx += 1;
+      }
+      f.updateMetaData = { author: user } as UpdateMetaData;
+      return f;
+    })
   );
 
+  // Handle creation of new children and historical enrollments
+  // that were provided in the spreadsheet (i.e. not existing
+  // records)
   // Create families
   const createdFamilies = await doBatchedInsert<Family>(
     transaction,
@@ -231,6 +274,8 @@ const updateRecord = async (
   userSites: Site[],
   child: Child,
   source: EnrollmentReportRow,
+  userFundingSpaces: FundingSpace[],
+  userReportingPeriods: ReportingPeriod[],
   childrenToUpdate: Child[],
   familiesToUpdate: Family[],
   determinationsToUpdate: IncomeDetermination[],
@@ -263,19 +308,56 @@ const updateRecord = async (
     const determination = mapIncomeDetermination(source, child.family);
     determinationsToUpdate.push(determination);
     child.family.incomeDeterminations.push(determination);
-    // Mark the family as updated if we haven't already
-    if (!familiesToUpdate.find((f) => f.id === child.family.id))
-      familiesToUpdate.push(child.family);
   }
-  const enrollment = mapEnrollment(source, site, child);
-  if (
-    enrollment.site ||
-    enrollment.model !== CareModel.Unknown ||
-    enrollment.ageGroup ||
-    enrollment.entry
-  ) {
+  const currentEnrollment: Enrollment | undefined = child.enrollments.find(
+    (e) => !e.exit
+  );
+  const currentFunding: Funding | undefined = currentEnrollment?.fundings.find(
+    (f) => !f.lastReportingPeriod
+  );
+  let enrollment = mapEnrollment(source, site, child);
+  if (rowHasNewEnrollment(currentEnrollment, enrollment)) {
+    enrollment.fundings = [];
     enrollmentsToUpdate.push(enrollment);
     child.enrollments.push(enrollment);
+    // DESIGN NOTE: We'll guess that the previous enrollment and funding
+    // ended "one unit" (day/reporting period) before the new ones
+    currentEnrollment.exit = enrollment.entry.clone().add(-1, 'day');
+    currentEnrollment.exitReason = getExitReason(currentEnrollment, enrollment);
+    enrollmentsToUpdate.push(currentEnrollment);
+  }
+  // If no new enrollment provided, new funding might apply
+  // to most current valid enrollment
+  else {
+    enrollment = currentEnrollment;
+  }
+  if (enrollment) {
+    const funding = mapFunding(
+      source,
+      organization,
+      enrollment,
+      userFundingSpaces,
+      userReportingPeriods
+    );
+    if (rowHasNewFunding(funding, currentFunding)) {
+      enrollment.fundings.push(funding);
+      fundingsToUpdate.push(funding);
+      // Same as before, we'll assume the old funding ended right
+      // before the new one started
+      const newFundingPeriodIdx = userReportingPeriods.findIndex(
+        (rp) => rp.id === funding.firstReportingPeriod.id
+      );
+      const oldFundingPeriodIdx = userReportingPeriods.findIndex(
+        (rp) => rp.id === currentFunding?.firstReportingPeriod.id
+      );
+      currentFunding.lastReportingPeriod =
+        userReportingPeriods[
+          newFundingPeriodIdx - 1 < oldFundingPeriodIdx
+            ? oldFundingPeriodIdx
+            : newFundingPeriodIdx - 1
+        ];
+      fundingsToUpdate.push(currentFunding);
+    }
   }
 };
 

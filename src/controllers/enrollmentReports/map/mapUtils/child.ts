@@ -91,6 +91,13 @@ export const mapChild = (
   });
 };
 
+/**
+ * Updates the various fields of a child's birth certificate.
+ *
+ * @param child
+ * @param source
+ * @param childrenToUpdate
+ */
 export const updateBirthCertificateInfo = (
   child: Child,
   source: EnrollmentReportRow,
