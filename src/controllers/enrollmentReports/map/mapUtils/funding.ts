@@ -69,7 +69,8 @@ export const mapFunding = (
     );
   }
 
-  // If the user supplied _any_ funding-related fields, create the funding.
+  // If the user supplied _any_ funding-related fields, create
+  // a populated funding.
   if (
     source.fundingSpace ||
     source.time ||
@@ -80,6 +81,10 @@ export const mapFunding = (
       firstReportingPeriod,
       lastReportingPeriod,
       fundingSpace,
+      enrollment,
+    });
+  } else {
+    return getManager().create(Funding, {
       enrollment,
     });
   }

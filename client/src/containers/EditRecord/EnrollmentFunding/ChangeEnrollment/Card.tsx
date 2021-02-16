@@ -21,6 +21,7 @@ type ChangeEnrollmentCardProps = {
   afterSaveSuccess: () => void;
   setAlerts: RecordFormProps['setAlerts'];
   topHeadingLevel: HeadingLevel;
+  noRecordedEnrollments: boolean;
 };
 
 /**
@@ -34,6 +35,7 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
   afterSaveSuccess,
   setAlerts,
   topHeadingLevel,
+  noRecordedEnrollments,
 }) => {
   const [closeCard, setCloseCard] = useState(false);
 
@@ -44,6 +46,12 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
   useEffect(() => {
     if (closeCard) setCloseCard(false);
   });
+
+  // Don't show this ChangeEnrollment card because a form to add
+  // missing info is already open
+  if (noRecordedEnrollments && !!currentEnrollment) {
+    return <></>;
+  }
 
   return (
     <Card forceClose={closeCard}>
@@ -60,7 +68,15 @@ export const ChangeEnrollmentCard: React.FC<ChangeEnrollmentCardProps> = ({
           </div>
         )}
         <ExpandCard>
-          <Button text="Change enrollment" appearance="outline" />
+          <Button
+            text={
+              // Means create flow was interrupted before saving enrollment
+              noRecordedEnrollments && !currentEnrollment
+                ? 'Start an enrollment'
+                : 'Change enrollment'
+            }
+            appearance="outline"
+          />
         </ExpandCard>
       </div>
       <CardExpansion>
