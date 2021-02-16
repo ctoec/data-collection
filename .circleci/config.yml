@@ -64,6 +64,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: print env
+          command: env
+      - run:
           name: Run npm audit for back-end dependencies
           command: yarn audit
       - run:
