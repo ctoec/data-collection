@@ -9,17 +9,21 @@ import parseCurrencyFromString from '../../../../utils/parseCurrencyFromString';
 import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
 import { set } from 'lodash';
 import produce from 'immer';
+import { HideErrorProps } from '../../types';
 
 /**
  * Component that receives the annual household income of a given
  * family and records that as part of the income determination.
  */
-export const AnnualHouseholdIncomeField: React.FC = () => {
+export const AnnualHouseholdIncomeField: React.FC<HideErrorProps> = ({
+  hideStatus,
+}) => {
   const {
     data: determination,
     dataDriller,
     updateData,
   } = useGenericContext<IncomeDetermination>(FormContext);
+
   return (
     <TextInput
       value={dataDriller.at('income').value}
@@ -40,11 +44,15 @@ export const AnnualHouseholdIncomeField: React.FC = () => {
       }}
       id="income-determination"
       label="Annual household income"
-      status={getValidationStatusForFieldInFieldset(
-        dataDriller,
-        dataDriller.at('income').path,
-        {}
-      )}
+      status={
+        hideStatus
+          ? undefined
+          : getValidationStatusForFieldInFieldset(
+              dataDriller,
+              dataDriller.at('income').path,
+              {}
+            )
+      }
       disabled={dataDriller.at('incomeNotDisclosed').value}
     />
   );
