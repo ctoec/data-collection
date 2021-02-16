@@ -30,7 +30,11 @@ import {
 import { EnrollmentReportRow } from '../../../template';
 import { BadRequestError, ApiError } from '../../../middleware/error/errors';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
-import { CareModel } from '../../../../client/src/shared/models';
+
+type UploadType = {
+  childId: number;
+  changeTag: string;
+};
 
 /**
  * Can use optional save parameter to decide whether to persist
