@@ -64,11 +64,54 @@ exports[`EditRecord matches snapshot 1`] = `
       <div
         class="display-flex flex-col flex-align-center"
       >
+        <span
+          class="margin-right-2 text-base-light"
+        >
+          Quick actions
+        </span>
+        <button
+          class="usa-button usa-button--unstyled margin-right-2"
+          type="button"
+        >
+          <span
+            class="oec-text-with-icon"
+          >
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+            >
+              change.svg
+            </svg>
+            Change age group and/or site
+          </span>
+        </button>
         <button
           class="usa-button usa-button--unstyled margin-right-0"
           type="button"
         >
-          Delete record
+          <span
+            class="oec-text-with-icon"
+          >
+            <svg
+              class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
+              height="20"
+              viewBox="0 0 19 20"
+              width="19"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>
+                trashCan
+              </title>
+              <g
+                fill="#D63E04"
+                fill-rule="nonzero"
+              >
+                <path
+                  d="M3.221 18.8c.063.695.632 1.2 1.327 1.2h10.905c.695 0 1.263-.526 1.327-1.2L18 6H2l1.221 12.8zm9.452-8.8c0-.358.295-.674.674-.674.358 0 .673.295.673.674v6a.678.678 0 0 1-.673.673.678.678 0 0 1-.674-.673v-6zm-3.347 0c0-.358.295-.674.674-.674.358 0 .673.295.673.674v6a.678.678 0 0 1-.673.673.678.678 0 0 1-.674-.673v-6zM6 10c0-.358.294-.674.673-.674.358 0 .674.295.674.674v6a.678.678 0 0 1-.674.673A.678.678 0 0 1 6 16v-6zM17.649 2.15h-5.426v-.725c0-.791-.6-1.425-1.351-1.425H8.149c-.75 0-1.351.634-1.351 1.425v.724H1.35C.601 2.15 0 2.783 0 3.575 0 4.366.6 5 1.351 5H17.65C18.399 5 19 4.366 19 3.575c0-.792-.6-1.426-1.351-1.426z"
+                />
+              </g>
+            </svg>
+            Delete record
+          </span>
         </button>
       </div>
     </div>
