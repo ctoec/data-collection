@@ -59,13 +59,11 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
       # https://support.circleci.com/hc/en-us/articles/360009208393-How-can-I-increase-the-max-memory-for-Node-
-      NODE_OPTIONS: --max-old-space-size=2048
+      NODE_OPTIONS: --max-old-space-size=4096
+      
     steps:
       - attach_workspace:
           at: .
-      - run:
-          name: print env
-          command: env
       - run:
           name: Run npm audit for back-end dependencies
           command: yarn audit

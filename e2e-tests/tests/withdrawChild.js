@@ -40,6 +40,9 @@ module.exports = {
       document.querySelector('button[type="submit"]').click();
     }, []);
 
+    await scrollToElement(browser, ['css selector', 'button[type="submit"]']);
+    await browser.click('css selector', 'button[type="submit"]');
+
     // These two elements say the withdraw happened when the alert appears
     await browser.waitForElementVisible(
       'xpath',
