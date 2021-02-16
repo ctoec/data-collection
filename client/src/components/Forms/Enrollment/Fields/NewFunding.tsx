@@ -17,6 +17,7 @@ import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { HideErrorProps } from '../../types';
 import { getCurrentFunding } from '../../../../utils/models';
 
 type FundingFieldProps<T> = {
@@ -25,7 +26,7 @@ type FundingFieldProps<T> = {
   organizationId: number;
   isEdit?: boolean;
   missingFundedEnrollmentError?: EnrichedValidationError;
-};
+} & HideErrorProps;
 
 const fsToId = (fs: string) => fs.replace(/\s/g, '');
 
@@ -41,6 +42,7 @@ export const NewFundingField = <
   organizationId,
   isEdit,
   missingFundedEnrollmentError,
+  hideStatus,
 }: FundingFieldProps<T>) => {
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
@@ -90,15 +92,17 @@ export const NewFundingField = <
       legend="Funding source options"
       showLegend
       status={
-        getValidationStatusForFields(enrollment, ['fundings']) ||
-        getValidationStatusForFields(
-          {
-            validationErrors: missingFundedEnrollmentError
-              ? [missingFundedEnrollmentError]
-              : [],
-          },
-          ['enrollments']
-        )
+        hideStatus
+          ? undefined
+          : getValidationStatusForFields(enrollment, ['fundings']) ||
+            getValidationStatusForFields(
+              {
+                validationErrors: missingFundedEnrollmentError
+                  ? [missingFundedEnrollmentError]
+                  : [],
+              },
+              ['enrollments']
+            )
       }
       options={fundingSourceOptions.map((fundingSource) => {
         const id = fsToId(fundingSource);
