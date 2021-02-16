@@ -36,12 +36,10 @@ module.exports = {
     // Nightwatch has an issue scrolling with the modal because there's a dropdown
     // input with options extending "over" the button so need direct injection
     // to click it
+    await scrollToElement(browser, ['css selector', 'button[type="submit"]']);
     await browser.execute(function () {
       document.querySelector('button[type="submit"]').click();
     }, []);
-
-    await scrollToElement(browser, ['css selector', 'button[type="submit"]']);
-    await browser.click('css selector', 'button[type="submit"]');
 
     // These two elements say the withdraw happened when the alert appears
     await browser.waitForElementVisible(
