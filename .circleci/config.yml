@@ -58,7 +58,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     environment:
-      NODE_OPTIONS: --max-old-space-size=1536
+      # https://support.circleci.com/hc/en-us/articles/360009208393-How-can-I-increase-the-max-memory-for-Node-
+      NODE_OPTIONS: --max-old-space-size=2048
     steps:
       - attach_workspace:
           at: .

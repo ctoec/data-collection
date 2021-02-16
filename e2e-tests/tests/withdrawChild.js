@@ -37,7 +37,7 @@ module.exports = {
     // input with options extending "over" the button so need direct injection
     // to click it
     await browser.execute(function () {
-      document.querySelector('input[value="Withdraw"]').click();
+      document.querySelector('button[type="submit"]').click();
     }, []);
 
     // These two elements say the withdraw happened when the alert appears

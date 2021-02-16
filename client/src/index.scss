@@ -19,6 +19,10 @@ legend .usa-label {
 // Override some carbon defaults for now
 .usa-button {
   min-height: unset;
+  &[type='submit'] {
+    margin-top: unset;
+    margin-bottom: unset;
+  }
 }
 
 h1,
