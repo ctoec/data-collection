@@ -89,3 +89,24 @@ export const mapFunding = (
     });
   }
 };
+
+/**
+ * Util function that determines whether the funding object mapped
+ * from a current EnrollmentReportRow contains new or different
+ * information from a child's current funding.
+ * @param fundingFromRow
+ * @param funding
+ */
+export const rowHasNewFunding = (fundingFromRow: Funding, funding: Funding) => {
+  return (
+    (fundingFromRow.fundingSpace &&
+      fundingFromRow.fundingSpace.source !== funding.fundingSpace.source) ||
+    fundingFromRow.fundingSpace?.time !== funding.fundingSpace.time ||
+    (fundingFromRow.firstReportingPeriod &&
+      fundingFromRow.firstReportingPeriod.period.format('MM/DD/YYYY') !==
+        funding.firstReportingPeriod.period.format('MM/DD/YYYY')) ||
+    (fundingFromRow.lastReportingPeriod &&
+      fundingFromRow.lastReportingPeriod.period.format('MM/DD/YYYY') !==
+        funding.lastReportingPeriod.period.format('MM/DD.YYYY'))
+  );
+};
