@@ -167,7 +167,7 @@ jobs:
       - run:
           working_directory: e2e-tests
           name: Run e2e tests (in chrome)
-          command: yarn test tests/withdrawChild.js
+          command: yarn test
       - run:
           working_directory: client
           name: Run api integration tests
