@@ -12,7 +12,7 @@ import { BackButton } from '../../components/BackButton';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
-import { Link, useParams, useHistory, useLocation } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
 import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
@@ -28,19 +28,23 @@ const BatchEdit: React.FC = () => {
   };
   const { alertElements } = useAlerts();
 
-  const history = useHistory();
   const h1Ref = getH1RefForTitle();
   const { data: children, isValidating, mutate, error } = useAuthenticatedSWR<
     Child[]
   >(
     childId
       ? null // no need to fetch all children for single record batch edit
-      : `children?${stringify({ organizationId, 'missing-info': true })}`
+      : `children?${stringify({ organizationId, 'missing-info': true })}`,
+    {
+      revalidateOnFocus: false,
+    }
   );
   const loading = !children && !error;
+  // Only children with validation errors, only set after initial fetch
   const [fixedRecordsForDisplayIds, setFixedRecordsForDisplayIds] = useState<
     string[]
   >([]);
+
   useEffect(() => {
     if (!isValidating && !!children) {
       setFixedRecordsForDisplayIds(

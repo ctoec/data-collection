@@ -21,7 +21,7 @@ import AuthenticationContext from '../../../../contexts/AuthenticationContext/Au
 import { Heading, HeadingLevel } from '../../../../components/Heading';
 import { nameFormatter } from '../../../../utils/formatters';
 
-type ChangeEnrollmentFormProps = {
+export type ChangeEnrollmentFormProps = {
   afterSaveSuccess: () => void;
   afterSaveFailure: (err: any) => void;
   child: Child;
