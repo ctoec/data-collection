@@ -101,39 +101,6 @@ jobs:
       - run:
           name: Deploy to Elastic Beanstalk environment
           command: eb deploy ece-fawkes-<< parameters.env >>-env
-  deploy-dupe:
-    description: 'Duplicate job for deploying Fawkes to the specified environment in a workflow with an earlier deploy step'
-    parameters:
-      env:
-        description: 'The environment to deploy Fawkes to (qa, devsecure, staging)'
-        type: string
-    docker:
-      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install Elastic Beanstalk CLI
-          working_directory: /
-          command: |
-            sudo apt-get -y -qq update
-            sudo apt-get install python3-pip python3-dev build-essential
-            sudo pip3 install awsebcli
-      - run:
-          name: Initialize Elastic Beanstalk
-          command: eb init ece-fawkes-<< parameters.env >>-app --region us-east-2 --platform node.js
-      - run: 
-          name: Rebuild for new env
-          working_directory: client
-          # move server node_modules so they don't interfere with preflight checks for the client node_modules
-          # (yarn looks for node_modules in parent directories)
-          command: mv ../node_modules ../IGNORE && CI="" REACT_APP_STAGE="<< parameters.env >>" yarn build && mv ../IGNORE ../node_modules
-      - run:
-          name: Deploy to Elastic Beanstalk environment
-          command: eb deploy ece-fawkes-<< parameters.env >>-env
   e2e_test:
     description: 'Run e2e tests against a deployed pre-prod env'
     parameters:
@@ -192,10 +159,6 @@ workflows:
           launch_url: "https://staging.ece-fawkes.ctoecskylight.com"
           requires:
             - deploy
-      - deploy-dupe:
-          env: devsecure
-          requires:
-            - e2e_test
   qa-tests:
     jobs:
       - hold:
