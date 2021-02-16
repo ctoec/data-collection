@@ -4,5 +4,6 @@ export interface ChangeFundingSpaceRequest {
   authorId: number;
   createdAt: Date;
   fundingSpace: string;
+  fundingSpaceId?: number;
   shouldHave: boolean;
 }

@@ -1,5 +1,5 @@
-import moment from 'moment';
 import { getCurrentHost } from './getCurrentHost';
+import { dateReviver } from '../shared/dateReviver';
 
 export type ApiOpts = {
   accessToken?: string | null;
@@ -123,11 +123,3 @@ async function api(
     return JSON.parse(jsonString, dateReviver);
   }
 }
-
-const dateReviver = (_: any, value: string) => {
-  if (typeof value === 'string') {
-    const parsedDate = moment.utc(value, moment.ISO_8601, true);
-    if (parsedDate.isValid()) return parsedDate;
-  }
-  return value;
-};

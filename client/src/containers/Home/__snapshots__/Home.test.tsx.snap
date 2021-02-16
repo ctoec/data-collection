@@ -535,7 +535,7 @@ exports[`Home snapshot matches revise site request form 1`] = `
       <div
         class="tablet:grid-col-3 text-bold"
       >
-        Request updated name
+        Request site name changes
       </div>
       <div
         class="tablet:grid-col-3 text-bold"

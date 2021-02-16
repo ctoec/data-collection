@@ -1,7 +1,6 @@
 import express, { json } from 'express';
 import path from 'path';
 import httpProxy from 'http-proxy';
-import moment from 'moment';
 import { createConnection, getConnectionOptions } from 'typeorm';
 import { isDevelopment } from './utils/isDevelopment';
 import { handleError } from './middleware/error/handleError';
@@ -10,6 +9,7 @@ import { initialize } from './data/fake/initialize';
 import { QueryLogger } from './loggers/QueryLogger';
 import { isProdLike } from './utils/isProdLike';
 import { requestLogger } from './loggers/RequestLogger';
+import { dateReviver } from '../client/src/shared/dateReviver';
 
 getConnectionOptions().then((connectionOptions) => {
   createConnection(
@@ -30,13 +30,6 @@ getConnectionOptions().then((connectionOptions) => {
 
       app.use(requestLogger);
       // Register pre-processing middlewares
-      const dateReviver = (_: any, value: string) => {
-        if (typeof value === 'string') {
-          const parsedDate = moment.utc(value, moment.ISO_8601, true);
-          if (parsedDate.isValid()) return parsedDate;
-        }
-        return value;
-      };
       app.use(json({ reviver: dateReviver }));
 
       // Register business logic routes
