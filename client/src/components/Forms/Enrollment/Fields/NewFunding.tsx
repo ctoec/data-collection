@@ -19,6 +19,7 @@ import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { HideErrorProps } from '../../types';
 import { getCurrentFunding } from '../../../../utils/models';
+import { getStrippedFundingSourceName } from '../../../../containers/Home/utils/getFundingSpaceDisplayName';
 
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
@@ -109,7 +110,7 @@ export const NewFundingField = <
         return {
           id,
           value: id,
-          text: fundingSource.split('-')[1].trim(),
+          text: getStrippedFundingSourceName(fundingSource),
           onChange: () => {},
           expansion: (
             <>

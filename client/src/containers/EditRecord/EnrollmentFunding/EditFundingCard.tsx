@@ -18,6 +18,7 @@ import { RecordFormProps } from '../../../components/Forms';
 import { hasValidationErrorForField } from '../../../utils/hasValidationError';
 import { HeadingLevel } from '../../../components/Heading';
 import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
+import { getStrippedFundingSourceName } from '../../Home/utils/getFundingSpaceDisplayName';
 
 type EditFundingCardProps = {
   child: Child;
@@ -121,7 +122,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
           {funding.fundingSpace ? (
             <Tag
               className="margin-top-0"
-              text={funding.fundingSpace.source.split('-')[1].trim()}
+              text={getStrippedFundingSourceName(funding.fundingSpace.source)}
             />
           ) : (
             InlineIcon({ icon: 'incomplete' })
