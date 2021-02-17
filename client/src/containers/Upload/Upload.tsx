@@ -76,7 +76,8 @@ const Upload: React.FC = () => {
         .then((resp: BatchUpload) => {
           // Clear all children records from data cache
           clearChildrenCaches();
-          let uploadText = `You uploaded ${resp.active} active records`;
+          console.log(resp);
+          let uploadText = `You uploaded ${resp.new} new records`;
           uploadText +=
             resp.withdrawn > 0
               ? ` and ${resp.withdrawn} withdrawn records.`
