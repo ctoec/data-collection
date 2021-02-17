@@ -1,13 +1,16 @@
+import { Alert } from '@ctoec/component-library';
 import Divider from '@material-ui/core/Divider';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import UserContext from '../../contexts/UserContext/UserContext';
+import { useAlerts } from '../../hooks/useAlerts';
 import { ReactComponent as Image } from '../../images/PersonWithSpreadsheet.svg';
+import { NestedFundingSpaces } from '../../shared/payloads/NestedFundingSpaces';
 import { apiGet } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { HowToUseStep } from './HowToUseStep';
-import { mapFundingSpacesToCards } from './mapFundingSpacesToCards';
+import { mapFundingSpacesToCards } from './utils/mapFundingSpacesToCards';
 
 export const PreSubmitHome: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -16,13 +19,27 @@ export const PreSubmitHome: React.FC = () => {
   const orgAccess = user?.accessType === 'organization';
   const userOrgs = user?.organizations || [];
   const showFundingsAndSites = orgAccess && userOrgs.length == 1;
-  const [fundingSpacesDisplay, setFundingSpacesDisplay] = useState();
+
+  // We might have a success alert pushed from the revision request
+  // form, so check whether we do (but filter so that we only show
+  // one if a user submits multiple forms)
+  const { setAlerts, alertElements } = useAlerts();
+  useEffect(() => {
+    setAlerts((_alerts) => [
+      _alerts.find((a) => a?.heading === 'Request received!'),
+    ]);
+  }, []);
+
+  const [
+    fundingSpacesDisplay,
+    setFundingSpacesDisplay,
+  ] = useState<NestedFundingSpaces>();
 
   useEffect(() => {
     // Determine the funding spaces map for the organization, if
     // the user has the permissions that enable this
     if (showFundingsAndSites) {
-      apiGet('children?fundingMap=true', accessToken)
+      apiGet('funding-spaces?fundingMap=true', accessToken)
         .then((res) => {
           setFundingSpacesDisplay(res.fundingSpacesMap);
         })
@@ -32,32 +49,9 @@ export const PreSubmitHome: React.FC = () => {
     }
   }, [accessToken, showFundingsAndSites]);
 
-  let fundingCards = mapFundingSpacesToCards(fundingSpacesDisplay);
-  const fundingSection = (
-    <>
-      <h3 className="pre-submit-h3">Funding spaces</h3>
-      <div className="three-column-layout">{fundingCards}</div>
-      <div className="margin-top-4 margin-bottom-4">
-        <Divider />
-      </div>
-    </>
-  );
-
-  const siteSection = (
-    <>
-      <h3 className="pre-submit-h3">Sites</h3>
-      <ul>
-        {(user?.sites || []).map((site) => (
-          <li key={site.siteName} className="line-height-body-4">
-            {site.siteName}
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-
   return (
     <div className="Home grid-container margin-top-4">
+      {alertElements.length > 0 && alertElements}
       <div className="grid-row grid-gap">
         <div className="tablet:grid-col-8 margin-top-4">
           <h1 ref={h1Ref} className="margin-top-0">
@@ -77,8 +71,39 @@ export const PreSubmitHome: React.FC = () => {
           <Image />
         </div>
       </div>
-      {showFundingsAndSites && siteSection}
-      {showFundingsAndSites && fundingSection}
+      <Alert
+        type="info"
+        text={
+          <span>
+            Are your sites and/or funding spaces incorrect? Reach out to the ECE
+            Reporter team through&nbsp;
+            <Link to="/revision">this form.</Link>
+          </span>
+        }
+      />
+      {showFundingsAndSites && (
+        <>
+          <h3 className="pre-submit-h3">Sites</h3>
+          <ul>
+            {(user?.sites || []).map((site) => (
+              <li key={site.siteName} className="line-height-body-4">
+                {site.siteName}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {showFundingsAndSites && fundingSpacesDisplay && (
+        <>
+          <h3 className="pre-submit-h3">Funding spaces</h3>
+          <div className="three-column-layout">
+            {mapFundingSpacesToCards(fundingSpacesDisplay)}
+          </div>
+          <div className="margin-top-4 margin-bottom-4">
+            <Divider />
+          </div>
+        </>
+      )}
       <h2 className="pre-submit-h2">How to use ECE Reporter</h2>
       <p>
         {

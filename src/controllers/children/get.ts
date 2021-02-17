@@ -10,7 +10,6 @@ import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
 import { propertyDateSorter } from '../../utils/propertyDateSorter';
-import { getCurrentFunding } from '../../utils/getCurrentFunding';
 import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
 import { ListChildReponse } from '../../../client/src/shared/payloads';
 
@@ -40,8 +39,8 @@ export const getChildren = async (
   user: User,
   filterOpts: {
     organizationIds?: string[];
-    missingInfoOnly?: boolean;  // When specified, only return children with missing information
-    activeMonth?: Moment;       // When specified, only return children enrolled prior to or during this month
+    missingInfoOnly?: boolean; // When specified, only return children with missing information
+    activeMonth?: Moment; // When specified, only return children enrolled prior to or during this month
     skip?: number;
     take?: number;
   } = {}
@@ -59,32 +58,33 @@ export const getChildren = async (
 
   const opts: FindManyOptions<Child> = await getFindOpts(user, {
     organizationIds,
-    activeMonth
+    activeMonth,
   });
 
   if (missingInfoOnly) {
     children = await getManager().find(Child, opts);
 
-    children = (await Promise.all(children.map(postProcessChild)))
-      .filter(child => child.validationErrors?.length);
+    children = (await Promise.all(children.map(postProcessChild))).filter(
+      (child) => child.validationErrors?.length
+    );
 
     return {
       children: children.slice(skip, skip + take),
-      totalCount: children.length
+      totalCount: children.length,
     };
   }
 
   [children, totalCount] = await getManager().findAndCount(Child, {
     ...opts,
     skip,
-    take
-  })
+    take,
+  });
 
-  children = (await Promise.all(children.map(postProcessChild)));
+  children = await Promise.all(children.map(postProcessChild));
 
   return {
     children,
-    totalCount
+    totalCount,
   };
 };
 
@@ -94,80 +94,6 @@ export const getChildren = async (
 export const getCount = async (user: User) => {
   const opts = await getFindOpts(user);
   return getManager().count(Child, opts);
-};
-
-/**
- * Simple structs that hold minimum amount of information necessary
- * to partition the children across funding spaces in a nice formatted
- * display.
- */
-type enrollmentTime = {
-  timeType: string;
-  filled: number;
-  capacity: number;
-};
-type enrolledAgeGroup = {
-  ageGroup: string;
-  includedTimes: enrollmentTime[];
-};
-
-/**
- * Function that accumulates the distribution of how all children in
- * an organization are assigned to their various funding spaces
- * across age groups and enrollment times. Handles partitioning for
- * displaying so that the front end just has to spit this back out.
- * @param children
- */
-export const getFundingSpaceMap = async (children: Child[]) => {
-  // Structure to hold accumulated display information about each funding space
-  const fundingSpacesDisplay: {
-    sourceName: string;
-    includedAgeGroups: enrolledAgeGroup[];
-  }[] = [];
-
-  children.forEach((child) => {
-    const fundingSpace = getCurrentFunding({ child: child })?.fundingSpace;
-
-    if (fundingSpace) {
-      // Start with overall funding source, since it's the header
-      const source = fundingSpace.source;
-      let matchingSource = fundingSpacesDisplay.find(
-        (fsd) => fsd.sourceName === source
-      );
-      if (matchingSource === undefined) {
-        matchingSource = { sourceName: source, includedAgeGroups: [] };
-        fundingSpacesDisplay.push(matchingSource);
-      }
-
-      // Then the age group, since a source is made up of a list of these
-      const ageGroup = fundingSpace.ageGroup;
-      let matchingGroup = matchingSource.includedAgeGroups.find(
-        (ag) => ag.ageGroup === ageGroup
-      );
-      if (matchingGroup === undefined) {
-        matchingGroup = { ageGroup, includedTimes: [] };
-        matchingSource.includedAgeGroups.push(matchingGroup);
-      }
-
-      // Then go to the times within each age group, because that's the
-      // last sub-list
-      const timeType = fundingSpace.time;
-      let matchingTime = matchingGroup.includedTimes.find(
-        (t) => t.timeType === timeType
-      );
-      if (matchingTime === undefined) {
-        matchingTime = {
-          timeType,
-          filled: 0,
-          capacity: fundingSpace.capacity,
-        };
-        matchingGroup.includedTimes.push(matchingTime);
-      }
-      matchingTime.filled += 1;
-    }
-  });
-
-  return fundingSpacesDisplay;
 };
 
 /**
@@ -265,11 +191,9 @@ const getFindOpts = async (
       }
 
       if (filterOpts.activeMonth) {
-        qb.andWhere('(Child__enrollment.entry <= :entry)',
-          { 
-            entry: filterOpts.activeMonth.endOf('month').format("YYYY-MM-DD") 
-          }
-        );
+        qb.andWhere('(Child__enrollment.entry <= :entry)', {
+          entry: filterOpts.activeMonth.endOf('month').format('YYYY-MM-DD'),
+        });
       }
     },
     loadEagerRelations: true,

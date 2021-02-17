@@ -1,6 +1,7 @@
 const { login } = require('../utils/login');
 const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { uploadFile } = require('../utils/uploadFile');
+const { UploadFileTypes } = require('../utils/UploadFileTypes');
 
 module.exports = {
   '@tags': ['child', 'delete'],
@@ -9,7 +10,7 @@ module.exports = {
       await browser.init();
       await browser.timeoutsImplicitWait(10000);
       await login(browser);
-      await uploadFile(browser);
+      await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
       const clickedChildLinkText = await clickOnChildInRoster(browser);
       const lastName = clickedChildLinkText.split(',')[0];
       // Expect the edit record h1 to contain the child's last name

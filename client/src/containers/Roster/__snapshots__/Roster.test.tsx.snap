@@ -274,20 +274,6 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         2 children 
                       </span>
                     </h3>
-                    <div
-                      class="display-flex flex-wrap"
-                    >
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        CDC - Child Day Care Full-day - 1/3
-                      </div>
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        PSR - Priority School Readiness Full-time - 1/5
-                      </div>
-                    </div>
                   </div>
                   <div
                     class="oec-accordion__heading-expand"
@@ -326,6 +312,56 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 class="oec-accordion__content"
                 id="Infant/toddler"
               >
+                <div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Child Day Care
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Full-day
+                      </b>
+                       1/3   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Priority School Readiness
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Full-time
+                      </b>
+                       1/5   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                </div>
                 <table
                   class="oec-table margin-bottom-4"
                   id="roster-table-Infant/toddler"
@@ -761,15 +797,6 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                         1 child 
                       </span>
                     </h3>
-                    <div
-                      class="display-flex flex-wrap"
-                    >
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        CDC - Child Day Care Extended-day - 1/10
-                      </div>
-                    </div>
                   </div>
                   <div
                     class="oec-accordion__heading-expand"
@@ -808,6 +835,32 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                 class="oec-accordion__content"
                 id="Preschool"
               >
+                <div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Child Day Care
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Extended-day
+                      </b>
+                       1/10   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                </div>
                 <table
                   class="oec-table margin-bottom-4"
                   id="roster-table-Preschool"
@@ -1508,20 +1561,6 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         2 children 
                       </span>
                     </h3>
-                    <div
-                      class="display-flex flex-wrap"
-                    >
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        CDC - Child Day Care Full-day - 1/3
-                      </div>
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        PSR - Priority School Readiness Full-time - 1/5
-                      </div>
-                    </div>
                   </div>
                   <div
                     class="oec-accordion__heading-expand"
@@ -1560,6 +1599,56 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 class="oec-accordion__content"
                 id="Infant/toddler"
               >
+                <div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Child Day Care
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Full-day
+                      </b>
+                       1/3   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Priority School Readiness
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Full-time
+                      </b>
+                       1/5   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                </div>
                 <table
                   class="oec-table margin-bottom-4"
                   id="roster-table-Infant/toddler"
@@ -1949,15 +2038,6 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                         1 child 
                       </span>
                     </h3>
-                    <div
-                      class="display-flex flex-wrap"
-                    >
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        CDC - Child Day Care Extended-day - 1/10
-                      </div>
-                    </div>
                   </div>
                   <div
                     class="oec-accordion__heading-expand"
@@ -1996,6 +2076,32 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 class="oec-accordion__content"
                 id="Preschool"
               >
+                <div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Child Day Care
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Extended-day
+                      </b>
+                       1/10   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                </div>
                 <table
                   class="oec-table margin-bottom-4"
                   id="roster-table-Preschool"
@@ -2584,20 +2690,6 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     2 children 
                   </span>
                 </h2>
-                <div
-                  class="display-flex flex-wrap"
-                >
-                  <div
-                    class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                  >
-                    CDC - Child Day Care Full-day - 1 space filled
-                  </div>
-                  <div
-                    class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                  >
-                    PSR - Priority School Readiness Full-time - 1 space filled
-                  </div>
-                </div>
               </div>
               <div
                 class="oec-accordion__heading-expand"
@@ -2636,6 +2728,56 @@ exports[`Roster matches snapshot for site level user 1`] = `
             class="oec-accordion__content"
             id="Infant/toddler"
           >
+            <div>
+              <div
+                class="grid-row grid-gap"
+              >
+                <div
+                  class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                >
+                  Child Day Care
+                </div>
+                <div
+                  class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                >
+                  <b>
+                    Full-day
+                  </b>
+                   1   
+                </div>
+              </div>
+              <div
+                class="margin-top-1 margin-bottom-1"
+              >
+                <hr
+                  class="MuiDivider-root"
+                />
+              </div>
+              <div
+                class="grid-row grid-gap"
+              >
+                <div
+                  class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                >
+                  Priority School Readiness
+                </div>
+                <div
+                  class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                >
+                  <b>
+                    Full-time
+                  </b>
+                   1   
+                </div>
+              </div>
+              <div
+                class="margin-top-1 margin-bottom-1"
+              >
+                <hr
+                  class="MuiDivider-root"
+                />
+              </div>
+            </div>
             <table
               class="oec-table margin-bottom-4"
               id="roster-table-Infant/toddler"
@@ -3025,15 +3167,6 @@ exports[`Roster matches snapshot for site level user 1`] = `
                     1 child 
                   </span>
                 </h2>
-                <div
-                  class="display-flex flex-wrap"
-                >
-                  <div
-                    class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                  >
-                    CDC - Child Day Care Extended-day - 1 space filled
-                  </div>
-                </div>
               </div>
               <div
                 class="oec-accordion__heading-expand"
@@ -3072,6 +3205,32 @@ exports[`Roster matches snapshot for site level user 1`] = `
             class="oec-accordion__content"
             id="Preschool"
           >
+            <div>
+              <div
+                class="grid-row grid-gap"
+              >
+                <div
+                  class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                >
+                  Child Day Care
+                </div>
+                <div
+                  class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                >
+                  <b>
+                    Extended-day
+                  </b>
+                   1   
+                </div>
+              </div>
+              <div
+                class="margin-top-1 margin-bottom-1"
+              >
+                <hr
+                  class="MuiDivider-root"
+                />
+              </div>
+            </div>
             <table
               class="oec-table margin-bottom-4"
               id="roster-table-Preschool"
@@ -3721,20 +3880,6 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                         2 children 
                       </span>
                     </h3>
-                    <div
-                      class="display-flex flex-wrap"
-                    >
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        CDC - Child Day Care Full-day - 1/3
-                      </div>
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        PSR - Priority School Readiness Full-time - 1/5
-                      </div>
-                    </div>
                   </div>
                   <div
                     class="oec-accordion__heading-expand"
@@ -3773,6 +3918,56 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                 class="oec-accordion__content"
                 id="Infant/toddler"
               >
+                <div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Child Day Care
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Full-day
+                      </b>
+                       1/3   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Priority School Readiness
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Full-time
+                      </b>
+                       1/5   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                </div>
                 <table
                   class="oec-table margin-bottom-4"
                   id="roster-table-Infant/toddler"
@@ -4162,15 +4357,6 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                         1 child 
                       </span>
                     </h3>
-                    <div
-                      class="display-flex flex-wrap"
-                    >
-                      <div
-                        class="margin-top-2 margin-right-2 font-body-sm text-base-darker text-no-wrap"
-                      >
-                        CDC - Child Day Care Extended-day - 1/10
-                      </div>
-                    </div>
                   </div>
                   <div
                     class="oec-accordion__heading-expand"
@@ -4209,6 +4395,32 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                 class="oec-accordion__content"
                 id="Preschool"
               >
+                <div>
+                  <div
+                    class="grid-row grid-gap"
+                  >
+                    <div
+                      class="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2"
+                    >
+                      Child Day Care
+                    </div>
+                    <div
+                      class="tablet:grid-col-8 font-body-sm usa-hint margin-top-1"
+                    >
+                      <b>
+                        Extended-day
+                      </b>
+                       1/10   
+                    </div>
+                  </div>
+                  <div
+                    class="margin-top-1 margin-bottom-1"
+                  >
+                    <hr
+                      class="MuiDivider-root"
+                    />
+                  </div>
+                </div>
                 <table
                   class="oec-table margin-bottom-4"
                   id="roster-table-Preschool"

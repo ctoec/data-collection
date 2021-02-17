@@ -118,7 +118,11 @@ export const ReportingPeriodField = <
       id={`${isLast ? 'last' : 'first'}-reporting-period`}
       name={`${isLast ? 'last' : 'first'}-reporting-period`}
       label={label || `${isLast ? 'Last' : 'First'} reporting period`}
-      hint={ isLast ? "Last reporting period is only required if this child's funding is no longer active." : undefined }
+      hint={
+        isLast
+          ? "Last reporting period is only required if this child's funding is no longer active."
+          : undefined
+      }
       options={reportingPeriodOptions.map((rp) => ({
         text: reportingPeriodFormatter(rp),
         value: `${rp.id}`,

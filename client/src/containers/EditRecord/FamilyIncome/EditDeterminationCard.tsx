@@ -24,6 +24,7 @@ type EditDeterminationCardProps = {
   currentIsNew?: boolean;
   setAlerts: RecordFormProps['setAlerts'];
   topHeadingLevel: HeadingLevel;
+  noRecordedDets?: boolean;
 };
 
 /**
@@ -39,6 +40,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
   currentIsNew,
   setAlerts,
   topHeadingLevel,
+  noRecordedDets,
 }) => {
   const determination = child?.family?.incomeDeterminations?.find(
     (d) => d.id === determinationId
@@ -71,6 +73,32 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       });
   };
 
+  // If we're in the error state of EditRecord where a child has no
+  // recorded income dets, then don't show any cards or current info,
+  // just the form expansion with NO error styling at all
+  if (noRecordedDets) {
+    return (
+      <div className="tablet:grid-col-9">
+        <Card>
+          <FamilyIncomeForm
+            child={child}
+            id={`edit-determination-${determinationId}`}
+            legend="Edit income determiniation"
+            incomeDeterminationId={determinationId}
+            afterSaveSuccess={() => {
+              setCloseCard(true);
+              afterSaveSuccess();
+            }}
+            setAlerts={setAlerts}
+            topHeadingLevel={topHeadingLevel}
+            hideErrors={true}
+            isFirstRecordedDet={true}
+          />
+        </Card>
+      </div>
+    );
+  }
+
   // Assign the card text options to variables for cleanliness
   // of showing it in the return statement below
   const notDisclosedCardText = (
@@ -90,7 +118,7 @@ export const EditDeterminationCard: React.FC<EditDeterminationCardProps> = ({
       <div className="flex-1">
         <p>Income</p>
         <p className="text-bold">
-          {determination.income
+          {typeof determination.income === 'number'
             ? currencyFormatter(determination.income)
             : InlineIcon({ icon: 'incomplete' })}
         </p>

@@ -1,33 +1,47 @@
 const { launch_url } = require('../nightwatch.conf');
+const { FakeChildrenTypes } = require('./FakeChildrenTypes');
 const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
 } = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
-  uploadFile: async function (browser, whichFile = 'complete') {
+  uploadFile: async function (
+    browser,
+    filetype,
+    whichFile = 'complete',
+    waitForHello = true
+  ) {
     // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
     const FILE_PATH = `${process.cwd()}/upload.csv`;
 
     // Pick the download url based on which kind of upload test we want to run
     let DOWNLOAD_URL = `${launch_url}`;
     if (whichFile === 'complete') {
-      DOWNLOAD_URL += '/api/template/example/csv';
-    } else if (whichFile === 'missingSome') {
-      DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingSome';
-    } else if (whichFile === 'missingOne') {
-      DOWNLOAD_URL += '/api/template/example/csv?whichFakeChildren=missingOne';
+      DOWNLOAD_URL += `/api/template/example/${filetype}`;
+    } else if (whichFile === FakeChildrenTypes.MISSING_SOME) {
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingSome`;
+    } else if (whichFile === FakeChildrenTypes.MISSING_ONE) {
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingOne`;
+    } else if (whichFile === FakeChildrenTypes.MISSING_OPTIONAL) {
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingOptional`;
+    } else if (whichFile === FakeChildrenTypes.MISSING_CONDITIONAL) {
+      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingConditional`;
     }
 
     const isCompleteTestRun = whichFile === 'complete';
+    const isMissingOptionalRun =
+      whichFile === FakeChildrenTypes.MISSING_OPTIONAL;
 
     await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
 
     // Go to file upload
-    await browser.waitForElementVisible(
-      'xpath',
-      '//*/h1[contains(.,"Hello Voldemort")]'
-    );
+    if (waitForHello) {
+      await browser.waitForElementVisible(
+        'xpath',
+        '//*/h1[contains(.,"Hello Voldemort")]'
+      );
+    }
     await browser.execute(function () {
       document.querySelector('a[href="/upload"]').click();
     });
@@ -45,7 +59,7 @@ module.exports = {
       browser,
       'Upload and correct in roster',
       'No error modal appearing',
-      !isCompleteTestRun
+      !(isCompleteTestRun || isMissingOptionalRun)
     );
 
     // Accept the replace thing if there is one
@@ -56,6 +70,11 @@ module.exports = {
       await browser.waitForElementVisible(
         'xpath',
         `//*/p[contains(text(),"20 children enrolled")]`
+      );
+    } else if (isMissingOptionalRun) {
+      await browser.waitForElementVisible(
+        'xpath',
+        `//*/p[contains(text(),"10 children enrolled")]`
       );
     } else {
       await browser.waitForElementVisible(

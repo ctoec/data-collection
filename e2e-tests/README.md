@@ -83,6 +83,12 @@ module.exports = {
 
 - You can only import from a given util module *once* in each test. If you try to import from the same module multiple times (i.e. multiple lines of `const { func } = require('path')` for the same value of `path`), selenium will malfunction and auto-fail before connecting to the webdriver that runs the test. So if you see a test exit immediately (without running any processes instead `module.exports`) with exit code 10, check your imports and make sure that each `path` is only invoked in a single `require()`.
 
+- Also, exit code 10 can be caused by importing something the tests can't parse through CommonJS modules, even if you've only imported it once, which will shut down the tests before they ever run. If you're encountering this error and are sure you're only importing each thing once, check to make sure a few things are true about your imports:
+
+1. You're not importing anything from the `client/` or `src/` directories of ECE Reporter (these are typescript files and cause errors)
+2. Anything you do import has to be valid javascript, meaning you can't import something like an `enum` with multiple options for different test settings (for an example of how to define and export an object to serve as an enum, see `/utils/FakeChildrenTypes.js`)
+3. You need to use brackets around imported objects in the actual test file (see `utils/uploadFile.js`), not just around module functions.
+
 - Make sure whatever element you're trying to manipulate on the page actually gets found by the test! Browserstack is king here because it will flag if an element doesn't get found. If that's the case, modify your selector, or try switching the kind of selector you're using (`xpath` if you were using `css selector`, and vice versa). The docs are not clear about which functions require which selector type, but many functions seem to only work with one or the other.
 
 - Sometimes React changes take time to propagate, like when saving form data. If you try to move directly to the next step of your test without waiting for those change, it'll probably fail. There's a couple of things you can try if you know you're testing with screens that have load times:

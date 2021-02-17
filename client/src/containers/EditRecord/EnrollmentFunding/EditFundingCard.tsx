@@ -17,6 +17,7 @@ import { FundingForm } from '../../../components/Forms/Enrollment/Funding/Form';
 import { RecordFormProps } from '../../../components/Forms';
 import { hasValidationErrorForField } from '../../../utils/hasValidationError';
 import { HeadingLevel } from '../../../components/Heading';
+import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
 
 type EditFundingCardProps = {
   child: Child;
@@ -53,6 +54,8 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
     throw new Error('Edit funding rendered without funding');
   }
 
+  const hasNoFundingInfo = fundingHasNoInformation(funding);
+
   const { accessToken } = useContext(AuthenticationContext);
   const [closeCard, setCloseCard] = useState(false);
 
@@ -88,6 +91,23 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       });
   }
 
+  // Don't want two incomplete icons if both reporting periods are
+  // missing, so see how many we need
+  let reportingPeriodDisplay = (
+    <>
+      {hasValidationErrorForField(funding, 'firstReportingPeriod') ? (
+        <InlineIcon icon="incomplete" />
+      ) : (
+        funding.firstReportingPeriod?.period.format('MMMM YYYY')
+      )}
+      {!funding.firstReportingPeriod
+        ? undefined
+        : funding.lastReportingPeriod
+        ? ` - ${funding.lastReportingPeriod.period.format('MMMM YYYY')}`
+        : ' - present'}
+    </>
+  );
+
   return (
     <Card
       key={fundingId}
@@ -112,37 +132,30 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         </div>
         <div className="flex-2">
           <p className="margin-bottom-0">Reporting periods</p>
-          <p className="text-bold margin-top-0">
-            {funding.firstReportingPeriod
-              ? funding.firstReportingPeriod.period.format('MMMM YYYY')
-              : InlineIcon({ icon: 'incomplete' })}{' '}
-            -{' '}
-            {funding.lastReportingPeriod
-              ? funding.lastReportingPeriod.period.format('MMMM YYYY')
-              : 'present'}
-            {hasValidationErrorForField(funding, 'firstReportingPeriod') && (
-              <>
-                {' '}
-                <InlineIcon icon="incomplete" />
-              </>
-            )}
-          </p>
+          <p className="text-bold margin-top-0">{reportingPeriodDisplay}</p>
         </div>
         <div className="display-flex align-center flex-space-between">
           <div className="display-flex align-center margin-right-2">
             <ExpandCard>
               <Button
-                text={<TextWithIcon text="Edit" Icon={Pencil} />}
+                text={
+                  <TextWithIcon
+                    text={hasNoFundingInfo ? 'Add funding info' : 'Edit'}
+                    Icon={Pencil}
+                  />
+                }
                 appearance="unstyled"
               />
             </ExpandCard>
           </div>
           <div className="display-flex align-center margin-right-2">
-            <Button
-              text={<TextWithIcon text="Delete" Icon={TrashCan} />}
-              appearance="unstyled"
-              onClick={deleteFunding}
-            />
+            {!hasNoFundingInfo && (
+              <Button
+                text={<TextWithIcon text="Delete" Icon={TrashCan} />}
+                appearance="unstyled"
+                onClick={deleteFunding}
+              />
+            )}
           </div>
         </div>
       </div>

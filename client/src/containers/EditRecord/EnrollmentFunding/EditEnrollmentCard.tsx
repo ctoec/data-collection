@@ -23,6 +23,7 @@ type EditEnrollmentCardProps = {
   isCurrent?: boolean;
   setAlerts: RecordFormProps['setAlerts'];
   topHeadingLevel: HeadingLevel;
+  noRecordedEnrollments?: boolean;
 };
 
 /**
@@ -38,6 +39,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   afterSaveSuccess,
   setAlerts,
   topHeadingLevel,
+  noRecordedEnrollments,
 }) => {
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
@@ -70,6 +72,36 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
           },
         ]);
       });
+  }
+
+  // If we're in the error state of EditRecord where a child has no
+  // recorded enrollments, then don't show any cards or current info,
+  // just the form expansion with NO error styling at all
+  if (noRecordedEnrollments) {
+    return (
+      <div className="tablet:grid-col-9">
+        <Card>
+          <EnrollmentForm
+            id={`edit-enrollment-${enrollment.id}`}
+            child={child}
+            enrollmentId={enrollment.id}
+            afterSaveSuccess={() => {
+              setCloseCard(true);
+              afterSaveSuccess();
+            }}
+            topHeadingLevel={topHeadingLevel}
+            setAlerts={setAlerts}
+            AdditionalButton={
+              <ExpandCard>
+                <Button text="Cancel" appearance="outline" />
+              </ExpandCard>
+            }
+            hideErrors={true}
+            noRecordedEnrollments={true}
+          />
+        </Card>
+      </div>
+    );
   }
 
   return (

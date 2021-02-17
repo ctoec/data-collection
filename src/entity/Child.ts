@@ -31,6 +31,7 @@ import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
 import { ChildBirthCertificateSpecified } from './decorators/Child/birthCertificateValidation';
 import { FundedEnrollmentValidation } from './decorators/Child/fundedEnrollmentValidation';
+import { EnrollmentDatesCannotOverlapValidation } from './decorators/Child/enrollmentDatesValidation';
 
 @Entity()
 export class Child implements ChildInterface {
@@ -179,6 +180,7 @@ export class Child implements ChildInterface {
     cascade: ['soft-remove'],
   })
   @FundedEnrollmentValidation()
+  @EnrollmentDatesCannotOverlapValidation()
   enrollments?: Array<Enrollment>;
 
   @Column(() => UpdateMetaData, { prefix: false })

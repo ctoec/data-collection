@@ -1,3 +1,5 @@
+export * from './AddSiteRequest';
+export * from './ChangeFundingSpaceRequest';
 export * from './Child';
 export * from './Community';
 export * from './Enrollment';
@@ -13,4 +15,5 @@ export * from './OrganizationPermission';
 export * from './ReportingPeriod';
 export * from './Site';
 export * from './SitePermission';
+export * from './UpdateSiteRequest';
 export * from './User';

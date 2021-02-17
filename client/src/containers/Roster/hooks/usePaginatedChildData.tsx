@@ -23,13 +23,18 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
     error,
   } = useAuthenticatedSWRInfinite<ListChildReponse>(getCacheKeyForChildQuery);
 
+  if (error) {
+    stillFetching = false;
+  }
+
   // Trigger next fetch if
   // - we've completed the first fetch (childrenArrays != undefined)
   // - we've completed our most recently triggered fetch (childrenArrays.length == size)
   // - there's more data to fetch (most recent page has records)
   // Or set fetching to false
   if (listChildResponses) {
-    if (listChildResponses.length === size &&
+    if (
+      listChildResponses.length === size &&
       listChildResponses[listChildResponses?.length - 1].children.length
     ) {
       setSize(size + 1);
@@ -39,7 +44,9 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
   }
 
   return {
-    children: listChildResponses ? listChildResponses.flatMap(r => r.children) : [],
+    children: listChildResponses
+      ? listChildResponses.flatMap((r) => r.children)
+      : [],
     totalCount: listChildResponses ? listChildResponses[size].totalCount : 0,
     mutate,
     stillFetching,
@@ -48,7 +55,10 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
 
   /////////////////////////////////////////////////////////////////
 
-  function getCacheKeyForChildQuery(index: number, prevData: ListChildReponse | null) {
+  function getCacheKeyForChildQuery(
+    index: number,
+    prevData: ListChildReponse | null
+  ) {
     // Base case -- no more data to fetch when prev data length = 0
     if (prevData && !prevData.children.length) {
       stillFetching = false;

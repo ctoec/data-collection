@@ -23,10 +23,9 @@ export const mapChild = (
   const gender: Gender = mapEnum(Gender, source.gender) || Gender.NotSpecified;
 
   // Birth certificate type
-  const birthCertificateType: BirthCertificateType = mapEnum(
-    BirthCertificateType,
-    source.birthCertificateType
-  );
+  const birthCertificateType: BirthCertificateType = !source.birthCertificateType
+    ? BirthCertificateType.Unavailable
+    : mapEnum(BirthCertificateType, source.birthCertificateType);
 
   // Ethnicity
   const hispanicOrLatinxEthnicity: UndefinableBoolean = mapEnum(
@@ -73,8 +72,18 @@ export const mapChild = (
     suffix: source.suffix,
     birthdate: source.birthdate,
     birthCertificateType: birthCertificateType,
-    birthTown: source.birthTown,
-    birthState: source.birthState,
+    // Need these corrections to defeat Excel: xlsx parses CSVs
+    // aggressively, storing things in a sparse representation.
+    // Blanks are interpreted as properties not existing, and
+    // there are NO parsing options to change this because the
+    // problem is with Excel itself. So we need to force conditionally
+    // expected properties to appear with the empty string.
+    birthTown: (source as Object).hasOwnProperty('birthTown')
+      ? source.birthTown
+      : '',
+    birthState: (source as Object).hasOwnProperty('birthState')
+      ? source.birthState
+      : '',
     birthCertificateId: source.birthCertificateId,
     americanIndianOrAlaskaNative: source.americanIndianOrAlaskaNative,
     asian: source.asian,
