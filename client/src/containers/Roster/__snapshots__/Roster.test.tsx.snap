@@ -714,7 +714,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        CDC - Child Day Care
+                         Child Day Care
                       </td>
                       <td
                         class="font-body-2xs"
@@ -756,7 +756,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        PSR - Priority School Readiness
+                         Priority School Readiness
                       </td>
                       <td
                         class="font-body-2xs"
@@ -1213,7 +1213,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        CDC - Child Day Care
+                         Child Day Care
                       </td>
                       <td
                         class="font-body-2xs"
@@ -1961,7 +1961,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        CDC - Child Day Care
+                         Child Day Care
                       </td>
                       <td
                         class="font-body-2xs"
@@ -2000,7 +2000,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        PSR - Priority School Readiness
+                         Priority School Readiness
                       </td>
                       <td
                         class="font-body-2xs"
@@ -2414,7 +2414,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        CDC - Child Day Care
+                         Child Day Care
                       </td>
                       <td
                         class="font-body-2xs"
@@ -3090,7 +3090,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   <td
                     class="font-body-2xs"
                   >
-                    CDC - Child Day Care
+                     Child Day Care
                   </td>
                   <td
                     class="font-body-2xs"
@@ -3129,7 +3129,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   <td
                     class="font-body-2xs"
                   >
-                    PSR - Priority School Readiness
+                     Priority School Readiness
                   </td>
                   <td
                     class="font-body-2xs"
@@ -3543,7 +3543,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
                   <td
                     class="font-body-2xs"
                   >
-                    CDC - Child Day Care
+                     Child Day Care
                   </td>
                   <td
                     class="font-body-2xs"
@@ -4280,7 +4280,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        CDC - Child Day Care
+                         Child Day Care
                       </td>
                       <td
                         class="font-body-2xs"
@@ -4319,7 +4319,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        PSR - Priority School Readiness
+                         Priority School Readiness
                       </td>
                       <td
                         class="font-body-2xs"
@@ -4733,7 +4733,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                       <td
                         class="font-body-2xs"
                       >
-                        CDC - Child Day Care
+                         Child Day Care
                       </td>
                       <td
                         class="font-body-2xs"
