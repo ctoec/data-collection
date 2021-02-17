@@ -119,7 +119,10 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         <div className="flex-1">
           <p className="margin-bottom-0">Funding</p>
           {funding.fundingSpace ? (
-            <Tag className="margin-top-0" text={funding.fundingSpace.source} />
+            <Tag
+              className="margin-top-0"
+              text={funding.fundingSpace.source.split('-')[0].trim()}
+            />
           ) : (
             InlineIcon({ icon: 'incomplete' })
           )}

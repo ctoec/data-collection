@@ -81,11 +81,18 @@ export const tableColumns: (
       className: tableColumnClassName,
       name: ColumnNames.FUNDING_SOURCE,
       sort: (row) =>
-        idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.source) || '',
+        idx(
+          row,
+          (_) => _.enrollments[0].fundings[0].fundingSpace.source.split('-')[1]
+        ) || '',
       width: `${shortColumnWidthPercent}%`,
       cell: ({ row }) => (
         <td className={tableRowClassName}>
-          {idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.source)}
+          {idx(
+            row,
+            (_) =>
+              _.enrollments[0].fundings[0].fundingSpace.source.split('-')[1]
+          )}
         </td>
       ),
     },

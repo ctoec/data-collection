@@ -109,7 +109,7 @@ export const NewFundingField = <
         return {
           id,
           value: id,
-          text: fundingSource,
+          text: fundingSource.split('-')[0].trim(),
           onChange: () => {},
           expansion: (
             <>
