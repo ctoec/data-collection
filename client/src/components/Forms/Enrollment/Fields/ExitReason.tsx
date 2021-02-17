@@ -13,6 +13,8 @@ export const ExitReasonField = <T extends Enrollment | Withdraw>({}) => {
   const { dataDriller, immutableUpdateData } = useGenericContext<T>(
     FormContext
   );
+
+  const exitReason = dataDriller.at('exitReason');
   return (
     <Select
       id="exit-reason"
@@ -22,13 +24,14 @@ export const ExitReasonField = <T extends Enrollment | Withdraw>({}) => {
         value: reason,
       }))}
       onChange={(e) => {
-        immutableUpdateData(dataDriller.at('exitReason'), e.target.value);
+        immutableUpdateData(exitReason, e.target.value);
       }}
+      defaultValue={exitReason.value}
       // TODO make a version of this that has a more reasonable func signature
       // for use without form fields
       status={getValidationStatusForField(
         dataDriller as TObjectDriller<Enrollment>,
-        dataDriller.at('exitReason').path,
+        exitReason.path,
         {}
       )}
     />
