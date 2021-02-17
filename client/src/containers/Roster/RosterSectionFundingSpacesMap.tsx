@@ -1,5 +1,5 @@
 import React from 'react';
-import Divider from '@material-ui/core/Divider';
+import { Divider } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 import { getCurrentFunding } from '../../utils/models';
 
@@ -56,6 +56,7 @@ export const RosterSectionFundingSpacesMap: React.FC<RosterSectionFundingSpacesM
 
   return (
     <div>
+      <Divider />
       {fundingSpacesMap.map((sourceToTimes) => {
         let displayStr = (
           <>

@@ -218,7 +218,7 @@ const Upload: React.FC = () => {
         </div>
       )}
 
-      <div className="grid-row">
+      <div className="grid-row display-block">
         <h1 ref={h1Ref} className="margin-bottom-0">
           Upload your enrollment data
         </h1>
