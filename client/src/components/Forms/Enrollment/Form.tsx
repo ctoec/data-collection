@@ -8,6 +8,7 @@ import {
   AgeGroupField,
   NewFundingField,
   EnrollmentEndDateField,
+  ExitReasonField,
 } from './Fields';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { RecordFormProps } from '../types';
@@ -152,7 +153,10 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
           <EnrollmentStartDateField<Enrollment> />
         )}
         {showFieldOrFieldset(enrollment, ['exit']) && (
-          <EnrollmentEndDateField<Enrollment> />
+          <>
+            <EnrollmentEndDateField<Enrollment> />
+            <ExitReasonField<Enrollment> />
+          </>
         )}
         {showFieldOrFieldset(enrollment, ['model']) && (
           <CareModelField<Enrollment> />

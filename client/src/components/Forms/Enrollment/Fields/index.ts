@@ -4,3 +4,4 @@ export * from './EnrollmentEndDate';
 export * from './EnrollmentStartDate';
 export * from './Site';
 export * from './NewFunding';
+export * from './ExitReason';
