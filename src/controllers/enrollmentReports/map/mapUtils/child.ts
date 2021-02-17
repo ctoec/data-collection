@@ -141,6 +141,7 @@ export const updateBirthCertificateInfo = (
   }
 
   if (madeAChange) childrenToUpdate.push(child);
+  return madeAChange;
 };
 
 /**

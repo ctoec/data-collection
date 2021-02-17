@@ -1,5 +1,9 @@
+import { UploadPreviewTableObject } from '../../containers/Upload/UploadPreviewTableObject';
+
 export interface BatchUpload {
   id?: number;
-  active: number;
+  new: number;
+  updated: number;
   withdrawn: number;
+  uploadPreview: UploadPreviewTableObject[];
 }

@@ -26,15 +26,14 @@ import {
   rowHasNewEnrollment,
   rowHasNewFunding,
   getExitReason,
+  rowHasNewDetermination,
 } from './mapUtils';
 import { EnrollmentReportRow } from '../../../template';
 import { BadRequestError, ApiError } from '../../../middleware/error/errors';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
-
-type UploadType = {
-  childId: number;
-  changeTag: string;
-};
+import { ChangeTag, ExitReason } from '../../../../client/src/shared/models';
+import { MapResult } from './uploadTypes';
+import { getLastIncomeDetermination } from '../../../utils/getLastIncomeDetermination';
 
 /**
  * Can use optional save parameter to decide whether to persist
@@ -47,7 +46,7 @@ export async function mapRows(
   rows: EnrollmentReportRow[],
   user: User,
   opts: { save: boolean } = { save: false }
-): Promise<Child[]> {
+): Promise<MapResult> {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
   const [
     organizations,
@@ -63,6 +62,13 @@ export async function mapRows(
     transaction.find(ReportingPeriod),
   ]);
 
+  const mapResult: MapResult = {
+    changeTagsForChildren: [],
+    children: [],
+  };
+
+  // Arrays to shove entities in so that we can correctly batch
+  // them for inserting/saving
   const children: Child[] = [];
   const childrenToUpdate: Child[] = [];
   const familiesToUpdate: Family[] = [];
@@ -83,6 +89,7 @@ export async function mapRows(
           'family.incomeDeterminations',
           'enrollments',
           'enrollments.fundings',
+          'enrollments.site',
         ],
       });
       const match = potentialMatches.find(
@@ -108,7 +115,8 @@ export async function mapRows(
           familiesToUpdate,
           determinationsToUpdate,
           enrollmentsToUpdate,
-          fundingsToUpdate
+          fundingsToUpdate,
+          mapResult
         );
       else {
         await mapRow(
@@ -137,7 +145,10 @@ export async function mapRows(
         (det) => (det.family = undefined)
       );
     });
-    return children;
+    children.forEach((c) => {
+      mapResult.children.push(c);
+    });
+    return mapResult;
   }
 
   // Batch update all the entities we modified fields for
@@ -162,6 +173,9 @@ export async function mapRows(
       return child;
     })
   );
+
+  // Same problem with creating cascading PKs that's described below,
+  // so we make the entities and then re-connect their references
   const updatedEnrollments = await doBatchedInsert<Enrollment>(
     transaction,
     enrollmentsToUpdate.map((e) => {
@@ -185,6 +199,28 @@ export async function mapRows(
       return f;
     })
   );
+  const updatedEnrollmentsWithFundings = updatedEnrollments.map(
+    (e: Enrollment) => {
+      if (!e.fundings) e.fundings = [];
+      e.fundings = e.fundings.concat(
+        updatedFundings.filter(
+          (f: Funding) =>
+            f.enrollmentId === e.id && !e.fundings.some((f: Funding) => f.id)
+        )
+      );
+      return e;
+    }
+  );
+  mapResult.children.forEach((c) => {
+    c.enrollments = c.enrollments.concat(
+      updatedEnrollmentsWithFundings.filter((e: Enrollment) => {
+        e.childId === c.id &&
+          !c.enrollments.some(
+            (existingEnrollment) => e.id === existingEnrollment.id
+          );
+      })
+    );
+  });
 
   // Handle creation of new children and historical enrollments
   // that were provided in the spreadsheet (i.e. not existing
@@ -270,7 +306,11 @@ export async function mapRows(
       return match;
     });
   });
-  return createdChildren;
+  createdChildren.forEach((c) => {
+    mapResult.changeTagsForChildren.push([ChangeTag.NewRecord]);
+    mapResult.children.push(c);
+  });
+  return mapResult;
 }
 
 const updateRecord = async (
@@ -284,7 +324,8 @@ const updateRecord = async (
   familiesToUpdate: Family[],
   determinationsToUpdate: IncomeDetermination[],
   enrollmentsToUpdate: Enrollment[],
-  fundingsToUpdate: Funding[]
+  fundingsToUpdate: Funding[],
+  mapResult: MapResult
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {
@@ -298,18 +339,33 @@ const updateRecord = async (
   }
   const site = lookUpSite(source, organization.id, userSites);
 
+  let matchingIdx = mapResult.children.findIndex((c) => c.id === child.id);
+  if (matchingIdx === -1) {
+    matchingIdx = mapResult.children.length;
+    mapResult.children.push(child);
+    mapResult.changeTagsForChildren.push([]);
+  }
+
   // Support birth cert updates and family address updates
-  updateBirthCertificateInfo(child, source, childrenToUpdate);
-  updateFamilyAddress(child.family, source, familiesToUpdate);
+  const changedBirthCert = updateBirthCertificateInfo(
+    child,
+    source,
+    childrenToUpdate
+  );
+  const changedAddress = updateFamilyAddress(
+    child.family,
+    source,
+    familiesToUpdate
+  );
+  if (changedBirthCert || changedAddress) {
+    mapResult.changeTagsForChildren[matchingIdx].push(ChangeTag.Edited);
+  }
 
   // Everything else involves making new entities
-  if (
-    source.income ||
-    source.numberOfPeople ||
-    source.determinationDate ||
-    source.incomeNotDisclosed
-  ) {
-    const determination = mapIncomeDetermination(source, child.family);
+  const currentDetermination = getLastIncomeDetermination(child.family);
+  const determination = mapIncomeDetermination(source, child.family);
+  if (rowHasNewDetermination(determination, currentDetermination)) {
+    mapResult.changeTagsForChildren[matchingIdx].push(ChangeTag.IncomeDet);
     determinationsToUpdate.push(determination);
     child.family.incomeDeterminations.push(determination);
   }
@@ -320,7 +376,8 @@ const updateRecord = async (
     (f) => !f.lastReportingPeriod
   );
   let enrollment = mapEnrollment(source, site, child);
-  if (rowHasNewEnrollment(currentEnrollment, enrollment)) {
+  const isNewEnrollment = rowHasNewEnrollment(currentEnrollment, enrollment);
+  if (isNewEnrollment) {
     enrollment.fundings = [];
     enrollmentsToUpdate.push(enrollment);
     child.enrollments.push(enrollment);
@@ -328,6 +385,13 @@ const updateRecord = async (
     // ended "one unit" (day/reporting period) before the new ones
     currentEnrollment.exit = enrollment.entry.clone().add(-1, 'day');
     currentEnrollment.exitReason = getExitReason(currentEnrollment, enrollment);
+    if (currentEnrollment.exitReason === ExitReason.AgedOut) {
+      mapResult.changeTagsForChildren[matchingIdx].push(ChangeTag.AgedUp);
+    } else {
+      mapResult.changeTagsForChildren[matchingIdx].push(
+        ChangeTag.ChangedEnrollment
+      );
+    }
     enrollmentsToUpdate.push(currentEnrollment);
   }
   // If no new enrollment provided, new funding might apply
@@ -346,6 +410,15 @@ const updateRecord = async (
     if (rowHasNewFunding(funding, currentFunding)) {
       enrollment.fundings.push(funding);
       fundingsToUpdate.push(funding);
+
+      // Only tag row as having new funding if we didn't switch
+      // enrollments, since having an enrollment kind of assumes
+      // it's funded
+      if (!isNewEnrollment) {
+        mapResult.changeTagsForChildren[matchingIdx].push(
+          ChangeTag.ChangedFunding
+        );
+      }
       // Same as before, we'll assume the old funding ended right
       // before the new one started
       const newFundingPeriodIdx = userReportingPeriods.findIndex(

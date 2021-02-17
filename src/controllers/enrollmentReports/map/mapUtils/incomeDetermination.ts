@@ -38,3 +38,29 @@ export const mapIncomeDetermination = (
     });
   }
 };
+
+/**
+ * Util function that determines whether an income determination mapped
+ * from an EnrollmentReportRow provides any new or different information
+ * from the income determination currently associated with a child's
+ * family.
+ * @param detFromRow
+ * @param determination
+ */
+export const rowHasNewDetermination = (
+  detFromRow,
+  determination: IncomeDetermination
+) => {
+  console.log('Det From Row: ', detFromRow);
+  console.log('New Determination: ', determination);
+  return (
+    (detFromRow.income &&
+      parseFloat(detFromRow.income) !== determination.income) ||
+    (detFromRow.numberOfPeople &&
+      parseFloat(detFromRow.numberOfPeople) !== determination.numberOfPeople) ||
+    (detFromRow.determinationDate &&
+      detFromRow.determinationDate.format('MM/DD/YYYY') !==
+        determination.determinationDate.format('MM/DD/YYYY')) ||
+    detFromRow.incomeNotDisclosed !== determination.incomeNotDisclosed
+  );
+};

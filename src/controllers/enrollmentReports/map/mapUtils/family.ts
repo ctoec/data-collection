@@ -31,6 +31,14 @@ export const mapFamily = (
   });
 };
 
+/**
+ * Updates a family's address if any of the address fields
+ * in an EnrollmentReportRow for the family provide new
+ * or different information.
+ * @param family
+ * @param source
+ * @param familiesToUpdate
+ */
 export const updateFamilyAddress = (
   family: Family,
   source: EnrollmentReportRow,
@@ -43,8 +51,10 @@ export const updateFamilyAddress = (
       source.homelessness,
       { isUndefineableBoolean: true }
     );
-    family.homelessness = homelessness;
-    madeAChange = true;
+    if (family.homelessness !== homelessness) {
+      family.homelessness = homelessness;
+      madeAChange = true;
+    }
   }
   if (rowHasNewAddress(source, family)) {
     family.streetAddress = source.streetAddress;
@@ -54,6 +64,7 @@ export const updateFamilyAddress = (
     madeAChange = true;
   }
   if (madeAChange) familiesToUpdate.push(family);
+  return madeAChange;
 };
 
 /**
