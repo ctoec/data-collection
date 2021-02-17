@@ -14,11 +14,8 @@ export function getRosterH2(
     : 'All sites';
   return (
     <h2>
-      {siteText}
-      <span className="text-light">
-        {' '}
-        {pluralize('child', childCount, true)}
-      </span>
+      {siteText}{' '}
+      <span className="text-light">{pluralize('child', childCount, true)}</span>
     </h2>
   );
 }

@@ -10,9 +10,10 @@ import {
   Card,
   InlineIcon,
   TextWithIcon,
+  Divider,
+  Button,
 } from '@ctoec/component-library';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import Divider from '@material-ui/core/Divider';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { mapFundingSpacesToCards } from './utils/mapFundingSpacesToCards';
 import { NestedFundingSpaces } from '../../shared/payloads/NestedFundingSpaces';
@@ -85,14 +86,19 @@ export const PostSubmitHome: React.FC = () => {
             />
           </div>
           <div className="margin-top-4 tablet:grid-col-2">
-            <Link to="/roster">
-              <TextWithIcon
-                text="View roster"
-                iconSide="right"
-                Icon={ArrowRight}
-                direction="right"
-              />
-            </Link>
+            <Button
+              appearance="unstyled"
+              href="/roster"
+              text={
+                <TextWithIcon
+                  text="View roster"
+                  iconSide="right"
+                  Icon={ArrowRight}
+                  direction="right"
+                  className="text-underline"
+                />
+              }
+            />
           </div>
         </div>
       ))}
@@ -125,15 +131,15 @@ export const PostSubmitHome: React.FC = () => {
               and families.
             </p>
             <h3 className="grid-row">What's next?</h3>
-            <span className="grid-row margin-bottom-1em">
+            <p className="grid-row margin-bottom-1em">
               Keep your roster updated with new enrollments and withdrawals, and
               with age group, site, and funding changes.
-            </span>
-            <span className="grid-row">
+            </p>
+            <p className="grid-row">
               We're working on a feature to allow updating from excel files.
               Until then, you can make any needed changes directly in your ECE
               Reporter roster.
-            </span>
+            </p>
           </div>
         </Card>
       </div>

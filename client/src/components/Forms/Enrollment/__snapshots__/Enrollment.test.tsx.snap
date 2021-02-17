@@ -107,7 +107,8 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             class="oec-calendar-dropdown oec-date-input__calendar-dropdown"
           >
             <button
-              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
+              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle bx--btn bx--btn--primary"
+              tabindex="0"
               title="open calendar"
               type="button"
             >
@@ -1403,7 +1404,8 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             class="oec-calendar-dropdown oec-date-input__calendar-dropdown"
           >
             <button
-              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
+              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle bx--btn bx--btn--primary"
+              tabindex="0"
               title="open calendar"
               type="button"
             >
@@ -2803,11 +2805,13 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </span>
       <div />
     </fieldset>
-    <input
-      class="usa-button"
+    <button
+      class="usa-button bx--btn bx--btn--primary"
+      tabindex="0"
       type="submit"
-      value="Save"
-    />
+    >
+      Save
+    </button>
   </form>
 </DocumentFragment>
 `;

@@ -18,7 +18,8 @@ exports[`EditRecord DeleteRecord matches snapshot 1`] = `
       class="oec-modal-close"
     >
       <button
-        class="usa-button usa-button--unstyled"
+        class="usa-button usa-button--unstyled bx--btn bx--btn--primary"
+        tabindex="0"
         type="button"
       >
         <div
@@ -62,13 +63,15 @@ exports[`EditRecord DeleteRecord matches snapshot 1`] = `
         class="grid-row flex-first-baseline space-between-4"
       >
         <button
-          class="usa-button usa-button--outline"
+          class="usa-button usa-button--outline bx--btn bx--btn--primary"
+          tabindex="0"
           type="button"
         >
           No, cancel
         </button>
         <button
-          class="usa-button"
+          class="usa-button bx--btn bx--btn--primary"
+          tabindex="0"
           type="button"
         >
           Yes, delete record

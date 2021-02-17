@@ -25,7 +25,7 @@ module.exports = {
       const setOfFields = setsOfInfo[j];
       await enterFormSection(browser, setOfFields);
       // Click save and wait
-      await browser.click('css selector', 'input[value^=Save]');
+      await browser.click('css selector', 'button[type="submit"]');
       await browser.pause(1000);
     }
 
