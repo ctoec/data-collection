@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from '@ctoec/component-library';
 import { NestedFundingSpaces } from '../../../shared/payloads/NestedFundingSpaces';
 import { AgeGroup, FundingSource } from '../../../shared/models';
+import { getStrippedFundingSourceName } from './getFundingSpaceDisplayName';
 
 // Map each calculated funding space distribution into a card
 // element that we can format for display
@@ -10,7 +11,9 @@ export const mapFundingSpacesToCards = (nestedSpaces: NestedFundingSpaces) =>
     <div className="desktop:grid-col-4 three-column-card">
       <Card>
         <div className="padding-0">
-          <h3 className="margin-top-0">{source.split('-')[1]}</h3>
+          <h3 className="margin-top-0">
+            {getStrippedFundingSourceName(source as FundingSource)}
+          </h3>
           {Object.keys(nestedSpaces[source as FundingSource]).map(
             (ageGroup) => (
               <>

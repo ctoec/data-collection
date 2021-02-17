@@ -1,6 +1,6 @@
 import React from 'react';
 import Divider from '@material-ui/core/Divider';
-import { Child, FundingSource, FundingSource } from '../../shared/models';
+import { Child, FundingSource } from '../../shared/models';
 import { getCurrentFunding } from '../../utils/models';
 import { getStrippedFundingSourceName } from '../Home/utils/getFundingSpaceDisplayName';
 
