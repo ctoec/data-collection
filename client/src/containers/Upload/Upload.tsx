@@ -8,11 +8,10 @@ import {
   LoadingWrapper,
   ErrorBoundary,
 } from '@ctoec/component-library';
-import { apiPost, apiGet } from '../../utils/api';
+import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
-import { CheckReplaceData } from './CheckReplaceData';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
@@ -107,8 +106,6 @@ const Upload: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postUpload]);
 
-  // Case where the user doesn't already have a roster so we
-  // don't need to go to CheckReplace: next step is confirm upload
   const [errorModalOpen, setErrorModalOpen] = useState(false);
   const advanceToPostUpload = () => {
     setPostUpload(true);
