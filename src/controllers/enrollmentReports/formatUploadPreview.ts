@@ -6,6 +6,11 @@ import {
   getLastFunding,
 } from '../../../client/src/utils/models';
 
+/**
+ * Build the data structure that will map to the table we'll show
+ * in the front end that represents a preview of a user's upload.
+ * @param mapResult
+ */
 export const formatUploadPreview = (mapResult: MapResult) => {
   const formattedPreview: Partial<UploadPreviewTableObject>[] = mapResult.children.map(
     (c, idx) => {

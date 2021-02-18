@@ -1,6 +1,9 @@
-import { Family, IncomeDetermination } from '../../../../entity';
+import { Child, Family, IncomeDetermination } from '../../../../entity';
 import { EnrollmentReportRow } from '../../../../template';
 import { getManager } from 'typeorm';
+import { MapResult } from '../uploadTypes';
+import { getLastIncomeDetermination } from '../../../../utils/getLastIncomeDetermination';
+import { ChangeTag } from '../../../../../client/src/shared/models';
 
 /**
  * Create IncomeDetermination object from FlattenedEnrollment source.
@@ -61,4 +64,25 @@ export const rowHasNewDetermination = (
         determination.determinationDate.format('MM/DD/YYYY')) ||
     detFromRow.incomeNotDisclosed !== determination.incomeNotDisclosed
   );
+};
+
+/**
+ * Decide whether, given a child and an enrollment report row,
+ * the row contains sufficient information to add an updated
+ * income determination.
+ */
+export const handleIncomeDeterminationUpdate = (
+  child: Child,
+  source: EnrollmentReportRow,
+  matchingIdx: number,
+  determinationsToUpdate: IncomeDetermination[],
+  mapResult: MapResult
+) => {
+  const currentDetermination = getLastIncomeDetermination(child.family);
+  const determination = mapIncomeDetermination(source, child.family);
+  if (rowHasNewDetermination(determination, currentDetermination)) {
+    mapResult.changeTagsForChildren[matchingIdx].push(ChangeTag.IncomeDet);
+    determinationsToUpdate.push(determination);
+    child.family.incomeDeterminations.push(determination);
+  }
 };

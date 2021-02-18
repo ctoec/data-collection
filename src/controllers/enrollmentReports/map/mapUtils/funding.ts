@@ -7,11 +7,13 @@ import {
   ReportingPeriod,
 } from '../../../../entity';
 import {
+  ChangeTag,
   FundingSource,
   FundingTime,
 } from '../../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum, mapFundingTime } from '.';
+import { MapResult } from '../uploadTypes';
 
 /**
  * Create a Funding object from FlattenedEnrollment source,
@@ -110,4 +112,64 @@ export const rowHasNewFunding = (fundingFromRow: Funding, funding: Funding) => {
       fundingFromRow.lastReportingPeriod.period.format('MM/DD/YYYY') !==
         funding.lastReportingPeriod.period.format('MM/DD.YYYY'))
   );
+};
+
+/**
+ * Create a new funding, if one is present in the given spreadsheet
+ * row. This funding can be associated with either a current enrollment
+ * (if the row had no new enrollment info) or can be paired with a
+ * new enrollment mapped from the given row.
+ */
+export const handleFundingUpdate = (
+  currentEnrollment: Enrollment,
+  enrollment: Enrollment | undefined,
+  isNewEnrollment: boolean,
+  source: EnrollmentReportRow,
+  organization: Organization,
+  userFundingSpaces: FundingSpace[],
+  userReportingPeriods: ReportingPeriod[],
+  fundingsToUpdate: Funding[],
+  mapResult: MapResult,
+  matchingIdx: number
+) => {
+  const currentFunding: Funding | undefined = currentEnrollment?.fundings.find(
+    (f) => !f.lastReportingPeriod
+  );
+  if (enrollment) {
+    const funding = mapFunding(
+      source,
+      organization,
+      enrollment,
+      userFundingSpaces,
+      userReportingPeriods
+    );
+    if (rowHasNewFunding(funding, currentFunding)) {
+      enrollment.fundings.push(funding);
+      fundingsToUpdate.push(funding);
+
+      // Only tag row as having new funding if we didn't switch
+      // enrollments, since having an enrollment kind of assumes
+      // it's funded
+      if (!isNewEnrollment) {
+        mapResult.changeTagsForChildren[matchingIdx].push(
+          ChangeTag.ChangedFunding
+        );
+      }
+      // Same as before, we'll assume the old funding ended right
+      // before the new one started
+      const newFundingPeriodIdx = userReportingPeriods.findIndex(
+        (rp) => rp.id === funding.firstReportingPeriod.id
+      );
+      const oldFundingPeriodIdx = userReportingPeriods.findIndex(
+        (rp) => rp.id === currentFunding?.firstReportingPeriod.id
+      );
+      currentFunding.lastReportingPeriod =
+        userReportingPeriods[
+          newFundingPeriodIdx - 1 < oldFundingPeriodIdx
+            ? oldFundingPeriodIdx
+            : newFundingPeriodIdx - 1
+        ];
+      fundingsToUpdate.push(currentFunding);
+    }
+  }
 };
