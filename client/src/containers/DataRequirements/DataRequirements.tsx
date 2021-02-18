@@ -56,7 +56,7 @@ const DataRequirements: React.FC = () => {
           Data submission deadline
         </span>
         <br />
-        You must submit your data to OEC by 03/05/2021.
+        You must submit your data to OEC by 03/08/2021.
       </p>
       <h2
         id="data-elements"
