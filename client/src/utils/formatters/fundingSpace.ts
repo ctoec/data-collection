@@ -11,6 +11,9 @@ export const fundingSpaceFormatter = (fundingSpace: FundingSpace) => {
 
   // TODO: change this once we have this data
   if (!fullTimeWeeks || !partTimeWeeks || partTimeWeeks <= fullTimeWeeks) {
+    console.warn(
+      'Part time full time split display needs to be updated when data is available'
+    );
     return `${FundingTime.PartTime} / ${FundingTime.FullTime}`;
   } else {
     return `${FundingTime.FullTime} / ${FundingTime.PartTime}`;
