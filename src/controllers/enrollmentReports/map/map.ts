@@ -376,7 +376,11 @@ const updateRecord = async (
     (f) => !f.lastReportingPeriod
   );
   let enrollment = mapEnrollment(source, site, child);
-  const isNewEnrollment = rowHasNewEnrollment(currentEnrollment, enrollment);
+  const isNewEnrollment = rowHasNewEnrollment(
+    source,
+    currentEnrollment,
+    enrollment
+  );
   if (isNewEnrollment) {
     enrollment.fundings = [];
     enrollmentsToUpdate.push(enrollment);

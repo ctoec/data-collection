@@ -51,8 +51,6 @@ export const rowHasNewDetermination = (
   detFromRow,
   determination: IncomeDetermination
 ) => {
-  console.log('Det From Row: ', detFromRow);
-  console.log('New Determination: ', determination);
   return (
     (detFromRow.income &&
       parseFloat(detFromRow.income) !== determination.income) ||
