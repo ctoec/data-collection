@@ -43,13 +43,14 @@ export const mapEnrollment = (
  * @param enrollment
  */
 export const rowHasNewEnrollment = (
+  source: EnrollmentReportRow,
   enrollmentFromRow: Enrollment,
   enrollment: Enrollment
 ) => {
   return (
     (enrollmentFromRow.site &&
       enrollmentFromRow.site.siteName !== enrollment.site.siteName) ||
-    (enrollmentFromRow.model && enrollmentFromRow.model !== enrollment.model) ||
+    (source.model && enrollmentFromRow.model !== enrollment.model) ||
     (enrollmentFromRow.ageGroup &&
       enrollmentFromRow.ageGroup !== enrollment.ageGroup) ||
     (enrollmentFromRow.entry &&

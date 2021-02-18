@@ -96,7 +96,8 @@ export const rowHasNewFunding = (fundingFromRow: Funding, funding: Funding) => {
   return (
     (fundingFromRow.fundingSpace &&
       fundingFromRow.fundingSpace.source !== funding.fundingSpace.source) ||
-    fundingFromRow.fundingSpace?.time !== funding.fundingSpace.time ||
+    (fundingFromRow.fundingSpace &&
+      fundingFromRow.fundingSpace?.time !== funding.fundingSpace.time) ||
     (fundingFromRow.firstReportingPeriod &&
       fundingFromRow.firstReportingPeriod.period.format('MM/DD/YYYY') !==
         funding.firstReportingPeriod.period.format('MM/DD/YYYY')) ||
