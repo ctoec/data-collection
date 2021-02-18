@@ -184,9 +184,6 @@ workflows:
     jobs:
       - hold:
           type: approval
-          filters:
-            branches:
-              ignore: base
       - install:
           requires:
             - hold
@@ -217,9 +214,6 @@ workflows:
     jobs:
       - hold:
           type: approval
-          filters:
-            branches:
-              ignore: remove-extra-deploy-workflow
       - install:
           requires:
             - hold
