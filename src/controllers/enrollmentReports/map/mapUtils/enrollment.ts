@@ -61,6 +61,24 @@ export const rowHasNewEnrollment = (
   );
 };
 
+export const rowHasExitForCurrentEnrollment = (
+  enrollmentFromRow: Enrollment,
+  enrollment: Enrollment
+) => {
+  return (
+    enrollmentFromRow.site &&
+    enrollmentFromRow.site.siteName === enrollment.site.siteName &&
+    enrollmentFromRow.model === enrollment.model &&
+    enrollmentFromRow.ageGroup &&
+    enrollmentFromRow.ageGroup === enrollment.ageGroup &&
+    enrollmentFromRow.entry &&
+    enrollmentFromRow.entry.format('MM/DD/YYYY') ===
+      enrollment.entry.format('MM/DD/YYYY') &&
+    enrollmentFromRow.exit !== undefined &&
+    enrollment.entry.isSameOrBefore(enrollmentFromRow.exit)
+  );
+};
+
 /**
  * Simple util function that determines the most likely exit reason
  * for a previous enrollment when updating to a new enrollment.
@@ -103,8 +121,8 @@ export const handleEnrollmentUpdate = (
   let enrollment = mapEnrollment(source, site, child);
   const isNewEnrollment = rowHasNewEnrollment(
     source,
-    currentEnrollment,
-    enrollment
+    enrollment,
+    currentEnrollment
   );
 
   if (isNewEnrollment) {
@@ -123,6 +141,19 @@ export const handleEnrollmentUpdate = (
       );
     }
     enrollmentsToUpdate.push(currentEnrollment);
+  }
+
+  // Row might still be a withdrawl for the current enrollment
+  else if (rowHasExitForCurrentEnrollment(enrollment, currentEnrollment)) {
+    currentEnrollment.exit = enrollment.exit.clone();
+    currentEnrollment.exitReason = enrollment.exitReason;
+    enrollmentsToUpdate.push(currentEnrollment);
+    mapResult.changeTagsForChildren[matchingIdx].push(
+      ChangeTag.WithdrawnRecord
+    );
+
+    // No need to fund an enrollment that we withdrew
+    enrollment = undefined;
   }
 
   // If no new enrollment provided, new funding might apply

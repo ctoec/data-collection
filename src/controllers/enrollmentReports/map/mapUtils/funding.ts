@@ -172,4 +172,18 @@ export const handleFundingUpdate = (
       fundingsToUpdate.push(currentFunding);
     }
   }
+
+  // Only way to get here is by providing a row that gives an
+  // exit to the current enrollment without providing a new
+  // enrollment
+  else if (currentEnrollment && currentFunding) {
+    const exitDate = currentEnrollment.exit;
+    const exitPeriod = userReportingPeriods.find(
+      (rp) =>
+        rp.periodStart.isSameOrBefore(exitDate) &&
+        rp.periodEnd.isSameOrAfter(exitDate)
+    );
+    currentFunding.lastReportingPeriod = exitPeriod;
+    fundingsToUpdate.push(currentFunding);
+  }
 };

@@ -86,30 +86,7 @@ export async function mapRows(
 
   for (const row of rows) {
     try {
-      // Check if this row is for a child already in the system
-      const findOpts = {
-        firstName: row.firstName,
-        lastName: row.lastName,
-      };
-      const potentialMatches = await transaction.find(Child, {
-        where: findOpts,
-        relations: [
-          'family',
-          'family.incomeDeterminations',
-          'enrollments',
-          'enrollments.fundings',
-          'enrollments.site',
-        ],
-      });
-      const match = potentialMatches.find(
-        (c) =>
-          c.birthdate.format('MM/DD/YYYY') ===
-            row.birthdate.format('MM/DD/YYYY') &&
-          ((c.sasid && c.sasid === row.sasidUniqueId) ||
-            (c.uniqueId && c.uniqueId === row.sasidUniqueId) ||
-            (!c.sasid && !row.sasidUniqueId))
-      );
-
+      const match = await doesChildMatchExist(row, transaction);
       if (match)
         await updateRecord(
           organizations,
@@ -147,9 +124,8 @@ export async function mapRows(
         (det) => (det.family = undefined)
       );
     });
-    children.forEach((c) => {
-      mapResult.children.push(c);
-    });
+    if (mapResult.children.length > 0) mapResult.children.concat(children);
+    else mapResult.children = children;
     return mapResult;
   }
 
@@ -168,6 +144,41 @@ export async function mapRows(
   await batchCreateNewChildren(user, transaction, children, mapResult);
   return mapResult;
 }
+
+/**
+ * Determines whether the child represented in the given
+ * spreadsheet row is already contained in the database.
+ * Returns the child if it is, otherwise returns undefined.
+ * @param row
+ * @param transaction
+ */
+const doesChildMatchExist = async (
+  row: EnrollmentReportRow,
+  transaction: EntityManager
+) => {
+  const findOpts = {
+    firstName: row.firstName,
+    lastName: row.lastName,
+  };
+  const potentialMatches = await transaction.find(Child, {
+    where: findOpts,
+    relations: [
+      'family',
+      'family.incomeDeterminations',
+      'enrollments',
+      'enrollments.fundings',
+      'enrollments.site',
+    ],
+  });
+  const match = potentialMatches.find(
+    (c) =>
+      c.birthdate.format('MM/DD/YYYY') === row.birthdate.format('MM/DD/YYYY') &&
+      ((c.sasid && c.sasid === row.sasidUniqueId) ||
+        (c.uniqueId && c.uniqueId === row.sasidUniqueId) ||
+        (!c.sasid && !row.sasidUniqueId))
+  );
+  return match;
+};
 
 /**
  * Function that updates entities associated with a child record
