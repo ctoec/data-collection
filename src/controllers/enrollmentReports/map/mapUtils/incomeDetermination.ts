@@ -54,6 +54,13 @@ export const rowHasNewDetermination = (
   detFromRow,
   determination: IncomeDetermination
 ) => {
+  if (
+    detFromRow.income === undefined &&
+    detFromRow.numberOfPeople === undefined &&
+    detFromRow.determinationDate === undefined
+  ) {
+    return false;
+  }
   return (
     (detFromRow.income &&
       parseFloat(detFromRow.income) !== determination.income) ||
