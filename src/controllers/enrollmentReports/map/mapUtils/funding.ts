@@ -100,6 +100,9 @@ export const mapFunding = (
  * @param funding
  */
 export const rowHasNewFunding = (fundingFromRow: Funding, funding: Funding) => {
+  if (!fundingFromRow) return false;
+  if (!fundingFromRow.fundingSpace && !fundingFromRow.firstReportingPeriod)
+    return false;
   return (
     (fundingFromRow.fundingSpace &&
       fundingFromRow.fundingSpace.source !== funding.fundingSpace.source) ||
@@ -111,6 +114,26 @@ export const rowHasNewFunding = (fundingFromRow: Funding, funding: Funding) => {
     (fundingFromRow.lastReportingPeriod &&
       fundingFromRow.lastReportingPeriod.period.format('MM/DD/YYYY') !==
         funding.lastReportingPeriod.period.format('MM/DD.YYYY'))
+  );
+};
+
+export const rowEndsCurrentFunding = (
+  fundingFromRow: Funding,
+  funding: Funding
+) => {
+  if (!fundingFromRow) return false;
+  return (
+    fundingFromRow.fundingSpace &&
+    fundingFromRow.fundingSpace.source === funding.fundingSpace.source &&
+    fundingFromRow.fundingSpace &&
+    fundingFromRow.fundingSpace?.time === funding.fundingSpace.time &&
+    fundingFromRow.firstReportingPeriod &&
+    fundingFromRow.firstReportingPeriod.period.format('MM/DD/YYYY') ===
+      funding.firstReportingPeriod.period.format('MM/DD/YYYY') &&
+    fundingFromRow.lastReportingPeriod &&
+    fundingFromRow.lastReportingPeriod.period.isSameOrAfter(
+      funding.firstReportingPeriod.period
+    )
   );
 };
 
@@ -171,18 +194,40 @@ export const handleFundingUpdate = (
         ];
       fundingsToUpdate.push(currentFunding);
     }
+
+    // Row might still have info that ends the current funding
+    else if (rowEndsCurrentFunding(funding, currentFunding)) {
+      currentFunding.lastReportingPeriod = funding.lastReportingPeriod;
+      fundingsToUpdate.push(currentFunding);
+      mapResult.changeTagsForChildren[matchingIdx].push(
+        ChangeTag.ChangedFunding
+      );
+    }
   }
 
   // Only way to get here is by providing a row that gives an
   // exit to the current enrollment without providing a new
   // enrollment
-  else if (currentEnrollment && currentFunding) {
-    const exitDate = currentEnrollment.exit;
-    const exitPeriod = userReportingPeriods.find(
-      (rp) =>
-        rp.periodStart.isSameOrBefore(exitDate) &&
-        rp.periodEnd.isSameOrAfter(exitDate)
-    );
+  else if (currentEnrollment) {
+    let exitPeriod: ReportingPeriod;
+    if (source.lastReportingPeriod) {
+      exitPeriod = userReportingPeriods.find(
+        (rp) =>
+          rp.type === currentFunding.fundingSpace.source &&
+          rp.period.format('MM-YYYY') ===
+            source.lastReportingPeriod.format('MM-YYYY')
+      );
+    }
+
+    // Guess the most likely ending for the funding, if the user
+    // didn't explicitlys upply it
+    else {
+      exitPeriod = userReportingPeriods.find(
+        (rp) =>
+          rp.periodStart.isSameOrBefore(currentEnrollment.exit) &&
+          rp.periodEnd.isSameOrAfter(currentEnrollment.exit)
+      );
+    }
     currentFunding.lastReportingPeriod = exitPeriod;
     fundingsToUpdate.push(currentFunding);
   }
