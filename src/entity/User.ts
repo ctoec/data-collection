@@ -35,6 +35,12 @@ export class User implements UserInterface {
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   confidentialityAgreedDate?: Moment;
 
+  @Column({ nullable: true })
+  email?: string;
+
+  @Column({ nullable: false, default: false })
+  isOECUser: boolean = false;
+
   @OneToMany((type) => OrganizationPermission, (perm) => perm.user)
   orgPermissions?: Array<OrganizationPermission>;
 
