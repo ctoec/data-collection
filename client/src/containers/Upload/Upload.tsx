@@ -7,6 +7,10 @@ import {
   Alert,
   LoadingWrapper,
   ErrorBoundary,
+  Card,
+  Accordion,
+  HeadingLevel,
+  Button,
 } from '@ctoec/component-library';
 import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
@@ -20,6 +24,7 @@ import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps
 import { BatchUpload } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { BackButton } from '../../components/BackButton';
+import { getPreviewTableAccordionItems } from './getPreviewTableAccordionItems';
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -56,15 +61,48 @@ const Upload: React.FC = () => {
     }
   }, [file, errorDict]);
 
+  const [showPreview, setShowPreview] = useState(false);
+  const [preview, setPreview] = useState<BatchUpload>();
+  useEffect(() => {
+    // console.log("Inside effect");
+    // console.log(file, preview);
+    if (file && showPreview) {
+      setLoading(true);
+      const formData = getFormDataBlob(file);
+      console.log('ABOUT TO CALL API');
+      apiPost(`enrollment-reports/false`, formData, {
+        accessToken,
+        headers: { 'content-type': formData.type },
+        rawBody: true,
+      })
+        .then((resp: BatchUpload) => {
+          // Clear all children records from data cache
+          clearChildrenCaches();
+          console.log(resp);
+          setPreview(resp);
+        })
+        .catch(
+          handleJWTError(history, (err) => {
+            setError(err);
+            clearFile();
+          })
+        )
+        // Reset this flag to false so the upload can be subsequently re-triggered
+        .finally(() => {
+          setLoading(false);
+        });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
+  }, [file, showPreview]);
+
   // If the file exists and the upload should be posted,
   // then trigger the API request
   const [postUpload, setPostUpload] = useState(false);
-  const [queryStringForUpload, setQueryStringForUpload] = useState('');
   useEffect(() => {
     if (file && postUpload) {
       setLoading(true);
       const formData = getFormDataBlob(file);
-      apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
+      apiPost(`enrollment-reports/true`, formData, {
         accessToken,
         headers: { 'content-type': formData.type },
         rawBody: true,
@@ -77,6 +115,8 @@ const Upload: React.FC = () => {
           clearChildrenCaches();
           console.log(resp);
           let uploadText = `You uploaded ${resp.new} new records`;
+          uploadText +=
+            resp.updated > 0 ? `, ${resp.updated} updated records` : '';
           uploadText +=
             resp.withdrawn > 0
               ? ` and ${resp.withdrawn} withdrawn records.`
@@ -107,16 +147,16 @@ const Upload: React.FC = () => {
   }, [postUpload]);
 
   const [errorModalOpen, setErrorModalOpen] = useState(false);
-  const advanceToPostUpload = () => {
-    setPostUpload(true);
+  const advanceToPreview = () => {
     setErrorModalOpen(false);
+    setShowPreview(true);
   };
 
   useEffect(() => {
     // If they have selected a file, then open the error checking modal.
     if (file && errorDict !== undefined) {
       if (errorDict.length > 0) setErrorModalOpen(true);
-      else setPostUpload(true);
+      else setShowPreview(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, errorDict]);
@@ -140,6 +180,13 @@ const Upload: React.FC = () => {
     setErrorDict(undefined);
   };
 
+  const previewAccordionItems = preview
+    ? {
+        items: getPreviewTableAccordionItems(preview.uploadPreview),
+        titleHeadingLevel: 'h2' as HeadingLevel,
+      }
+    : undefined;
+
   return (
     <div className="grid-container">
       <BackButton location="/" />
@@ -149,7 +196,7 @@ const Upload: React.FC = () => {
         closeModal={() => setErrorModalOpen(false)}
         clearFile={clearFile}
         errorDict={errorDict || []}
-        nextFunc={advanceToPostUpload}
+        nextFunc={advanceToPreview}
       />
       {error && (
         <div className="margin-bottom-2">
@@ -183,28 +230,86 @@ const Upload: React.FC = () => {
           Upload your enrollment data
         </h1>
         <p>
-          After you've entered all state funded enrollment data in the
-          spreadsheet template, upload the file here.
+          {!showPreview && !errorModalOpen
+            ? `After you've entered all state funded enrollment data in the 
+              spreadsheet template, upload the file here.`
+            : `Here is a summary of the changes you're uploading in this file.
+              If everything looks right, upload your changes to your roster.`}
         </p>
       </div>
-      <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-        <div className="grid-row">
-          <form
-            className={cx('usa-form', {
-              'display-none': errorModalOpen,
-            })}
-          >
-            <LoadingWrapper text="Uploading your file..." loading={loading}>
-              <FileInput
-                key={fileKey}
-                id="report"
-                label="Choose a file"
-                onChange={fileUpload}
-              />
-            </LoadingWrapper>
-          </form>
-        </div>
-      </ErrorBoundary>
+
+      {!preview || errorModalOpen ? (
+        <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
+          <div className="grid-row">
+            <form
+              className={cx('usa-form', {
+                'display-none': errorModalOpen,
+              })}
+            >
+              <LoadingWrapper text="Uploading your file..." loading={loading}>
+                <FileInput
+                  key={fileKey}
+                  id="report"
+                  label="Choose a file"
+                  onChange={fileUpload}
+                />
+              </LoadingWrapper>
+            </form>
+          </div>
+        </ErrorBoundary>
+      ) : (
+        <>
+          <div className="grid-row desktop:grid-col-4 three-column-card">
+            <Card className="font-body-lg">
+              <p className="margin-top-0 margin-bottom-0">
+                Total records in this file
+              </p>
+              <p className="text-bold margin-top-0 margin-bottom-0">
+                {preview.new + preview.updated + preview.withdrawn}
+              </p>
+            </Card>
+          </div>
+          <div className="grid-row three-column-layout">
+            <div className="desktop:grid-col-4 three-column-card">
+              <Card className="font-body-lg">
+                <p className="margin-top-0 margin-bottom-0">New</p>
+                <p className="text-bold margin-top-0 margin-bottom-0">
+                  {preview.new}
+                </p>
+              </Card>
+            </div>
+            <div className="desktop:grid-col-4 three-column-card">
+              <Card className="font-body-lg">
+                <p className="margin-top-0 margin-bottom-0">Updated</p>
+                <p className="text-bold margin-top-0 margin-bottom-0">
+                  {preview.updated}
+                </p>
+              </Card>
+            </div>
+            <div className="desktop:grid-col-4 three-column-card">
+              <Card className="font-body-lg">
+                <p className="margin-top-0 margin-bottom-0">Withdrawn</p>
+                <p className="text-bold margin-top-0 margin-bottom-0">
+                  {preview.withdrawn}
+                </p>
+              </Card>
+            </div>
+          </div>
+
+          {previewAccordionItems ? (
+            <Accordion {...previewAccordionItems} />
+          ) : (
+            <></>
+          )}
+
+          <Button text="Cancel Upload" href="/home" appearance="outline" />
+          <Button
+            id="upload-button"
+            text="Save changes to roster"
+            onClick={() => setPostUpload(true)}
+          />
+        </>
+      )}
     </div>
   );
 };

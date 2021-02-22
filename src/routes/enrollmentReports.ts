@@ -99,19 +99,30 @@ enrollmentReportsRouter.post(
  * 	- returns new EnrollmentReport on success
  */
 enrollmentReportsRouter.post(
-  '/',
+  '/:shouldSave',
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
+        const shouldSave = req.params['shouldSave'] === 'true';
         const reportRows = controller.parseUploadedTemplate(req.file);
         const mapResult = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
-          { save: true }
+          { save: shouldSave }
         );
+
+        // Augment with validation errors to determine missing info
+        if (!shouldSave) {
+          mapResult.children = await Promise.all(
+            mapResult.children.map(async (c) => ({
+              ...c,
+              validationErrors: await validate(c),
+            }))
+          );
+        }
 
         // TODO: Decide if there's any benefit in actually creating the EnrollmentReport entity,
         // which maps childIds to the upload they came from.

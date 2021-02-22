@@ -60,7 +60,7 @@ export const ErrorModal: React.FC<ErrorModalProps> = ({
                 closeModal();
               }}
             />
-            <Button text="Upload and correct in roster" onClick={nextFunc} />
+            <Button text="Move to upload preview" onClick={nextFunc} />
           </div>
         </div>
       }

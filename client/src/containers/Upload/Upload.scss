@@ -1,0 +1,13 @@
+.three-column-layout {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.three-column-card {
+  margin: 0.5em;
+  width: 30%;
+  max-width: 30%;
+}
