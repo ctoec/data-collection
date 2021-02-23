@@ -229,7 +229,7 @@ export class EnrollmentReportRow {
   @ColumnMetadata({
     formattedName: 'Hispanic or Latinx ethnicity',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
-    definition: "The child's ethnicity, has identified by the family.",
+    definition: "The child's ethnicity, as identified by the family.",
     reason: DEMOGRAPHIC_REPORTING_REASON,
     format: makeFormatOptionsList(BOOLEAN_FORMATS),
     example: 'Yes',
