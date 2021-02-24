@@ -14,9 +14,8 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { CheckReplaceData } from './CheckReplaceData';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
-import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
-import { BatchUpload, EnrollmentColumnError } from '../../shared/payloads';
+import { EnrollmentColumnError } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { BackButton } from '../../components/BackButton';
 
@@ -41,28 +40,35 @@ const Upload: React.FC = () => {
   // Check the file for errors if there is a file
   const [file, setFile] = useState<File>();
   useEffect(() => {
-    // Haven't yet determined how many errors of each type there are
-    if (file) {
+    (async function submitUpload() {
+      if (!file) return;
+
       setLoading(true);
       const formData = getFormDataBlob(file);
-      apiPost(`enrollment-reports/check`, formData, {
-        accessToken,
-        headers: { 'content-type': formData.type },
-        rawBody: true,
-      })
-        .then((enrollmentColumnErrors: EnrollmentColumnError[]) => {
-          history.push('/missing-info', {
-            enrollmentColumnErrors,
-          });
-        })
-        .catch(
-          handleJWTError(history, (err) => {
-            setError(err);
-            clearFile();
-          })
-        )
-        .finally(() => setLoading(false));
-    }
+
+      try {
+        const enrollmentColumnErrors: EnrollmentColumnError[] = await apiPost(
+          `enrollment-reports/check`,
+          formData,
+          {
+            accessToken,
+            headers: { 'content-type': formData.type },
+            rawBody: true,
+          }
+        );
+
+        history.push('/missing-info', {
+          enrollmentColumnErrors,
+        });
+      } catch (e) {
+        handleJWTError(history, (e) => {
+          setError(e);
+          clearFile();
+        });
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [file]);
 
   // If the file exists and the upload should be posted,
@@ -70,19 +76,10 @@ const Upload: React.FC = () => {
   const [postUpload, setPostUpload] = useState(false);
   const [queryStringForUpload, setQueryStringForUpload] = useState('');
 
-  // Case where the user doesn't already have a roster so we
-  // don't need to go to CheckReplace: next step is confirm upload
-  const [errorModalOpen, setErrorModalOpen] = useState(false);
-  const advanceToPostUpload = () => {
-    setPostUpload(true);
-    setErrorModalOpen(false);
-  };
-
   // Case where the user does have an existing roster; need to
   // open the CheckReplace modal as a next step
   const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
   const advanceToCheckReplace = () => {
-    setErrorModalOpen(false);
     setCheckReplaceDataOpen(true);
   };
 
@@ -173,7 +170,7 @@ const Upload: React.FC = () => {
         <div className="grid-row">
           <form
             className={cx('usa-form', {
-              'display-none': checkReplaceDataOpen || errorModalOpen,
+              'display-none': checkReplaceDataOpen,
             })}
           >
             <LoadingWrapper text="Uploading your file..." loading={loading}>
