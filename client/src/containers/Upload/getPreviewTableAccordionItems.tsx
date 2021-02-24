@@ -1,11 +1,15 @@
 import React from 'react';
 import pluralize from 'pluralize';
-import { ErrorBoundary, InlineIcon, Table } from '@ctoec/component-library';
-import { AccordionItemProps } from '@ctoec/component-library/dist/components/Accordion/AccordionItem';
+import {
+  AccordionItemProps,
+  ErrorBoundary,
+  InlineIcon,
+  Table,
+} from '@ctoec/component-library';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
-import { UploadPreviewTableObject } from './UploadPreviewTableObject';
 import { AgeGroup } from '../../shared/models';
 import { getPreviewTableColumns } from './previewTableColumns';
+import { UploadPreviewRow } from './UploadPreviewRow';
 
 export const MAX_LENGTH_EXPANDED = 50;
 export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
@@ -16,7 +20,7 @@ export const QUERY_STRING_MONTH_FORMAT = 'MMMM-YYYY';
 export const NoAgeGroup = 'Incomplete enrollments';
 export type RosterSections = AgeGroup | typeof NoAgeGroup;
 export type RowsByAgeGroup = {
-  [key in RosterSections]?: UploadPreviewTableObject[];
+  [key in RosterSections]?: UploadPreviewRow[];
 };
 
 /**
@@ -26,7 +30,7 @@ export type RowsByAgeGroup = {
  * @param opts
  */
 export function getPreviewTableAccordionItems(
-  children: UploadPreviewTableObject[]
+  children: UploadPreviewRow[]
 ): AccordionItemProps[] {
   const childrenByAgeGroup = getChildrenByAgeGroup(children);
 
@@ -66,7 +70,7 @@ export function getPreviewTableAccordionItems(
       content: (
         <>
           <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
-            <Table<UploadPreviewTableObject>
+            <Table<UploadPreviewRow>
               className="margin-bottom-4"
               id={`preview-table-${ageGroup}`}
               rowKey={(row) => row?.name}
@@ -83,7 +87,7 @@ export function getPreviewTableAccordionItems(
 }
 
 function getChildrenByAgeGroup(
-  filteredChildren: UploadPreviewTableObject[]
+  filteredChildren: UploadPreviewRow[]
 ): RowsByAgeGroup {
   const childrenByAgeGroup: RowsByAgeGroup = {};
   // Filter all children into an object, keyed by age group

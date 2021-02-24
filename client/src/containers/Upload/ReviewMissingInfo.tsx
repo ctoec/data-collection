@@ -1,51 +1,14 @@
 import {
   Button,
-  Column,
   ProgressIndicator,
   ProgressIndicatorProps,
   Table,
 } from '@ctoec/component-library';
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import { EnrollmentColumnError } from '../../shared/payloads';
-
-const misingInfoTableColumns: Column<EnrollmentColumnError>[] = [
-  {
-    name: 'Column name',
-    sort: (row) => row.column || '',
-    cell: ({ row }) => (
-      <th scope="row" className="font-body-2xs">
-        <p>{row.formattedName}</p>
-      </th>
-    ),
-  },
-  {
-    name: '# of errors',
-    sort: (row) => row.column || '',
-    cell: ({ row }) => (
-      <th scope="row" className="font-body-2xs">
-        <p>{row.errorCount}</p>
-      </th>
-    ),
-  },
-  {
-    name: 'Child records with errors',
-    sort: (row) => row.column || '',
-    cell: ({ row }) => (
-      <th scope="row" className="font-body-2xs">
-        <p>
-          {row.affectedRows.length > 5
-            ? row.affectedRows.slice(0, 5).join(', ') +
-              ', and ' +
-              (row.affectedRows.length - 5).toString() +
-              ' more'
-            : row.affectedRows.join(', ')}
-        </p>
-      </th>
-    ),
-  },
-];
+import { misingInfoTableColumns } from './missingInfoTableColumns';
 
 const props: ProgressIndicatorProps = {
   currentIndex: 1,
@@ -75,6 +38,7 @@ export const ReviewMissingInfo: React.FC = () => {
 
   const missingInfo: EnrollmentColumnError[] = (state as any)
     .enrollmentColumnErrors;
+  const file = (state as any).file;
 
   return (
     <div className="grid-container">
@@ -102,7 +66,7 @@ export const ReviewMissingInfo: React.FC = () => {
               id="errors-in-sheet-modal-table"
               data={missingInfo}
               rowKey={(row) => row.column}
-              columns={misingInfoTableColumns}
+              columns={misingInfoTableColumns()}
             />
           </div>
         ) : (
@@ -124,7 +88,10 @@ export const ReviewMissingInfo: React.FC = () => {
         />
         // TODO: Update in
         https://app.zenhub.com/workspaces/ece-dev-board-5ff506028d35f30012e0e937/issues/ctoec/data-collection/239
-        <Button text="Next" onClick={() => null} />
+        <Button
+          text="Next"
+          onClick={() => history.push('/preview', { file })}
+        />
       </div>
     </div>
   );

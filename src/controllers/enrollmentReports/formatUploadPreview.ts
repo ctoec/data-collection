@@ -23,7 +23,7 @@ export const formatUploadPreview = (mapResult: EnrollmentReportUpdate) => {
         // Greater than 1 here because we didn't save nested enrollments and
         // fundings to the DB, so the "every child has a funded enrollment"
         // validator goes off for every child--ignore it
-        missingfInfo: c.validationErrors && c.validationErrors.length > 1,
+        missingInfo: c.validationErrors && c.validationErrors.length > 1,
         tags: mapResult.changeTagsForChildren[idx],
         birthDate: c.birthdate.format('MM/DD/YYYY'),
         fundingSource: recentFunding
