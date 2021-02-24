@@ -6,7 +6,7 @@ jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { ColumnMetadata } from '../../shared/models';
 import { waitFor } from '@testing-library/react';
-import { TemplateMetadata } from '../../shared/payloads';
+import { TemplateMetadataResponse } from '../../shared/payloads';
 import moment from 'moment';
 const apiMock = api as jest.Mocked<typeof api>;
 
@@ -33,7 +33,7 @@ const dataRequirements: ColumnMetadata[] = [
   },
 ];
 
-const templateMetadata: TemplateMetadata = {
+const templateMetadata: TemplateMetadataResponse = {
   version: 1,
   lastUpdated: moment(),
   columnMetadata: dataRequirements,

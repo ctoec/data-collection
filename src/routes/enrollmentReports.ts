@@ -6,7 +6,7 @@ import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
-import { BatchUpload } from '../../client/src/shared/payloads';
+import { BatchUploadResponse } from '../../client/src/shared/payloads';
 import { ChangeTag } from '../../client/src/shared/models';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
@@ -137,7 +137,7 @@ enrollmentReportsRouter.post(
           updated: numUpdated,
           withdrawn: numWithdrawn,
           uploadPreview: controller.formatUploadPreview(mapResult),
-        } as BatchUpload);
+        } as BatchUploadResponse);
 
         // Only remove the file from disk if we successfully parsed it
         if (req.file && req.file.path) fs.unlinkSync(req.file.path);

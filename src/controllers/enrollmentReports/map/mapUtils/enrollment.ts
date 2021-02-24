@@ -8,7 +8,7 @@ import {
 import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum } from '.';
 import { getManager } from 'typeorm';
-import { MapResult } from '../uploadTypes';
+import { EnrollmentReportUpdate } from '../uploadTypes';
 
 /**
  * Create Enrollment object from FlattenedEnrollment source,
@@ -111,7 +111,7 @@ export const handleEnrollmentUpdate = (
   site: Site,
   child: Child,
   enrollmentsToUpdate: Enrollment[],
-  mapResult: MapResult,
+  mapResult: EnrollmentReportUpdate,
   matchingIdx: number
 ) => {
   const currentEnrollment: Enrollment | undefined = child.enrollments.find(

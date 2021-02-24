@@ -11,7 +11,7 @@ import {
 } from '../shared/models';
 import { apiPost, ApiOpts, apiGet } from '../utils/api';
 import moment from 'moment';
-import { ChangeEnrollment } from '../shared/payloads';
+import { ChangeEnrollmentRequest } from '../shared/payloads';
 
 export const TEST_OPTS: ApiOpts = {
   headers: { 'X-Test-No-Authenticate': 'true' },
@@ -36,7 +36,7 @@ export const createEnrollment = async (
   opts?: { withFunding: boolean }
 ) => {
   const date = moment('2020-09-01', ['YYYY-MM-DD']);
-  const changeEnrollment: ChangeEnrollment = {
+  const changeEnrollment: ChangeEnrollmentRequest = {
     newEnrollment: {
       site,
       entry: date,

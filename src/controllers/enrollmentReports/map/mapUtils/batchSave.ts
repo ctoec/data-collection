@@ -8,7 +8,7 @@ import {
   Enrollment,
   Funding,
 } from '../../../../entity';
-import { MapResult } from '../uploadTypes';
+import { EnrollmentReportUpdate } from '../uploadTypes';
 import { ChangeTag } from '../../../../../client/src/shared/models';
 
 /**
@@ -57,7 +57,7 @@ export async function batchCreateNewChildren(
   user: User,
   transaction: EntityManager,
   children: Child[],
-  mapResult: MapResult
+  mapResult: EnrollmentReportUpdate
 ) {
   // Create families
   const createdFamilies = await doBatchedInsert<Family>(
@@ -158,7 +158,7 @@ export async function batchSaveUpdatedEntities(
   childrenToUpdate: Child[],
   enrollmentsToUpdate: Enrollment[],
   fundingsToUpdate: Funding[],
-  mapResult: MapResult
+  mapResult: EnrollmentReportUpdate
 ) {
   await doBatchedInsert<Family>(user, transaction, familiesToUpdate);
   await doBatchedInsert<IncomeDetermination>(

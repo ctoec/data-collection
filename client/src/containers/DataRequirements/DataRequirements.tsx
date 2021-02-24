@@ -3,7 +3,7 @@ import { BackButton } from '../../components/BackButton';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import DataDefinitionsTable from '../../components/DataDefinitionsTable/DataDefinitionsTable';
 import useSWR, { responseInterface } from 'swr';
-import { TemplateMetadata } from '../../shared/payloads';
+import { TemplateMetadataResponse } from '../../shared/payloads';
 import { FundingSource } from '../../shared/models';
 
 const DataRequirements: React.FC = () => {
@@ -11,7 +11,7 @@ const DataRequirements: React.FC = () => {
 
   const { data: templateMetadata } = useSWR('template/metadata', {
     dedupingInterval: 100000,
-  }) as responseInterface<TemplateMetadata, string>;
+  }) as responseInterface<TemplateMetadataResponse, string>;
 
   return (
     <div className="grid-container">

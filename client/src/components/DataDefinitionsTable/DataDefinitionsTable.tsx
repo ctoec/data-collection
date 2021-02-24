@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Table, HeadingLevel, LoadingWrapper } from '@ctoec/component-library';
-import { TemplateMetadata } from '../../shared/payloads';
+import { TemplateMetadataResponse } from '../../shared/payloads';
 import {
   TEMPLATE_REQUIREMENT_LEVELS,
   TEMPLATE_SECTIONS,
@@ -32,7 +32,7 @@ const DataDefinitionsTable: React.FC<DataDefinitionsTableProps> = ({
 
   const { data: templateMetadata } = useSWR('template/metadata', {
     dedupingInterval: 100000,
-  }) as responseInterface<TemplateMetadata, string>;
+  }) as responseInterface<TemplateMetadataResponse, string>;
   const { columnMetadata } = templateMetadata || {};
 
   let filteredColumnMetadata: EnhancedColumnMetadata[] = columnMetadata || [];

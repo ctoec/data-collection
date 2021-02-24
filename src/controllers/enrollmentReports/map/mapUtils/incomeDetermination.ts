@@ -1,7 +1,7 @@
 import { Child, Family, IncomeDetermination } from '../../../../entity';
 import { EnrollmentReportRow } from '../../../../template';
 import { getManager } from 'typeorm';
-import { MapResult } from '../uploadTypes';
+import { EnrollmentReportUpdate } from '../uploadTypes';
 import { getLastIncomeDetermination } from '../../../../utils/getLastIncomeDetermination';
 import { ChangeTag } from '../../../../../client/src/shared/models';
 
@@ -83,7 +83,7 @@ export const handleIncomeDeterminationUpdate = (
   source: EnrollmentReportRow,
   matchingIdx: number,
   determinationsToUpdate: IncomeDetermination[],
-  mapResult: MapResult
+  mapResult: EnrollmentReportUpdate
 ) => {
   const currentDetermination = getLastIncomeDetermination(child.family);
   const determination = mapIncomeDetermination(source, child.family);

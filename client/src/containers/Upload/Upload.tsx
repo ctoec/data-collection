@@ -17,7 +17,7 @@ import { ErrorModal } from './ErrorModal/ErrorsModal';
 import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
 import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
-import { BatchUpload } from '../../shared/payloads';
+import { BatchUploadResponse } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { BackButton } from '../../components/BackButton';
 
@@ -72,10 +72,9 @@ const Upload: React.FC = () => {
         // Response contains id of created enrollmentReport,
         // number of active enrollments, and num withdrawn enrollments
         // via BatchUpload payload
-        .then((resp: BatchUpload) => {
+        .then((resp: BatchUploadResponse) => {
           // Clear all children records from data cache
           clearChildrenCaches();
-          console.log(resp);
           let uploadText = `You uploaded ${resp.new} new records`;
           uploadText +=
             resp.withdrawn > 0

@@ -1,6 +1,6 @@
 import { getManager, EntityManager } from 'typeorm';
 import idx from 'idx';
-import { ChangeEnrollment } from '../../../client/src/shared/payloads';
+import { ChangeEnrollmentRequest } from '../../../client/src/shared/payloads';
 import {
   ExitReason,
   Enrollment as EnrollmentInterface,
@@ -32,7 +32,7 @@ import { UpdateMetaData } from '../../entity/embeddedColumns/UpdateMetaData';
  */
 export const changeEnrollment = async (
   id: string,
-  changeEnrollmentData: ChangeEnrollment,
+  changeEnrollmentData: ChangeEnrollmentRequest,
   user: User
 ) => {
   console.debug('changeEnrollment() invoked');

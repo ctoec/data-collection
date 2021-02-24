@@ -30,7 +30,7 @@ import { EnrollmentReportRow } from '../../../template';
 import { BadRequestError, ApiError } from '../../../middleware/error/errors';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
 import { ChangeTag } from '../../../../client/src/shared/models';
-import { MapResult } from './uploadTypes';
+import { EnrollmentReportUpdate } from './uploadTypes';
 import {
   batchCreateNewChildren,
   batchSaveUpdatedEntities,
@@ -55,7 +55,7 @@ export async function mapRows(
   rows: EnrollmentReportRow[],
   user: User,
   opts: { save: boolean } = { save: false }
-): Promise<MapResult> {
+): Promise<EnrollmentReportUpdate> {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
   const [
     organizations,
@@ -71,7 +71,7 @@ export async function mapRows(
     transaction.find(ReportingPeriod),
   ]);
 
-  const mapResult: MapResult = {
+  const mapResult: EnrollmentReportUpdate = {
     changeTagsForChildren: [],
     children: [],
   };
@@ -191,7 +191,7 @@ const updateRecord = async (
   source: EnrollmentReportRow,
   userFundingSpaces: FundingSpace[],
   userReportingPeriods: ReportingPeriod[],
-  mapResult: MapResult
+  mapResult: EnrollmentReportUpdate
 ) => {
   const organization = lookUpOrganization(source, userOrganizations);
   if (!organization) {

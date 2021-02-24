@@ -13,7 +13,7 @@ import {
 } from '../../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum, mapFundingTime } from '.';
-import { MapResult } from '../uploadTypes';
+import { EnrollmentReportUpdate } from '../uploadTypes';
 
 /**
  * Create a Funding object from FlattenedEnrollment source,
@@ -152,7 +152,7 @@ export const handleFundingUpdate = (
   userFundingSpaces: FundingSpace[],
   userReportingPeriods: ReportingPeriod[],
   fundingsToUpdate: Funding[],
-  mapResult: MapResult,
+  mapResult: EnrollmentReportUpdate,
   matchingIdx: number
 ) => {
   const currentFunding: Funding | undefined = currentEnrollment?.fundings.find(
