@@ -124,7 +124,7 @@ export async function mapRows(
         (det) => (det.family = undefined)
       );
     });
-    if (mapResult.children.length > 0) mapResult.children.concat(children);
+    if (mapResult.children.length > 0) mapResult.children.push(...children);
     else mapResult.children = children;
     return mapResult;
   }

@@ -59,12 +59,11 @@ const Upload: React.FC = () => {
   // If the file exists and the upload should be posted,
   // then trigger the API request
   const [postUpload, setPostUpload] = useState(false);
-  const [queryStringForUpload, setQueryStringForUpload] = useState('');
   useEffect(() => {
     if (file && postUpload) {
       setLoading(true);
       const formData = getFormDataBlob(file);
-      apiPost(`enrollment-reports${queryStringForUpload}`, formData, {
+      apiPost('enrollment-reports', formData, {
         accessToken,
         headers: { 'content-type': formData.type },
         rawBody: true,
