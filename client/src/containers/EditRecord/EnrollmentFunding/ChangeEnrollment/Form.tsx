@@ -5,7 +5,7 @@ import {
   Button,
   FormSubmitButton,
 } from '@ctoec/component-library';
-import { ChangeEnrollment } from '../../../../shared/payloads';
+import { ChangeEnrollmentRequest } from '../../../../shared/payloads';
 import { Enrollment, Child, FundingSource } from '../../../../shared/models';
 import {
   SiteField,
@@ -44,7 +44,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
 
   const [loading, setLoading] = useState(false);
-  const onSubmit = (updatedData: ChangeEnrollment) => {
+  const onSubmit = (updatedData: ChangeEnrollmentRequest) => {
     setLoading(true);
 
     //  Because the radio group for the Site field broadcasts ID as a string,
@@ -88,7 +88,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   }
 
   return (
-    <Form<ChangeEnrollment>
+    <Form<ChangeEnrollmentRequest>
       id="change-enrollment-form"
       className="usa-form"
       data={{ newEnrollment: {} as Enrollment }}
@@ -97,20 +97,20 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       <Heading level={topHeadingLevel} className="margin-top-2 margin-bottom-2">
         New enrollment
       </Heading>
-      <SiteField<ChangeEnrollment>
+      <SiteField<ChangeEnrollmentRequest>
         sites={sites}
         enrollmentAccessor={(data) => data.at('newEnrollment')}
       />
-      <EnrollmentStartDateField<ChangeEnrollment>
+      <EnrollmentStartDateField<ChangeEnrollmentRequest>
         enrollmentAccessor={(data) => data.at('newEnrollment')}
       />
-      <CareModelField<ChangeEnrollment>
+      <CareModelField<ChangeEnrollmentRequest>
         enrollmentAccessor={(data) => data.at('newEnrollment')}
       />
-      <AgeGroupField<ChangeEnrollment>
+      <AgeGroupField<ChangeEnrollmentRequest>
         enrollmentAccessor={(data) => data.at('newEnrollment')}
       />
-      <NewFundingField<ChangeEnrollment>
+      <NewFundingField<ChangeEnrollmentRequest>
         fundingAccessor={(data) =>
           data.at('newEnrollment').at('fundings').at(0)
         }
@@ -121,7 +121,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       {!!currentEnrollment && activeFunding && (
         <>
           <Heading level={topHeadingLevel}>Previous enrollment</Heading>
-          <ReportingPeriodField<ChangeEnrollment>
+          <ReportingPeriodField<ChangeEnrollmentRequest>
             accessor={(data) =>
               data.at('oldEnrollment').at('funding').at('lastReportingPeriod')
             }

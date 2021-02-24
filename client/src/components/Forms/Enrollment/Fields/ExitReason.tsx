@@ -6,10 +6,10 @@ import {
 } from '@ctoec/component-library';
 import React from 'react';
 import { ExitReason, Enrollment } from '../../../../shared/models';
-import { Withdraw } from '../../../../shared/payloads';
+import { WithdrawRequest } from '../../../../shared/payloads';
 import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 
-export const ExitReasonField = <T extends Enrollment | Withdraw>({}) => {
+export const ExitReasonField = <T extends Enrollment | WithdrawRequest>({}) => {
   const { dataDriller, immutableUpdateData } = useGenericContext<T>(
     FormContext
   );

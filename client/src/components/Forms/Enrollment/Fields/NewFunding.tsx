@@ -13,7 +13,10 @@ import {
   TObjectDriller,
 } from '@ctoec/component-library';
 import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
-import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
+import {
+  ChangeFundingRequest,
+  ChangeEnrollmentRequest,
+} from '../../../../shared/payloads';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
@@ -36,7 +39,11 @@ const fsToId = (fs: string) => fs.replace(/\s/g, '');
  * or as part of creating a new enrollment.
  */
 export const NewFundingField = <
-  T extends ChangeFunding | ChangeEnrollment | Enrollment | Funding
+  T extends
+    | ChangeFundingRequest
+    | ChangeEnrollmentRequest
+    | Enrollment
+    | Funding
 >({
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
   getEnrollment,

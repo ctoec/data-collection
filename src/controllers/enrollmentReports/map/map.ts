@@ -11,7 +11,6 @@ import {
   Family,
   IncomeDetermination,
 } from '../../../entity';
-import { UpdateMetaData } from '../../../entity/embeddedColumns/UpdateMetaData';
 import {
   lookUpOrganization,
   lookUpSite,
@@ -21,10 +20,29 @@ import {
   mapChild,
   mapEnrollment,
   mapFunding,
+  updateBirthCertificateInfo,
+  updateFamilyAddress,
+  handleIncomeDeterminationUpdate,
+  handleEnrollmentUpdate,
+  handleFundingUpdate,
 } from './mapUtils';
 import { EnrollmentReportRow } from '../../../template';
 import { BadRequestError, ApiError } from '../../../middleware/error/errors';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
+import { ChangeTag } from '../../../../client/src/shared/models';
+import { EnrollmentReportUpdate } from './uploadTypes';
+import {
+  batchCreateNewChildren,
+  batchSaveUpdatedEntities,
+} from './mapUtils/batchSave';
+
+// We'll store entities we need to update here so that we can
+// appropriately batch save them after all processing
+let childrenToUpdate: Child[];
+let familiesToUpdate: Family[];
+let determinationsToUpdate: IncomeDetermination[];
+let enrollmentsToUpdate: Enrollment[];
+let fundingsToUpdate: Funding[];
 
 /**
  * Can use optional save parameter to decide whether to persist
@@ -37,7 +55,7 @@ export async function mapRows(
   rows: EnrollmentReportRow[],
   user: User,
   opts: { save: boolean } = { save: false }
-): Promise<Child[]> {
+): Promise<EnrollmentReportUpdate> {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
   const [
     organizations,
@@ -53,17 +71,42 @@ export async function mapRows(
     transaction.find(ReportingPeriod),
   ]);
 
+  const mapResult: EnrollmentReportUpdate = {
+    changeTagsForChildren: [],
+    children: [],
+  };
+
+  // Initialize the accumulator arrays
   const children: Child[] = [];
+  childrenToUpdate = [];
+  familiesToUpdate = [];
+  determinationsToUpdate = [];
+  enrollmentsToUpdate = [];
+  fundingsToUpdate = [];
+
   for (const row of rows) {
     try {
-      await mapRow(
-        row,
-        organizations,
-        sites,
-        fundingSpaces,
-        reportingPeriods,
-        children
-      );
+      const match = await doesChildMatchExist(row, transaction);
+      if (match)
+        await updateRecord(
+          organizations,
+          sites,
+          match,
+          row,
+          fundingSpaces,
+          reportingPeriods,
+          mapResult
+        );
+      else {
+        await mapRow(
+          row,
+          organizations,
+          sites,
+          fundingSpaces,
+          reportingPeriods,
+          children
+        );
+      }
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error occured while parsing row: ', err);
@@ -81,93 +124,142 @@ export async function mapRows(
         (det) => (det.family = undefined)
       );
     });
-    return children;
+    if (mapResult.children.length > 0) mapResult.children.push(...children);
+    else mapResult.children = children;
+    return mapResult;
   }
 
-  // Otherwise, create entities in DB
-  // Create families
-  const createdFamilies = await doBatchedInsert<Family>(
+  // Otherwise, update the entities that already exist, and create
+  // new records that don't yet
+  await batchSaveUpdatedEntities(
+    user,
     transaction,
-    children.map((child) => {
-      child.family.updateMetaData = { author: user } as UpdateMetaData;
-      return child.family;
-    })
+    familiesToUpdate,
+    determinationsToUpdate,
+    childrenToUpdate,
+    enrollmentsToUpdate,
+    fundingsToUpdate,
+    mapResult
   );
-
-  // Create dets with updated family references
-  await doBatchedInsert<IncomeDetermination>(
-    transaction,
-    children.map((child, idx) => {
-      const det = child.family.incomeDeterminations[0];
-      det.family = undefined;
-      det.familyId = createdFamilies[idx].id;
-      det.updateMetaData = { author: user } as UpdateMetaData;
-      return det;
-    })
-  );
-
-  // Create children with updated family references
-  const createdChildren = await doBatchedInsert<Child>(
-    transaction,
-    children.map((child, idx) => {
-      child.family = createdFamilies[idx];
-      child.updateMetaData = { author: user } as UpdateMetaData;
-      return child;
-    })
-  );
-
-  // Create enrollments and fundings with updated child references
-  // Cascade create does not work for entities with auto-incrementing pks,
-  // so we have to create all enrollments, then create all fundings for the enrollments
-  const fundings: Funding[][] = [];
-  const enrollments = children.reduce((flatEnrollments, child, childIdx) => {
-    child.enrollments.forEach((enrollment) => {
-      // Add child id and remove child reference
-      enrollment.child = undefined;
-      enrollment.childId = createdChildren[childIdx].id;
-
-      // Grab fundings to save later, and remove reference
-      fundings.push(enrollment.fundings);
-      enrollment.fundings = undefined;
-
-      // Add processed enrollment to array
-      enrollment.updateMetaData = { author: user } as UpdateMetaData;
-      flatEnrollments.push(enrollment);
-    });
-    return flatEnrollments;
-  }, []) as Enrollment[];
-
-  const createdEnrollments = await doBatchedInsert(transaction, enrollments);
-
-  const createdFundings = await doBatchedInsert(
-    transaction,
-    fundings.reduce((flatFundings, fundings, enrollmentIdx) => {
-      fundings?.forEach((funding) => {
-        funding.enrollment = undefined;
-        funding.enrollmentId = createdEnrollments[enrollmentIdx].id;
-
-        funding.updateMetaData = { author: user } as UpdateMetaData;
-        flatFundings.push(funding);
-      });
-      return flatFundings;
-    }, [])
-  );
-
-  // Compose entities from created in DB and return
-  createdChildren.forEach((child, idx) => {
-    child.family = createdFamilies[idx];
-    child.enrollments = createdEnrollments.filter((enrollment) => {
-      const match = enrollment.childId === child.id;
-      if (match) {
-        enrollment.fundings = createdFundings.filter(
-          (funding) => funding.enrollmentId === enrollment.id
-        );
-      }
-      return match;
-    });
-  });
-  return createdChildren;
+  await batchCreateNewChildren(user, transaction, children, mapResult);
+  return mapResult;
 }
+
+/**
+ * Determines whether the child represented in the given
+ * spreadsheet row is already contained in the database.
+ * Returns the child if it is, otherwise returns undefined.
+ * @param row
+ * @param transaction
+ */
+const doesChildMatchExist = async (
+  row: EnrollmentReportRow,
+  transaction: EntityManager
+) => {
+  const findOpts = {
+    firstName: row.firstName,
+    lastName: row.lastName,
+  };
+  const potentialMatches = await transaction.find(Child, {
+    where: findOpts,
+    relations: [
+      'family',
+      'family.incomeDeterminations',
+      'enrollments',
+      'enrollments.fundings',
+      'enrollments.site',
+    ],
+  });
+  const match = potentialMatches.find(
+    (c) =>
+      c.birthdate.format('MM/DD/YYYY') === row.birthdate.format('MM/DD/YYYY') &&
+      ((c.sasid && c.sasid === row.sasidUniqueId) ||
+        (c.uniqueId && c.uniqueId === row.sasidUniqueId) ||
+        (!c.sasid && !row.sasidUniqueId))
+  );
+  return match;
+};
+
+/**
+ * Function that updates entities associated with a child record
+ * that already exists in the DB.
+ */
+const updateRecord = async (
+  userOrganizations: Organization[],
+  userSites: Site[],
+  child: Child,
+  source: EnrollmentReportRow,
+  userFundingSpaces: FundingSpace[],
+  userReportingPeriods: ReportingPeriod[],
+  mapResult: EnrollmentReportUpdate
+) => {
+  const organization = lookUpOrganization(source, userOrganizations);
+  if (!organization) {
+    const orgNames = userOrganizations.map((org) => `"${org.providerName}"`);
+    const orgNamesForError = `${orgNames
+      .slice(0, -1)
+      .join(', ')}, or ${orgNames.slice(-1)}`;
+    throw new BadRequestError(
+      `You entered invalid provider names\nCheck that your spreadsheet provider column only contains ${orgNamesForError} before uploading again.`
+    );
+  }
+  const site = lookUpSite(source, organization.id, userSites);
+
+  let matchingIdx = mapResult.children.findIndex((c) => c.id === child.id);
+  if (matchingIdx === -1) {
+    matchingIdx = mapResult.children.length;
+    mapResult.children.push(child);
+    mapResult.changeTagsForChildren.push([]);
+  }
+
+  // Support birth cert updates and family address updates
+  const changedBirthCert = updateBirthCertificateInfo(
+    child,
+    source,
+    childrenToUpdate
+  );
+  const changedAddress = updateFamilyAddress(
+    child.family,
+    source,
+    familiesToUpdate
+  );
+  if (changedBirthCert || changedAddress) {
+    mapResult.changeTagsForChildren[matchingIdx].push(ChangeTag.Edited);
+  }
+
+  // Everything else involves making new entities
+  handleIncomeDeterminationUpdate(
+    child,
+    source,
+    matchingIdx,
+    determinationsToUpdate,
+    mapResult
+  );
+  const {
+    enrollment,
+    currentEnrollment,
+    isNewEnrollment,
+  } = handleEnrollmentUpdate(
+    source,
+    site,
+    child,
+    enrollmentsToUpdate,
+    mapResult,
+    matchingIdx
+  );
+  handleFundingUpdate(
+    currentEnrollment,
+    enrollment,
+    isNewEnrollment,
+    source,
+    organization,
+    userFundingSpaces,
+    userReportingPeriods,
+    fundingsToUpdate,
+    mapResult,
+    matchingIdx
+  );
+};
 
 /**
  * Creates Child, Family, IncomeDetermination, Enrollment, and Funding
@@ -249,27 +341,3 @@ const mapRow = async (
 
   return child;
 };
-
-/**
- * SQL Server driver has an upper limit of 2100 parameters per query.
- * Using object keys in the entity has proxy for number of parameters
- * that'll end up in the query (couldn't find any better way to do this
- * from typeORM), chunk the inserts into batches that will have <2000
- * parameters per batch.
- * @param transaction
- * @param entities
- */
-async function doBatchedInsert<T>(transaction: EntityManager, entities: T[]) {
-  const parametersPerEntity = Object.keys(entities[0]).length;
-
-  const batchSize = Math.floor(2000 / parametersPerEntity);
-
-  const createdData: any[] = [];
-  for (let b = 0; b < entities.length; b += batchSize) {
-    const batch = entities.slice(b, b + batchSize);
-    const batchEntities = await transaction.save<T>(batch);
-    createdData.push(...batchEntities);
-  }
-
-  return createdData;
-}

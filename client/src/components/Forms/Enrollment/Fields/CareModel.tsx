@@ -1,7 +1,7 @@
 import React from 'react';
 import { RadioButtonGroup, TObjectDriller } from '@ctoec/component-library';
 import { Enrollment, CareModel } from '../../../../shared/models';
-import { ChangeEnrollment } from '../../../../shared/payloads';
+import { ChangeEnrollmentRequest } from '../../../../shared/payloads';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 type CareModelProps<T> = {
@@ -10,7 +10,7 @@ type CareModelProps<T> = {
 /**
  * Component for updating an enrollment's care model.
  */
-export const CareModelField = <T extends Enrollment | ChangeEnrollment>({
+export const CareModelField = <T extends Enrollment | ChangeEnrollmentRequest>({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: CareModelProps<T>) => {
   return (

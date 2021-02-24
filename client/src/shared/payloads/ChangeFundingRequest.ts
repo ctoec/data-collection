@@ -1,6 +1,6 @@
 import { ReportingPeriod, Funding } from '../models';
 
-export interface ChangeFunding {
+export interface ChangeFundingRequest {
   newFunding?: Funding;
   oldFunding?: {
     lastReportingPeriod: ReportingPeriod;

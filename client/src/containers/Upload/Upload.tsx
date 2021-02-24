@@ -8,13 +8,13 @@ import {
   LoadingWrapper,
   ErrorBoundary,
 } from '@ctoec/component-library';
-import { apiPost, apiGet } from '../../utils/api';
+import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
-import { CheckReplaceData } from './CheckReplaceData';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
+import { BatchUploadResponse } from '../../shared/payloads';
 import { EnrollmentColumnError } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { BackButton } from '../../components/BackButton';
@@ -23,16 +23,6 @@ const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
-
-  // Count how many children are in the roster so we can determine if we're writing over that data
-  const [userRosterCount, setUserRosterCount] = useState(undefined);
-  useEffect(() => {
-    apiGet('children?count=true', accessToken)
-      .then((res) => setUserRosterCount(res.count))
-      .catch((err) => {
-        throw new Error(err);
-      });
-  }, [accessToken]);
 
   const [error, setError] = useState<string>();
   const [loading, setLoading] = useState(false);
@@ -71,37 +61,6 @@ const Upload: React.FC = () => {
     })();
   }, [file]);
 
-  // If the file exists and the upload should be posted,
-  // then trigger the API request
-  const [postUpload, setPostUpload] = useState(false);
-  const [queryStringForUpload, setQueryStringForUpload] = useState('');
-
-  // Case where the user does have an existing roster; need to
-  // open the CheckReplace modal as a next step
-  const [checkReplaceDataOpen, setCheckReplaceDataOpen] = useState(false);
-  const advanceToCheckReplace = () => {
-    setCheckReplaceDataOpen(true);
-  };
-
-  useEffect(() => {
-    // wait until we know if the user already has a roster or not
-    // before allowing them to submit data
-    if (userRosterCount === undefined) return;
-
-    // If they have selected a file, then open the error checking modal.
-    // If they confirm the upload, decide if we just post the upload
-    // or we display check replace data modal
-    if (file) {
-      if (userRosterCount === 0) {
-        // If state has an empty list, back-end found no errors
-        setPostUpload(true);
-      } else {
-        setCheckReplaceDataOpen(true);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, userRosterCount]);
-
   const [fileKey, setFileKey] = useState(0);
   const clearFile = () => {
     // When the file is cleared, change the key to force the file component to rerender/reset
@@ -123,13 +82,6 @@ const Upload: React.FC = () => {
     <div className="grid-container">
       <BackButton location="/" />
 
-      <CheckReplaceData
-        isOpen={checkReplaceDataOpen}
-        clearFile={clearFile}
-        closeModal={() => setCheckReplaceDataOpen(false)}
-        setPostUpload={setPostUpload}
-        setQueryString={setQueryStringForUpload}
-      />
       {error && (
         <div className="margin-bottom-2">
           <Alert
@@ -168,11 +120,6 @@ const Upload: React.FC = () => {
       </div>
       <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
         <div className="grid-row">
-          <form
-            className={cx('usa-form', {
-              'display-none': checkReplaceDataOpen,
-            })}
-          >
             <LoadingWrapper text="Uploading your file..." loading={loading}>
               <FileInput
                 key={fileKey}

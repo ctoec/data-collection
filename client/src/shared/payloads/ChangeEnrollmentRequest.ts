@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 import { ReportingPeriod, Enrollment } from '../models';
 
-export interface ChangeEnrollment {
+export interface ChangeEnrollmentRequest {
   newEnrollment: Enrollment;
   oldEnrollment?: {
     exitDate?: Moment;

@@ -7,7 +7,7 @@ import {
 } from '@ctoec/component-library';
 import { Moment } from 'moment';
 import { Enrollment } from '../../../../shared/models';
-import { ChangeEnrollment } from '../../../../shared/payloads';
+import { ChangeEnrollmentRequest } from '../../../../shared/payloads';
 import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
 
 type EnrollmentStartDateProps<T> = {
@@ -17,7 +17,7 @@ type EnrollmentStartDateProps<T> = {
  *  Component for updating an enrollment's entry
  */
 export const EnrollmentStartDateField = <
-  T extends Enrollment | ChangeEnrollment
+  T extends Enrollment | ChangeEnrollmentRequest
 >({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: EnrollmentStartDateProps<T>) => {
