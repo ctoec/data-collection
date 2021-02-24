@@ -68,8 +68,9 @@ export const ReviewMissingInfo: React.FC = () => {
   const history = useHistory();
   const { state } = useLocation();
 
+  //  If there's no state suplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
-    throw new Error('TODO MAKE THIS NOT HAPPEN');
+    history.push('/upload');
   }
 
   const missingInfo: EnrollmentColumnError[] = (state as any)
