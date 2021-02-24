@@ -17,6 +17,7 @@ import PrivacyPolicy from './containers/PrivacyPolicy/PrivacyPolicy';
 import Help from './containers/Help/Help';
 import SupportRequest from './containers/Help/SupportRequest';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
+import { ReviewMissingInfo } from './containers/Upload/ReviewMissingInfo';
 
 export type RouteConfig = {
   path: string;
@@ -93,6 +94,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/upload',
     component: Upload,
+    unauthorized: false,
+  },
+  {
+    path: '/missing-info',
+    component: ReviewMissingInfo,
     unauthorized: false,
   },
   {

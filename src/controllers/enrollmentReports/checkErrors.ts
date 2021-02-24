@@ -3,6 +3,7 @@ import { ValidationError } from 'class-validator';
 import { ColumnMetadata } from '../../../client/src/shared/models';
 import { getAllColumnMetadata } from '../../template';
 import { sentenceCase } from '../../utils/generateFiles/getFormattedColumnHeader';
+import { EnrollmentColumnError } from '../../../client/src/shared/payloads';
 
 /**
  * Function that recursively determines the lowest level from
@@ -48,7 +49,9 @@ const processErrorsInFields = (
  * possible field of the child schema.
  * @param children Array of DB-view child objects to analyze
  */
-export const checkErrorsInChildren = async (children: Child[]) => {
+export const checkErrorsInChildren = async (
+  children: Child[]
+): Promise<EnrollmentColumnError[]> => {
   // Exclude income not disclosed since it's an optional switch parameter
   const cols: ColumnMetadata[] = getAllColumnMetadata().filter(
     (col) => col.formattedName !== 'income not disclosed'
@@ -77,9 +80,9 @@ export const checkErrorsInChildren = async (children: Child[]) => {
   const filteredKeys = Object.keys(errorDict).filter((k) => errorDict[k] > 0);
   const filteredErrors = filteredKeys.map((k) => {
     return {
-      property: k,
+      column: k,
       formattedName: propertyNameToFormattedName[k],
-      count: errorDict[k],
+      errorCount: errorDict[k],
       affectedRows: errorOccursIn[k],
     };
   });

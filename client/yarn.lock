@@ -1274,10 +1274,9 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@1.1.12":
+"@ctoec/component-library@https://github.com/ctoec/component-library.git#missing-info-page":
   version "1.1.12"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.12.tgz#4b6c13d7a643031599c39b4b5b40b49136a10af2"
-  integrity sha512-yq4zyj0rTNSZyZr1zwgJHLz9109pYJsxqXH3v34s67OGwDsgiPKCs2thtop+TZc/x7Ew0Dql0JOkPCGBgVHkgg==
+  resolved "https://github.com/ctoec/component-library.git#83c562fc9e64ce20b8192c5e692c3c114e23790c"
   dependencies:
     "@types/carbon-components" "^10.23.0"
     "@types/carbon-components-react" "^7.26.0"
@@ -7507,6 +7506,33 @@ jsdom@^11.5.1:
   version "11.12.0"
   resolved "https://registry.yarnpkg.com/jsdom/-/jsdom-11.12.0.tgz#1a80d40ddd378a1de59656e9e6dc5a3ba8657bc8"
   integrity sha512-y8Px43oyiBM13Zc1z780FrfNLJCXTL40EWlty/LXUtcjykRBNgLlCjWXpfSPBl2iv+N7koQN+dvqszHZgT/Fjw==
+  dependencies:
+    abab "^2.0.0"
+    acorn "^5.5.3"
+    acorn-globals "^4.1.0"
+    array-equal "^1.0.0"
+    cssom ">= 0.3.2 < 0.4.0"
+    cssstyle "^1.0.0"
+    data-urls "^1.0.0"
+    domexception "^1.0.1"
+    escodegen "^1.9.1"
+    html-encoding-sniffer "^1.0.2"
+    left-pad "^1.3.0"
+    nwsapi "^2.0.7"
+    parse5 "4.0.0"
+    pn "^1.1.0"
+    request "^2.87.0"
+    request-promise-native "^1.0.5"
+    sax "^1.2.4"
+    symbol-tree "^3.2.2"
+    tough-cookie "^2.3.4"
+    w3c-hr-time "^1.0.1"
+    webidl-conversions "^4.0.2"
+    whatwg-encoding "^1.0.3"
+    whatwg-mimetype "^2.1.0"
+    whatwg-url "^6.4.1"
+    ws "^5.2.0"
+    xml-name-validator "^3.0.0"
 
 jsdom@^14.1.0:
   version "14.1.0"

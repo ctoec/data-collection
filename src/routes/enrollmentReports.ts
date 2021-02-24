@@ -10,7 +10,10 @@ import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
-import { BatchUpload } from '../../client/src/shared/payloads';
+import {
+  BatchUpload,
+  EnrollmentColumnError,
+} from '../../client/src/shared/payloads';
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -57,7 +60,7 @@ enrollmentReportsRouter.post(
           }))
         );
 
-        const errorDict = await controller.checkErrorsInChildren(
+        const errorDict: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
 
