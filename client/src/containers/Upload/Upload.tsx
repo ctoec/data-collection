@@ -13,11 +13,9 @@ import { getErrorHeading, getErrorText } from '../../utils/error';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
-import { ErrorModal } from './ErrorModal/ErrorsModal';
-import { ErrorObjectForTable } from './ErrorModal/ErrorObjectForTable';
-import { clearChildrenCaches } from '../Roster/hooks';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { BatchUploadResponse } from '../../shared/payloads';
+import { EnrollmentColumnError } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { BackButton } from '../../components/BackButton';
 
@@ -31,99 +29,42 @@ const Upload: React.FC = () => {
 
   // Check the file for errors if there is a file
   const [file, setFile] = useState<File>();
-  const [errorDict, setErrorDict] = useState<ErrorObjectForTable[]>();
   useEffect(() => {
-    // Haven't yet determined how many errors of each type there are
-    if (file && errorDict === undefined) {
-      setLoading(true);
-      const formData = getFormDataBlob(file);
-      apiPost(`enrollment-reports/check`, formData, {
-        accessToken,
-        headers: { 'content-type': formData.type },
-        rawBody: true,
-      })
-        // Back end sends back an object whose fields are error table obj.
-        .then((resp) => {
-          setErrorDict(resp);
-        })
-        .catch(
-          handleJWTError(history, (err) => {
-            setError(err);
-            clearFile();
-          })
-        )
-        .finally(() => setLoading(false));
-    }
-  }, [file, errorDict]);
+    (async function submitUpload() {
+      if (!file) return;
 
-  // If the file exists and the upload should be posted,
-  // then trigger the API request
-  const [postUpload, setPostUpload] = useState(false);
-  useEffect(() => {
-    if (file && postUpload) {
       setLoading(true);
       const formData = getFormDataBlob(file);
-      apiPost('enrollment-reports', formData, {
-        accessToken,
-        headers: { 'content-type': formData.type },
-        rawBody: true,
-      })
-        // Response contains id of created enrollmentReport,
-        // number of active enrollments, and num withdrawn enrollments
-        // via BatchUpload payload
-        .then((resp: BatchUploadResponse) => {
-          // Clear all children records from data cache
-          clearChildrenCaches();
-          let uploadText = `You uploaded ${resp.new} new records`;
-          uploadText +=
-            resp.withdrawn > 0
-              ? ` and ${resp.withdrawn} withdrawn records.`
-              : `.`;
-          history.push(`/roster`, {
-            alerts: [
-              {
-                type: 'success',
-                heading: 'Your records have been uploaded!',
-                text: uploadText,
-              },
-            ],
-          });
-        })
-        .catch(
-          handleJWTError(history, (err) => {
-            setError(err);
-            clearFile();
-          })
-        )
-        // Reset this flag to false so the upload can be subsequently re-triggered
-        .finally(() => {
-          setPostUpload(false);
-          setLoading(false);
+
+      try {
+        const enrollmentColumnErrors: EnrollmentColumnError[] = await apiPost(
+          `enrollment-reports/check`,
+          formData,
+          {
+            accessToken,
+            headers: { 'content-type': formData.type },
+            rawBody: true,
+          }
+        );
+
+        history.push('/missing-info', {
+          enrollmentColumnErrors,
         });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postUpload]);
-
-  const [errorModalOpen, setErrorModalOpen] = useState(false);
-  const advanceToPostUpload = () => {
-    setPostUpload(true);
-    setErrorModalOpen(false);
-  };
-
-  useEffect(() => {
-    // If they have selected a file, then open the error checking modal.
-    if (file && errorDict !== undefined) {
-      if (errorDict.length > 0) setErrorModalOpen(true);
-      else setPostUpload(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, errorDict]);
+      } catch (e) {
+        handleJWTError(history, (e) => {
+          setError(e);
+          clearFile();
+        });
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [file]);
 
   const [fileKey, setFileKey] = useState(0);
   const clearFile = () => {
     // When the file is cleared, change the key to force the file component to rerender/reset
     setFile(undefined);
-    setErrorDict(undefined);
     setFileKey((oldKey) => oldKey + 1);
   };
   const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,20 +76,12 @@ const Upload: React.FC = () => {
     }
     setFile(_file);
     setError(undefined);
-    setErrorDict(undefined);
   };
 
   return (
     <div className="grid-container">
       <BackButton location="/" />
 
-      <ErrorModal
-        isOpen={errorModalOpen}
-        closeModal={() => setErrorModalOpen(false)}
-        clearFile={clearFile}
-        errorDict={errorDict || []}
-        nextFunc={advanceToPostUpload}
-      />
       {error && (
         <div className="margin-bottom-2">
           <Alert
@@ -187,11 +120,6 @@ const Upload: React.FC = () => {
       </div>
       <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
         <div className="grid-row">
-          <form
-            className={cx('usa-form', {
-              'display-none': errorModalOpen,
-            })}
-          >
             <LoadingWrapper text="Uploading your file..." loading={loading}>
               <FileInput
                 key={fileKey}

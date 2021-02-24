@@ -6,7 +6,7 @@ import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
-import { BatchUploadResponse } from '../../client/src/shared/payloads';
+import { BatchUploadResponse, EnrollmentColumnError } from '../../client/src/shared/payloads';
 import { ChangeTag } from '../../client/src/shared/models';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
@@ -62,7 +62,7 @@ enrollmentReportsRouter.post(
           }))
         );
 
-        const errorDict = await controller.checkErrorsInChildren(
+        const errorDict: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
 
