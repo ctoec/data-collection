@@ -10,7 +10,7 @@ import {
 } from '@ctoec/component-library';
 import { downloadStreamToFile } from '../utils/fileDownload';
 import AuthenticationContext from '../contexts/AuthenticationContext/AuthenticationContext';
-import { TemplateMetadata } from '../shared/payloads';
+import { TemplateMetadataResponse } from '../shared/payloads';
 
 type FileTypeOpts = 'xlsx' | 'csv';
 const fileTypeName = {
@@ -68,7 +68,7 @@ export const CSVExcelDownloadButton: React.FC<CSVExcelDownloadButtonProps> = ({
 
   const { data: templateMetadata } = useSWR('template/metadata', {
     dedupingInterval: 100000,
-  }) as responseInterface<TemplateMetadata, string>;
+  }) as responseInterface<TemplateMetadataResponse, string>;
 
   const versionString = templateMetadata?.version
     ? ` (v${templateMetadata.version})`

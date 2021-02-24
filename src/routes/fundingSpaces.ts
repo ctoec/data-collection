@@ -29,6 +29,7 @@ fundingSpacesRouter.get(
         children
       );
       res.send({ fundingSpacesMap });
+      return;
     }
 
     res.send(fundingSpaces);

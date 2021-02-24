@@ -3,6 +3,7 @@ const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
 const { scrollToElement } = require('../utils/scrollToElement');
+const { UploadFileTypes } = require('../utils/UploadFileTypes');
 
 module.exports = {
   '@tags': ['child', 'withdraw'],
@@ -10,7 +11,7 @@ module.exports = {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await uploadFile(browser);
+    await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
     const clickedChildLinkText = await clickOnChildInRoster(browser);
     const lastName = clickedChildLinkText.split(',')[0];
 
@@ -36,7 +37,16 @@ module.exports = {
     // input with options extending "over" the button so need direct injection
     // to click it
     await browser.execute(function () {
-      document.querySelector('input[value="Withdraw"]').click();
+      // woof, this is pretty yuck
+      document
+        .evaluate(
+          '//*/button[contains(text(), "Withdraw")]',
+          document,
+          null,
+          9, // https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate#result_types
+          null
+        )
+        .singleNodeValue.click();
     }, []);
 
     // These two elements say the withdraw happened when the alert appears

@@ -8,6 +8,7 @@ import {
   AgeGroupField,
   NewFundingField,
   EnrollmentEndDateField,
+  ExitReasonField,
 } from './Fields';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { RecordFormProps } from '../types';
@@ -49,6 +50,7 @@ export const doesEnrollmentFormHaveErrors = (
 type EnrollmentFormProps = {
   id?: string;
   enrollmentId?: number;
+  noRecordedEnrollments?: boolean;
 } & RecordFormProps;
 
 export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
@@ -60,6 +62,7 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   setAlerts,
   showFieldOrFieldset = () => true,
   hideErrors,
+  noRecordedEnrollments,
 }) => {
   if (!child) {
     throw new Error('Enrollment form rendered without child');
@@ -150,7 +153,10 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
           <EnrollmentStartDateField<Enrollment> />
         )}
         {showFieldOrFieldset(enrollment, ['exit']) && (
-          <EnrollmentEndDateField<Enrollment> />
+          <>
+            <EnrollmentEndDateField<Enrollment> />
+            <ExitReasonField<Enrollment> />
+          </>
         )}
         {showFieldOrFieldset(enrollment, ['model']) && (
           <CareModelField<Enrollment> />
@@ -173,11 +179,18 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
                     (e) => !!e.constraints?.fundedEnrollment
                   )
             }
+            hideStatus={errorsHidden}
           />
         )}
         {AdditionalButton}
         <FormSubmitButton
-          text={loading ? 'Saving...' : 'Save'}
+          text={
+            loading
+              ? 'Saving...'
+              : noRecordedEnrollments
+              ? 'Add enrollment and funding'
+              : 'Save'
+          }
           disabled={loading}
         />
       </Form>

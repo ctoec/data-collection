@@ -7,7 +7,7 @@ import { Child } from '../../../entity';
  * index where the tags for child i can be found in the
  * `changeTags` field.
  */
-export type MapResult = {
+export type EnrollmentReportUpdate = {
   changeTagsForChildren: string[][];
   children: Child[];
 };

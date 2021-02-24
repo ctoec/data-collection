@@ -17,7 +17,7 @@ exports[`Landing matches snapshot 1`] = `
           Welcome to ECE Reporter
         </h1>
         <a
-          class="usa-button usa-button--base btn--inverse"
+          class="bx--link usa-button usa-button--base btn--inverse"
           href="/login"
         >
           Log in
@@ -67,7 +67,7 @@ exports[`Landing matches snapshot 1`] = `
               See the data collected by ECE Reporter
             </h3>
             <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+              class="bx--link usa-button usa-button--unstyled margin-bottom-3 display-block"
               href="/data-requirements"
             >
               <span
@@ -82,7 +82,7 @@ exports[`Landing matches snapshot 1`] = `
               </span>
             </a>
             <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+              class="bx--link usa-button usa-button--unstyled margin-bottom-3 display-block"
               href="/template"
             >
               <span
@@ -97,10 +97,28 @@ exports[`Landing matches snapshot 1`] = `
               </span>
             </a>
             <h3>
+              Get help with ECE Reporter
+            </h3>
+            <a
+              class="bx--link usa-button usa-button--unstyled margin-bottom-3 display-block"
+              href="https://help.ece-reporter.ctoec.org"
+            >
+              <span
+                class="oec-text-with-icon text-underline"
+              >
+                View how-to guides
+                <svg
+                  class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-right"
+                >
+                  arrowForward.svg
+                </svg>
+              </span>
+            </a>
+            <h3>
               Learn more about OEC
             </h3>
             <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+              class="bx--link usa-button usa-button--unstyled margin-bottom-3 display-block"
               href="https://ctoec.org"
             >
               <span
@@ -118,7 +136,7 @@ exports[`Landing matches snapshot 1`] = `
               Learn how ECE Reporter collects and stores data
             </h3>
             <a
-              class="usa-button usa-button--unstyled margin-bottom-3 display-block"
+              class="bx--link usa-button usa-button--unstyled margin-bottom-3 display-block"
               href="/privacy"
             >
               <span
@@ -157,7 +175,7 @@ exports[`Landing matches snapshot 1`] = `
               Take a quick survey to let the team know how this tool can work better for you.
             </p>
             <a
-              class="usa-button usa-button--outline"
+              class="usa-button usa-button--outline margin-top-3"
               href="https://forms.monday.com/forms/f5bcf5d3d611b99f45ffb8187cd6c2b9?r=use1"
               target="_blank"
             >

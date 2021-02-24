@@ -6,7 +6,8 @@ exports[`DataRequirements matches snapshot 1`] = `
     class="grid-container"
   >
     <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold"
+      class="usa-button usa-button--unstyled margin-top-2 text-bold bx--btn bx--btn--primary"
+      tabindex="0"
       type="button"
     >
       <span
@@ -83,7 +84,7 @@ exports[`DataRequirements matches snapshot 1`] = `
         Data submission deadline
       </span>
       <br />
-      You must submit your data to OEC by 03/05/2021.
+      You must submit your data to OEC by 03/08/2021.
     </p>
     <h2
       class="border-top border-base-lighter padding-top-1"
@@ -92,49 +93,209 @@ exports[`DataRequirements matches snapshot 1`] = `
       Data elements
     </h2>
     <div
-      class="oec-loading-wrapper"
+      class="data-definitions"
     >
-      <div
-        aria-hidden="false"
-        class=""
+      <table
+        id="requirement-levels"
       >
-        <div
-          class="data-definitions"
+        <caption
+          class="text-bold text-left margin-bottom-1"
         >
-          <table
-            id="requirement-levels"
+          Requirement levels
+        </caption>
+        <tbody>
+          <tr>
+            <td>
+              <span
+                class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+              >
+                Required
+              </span>
+            </td>
+            <td>
+              Must be entered for all enrollments
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span
+                class="usa-tag usa-tag--no-transform required-tag required-tag--conditional"
+              >
+                Required If
+              </span>
+            </td>
+            <td>
+              Must be entered for certain scenarios (such as for an exited enrollment)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span
+                class="usa-tag usa-tag--no-transform required-tag"
+              >
+                Optional
+              </span>
+            </td>
+            <td>
+              Suggested for better data quality and record matching, but not required for submission to OEC
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <fieldset
+        aria-labelledby="fieldset-legend-filter-fields"
+        class="usa-fieldset requirement-level-filter"
+        id="filter-fields"
+      >
+        <legend
+          id="fieldset-legend-filter-fields"
+        >
+          <span
+            class="usa-label"
           >
-            <caption
-              class="text-bold text-left margin-bottom-1"
+            Filter fields
+          </span>
+        </legend>
+        <div>
+          <span>
+            <div
+              class="usa-radio"
             >
-              Requirement levels
-            </caption>
+              <input
+                checked=""
+                class="usa-radio__input"
+                id="all"
+                name="field filter option"
+                type="radio"
+                value="all"
+              />
+              <label
+                class="usa-radio__label"
+                for="all"
+              >
+                All fields
+              </label>
+            </div>
+          </span>
+          <span>
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="required"
+                name="field filter option"
+                type="radio"
+                value="required"
+              />
+              <label
+                class="usa-radio__label"
+                for="required"
+              >
+                Only required  and conditionally required fields
+              </label>
+            </div>
+          </span>
+        </div>
+      </fieldset>
+      <div>
+        <div
+          class="margin-top-4"
+        >
+          <h3
+            id="section-one"
+          >
+            Section one
+          </h3>
+          <p
+            class="text-pre-line"
+          />
+          <table
+            class="oec-table"
+            id="data-requirements-Section-one"
+          >
+            <thead>
+              <tr>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-sorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 18%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Field name
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Required/ Optional
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 24%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Definition
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Reason for collecting
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Format
+                  </span>
+                </th>
+              </tr>
+            </thead>
             <tbody>
-              <tr>
-                <td>
+              <tr
+                id="favorite-color-field"
+              >
+                <th
+                  scope="row"
+                >
                   <span
-                    class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+                    class="text-bold"
                   >
-                    Required
+                    Favorite color
                   </span>
-                </td>
-                <td>
-                  Must be entered for all enrollments
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span
-                    class="usa-tag usa-tag--no-transform required-tag required-tag--conditional"
-                  >
-                    Required If
-                  </span>
-                </td>
-                <td>
-                  Must be entered for certain scenarios (such as for an exited enrollment)
-                </td>
-              </tr>
-              <tr>
+                </th>
                 <td>
                   <span
                     class="usa-tag usa-tag--no-transform required-tag"
@@ -143,345 +304,152 @@ exports[`DataRequirements matches snapshot 1`] = `
                   </span>
                 </td>
                 <td>
-                  Suggested for better data quality and record matching, but not required for submission to OEC
+                  <p>
+                    The color you like the most
+                  </p>
+                </td>
+                <td>
+                  So we know your favorite color
+                </td>
+                <td>
+                  <p>
+                    string
+                  </p>
+                  <div
+                    class="margin-top-1"
+                  >
+                    Ex: Blue
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
-          <fieldset
-            aria-labelledby="fieldset-legend-filter-fields"
-            class="usa-fieldset requirement-level-filter"
-            id="filter-fields"
-          >
-            <legend
-              id="fieldset-legend-filter-fields"
-            >
-              <span
-                class="usa-label"
-              >
-                Filter fields
-              </span>
-            </legend>
-            <div>
-              <span>
-                <div
-                  class="usa-radio"
-                >
-                  <input
-                    checked=""
-                    class="usa-radio__input"
-                    id="all"
-                    name="field filter option"
-                    type="radio"
-                    value="all"
-                  />
-                  <label
-                    class="usa-radio__label"
-                    for="all"
-                  >
-                    All fields
-                  </label>
-                </div>
-              </span>
-              <span>
-                <div
-                  class="usa-radio"
-                >
-                  <input
-                    class="usa-radio__input"
-                    id="required"
-                    name="field filter option"
-                    type="radio"
-                    value="required"
-                  />
-                  <label
-                    class="usa-radio__label"
-                    for="required"
-                  >
-                    Only required  and conditionally required fields
-                  </label>
-                </div>
-              </span>
-            </div>
-          </fieldset>
-          <div>
-            <div
-              class="margin-top-4"
-            >
-              <h3
-                id="section-one"
-              >
-                Section one
-              </h3>
-              <p
-                class="text-pre-line"
-              />
-              <table
-                class="oec-table"
-                id="data-requirements-Section-one"
-              >
-                <thead>
-                  <tr>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-sorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 18%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Field name
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 20%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Required/ Optional
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 24%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Definition
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 20%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Reason for collecting
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 20%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Format
-                      </span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    id="favorite-color-field"
-                  >
-                    <th
-                      scope="row"
-                    >
-                      <span
-                        class="text-bold"
-                      >
-                        Favorite color
-                      </span>
-                    </th>
-                    <td>
-                      <span
-                        class="usa-tag usa-tag--no-transform required-tag"
-                      >
-                        Optional
-                      </span>
-                    </td>
-                    <td>
-                      <p>
-                        The color you like the most
-                      </p>
-                    </td>
-                    <td>
-                      So we know your favorite color
-                    </td>
-                    <td>
-                      <p>
-                        string
-                      </p>
-                      <div
-                        class="margin-top-1"
-                      >
-                        Ex: Blue
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div
-              class="margin-top-4"
-            >
-              <h3
-                id="section-two"
-              >
-                Section two
-              </h3>
-              <p
-                class="text-pre-line"
-              />
-              <table
-                class="oec-table"
-                id="data-requirements-Section-two"
-              >
-                <thead>
-                  <tr>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-sorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 18%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Field name
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 20%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Required/ Optional
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 24%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Definition
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 20%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Reason for collecting
-                      </span>
-                    </th>
-                    <th
-                      aria-sort="none"
-                      class="oec-table__column-header oec-unsorted"
-                      role="columnheader"
-                      scope="col"
-                      style="width: 20%;"
-                    >
-                      <span
-                        class="oec-table__column-title"
-                      >
-                        Format
-                      </span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    id="lucky-number-field"
-                  >
-                    <th
-                      scope="row"
-                    >
-                      <span
-                        class="text-bold"
-                      >
-                        Lucky number
-                      </span>
-                    </th>
-                    <td>
-                      <span
-                        class="usa-tag usa-tag--no-transform required-tag required-tag--required"
-                      >
-                        Required
-                      </span>
-                    </td>
-                    <td>
-                      <p>
-                        The number you find brings the most luck
-                      </p>
-                    </td>
-                    <td>
-                      So we know your lucky number
-                    </td>
-                    <td>
-                      <p>
-                        number
-                      </p>
-                      <div
-                        class="margin-top-1"
-                      >
-                        Ex: 130
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
-      </div>
-      <div
-        class="oec-loading-wrapper__indicator bg-white"
-        hidden=""
-      >
         <div
-          class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-          role="progressbar"
-          style="width: 40px; height: 40px;"
+          class="margin-top-4"
         >
-          <svg
-            class="MuiCircularProgress-svg"
-            viewBox="22 22 44 44"
+          <h3
+            id="section-two"
           >
-            <circle
-              class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-              cx="44"
-              cy="44"
-              fill="none"
-              r="20.2"
-              stroke-width="3.6"
-            />
-          </svg>
+            Section two
+          </h3>
+          <p
+            class="text-pre-line"
+          />
+          <table
+            class="oec-table"
+            id="data-requirements-Section-two"
+          >
+            <thead>
+              <tr>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-sorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 18%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Field name
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Required/ Optional
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 24%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Definition
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Reason for collecting
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Format
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                id="lucky-number-field"
+              >
+                <th
+                  scope="row"
+                >
+                  <span
+                    class="text-bold"
+                  >
+                    Lucky number
+                  </span>
+                </th>
+                <td>
+                  <span
+                    class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+                  >
+                    Required
+                  </span>
+                </td>
+                <td>
+                  <p>
+                    The number you find brings the most luck
+                  </p>
+                </td>
+                <td>
+                  So we know your lucky number
+                </td>
+                <td>
+                  <p>
+                    number
+                  </p>
+                  <div
+                    class="margin-top-1"
+                  >
+                    Ex: 130
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

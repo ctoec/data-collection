@@ -12,8 +12,8 @@ import {
 } from '../../../../../../shared/models';
 import { fundingSpaceFormatter } from '../../../../../../utils/formatters';
 import {
-  ChangeEnrollment,
-  ChangeFunding,
+  ChangeEnrollmentRequest,
+  ChangeFundingRequest,
 } from '../../../../../../shared/payloads';
 
 type SingleContractSpaceProps<T> = {
@@ -22,7 +22,11 @@ type SingleContractSpaceProps<T> = {
 };
 
 export const SingleContractSpaceField = <
-  T extends Funding | ChangeFunding | ChangeEnrollment | Enrollment
+  T extends
+    | Funding
+    | ChangeFundingRequest
+    | ChangeEnrollmentRequest
+    | Enrollment
 >({
   fundingSpace,
   accessor,

@@ -13,11 +13,16 @@ import {
   TObjectDriller,
 } from '@ctoec/component-library';
 import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
-import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
+import {
+  ChangeFundingRequest,
+  ChangeEnrollmentRequest,
+} from '../../../../shared/payloads';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
+import { HideErrorProps } from '../../types';
 import { getCurrentFunding } from '../../../../utils/models';
+import { getStrippedFundingSourceName } from '../../../../containers/Home/utils/getFundingSpaceDisplayName';
 
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
@@ -25,7 +30,7 @@ type FundingFieldProps<T> = {
   organizationId: number;
   isEdit?: boolean;
   missingFundedEnrollmentError?: EnrichedValidationError;
-};
+} & HideErrorProps;
 
 const fsToId = (fs: string) => fs.replace(/\s/g, '');
 
@@ -34,13 +39,18 @@ const fsToId = (fs: string) => fs.replace(/\s/g, '');
  * or as part of creating a new enrollment.
  */
 export const NewFundingField = <
-  T extends ChangeFunding | ChangeEnrollment | Enrollment | Funding
+  T extends
+    | ChangeFundingRequest
+    | ChangeEnrollmentRequest
+    | Enrollment
+    | Funding
 >({
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
   getEnrollment,
   organizationId,
   isEdit,
   missingFundedEnrollmentError,
+  hideStatus,
 }: FundingFieldProps<T>) => {
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
@@ -90,22 +100,24 @@ export const NewFundingField = <
       legend="Funding source options"
       showLegend
       status={
-        getValidationStatusForFields(enrollment, ['fundings']) ||
-        getValidationStatusForFields(
-          {
-            validationErrors: missingFundedEnrollmentError
-              ? [missingFundedEnrollmentError]
-              : [],
-          },
-          ['enrollments']
-        )
+        hideStatus
+          ? undefined
+          : getValidationStatusForFields(enrollment, ['fundings']) ||
+            getValidationStatusForFields(
+              {
+                validationErrors: missingFundedEnrollmentError
+                  ? [missingFundedEnrollmentError]
+                  : [],
+              },
+              ['enrollments']
+            )
       }
       options={fundingSourceOptions.map((fundingSource) => {
         const id = fsToId(fundingSource);
         return {
           id,
           value: id,
-          text: fundingSource,
+          text: getStrippedFundingSourceName(fundingSource),
           onChange: () => {},
           expansion: (
             <>

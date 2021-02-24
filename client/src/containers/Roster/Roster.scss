@@ -1,6 +1,10 @@
 .Roster {
   margin-bottom: 5rem; // to keep content above fixed button bar
 
+  th,
+  td {
+    vertical-align: middle;
+  }
   .buttons-table {
     width: 100%;
     vertical-align: baseline;
@@ -8,7 +12,6 @@
     th,
     td {
       border: 1px solid color('base-lighter');
-      padding: 1rem;
     }
     th {
       color: gray;
@@ -35,5 +38,14 @@
     .oec-accordion__content {
       overflow-x: visible;
     }
+  }
+
+  .bx--accordion__content {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .bx--accordion__title {
+    margin-left: 0 !important;
   }
 }

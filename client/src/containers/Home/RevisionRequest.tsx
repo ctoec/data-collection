@@ -1,5 +1,4 @@
-import { Button, Checkbox, TextInput } from '@ctoec/component-library';
-import Divider from '@material-ui/core/Divider';
+import { Button, Checkbox, TextInput, Divider } from '@ctoec/component-library';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
@@ -14,6 +13,10 @@ import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { getAddNewSiteForm } from './utils/getAddNewSiteForm';
 import { getFundingSpaceCheckboxes } from './utils/getFundingSpaceCheckboxes';
+import {
+  getFundingSpaceDisplayName,
+  getStrippedFundingSourceName,
+} from './utils/getFundingSpaceDisplayName';
 
 /**
  * Form to allow a user to request changes to their accessible sites
@@ -53,19 +56,22 @@ export const RevisionRequest: React.FC = () => {
   // Start by determining all potential funding spaces so we know what
   // we need to precheck
   const [userFundingSpaces, setUserFundingSpaces] = useState<
-    ChangeFundingSpaceRequest[]
+    Partial<ChangeFundingSpaceRequest>[]
   >([]);
   useEffect(() => {
-    const fsOptions: ChangeFundingSpaceRequest[] = [];
+    const fsOptions: Array<Partial<ChangeFundingSpaceRequest>> = [];
     Object.values(AgeGroup).map((ag) => {
       FUNDING_SOURCE_TIMES.forEach((fst) => {
         if (!fst.ageGroupLimitations || fst.ageGroupLimitations.includes(ag)) {
-          fst.fundingTimes.forEach((time) => {
-            const stringRep = ag + ' - ' + fst.displayName + ' - ' + time.value;
-            fsOptions.push({
-              fundingSpace: stringRep,
-              shouldHave: false,
-            } as ChangeFundingSpaceRequest);
+          fst.fundingSources.forEach((source) => {
+            const sourceName = getStrippedFundingSourceName(source);
+            fst.fundingTimes.forEach((time) => {
+              const stringRep = ag + ' - ' + sourceName + ' - ' + time.value;
+              fsOptions.push({
+                fundingSpace: stringRep,
+                shouldHave: false,
+              });
+            });
           });
         }
       });
@@ -82,18 +88,14 @@ export const RevisionRequest: React.FC = () => {
       apiGet('funding-spaces', accessToken)
         .then((res: FundingSpace[]) => {
           res.forEach((fs) => {
-            const stringRep =
-              fs.ageGroup +
-              ' - ' +
-              fs.source.split('-')[1].trim() +
-              ' - ' +
-              fs.time;
+            const stringRep = getFundingSpaceDisplayName(fs);
             const match = userFundingSpaces.find(
               (fs) => fs.fundingSpace === stringRep
             );
             if (match) {
               setUserFundingSpaces((o) => {
                 match.shouldHave = true;
+                match.fundingSpaceId = fs.id;
                 return o;
               });
             }
@@ -132,7 +134,9 @@ export const RevisionRequest: React.FC = () => {
     <>
       <div className="grid-row grid-gap margin-bottom-1">
         <div className="tablet:grid-col-4 text-bold">Site name</div>
-        <div className="tablet:grid-col-3 text-bold">Request updated name</div>
+        <div className="tablet:grid-col-3 text-bold">
+          Request site name changes
+        </div>
         <div className="tablet:grid-col-3 text-bold">
           Request removal from your account
         </div>

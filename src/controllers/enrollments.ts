@@ -1,6 +1,9 @@
 import { removeDeletedElements } from '../utils/filterSoftRemoved';
 import { getManager, In, IsNull } from 'typeorm';
-import { ChangeFunding, Withdraw } from '../../client/src/shared/payloads';
+import {
+  ChangeFundingRequest,
+  WithdrawRequest,
+} from '../../client/src/shared/payloads';
 import { Enrollment, ReportingPeriod, Funding, User } from '../entity';
 import { NotFoundError, BadRequestError } from '../middleware/error/errors';
 
@@ -40,7 +43,7 @@ export const getFunding = async (
 export const changeFunding = async (
   id: number,
   user: User,
-  changeFundingData: ChangeFunding
+  changeFundingData: ChangeFundingRequest
 ) => {
   const enrollment = await getEnrollment(id, user, true);
   enrollment.fundings = removeDeletedElements(enrollment.fundings);
@@ -112,7 +115,7 @@ export const changeFunding = async (
 export const withdraw = async (
   id: number,
   user: User,
-  withdrawData: Withdraw
+  withdrawData: WithdrawRequest
 ) => {
   const enrollment = await getEnrollment(id, user, true);
 

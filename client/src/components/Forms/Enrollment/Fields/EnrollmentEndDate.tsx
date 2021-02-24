@@ -5,7 +5,10 @@ import {
   FormField,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { ChangeEnrollment, Withdraw } from '../../../../shared/payloads';
+import {
+  ChangeEnrollmentRequest,
+  WithdrawRequest,
+} from '../../../../shared/payloads';
 import { Moment } from 'moment';
 import { Enrollment } from '../../../../shared/models';
 import { getValidationStatusForField } from '../../../../utils/getValidationStatus';
@@ -18,7 +21,7 @@ type EnrollmentEndDateProps<T> = {
  *  Component for updating an enrollment's exit
  */
 export const EnrollmentEndDateField = <
-  T extends Enrollment | ChangeEnrollment | Withdraw
+  T extends Enrollment | ChangeEnrollmentRequest | WithdrawRequest
 >({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
   optional = false,

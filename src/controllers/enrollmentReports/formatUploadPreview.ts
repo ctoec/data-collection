@@ -1,5 +1,5 @@
-import { MapResult } from './map/uploadTypes';
-import { UploadPreviewTableObject } from '../../../client/src/containers/Upload/UploadPreviewTableObject';
+import { EnrollmentReportUpdate } from './map/uploadTypes';
+import { UploadPreviewRow } from '../../../client/src/containers/Upload/UploadPreviewRow';
 import { nameFormatter } from '../../../client/src/utils/formatters';
 import {
   getLastEnrollment,
@@ -12,12 +12,12 @@ import { validate } from 'class-validator';
  * in the front end that represents a preview of a user's upload.
  * @param mapResult
  */
-export const formatUploadPreview = (mapResult: MapResult) => {
-  const formattedPreview: Partial<UploadPreviewTableObject>[] = mapResult.children.map(
+export const formatUploadPreview = (mapResult: EnrollmentReportUpdate) => {
+  const formattedPreview: Partial<UploadPreviewRow>[] = mapResult.children.map(
     (c, idx) => {
       const recentEnrollment = getLastEnrollment(c);
       const recentFunding = getLastFunding(recentEnrollment);
-      const tableObj: Partial<UploadPreviewTableObject> = {
+      const tableObj: Partial<UploadPreviewRow> = {
         name: nameFormatter(c, { lastNameFirst: true, capitalize: true }),
         ageGroup: recentEnrollment ? recentEnrollment.ageGroup : undefined,
         // Greater than 1 here because we didn't save nested enrollments and

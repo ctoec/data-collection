@@ -5,7 +5,7 @@ import {
   TObjectDriller,
 } from '@ctoec/component-library';
 import { AgeGroup, Enrollment } from '../../../../shared/models';
-import { ChangeEnrollment } from '../../../../shared/payloads';
+import { ChangeEnrollmentRequest } from '../../../../shared/payloads';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 type AgeGroupProps<T> = {
@@ -14,7 +14,7 @@ type AgeGroupProps<T> = {
 /**
  * Component for updating an enrollment's age group.
  */
-export const AgeGroupField = <T extends Enrollment | ChangeEnrollment>({
+export const AgeGroupField = <T extends Enrollment | ChangeEnrollmentRequest>({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: AgeGroupProps<T>) => {
   return (

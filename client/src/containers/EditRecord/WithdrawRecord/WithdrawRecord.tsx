@@ -12,10 +12,12 @@ import { useHistory } from 'react-router-dom';
 import { Enrollment, Child, FundingSource } from '../../../shared/models';
 import { apiPost, apiGet } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
-import { EnrollmentEndDateField } from '../../../components/Forms/Enrollment/Fields';
+import {
+  EnrollmentEndDateField,
+  ExitReasonField,
+} from '../../../components/Forms/Enrollment/Fields';
 import { ReportingPeriodField } from '../../../components/Forms/Enrollment/Funding/Fields';
-import { ExitReasonField } from './Fields/ExitReason';
-import { Withdraw } from '../../../shared/payloads';
+import { WithdrawRequest } from '../../../shared/payloads';
 import { useAlerts } from '../../../hooks/useAlerts';
 import { nameFormatter } from '../../../utils/formatters';
 import RosterContext from '../../../contexts/RosterContext/RosterContext';
@@ -39,7 +41,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
 
   const { rosterQuery, updateCurrentRosterCache } = useContext(RosterContext);
 
-  const onSubmit = (withdraw: Withdraw) => {
+  const onSubmit = (withdraw: WithdrawRequest) => {
     setIsSaving(true);
     apiPost(`enrollments/${enrollment.id}/withdraw`, withdraw, {
       accessToken,
@@ -143,15 +145,15 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
                 )}
               </div>
             </div>
-            <Form<Withdraw>
+            <Form<WithdrawRequest>
               onSubmit={onSubmit}
-              data={{} as Withdraw}
+              data={{} as WithdrawRequest}
               className="usa-form"
             >
-              <EnrollmentEndDateField<Withdraw> />
-              <ExitReasonField />
+              <EnrollmentEndDateField<WithdrawRequest> />
+              <ExitReasonField<WithdrawRequest> />
               {!!activeFunding && (
-                <ReportingPeriodField<Withdraw>
+                <ReportingPeriodField<WithdrawRequest>
                   fundingSource={
                     activeFunding.fundingSpace?.source as FundingSource
                   } // Known to have value (modal only displayed when record has no missing info)
