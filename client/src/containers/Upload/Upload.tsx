@@ -45,35 +45,31 @@ const Upload: React.FC = () => {
   // Check the file for errors if there is a file
   const [file, setFile] = useState<File>();
   useEffect(() => {
-    (async function submitUpload() {
-      if (!file) return;
+    if (!file) return;
 
-      setLoading(true);
-      try {
-        const formData = getFormDataBlob(file);
-        const enrollmentColumnErrors: EnrollmentColumnError[] = await apiPost(
-          `enrollment-reports/check`,
-          formData,
-          {
-            accessToken,
-            headers: { 'content-type': formData.type },
-            rawBody: true,
-          }
-        );
+    setLoading(true);
 
+    const formData = getFormDataBlob(file);
+    apiPost(`enrollment-reports/check`, formData, {
+      accessToken,
+      headers: { 'content-type': formData.type },
+      rawBody: true,
+    })
+      .then((enrollmentColumnErrors: EnrollmentColumnError[]) => {
         history.push('/missing-info', {
           enrollmentColumnErrors,
           file,
         });
-      } catch (error) {
+      })
+      .catch((error) => {
         handleJWTError(history, (e) => {
           setError(e);
           clearFile();
-        })(error);
-      } finally {
+        });
+      })
+      .finally(() => {
         setLoading(false);
-      }
-    })();
+      });
   }, [file]);
 
   const [fileKey, setFileKey] = useState(0);
