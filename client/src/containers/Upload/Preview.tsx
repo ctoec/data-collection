@@ -186,7 +186,7 @@ export const Preview: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid-row">
+      <div className="grid-row upload-preview-table">
         {previewAccordionItems ? (
           <Accordion {...previewAccordionItems} />
         ) : (
