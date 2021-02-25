@@ -86,8 +86,10 @@ export const ReviewMissingInfo: React.FC = () => {
             history.push(`/upload`);
           }}
         />
-        // TODO: Update in
-        https://app.zenhub.com/workspaces/ece-dev-board-5ff506028d35f30012e0e937/issues/ctoec/data-collection/239
+        {
+          // TODO: Update in
+          // https://app.zenhub.com/workspaces/ece-dev-board-5ff506028d35f30012e0e937/issues/ctoec/data-collection/239
+        }
         <Button
           text="Next"
           onClick={() => history.push('/preview', { file })}
