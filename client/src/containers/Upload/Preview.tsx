@@ -41,7 +41,7 @@ export const Preview: React.FC = () => {
   const history = useHistory();
   const { state } = useLocation();
 
-  //  If there's no state suplied, the user presumably tried to get here manually, which isn't allowed
+  //  If there's no state supplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
     history.push('/upload');
   }
@@ -52,24 +52,25 @@ export const Preview: React.FC = () => {
   useEffect(() => {
     (async function fetchPreview() {
       if (!file) return;
-      const formData = getFormDataBlob(file);
-      await apiPost(`enrollment-reports/false`, formData, {
-        accessToken,
-        headers: { 'content-type': formData.type },
-        rawBody: true,
-      })
-        .then((resp: BatchUploadResponse) => {
-          // Clear all children records from data cache
-          clearChildrenCaches();
-          console.log(resp);
-          setPreview(resp);
-        })
-        .catch(
-          handleJWTError(history, (err) => {
-            console.error(err);
-          })
+
+      try {
+        const formData = getFormDataBlob(file);
+        const resp: BatchUploadResponse = await apiPost(
+          `enrollment-reports/false`,
+          formData,
+          {
+            accessToken,
+            headers: { 'content-type': formData.type },
+            rawBody: true,
+          }
         );
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+        clearChildrenCaches();
+        setPreview(resp);
+      } catch (error) {
+        handleJWTError(history, (err) => {
+          console.error(err);
+        });
+      }
     })();
   }, [file]);
 
@@ -86,7 +87,6 @@ export const Preview: React.FC = () => {
       .then((resp: BatchUploadResponse) => {
         // Clear all children records from data cache
         clearChildrenCaches();
-        console.log(resp);
         let uploadText = `You uploaded ${resp.new} new records`;
         uploadText +=
           resp.updated > 0 ? `, ${resp.updated} updated records` : '';
@@ -191,7 +191,7 @@ export const Preview: React.FC = () => {
       <Button
         id="upload-button"
         text="Save changes to roster"
-        onClick={() => confirmUpload()}
+        onClick={confirmUpload}
       />
     </div>
   );
