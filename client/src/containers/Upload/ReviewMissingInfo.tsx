@@ -68,7 +68,7 @@ export const ReviewMissingInfo: React.FC = () => {
           <div>
             <div className="display-flex flex-row">
               <InlineIcon className="missing-info-icon" icon="incomplete" />
-              <p>
+              <p className="margin-top-0 margin-left-1">
                 The uploaded file had missing information OEC requires.
                 <br />
                 To make updates, go back to choose a resolved file or continue
@@ -85,8 +85,8 @@ export const ReviewMissingInfo: React.FC = () => {
           </div>
         ) : (
           <div className="display-flex flex-row">
-            <InlineIcon icon="complete" />
-            <p>
+            <InlineIcon className="missing-info-icon" icon="complete" />
+            <p className="margin-top-0 margin-left-1">
               Your file has no missing information required for OEC reporting!
               Go to the next step to review changes and upload to your roster.
             </p>
