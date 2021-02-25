@@ -138,7 +138,9 @@ export const Preview: React.FC = () => {
         ></ProgressIndicator>
 
         <h2 className="margin-bottom-0">
-          <span>3 of 3</span>Preview changes and upload file
+          <span className="usa-step-indicator__current-step">3</span>
+          <span className="usa-step-indicator__total-steps"> of 3</span>Preview
+          changes and upload file
         </h2>
 
         <p>

@@ -137,7 +137,9 @@ const Upload: React.FC = () => {
           steps={props.steps}
         ></ProgressIndicator>
         <h2 className="margin-bottom-0">
-          <span>1 of 3</span>Choose your enrollment file
+          <span className="usa-step-indicator__current-step">1</span>
+          <span className="usa-step-indicator__total-steps"> of 3</span>Choose
+          your enrollment file
         </h2>
         <p>
           After you've entered all state funded enrollment data in the

@@ -57,7 +57,9 @@ export const ReviewMissingInfo: React.FC = () => {
         ></ProgressIndicator>
 
         <h2 className="margin-bottom-0">
-          <span>2 of 3</span>Review missing info
+          <span className="usa-step-indicator__current-step">2</span>
+          <span className="usa-step-indicator__total-steps"> of 3</span>Review
+          missing info
         </h2>
 
         {missingInfo && missingInfo.length ? (
