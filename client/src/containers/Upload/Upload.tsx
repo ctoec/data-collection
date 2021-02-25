@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react';
-import cx from 'classnames';
 import { useHistory } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
@@ -7,6 +6,8 @@ import {
   Alert,
   LoadingWrapper,
   ErrorBoundary,
+  ProgressIndicator,
+  ProgressIndicatorProps,
 } from '@ctoec/component-library';
 import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
@@ -14,10 +15,24 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
-import { BatchUploadResponse } from '../../shared/payloads';
 import { EnrollmentColumnError } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { BackButton } from '../../components/BackButton';
+
+const props: ProgressIndicatorProps = {
+  currentIndex: 0,
+  steps: [
+    {
+      label: 'Choose file',
+    },
+    {
+      label: 'Review Missing Info',
+    },
+    {
+      label: 'Preview and upload',
+    },
+  ],
+};
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -34,9 +49,8 @@ const Upload: React.FC = () => {
       if (!file) return;
 
       setLoading(true);
-      const formData = getFormDataBlob(file);
-
       try {
+        const formData = getFormDataBlob(file);
         const enrollmentColumnErrors: EnrollmentColumnError[] = await apiPost(
           `enrollment-reports/check`,
           formData,
@@ -49,12 +63,13 @@ const Upload: React.FC = () => {
 
         history.push('/missing-info', {
           enrollmentColumnErrors,
+          file,
         });
-      } catch (e) {
+      } catch (error) {
         handleJWTError(history, (e) => {
           setError(e);
           clearFile();
-        });
+        })(error);
       } finally {
         setLoading(false);
       }
@@ -62,21 +77,25 @@ const Upload: React.FC = () => {
   }, [file]);
 
   const [fileKey, setFileKey] = useState(0);
-  const clearFile = () => {
+
+  function clearFile() {
     // When the file is cleared, change the key to force the file component to rerender/reset
     setFile(undefined);
     setFileKey((oldKey) => oldKey + 1);
-  };
-  const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const _file = e?.target?.files?.[0];
+  }
+
+  function triggerUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault();
+    const _file = event?.target?.files?.[0];
+
     if (!_file) {
       clearFile();
       return setError('No file selected for upload');
     }
+
     setFile(_file);
     setError(undefined);
-  };
+  }
 
   return (
     <div className="grid-container">
@@ -108,11 +127,20 @@ const Upload: React.FC = () => {
           />
         </div>
       )}
-
       <div className="grid-row display-block">
-        <h1 ref={h1Ref} className="margin-bottom-0">
+        <h1 ref={h1Ref} className="margin-bottom-4">
           Upload your enrollment data
         </h1>
+
+        <ProgressIndicator
+          currentIndex={props.currentIndex}
+          steps={props.steps}
+        ></ProgressIndicator>
+        <h2 className="margin-bottom-2">
+          <span className="usa-step-indicator__current-step">1</span>
+          <span className="usa-step-indicator__total-steps"> of 3</span>Choose
+          your enrollment file
+        </h2>
         <p>
           After you've entered all state funded enrollment data in the
           spreadsheet template, upload the file here.
@@ -120,15 +148,14 @@ const Upload: React.FC = () => {
       </div>
       <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
         <div className="grid-row">
-            <LoadingWrapper text="Uploading your file..." loading={loading}>
-              <FileInput
-                key={fileKey}
-                id="report"
-                label="Choose a file"
-                onChange={fileUpload}
-              />
-            </LoadingWrapper>
-          </form>
+          <LoadingWrapper text="Uploading your file..." loading={loading}>
+            <FileInput
+              key={fileKey}
+              id="report"
+              label="Choose a file"
+              onChange={triggerUpload}
+            />
+          </LoadingWrapper>
         </div>
       </ErrorBoundary>
     </div>

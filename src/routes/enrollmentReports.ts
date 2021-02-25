@@ -6,7 +6,10 @@ import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
-import { BatchUploadResponse, EnrollmentColumnError } from '../../client/src/shared/payloads';
+import {
+  BatchUploadResponse,
+  EnrollmentColumnError,
+} from '../../client/src/shared/payloads';
 import { ChangeTag } from '../../client/src/shared/models';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
@@ -99,19 +102,30 @@ enrollmentReportsRouter.post(
  * 	- returns new EnrollmentReport on success
  */
 enrollmentReportsRouter.post(
-  '/',
+  '/:shouldSave',
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
+        const shouldSave = req.params['shouldSave'] === 'true';
         const reportRows = controller.parseUploadedTemplate(req.file);
         const mapResult = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
-          { save: true }
+          { save: shouldSave }
         );
+
+        // Augment with validation errors to determine missing info
+        if (!shouldSave) {
+          mapResult.children = await Promise.all(
+            mapResult.children.map(async (c) => ({
+              ...c,
+              validationErrors: await validate(c),
+            }))
+          );
+        }
 
         // TODO: Decide if there's any benefit in actually creating the EnrollmentReport entity,
         // which maps childIds to the upload they came from.

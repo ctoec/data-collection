@@ -126,6 +126,9 @@ export async function mapRows(
     });
     if (mapResult.children.length > 0) mapResult.children.push(...children);
     else mapResult.children = children;
+    children.forEach((c) => {
+      mapResult.changeTagsForChildren.push([ChangeTag.NewRecord]);
+    });
     return mapResult;
   }
 

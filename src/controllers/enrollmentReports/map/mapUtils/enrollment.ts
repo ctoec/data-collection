@@ -49,6 +49,8 @@ export const rowHasNewEnrollment = (
   enrollmentFromRow: Enrollment,
   enrollment: Enrollment
 ) => {
+  if (!enrollmentFromRow) return false;
+  if (!enrollment) return true;
   return (
     (enrollmentFromRow.site &&
       enrollmentFromRow.site.siteName !== enrollment.site.siteName) ||
@@ -131,16 +133,21 @@ export const handleEnrollmentUpdate = (
     child.enrollments.push(enrollment);
     // DESIGN NOTE: We'll guess that the previous enrollment and funding
     // ended "one unit" (day/reporting period) before the new ones
-    currentEnrollment.exit = enrollment.entry.clone().add(-1, 'day');
-    currentEnrollment.exitReason = getExitReason(currentEnrollment, enrollment);
-    if (currentEnrollment.exitReason === ExitReason.AgedOut) {
-      mapResult.changeTagsForChildren[matchingIdx].push(ChangeTag.AgedUp);
-    } else {
-      mapResult.changeTagsForChildren[matchingIdx].push(
-        ChangeTag.ChangedEnrollment
+    if (currentEnrollment) {
+      currentEnrollment.exit = enrollment.entry.clone().add(-1, 'day');
+      currentEnrollment.exitReason = getExitReason(
+        currentEnrollment,
+        enrollment
       );
+      if (currentEnrollment.exitReason === ExitReason.AgedOut) {
+        mapResult.changeTagsForChildren[matchingIdx].push(ChangeTag.AgedUp);
+      } else {
+        mapResult.changeTagsForChildren[matchingIdx].push(
+          ChangeTag.ChangedEnrollment
+        );
+      }
+      enrollmentsToUpdate.push(currentEnrollment);
     }
-    enrollmentsToUpdate.push(currentEnrollment);
   }
 
   // Row might still be a withdrawl for the current enrollment

@@ -1,51 +1,17 @@
 import {
   Button,
-  Column,
+  InlineIcon,
   ProgressIndicator,
   ProgressIndicatorProps,
   Table,
 } from '@ctoec/component-library';
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import { EnrollmentColumnError } from '../../shared/payloads';
-
-const misingInfoTableColumns: Column<EnrollmentColumnError>[] = [
-  {
-    name: 'Column name',
-    sort: (row) => row.column || '',
-    cell: ({ row }) => (
-      <th scope="row" className="font-body-2xs">
-        <p>{row.formattedName}</p>
-      </th>
-    ),
-  },
-  {
-    name: '# of errors',
-    sort: (row) => row.column || '',
-    cell: ({ row }) => (
-      <th scope="row" className="font-body-2xs">
-        <p>{row.errorCount}</p>
-      </th>
-    ),
-  },
-  {
-    name: 'Child records with errors',
-    sort: (row) => row.column || '',
-    cell: ({ row }) => (
-      <th scope="row" className="font-body-2xs">
-        <p>
-          {row.affectedRows.length > 5
-            ? row.affectedRows.slice(0, 5).join(', ') +
-              ', and ' +
-              (row.affectedRows.length - 5).toString() +
-              ' more'
-            : row.affectedRows.join(', ')}
-        </p>
-      </th>
-    ),
-  },
-];
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
+import { misingInfoTableColumns } from './missingInfoTableColumns';
+import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/uswds/arrowRight.svg';
 
 const props: ProgressIndicatorProps = {
   currentIndex: 1,
@@ -65,6 +31,7 @@ const props: ProgressIndicatorProps = {
 //////////////////////////////////////////////////////
 
 export const ReviewMissingInfo: React.FC = () => {
+  const h1Ref = getH1RefForTitle();
   const history = useHistory();
   const { state } = useLocation();
 
@@ -75,38 +42,50 @@ export const ReviewMissingInfo: React.FC = () => {
 
   const missingInfo: EnrollmentColumnError[] = (state as any)
     .enrollmentColumnErrors;
+  const file = (state as any).file;
 
   return (
     <div className="grid-container">
       <BackButton location="/upload" />
 
-      <ProgressIndicator
-        currentIndex={props.currentIndex}
-        steps={props.steps}
-      ></ProgressIndicator>
-
       <div className="grid-row display-block">
-        <h2 className="margin-bottom-0">Review missing info</h2>
+        <h1 ref={h1Ref} className="margin-bottom-4">
+          Upload your enrollment data
+        </h1>
+
+        <ProgressIndicator
+          currentIndex={props.currentIndex}
+          steps={props.steps}
+        ></ProgressIndicator>
+
+        <h2 className="margin-bottom-2">
+          <span className="usa-step-indicator__current-step">2</span>
+          <span className="usa-step-indicator__total-steps"> of 3</span>Review
+          missing info
+        </h2>
 
         {missingInfo && missingInfo.length ? (
           <div>
-            <p>
-              The uploaded file had missing information OEC requires.
-              <br />
-              To make updates, go back to choose a resolved file or continue
-              with this upload and make edits in the roster.
-            </p>
-
+            <div className="display-flex flex-row">
+              <InlineIcon className="missing-info-icon" icon="incomplete" />
+              <p>
+                The uploaded file had missing information OEC requires.
+                <br />
+                To make updates, go back to choose a resolved file or continue
+                with this upload and make edits in the roster.
+              </p>
+            </div>
             <Table<EnrollmentColumnError>
-              className="margin-bottom-4"
+              className="margin-bottom-4 missing-info-table"
               id="errors-in-sheet-modal-table"
               data={missingInfo}
               rowKey={(row) => row.column}
-              columns={misingInfoTableColumns}
+              columns={misingInfoTableColumns()}
             />
           </div>
         ) : (
-          <div>
+          <div className="display-flex flex-row">
+            <InlineIcon icon="complete" />
             <p>
               Your file has no missing information required for OEC reporting!
               Go to the next step to review changes and upload to your roster.
@@ -122,9 +101,10 @@ export const ReviewMissingInfo: React.FC = () => {
             history.push(`/upload`);
           }}
         />
-        // TODO: Update in
-        https://app.zenhub.com/workspaces/ece-dev-board-5ff506028d35f30012e0e937/issues/ctoec/data-collection/239
-        <Button text="Next" onClick={() => null} />
+        <Button
+          text="Next"
+          onClick={() => history.push('/preview', { file })}
+        />
       </div>
     </div>
   );
