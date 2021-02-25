@@ -64,15 +64,16 @@ export const ReviewMissingInfo: React.FC = () => {
         </h2>
 
         {missingInfo && missingInfo.length ? (
-          <div className="display-flex flex-column">
-            <InlineIcon className="height-4 width-4" icon="incomplete" />
-            <p>
-              The uploaded file had missing information OEC requires.
-              <br />
-              To make updates, go back to choose a resolved file or continue
-              with this upload and make edits in the roster.
-            </p>
-
+          <div>
+            <div className="display-flex flex-row">
+              <InlineIcon className="height-4 width-4" icon="incomplete" />
+              <p>
+                The uploaded file had missing information OEC requires.
+                <br />
+                To make updates, go back to choose a resolved file or continue
+                with this upload and make edits in the roster.
+              </p>
+            </div>
             <Table<EnrollmentColumnError>
               className="margin-bottom-4"
               id="errors-in-sheet-modal-table"
@@ -82,7 +83,7 @@ export const ReviewMissingInfo: React.FC = () => {
             />
           </div>
         ) : (
-          <div className="display-flex flex-column">
+          <div className="display-flex flex-row">
             <InlineIcon icon="complete" />
             <p>
               Your file has no missing information required for OEC reporting!
