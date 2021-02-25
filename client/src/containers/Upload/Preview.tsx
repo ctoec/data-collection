@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   HeadingLevel,
+  LoadingWrapper,
   ProgressIndicator,
   ProgressIndicatorProps,
 } from '@ctoec/component-library';
@@ -41,6 +42,8 @@ export const Preview: React.FC = () => {
   const history = useHistory();
   const { state } = useLocation();
 
+  const [loading, setLoading] = useState(false);
+
   //  If there's no state supplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
     history.push('/upload');
@@ -53,6 +56,7 @@ export const Preview: React.FC = () => {
     (async function fetchPreview() {
       if (!file) return;
 
+      setLoading(true);
       try {
         const formData = getFormDataBlob(file);
         const resp: BatchUploadResponse = await apiPost(
@@ -70,6 +74,8 @@ export const Preview: React.FC = () => {
         handleJWTError(history, (err) => {
           console.error(err);
         });
+      } finally {
+        setLoading(false);
       }
     })();
   }, [file]);
@@ -148,58 +154,59 @@ export const Preview: React.FC = () => {
           everything looks right, upload your changes to your roster.
         </p>
       </div>
-
-      <div className="grid-row desktop:grid-col-4 three-column-card">
-        <Card className="font-body-lg">
-          <p className="margin-top-0 margin-bottom-0">
-            Total records in this file
-          </p>
-          <p className="text-bold margin-top-0 margin-bottom-0">
-            {preview ? preview.new + preview.updated + preview.withdrawn : ''}
-          </p>
-        </Card>
-      </div>
-      <div className="grid-row three-column-layout">
-        <div className="desktop:grid-col-4 three-column-card">
+      <LoadingWrapper text="Building your upload summary..." loading={loading}>
+        <div className="grid-row desktop:grid-col-4 three-column-card">
           <Card className="font-body-lg">
-            <p className="margin-top-0 margin-bottom-0">New</p>
+            <p className="margin-top-0 margin-bottom-0">
+              Total records in this file
+            </p>
             <p className="text-bold margin-top-0 margin-bottom-0">
-              {preview ? preview.new : ''}
+              {preview ? preview.new + preview.updated + preview.withdrawn : ''}
             </p>
           </Card>
         </div>
-        <div className="desktop:grid-col-4 three-column-card">
-          <Card className="font-body-lg">
-            <p className="margin-top-0 margin-bottom-0">Updated</p>
-            <p className="text-bold margin-top-0 margin-bottom-0">
-              {preview ? preview.updated : ''}
-            </p>
-          </Card>
+        <div className="grid-row three-column-layout">
+          <div className="desktop:grid-col-4 three-column-card">
+            <Card className="font-body-lg">
+              <p className="margin-top-0 margin-bottom-0">New</p>
+              <p className="text-bold margin-top-0 margin-bottom-0">
+                {preview ? preview.new : ''}
+              </p>
+            </Card>
+          </div>
+          <div className="desktop:grid-col-4 three-column-card">
+            <Card className="font-body-lg">
+              <p className="margin-top-0 margin-bottom-0">Updated</p>
+              <p className="text-bold margin-top-0 margin-bottom-0">
+                {preview ? preview.updated : ''}
+              </p>
+            </Card>
+          </div>
+          <div className="desktop:grid-col-4 three-column-card">
+            <Card className="font-body-lg">
+              <p className="margin-top-0 margin-bottom-0">Withdrawn</p>
+              <p className="text-bold margin-top-0 margin-bottom-0">
+                {preview ? preview.withdrawn : ''}
+              </p>
+            </Card>
+          </div>
         </div>
-        <div className="desktop:grid-col-4 three-column-card">
-          <Card className="font-body-lg">
-            <p className="margin-top-0 margin-bottom-0">Withdrawn</p>
-            <p className="text-bold margin-top-0 margin-bottom-0">
-              {preview ? preview.withdrawn : ''}
-            </p>
-          </Card>
+
+        <div className="grid-row upload-preview-table">
+          {previewAccordionItems ? (
+            <Accordion {...previewAccordionItems} />
+          ) : (
+            <></>
+          )}
         </div>
-      </div>
 
-      <div className="grid-row upload-preview-table">
-        {previewAccordionItems ? (
-          <Accordion {...previewAccordionItems} />
-        ) : (
-          <></>
-        )}
-      </div>
-
-      <Button text="Cancel upload" href="/home" appearance="outline" />
-      <Button
-        id="upload-button"
-        text="Save changes to roster"
-        onClick={confirmUpload}
-      />
+        <Button text="Cancel upload" href="/home" appearance="outline" />
+        <Button
+          id="upload-button"
+          text="Save changes to roster"
+          onClick={confirmUpload}
+        />
+      </LoadingWrapper>
     </div>
   );
 };
