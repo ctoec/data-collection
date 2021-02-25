@@ -43,7 +43,7 @@ export const Preview: React.FC = () => {
   const { state } = useLocation();
 
   const [loading, setLoading] = useState(false);
-  let loadingText: string = 'Building your upload summary...';
+  const [loadingText, setLoadingText] = useState('');
 
   //  If there's no state supplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
@@ -57,7 +57,7 @@ export const Preview: React.FC = () => {
     (async function fetchPreview() {
       if (!file) return;
 
-      loadingText = 'Building your upload summary...';
+      setLoadingText('Building your upload summary...');
       setLoading(true);
       try {
         const formData = getFormDataBlob(file);
@@ -83,7 +83,7 @@ export const Preview: React.FC = () => {
   }, [file]);
 
   async function confirmUpload() {
-    loadingText = 'Uploading changes...';
+    setLoadingText('Uploading changes...');
     setLoading(true);
 
     try {
@@ -161,7 +161,7 @@ export const Preview: React.FC = () => {
           everything looks right, upload your changes to your roster.
         </p>
       </div>
-      <LoadingWrapper text={getLoadingText()} loading={loading}>
+      <LoadingWrapper text={loadingText} loading={loading}>
         <div className="grid-row desktop:grid-col-4 three-column-card">
           <Card className="font-body-lg">
             <p className="margin-top-0 margin-bottom-0">
