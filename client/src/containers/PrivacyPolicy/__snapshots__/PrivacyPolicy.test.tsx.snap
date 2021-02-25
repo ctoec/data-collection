@@ -225,261 +225,34 @@ exports[`PrivacyPolicy matches snapshot 1`] = `
       Schedule A: Dictionary of Collected Data
     </h2>
     <div
-      class="data-definitions"
+      class="oec-loading-wrapper"
     >
-      <div>
-        <div
-          class="margin-top-4"
+      <div
+        aria-atomic="true"
+        aria-labelledby="loading-id-1"
+        aria-live="assertive"
+        class="bx--loading"
+      >
+        <label
+          class="bx--visually-hidden"
+          id="loading-id-1"
         >
-          <h3
-            id="section-one"
-          >
-            Section one
-          </h3>
-          <p
-            class="text-pre-line"
-          />
-          <table
-            class="oec-table"
-            id="data-requirements-Section-one"
-          >
-            <thead>
-              <tr>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-sorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 18%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Field name
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 20%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Required/ Optional
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 24%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Definition
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 20%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Reason for collecting
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 20%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Format
-                  </span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                id="favorite-color-field"
-              >
-                <th
-                  scope="row"
-                >
-                  <span
-                    class="text-bold"
-                  >
-                    Favorite color
-                  </span>
-                </th>
-                <td>
-                  <span
-                    class="usa-tag usa-tag--no-transform required-tag"
-                  >
-                    Optional
-                  </span>
-                </td>
-                <td>
-                  <p>
-                    The color you like the most
-                  </p>
-                </td>
-                <td>
-                  So we know your favorite color
-                </td>
-                <td>
-                  <p>
-                    string
-                  </p>
-                  <div
-                    class="margin-top-1"
-                  >
-                    Ex: Blue
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div
-          class="margin-top-4"
+          Active loading indicator
+        </label>
+        <svg
+          class="bx--loading__svg"
+          viewBox="0 0 100 100"
         >
-          <h3
-            id="section-two"
-          >
-            Section two
-          </h3>
-          <p
-            class="text-pre-line"
+          <title>
+            Active loading indicator
+          </title>
+          <circle
+            class="bx--loading__stroke"
+            cx="50%"
+            cy="50%"
+            r="44"
           />
-          <table
-            class="oec-table"
-            id="data-requirements-Section-two"
-          >
-            <thead>
-              <tr>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-sorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 18%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Field name
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 20%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Required/ Optional
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 24%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Definition
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 20%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Reason for collecting
-                  </span>
-                </th>
-                <th
-                  aria-sort="none"
-                  class="oec-table__column-header oec-unsorted"
-                  role="columnheader"
-                  scope="col"
-                  style="width: 20%;"
-                >
-                  <span
-                    class="oec-table__column-title"
-                  >
-                    Format
-                  </span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                id="lucky-number-field"
-              >
-                <th
-                  scope="row"
-                >
-                  <span
-                    class="text-bold"
-                  >
-                    Lucky number
-                  </span>
-                </th>
-                <td>
-                  <span
-                    class="usa-tag usa-tag--no-transform required-tag required-tag--required"
-                  >
-                    Required
-                  </span>
-                </td>
-                <td>
-                  <p>
-                    The number you find brings the most luck
-                  </p>
-                </td>
-                <td>
-                  So we know your lucky number
-                </td>
-                <td>
-                  <p>
-                    number
-                  </p>
-                  <div
-                    class="margin-top-1"
-                  >
-                    Ex: 130
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        </svg>
       </div>
     </div>
   </div>
