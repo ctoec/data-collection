@@ -174,7 +174,13 @@ export const Preview: React.FC = () => {
         </div>
       </div>
 
-      {previewAccordionItems ? <Accordion {...previewAccordionItems} /> : <></>}
+      <div className="grid-row">
+        {previewAccordionItems ? (
+          <Accordion {...previewAccordionItems} />
+        ) : (
+          <></>
+        )}
+      </div>
 
       <Button text="Cancel Upload" href="/home" appearance="outline" />
       <Button
