@@ -39,7 +39,7 @@ export class User implements UserInterface {
   email?: string;
 
   @Column({ nullable: false, default: false })
-  isOECUser: boolean = false;
+  isAdmin: boolean = false;
 
   @OneToMany((type) => OrganizationPermission, (perm) => perm.user)
   orgPermissions?: Array<OrganizationPermission>;
