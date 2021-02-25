@@ -1,5 +1,6 @@
 import {
   Button,
+  InlineIcon,
   ProgressIndicator,
   ProgressIndicatorProps,
   Table,
@@ -64,6 +65,7 @@ export const ReviewMissingInfo: React.FC = () => {
 
         {missingInfo && missingInfo.length ? (
           <div>
+            <InlineIcon icon="incomplete" />
             <p>
               The uploaded file had missing information OEC requires.
               <br />
@@ -81,6 +83,7 @@ export const ReviewMissingInfo: React.FC = () => {
           </div>
         ) : (
           <div>
+            <InlineIcon icon="complete" />
             <p>
               Your file has no missing information required for OEC reporting!
               Go to the next step to review changes and upload to your roster.
