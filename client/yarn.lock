@@ -1217,7 +1217,7 @@
 
 "@ctoec/component-library@https://github.com/ctoec/component-library.git#missing-info-page":
   version "1.1.12"
-  resolved "https://github.com/ctoec/component-library.git#a435955d6ebad44f94dd2eb54396b4ff19596d19"
+  resolved "https://github.com/ctoec/component-library.git#2cb2a62acfa7f8765ac413f5c928f56d73447d7f"
   dependencies:
     "@types/carbon-components" "^10.23.0"
     "@types/carbon-components-react" "^7.26.0"
