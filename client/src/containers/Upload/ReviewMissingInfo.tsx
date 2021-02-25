@@ -8,6 +8,7 @@ import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import { EnrollmentColumnError } from '../../shared/payloads';
+import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { misingInfoTableColumns } from './missingInfoTableColumns';
 
 const props: ProgressIndicatorProps = {
@@ -28,6 +29,7 @@ const props: ProgressIndicatorProps = {
 //////////////////////////////////////////////////////
 
 export const ReviewMissingInfo: React.FC = () => {
+  const h1Ref = getH1RefForTitle();
   const history = useHistory();
   const { state } = useLocation();
 
@@ -43,6 +45,7 @@ export const ReviewMissingInfo: React.FC = () => {
   return (
     <div className="grid-container">
       <BackButton location="/upload" />
+      <h1 ref={h1Ref}>Upload your enrollment data</h1>
 
       <ProgressIndicator
         currentIndex={props.currentIndex}
@@ -50,7 +53,9 @@ export const ReviewMissingInfo: React.FC = () => {
       ></ProgressIndicator>
 
       <div className="grid-row display-block">
-        <h2 className="margin-bottom-0">Review missing info</h2>
+        <h2 className="margin-bottom-0">
+          <span>2 of 3</span>Review missing info
+        </h2>
 
         {missingInfo && missingInfo.length ? (
           <div>
@@ -86,8 +91,6 @@ export const ReviewMissingInfo: React.FC = () => {
             history.push(`/upload`);
           }}
         />
-        // TODO: Update in
-        https://app.zenhub.com/workspaces/ece-dev-board-5ff506028d35f30012e0e937/issues/ctoec/data-collection/239
         <Button
           text="Next"
           onClick={() => history.push('/preview', { file })}
