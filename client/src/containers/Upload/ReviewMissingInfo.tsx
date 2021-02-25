@@ -11,6 +11,7 @@ import { BackButton } from '../../components/BackButton';
 import { EnrollmentColumnError } from '../../shared/payloads';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { misingInfoTableColumns } from './missingInfoTableColumns';
+import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/uswds/arrowRight.svg';
 
 const props: ProgressIndicatorProps = {
   currentIndex: 1,
@@ -48,7 +49,7 @@ export const ReviewMissingInfo: React.FC = () => {
       <BackButton location="/upload" />
 
       <div className="grid-row display-block">
-        <h1 ref={h1Ref} className="margin-bottom-0">
+        <h1 ref={h1Ref} className="margin-bottom-4">
           Upload your enrollment data
         </h1>
 
@@ -57,7 +58,7 @@ export const ReviewMissingInfo: React.FC = () => {
           steps={props.steps}
         ></ProgressIndicator>
 
-        <h2 className="margin-bottom-0">
+        <h2 className="margin-bottom-2">
           <span className="usa-step-indicator__current-step">2</span>
           <span className="usa-step-indicator__total-steps"> of 3</span>Review
           missing info
@@ -75,7 +76,7 @@ export const ReviewMissingInfo: React.FC = () => {
               </p>
             </div>
             <Table<EnrollmentColumnError>
-              className="margin-bottom-4"
+              className="margin-bottom-4 missing-info-table"
               id="errors-in-sheet-modal-table"
               data={missingInfo}
               rowKey={(row) => row.column}

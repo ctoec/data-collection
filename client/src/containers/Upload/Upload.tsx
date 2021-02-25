@@ -128,7 +128,7 @@ const Upload: React.FC = () => {
         </div>
       )}
       <div className="grid-row display-block">
-        <h1 ref={h1Ref} className="margin-bottom-0">
+        <h1 ref={h1Ref} className="margin-bottom-4">
           Upload your enrollment data
         </h1>
 
@@ -136,7 +136,7 @@ const Upload: React.FC = () => {
           currentIndex={props.currentIndex}
           steps={props.steps}
         ></ProgressIndicator>
-        <h2 className="margin-bottom-0">
+        <h2 className="margin-bottom-2">
           <span className="usa-step-indicator__current-step">1</span>
           <span className="usa-step-indicator__total-steps"> of 3</span>Choose
           your enrollment file
