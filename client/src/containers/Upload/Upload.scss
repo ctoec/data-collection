@@ -16,6 +16,17 @@
   width: 100%;
 }
 
+.missing-info-icon svg {
+  height: 2em;
+  width: 2em;
+  vertical-align: middle;
+  display: inline-block;
+  position: relative;
+  top: -0.1em;
+  left: 0.1em;
+  margin-right: 0.25em;
+}
+
 .upload-preview-table {
   .bx--accordion__content {
     padding-right: 0;

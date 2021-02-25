@@ -67,7 +67,7 @@ export const ReviewMissingInfo: React.FC = () => {
         {missingInfo && missingInfo.length ? (
           <div>
             <div className="display-flex flex-row">
-              <InlineIcon className="height-4 width-4" icon="incomplete" />
+              <InlineIcon className="missing-info-icon" icon="incomplete" />
               <p>
                 The uploaded file had missing information OEC requires.
                 <br />
