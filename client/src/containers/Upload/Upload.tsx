@@ -49,9 +49,8 @@ const Upload: React.FC = () => {
       if (!file) return;
 
       setLoading(true);
-      const formData = getFormDataBlob(file);
-
       try {
+        const formData = getFormDataBlob(file);
         const enrollmentColumnErrors: EnrollmentColumnError[] = await apiPost(
           `enrollment-reports/check`,
           formData,
@@ -66,11 +65,11 @@ const Upload: React.FC = () => {
           enrollmentColumnErrors,
           file,
         });
-      } catch (e) {
+      } catch (error) {
         handleJWTError(history, (e) => {
           setError(e);
           clearFile();
-        });
+        })(error);
       } finally {
         setLoading(false);
       }
@@ -78,21 +77,25 @@ const Upload: React.FC = () => {
   }, [file]);
 
   const [fileKey, setFileKey] = useState(0);
-  const clearFile = () => {
+
+  function clearFile() {
     // When the file is cleared, change the key to force the file component to rerender/reset
     setFile(undefined);
     setFileKey((oldKey) => oldKey + 1);
-  };
-  const fileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const _file = e?.target?.files?.[0];
+  }
+
+  function triggerUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault();
+    const _file = event?.target?.files?.[0];
+
     if (!_file) {
       clearFile();
       return setError('No file selected for upload');
     }
+
     setFile(_file);
     setError(undefined);
-  };
+  }
 
   return (
     <div className="grid-container">
@@ -148,7 +151,7 @@ const Upload: React.FC = () => {
               key={fileKey}
               id="report"
               label="Choose a file"
-              onChange={fileUpload}
+              onChange={triggerUpload}
             />
           </LoadingWrapper>
         </div>
