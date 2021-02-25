@@ -194,7 +194,7 @@ export const Preview: React.FC = () => {
         )}
       </div>
 
-      <Button text="Cancel Upload" href="/home" appearance="outline" />
+      <Button text="Cancel upload" href="/home" appearance="outline" />
       <Button
         id="upload-button"
         text="Save changes to roster"
