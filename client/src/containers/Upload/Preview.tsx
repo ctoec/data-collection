@@ -51,6 +51,7 @@ export const Preview: React.FC = () => {
 
   useEffect(() => {
     (async function fetchPreview() {
+      if (!file) return;
       const formData = getFormDataBlob(file);
       await apiPost(`enrollment-reports/false`, formData, {
         accessToken,
@@ -69,7 +70,7 @@ export const Preview: React.FC = () => {
           })
         );
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    });
+    })();
   }, [file]);
 
   const confirmUpload = async () => {
@@ -179,7 +180,7 @@ export const Preview: React.FC = () => {
       <Button
         id="upload-button"
         text="Save changes to roster"
-        onClick={() => confirmUpload}
+        onClick={() => confirmUpload()}
       />
     </div>
   );

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Column } from '@ctoec/component-library';
-import { UploadPreviewTableObject } from './UploadPreviewTableObject';
 import { IncompleteIcon } from '../../components/IncompleteIcon';
+import { UploadPreviewRow } from './UploadPreviewRow';
 
 /**
  * Tabular column formatter that displays a preview of a spreadsheet
  * given to batch upload.
  */
-export const getPreviewTableColumns: () => Column<UploadPreviewTableObject>[] = () => {
-  const columns: Column<UploadPreviewTableObject>[] = [
+export const getPreviewTableColumns: () => Column<UploadPreviewRow>[] = () => {
+  const columns: Column<UploadPreviewRow>[] = [
     {
       name: 'Name',
       sort: (row) => row.name || '',
@@ -32,7 +32,7 @@ export const getPreviewTableColumns: () => Column<UploadPreviewTableObject>[] = 
       sort: (row) => row.name || '',
       cell: ({ row }) => (
         <th scope="row" className="font-body-2xs">
-          <p>{row.missingfInfo ? <IncompleteIcon /> : <></>}</p>
+          <p>{row.missingInfo ? <IncompleteIcon /> : <></>}</p>
         </th>
       ),
     },

@@ -57,7 +57,7 @@ const Upload: React.FC = () => {
       } finally {
         setLoading(false);
       }
-    });
+    })();
   }, [file]);
 
   const [fileKey, setFileKey] = useState(0);
