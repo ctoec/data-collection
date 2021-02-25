@@ -45,14 +45,17 @@ export const ReviewMissingInfo: React.FC = () => {
   return (
     <div className="grid-container">
       <BackButton location="/upload" />
-      <h1 ref={h1Ref}>Upload your enrollment data</h1>
-
-      <ProgressIndicator
-        currentIndex={props.currentIndex}
-        steps={props.steps}
-      ></ProgressIndicator>
 
       <div className="grid-row display-block">
+        <h1 ref={h1Ref} className="margin-bottom-0">
+          Upload your enrollment data
+        </h1>
+
+        <ProgressIndicator
+          currentIndex={props.currentIndex}
+          steps={props.steps}
+        ></ProgressIndicator>
+
         <h2 className="margin-bottom-0">
           <span>2 of 3</span>Review missing info
         </h2>

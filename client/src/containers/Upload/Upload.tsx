@@ -6,6 +6,8 @@ import {
   Alert,
   LoadingWrapper,
   ErrorBoundary,
+  ProgressIndicator,
+  ProgressIndicatorProps,
 } from '@ctoec/component-library';
 import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
@@ -16,6 +18,21 @@ import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps
 import { EnrollmentColumnError } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { BackButton } from '../../components/BackButton';
+
+const props: ProgressIndicatorProps = {
+  currentIndex: 0,
+  steps: [
+    {
+      label: 'Choose file',
+    },
+    {
+      label: 'Review Missing Info',
+    },
+    {
+      label: 'Preview and upload',
+    },
+  ],
+};
 
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -111,6 +128,11 @@ const Upload: React.FC = () => {
         <h1 ref={h1Ref} className="margin-bottom-0">
           Upload your enrollment data
         </h1>
+
+        <ProgressIndicator
+          currentIndex={props.currentIndex}
+          steps={props.steps}
+        ></ProgressIndicator>
         <p>
           After you've entered all state funded enrollment data in the
           spreadsheet template, upload the file here.
