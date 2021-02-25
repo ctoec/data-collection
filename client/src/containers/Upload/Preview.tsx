@@ -74,42 +74,47 @@ export const Preview: React.FC = () => {
     })();
   }, [file]);
 
-  const confirmUpload = async () => {
-    const formData = getFormDataBlob(file);
-    apiPost(`enrollment-reports/true`, formData, {
-      accessToken,
-      headers: { 'content-type': formData.type },
-      rawBody: true,
-    })
-      // Response contains id of created enrollmentReport,
-      // number of active enrollments, and num withdrawn enrollments
-      // via BatchUpload payload
-      .then((resp: BatchUploadResponse) => {
-        // Clear all children records from data cache
-        clearChildrenCaches();
-        let uploadText = `You uploaded ${resp.new} new records`;
-        uploadText +=
-          resp.updated > 0 ? `, ${resp.updated} updated records` : '';
-        uploadText +=
-          resp.withdrawn > 0
-            ? ` and ${resp.withdrawn} withdrawn records.`
-            : `.`;
-        history.push(`/roster`, {
-          alerts: [
-            {
-              type: 'success',
-              heading: 'Your records have been uploaded!',
-              text: uploadText,
-            },
-          ],
-        });
-      })
-      .catch(
-        handleJWTError(history, (err) => {
-          console.error(err);
-        })
+  async function confirmUpload() {
+    try {
+      const formData = getFormDataBlob(file);
+      const resp: BatchUploadResponse = await apiPost(
+        `enrollment-reports/true`,
+        formData,
+        {
+          accessToken,
+          headers: { 'content-type': formData.type },
+          rawBody: true,
+        }
       );
-  };
+
+      clearChildrenCaches();
+      history.push(`/roster`, {
+        alerts: [
+          {
+            type: 'success',
+            heading: 'Your records have been uploaded!',
+            text: buildUploadSuccessText(resp),
+          },
+        ],
+      });
+    } catch (error) {
+      handleJWTError(history, (err) => {
+        console.error(err);
+      });
+    }
+  }
+
+  function buildUploadSuccessText(batchUpload: BatchUploadResponse) {
+    let uploadText = `You uploaded ${batchUpload.new} new records`;
+    uploadText +=
+      batchUpload.updated > 0 ? `, ${batchUpload.updated} updated records` : '';
+    uploadText +=
+      batchUpload.withdrawn > 0
+        ? ` and ${batchUpload.withdrawn} withdrawn records.`
+        : `.`;
+
+    return uploadText;
+  }
 
   const previewAccordionItems = preview
     ? {
@@ -120,7 +125,7 @@ export const Preview: React.FC = () => {
 
   return (
     <div className="grid-container">
-      <BackButton location="/upload" />
+      <BackButton />
 
       <div className="grid-row display-block">
         <h1 ref={h1Ref} className="margin-bottom-0">
