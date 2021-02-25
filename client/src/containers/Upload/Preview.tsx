@@ -43,11 +43,7 @@ export const Preview: React.FC = () => {
   const { state } = useLocation();
 
   const [loading, setLoading] = useState(false);
-  let loadingText: string = '';
-
-  function getLoadingText() {
-    return loadingText;
-  }
+  let loadingText: string = 'Building your upload summary...';
 
   //  If there's no state supplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
