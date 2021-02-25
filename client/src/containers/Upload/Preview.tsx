@@ -45,6 +45,10 @@ export const Preview: React.FC = () => {
   const [loading, setLoading] = useState(false);
   let loadingText: string = '';
 
+  function getLoadingText() {
+    return loadingText;
+  }
+
   //  If there's no state supplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
     history.push('/upload');
@@ -161,7 +165,7 @@ export const Preview: React.FC = () => {
           everything looks right, upload your changes to your roster.
         </p>
       </div>
-      <LoadingWrapper text={loadingText} loading={loading}>
+      <LoadingWrapper text={getLoadingText()} loading={loading}>
         <div className="grid-row desktop:grid-col-4 three-column-card">
           <Card className="font-body-lg">
             <p className="margin-top-0 margin-bottom-0">
