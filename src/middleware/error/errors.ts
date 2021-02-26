@@ -10,7 +10,15 @@ export class ApiError extends Error {
  */
 export class InvalidSubClaimError extends ApiError {
   constructor() {
-    super('No valid user found for decided sub claim');
+    super('No valid user found for decoded sub claim');
+    this.name = UnauthorizedError.name;
+    this.status = 401;
+  }
+}
+
+export class ForbiddenError extends ApiError {
+  constructor() {
+    super('You are not authorized to access this resource');
     this.name = UnauthorizedError.name;
     this.status = 401;
   }

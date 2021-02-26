@@ -6,7 +6,7 @@ import { Column } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 import { IncompleteIcon } from '../../components/IncompleteIcon';
 import { nameFormatter } from '../../utils/formatters';
-import { getStrippedFundingSourceName } from '../Home/utils/getFundingSpaceDisplayName';
+import { getStrippedFundingSourceName } from '../../utils/getFundingSpaceDisplayName';
 
 export enum ColumnNames {
   NAME = 'Name',

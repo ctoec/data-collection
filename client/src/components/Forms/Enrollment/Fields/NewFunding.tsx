@@ -22,7 +22,7 @@ import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { HideErrorProps } from '../../types';
 import { getCurrentFunding } from '../../../../utils/models';
-import { getStrippedFundingSourceName } from '../../../../containers/Home/utils/getFundingSpaceDisplayName';
+import { getStrippedFundingSourceName } from '../../../../utils/getFundingSpaceDisplayName';
 
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
