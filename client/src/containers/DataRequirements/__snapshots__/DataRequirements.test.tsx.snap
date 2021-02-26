@@ -32,7 +32,9 @@ exports[`DataRequirements matches snapshot 1`] = `
       Last updated: 
       <span
         class="text-bold"
-      />
+      >
+        June 21, 2008
+      </span>
     </p>
     <p>
       ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC).
@@ -91,34 +93,364 @@ exports[`DataRequirements matches snapshot 1`] = `
       Data elements
     </h2>
     <div
-      class="oec-loading-wrapper"
+      class="data-definitions"
     >
-      <div
-        aria-atomic="true"
-        aria-labelledby="loading-id-1"
-        aria-live="assertive"
-        class="bx--loading"
+      <table
+        id="requirement-levels"
       >
-        <label
-          class="bx--visually-hidden"
-          id="loading-id-1"
+        <caption
+          class="text-bold text-left margin-bottom-1"
         >
-          Active loading indicator
-        </label>
-        <svg
-          class="bx--loading__svg"
-          viewBox="0 0 100 100"
+          Requirement levels
+        </caption>
+        <tbody>
+          <tr>
+            <td>
+              <span
+                class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+              >
+                Required
+              </span>
+            </td>
+            <td>
+              Must be entered for all enrollments
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span
+                class="usa-tag usa-tag--no-transform required-tag required-tag--conditional"
+              >
+                Required If
+              </span>
+            </td>
+            <td>
+              Must be entered for certain scenarios (such as for an exited enrollment)
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <span
+                class="usa-tag usa-tag--no-transform required-tag"
+              >
+                Optional
+              </span>
+            </td>
+            <td>
+              Suggested for better data quality and record matching, but not required for submission to OEC
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <fieldset
+        aria-labelledby="fieldset-legend-filter-fields"
+        class="usa-fieldset requirement-level-filter"
+        id="filter-fields"
+      >
+        <legend
+          id="fieldset-legend-filter-fields"
         >
-          <title>
-            Active loading indicator
-          </title>
-          <circle
-            class="bx--loading__stroke"
-            cx="50%"
-            cy="50%"
-            r="44"
+          <span
+            class="usa-label"
+          >
+            Filter fields
+          </span>
+        </legend>
+        <div>
+          <span>
+            <div
+              class="usa-radio"
+            >
+              <input
+                checked=""
+                class="usa-radio__input"
+                id="all"
+                name="field filter option"
+                type="radio"
+                value="all"
+              />
+              <label
+                class="usa-radio__label"
+                for="all"
+              >
+                All fields
+              </label>
+            </div>
+          </span>
+          <span>
+            <div
+              class="usa-radio"
+            >
+              <input
+                class="usa-radio__input"
+                id="required"
+                name="field filter option"
+                type="radio"
+                value="required"
+              />
+              <label
+                class="usa-radio__label"
+                for="required"
+              >
+                Only required  and conditionally required fields
+              </label>
+            </div>
+          </span>
+        </div>
+      </fieldset>
+      <div>
+        <div
+          class="margin-top-4"
+        >
+          <h3
+            id="section-one"
+          >
+            Section one
+          </h3>
+          <p
+            class="text-pre-line"
           />
-        </svg>
+          <table
+            class="oec-table"
+            id="data-requirements-Section-one"
+          >
+            <thead>
+              <tr>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-sorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 18%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Field name
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Required/ Optional
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 24%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Definition
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Reason for collecting
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Format
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                id="favorite-color-field"
+              >
+                <th
+                  scope="row"
+                >
+                  <span
+                    class="text-bold"
+                  >
+                    Favorite color
+                  </span>
+                </th>
+                <td>
+                  <span
+                    class="usa-tag usa-tag--no-transform required-tag"
+                  >
+                    Optional
+                  </span>
+                </td>
+                <td>
+                  <p>
+                    The color you like the most
+                  </p>
+                </td>
+                <td>
+                  So we know your favorite color
+                </td>
+                <td>
+                  <p>
+                    string
+                  </p>
+                  <div
+                    class="margin-top-1"
+                  >
+                    Ex: Blue
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="margin-top-4"
+        >
+          <h3
+            id="section-two"
+          >
+            Section two
+          </h3>
+          <p
+            class="text-pre-line"
+          />
+          <table
+            class="oec-table"
+            id="data-requirements-Section-two"
+          >
+            <thead>
+              <tr>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-sorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 18%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Field name
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Required/ Optional
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 24%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Definition
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Reason for collecting
+                  </span>
+                </th>
+                <th
+                  aria-sort="none"
+                  class="oec-table__column-header oec-unsorted"
+                  role="columnheader"
+                  scope="col"
+                  style="width: 20%;"
+                >
+                  <span
+                    class="oec-table__column-title"
+                  >
+                    Format
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                id="lucky-number-field"
+              >
+                <th
+                  scope="row"
+                >
+                  <span
+                    class="text-bold"
+                  >
+                    Lucky number
+                  </span>
+                </th>
+                <td>
+                  <span
+                    class="usa-tag usa-tag--no-transform required-tag required-tag--required"
+                  >
+                    Required
+                  </span>
+                </td>
+                <td>
+                  <p>
+                    The number you find brings the most luck
+                  </p>
+                </td>
+                <td>
+                  So we know your lucky number
+                </td>
+                <td>
+                  <p>
+                    number
+                  </p>
+                  <div
+                    class="margin-top-1"
+                  >
+                    Ex: 130
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
