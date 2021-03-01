@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+
 export interface SummaryResponse {
   totalChildren: number;
   totalProviderUsers: number;
@@ -11,8 +13,9 @@ export interface SummaryResponse {
 
 export interface SiteSummary {
   id: number;
-  name: string;
+  siteName: string;
   organizationId: number;
-  organizationName: string;
+  providerName: string;
   totalEnrollments: number;
+  submissionDate?: Moment;
 }

@@ -7,7 +7,7 @@ type SummaryCardProps = {
 };
 export const SummaryCard: React.FC<SummaryCardProps> = ({ header, body }) => {
   return (
-    <Card className="margin-2">
+    <Card className="margin-2" stacked={false}>
       <p className="text-bold">{header}</p>
       <p className="font-body-3xl">{body}</p>
     </Card>

@@ -1250,10 +1250,16 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
+<<<<<<< HEAD
 "@ctoec/component-library@^1.1.14":
   version "1.1.14"
   resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.14.tgz#a9973c933ae6eb2466168d15c5daf1b2515e81dc"
   integrity sha512-AGyE7cyMQiBSBnsyUfNfjERSwUehXAt+WBntzYByTVFVWYm0xIJm73pGwXChpal/GwyvaJYfnZhN0NFtNGW6Ew==
+=======
+"@ctoec/component-library@https://github.com/ctoec/component-library#stacked-cards":
+  version "1.1.12"
+  resolved "https://github.com/ctoec/component-library#65b078c64e743833bf09a801813513fffae62889"
+>>>>>>> 243 (part 1): Adds overview view and admin-only summary controller
   dependencies:
     "@types/carbon-components" "^10.23.0"
     "@types/carbon-components-react" "^7.26.0"

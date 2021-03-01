@@ -8,12 +8,14 @@ type SiteSummaryTableProps = {
   headerText: string;
   sites: SiteSummary[];
   hideEnrollments?: boolean;
+  showSubmissionDate?: boolean;
 };
 
 export const SiteSummaryTable: React.FC<SiteSummaryTableProps> = ({
   headerText,
   sites,
-  hideEnrollments = true,
+  hideEnrollments = false,
+  showSubmissionDate = false,
 }) => {
   return (
     <>
@@ -23,39 +25,50 @@ export const SiteSummaryTable: React.FC<SiteSummaryTableProps> = ({
       <Table<SiteSummary>
         id="site-summary-table"
         rowKey={(row) => row.id}
+        fullWidth={true}
         data={sites}
-        columns={TableColumns(hideEnrollments)}
+        columns={TableColumns(hideEnrollments, showSubmissionDate)}
       />
     </>
   );
 };
 
-const TableColumns: (_: boolean) => Column<SiteSummary>[] = (
-  hideEnrollments?: boolean
+const TableColumns: (_: boolean, __: boolean) => Column<SiteSummary>[] = (
+  hideEnrollments?: boolean,
+  showSubmissionDate?: boolean
 ) => {
   const { pathname } = useLocation();
   const columns: Column<SiteSummary>[] = [
     {
       name: 'Site',
-      sort: (row) => row.name,
+      sort: (row) => row.siteName,
       cell: ({ row }) => (
         <th scope="row">
-          <Link to={`${pathname}/site/${row.id}`}>{row.name}</Link>
+          <Link to={`${pathname}/site/${row.id}`}>{row.siteName}</Link>
         </th>
       ),
     },
     {
       name: 'Organization',
-      sort: (row) => row.organizationName,
+      sort: (row) => row.providerName,
       cell: ({ row }) => (
         <td>
           <Link to={`${pathname}/organization/${row.organizationId}`}>
-            {row.organizationId}
+            {row.providerName}
           </Link>
         </td>
       ),
     },
   ];
+
+  if (showSubmissionDate) {
+    console.log();
+    columns.push({
+      name: 'Submission date',
+      sort: (row) => row.submissionDate?.unix() || '',
+      cell: ({ row }) => <td>{row.submissionDate?.format('MM/DD/YYYY')}</td>,
+    });
+  }
 
   if (!hideEnrollments) {
     columns.push({

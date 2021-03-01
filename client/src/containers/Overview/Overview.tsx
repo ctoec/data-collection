@@ -15,59 +15,18 @@ const Overview: React.FC = () => {
   const { user } = useContext(UserContext);
   const h1Ref = getH1RefForTitle();
 
-  // const { data } = useAuthenticatedSWR<SummaryResponse>('summary');
-
   const {
-    totalChildren,
-    totalOrganizations,
-    totalProviderUsers,
-    siteSummaries: { completedSites, inProgressSites, noDataSites } = {
-      completedSites: [],
-      inProgressSites: [],
-      noDataSites: [],
-    },
-    // } = data || {};
-  } = {
-    totalChildren: 3039,
-    totalProviderUsers: 487,
-    totalOrganizations: 267,
-    siteSummaries: {
-      completedSites: [
-        {
-          id: 1,
-          name: 'Site One',
-          organizationId: 1,
-          organizationName: 'Org 1',
-          totalEnrollments: 39,
-        },
-      ] as SiteSummary[],
-      inProgressSites: [
-        {
-          id: 2,
-          name: 'Site two',
-          organizationId: 2,
-          organizationName: 'Org 2',
-          totalEnrollments: 10,
-        },
-        {
-          id: 3,
-          name: 'Site three',
-          organizationId: 2,
-          organizationName: 'Org 2',
-          totalEnrollments: 4,
-        },
-      ] as SiteSummary[],
-      noDataSites: [
-        {
-          id: 4,
-          name: 'Site four',
-          organizationId: 2,
-          organizationName: 'Org 2',
-          totalEnrollments: 0,
-        },
-      ] as SiteSummary[],
-    },
-  };
+    data: {
+      totalChildren,
+      totalOrganizations,
+      totalProviderUsers,
+      siteSummaries: { completedSites, inProgressSites, noDataSites } = {
+        completedSites: [],
+        inProgressSites: [],
+        noDataSites: [],
+      },
+    } = {},
+  } = useAuthenticatedSWR<SummaryResponse>('summary');
 
   const totalSites =
     completedSites.length + inProgressSites.length + noDataSites.length;
@@ -106,7 +65,7 @@ const Overview: React.FC = () => {
                 <>
                   {completedSites.length}
                   <span className="font-body-lg">
-                    {pluralize('site', completedSites.length)}
+                    {pluralize(' site', completedSites.length)}
                   </span>
                 </>
               }
