@@ -105,15 +105,6 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   const onSubmit = (updatedData: Enrollment) => {
     setLoading(true);
 
-    //  Because the radio group for the Site field broadcasts ID as a string,
-    //  but the API is expecting a number (as it should)
-    if (
-      !!updatedData.site &&
-      !!updatedData.site.id &&
-      typeof updatedData.site.id === 'string'
-    ) {
-      updatedData.site.id = parseInt(updatedData.site.id);
-    }
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {

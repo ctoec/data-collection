@@ -67,6 +67,12 @@ describe('Home', () => {
 
   accessibilityTestHelper(HomeWithUserProvider, {
     wrapInRouter: true,
+    before: async () => {
+      apiMock.apiGet.mockReturnValue(
+        new Promise((resolve) => resolve({ submitted: true }))
+      );
+      return waitFor(() => expect(apiMock.apiGet).toBeCalled());
+    },
   });
 
   snapshotTestHelper(RevisionFormWithUserProvider, {

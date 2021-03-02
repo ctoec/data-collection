@@ -78,12 +78,13 @@ const Roster: React.FC = () => {
   useEffect(() => {
     if (query) setRosterQuery(query);
   }, [query?.organization, query?.month]);
-
+  const d = usePaginatedChildData(query);
+  console.log('DATA', d);
   let {
     children: allChildren,
     stillFetching: loading,
     error: fetchRosterError,
-  } = usePaginatedChildData(query);
+  } = d;
 
   if (fetchRosterError) {
     throw fetchRosterError;
