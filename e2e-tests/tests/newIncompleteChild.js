@@ -21,7 +21,7 @@ module.exports = {
     const childInfoSection = newChildInput.childIdentFields.slice(1);
     await enterFormSection(browser, childInfoSection);
     // Click save and wait
-    await browser.click('css selector', 'input[value^=Save]');
+    await browser.click('css selector', 'button[type="submit"]');
     await browser.pause(1000);
 
     // Expect one span element with the class usa-error-message

@@ -19,7 +19,7 @@ module.exports = {
     const newFirstNameText = 'New first name';
     await enterFormValue(browser, 'firstName', newFirstNameText);
 
-    const saveButtonArgs = ['xpath', "//*/input[contains(@value,'Save')]"];
+    const saveButtonArgs = ['css selector', 'button[type="submit"]'];
     await scrollToElement(browser, saveButtonArgs);
     await browser.click(...saveButtonArgs);
     await scrollToElement(browser, ['css selector', 'header']);

@@ -1,7 +1,8 @@
 import React from 'react';
-import Divider from '@material-ui/core/Divider';
-import { Child } from '../../shared/models';
+import { Divider } from '@ctoec/component-library';
+import { Child, FundingSource } from '../../shared/models';
 import { getCurrentFunding } from '../../utils/models';
+import { getStrippedFundingSourceName } from '../Home/utils/getFundingSpaceDisplayName';
 
 type RosterSectionFundingSpacesMapProps = {
   children: Child[];
@@ -56,6 +57,7 @@ export const RosterSectionFundingSpacesMap: React.FC<RosterSectionFundingSpacesM
 
   return (
     <div>
+      <Divider />
       {fundingSpacesMap.map((sourceToTimes) => {
         let displayStr = (
           <>
@@ -74,7 +76,9 @@ export const RosterSectionFundingSpacesMap: React.FC<RosterSectionFundingSpacesM
           <>
             <div key={sourceToTimes.sourceName} className="grid-row grid-gap">
               <div className="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2">
-                {sourceToTimes.sourceName.split('-')[1].trim()}
+                {getStrippedFundingSourceName(
+                  sourceToTimes.sourceName as FundingSource
+                )}
               </div>
               <div className="tablet:grid-col-8 font-body-sm usa-hint margin-top-1">
                 {displayStr}

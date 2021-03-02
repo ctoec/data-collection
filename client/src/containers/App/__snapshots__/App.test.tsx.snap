@@ -125,31 +125,31 @@ exports[`App matches snapshot 1`] = `
         class="oec-loading-wrapper"
       >
         <div
-          aria-hidden="true"
-          class="opacity-0"
-        />
-        <div
-          class="oec-loading-wrapper__indicator bg-white"
+          aria-atomic="true"
+          aria-labelledby="loading-id-1"
+          aria-live="assertive"
+          class="bx--loading"
         >
-          <div
-            class="MuiCircularProgress-root indeterminate MuiCircularProgress-colorPrimary MuiCircularProgress-indeterminate"
-            role="progressbar"
-            style="width: 40px; height: 40px;"
+          <label
+            class="bx--visually-hidden"
+            id="loading-id-1"
           >
-            <svg
-              class="MuiCircularProgress-svg"
-              viewBox="22 22 44 44"
-            >
-              <circle
-                class="MuiCircularProgress-circle MuiCircularProgress-circleIndeterminate"
-                cx="44"
-                cy="44"
-                fill="none"
-                r="20.2"
-                stroke-width="3.6"
-              />
-            </svg>
-          </div>
+            Active loading indicator
+          </label>
+          <svg
+            class="bx--loading__svg"
+            viewBox="0 0 100 100"
+          >
+            <title>
+              Active loading indicator
+            </title>
+            <circle
+              class="bx--loading__stroke"
+              cx="50%"
+              cy="50%"
+              r="44"
+            />
+          </svg>
         </div>
       </div>
     </main>

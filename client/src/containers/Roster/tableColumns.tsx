@@ -6,6 +6,7 @@ import { Column } from '@ctoec/component-library';
 import { Child } from '../../shared/models';
 import { IncompleteIcon } from '../../components/IncompleteIcon';
 import { nameFormatter } from '../../utils/formatters';
+import { getStrippedFundingSourceName } from '../Home/utils/getFundingSpaceDisplayName';
 
 export enum ColumnNames {
   NAME = 'Name',
@@ -81,11 +82,19 @@ export const tableColumns: (
       className: tableColumnClassName,
       name: ColumnNames.FUNDING_SOURCE,
       sort: (row) =>
-        idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.source) || '',
+        idx(row, (_) =>
+          getStrippedFundingSourceName(
+            _.enrollments[0].fundings[0].fundingSpace.source
+          )
+        ) || '',
       width: `${shortColumnWidthPercent}%`,
       cell: ({ row }) => (
         <td className={tableRowClassName}>
-          {idx(row, (_) => _.enrollments[0].fundings[0].fundingSpace.source)}
+          {idx(row, (_) =>
+            getStrippedFundingSourceName(
+              _.enrollments[0].fundings[0].fundingSpace.source
+            )
+          )}
         </td>
       ),
     },

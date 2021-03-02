@@ -1,5 +1,4 @@
-import { Alert } from '@ctoec/component-library';
-import Divider from '@material-ui/core/Divider';
+import { Alert, Divider } from '@ctoec/component-library';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
@@ -84,9 +83,12 @@ export const PreSubmitHome: React.FC = () => {
       {showFundingsAndSites && (
         <>
           <h3 className="pre-submit-h3">Sites</h3>
-          <ul>
+          <ul className="margin-left-2 bx--list--unordered">
             {(user?.sites || []).map((site) => (
-              <li key={site.siteName} className="line-height-body-4">
+              <li
+                key={site.siteName}
+                className="line-height-body-4 bx--list__item"
+              >
                 {site.siteName}
               </li>
             ))}

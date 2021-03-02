@@ -107,7 +107,8 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             class="oec-calendar-dropdown oec-date-input__calendar-dropdown"
           >
             <button
-              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
+              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle bx--btn bx--btn--primary"
+              tabindex="0"
               title="open calendar"
               type="button"
             >
@@ -1403,7 +1404,8 @@ exports[`Forms Enrollment matches snapshot 1`] = `
             class="oec-calendar-dropdown oec-date-input__calendar-dropdown"
           >
             <button
-              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
+              class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle bx--btn bx--btn--primary"
+              tabindex="0"
               title="open calendar"
               type="button"
             >
@@ -2614,6 +2616,77 @@ exports[`Forms Enrollment matches snapshot 1`] = `
         </div>
       </div>
     </fieldset>
+    <div
+      class="usa-form-group"
+    >
+      <label
+        class="usa-label"
+        for="exit-reason"
+      >
+        <span
+          class="text-bold"
+        >
+          Exit reason
+        </span>
+      </label>
+      <select
+        aria-required="true"
+        class="usa-select"
+        id="exit-reason"
+        name=""
+      >
+        <option
+          value=""
+        >
+          - Select -
+        </option>
+        <option
+          value="Aged out"
+        >
+          Aged out
+        </option>
+        <option
+          value="Moved within program"
+        >
+          Moved within program
+        </option>
+        <option
+          value="Stopped attending"
+        >
+          Stopped attending
+        </option>
+        <option
+          value="Chose to attend a different program"
+        >
+          Chose to attend a different program
+        </option>
+        <option
+          value=" Moved within Connecticut"
+        >
+           Moved within Connecticut
+        </option>
+        <option
+          value="Moved to another state"
+        >
+          Moved to another state
+        </option>
+        <option
+          value="Withdrew due to lack of payment"
+        >
+          Withdrew due to lack of payment
+        </option>
+        <option
+          value="Child was asked to leave"
+        >
+          Child was asked to leave
+        </option>
+        <option
+          value="Unknown"
+        >
+          Unknown
+        </option>
+      </select>
+    </div>
     <fieldset
       aria-labelledby="fieldset-legend-care-model-radiogroup"
       class="usa-fieldset"
@@ -2803,11 +2876,13 @@ exports[`Forms Enrollment matches snapshot 1`] = `
       </span>
       <div />
     </fieldset>
-    <input
-      class="usa-button"
+    <button
+      class="usa-button bx--btn bx--btn--primary"
+      tabindex="0"
       type="submit"
-      value="Save"
-    />
+    >
+      Save
+    </button>
   </form>
 </DocumentFragment>
 `;

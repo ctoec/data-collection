@@ -21,7 +21,8 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
       class="oec-modal-close"
     >
       <button
-        class="usa-button usa-button--unstyled"
+        class="usa-button usa-button--unstyled bx--btn bx--btn--primary"
+        tabindex="0"
         type="button"
       >
         <div
@@ -162,7 +163,8 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
               class="oec-calendar-dropdown oec-date-input__calendar-dropdown"
             >
               <button
-                class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle"
+                class="usa-button oec-calendar-toggle oec-calendar-dropdown__toggle bx--btn bx--btn--primary"
+                tabindex="0"
                 title="open calendar"
                 type="button"
               >
@@ -1380,7 +1382,11 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
           class="usa-label"
           for="exit-reason"
         >
-          Exit reason
+          <span
+            class="text-bold"
+          >
+            Exit reason
+          </span>
         </label>
         <select
           aria-required="true"
@@ -1441,16 +1447,19 @@ exports[`EditRecord WithdrawRecord matches snapshot 1`] = `
         </select>
       </div>
       <button
-        class="usa-button usa-button--outline"
+        class="usa-button usa-button--outline bx--btn bx--btn--primary"
+        tabindex="0"
         type="button"
       >
         Cancel
       </button>
-      <input
-        class="usa-button"
+      <button
+        class="usa-button bx--btn bx--btn--primary"
+        tabindex="0"
         type="submit"
-        value="Withdraw"
-      />
+      >
+        Withdraw
+      </button>
     </form>
   </div>
 </div>

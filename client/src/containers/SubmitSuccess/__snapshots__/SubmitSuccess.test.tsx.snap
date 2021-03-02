@@ -78,7 +78,8 @@ exports[`SubmitSuccess matches snapshot 1`] = `
       class="grid-row margin-top-1 margin-bottom-2"
     >
       <button
-        class="usa-button usa-button--unstyled display-block"
+        class="usa-button usa-button--unstyled display-block bx--btn bx--btn--primary"
+        tabindex="0"
         type="button"
       >
         <span
@@ -109,7 +110,7 @@ exports[`SubmitSuccess matches snapshot 1`] = `
       class="grid-row margin-top-1"
     >
       <a
-        class="usa-button"
+        class="bx--link usa-button"
         href="/upload"
       >
         Upload another file

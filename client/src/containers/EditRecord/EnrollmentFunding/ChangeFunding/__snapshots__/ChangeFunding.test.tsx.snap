@@ -62,7 +62,8 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - change fun
           class="display-flex flex-align-center"
         >
           <button
-            class="usa-button usa-button--outline"
+            class="usa-button usa-button--outline bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             Cancel
@@ -70,11 +71,13 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - change fun
           <div
             class="margin-top-1"
           >
-            <input
-              class="usa-button"
+            <button
+              class="usa-button bx--btn bx--btn--primary"
+              tabindex="0"
               type="submit"
-              value="Change current funding"
-            />
+            >
+              Change current funding
+            </button>
           </div>
         </div>
       </form>
@@ -94,13 +97,15 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - change fun
       >
         <div>
           <button
-            class="usa-button usa-button--unstyled margin-right-4"
+            class="usa-button usa-button--unstyled margin-right-4 bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             End current funding
           </button>
           <button
-            class="usa-button usa-button--unstyled"
+            class="usa-button usa-button--unstyled bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             Change funding
@@ -161,7 +166,8 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end fundin
           class="display-flex flex-align-center"
         >
           <button
-            class="usa-button usa-button--outline"
+            class="usa-button usa-button--outline bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             Cancel
@@ -169,11 +175,13 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end fundin
           <div
             class="margin-top-1"
           >
-            <input
-              class="usa-button"
+            <button
+              class="usa-button bx--btn bx--btn--primary"
+              tabindex="0"
               type="submit"
-              value="End current funding"
-            />
+            >
+              End current funding
+            </button>
           </div>
         </div>
       </form>
@@ -193,13 +201,15 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - end fundin
       >
         <div>
           <button
-            class="usa-button usa-button--unstyled margin-right-4"
+            class="usa-button usa-button--unstyled margin-right-4 bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             End current funding
           </button>
           <button
-            class="usa-button usa-button--unstyled"
+            class="usa-button usa-button--unstyled bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             Change funding
@@ -249,7 +259,8 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
           class="display-flex flex-align-center"
         >
           <button
-            class="usa-button usa-button--outline"
+            class="usa-button usa-button--outline bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             Cancel
@@ -257,11 +268,13 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
           <div
             class="margin-top-1"
           >
-            <input
-              class="usa-button"
+            <button
+              class="usa-button bx--btn bx--btn--primary"
+              tabindex="0"
               type="submit"
-              value="Change current funding"
-            />
+            >
+              Change current funding
+            </button>
           </div>
         </div>
       </form>
@@ -281,7 +294,8 @@ exports[`EditRecord EnrollmentFundng ChangeFunding matches snapshot - without fu
       >
         <div>
           <button
-            class="usa-button usa-button--unstyled"
+            class="usa-button usa-button--unstyled bx--btn bx--btn--primary"
+            tabindex="0"
             type="button"
           >
             Start new funding
