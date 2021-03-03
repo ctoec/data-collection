@@ -47,7 +47,9 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
     children: listChildResponses
       ? listChildResponses.flatMap((r) => r.children)
       : [],
-    totalCount: listChildResponses ? listChildResponses[size].totalCount : 0,
+    totalCount: listChildResponses
+      ? listChildResponses[listChildResponses.length - 1].totalCount
+      : 0,
     mutate,
     stillFetching,
     error,
