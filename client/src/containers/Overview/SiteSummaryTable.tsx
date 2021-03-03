@@ -1,7 +1,7 @@
 import { Column, Table } from '@ctoec/component-library';
 import pluralize from 'pluralize';
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+// import { Link, useLocation } from 'react-router-dom';
 import { SiteSummary } from '../../shared/payloads/SummaryResponse';
 
 type SiteSummaryTableProps = {
@@ -37,7 +37,7 @@ const TableColumns: (_: boolean, __: boolean) => Column<SiteSummary>[] = (
   hideEnrollments?: boolean,
   showSubmissionDate?: boolean
 ) => {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
   const columns: Column<SiteSummary>[] = [
     {
       name: 'Site',

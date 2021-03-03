@@ -2,10 +2,7 @@ import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import {
-  SiteSummary,
-  SummaryResponse,
-} from '../../shared/payloads/SummaryResponse';
+import { SummaryResponse } from '../../shared/payloads/SummaryResponse';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { SummaryCard } from './SummaryCard';
 import { SiteSummaryTabNav } from './SiteSummaryTabNav';

@@ -3,7 +3,7 @@ import {
   SummaryResponse,
 } from '../../client/src/shared/payloads/SummaryResponse';
 import { getManager } from 'typeorm';
-import { Child, OECReport, Organization, User } from '../entity';
+import { Child, Organization, User } from '../entity';
 
 export async function getSummaryResponse(): Promise<SummaryResponse> {
   const sites = await getSiteSummaries();
@@ -51,8 +51,4 @@ async function getSiteSummaries(): Promise<SiteSummary[]> {
 		WHERE e.deleteddate is null
 		GROUP BY s.id, s.siteName, o.id, o.providerName, r.updatedAt
 	`);
-}
-
-async function getOECReports(): Promise<OECReport[]> {
-  return getManager().find(OECReport);
 }
