@@ -34,7 +34,7 @@ const BatchEdit: React.FC = () => {
   >(
     childId
       ? null // no need to fetch all children for single record batch edit
-      : `children?${stringify({ organizationId, 'missing-info': true })}`,
+      : `children/missing-info?${stringify({ organizationId })}`,
     {
       revalidateOnFocus: false,
     }

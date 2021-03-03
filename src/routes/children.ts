@@ -9,6 +9,7 @@ import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
 import moment, { Moment } from 'moment';
 import { ListChildReponse } from '../../client/src/shared/payloads';
+import { Child } from 'client/src/shared/models';
 
 export const childrenRouter = express.Router();
 
@@ -55,6 +56,24 @@ childrenRouter.get(
     } else {
       res.send(response);
     }
+  })
+);
+
+/**
+ * /children/missing-info GET
+ *
+ * Returns all children the authed user has access to that are missing information.
+ */
+childrenRouter.get(
+  '/missing-info',
+  passAsyncError(async (req, res) => {
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+
+    res.send(
+      await controller.getChildrenWithMissingInfo(req.user, organizationIds)
+    );
   })
 );
 

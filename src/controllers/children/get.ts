@@ -31,7 +31,6 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
  * Optionally, can filter to only return children:
  * 	- for specific organizations
  *  - with active enrollments in a specific month
- * 	- with missing info
  * Supports pagination with skip and take parameters, which
  * leverages offset fetch capability of sorted sql server query
  * (https://docs.microsoft.com/en-us/sql/t-sql/queries/select-order-by-clause-transact-sql?view=sql-server-ver15#syntax)
@@ -40,19 +39,12 @@ export const getChildren = async (
   user: User,
   filterOpts: {
     organizationIds?: string[];
-    missingInfoOnly?: boolean; // When specified, only return children with missing information
     activeMonth?: Moment; // When specified, only return children enrolled prior to or during this month
     skip?: number;
     take?: number;
   } = {}
 ): Promise<ListChildReponse> => {
-  let {
-    organizationIds,
-    missingInfoOnly,
-    activeMonth,
-    skip,
-    take,
-  } = filterOpts;
+  let { organizationIds, activeMonth, skip, take } = filterOpts;
 
   let children: Child[];
   let totalCount: number;
@@ -62,38 +54,36 @@ export const getChildren = async (
     activeMonth,
   });
 
-  if (missingInfoOnly) {
-    console.log('WE SHOULD FOR SURE NOT BE HERE');
-    children = await getManager().find(Child, opts);
+  [children, totalCount] = await getManager().findAndCount(Child, {
+    ...opts,
+    skip,
+    take,
+  });
 
-    children = (await Promise.all(children.map(postProcessChild))).filter(
-      (child) => child.validationErrors?.length
-    );
+  children = await Promise.all(children.map(postProcessChild));
 
-    return {
-      children,
-      totalCount: children.length,
-    };
-  } else {
-    console.log('OKAY GOOD', opts);
-    console.log('SKIP', skip);
-    console.log('TAKE', take);
-    [children, totalCount] = await getManager().findAndCount(Child, {
-      ...opts,
-      skip,
-      take,
-    });
-
-    console.log('ALRIGHTY THEN', totalCount);
-
-    children = await Promise.all(children.map(postProcessChild));
-
-    return {
-      children,
-      totalCount,
-    };
-  }
+  return {
+    children,
+    totalCount,
+  };
 };
+
+export async function getChildrenWithMissingInfo(
+  user: User,
+  organizationIds?: string[]
+): Promise<Child[]> {
+  let children: Child[];
+
+  const opts: FindManyOptions<Child> = await getFindOpts(user, {
+    organizationIds,
+  });
+
+  children = await getManager().find(Child, opts);
+
+  return (await Promise.all(children.map(postProcessChild))).filter(
+    (child) => child.validationErrors?.length
+  );
+}
 
 export async function getByOrganizationId(
   user: User,
@@ -211,9 +201,12 @@ const getFindOpts = async (
       }
 
       if (filterOpts.activeMonth) {
-        qb.andWhere('(Child__enrollments.entry <= :entry)', {
-          entry: filterOpts.activeMonth.endOf('month').format('YYYY-MM-DD'),
-        });
+        qb.andWhere(
+          '(Child__enrollments.entry <= :entry) AND (Child__enrollments.deletedDate IS NULL)',
+          {
+            entry: filterOpts.activeMonth.endOf('month').format('YYYY-MM-DD'),
+          }
+        );
       }
     },
     loadEagerRelations: true,
