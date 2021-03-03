@@ -32,7 +32,7 @@ describe('integration', () => {
     let organization: Organization;
     let site: Site;
     let childWithIdentifiers: Child;
-    beforeAll(async () => {
+    beforeEach(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
@@ -51,8 +51,9 @@ describe('integration', () => {
         birthCertificateType: BirthCertificateType.Unavailable,
       } as Child;
     });
-    afterAll(() => {
+    afterEach(() => {
       enableFetchMocks();
+      jest.resetAllMocks();
     });
     describe('validations', () => {
       describe('child', () => {
