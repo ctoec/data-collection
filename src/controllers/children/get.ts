@@ -71,7 +71,7 @@ export const getChildren = async (
     );
 
     return {
-      children: children.slice(skip, skip + take),
+      children,
       totalCount: children.length,
     };
   } else {
