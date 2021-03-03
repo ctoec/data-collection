@@ -211,7 +211,7 @@ const getFindOpts = async (
       }
 
       if (filterOpts.activeMonth) {
-        qb.andWhere('(Child__enrollment.entry <= :entry)', {
+        qb.andWhere('(Child__enrollments.entry <= :entry)', {
           entry: filterOpts.activeMonth.endOf('month').format('YYYY-MM-DD'),
         });
       }
