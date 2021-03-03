@@ -63,6 +63,7 @@ export const getChildren = async (
   });
 
   if (missingInfoOnly) {
+    console.log('WE SHOULD FOR SURE NOT BE HERE');
     children = await getManager().find(Child, opts);
 
     children = (await Promise.all(children.map(postProcessChild))).filter(
@@ -73,20 +74,25 @@ export const getChildren = async (
       children: children.slice(skip, skip + take),
       totalCount: children.length,
     };
+  } else {
+    console.log('OKAY GOOD', opts);
+    console.log('SKIP', skip);
+    console.log('TAKE', take);
+    [children, totalCount] = await getManager().findAndCount(Child, {
+      ...opts,
+      skip,
+      take,
+    });
+
+    console.log('ALRIGHTY THEN', totalCount);
+
+    children = await Promise.all(children.map(postProcessChild));
+
+    return {
+      children,
+      totalCount,
+    };
   }
-
-  [children, totalCount] = await getManager().findAndCount(Child, {
-    ...opts,
-    skip,
-    take,
-  });
-
-  children = await Promise.all(children.map(postProcessChild));
-
-  return {
-    children,
-    totalCount,
-  };
 };
 
 export async function getByOrganizationId(
