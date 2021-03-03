@@ -1,4 +1,4 @@
-import { Child } from '../entity';
+import { Child } from '../../client/src/shared/models';
 import moment from 'moment';
 
 // Only retrieves enrollment with no exit date

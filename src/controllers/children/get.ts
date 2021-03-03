@@ -6,6 +6,7 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 import { User, Child } from '../../entity';
+import { Child as ChildInterface } from '../../../client/src/shared/models';
 import { validateObject } from '../../utils/validateObject';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Moment } from 'moment';
@@ -88,10 +89,23 @@ export const getChildren = async (
   };
 };
 
+export async function getByOrganizationId(
+  user: User,
+  organizationIds: string[]
+): Promise<Child[]> {
+  const opts: FindManyOptions<Child> = await getFindOpts(user, {
+    organizationIds,
+  });
+
+  const children: Child[] = await getManager().find(Child, opts);
+
+  return Promise.all(children.map(postProcessChild));
+}
+
 /**
  * Get count of all children the given user has access to
  */
-export const getCount = async (user: User) => {
+export const getCount = async (user: User): Promise<Number> => {
   const opts = await getFindOpts(user);
   return getManager().count(Child, opts);
 };
@@ -104,7 +118,7 @@ export const getCount = async (user: User) => {
  * site roster.
  * @param children
  */
-export const getSiteCountMap = async (children: Child[]) => {
+export const getSiteCountMap = async (children: ChildInterface[]) => {
   const siteCounts: {
     siteName: string;
     count: number;
