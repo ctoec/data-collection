@@ -46,7 +46,7 @@ const BatchEdit: React.FC = () => {
   >([]);
 
   useEffect(() => {
-    if (!isValidating && !!children) {
+    if (!isValidating && children?.length) {
       setFixedRecordsForDisplayIds(
         children.filter(hasValidationError).map((child) => child.id)
       );
