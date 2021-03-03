@@ -57,12 +57,9 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
 
   /////////////////////////////////////////////////////////////////
 
-  function getCacheKeyForChildQuery(
-    index: number,
-    prevData: ListChildReponse | null
-  ) {
+  function getCacheKeyForChildQuery(index: number, prevData: any) {
     // Base case -- no more data to fetch when prev data length = 0
-    if (prevData && !prevData.children.length) {
+    if (prevData && !prevData.length) {
       stillFetching = false;
       return null;
     }
