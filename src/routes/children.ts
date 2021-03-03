@@ -9,7 +9,6 @@ import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
 import moment, { Moment } from 'moment';
 import { ListChildReponse } from '../../client/src/shared/payloads';
-import { Child } from 'client/src/shared/models';
 
 export const childrenRouter = express.Router();
 
@@ -26,7 +25,6 @@ childrenRouter.get(
       forceArray: true,
     }) as string[];
     const count = parseQueryString(req, 'count');
-    const missingInfo = parseQueryString(req, 'missing-info') as string;
     const activeMonth = parseQueryString(req, 'month', {
       post: (monthStr) => moment.utc(monthStr, 'MMM-YYYY'),
     }) as Moment;
@@ -42,7 +40,6 @@ childrenRouter.get(
 
     const response: ListChildReponse = await controller.getChildren(req.user, {
       organizationIds,
-      missingInfoOnly: missingInfo === 'true',
       activeMonth,
       skip,
       take,
