@@ -66,10 +66,9 @@ export const getChildren = async (
     console.log('WE SHOULD FOR SURE NOT BE HERE');
     children = await getManager().find(Child, opts);
 
-    children = await Promise.all(children.map(postProcessChild));
-    children = children.filter((child) => child.validationErrors?.length);
-
-    console.log('WTF IS HAPPENING', children);
+    children = (await Promise.all(children.map(postProcessChild))).filter(
+      (child) => child.validationErrors?.length
+    );
 
     return {
       children,
