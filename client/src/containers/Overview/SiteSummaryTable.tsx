@@ -44,7 +44,9 @@ const TableColumns: (_: boolean, __: boolean) => Column<SiteSummary>[] = (
       sort: (row) => row.siteName,
       cell: ({ row }) => (
         <th scope="row">
-          <Link to={`${pathname}/site/${row.id}`}>{row.siteName}</Link>
+          h{/* Deactivate links until site/org detail pages are built */}
+          {/* <Link to={`${pathname}/site/${row.id}`}>{row.siteName}</Link> */}
+          {row.siteName}
         </th>
       ),
     },
@@ -53,9 +55,10 @@ const TableColumns: (_: boolean, __: boolean) => Column<SiteSummary>[] = (
       sort: (row) => row.providerName,
       cell: ({ row }) => (
         <td>
-          <Link to={`${pathname}/organization/${row.organizationId}`}>
-            {row.providerName}
-          </Link>
+          {/* Deactivate links until site/org detail pages are built */}
+          {/* <Link to={`${pathname}/organization/${row.organizationId}`}> */}
+          {row.providerName}
+          {/* </Link> */}
         </td>
       ),
     },
