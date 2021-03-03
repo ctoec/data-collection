@@ -25,7 +25,7 @@ let ALLOWED_ORGS: Organization[];
 describe('integration', () => {
   describe('api', () => {
     let organization: Organization;
-    beforeAll(async () => {
+    beforeEach(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
@@ -89,8 +89,9 @@ describe('integration', () => {
         expect(status).toEqual(201);
       });
     });
-    afterAll(() => {
+    afterEach(() => {
       enableFetchMocks();
+      jest.resetAllMocks();
     });
   });
 });

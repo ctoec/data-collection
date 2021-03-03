@@ -23,7 +23,7 @@ describe('integration', () => {
   describe('api', () => {
     let organization: Organization;
     let site: Site;
-    beforeAll(async () => {
+    beforeEach(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
@@ -152,7 +152,7 @@ describe('integration', () => {
         expect(child.firstName).toEqual(updatedName);
       });
     });
-    afterAll(() => {
+    afterEach(() => {
       enableFetchMocks();
       jest.resetAllMocks();
     });
