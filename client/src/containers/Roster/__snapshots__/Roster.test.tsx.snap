@@ -4560,30 +4560,5 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
       </div>
     </div>
   </div>
-  <div
-    class="fixed-bottom-bar"
-  >
-    <div
-      class="shadow-box"
-    >
-      <div
-        class="grid-container"
-      >
-        <a
-          class="bx--link usa-button usa-button--outline"
-          href="/home"
-        >
-          Back to home
-        </a>
-        <button
-          class="usa-button bx--btn bx--btn--primary"
-          tabindex="0"
-          type="button"
-        >
-          My Jul-Dec data is complete
-        </button>
-      </div>
-    </div>
-  </div>
 </DocumentFragment>
 `;

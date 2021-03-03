@@ -32,7 +32,7 @@ describe('integration', () => {
     let reportingPeriods: ReportingPeriod[] | undefined;
     let organization: Organization;
     let site: Site;
-    beforeAll(async () => {
+    beforeEach(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
@@ -45,8 +45,9 @@ describe('integration', () => {
       ) as Site;
       reportingPeriods = await apiGet(`reporting-periods`, '', TEST_OPTS);
     });
-    afterAll(() => {
+    afterEach(() => {
       enableFetchMocks();
+      jest.resetAllMocks();
     });
     describe('enrollments', () => {
       it('PUT /enrollments/id', async () => {

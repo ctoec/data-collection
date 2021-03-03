@@ -79,7 +79,7 @@ const Roster: React.FC = () => {
     if (query) setRosterQuery(query);
   }, [query?.organization, query?.month]);
 
-  let {
+  const {
     children: allChildren,
     stillFetching: loading,
     error: fetchRosterError,
