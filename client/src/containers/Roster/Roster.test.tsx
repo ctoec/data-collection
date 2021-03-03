@@ -175,6 +175,7 @@ describe('Roster', () => {
   beforeAll(async () => {
     paginatedChildDataMock.usePaginatedChildData.mockReturnValue({
       children,
+      totalCount: children.length,
       stillFetching: false,
       mutate: async () => undefined,
       error: undefined,
