@@ -24,7 +24,6 @@ export const PostSubmitHome: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const orgAccess = user?.accessType === 'organization';
   const userOrgs = user?.organizations || [];
-  const userSites = user?.sites || [];
   const showFundings = orgAccess && userOrgs.length == 1;
 
   // Count how many children are in the roster so we can format the display

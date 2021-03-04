@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RecordFormProps } from '../../../components/Forms';
 import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
-import { Button, InlineIcon, TextWithIcon } from '@ctoec/component-library';
+import { Button, InlineIcon } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
 import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 import { determinationHasNoInformation } from '../../../utils/determinationHasNoInformation';
@@ -35,7 +35,8 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
     (determinations.length === 1 &&
       determinationHasNoInformation(determinations[0]));
 
-  let currentDetermination: IncomeDetermination | undefined = determinations[0];
+  const currentDetermination: IncomeDetermination | undefined =
+    determinations[0];
   const pastDeterminations: IncomeDetermination[] = determinations.slice(1);
 
   // If a user somehow broke the create flow and got here without
