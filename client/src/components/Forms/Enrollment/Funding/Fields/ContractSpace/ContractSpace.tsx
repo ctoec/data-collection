@@ -14,8 +14,8 @@ import {
 } from '../../../../../../shared/models';
 import { SingleContractSpaceField } from './SingleContractSpace';
 import {
-  ChangeFunding,
-  ChangeEnrollment,
+  ChangeFundingRequest,
+  ChangeEnrollmentRequest,
 } from '../../../../../../shared/payloads';
 import { fundingSpaceFormatter } from '../../../../../../utils/formatters';
 import { getValidationStatusForField } from '../../../../../../utils/getValidationStatus';
@@ -30,7 +30,11 @@ type ContractSpaceProps<T> = {
 };
 
 export const ContractSpaceField = <
-  T extends Funding | ChangeFunding | ChangeEnrollment | Enrollment
+  T extends
+    | Funding
+    | ChangeFundingRequest
+    | ChangeEnrollmentRequest
+    | Enrollment
 >({
   ageGroup,
   fundingSource,

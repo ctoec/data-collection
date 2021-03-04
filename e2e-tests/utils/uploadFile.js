@@ -1,86 +1,94 @@
 const { launch_url } = require('../nightwatch.conf');
 const { FakeChildrenTypes } = require('./FakeChildrenTypes');
-const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
 } = require('../utils/downloadFileToTestRunnerHost');
 
 module.exports = {
-  uploadFile: async function (
-    browser,
-    filetype,
-    whichFile = 'complete',
-    waitForHello = true
-  ) {
-    // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
-    const FILE_PATH = `${process.cwd()}/upload.csv`;
+  uploadFile,
+};
 
-    // Pick the download url based on which kind of upload test we want to run
-    let DOWNLOAD_URL = `${launch_url}`;
-    if (whichFile === 'complete') {
-      DOWNLOAD_URL += `/api/template/example/${filetype}`;
-    } else if (whichFile === FakeChildrenTypes.MISSING_SOME) {
-      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingSome`;
-    } else if (whichFile === FakeChildrenTypes.MISSING_ONE) {
-      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingOne`;
-    } else if (whichFile === FakeChildrenTypes.MISSING_OPTIONAL) {
-      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingOptional`;
-    } else if (whichFile === FakeChildrenTypes.MISSING_CONDITIONAL) {
-      DOWNLOAD_URL += `/api/template/example/${filetype}?whichFakeChildren=missingConditional`;
-    }
+async function uploadFile(
+  browser,
+  fileType,
+  whichFile = 'complete',
+  waitForHello = true
+) {
+  // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
+  const FILE_PATH = `${process.cwd()}/upload.csv`;
+  const downloadUrl = getDownloadUrl(whichFile, fileType);
 
-    const isCompleteTestRun = whichFile === 'complete';
-    const isMissingOptionalRun =
-      whichFile === FakeChildrenTypes.MISSING_OPTIONAL;
+  await downloadFileToTestRunnerHost(FILE_PATH, downloadUrl);
 
-    await downloadFileToTestRunnerHost(FILE_PATH, DOWNLOAD_URL);
-
-    // Go to file upload
-    if (waitForHello) {
-      await browser.waitForElementVisible(
-        'xpath',
-        '//*/h1[contains(.,"Hello Voldemort")]'
-      );
-    }
-    await browser.execute(function () {
-      document.querySelector('a[href="/upload"]').click();
-    });
+  if (waitForHello) {
     await browser.waitForElementVisible(
       'xpath',
-      '//*/h1[contains(text(),"Upload your enrollment data")]'
+      '//*/h1[contains(.,"Hello Voldemort")]'
     );
+  }
 
-    // Upload example data from local directory
-    await browser.UploadLocalFile(FILE_PATH, '#report');
-    await browser.pause(5000);
+  await startUpload(browser, FILE_PATH);
+  await reviewMissingInfo(browser);
+  await completeUpload(browser);
+}
 
-    // Accept the error modal if it pops up
-    await acceptModal(
-      browser,
-      'Upload and correct in roster',
-      'No error modal appearing',
-      !(isCompleteTestRun || isMissingOptionalRun)
-    );
+//////////////////////////////////////////////////////////////////////////
 
-    // Accept the replace thing if there is one
-    await acceptModal(browser, 'Replace data', 'No replace data button');
+async function startUpload(browser, filePath) {
+  await browser.execute(function () {
+    document.querySelector('a[href="/upload"]').click();
+  });
+  await browser.waitForElementVisible(
+    'xpath',
+    '//*/h1[contains(text(),"Upload your enrollment data")]'
+  );
 
-    // Resulting alert will depend on whether we uploaded complete or incomplete data
-    if (isCompleteTestRun) {
-      await browser.waitForElementVisible(
-        'xpath',
-        `//*/p[contains(text(),"20 children enrolled")]`
-      );
-    } else if (isMissingOptionalRun) {
-      await browser.waitForElementVisible(
-        'xpath',
-        `//*/p[contains(text(),"10 children enrolled")]`
-      );
-    } else {
-      await browser.waitForElementVisible(
-        'xpath',
-        `//*/h2[contains(.,'Update your roster')]`
-      );
-    }
-  },
-};
+  await browser.UploadLocalFile(filePath, '#report');
+  await browser.pause(5000);
+}
+
+async function reviewMissingInfo(browser) {
+  await browser.waitForElementVisible(
+    'xpath',
+    `//*/h2[contains(text(),'Review missing info')]`
+  );
+
+  await browser.click('xpath', "//*/button[contains(text(), 'Next')]");
+  await browser.pause(15000);
+}
+
+async function completeUpload(browser) {
+  await browser.waitForElementVisible(
+    'xpath',
+    `//*/h2[contains(.,'Preview changes and upload file')]`
+  );
+
+  await browser.click(
+    'xpath',
+    "//*/button[contains(text(), 'Save changes to roster')]"
+  );
+
+  await browser.pause(5000);
+  await browser.waitForElementVisible(
+    'xpath',
+    '//*/h2[contains(text(),"Your records have been uploaded!")]'
+  );
+}
+
+function getDownloadUrl(whichFile, fileType) {
+  let DOWNLOAD_URL = `${launch_url}`;
+
+  if (whichFile === 'complete') {
+    DOWNLOAD_URL += `/api/template/example/${fileType}`;
+  } else if (whichFile === FakeChildrenTypes.MISSING_SOME) {
+    DOWNLOAD_URL += `/api/template/example/${fileType}?whichFakeChildren=missingSome`;
+  } else if (whichFile === FakeChildrenTypes.MISSING_ONE) {
+    DOWNLOAD_URL += `/api/template/example/${fileType}?whichFakeChildren=missingOne`;
+  } else if (whichFile === FakeChildrenTypes.MISSING_OPTIONAL) {
+    DOWNLOAD_URL += `/api/template/example/${fileType}?whichFakeChildren=missingOptional`;
+  } else if (whichFile === FakeChildrenTypes.MISSING_CONDITIONAL) {
+    DOWNLOAD_URL += `/api/template/example/${fileType}?whichFakeChildren=missingConditional`;
+  }
+
+  return DOWNLOAD_URL;
+}

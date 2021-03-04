@@ -1,16 +1,24 @@
 import express from 'express';
 import { getManager } from 'typeorm';
 import multer from 'multer';
-import {
-  BadRequestError,
-  ApiError,
-  InternalServerError,
-} from '../middleware/error/errors';
+import { BadRequestError, ApiError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
-import { BatchUpload } from '../../client/src/shared/payloads';
+import {
+  BatchUploadResponse,
+  EnrollmentColumnError,
+} from '../../client/src/shared/payloads';
+import { ChangeTag } from '../../client/src/shared/models';
+
+const CHANGE_TAGS_DENOTING_UPDATE = [
+  ChangeTag.AgedUp,
+  ChangeTag.ChangedEnrollment,
+  ChangeTag.ChangedFunding,
+  ChangeTag.Edited,
+  ChangeTag.IncomeDet,
+];
 
 export const enrollmentReportsRouter = express.Router();
 
@@ -43,7 +51,7 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (tManager) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const reportChildren = await controller.mapRows(
+        const { children: reportChildren } = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
@@ -57,7 +65,7 @@ enrollmentReportsRouter.post(
           }))
         );
 
-        const errorDict = await controller.checkErrorsInChildren(
+        const errorDict: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
 
@@ -94,37 +102,30 @@ enrollmentReportsRouter.post(
  * 	- returns new EnrollmentReport on success
  */
 enrollmentReportsRouter.post(
-  '/',
+  '/:shouldSave',
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (tManager) => {
-      // Prepare for ingestion by removing any existing data
-      try {
-        const siteIdToReplace = req.query['overwriteSites'];
-        const siteIdsToReplace = !siteIdToReplace
-          ? undefined
-          : ((Array.isArray(siteIdToReplace)
-              ? siteIdToReplace
-              : [siteIdToReplace]) as string[]);
-        await controller.removeExistingEnrollmentDataForUser(
-          tManager,
-          req.user,
-          siteIdsToReplace
-        );
-      } catch (err) {
-        console.error('Unable to delete existing data for user:', err);
-        throw new InternalServerError('Unable to remove existing roster data');
-      }
-
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
+        const shouldSave = req.params['shouldSave'] === 'true';
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const reportChildren = await controller.mapRows(
+        const mapResult = await controller.mapRows(
           tManager,
           reportRows,
           req.user,
-          { save: true }
+          { save: shouldSave }
         );
+
+        // Augment with validation errors to determine missing info
+        if (!shouldSave) {
+          mapResult.children = await Promise.all(
+            mapResult.children.map(async (c) => ({
+              ...c,
+              validationErrors: await validate(c),
+            }))
+          );
+        }
 
         // TODO: Decide if there's any benefit in actually creating the EnrollmentReport entity,
         // which maps childIds to the upload they came from.
@@ -132,17 +133,25 @@ enrollmentReportsRouter.post(
         // and we have a need to display to the user which records were updated/added by their
         // upload. Skip creating the report for now to save time (esp for large uploads)
 
-        let numActive = 0,
+        // Use tags to decide which kinds of uploads/updates were performed
+        // on each record
+        let numNew = 0,
+          numUpdated = 0,
           numWithdrawn = 0;
-        reportChildren.forEach((child) => {
+        mapResult.children.forEach((child, idx) => {
           if (child.enrollments?.every((e) => e.exit)) numWithdrawn += 1;
-          else numActive += 1;
+          const tags = mapResult.changeTagsForChildren[idx];
+          if (tags.includes(ChangeTag.NewRecord)) numNew += 1;
+          if (CHANGE_TAGS_DENOTING_UPDATE.some((t) => tags.includes(t)))
+            numUpdated += 1;
         });
 
         res.status(201).json({
-          active: numActive,
+          new: numNew,
+          updated: numUpdated,
           withdrawn: numWithdrawn,
-        } as BatchUpload);
+          uploadPreview: controller.formatUploadPreview(mapResult),
+        } as BatchUploadResponse);
 
         // Only remove the file from disk if we successfully parsed it
         if (req.file && req.file.path) fs.unlinkSync(req.file.path);

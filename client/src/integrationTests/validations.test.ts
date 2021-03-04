@@ -14,7 +14,10 @@ import {
   Funding,
 } from '../shared/models';
 import moment from 'moment';
-import { ChangeEnrollment, ChangeFunding } from '../shared/payloads';
+import {
+  ChangeEnrollmentRequest,
+  ChangeFundingRequest,
+} from '../shared/payloads';
 import { disableFetchMocks, enableFetchMocks } from 'jest-fetch-mock';
 
 jest.mock('../utils/getCurrentHost');
@@ -149,7 +152,7 @@ describe('integration', () => {
           expect(missingFundedEnrollmentError).not.toBeUndefined();
 
           // Then, add an enrollment without a funding and ensure the error is still there
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               entry: moment(),
             } as Enrollment,
@@ -175,7 +178,7 @@ describe('integration', () => {
             '',
             TEST_OPTS
           );
-          const changeEnrollmentWithFunding: ChangeEnrollment = {
+          const changeEnrollmentWithFunding: ChangeEnrollmentRequest = {
             newEnrollment: {
               entry: moment(),
               fundings: [
@@ -294,7 +297,7 @@ describe('integration', () => {
           );
           let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
 
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {} as Enrollment,
           };
 
@@ -322,7 +325,7 @@ describe('integration', () => {
           );
           let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
 
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               siteId: site.id,
               entry: moment(),
@@ -353,7 +356,7 @@ describe('integration', () => {
           );
           let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
 
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               siteId: site.id,
               entry: moment('2030-09-01', 'YYYY-MM-DD'),
@@ -401,7 +404,7 @@ describe('integration', () => {
             (space) => space.ageGroup === AgeGroup.SchoolAge
           );
 
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               siteId: site.id,
               entry: moment(),
@@ -440,7 +443,7 @@ describe('integration', () => {
           );
           let child: Child = await apiGet(`children/${id}`, '', TEST_OPTS);
 
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               fundings: [{}],
             } as Enrollment,
@@ -480,7 +483,7 @@ describe('integration', () => {
           const reportingPeriodBeforeEntry = reportingPeriods.find((rp) =>
             rp.period.isBefore(enrollmentEntry)
           );
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               entry: enrollmentEntry,
               fundings: [
@@ -530,7 +533,7 @@ describe('integration', () => {
           );
 
           // Create enrollment with funding
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               entry: enrollmentEntry,
               fundings: [
@@ -561,7 +564,7 @@ describe('integration', () => {
                 reportingPeriod?.period.clone().add('months', 4)
               )
           ) as ReportingPeriod;
-          const changeFunding: ChangeFunding = {
+          const changeFunding: ChangeFundingRequest = {
             newFunding: {
               firstReportingPeriod: newFundingReportingPeriod,
             } as Funding,
@@ -624,7 +627,7 @@ describe('integration', () => {
           ) as ReportingPeriod;
 
           // Create enrollment with funding
-          const changeEnrollment: ChangeEnrollment = {
+          const changeEnrollment: ChangeEnrollmentRequest = {
             newEnrollment: {
               entry: enrollmentEntry,
               fundings: [
@@ -643,7 +646,7 @@ describe('integration', () => {
           let enrollment = child?.enrollments?.pop() as Enrollment;
           let funding = enrollment.fundings?.pop() as Funding;
 
-          const changeFunding: ChangeFunding = {
+          const changeFunding: ChangeFundingRequest = {
             oldFunding: {
               lastReportingPeriod,
             },

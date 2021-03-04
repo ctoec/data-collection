@@ -1,7 +1,7 @@
 import React from 'react';
 import { RadioButtonGroup, TObjectDriller } from '@ctoec/component-library';
 import { Site, Enrollment } from '../../../../shared/models';
-import { ChangeEnrollment } from '../../../../shared/payloads';
+import { ChangeEnrollmentRequest } from '../../../../shared/payloads';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 
 type SiteProps<T> = {
@@ -12,7 +12,7 @@ type SiteProps<T> = {
 /**
  * Component for updating the site of an enrollment
  */
-export const SiteField = <T extends Enrollment | ChangeEnrollment>({
+export const SiteField = <T extends Enrollment | ChangeEnrollmentRequest>({
   sites,
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: SiteProps<T>) => {

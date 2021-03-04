@@ -20,7 +20,7 @@ https: nightwatch_config = {
   test_settings: {
     default: {
       globals: {
-        waitForConditionTimeout: 5000, // sometimes internet is slow so wait.
+        waitForConditionTimeout: 15000, // sometimes internet is slow so wait.
       },
       desiredCapabilities: {
         browserName: 'chrome',

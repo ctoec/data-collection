@@ -125,7 +125,7 @@ exports[`Home snapshot matches post-submit user 1`] = `
       class="grid-row margin-top-2"
     >
       <div
-        class="oec-card"
+        class="oec-card oec-card--stacked"
       >
         <div
           class="oec-card-cell"

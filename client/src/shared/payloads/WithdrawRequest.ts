@@ -1,7 +1,7 @@
 import { Moment } from 'moment';
 import { ReportingPeriod } from '../models';
 
-export interface Withdraw {
+export interface WithdrawRequest {
   exit: Moment;
   exitReason: string;
   funding?: {

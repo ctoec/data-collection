@@ -14,7 +14,7 @@ export type ApiOpts = {
  * @param accessToken - separate access token to make it play nicer with SWR
  * @param opts
  */
-export function apiGet(
+export async function apiGet(
   path: string,
   accessToken?: string | null,
   opts?: ApiOpts
@@ -33,7 +33,7 @@ export function apiGet(
  * @param body
  * @param opts
  */
-export function apiPost(path: string, body: any, opts?: ApiOpts) {
+export async function apiPost(path: string, body: any, opts?: ApiOpts) {
   return api(path, body, 'POST', opts || {});
 }
 
@@ -43,7 +43,7 @@ export function apiPost(path: string, body: any, opts?: ApiOpts) {
  * @param body
  * @param opts
  */
-export function apiPut(path: string, body: any, opts?: ApiOpts) {
+export async function apiPut(path: string, body: any, opts?: ApiOpts) {
   return api(path, body, 'PUT', opts || {});
 }
 
@@ -52,7 +52,7 @@ export function apiPut(path: string, body: any, opts?: ApiOpts) {
  * @param path
  * @param opts
  */
-export function apiDelete(path: string, opts?: ApiOpts) {
+export async function apiDelete(path: string, opts?: ApiOpts) {
   return api(path, undefined, 'DELETE', opts || {});
 }
 

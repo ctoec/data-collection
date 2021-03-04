@@ -12,6 +12,8 @@ module.exports = {
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
     await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
+
+    await sortMissingInfoChildrenLast(browser);
     const clickedChildLinkText = await clickOnChildInRoster(browser);
     const lastName = clickedChildLinkText.split(',')[0];
 
@@ -54,13 +56,25 @@ module.exports = {
       'xpath',
       "//*/h2[contains(., 'Record withdrawn')]"
     );
-    await browser.waitForElementVisible(
-      'xpath',
-      "//*/p[contains(., '19 children enrolled')]"
-    );
 
     // This expect allows the test to end with a success code
     browser.expect.element('p.usa-alert__text').text.to.contain(lastName);
     browser.end();
   },
 };
+
+//  SUPER SORTING HACK so that children without missing info are at the top of the page,
+//  because we can't withdraw children that are missing info
+async function sortMissingInfoChildrenLast(browser) {
+  await browser.execute(`window.scrollTo(280,900);`);
+  await browser.click(
+    'xpath',
+    "//*/button[contains(text(), 'Missing info')][1]"
+  );
+
+  await browser.execute(`window.scrollTo(280,900);`);
+  await browser.click(
+    'xpath',
+    "//*/button[contains(text(), 'Missing info')][1]"
+  );
+}
