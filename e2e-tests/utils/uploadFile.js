@@ -43,24 +43,6 @@ async function uploadFile(
 
   await reviewMissingInfo(browser);
   await completeUpload(browser);
-
-  // Resulting alert will depend on whether we uploaded complete or incomplete data
-  if (isCompleteTestRun) {
-    await browser.waitForElementVisible(
-      'xpath',
-      `//*/p[contains(text(),"20 new records")]`
-    );
-  } else if (isMissingOptionalRun) {
-    await browser.waitForElementVisible(
-      'xpath',
-      `//*/p[contains(text(),"10 new records")]`
-    );
-  } else {
-    await browser.waitForElementVisible(
-      'xpath',
-      `//*/h2[contains(.,'Update your roster')]`
-    );
-  }
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -98,7 +80,12 @@ async function completeUpload(browser) {
     'xpath',
     "//*/button[contains(text(), 'Save changes to roster')]"
   );
+
   await browser.pause(5000);
+  await browser.waitForElementVisible(
+    'xpath',
+    '//*/h2[contains(text(),"Your records have been uploaded!")]'
+  );
 }
 
 function getDownloadUrl(whichFile, fileType) {
