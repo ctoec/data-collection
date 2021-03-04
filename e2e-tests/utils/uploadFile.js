@@ -1,6 +1,5 @@
 const { launch_url } = require('../nightwatch.conf');
 const { FakeChildrenTypes } = require('./FakeChildrenTypes');
-const { acceptModal } = require('../utils/acceptModal');
 const {
   downloadFileToTestRunnerHost,
 } = require('../utils/downloadFileToTestRunnerHost');
@@ -17,15 +16,10 @@ async function uploadFile(
 ) {
   // Set await browser.timeoutsImplicitWait(10000); in the test right after browser.init for this function to work
   const FILE_PATH = `${process.cwd()}/upload.csv`;
-
   const downloadUrl = getDownloadUrl(whichFile, fileType);
-
-  const isCompleteTestRun = whichFile === 'complete';
-  const isMissingOptionalRun = whichFile === FakeChildrenTypes.MISSING_OPTIONAL;
 
   await downloadFileToTestRunnerHost(FILE_PATH, downloadUrl);
 
-  // Go to file upload
   if (waitForHello) {
     await browser.waitForElementVisible(
       'xpath',
@@ -34,13 +28,6 @@ async function uploadFile(
   }
 
   await startUpload(browser, FILE_PATH);
-  await acceptModal(
-    browser,
-    'Upload and correct in roster',
-    'No error modal appearing',
-    !(isCompleteTestRun || isMissingOptionalRun)
-  );
-
   await reviewMissingInfo(browser);
   await completeUpload(browser);
 }
