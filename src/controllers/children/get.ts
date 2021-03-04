@@ -44,7 +44,6 @@ export const getChildren = async (
     take?: number;
   } = {}
 ) => {
-
   let {
     organizationIds,
     missingInfoOnly,
@@ -103,7 +102,7 @@ export const getCount = async (user: User) => {
  * site roster.
  * @param children
  */
-export const getSiteCountMap = async (children: Child[]) => {
+export const getSiteCountMap = async (user: User, children: Child[]) => {
   const siteCounts: {
     siteName: string;
     count: number;
@@ -114,19 +113,24 @@ export const getSiteCountMap = async (children: Child[]) => {
   children.forEach((c) => {
     const enrollment = getCurrentEnrollment(c);
     if (enrollment) {
-      let match = siteCounts.find(
-        (sc) => sc.siteName === enrollment?.site?.siteName
-      );
-      if (match === undefined) {
-        match = {
-          siteName: enrollment.site.siteName,
-          count: 0,
-          orgId: enrollment.site.organizationId,
-          siteId: enrollment.site.id,
-        };
-        siteCounts.push(match);
+      if (
+        user.accessType == 'organization' ||
+        user.siteIds.includes(enrollment.site.id)
+      ) {
+        let match = siteCounts.find(
+          (sc) => sc.siteName === enrollment?.site?.siteName
+        );
+        if (match === undefined) {
+          match = {
+            siteName: enrollment.site.siteName,
+            count: 0,
+            orgId: enrollment.site.organizationId,
+            siteId: enrollment.site.id,
+          };
+          siteCounts.push(match);
+        }
+        match.count += 1;
       }
-      match.count += 1;
     }
   });
 

@@ -49,7 +49,7 @@ childrenRouter.get(
     // Send back a nice pretty display structure for the user's home
     // page if they've submitted their data
     if (siteMap && siteMap === 'true') {
-      const siteCountMap = await controller.getSiteCountMap(children);
+      const siteCountMap = await controller.getSiteCountMap(req.user, children);
       res.send({ siteCountMap });
     } else {
       res.send(children);
