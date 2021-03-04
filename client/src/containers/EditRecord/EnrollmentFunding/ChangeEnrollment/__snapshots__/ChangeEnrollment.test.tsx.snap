@@ -3,7 +3,7 @@
 exports[`EditRecord EnrollmentFunding ChangeEnrollment matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="oec-card"
+    class="oec-card oec-card--stacked"
   >
     <div
       class="oec-card-cell"
