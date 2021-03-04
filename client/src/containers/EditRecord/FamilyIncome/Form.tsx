@@ -26,6 +26,9 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
 
+  console.log(child);
+  console.log(child.family);
+
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted
 
@@ -35,6 +38,8 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
     determinations.length === 0 ||
     (determinations.length === 1 &&
       determinationHasNoInformation(determinations[0]));
+
+  console.log(noRecordedDets);
 
   const currentDetermination: IncomeDetermination | undefined =
     determinations[0];
