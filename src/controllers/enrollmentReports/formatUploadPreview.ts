@@ -25,13 +25,17 @@ export const formatUploadPreview = (mapResult: EnrollmentReportUpdate) => {
         // validator goes off for every child--ignore it
         missingInfo: c.validationErrors && c.validationErrors.length > 1,
         tags: mapResult.changeTagsForChildren[idx],
-        birthDate: c.birthdate.format('MM/DD/YYYY'),
-        fundingSource: recentFunding
+        birthDate: c.birthdate?.format('MM/DD/YYYY'),
+        fundingSource: recentFunding?.fundingSpace?.source
           ? recentFunding.fundingSpace.source
           : ' - ',
-        spaceType: recentFunding ? recentFunding.fundingSpace.time : ' - ',
-        site: recentEnrollment ? recentEnrollment.site.siteName : ' - ',
-        enrollmentDate: recentEnrollment
+        spaceType: recentFunding?.fundingSpace?.time
+          ? recentFunding.fundingSpace.time
+          : ' - ',
+        site: recentEnrollment?.site?.siteName
+          ? recentEnrollment.site.siteName
+          : ' - ',
+        enrollmentDate: recentEnrollment?.entry
           ? recentEnrollment.entry.format('MM/DD/YYYY')
           : ' - ',
       };
