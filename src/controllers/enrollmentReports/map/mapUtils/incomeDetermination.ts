@@ -17,8 +17,8 @@ export const mapIncomeDetermination = (
   // create the det and overwrite not disclosed to false
   if (source.numberOfPeople || source.income || source.determinationDate) {
     return getManager().create(IncomeDetermination, {
-      numberOfPeople: stripInt(source.numberOfPeople),
-      income: stripFloat(source.income),
+      numberOfPeople: getFirstInt(source.numberOfPeople),
+      income: getFloat(source.income),
       determinationDate: source.determinationDate,
       incomeNotDisclosed: false,
       family,
@@ -100,7 +100,7 @@ export const handleIncomeDeterminationUpdate = (
  * - legacy ECIS value "9 or more" is entered
  * @param value
  */
-const stripInt = (value: string | number) => {
+const getFirstInt = (value: string | number) => {
   if (typeof value === 'number') return value;
   if (typeof value === 'string') {
     const match = value.match(/\d+/);
@@ -118,14 +118,15 @@ const stripInt = (value: string | number) => {
  *
  * For when:
  * - excel formatting does not apply correctly to copy/pasted
- * numeric values, and they end up as strings with commas
+ * numeric values, and they end up as strings with preceeding ' and commas
  * - users accidentially enter errant spaces in dollar amount
  * @param value
  */
-const stripFloat = (value: string | number) => {
+const getFloat = (value: string | number) => {
   if (typeof value === 'number') return value;
   if (typeof value === 'string') {
-    const float = parseFloat(value.replace(/\D/g, ''));
+    // strip out whitespace, dollar signs, commas
+    const float = parseFloat(value.replace(/[\s\$,]/g, ''));
     if (!isNaN(float)) return float;
   }
   return undefined;

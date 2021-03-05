@@ -17,29 +17,21 @@ export const formatUploadPreview = (mapResult: EnrollmentReportUpdate) => {
     (c, idx) => {
       const recentEnrollment = getLastEnrollment(c);
       const recentFunding = getLastFunding(recentEnrollment);
-      const tableObj: Partial<UploadPreviewRow> = {
+      const previewRow: Partial<UploadPreviewRow> = {
         name: nameFormatter(c, { lastNameFirst: true, capitalize: true }),
-        ageGroup: recentEnrollment ? recentEnrollment.ageGroup : undefined,
+        ageGroup: recentEnrollment?.ageGroup,
         // Greater than 1 here because we didn't save nested enrollments and
         // fundings to the DB, so the "every child has a funded enrollment"
         // validator goes off for every child--ignore it
         missingInfo: c.validationErrors && c.validationErrors.length > 1,
         tags: mapResult.changeTagsForChildren[idx],
         birthDate: c.birthdate?.format('MM/DD/YYYY'),
-        fundingSource: recentFunding?.fundingSpace?.source
-          ? recentFunding.fundingSpace.source
-          : ' - ',
-        spaceType: recentFunding?.fundingSpace?.time
-          ? recentFunding.fundingSpace.time
-          : ' - ',
-        site: recentEnrollment?.site?.siteName
-          ? recentEnrollment.site.siteName
-          : ' - ',
-        enrollmentDate: recentEnrollment?.entry
-          ? recentEnrollment.entry.format('MM/DD/YYYY')
-          : ' - ',
+        fundingSource: recentFunding?.fundingSpace?.source ?? '-',
+        spaceType: recentFunding?.fundingSpace?.time ?? '-',
+        site: recentEnrollment?.site?.siteName ?? '-',
+        enrollmentDate: recentEnrollment?.entry?.format('MM/DD/YYYY') ?? '-',
       };
-      return tableObj;
+      return previewRow;
     }
   );
   return formattedPreview;
