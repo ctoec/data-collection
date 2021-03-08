@@ -17,11 +17,8 @@ export const mapIncomeDetermination = (
   // create the det and overwrite not disclosed to false
   if (source.numberOfPeople || source.income || source.determinationDate) {
     return getManager().create(IncomeDetermination, {
-      // Cast empty strings to undefined to avoid DB write failures
-      numberOfPeople: source.numberOfPeople || undefined,
-      // Need to accept 0 as valid income, so use forcible number conversion
-      // to check if the result is a valid number
-      income: isNaN(source.income) ? undefined : source.income,
+      numberOfPeople: getFirstInt(source.numberOfPeople),
+      income: getFloat(source.income),
       determinationDate: source.determinationDate,
       incomeNotDisclosed: false,
       family,
@@ -92,4 +89,45 @@ export const handleIncomeDeterminationUpdate = (
     determinationsToUpdate.push(determination);
     child.family.incomeDeterminations.push(determination);
   }
+};
+
+/**
+ * Return value if it is a number, or pull numeric value
+ * from string
+ *
+ * For cases when:
+ * - errant characters/spaces result in invalid string (i.e. user accidentally prepends a '`')
+ * - legacy ECIS value "9 or more" is entered
+ * @param value
+ */
+const getFirstInt = (value: string | number) => {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    const match = value.match(/\d+/);
+    if (match) {
+      return parseInt(match[0]);
+    }
+  }
+
+  return undefined;
+};
+
+/**
+ * Return value if it is a number, or string out all non-numeric
+ * characters from a string.
+ *
+ * For when:
+ * - excel formatting does not apply correctly to copy/pasted
+ * numeric values, and they end up as strings with preceeding ' and commas
+ * - users accidentially enter errant spaces in dollar amount
+ * @param value
+ */
+const getFloat = (value: string | number) => {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    // strip out whitespace, dollar signs, commas
+    const float = parseFloat(value.replace(/[\s\$,]/g, ''));
+    if (!isNaN(float)) return float;
+  }
+  return undefined;
 };

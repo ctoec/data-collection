@@ -1,5 +1,6 @@
 import {
   Accordion,
+  Alert,
   Button,
   Card,
   HeadingLevel,
@@ -8,7 +9,7 @@ import {
   ProgressIndicatorProps,
 } from '@ctoec/component-library';
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { BatchUploadResponse } from '../../shared/payloads';
@@ -44,6 +45,7 @@ export const Preview: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
+  const [error, setError] = useState('');
 
   //  If there's no state supplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
@@ -59,6 +61,7 @@ export const Preview: React.FC = () => {
 
       setLoadingText('Building your upload summary...');
       setLoading(true);
+      setError('');
       try {
         const formData = getFormDataBlob(file);
         const resp: BatchUploadResponse = await apiPost(
@@ -75,7 +78,8 @@ export const Preview: React.FC = () => {
       } catch (error) {
         handleJWTError(history, (err) => {
           console.error(err);
-        });
+          setError(err);
+        })(error);
       } finally {
         setLoading(false);
       }
@@ -85,6 +89,7 @@ export const Preview: React.FC = () => {
   async function confirmUpload() {
     setLoadingText('Uploading changes...');
     setLoading(true);
+    setError('');
 
     try {
       const formData = getFormDataBlob(file);
@@ -111,7 +116,8 @@ export const Preview: React.FC = () => {
     } catch (error) {
       handleJWTError(history, (err) => {
         console.error(err);
-      });
+        setError(err);
+      })(error);
     } finally {
       setLoading(false);
     }
@@ -162,57 +168,71 @@ export const Preview: React.FC = () => {
         </p>
       </div>
       <LoadingWrapper text={loadingText} loading={loading}>
-        <div className="grid-row desktop:grid-col-4 three-column-card">
-          <Card className="font-body-lg">
-            <p className="margin-top-0 margin-bottom-0">
-              Total records in this file
-            </p>
-            <p className="text-bold margin-top-0 margin-bottom-0">
-              {preview ? preview.new + preview.updated + preview.withdrawn : ''}
-            </p>
-          </Card>
-        </div>
-        <div className="grid-row three-column-layout">
-          <div className="desktop:grid-col-4 three-column-card">
-            <Card className="font-body-lg">
-              <p className="margin-top-0 margin-bottom-0">New</p>
-              <p className="text-bold margin-top-0 margin-bottom-0">
-                {preview ? preview.new : ''}
-              </p>
-            </Card>
-          </div>
-          <div className="desktop:grid-col-4 three-column-card">
-            <Card className="font-body-lg">
-              <p className="margin-top-0 margin-bottom-0">Updated</p>
-              <p className="text-bold margin-top-0 margin-bottom-0">
-                {preview ? preview.updated : ''}
-              </p>
-            </Card>
-          </div>
-          <div className="desktop:grid-col-4 three-column-card">
-            <Card className="font-body-lg">
-              <p className="margin-top-0 margin-bottom-0">Withdrawn</p>
-              <p className="text-bold margin-top-0 margin-bottom-0">
-                {preview ? preview.withdrawn : ''}
-              </p>
-            </Card>
-          </div>
-        </div>
+        {error ? (
+          <Alert
+            text="Something went wrong with your upload!"
+            actionItem={
+              <Link to="/upload">Try to upload a different file</Link>
+            }
+            type="error"
+          />
+        ) : (
+          <>
+            <div className="grid-row desktop:grid-col-4 three-column-card">
+              <Card className="font-body-lg">
+                <p className="margin-top-0 margin-bottom-0">
+                  Total records in this file
+                </p>
+                <p className="text-bold margin-top-0 margin-bottom-0">
+                  {preview
+                    ? preview.new + preview.updated + preview.withdrawn
+                    : ''}
+                </p>
+              </Card>
+            </div>
+            <div className="grid-row three-column-layout">
+              <div className="desktop:grid-col-4 three-column-card">
+                <Card className="font-body-lg">
+                  <p className="margin-top-0 margin-bottom-0">New</p>
+                  <p className="text-bold margin-top-0 margin-bottom-0">
+                    {preview ? preview.new : ''}
+                  </p>
+                </Card>
+              </div>
+              <div className="desktop:grid-col-4 three-column-card">
+                <Card className="font-body-lg">
+                  <p className="margin-top-0 margin-bottom-0">Updated</p>
+                  <p className="text-bold margin-top-0 margin-bottom-0">
+                    {preview ? preview.updated : ''}
+                  </p>
+                </Card>
+              </div>
+              <div className="desktop:grid-col-4 three-column-card">
+                <Card className="font-body-lg">
+                  <p className="margin-top-0 margin-bottom-0">Withdrawn</p>
+                  <p className="text-bold margin-top-0 margin-bottom-0">
+                    {preview ? preview.withdrawn : ''}
+                  </p>
+                </Card>
+              </div>
+            </div>
 
-        <div className="grid-row upload-preview-table">
-          {previewAccordionItems ? (
-            <Accordion {...previewAccordionItems} />
-          ) : (
-            <></>
-          )}
-        </div>
+            <div className="grid-row upload-preview-table">
+              {previewAccordionItems ? (
+                <Accordion {...previewAccordionItems} />
+              ) : (
+                <></>
+              )}
+            </div>
 
-        <Button text="Cancel upload" href="/home" appearance="outline" />
-        <Button
-          id="upload-button"
-          text="Save changes to roster"
-          onClick={confirmUpload}
-        />
+            <Button text="Cancel upload" href="/home" appearance="outline" />
+            <Button
+              id="upload-button"
+              text="Save changes to roster"
+              onClick={confirmUpload}
+            />
+          </>
+        )}
       </LoadingWrapper>
     </div>
   );
