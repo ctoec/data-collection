@@ -6,6 +6,7 @@ import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const FundingSourceTimes: React.FC = () => {
+  console.log('Funding source times component init...');
   const h1Ref = getH1RefForTitle();
 
   /**

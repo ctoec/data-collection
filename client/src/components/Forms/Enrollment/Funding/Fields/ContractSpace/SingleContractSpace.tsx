@@ -31,10 +31,12 @@ export const SingleContractSpaceField = <
   fundingSpace,
   accessor,
 }: SingleContractSpaceProps<T>) => {
+  console.log('Single contract space field init...');
   const { updateData, dataDriller } = useGenericContext<T>(FormContext);
   const currentFundingSpace = accessor(dataDriller);
 
   useEffect(() => {
+    console.log('Updating single contract space field...');
     if (currentFundingSpace.at('id').value !== fundingSpace.id) {
       updateData((_data) =>
         set({ ..._data }, currentFundingSpace.path, fundingSpace)

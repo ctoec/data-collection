@@ -41,6 +41,7 @@ export const ContractSpaceField = <
   organizationId,
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
 }: ContractSpaceProps<T>) => {
+  console.log('Contract space field init...');
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
   );
@@ -49,6 +50,8 @@ export const ContractSpaceField = <
   >([]);
 
   useEffect(() => {
+    console.log('Contract space effect...');
+
     if (!fundingSpaces) return;
     setFundingSpaceOptions(
       fundingSpaces.filter(

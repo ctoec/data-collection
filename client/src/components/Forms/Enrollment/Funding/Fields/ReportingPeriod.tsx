@@ -56,6 +56,8 @@ export const ReportingPeriodField = <
   optional,
   showStatus = true,
 }: ReportingPeriodProps<T>) => {
+  console.log('Reporting period init...');
+
   const { data: reportingPeriods } = useAuthenticatedSWR<ReportingPeriod[]>(
     `reporting-periods?${stringify({
       source: getShortFundingSourceName(fundingSource),
@@ -69,6 +71,7 @@ export const ReportingPeriodField = <
 
   const currentReportingPeriod = accessor(dataDriller).value;
   useEffect(() => {
+    console.log('Reporting period effect...');
     if (!reportingPeriods) return;
     // See https://github.com/ctoec/data-collection/issues/842 - display all options for now
     // Only display 5 options, centered around existing value or today

@@ -1,6 +1,7 @@
 import { FundingSpace, FundingTime } from '../../shared/models';
 
 export const fundingSpaceFormatter = (fundingSpace: FundingSpace) => {
+  console.log('Formatting funding space...');
   if (fundingSpace.time !== FundingTime.SplitTime) {
     return fundingSpace.time;
   }
