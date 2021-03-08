@@ -74,6 +74,7 @@ export function getValidationStatusForField<
   _: any, // TODO: clean this up -- no longer user now that property names come from validation error metadata (but still expected by FormField status)
   options?: ValidationStatusOptions
 ): FormStatusProps | undefined {
+  console.log('getValidationStatusForField executing...');
   const splitPath = path.split('.');
   const field = splitPath.pop();
 

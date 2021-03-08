@@ -61,6 +61,8 @@ export const ContractSpaceField = <
   }, [ageGroup, fundingSource, fundingSpaces]);
 
   if (fundingSpaceOptions.length === 1) {
+    console.log('Only one funding space option!');
+
     return (
       <SingleContractSpaceField<T>
         fundingSpace={fundingSpaceOptions[0]}
@@ -69,6 +71,7 @@ export const ContractSpaceField = <
     );
   }
 
+  console.log('Multiple funding space options...');
   return (
     <FormField<T, SelectProps, number | null>
       getValue={(data) => fundingAccessor(data).at('fundingSpace').at('id')}
