@@ -13,6 +13,10 @@ The OEC data collection application has just a few prerequisites that need to be
 1. Clone (or bind mount) the [`winged-keys` project](https://github.com/ctoec/winged-keys) (our authentication layer) into the **root directory of this project**.
 1. Follow the steps outlined in the corresponding README to set up the `winged-keys` project.
 
+You may need to [allocate more memory to Docker](https://stackoverflow.com/a/44533437) (say, ~4 GB). 
+
+If you are developing on an M1/ARM system, you [may](https://github.com/microsoft/mssql-docker/issues/668) need to update the `image` of `db` and `winged-keys-db` in `docker-compose.yaml` to `mcr.microsoft.com/azure-sql-edge`.
+
 ## Usage
 Once the required libraries are installed, getting the application up and running is a pretty simple task.
 
@@ -43,14 +47,16 @@ Once the required libraries are installed, getting the application up and runnin
        Name                            Command               State           Ports
    --------------------------------------------------------------------------------------------------
    data-collection_client_1           yarn start                       Up
-   data-collection_db_1               /opt/mssql/bin/permissions ...   Up      1433/tcp
+   data-collection_db_1               /opt/mssql/bin/permissions ...   Up      1401/tcp, 0.0.0.0:5002->1433/tcp
    data-collection_server_1           yarn run watch                   Up      0.0.0.0:5001->3000/tcp
-   data-collection_winged-keys-db_1   /opt/mssql/bin/permissions ...   Up      1433/tcp
+   data-collection_winged-keys-db_1   /opt/mssql/bin/permissions ...   Up      1401/tcp, 0.0.0.0:5051->1433/tcp
    data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp
 
    ```
 
-## Architecture
+(Stop the application running in the background with `docker-compose down`.)
+
+### Architecture
 
 This mono-repo consists of three main parts:
 
