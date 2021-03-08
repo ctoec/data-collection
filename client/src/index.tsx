@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { SWRConfig } from 'swr';
+import ReactGA from 'react-ga';
 
 import App from './containers/App/App';
 import { AuthenticationProvider } from './contexts/AuthenticationContext/AuthenticationContext';
@@ -16,6 +17,10 @@ import '@ctoec/component-library/dist/assets/styles/index.scss';
 import './index.scss';
 import { apiGet } from './utils/api';
 import { RosterProvider } from './contexts/RosterContext/RosterContext';
+
+//  Init Google Analytics
+ReactGA.initialize('UA-191041839-2');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const render = (Component: React.FC) =>
   ReactDOM.render(
