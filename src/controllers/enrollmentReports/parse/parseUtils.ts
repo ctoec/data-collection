@@ -153,7 +153,8 @@ export function parseEnrollmentReportRow(
  * Other values return true.
  * @param value
  */
-export function getBoolean(value: string): boolean {
+export function getBoolean(value: string | number | boolean): boolean {
+  if (typeof value === 'boolean' || typeof value === 'number') return !!value;
   if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
   else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
   return null;
