@@ -23,7 +23,6 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
     throw new Error('Family income form rendered without family');
   }
 
-  const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted
@@ -42,11 +41,9 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   // If a user somehow broke the create flow and got here without
   // a child having _any_ dets at all, there's no det to pull an ID
   // from, so direct the user to redetermine
-  useEffect(() => {
-    if (currentDetermination === undefined) {
-      setShowRedeterminationForm(true);
-    }
-  }, [currentDetermination]);
+  const [showRedeterminationForm, setShowRedeterminationForm] = useState(
+    currentDetermination === undefined
+  );
 
   return (
     <>

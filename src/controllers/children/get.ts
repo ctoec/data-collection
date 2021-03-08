@@ -122,10 +122,10 @@ export const getSiteCountMap = async (user: User, children: Child[]) => {
         );
         if (match === undefined) {
           match = {
-            siteName: enrollment.site.siteName,
+            siteName: enrollment?.site?.siteName,
             count: 0,
-            orgId: enrollment.site.organizationId,
-            siteId: enrollment.site.id,
+            orgId: enrollment?.site?.organizationId,
+            siteId: enrollment?.site?.id,
           };
           siteCounts.push(match);
         }

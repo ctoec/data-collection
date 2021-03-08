@@ -80,14 +80,21 @@ export const PreSubmitHome: React.FC = () => {
           </span>
         }
       />
-      <h3 className="pre-submit-h3">Sites</h3>
-      <ul className="margin-left-2 bx--list--unordered">
-        {(user?.sites || []).map((site) => (
-          <li key={site.siteName} className="line-height-body-4 bx--list__item">
-            {site.siteName}
-          </li>
-        ))}
-      </ul>
+      {(user?.sites || []).length > 0 && (
+        <>
+          <h3 className="pre-submit-h3">Sites</h3>
+          <ul className="margin-left-2 bx--list--unordered">
+            {(user?.sites || []).map((site) => (
+              <li
+                key={site.siteName}
+                className="line-height-body-4 bx--list__item"
+              >
+                {site.siteName}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
       {showFundings && fundingSpacesDisplay && (
         <>
           <h3 className="pre-submit-h3">Funding spaces</h3>
