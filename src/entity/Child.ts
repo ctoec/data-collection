@@ -61,11 +61,6 @@ export class Child implements ChildInterface {
   @Column({ nullable: true, type: 'date', transformer: momentTransformer })
   @IsNotEmpty()
   @MomentComparison({
-    compareFunc: (birthdate: Moment) =>
-      birthdate.isSameOrAfter(moment().add(-12, 'years')),
-    message: 'Birthdate must be within last 12 years.',
-  })
-  @MomentComparison({
     compareFunc: (birthdate: Moment) => birthdate.isBefore(moment()),
     message: 'Birthdate cannot be in the future.',
   })
