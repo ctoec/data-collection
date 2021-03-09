@@ -180,10 +180,6 @@ export function getDate(value: string | number, prop: string): Moment {
   if (typeof value === 'number') {
     parsedDate = excelDateToDate(value);
   }
-  // Override the day value of funding period dates to be 01
-  if (parsedDate && prop.toLowerCase().includes('period')) {
-    return parsedDate.startOf('month');
-  }
   return parsedDate;
 }
 
