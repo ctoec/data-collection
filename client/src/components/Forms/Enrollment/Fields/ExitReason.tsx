@@ -13,6 +13,7 @@ export const ExitReasonField = <T extends Enrollment | WithdrawRequest>({}) => {
   const { dataDriller, immutableUpdateData } = useGenericContext<T>(
     FormContext
   );
+  console.log('ExitReasonField render...');
   return (
     <Select
       id="exit-reason"

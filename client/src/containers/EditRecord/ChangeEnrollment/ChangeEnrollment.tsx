@@ -18,6 +18,7 @@ export const ChangeEnrollment: React.FC<ChangeEnrollmentProps> = ({
   currentEnrollment,
   afterSaveSuccess,
 }) => {
+  console.log('ChangeEnrollment container render...');
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen((o) => !o);
   const history = useHistory();

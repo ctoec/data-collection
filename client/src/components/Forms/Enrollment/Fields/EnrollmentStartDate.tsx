@@ -21,6 +21,7 @@ export const EnrollmentStartDateField = <
 >({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: EnrollmentStartDateProps<T>) => {
+  console.log('EnrollmentStartDateField render...');
   // TODO: why does this not show up after save during create child?
   // To reproduce: add child, save without completely filling out enrollment form (but include entry)
   return (

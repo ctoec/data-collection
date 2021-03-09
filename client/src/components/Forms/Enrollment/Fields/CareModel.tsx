@@ -13,6 +13,7 @@ type CareModelProps<T> = {
 export const CareModelField = <T extends Enrollment | ChangeEnrollmentRequest>({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: CareModelProps<T>) => {
+  console.log('CareModelField render...');
   return (
     <RadioButtonGroup<T>
       inForm

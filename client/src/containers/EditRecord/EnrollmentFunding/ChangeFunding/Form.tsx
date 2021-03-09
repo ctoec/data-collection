@@ -24,6 +24,8 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
   enrollment,
   hideForm,
 }) => {
+  console.log('ChangeFundingForm container render...');
+
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
   const onSubmit = (updatedData: ChangeFundingRequest) => {
@@ -45,7 +47,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
     return (
       <div>
         <p>
-          Add missing enrollment and/or funding formatoin before you can change
+          Add missing enrollment and/or funding information before you can change
           funding.
         </p>
         <Button text="Cancel" appearance="outline" onClick={hideForm} />

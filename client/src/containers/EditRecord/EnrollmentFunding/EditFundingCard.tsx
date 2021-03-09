@@ -45,6 +45,7 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
   setAlerts,
   topHeadingLevel,
 }) => {
+  console.log('EditFundingCard container render...');
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
     throw new Error('Edit funding rendered without enrollment');

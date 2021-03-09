@@ -52,6 +52,8 @@ export const NewFundingField = <
   missingFundedEnrollmentError,
   hideStatus,
 }: FundingFieldProps<T>) => {
+  console.log('NewFundingField render...');
+
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
   );
@@ -66,6 +68,7 @@ export const NewFundingField = <
   // from the funding spaces associated with the given site and agegroup
   // for the enrollment.
   useEffect(() => {
+    console.log('NewFundingField effect execution...');
     if (!fundingSpaces) return;
     const _fundingSourceOptions = new Set(
       fundingSpaces

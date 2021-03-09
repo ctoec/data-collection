@@ -36,6 +36,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
   currentEnrollment,
   topHeadingLevel,
 }) => {
+  console.log('ChangeEnrollmentForm container render...');
   const { user } = useContext(UserContext);
   const sites = (user?.sites || []).filter(
     (site) => site.organizationId === child.organization?.id

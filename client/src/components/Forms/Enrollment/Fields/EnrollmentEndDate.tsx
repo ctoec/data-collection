@@ -26,6 +26,7 @@ export const EnrollmentEndDateField = <
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
   optional = false,
 }: EnrollmentEndDateProps<T>) => {
+  console.log('EnrollmentEndDateField render...');
   return (
     <FormField<T, DateInputProps, Moment | null>
       // if field is optional, force default value empty (null)

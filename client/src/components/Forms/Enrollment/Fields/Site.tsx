@@ -16,6 +16,7 @@ export const SiteField = <T extends Enrollment | ChangeEnrollmentRequest>({
   sites,
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: SiteProps<T>) => {
+  console.log('SiteField render...');
   return (
     <RadioButtonGroup<T>
       id="site-radiogroup"

@@ -17,6 +17,7 @@ type AgeGroupProps<T> = {
 export const AgeGroupField = <T extends Enrollment | ChangeEnrollmentRequest>({
   enrollmentAccessor = (data) => data as TObjectDriller<Enrollment>,
 }: AgeGroupProps<T>) => {
+  console.log('AgeGroupField render...');
   return (
     <RadioButtonGroup<T>
       inForm

@@ -41,6 +41,7 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
   topHeadingLevel,
   noRecordedEnrollments,
 }) => {
+  console.log('EditEnrollmentCard container render...');
   const enrollment = child.enrollments?.find((e) => e.id === enrollmentId);
   if (!enrollment) {
     throw new Error('Edit enrollment rendered without enrollment');
