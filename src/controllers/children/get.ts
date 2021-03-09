@@ -44,7 +44,6 @@ export const getChildren = async (
     take?: number;
   } = {}
 ) => {
-
   let {
     organizationIds,
     missingInfoOnly,
@@ -71,16 +70,19 @@ export const getChildren = async (
   }
   // Else if month qs param
   else if (activeMonth) {
-    // Do not return children withouth active enrollment during or before that month
-    return children.filter((c) => {
-      // filter out enrollments after the current month filter
-      c.enrollments = c.enrollments?.filter(
-        (e) => e.entry && e.entry.isSameOrBefore(activeMonth.endOf('month'))
-      );
-
-      // filter out children with no qualifying enrollments
-      return c.enrollments && c.enrollments.length;
-    });
+    const monthEnd = activeMonth.endOf('month');
+    // Return only children with active enrollment during that month
+    return children
+      .map((child) => ({
+        ...child,
+        // Return enrollments that started before the filter and either did not end, or ended after the end of the filter month
+        enrollments: child.enrollments?.filter(
+          (e) =>
+            e.entry?.isSameOrBefore(monthEnd) &&
+            (!e.exit || e.exit.isAfter(monthEnd))
+        ),
+      }))
+      .filter((c) => c.enrollments?.length); // filter out children with no qualifying enrollments
   }
 
   // Default return all children

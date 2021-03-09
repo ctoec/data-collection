@@ -60,8 +60,7 @@ const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { user } = useContext(UserContext);
   const isSiteLevelUser = user?.accessType === 'site';
-  const userOrganizations = user?.organizations || [];
-  const isMultiOrgUser = userOrganizations.length > 1;
+  const isMultiOrgUser = (user?.organizations ?? []).length > 1;
 
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
@@ -69,6 +68,7 @@ const Roster: React.FC = () => {
   // Parse query params, and update if missing (i.e. initial load) or invalid
   useUpdateRosterParams();
   const query = parse(history.location.search) as RosterQueryParams;
+  const isSingleSiteView = !!query.site;
   const queryMonth = query.month
     ? moment.utc(query.month, QUERY_STRING_MONTH_FORMAT)
     : undefined;
@@ -80,31 +80,32 @@ const Roster: React.FC = () => {
   }, [query?.organization, query?.month]);
 
   const {
-    children: allChildren,
-    stillFetching: loading,
-    error: fetchRosterError,
+    children: allChildren = [],
+    error,
+    stillFetching,
   } = usePaginatedChildData(query);
-
-  if (fetchRosterError) {
-    throw fetchRosterError;
-  }
+  if (error) throw error;
 
   const {
     active: activeChildren,
     withdrawn: withdrawnChildren,
-  } = filterChildrenByWithdrawn(allChildren || []);
-  const rosterIsEmpty = (allChildren || []).length === 0;
-  const displayChildren = query.withdrawn ? withdrawnChildren : activeChildren;
-  const isSingleSiteView = query.site ? true : false;
+  } = filterChildrenByWithdrawn(allChildren);
+
+  // Withdrawn and Month filters are mutually exclusive, active is the default in the absence of either
+  const displayChildren = query.withdrawn
+    ? withdrawnChildren
+    : queryMonth
+    ? allChildren
+    : activeChildren;
 
   // Get other alerts for page, including alert for children with errors
   // (which includes count of ALL children with errors for the active org)
   const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
   const activeChildrenWithErrorsCount = activeChildren.filter(
-    (child) => child?.validationErrors && child.validationErrors.length
+    (c) => c.validationErrors?.length
   ).length;
   const withdrawnChildrenWithErrorsCount = withdrawnChildren.filter(
-    (child) => child?.validationErrors && child.validationErrors.length
+    (c) => c.validationErrors?.length
   ).length;
 
   // Determine if we need to show the successful submit alert when loading
@@ -156,7 +157,7 @@ const Roster: React.FC = () => {
     h1Text,
     subHeaderText,
     superHeaderText,
-  } = useOrgSiteProps(loading, displayChildren.length);
+  } = useOrgSiteProps(stillFetching, displayChildren.length);
 
   const siteChildCount = (siteFilteredChildren || []).length;
   const siteIsEmpty = siteChildCount === 0;
@@ -297,12 +298,12 @@ const Roster: React.FC = () => {
               updateWithdrawnOnly={updateWithdrawnOnly}
             />
           )}
-          <LoadingWrapper text="Loading your roster..." loading={loading}>
+          <LoadingWrapper text="Loading your roster..." loading={stillFetching}>
             {rosterContent}
           </LoadingWrapper>
         </ErrorBoundary>
       </div>
-      {!rosterIsEmpty && !isSubmitted && (
+      {displayChildren?.length && !isSubmitted && (
         <FixedBottomBar>
           <Button text="Back to home" href="/home" appearance="outline" />
           {!isSiteLevelUser && (
