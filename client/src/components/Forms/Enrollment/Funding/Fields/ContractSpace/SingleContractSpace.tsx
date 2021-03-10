@@ -42,7 +42,7 @@ export const SingleContractSpaceField = <
         set({ ..._data }, currentFundingSpace.path, fundingSpace)
       );
     }
-  }, [fundingSpace, currentFundingSpace, updateData]);
+  }, []);
 
   return (
     <div>
