@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import set from 'lodash/set';
+import produce from 'immer';
 import {
   useGenericContext,
   FormContext,
@@ -31,14 +32,14 @@ export const SingleContractSpaceField = <
   fundingSpace,
   accessor,
 }: SingleContractSpaceProps<T>) => {
-  const { updateData, dataDriller } = useGenericContext<T>(FormContext);
+  const { data, updateData, dataDriller } = useGenericContext<T>(FormContext);
   const currentFundingSpace = accessor(dataDriller);
 
   useEffect(() => {
     if (currentFundingSpace.at('id').value !== fundingSpace.id) {
-      updateData((_data) =>
-        set({ ..._data }, currentFundingSpace.path, fundingSpace)
-      );
+      updateData(produce<T>(data, (draft) =>
+        set(draft, currentFundingSpace.path, fundingSpace)
+      ));
     }
   }, [fundingSpace, currentFundingSpace, updateData]);
 
