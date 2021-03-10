@@ -32,14 +32,12 @@ export const SingleContractSpaceField = <
   fundingSpace,
   accessor,
 }: SingleContractSpaceProps<T>) => {
-  const { data, updateData, dataDriller } = useGenericContext<T>(FormContext);
+  const { immutableUpdateData, updateData, dataDriller } = useGenericContext<T>(FormContext);
   const currentFundingSpace = accessor(dataDriller);
 
   useEffect(() => {
     if (currentFundingSpace.at('id').value !== fundingSpace.id) {
-      updateData(produce<T>(data, (draft) =>
-        set(draft, currentFundingSpace.path, fundingSpace)
-      ));
+      immutableUpdateData(currentFundingSpace, fundingSpace);
     }
   }, [fundingSpace, currentFundingSpace, updateData]);
 
