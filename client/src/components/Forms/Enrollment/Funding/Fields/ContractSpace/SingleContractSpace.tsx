@@ -38,11 +38,13 @@ export const SingleContractSpaceField = <
   useEffect(() => {
     console.log('Updating single contract space field...');
     if (currentFundingSpace.at('id').value !== fundingSpace.id) {
-      updateData((_data) =>
-        set({ ..._data }, currentFundingSpace.path, fundingSpace)
-      );
+      updateData(produce<T>(whoKnows, (idk) => {
+        console.log('AHAHAHA', idk);
+        console.log('OH COOL', whoKnows);
+        return set({ ..._data }, currentFundingSpace.path, fundingSpace)
+      });
     }
-  }, []);
+  }, [fundingSpace, currentFundingSpace, updateData]);
 
   return (
     <div>
