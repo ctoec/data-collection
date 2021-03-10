@@ -41,7 +41,7 @@ export const SingleContractSpaceField = <
       updateData(produce<T>(whoKnows, (idk) => {
         console.log('AHAHAHA', idk);
         console.log('OH COOL', whoKnows);
-        return set({ ..._data }, currentFundingSpace.path, fundingSpace)
+        return set(idk, currentFundingSpace.path, fundingSpace)
       });
     }
   }, [fundingSpace, currentFundingSpace, updateData]);
