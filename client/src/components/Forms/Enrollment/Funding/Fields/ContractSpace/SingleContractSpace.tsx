@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import set from 'lodash/set';
+import produce from 'immer';
 import {
   useGenericContext,
   FormContext,
@@ -32,17 +33,15 @@ export const SingleContractSpaceField = <
   accessor,
 }: SingleContractSpaceProps<T>) => {
   console.log('Single contract space field init...');
-  const { updateData, dataDriller } = useGenericContext<T>(FormContext);
+  const { data, updateData, dataDriller } = useGenericContext<T>(FormContext);
   const currentFundingSpace = accessor(dataDriller);
 
   useEffect(() => {
     console.log('Updating single contract space field...');
     if (currentFundingSpace.at('id').value !== fundingSpace.id) {
-      updateData(produce<T>(whoKnows, (idk) => {
-        console.log('AHAHAHA', idk);
-        console.log('OH COOL', whoKnows);
-        return set(idk, currentFundingSpace.path, fundingSpace)
-      });
+      updateData(produce<T>(data, (draft) =>
+        set(draft, currentFundingSpace.path, fundingSpace)
+      ));
     }
   }, [fundingSpace, currentFundingSpace, updateData]);
 
