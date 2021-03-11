@@ -50,7 +50,6 @@ export const FundingForm: React.FC<FundingFormProps> = ({
   afterSaveSuccess,
   hideErrors,
 }) => {
-  console.log('Funding form re-render!');
   if (!child) {
     throw new Error('Funding form rendered without child');
   }
