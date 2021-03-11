@@ -4,6 +4,8 @@ import {
   FormField,
   Select,
   TObjectDriller,
+  useGenericContext,
+  FormContext,
 } from '@ctoec/component-library';
 import {
   Funding,
@@ -47,6 +49,8 @@ export const ContractSpaceField = <
     FundingSpace[]
   >([]);
 
+  const { immutableUpdateData, dataDriller } = useGenericContext<T>(FormContext);
+
   useEffect(() => {
     if (!fundingSpaces) return;
     setFundingSpaceOptions(
@@ -56,8 +60,9 @@ export const ContractSpaceField = <
     );
   }, [ageGroup, fundingSource, fundingSpaces]);
 
-  //  If only one funding space option is available, this becomes read-only
   if (fundingSpaceOptions.length === 1) {
+    immutableUpdateData(fundingAccessor(dataDriller).at('fundingSpace').at('id'), fundingSpaceOptions[0].id);
+
     return (
       <div>
         <span className="usa-hint text-italic">
