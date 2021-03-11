@@ -61,7 +61,9 @@ export const ContractSpaceField = <
   }, [ageGroup, fundingSource, fundingSpaces]);
 
   if (fundingSpaceOptions.length === 1) {
-    // immutableUpdateData(fundingAccessor(dataDriller).at('fundingSpace').at('id'), fundingSpaceOptions[0].id);
+    console.log('Updating single funding space selection', fundingSpaceOptions[0].id);
+    console.log('Whole funding space', fundingSpaceOptions[0]);
+    immutableUpdateData(fundingAccessor(dataDriller).at('fundingSpace').at('id'), fundingSpaceOptions[0].id);
 
     return (
       <div>
