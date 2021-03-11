@@ -60,6 +60,7 @@ export const ContractSpaceField = <
     );
 
     if (fundingSpaceOptions.length === 1) {
+      console.log('UPDATING THE FORM');
       immutableUpdateData(fundingAccessor(dataDriller).at('fundingSpace').at('id'), fundingSpaceOptions[0].id);
     }
   }, [ageGroup, fundingSource, fundingSpaces]);
