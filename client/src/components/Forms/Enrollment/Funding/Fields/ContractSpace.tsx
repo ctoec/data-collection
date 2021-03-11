@@ -58,20 +58,21 @@ export const ContractSpaceField = <
         (fs) => fs.ageGroup === ageGroup && fs.source === fundingSource
       )
     );
-
-    if (fundingSpaceOptions.length === 1) {
-      console.log('UPDATING THE FORM');
-      immutableUpdateData(fundingAccessor(dataDriller).at('fundingSpace').at('id'), fundingSpaceOptions[0].id);
-    }
   }, [ageGroup, fundingSource, fundingSpaces]);
 
-  return fundingSpaceOptions.length === 1 ? (
-    <div>
-      <span className="usa-hint text-italic">
-        {fundingSpaceFormatter(fundingSpaceOptions[0])}
-      </span>
+  if (fundingSpaceOptions.length === 1) {
+    immutableUpdateData(fundingAccessor(dataDriller).at('fundingSpace').at('id'), fundingSpaceOptions[0].id);
+
+    return (
+      <div>
+        <span className="usa-hint text-italic">
+          {fundingSpaceFormatter(fundingSpaceOptions[0])}
+        </span>
     </div>
-  ) : (
+    );
+  }
+
+  return (
     <FormField<T, SelectProps, number | null>
       getValue={(data) => fundingAccessor(data).at('fundingSpace').at('id')}
       parseOnChangeEvent={(e: React.ChangeEvent<any>) =>
