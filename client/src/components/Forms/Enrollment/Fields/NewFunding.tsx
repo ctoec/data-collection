@@ -52,6 +52,7 @@ export const NewFundingField = <
   missingFundedEnrollmentError,
   hideStatus,
 }: FundingFieldProps<T>) => {
+  console.log('New funding field re-render!');
   const { data: fundingSpaces } = useAuthenticatedSWR<FundingSpace[]>(
     `funding-spaces?${stringify({ organizationId })}`
   );
