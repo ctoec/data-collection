@@ -26,8 +26,9 @@ export const enrollmentReportsRouter = express.Router();
 // it persists to disk, it's easier to debug
 const storage = multer.diskStorage({
   destination: '/tmp/uploads',
-  filename: (req, file, callback) =>
-    callback(null, file.fieldname + '_' + new Date()),
+  filename: (req, file, callback) => {
+    return callback(null, `user_${req.user?.id}_` + new Date().toISOString());
+  },
 });
 const upload = multer({ storage: storage }).single('file');
 

@@ -4,6 +4,8 @@ import {
   FormField,
   Select,
   TObjectDriller,
+  useGenericContext,
+  FormContext,
 } from '@ctoec/component-library';
 import {
   Funding,
@@ -11,16 +13,18 @@ import {
   AgeGroup,
   FundingSource,
   FundingSpace,
-} from '../../../../../../shared/models';
-import { SingleContractSpaceField } from './SingleContractSpace';
+} from '../../../../../shared/models';
 import {
   ChangeFundingRequest,
   ChangeEnrollmentRequest,
-} from '../../../../../../shared/payloads';
-import { fundingSpaceFormatter } from '../../../../../../utils/formatters';
-import { getValidationStatusForField } from '../../../../../../utils/getValidationStatus';
-import { useAuthenticatedSWR } from '../../../../../../hooks/useAuthenticatedSWR';
+} from '../../../../../shared/payloads';
+import { fundingSpaceFormatter } from '../../../../../utils/formatters';
+import { getValidationStatusForField } from '../../../../../utils/getValidationStatus';
+import { useAuthenticatedSWR } from '../../../../../hooks/useAuthenticatedSWR';
 import { stringify } from 'query-string';
+
+import produce from 'immer';
+import { set } from 'lodash';
 
 type ContractSpaceProps<T> = {
   ageGroup: AgeGroup | undefined;
@@ -48,6 +52,8 @@ export const ContractSpaceField = <
     FundingSpace[]
   >([]);
 
+  const { data, immutableUpdateData, dataDriller, updateData } = useGenericContext<T>(FormContext);
+
   useEffect(() => {
     if (!fundingSpaces) return;
     setFundingSpaceOptions(
@@ -58,11 +64,16 @@ export const ContractSpaceField = <
   }, [ageGroup, fundingSource, fundingSpaces]);
 
   if (fundingSpaceOptions.length === 1) {
+    updateData(
+      produce<T>(data, (draft) => set(draft, fundingAccessor(dataDriller).at('fundingSpace').at('id').path, fundingSpaceOptions[0].id))
+    );
+
     return (
-      <SingleContractSpaceField<T>
-        fundingSpace={fundingSpaceOptions[0]}
-        accessor={(data) => fundingAccessor(data).at('fundingSpace')}
-      />
+      <div>
+        <span className="usa-hint text-italic">
+          {fundingSpaceFormatter(fundingSpaceOptions[0])}
+        </span>
+    </div>
     );
   }
 
