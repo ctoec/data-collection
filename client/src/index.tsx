@@ -23,7 +23,6 @@ import { getConfig } from './config/getConfig';
 getConfig('GoogleAnalyticsTrackingId')
   .then(gATrackingId => {
     if (!!gATrackingId) {
-      console.log('initializing GA with ', gATrackingId);
       ReactGA.initialize(gATrackingId);
       ReactGA.pageview(window.location.pathname + window.location.search);
     }
