@@ -17,10 +17,17 @@ import '@ctoec/component-library/dist/assets/styles/index.scss';
 import './index.scss';
 import { apiGet } from './utils/api';
 import { RosterProvider } from './contexts/RosterContext/RosterContext';
+import { getConfig } from './config/getConfig';
 
 //  Init Google Analytics
-ReactGA.initialize('UA-191041839-2');
-ReactGA.pageview(window.location.pathname + window.location.search);
+getConfig('GoogleAnalyticsTrackingId')
+  .then(gATrackingId => {
+    if (!!gATrackingId) {
+      console.log('initializing GA with ', gATrackingId);
+      ReactGA.initialize(gATrackingId);
+      ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+  });
 
 const render = (Component: React.FC) =>
   ReactDOM.render(
