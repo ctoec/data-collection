@@ -44,7 +44,7 @@ const TableColumns: (_: boolean, __: boolean) => Column<SiteSummary>[] = (
       sort: (row) => row.siteName,
       cell: ({ row }) => (
         <th scope="row">
-          h{/* Deactivate links until site/org detail pages are built */}
+          {/* Deactivate links until site/org detail pages are built */}
           {/* <Link to={`${pathname}/site/${row.id}`}>{row.siteName}</Link> */}
           {row.siteName}
         </th>
