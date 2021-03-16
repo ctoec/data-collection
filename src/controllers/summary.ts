@@ -43,7 +43,7 @@ async function getChildCount(): Promise<number> {
 
 async function getSiteSummaries(): Promise<SiteSummary[]> {
   return getManager().query(`
-		SELECT s.id as siteId, s.siteName, o.id as organizationId, o.providerName, r.updatedAt, count(*) as totalEnrollments
+		SELECT s.id as siteId, s.siteName, o.id as organizationId, o.providerName, r.updatedAt as submissionDate, count(*) as totalEnrollments
 		FROM site s
 		JOIN organization o ON s.organizationid = o.id
 		LEFT JOIN oec_report r ON r.organizationid = o.id
