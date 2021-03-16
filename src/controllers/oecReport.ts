@@ -14,7 +14,7 @@ export async function createOecReport(
       "You don't have permission to submit data for this organization"
     );
   }
-  const report: OECReportInterface = await getManager().create(OECReport, {
+  const report: OECReportInterface = getManager().create(OECReport, {
     organizationId,
     updateMetaData: {
       author: user,

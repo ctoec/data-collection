@@ -2,7 +2,7 @@ import React from 'react';
 import { Divider } from '@ctoec/component-library';
 import { Child, FundingSource } from '../../shared/models';
 import { getCurrentFunding } from '../../utils/models';
-import { getStrippedFundingSourceName } from '../Home/utils/getFundingSpaceDisplayName';
+import { getStrippedFundingSourceName } from '../../utils/getFundingSpaceDisplayName';
 
 type RosterSectionFundingSpacesMapProps = {
   children: Child[];

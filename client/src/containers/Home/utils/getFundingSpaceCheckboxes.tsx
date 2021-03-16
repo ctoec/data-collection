@@ -3,7 +3,7 @@ import React from 'react';
 import { FUNDING_SOURCE_TIMES } from '../../../shared/constants';
 import { AgeGroup } from '../../../shared/models';
 import { ChangeFundingSpaceRequest } from '../../../shared/models/db/ChangeFundingSpaceRequest';
-import { getStrippedFundingSourceName } from './getFundingSpaceDisplayName';
+import { getStrippedFundingSourceName } from '../../../utils/getFundingSpaceDisplayName';
 
 /**
  * Function that creates a series of checkboxes broken out by age

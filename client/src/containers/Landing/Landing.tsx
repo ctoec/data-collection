@@ -22,7 +22,11 @@ const Landing: React.FC = () => {
 
   // If the user is logged in, don't show the splash page
   if (user) {
-    return <Redirect to="/home" />;
+    return user.isAdmin ? (
+      <Redirect to="/overview/" />
+    ) : (
+      <Redirect to="/home" />
+    );
   }
 
   return (
