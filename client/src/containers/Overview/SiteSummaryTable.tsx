@@ -65,7 +65,6 @@ const TableColumns: (_: boolean, __: boolean) => Column<SiteSummary>[] = (
   ];
 
   if (showSubmissionDate) {
-    console.log();
     columns.push({
       name: 'Submission date',
       sort: (row) => row.submissionDate?.unix() || '',
