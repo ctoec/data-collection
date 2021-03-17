@@ -30,6 +30,7 @@
     "pluralize": "^8.0.0",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
+    "react-dev-utils": "11.0.4",
     "react-dom": "^16.13.1",
     "react-ga": "^3.3.0",
     "react-markdown": "^4.3.1",

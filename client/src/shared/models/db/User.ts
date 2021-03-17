@@ -9,6 +9,8 @@ export interface User {
   middleName?: string;
   suffix?: string;
   confidentialityAgreedDate?: Moment;
+  email?: string;
+  isAdmin: boolean;
   sites?: Array<Site>;
   organizations?: Array<Organization>;
   accessType?: 'site' | 'organization';

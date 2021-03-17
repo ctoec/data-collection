@@ -13,6 +13,7 @@ import { templateRouter } from './template';
 import { exportRouter } from './export';
 import { oecReportRouter } from './oecReport';
 import { revisionsRouter } from './revisions';
+import { summaryRouter } from './summary';
 
 export const router = express.Router();
 
@@ -41,3 +42,5 @@ router.use('/oec-report', authenticate, oecReportRouter);
 router.use('/revision-request', authenticate, revisionsRouter);
 
 router.use('/export', authenticate, exportRouter);
+
+router.use('/summary', authenticate, summaryRouter);
