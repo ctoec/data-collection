@@ -270,6 +270,30 @@ exports[`Home snapshot matches pre-submit user 1`] = `
         />
       </div>
     </div>
+    <h3
+      class="pre-submit-h3"
+    >
+      Sites
+    </h3>
+    <ul
+      class="margin-left-2 bx--list--unordered"
+    >
+      <li
+        class="line-height-body-4 bx--list__item"
+      >
+        Students of Salazaar
+      </li>
+      <li
+        class="line-height-body-4 bx--list__item"
+      >
+        Karkaroff Kids
+      </li>
+      <li
+        class="line-height-body-4 bx--list__item"
+      >
+        Nocturn Alley Nargles
+      </li>
+    </ul>
     <h2
       class="pre-submit-h2"
     >

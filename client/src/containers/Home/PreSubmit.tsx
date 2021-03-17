@@ -17,7 +17,7 @@ export const PreSubmitHome: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const orgAccess = user?.accessType === 'organization';
   const userOrgs = user?.organizations || [];
-  const showFundingsAndSites = orgAccess && userOrgs.length == 1;
+  const showFundings = orgAccess && userOrgs.length == 1;
 
   // We might have a success alert pushed from the revision request
   // form, so check whether we do (but filter so that we only show
@@ -37,7 +37,7 @@ export const PreSubmitHome: React.FC = () => {
   useEffect(() => {
     // Determine the funding spaces map for the organization, if
     // the user has the permissions that enable this
-    if (showFundingsAndSites) {
+    if (showFundings) {
       apiGet('funding-spaces?fundingMap=true', accessToken)
         .then((res) => {
           setFundingSpacesDisplay(res.fundingSpacesMap);
@@ -46,7 +46,7 @@ export const PreSubmitHome: React.FC = () => {
           throw new Error(err);
         });
     }
-  }, [accessToken, showFundingsAndSites]);
+  }, [accessToken, showFundings]);
 
   return (
     <div className="Home grid-container margin-top-4">
@@ -80,7 +80,7 @@ export const PreSubmitHome: React.FC = () => {
           </span>
         }
       />
-      {showFundingsAndSites && (
+      {(user?.sites || []).length > 0 && (
         <>
           <h3 className="pre-submit-h3">Sites</h3>
           <ul className="margin-left-2 bx--list--unordered">
@@ -95,7 +95,7 @@ export const PreSubmitHome: React.FC = () => {
           </ul>
         </>
       )}
-      {showFundingsAndSites && fundingSpacesDisplay && (
+      {showFundings && fundingSpacesDisplay && (
         <>
           <h3 className="pre-submit-h3">Funding spaces</h3>
           <div className="three-column-layout">
