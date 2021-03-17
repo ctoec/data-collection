@@ -16,7 +16,7 @@ import { getFundingSpaceCheckboxes } from './utils/getFundingSpaceCheckboxes';
 import {
   getFundingSpaceDisplayName,
   getStrippedFundingSourceName,
-} from './utils/getFundingSpaceDisplayName';
+} from '../../utils/getFundingSpaceDisplayName';
 
 /**
  * Form to allow a user to request changes to their accessible sites

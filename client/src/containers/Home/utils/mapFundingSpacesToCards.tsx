@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from '@ctoec/component-library';
 import { NestedFundingSpaces } from '../../../shared/payloads/NestedFundingSpaces';
 import { AgeGroup, FundingSource } from '../../../shared/models';
-import { getStrippedFundingSourceName } from './getFundingSpaceDisplayName';
+import { getStrippedFundingSourceName } from '../../../utils/getFundingSpaceDisplayName';
 
 // Map each calculated funding space distribution into a card
 // element that we can format for display

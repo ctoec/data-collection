@@ -18,7 +18,7 @@ import { RecordFormProps } from '../../../components/Forms';
 import { hasValidationErrorForField } from '../../../utils/hasValidationError';
 import { HeadingLevel } from '../../../components/Heading';
 import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
-import { getStrippedFundingSourceName } from '../../Home/utils/getFundingSpaceDisplayName';
+import { getStrippedFundingSourceName } from '../../../utils/getFundingSpaceDisplayName';
 
 type EditFundingCardProps = {
   child: Child;
