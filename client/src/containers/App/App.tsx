@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Switch } from 'react-router-dom';
-import { ErrorBoundary, Header } from '@ctoec/component-library';
+import { ErrorBoundary, Header, NavLinkProps } from '@ctoec/component-library';
 
 import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';
@@ -10,6 +10,49 @@ import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps
 
 const App: React.FC = () => {
   const { user, confidentialityAgreedDate } = useContext(UserContext);
+
+  // All users see these "secondary" styled nav items
+  const secondaryNavItems: NavLinkProps[] = [
+    {
+      text: 'Privacy policy',
+      type: 'secondary',
+      path: '/privacy',
+    },
+    {
+      text: 'Data template',
+      type: 'secondary',
+      path: '/template',
+    },
+    {
+      type: 'secondary',
+      text: 'Data requirements',
+      path: '/data-requirements',
+    },
+    {
+      text: 'Help',
+      type: 'secondary',
+      path: '/help',
+    },
+  ];
+
+  // only non-admin users see these "primary" styled nav items
+  const primaryNavItems: NavLinkProps[] = [
+    {
+      type: 'primary',
+      text: 'Home',
+      path: '/home',
+    },
+    {
+      type: 'primary',
+      text: 'File upload',
+      path: '/upload',
+    },
+    {
+      type: 'primary',
+      text: 'Roster',
+      path: '/roster',
+    },
+  ];
 
   return (
     <div className="App">
@@ -24,41 +67,8 @@ const App: React.FC = () => {
           logoutPath="/logout"
           showPrimaryNavItems={!!user?.firstName && !!confidentialityAgreedDate}
           navItems={[
-            {
-              type: 'primary',
-              text: 'Home',
-              path: '/home',
-            },
-            {
-              type: 'primary',
-              text: 'File upload',
-              path: '/upload',
-            },
-            {
-              type: 'primary',
-              text: 'Roster',
-              path: '/roster',
-            },
-            {
-              text: 'Privacy policy',
-              type: 'secondary',
-              path: '/privacy',
-            },
-            {
-              text: 'Data template',
-              type: 'secondary',
-              path: '/template',
-            },
-            {
-              type: 'secondary',
-              text: 'Data requirements',
-              path: '/data-requirements',
-            },
-            {
-              text: 'Help',
-              type: 'secondary',
-              path: '/help',
-            },
+            ...secondaryNavItems,
+            ...(user?.isAdmin ? [] : primaryNavItems),
           ]}
           userFirstName={user?.firstName}
         />

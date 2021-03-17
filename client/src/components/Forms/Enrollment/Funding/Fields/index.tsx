@@ -1,2 +1,2 @@
 export * from './ReportingPeriod';
-export * from './ContractSpace/ContractSpace';
+export * from './ContractSpace';
