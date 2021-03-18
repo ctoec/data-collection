@@ -46,7 +46,7 @@ describe('Home', () => {
   snapshotTestHelper(HomeWithUserProvider, {
     before: async () => {
       apiMock.apiGet.mockReturnValue(
-        new Promise((resolve) => resolve({ submitted: false }))
+        new Promise((resolve) => resolve({ allSubmitted: false }))
       );
       return waitFor(() => expect(apiMock.apiGet).toBeCalled());
     },
@@ -57,7 +57,7 @@ describe('Home', () => {
   snapshotTestHelper(HomeWithUserProvider, {
     before: async () => {
       apiMock.apiGet.mockReturnValue(
-        new Promise((resolve) => resolve({ submitted: true }))
+        new Promise((resolve) => resolve({ allSubmitted: true }))
       );
       return waitFor(() => expect(apiMock.apiGet).toBeCalled());
     },
@@ -69,7 +69,7 @@ describe('Home', () => {
     wrapInRouter: true,
     before: async () => {
       apiMock.apiGet.mockReturnValue(
-        new Promise((resolve) => resolve({ submitted: true }))
+        new Promise((resolve) => resolve({ allSubmitted: true }))
       );
       return waitFor(() => expect(apiMock.apiGet).toBeCalled());
     },
