@@ -7,9 +7,17 @@ import { passAsyncError } from '../middleware/error/passAsyncError';
 export const oecReportRouter = express.Router();
 
 oecReportRouter.get(
-  '/:organizationId',
+  '/are-all-orgs-submitted',
   passAsyncError(async (req: Request, res: Response) => {
-    const organizationId: number = Number(req.params['organizationId']);
+    const allSubmitted = await controller.checkIfAllOrgsSubmitted(req.user);
+    res.send({ allSubmitted });
+  })
+);
+
+oecReportRouter.get(
+  `/:organizationId`,
+  passAsyncError(async (req: Request, res: Response) => {
+    const organizationId = Number(req['organizationId']);
     const foundOrg = await getManager().findOne(OECReport, {
       where: { organizationId },
     });
