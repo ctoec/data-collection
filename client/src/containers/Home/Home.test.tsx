@@ -24,9 +24,16 @@ const userProps = {
   setConfidentialityAgreedDate: () => {},
 };
 
+const authProps = {
+  loading: false,
+  accessToken: 'notBlank',
+};
+
 const HomeWithUserProvider = (
   <UserContext.Provider value={{ ...userProps }}>
-    <Home />
+    <AuthenticationContext.Provider value={{ ...authProps }}>
+      <Home />
+    </AuthenticationContext.Provider>
   </UserContext.Provider>
 );
 
@@ -40,6 +47,7 @@ jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { waitFor } from '@testing-library/react';
 import { RevisionRequest } from './RevisionRequest';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 const apiMock = api as jest.Mocked<typeof api>;
 
 describe('Home', () => {
