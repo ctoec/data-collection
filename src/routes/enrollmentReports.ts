@@ -10,7 +10,7 @@ import {
   BatchUploadResponse,
   EnrollmentColumnError,
 } from '../../client/src/shared/payloads';
-import { ChangeTag } from '../../client/src/shared/models';
+import { ChangeTag, Child } from '../../client/src/shared/models';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
   ChangeTag.AgedUp,
@@ -62,18 +62,25 @@ enrollmentReportsRouter.post(
         const childrenWithErrors = await Promise.all(
           reportChildren.map(async (child) => ({
             ...child,
-            validationErrors: await validate(child),
+            validationErrors: await validate(child, {
+              validationError: { target: false, value: false },
+            }),
           }))
         );
 
-        const errorDict: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
+        const enrollmentColumnErrors: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
           childrenWithErrors
         );
+
+        // Log out the children with errors, without PII, to enable
+        if (enrollmentColumnErrors?.length) {
+          logUploadErrors(req.user.id, childrenWithErrors);
+        }
 
         // Only remove the file from disk if we could successfully parse it
         if (req.file && req.file.path) fs.unlinkSync(req.file.path);
 
-        res.send(errorDict);
+        res.send(enrollmentColumnErrors);
       } catch (err) {
         if (err instanceof ApiError) throw err;
         console.error(
@@ -87,6 +94,30 @@ enrollmentReportsRouter.post(
     });
   })
 );
+
+const logUploadErrors = (userId: number, childrenWithErrors: Child[]) => {
+  console.log(
+    `User ${userId} uploaded sheet with errors: ${JSON.stringify(
+      childrenWithErrors
+        .filter(
+          (child) => !!child.validationErrors && child.validationErrors.length
+        )
+        .map((child) => {
+          const childToLog: object = child;
+          childToLog['lastName'] = child.lastName?.charAt(0);
+          childToLog['birthCertificateId'] = child.birthCertificateId?.replace(
+            /./g,
+            '#'
+          );
+          childToLog['birthdate'] = child.birthdate?.format('MM/YYYY');
+          childToLog['family'][
+            'streetAddress'
+          ] = child.family?.streetAddress?.replace(/./g, '#');
+          return childToLog;
+        })
+    )}`
+  );
+};
 
 /**
  * /enrollment-reports POST
