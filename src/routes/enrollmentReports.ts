@@ -72,7 +72,7 @@ enrollmentReportsRouter.post(
           childrenWithErrors
         );
 
-        // Log out the children with errors, without PII, to enable
+        // Log children with errors, without PII, to make troubleshooting easier
         if (enrollmentColumnErrors?.length) {
           logUploadErrors(req.user.id, childrenWithErrors);
         }
@@ -95,26 +95,27 @@ enrollmentReportsRouter.post(
   })
 );
 
+/**
+ * Helper function to log children with validation errors,
+ * without PII
+ * @param userId
+ * @param childrenWithErrors
+ */
 const logUploadErrors = (userId: number, childrenWithErrors: Child[]) => {
   console.log(
     `User ${userId} uploaded sheet with errors: ${JSON.stringify(
       childrenWithErrors
-        .filter(
-          (child) => !!child.validationErrors && child.validationErrors.length
-        )
-        .map((child) => {
-          const childToLog: object = child;
-          childToLog['lastName'] = child.lastName?.charAt(0);
-          childToLog['birthCertificateId'] = child.birthCertificateId?.replace(
-            /./g,
-            '#'
-          );
-          childToLog['birthdate'] = child.birthdate?.format('MM/YYYY');
-          childToLog['family'][
-            'streetAddress'
-          ] = child.family?.streetAddress?.replace(/./g, '#');
-          return childToLog;
-        })
+        .filter((child) => child.validationErrors?.length)
+        .map((child) => ({
+          ...child,
+          lastName: child.lastName?.charAt(0),
+          birthCertificateId: child.birthCertificateId?.replace(/./g, '#'),
+          birthdate: child.birthdate ? '##/##/####' : undefined,
+          family: {
+            ...child.family,
+            streetAddress: child.family?.streetAddress?.replace(/./g, '#'),
+          },
+        }))
     )}`
   );
 };
