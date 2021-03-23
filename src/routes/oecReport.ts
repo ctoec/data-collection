@@ -17,7 +17,7 @@ oecReportRouter.get(
 oecReportRouter.get(
   `/:organizationId`,
   passAsyncError(async (req: Request, res: Response) => {
-    const organizationId = Number(req['organizationId']);
+    const organizationId: number = Number(req.params['organizationId']);
     const foundOrg = await getManager().findOne(OECReport, {
       where: { organizationId },
     });
