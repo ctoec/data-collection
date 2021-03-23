@@ -109,7 +109,9 @@ const logUploadErrors = (userId: number, childrenWithErrors: Child[]) => {
         .map((child) => ({
           ...child,
           lastName: child.lastName?.charAt(0),
-          birthCertificateId: child.birthCertificateId?.replace(/./g, '#'),
+          birthCertificateId: child.birthCertificateId
+            ?.toString()
+            .replace(/./g, '#'),
           birthdate: child.birthdate ? '##/##/####' : undefined,
           family: {
             ...child.family,
