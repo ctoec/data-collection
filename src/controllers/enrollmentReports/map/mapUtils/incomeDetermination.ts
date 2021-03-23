@@ -13,30 +13,13 @@ export const mapIncomeDetermination = (
   source: EnrollmentReportRow,
   family: Family
 ) => {
-  // If the user supplied any of the income determination value fields,
-  // create the det and overwrite not disclosed to false
-  if (source.numberOfPeople || source.income || source.determinationDate) {
-    return getManager().create(IncomeDetermination, {
-      numberOfPeople: getFirstInt(source.numberOfPeople),
-      income: getFloat(source.income),
-      determinationDate: source.determinationDate,
-      incomeNotDisclosed: false,
-      family,
-    });
-  }
-
-  // If there are no provided values and user deliberately checked not
-  // disclosed, then make an undisclosed income determination
-  else if (source.incomeNotDisclosed) {
-    return getManager().create(IncomeDetermination, {
-      incomeNotDisclosed: true,
-      family,
-    });
-  } else {
-    return getManager().create(IncomeDetermination, {
-      family,
-    });
-  }
+  return getManager().create(IncomeDetermination, {
+    numberOfPeople: getFirstInt(source.numberOfPeople),
+    income: getFloat(source.income),
+    determinationDate: source.determinationDate,
+    incomeNotDisclosed: source.incomeNotDisclosed || false,
+    family,
+  });
 };
 
 /**

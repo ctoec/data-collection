@@ -34,6 +34,16 @@ const props: ProgressIndicatorProps = {
   ],
 };
 
+const ACCEPTABLE_ROWS = [
+  'A new child',
+  'An existing child with updated birth certificate information (Birth certificate type, Birth certificate ID #, Town of birth, and State of birth)',
+  'An existing child with updated address (Street address, Cty, State, and Zipcode)',
+  'A withdrawn child with ended enrollment (Enrollment end date, Enrollment exit reason, Last reporting period)',
+  'An existing child with changed site',
+  'An existing child with changed age group (with or without changed funding)',
+  'An existing child with changed funding and/or space type',
+];
+
 const Upload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
@@ -127,7 +137,7 @@ const Upload: React.FC = () => {
           />
         </div>
       )}
-      <div className="grid-row display-block">
+      <div className="grid-row display-block margin-bottom-2">
         <h1 ref={h1Ref} className="margin-bottom-4">
           Upload your enrollment data
         </h1>
@@ -142,9 +152,16 @@ const Upload: React.FC = () => {
           your enrollment file
         </h2>
         <p>
-          After you've entered all state funded enrollment data in the
-          spreadsheet template, upload the file here.
+          Upload a data template to add to or edit your roster. An acceptable
+          data template includes rows for:
         </p>
+        <ul className="margin-left-2 bx--list--unordered">
+          {ACCEPTABLE_ROWS.map((text) => (
+            <li key={text} className="line-height-body-4 bx--list__item">
+              {text}
+            </li>
+          ))}
+        </ul>
       </div>
       <ErrorBoundary alertProps={{ ...defaultErrorBoundaryProps }}>
         <div className="grid-row">
