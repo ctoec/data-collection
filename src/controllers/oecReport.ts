@@ -26,10 +26,11 @@ export async function createOecReport(
 
 export async function checkIfAllOrgsSubmitted(user: User) {
   const orgIds = await getReadAccessibleOrgIds(user);
-  const foundOrgs = await getManager().find(OECReport, {
+  const foundReports = await getManager().find(OECReport, {
     where: { organizationId: In(orgIds) },
   });
+  
   return orgIds.every((oid) =>
-    foundOrgs.some((foundOrg) => foundOrg.id === Number(oid))
+    foundReports.some((foundReport: OECReport) => foundReport.organizationId === Number(oid))
   );
 }
