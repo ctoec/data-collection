@@ -5,6 +5,8 @@ import {
   ManyToOne,
   OneToMany,
   DeleteDateColumn,
+  BeforeUpdate,
+  BeforeInsert,
 } from 'typeorm';
 import moment, { Moment } from 'moment';
 import {
@@ -25,7 +27,7 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { momentTransformer, enumTransformer } from './transformers';
+import { momentTransformer, enumTransformer, nullTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
@@ -75,19 +77,25 @@ export class Child implements ChildInterface {
   @IsNotEmpty()
   birthCertificateType?: BirthCertificateType;
 
-  @Column({ nullable: true })
+  @BeforeInsert()
+  @BeforeUpdate()
+  updateBirthCertificate() {
+      if(this.birthCertificateType === BirthCertificateType.US && this.birthTown === null && this.birthState === null && this.birthCertificateId === null)
+        this.birthCertificateType = BirthCertificateType.Unavailable;
+  }
+
+  @Column({ nullable: true, transformer: nullTransformer })
   @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
   @ChildBirthCertificateSpecified()
   birthTown?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, transformer: nullTransformer })
   @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
   @ChildBirthCertificateSpecified()
   birthState?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, transformer: nullTransformer })
   @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
-  @IsNotEmpty()
   birthCertificateId?: string;
 
   @Column({ nullable: true })
