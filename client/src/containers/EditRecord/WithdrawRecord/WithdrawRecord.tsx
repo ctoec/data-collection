@@ -35,11 +35,11 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
   const toggleIsOpen = () => setIsOpen((o) => !o);
 
   const [isSaving, setIsSaving] = useState(false);
-  const { alertElements, setAlerts } = useAlerts();
+  const [alertElements, setAlerts] = useAlerts();
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
 
-  const { rosterQuery, updateCurrentRosterCache } = useContext(RosterContext);
+  const { query, updateCurrentRosterCache } = useContext(RosterContext);
 
   const onSubmit = (withdraw: WithdrawRequest) => {
     setIsSaving(true);
@@ -53,7 +53,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
           toggleIsOpen();
           history.push({
             pathname: '/roster',
-            search: stringify(rosterQuery || {}),
+            search: stringify(query ?? {}),
             state: {
               alerts: [
                 {

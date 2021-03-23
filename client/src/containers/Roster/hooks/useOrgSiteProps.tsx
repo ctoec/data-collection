@@ -1,35 +1,38 @@
 import { TabItem } from '@ctoec/component-library';
-import { stringify, parse } from 'query-string';
+import { stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
 import { useContext, useMemo } from 'react';
 import moment from 'moment';
+import RosterContext, {
+  RosterQueryParams,
+} from '../../../contexts/RosterContext/RosterContext';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { Site, Organization } from '../../../shared/models';
-import { RosterQueryParams } from '../Roster';
 import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils/';
 import pluralize from 'pluralize';
 
 const ALL_SITES = 'all-sites';
 
-export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
+export const useOrgSiteProps = () => {
   const history = useHistory();
   const { user } = useContext(UserContext);
+  const { childRecords, fetching, query } = useContext(RosterContext);
+  const orgChildCount = childRecords?.length ?? 0;
 
   return useMemo(() => {
-    const organizations = user?.organizations || [];
-    const sites = user?.sites || [];
-    const query = parse(history.location.search) as RosterQueryParams;
+    const organizations = user?.organizations ?? [];
+    const sites = user?.sites ?? [];
 
     // Function to update search query when user clicks on tab nav
     const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
       // If it has a nested item type then it's an org
       if (clickedItem.nestedItemType) {
         // Remove site param if clickedId !== current orgId
-        if (clickedId !== query.organization) delete query.site;
+        if (clickedId !== query.organizationId) delete query.site;
         history.push({
           search: stringify({
             ...query,
-            organization: clickedId,
+            organizationId: clickedId,
           }),
         });
       } else {
@@ -47,7 +50,7 @@ export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
       }
     };
 
-    if (isLoading) {
+    if (fetching) {
       return {
         h1Text: 'Loading...',
       };
@@ -59,7 +62,7 @@ export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
     // and no super header
     if (organizations.length > 1) {
       const orgSites = sites.filter(
-        (s) => `${s.organizationId}` === query.organization
+        (s) => `${s.organizationId}` === query.organizationId
       );
       return {
         h1Text: query.withdrawn
@@ -70,7 +73,7 @@ export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
           items: getOrganizationTabItems(organizations, orgSites),
           onClick: tabNavOnClick,
           nestedActiveId: query.site,
-          activeId: query.organization,
+          activeId: query.organizationId,
         },
         subHeaderText: getSubHeaderText(orgChildCount, orgSites, query),
         superHeaderText: '',
@@ -106,7 +109,7 @@ export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
       subHeaderText: getSubHeaderText(orgChildCount, sites, query),
       superHeaderText: organizations?.[0]?.providerName,
     };
-  }, [isLoading, orgChildCount]);
+  }, [fetching, orgChildCount]);
 };
 
 /****************** HELPER FUNCTIONS  ***********************/

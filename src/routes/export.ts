@@ -4,8 +4,7 @@ import { Response, Request } from 'express';
 import * as controller from '../controllers/export';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import { InternalServerError } from '../middleware/error/errors';
-import { User } from '../entity';
-import { getChildren } from '../controllers/children';
+import { getActiveChildren } from '../controllers/children';
 
 export const exportRouter = express.Router();
 
@@ -20,8 +19,7 @@ exportRouter.get(
   '/roster',
   passAsyncError(async (req: Request, res: Response) => {
     try {
-      const user: User = req.user;
-      const childrenToMap = await getChildren(user);
+      const childrenToMap = await getActiveChildren(req.user);
       res.send(controller.streamUploadedChildren(res, childrenToMap));
     } catch (err) {
       console.error('Unable to generate CSV by user ID', err);

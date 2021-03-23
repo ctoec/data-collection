@@ -32,7 +32,7 @@ const EditRecord: React.FC = () => {
     childId: string;
   };
   const { accessToken } = useContext(AuthenticationContext);
-  const { alertElements, setAlerts } = useAlerts();
+  const [alertElements, setAlerts] = useAlerts();
   const [child, setChild] = useState<Child>();
 
   // Persist active tab in URL hash

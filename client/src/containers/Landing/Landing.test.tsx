@@ -10,6 +10,7 @@ const LandingWithUserProvider = (
       loading: false,
       user: null,
       confidentialityAgreedDate: moment.utc(),
+      isSiteLevelUser: false,
       setConfidentialityAgreedDate: () => {},
     }}
   >

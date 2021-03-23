@@ -29,5 +29,5 @@ export const useAlerts = (initialAlerts: AlertProps[] = []) => {
       <Alert {...(alertProps as AlertProps)} key={`alerts-${i}`} />
     ));
 
-  return { alertElements, alerts, setAlerts };
+  return [alertElements, setAlerts] as const;
 };

@@ -2,7 +2,7 @@ import { stringify } from 'query-string';
 import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR';
 import { Child } from '../../../shared/models';
 import { cache } from 'swr';
-import { RosterQueryParams } from '../Roster';
+import { RosterQueryParams } from '../../../contexts/RosterContext/RosterContext';
 
 const PAGE_SIZE = 100;
 
@@ -11,8 +11,12 @@ const PAGE_SIZE = 100;
  * automatically requesting the next page of data while it exists
  * by incrementing useSWRInfinite "page size".
  */
-export const usePaginatedChildData = (query: RosterQueryParams) => {
-  let stillFetching = true;
+export const usePaginatedChildData = ({
+  month,
+  organizationId,
+  withdrawn,
+}: RosterQueryParams) => {
+  let fetching = true;
   // Fetch child data, filtered by organization and month
   const {
     data: childrenArrays,
@@ -23,23 +27,23 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
   } = useAuthenticatedSWRInfinite<Child[]>((index, prevData) => {
     // Base case -- no more data to fetch when prev data length = 0
     if (prevData && !prevData.length) {
-      stillFetching = false;
+      fetching = false;
       return null;
     }
 
     // Paginated api query (but only once we have organizationId param)
-    return query.organization
-      ? `children?${stringify({
-          organizationId: query.organization,
+    return organizationId
+      ? `children${withdrawn ? '/withdrawn' : ''}?${stringify({
+          organizationId,
           skip: index * PAGE_SIZE,
           take: PAGE_SIZE,
-          month: query.month,
+          month,
         })}`
       : null;
   });
 
   if (error) {
-    stillFetching = false;
+    fetching = false;
   }
 
   // Trigger next fetch if
@@ -54,14 +58,14 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
     ) {
       setSize(size + 1);
     } else {
-      stillFetching = false;
+      fetching = false;
     }
   }
 
   return {
-    children: childrenArrays ? childrenArrays.flat() : childrenArrays,
+    childRecords: childrenArrays ? childrenArrays.flat() : [],
     mutate,
-    stillFetching,
+    fetching,
     error,
   };
 };

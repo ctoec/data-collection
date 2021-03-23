@@ -9,22 +9,21 @@ import { stringify } from 'query-string';
  * @param numberOfChildrenWithErrors
  */
 export function getChildrenWithErrorsAlert(
-  numberOfChildrenWithErrors: number,
-  numberOfWithdrawnChildrenWithErrors: number,
+  activeErrorsCounts: number,
+  withdrawnErrorsCounts: number,
   alertType: 'warning' | 'error' | undefined,
   organizationId?: string
 ): AlertProps | undefined {
-  if (!numberOfChildrenWithErrors && !numberOfWithdrawnChildrenWithErrors)
-    return;
+  if (!activeErrorsCounts && !withdrawnErrorsCounts) return;
   let alertText = `Required information is missing for
-        ${pluralize('record', numberOfChildrenWithErrors, true)}.`;
-  if (numberOfWithdrawnChildrenWithErrors > 0) {
-    alertText = `Required information is missing for ${numberOfChildrenWithErrors} active ${pluralize(
+        ${pluralize('record', activeErrorsCounts, true)}.`;
+  if (withdrawnErrorsCounts > 0) {
+    alertText = `Required information is missing for ${withdrawnErrorsCounts} active ${pluralize(
       'record',
-      numberOfChildrenWithErrors
-    )} and ${numberOfWithdrawnChildrenWithErrors} withdrawn ${pluralize(
+      activeErrorsCounts
+    )} and ${withdrawnErrorsCounts} withdrawn ${pluralize(
       'record',
-      numberOfWithdrawnChildrenWithErrors
+      withdrawnErrorsCounts
     )}.`;
   }
   return {

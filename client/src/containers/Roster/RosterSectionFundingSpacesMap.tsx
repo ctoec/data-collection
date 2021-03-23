@@ -62,18 +62,18 @@ export const RosterSectionFundingSpacesMap: React.FC<RosterSectionFundingSpacesM
         let displayStr = (
           <>
             {sourceToTimes.times.map((t) => (
-              <>
+              <React.Fragment key={t.time}>
                 <b>{t.time}</b> {t.count}
                 {hideCapacity || sourceToTimes.capacity === -1
                   ? ''
                   : `/${sourceToTimes.capacity}`}{' '}
                 &nbsp;&nbsp;
-              </>
+              </React.Fragment>
             ))}
           </>
         );
         return (
-          <>
+          <React.Fragment key={sourceToTimes.sourceName}>
             <div key={sourceToTimes.sourceName} className="grid-row grid-gap">
               <div className="tablet:grid-col-3 font-body-sm text-bold margin-top-1 margin-left-2">
                 {getStrippedFundingSourceName(
@@ -87,7 +87,7 @@ export const RosterSectionFundingSpacesMap: React.FC<RosterSectionFundingSpacesM
             <div className="margin-top-1 margin-bottom-1">
               <Divider />
             </div>
-          </>
+          </React.Fragment>
         );
       })}
     </div>

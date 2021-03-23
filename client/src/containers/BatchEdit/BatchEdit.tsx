@@ -26,7 +26,7 @@ const BatchEdit: React.FC = () => {
   const { organizationId } = parse(useLocation().search) as {
     organizationId: string;
   };
-  const { alertElements } = useAlerts();
+  const [alertElements] = useAlerts();
 
   const h1Ref = getH1RefForTitle();
   const { data: children, isValidating, mutate, error } = useAuthenticatedSWR<
@@ -34,7 +34,7 @@ const BatchEdit: React.FC = () => {
   >(
     childId
       ? null // no need to fetch all children for single record batch edit
-      : `children?${stringify({ organizationId, 'missing-info': true })}`,
+      : `children/missing-info?${stringify({ organizationId })}`,
     {
       revalidateOnFocus: false,
     }

@@ -3,6 +3,7 @@ import moment from 'moment';
 import { waitFor } from '@testing-library/react';
 import { snapshotTestHelper, accessibilityTestHelper } from '../../testHelpers';
 import Roster from './Roster';
+import { RosterProvider } from '../../contexts/RosterContext/RosterContext';
 import UserContext from '../../contexts/UserContext/UserContext';
 import {
   Family,
@@ -20,6 +21,7 @@ import {
 const commonUserProvider = {
   loading: false,
   confidentialityAgreedDate: moment.utc(),
+  isSiteLevelUser: false,
   setConfidentialityAgreedDate: () => {},
 };
 
@@ -53,7 +55,7 @@ const PRESCHOOL_CDC = {
   time: FundingTime.ExtendedDay,
 } as FundingSpace;
 
-const children: Child[] = [
+const childRecords: Child[] = [
   {
     id: '0000000-0000-0000-0000-0000000000000',
     firstName: 'First',
@@ -174,8 +176,8 @@ const helperOpts = {
 describe('Roster', () => {
   beforeEach(() => {
     paginatedChildDataMock.usePaginatedChildData.mockReturnValue({
-      children,
-      stillFetching: false,
+      childRecords,
+      fetching: false,
       mutate: async () => undefined,
       error: undefined,
     });
@@ -185,8 +187,16 @@ describe('Roster', () => {
   });
 
   snapshotTestHelper(
-    <UserContext.Provider value={{ ...commonUserProvider, user: oneSiteUser }}>
-      <Roster />
+    <UserContext.Provider
+      value={{
+        ...commonUserProvider,
+        user: oneSiteUser,
+        isSiteLevelUser: true,
+      }}
+    >
+      <RosterProvider>
+        <Roster />
+      </RosterProvider>
     </UserContext.Provider>,
     {
       ...helperOpts,
@@ -196,7 +206,9 @@ describe('Roster', () => {
 
   snapshotTestHelper(
     <UserContext.Provider value={{ ...commonUserProvider, user: oneOrgUser }}>
-      <Roster />
+      <RosterProvider>
+        <Roster />
+      </RosterProvider>
     </UserContext.Provider>,
     {
       ...helperOpts,
@@ -206,7 +218,9 @@ describe('Roster', () => {
 
   snapshotTestHelper(
     <UserContext.Provider value={{ ...commonUserProvider, user: multiOrgUser }}>
-      <Roster />
+      <RosterProvider>
+        <Roster />
+      </RosterProvider>
     </UserContext.Provider>,
     {
       ...helperOpts,
@@ -216,7 +230,9 @@ describe('Roster', () => {
 
   snapshotTestHelper(
     <UserContext.Provider value={{ ...commonUserProvider, user: oneOrgUser }}>
-      <Roster />
+      <RosterProvider>
+        <Roster />
+      </RosterProvider>
     </UserContext.Provider>,
     {
       ...helperOpts,
@@ -232,7 +248,9 @@ describe('Roster', () => {
 
   accessibilityTestHelper(
     <UserContext.Provider value={{ ...commonUserProvider, user: multiOrgUser }}>
-      <Roster />
+      <RosterProvider>
+        <Roster />
+      </RosterProvider>
     </UserContext.Provider>,
     helperOpts
   );

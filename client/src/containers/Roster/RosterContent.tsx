@@ -3,7 +3,7 @@ import { Accordion, AccordionProps } from '@ctoec/component-library';
 import { stringify } from 'query-string';
 import { Link, useHistory } from 'react-router-dom';
 import { NoRecordsAlert } from './NoRecordsAlert';
-import { RosterQueryParams } from './Roster';
+import { RosterQueryParams } from '../../contexts/RosterContext/RosterContext';
 import { Child } from '../../shared/models';
 
 export type RosterContentProps = {

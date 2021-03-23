@@ -35,7 +35,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
 }) => {
   const [child, setChild] = useState<Child>();
 
-  const { setAlerts } = useAlerts();
+  const [, setAlerts] = useAlerts();
   const history = useHistory();
 
   const [steps, setSteps] = useState<StepProps<RecordFormProps>[]>();

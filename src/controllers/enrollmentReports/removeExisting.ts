@@ -1,6 +1,6 @@
 import { User, Child } from '../../entity';
 import { EntityManager, In } from 'typeorm';
-import { removeDeletedElements } from '../../utils/filterSoftRemoved';
+import { removeDeletedElements } from '../../utils/processChild';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 
 /**

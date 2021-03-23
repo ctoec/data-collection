@@ -1,7 +1,7 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { getManager } from 'typeorm';
 import { Child, Enrollment } from '../../../entity';
-import { removeDeletedElements } from '../../../utils/filterSoftRemoved';
+import { removeDeletedElements } from '../../../utils/processChild';
 
 export function FundedEnrollmentValidation(
   validationOptions?: ValidationOptions
