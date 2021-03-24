@@ -27,7 +27,7 @@ import { Enrollment } from './Enrollment';
 import { Family } from './Family';
 import { Organization } from './Organization';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { momentTransformer, enumTransformer, nullTransformer } from './transformers';
+import { momentTransformer, enumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
