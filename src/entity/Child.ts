@@ -77,26 +77,51 @@ export class Child implements ChildInterface {
   @IsNotEmpty()
   birthCertificateType?: BirthCertificateType;
 
+  @Column({ nullable: true })
+  birthTown?: string;
+
+  @Column({ nullable: true })
+  birthState?: string;
+
+  @Column({ nullable: true })
+  @ValidateIf((o) => {
+    //Only validate if Type is US and birthTown or birthState have data
+    //Will be set to null otherwise
+    if(o.birthCertificateType !== BirthCertificateType.US){
+      return false;
+    }
+    return o.birthTown || o.birthState
+  })
+  @IsNotEmpty()
+  birthCertificateId?: string;
+
   @BeforeInsert()
   @BeforeUpdate()
   updateBirthCertificate() {
-      if(this.birthCertificateType === BirthCertificateType.US && this.birthTown === null && this.birthState === null && this.birthCertificateId === null)
-        this.birthCertificateType = BirthCertificateType.Unavailable;
+      const townEmpty = !this.birthTown;
+      const stateEmpty = !this.birthState;
+      const idEmpty = !this.birthCertificateId;
+      const typeUS = this.birthCertificateType === BirthCertificateType.US;
+
+      if(this.birthCertificateType === BirthCertificateType.US){
+        //If birthCertificateType is set to US, but no info provided, change to Unavailable
+        if(townEmpty && stateEmpty && idEmpty){
+          this.birthCertificateType = BirthCertificateType.Unavailable;
+          this.birthTown = '';
+          this.birthState = '';
+        }else{
+          //If there is some information, but town or state are empty, set to null
+          //This will set them to "not collected"
+          if(townEmpty) this.birthTown = null;
+          if(stateEmpty) this.birthState = null; 
+        }
+      }else{
+        //If birthCertificateType is not US, set town and state to empty so 
+        //they aren't checked as "not collected"
+        if(townEmpty) this.birthTown = '';
+        if(stateEmpty) this.birthState = '';
+      }
   }
-
-  @Column({ nullable: true, transformer: nullTransformer })
-  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
-  @ChildBirthCertificateSpecified()
-  birthTown?: string;
-
-  @Column({ nullable: true, transformer: nullTransformer })
-  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
-  @ChildBirthCertificateSpecified()
-  birthState?: string;
-
-  @Column({ nullable: true, transformer: nullTransformer })
-  @ValidateIf((o) => o.birthCertificateType === BirthCertificateType.US)
-  birthCertificateId?: string;
 
   @Column({ nullable: true })
   @ChildRaceIndicated()
