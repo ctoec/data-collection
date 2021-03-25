@@ -31,7 +31,6 @@ import { momentTransformer, enumTransformer } from './transformers';
 import { ChildRaceIndicated } from './decorators/Child/raceValidation';
 import { ChildGenderSpecified } from './decorators/Child/genderValidation';
 import { MomentComparison } from './decorators/momentValidators';
-import { ChildBirthCertificateSpecified } from './decorators/Child/birthCertificateValidation';
 import { FundedEnrollmentValidation } from './decorators/Child/fundedEnrollmentValidation';
 import { EnrollmentDatesCannotOverlapValidation } from './decorators/Child/enrollmentDatesValidation';
 
@@ -101,7 +100,6 @@ export class Child implements ChildInterface {
       const townEmpty = !this.birthTown;
       const stateEmpty = !this.birthState;
       const idEmpty = !this.birthCertificateId;
-      const typeUS = this.birthCertificateType === BirthCertificateType.US;
 
       if(this.birthCertificateType === BirthCertificateType.US){
         //If birthCertificateType is set to US, but no info provided, change to Unavailable
