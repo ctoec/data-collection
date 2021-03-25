@@ -97,7 +97,7 @@ export class Child implements ChildInterface {
 
   @BeforeInsert()
   @BeforeUpdate()
-  updateBirthCertificate(): void {
+  updateBirthCertificate(){
       const townEmpty = !this.birthTown;
       const stateEmpty = !this.birthState;
       const idEmpty = !this.birthCertificateId;
