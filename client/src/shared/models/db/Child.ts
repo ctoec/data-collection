@@ -41,5 +41,5 @@ export interface Child extends ObjectWithValidationErrors {
   family?: Family;
   organization: Organization;
   enrollments?: Array<Enrollment>;
-  updateBirthCertificate?: () => void;
+  updateBirthCertificate?(): void;
 }
