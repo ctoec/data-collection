@@ -86,39 +86,39 @@ export class Child implements ChildInterface {
   @ValidateIf((o) => {
     //Only validate if Type is US and birthTown or birthState have data
     //Will be set to null otherwise
-    if(o.birthCertificateType !== BirthCertificateType.US){
+    if (o.birthCertificateType !== BirthCertificateType.US) {
       return false;
     }
-    return o.birthTown || o.birthState
+    return o.birthTown || o.birthState;
   })
   @IsNotEmpty()
   birthCertificateId?: string;
 
   @BeforeInsert()
   @BeforeUpdate()
-  updateBirthCertificate?(): void{
-      const townEmpty = !this.birthTown;
-      const stateEmpty = !this.birthState;
-      const idEmpty = !this.birthCertificateId;
+  updateBirthCertificate?(): void {
+    const townEmpty = !this.birthTown;
+    const stateEmpty = !this.birthState;
+    const idEmpty = !this.birthCertificateId;
 
-      if(this.birthCertificateType === BirthCertificateType.US){
-        //If birthCertificateType is set to US, but no info provided, change to Unavailable
-        if(townEmpty && stateEmpty && idEmpty){
-          this.birthCertificateType = BirthCertificateType.Unavailable;
-          this.birthTown = '';
-          this.birthState = '';
-        }else{
-          //If there is some information, but town or state are empty, set to null
-          //This will set them to "not collected"
-          if(townEmpty) this.birthTown = null;
-          if(stateEmpty) this.birthState = null; 
-        }
-      }else{
-        //If birthCertificateType is not US, set town and state to empty so 
-        //they aren't checked as "not collected"
-        if(townEmpty) this.birthTown = '';
-        if(stateEmpty) this.birthState = '';
+    if (this.birthCertificateType === BirthCertificateType.US) {
+      //If birthCertificateType is set to US, but no info provided, change to Unavailable
+      if (townEmpty && stateEmpty && idEmpty) {
+        this.birthCertificateType = BirthCertificateType.Unavailable;
+        this.birthTown = '';
+        this.birthState = '';
+      } else {
+        //If there is some information, but town or state are empty, set to null
+        //This will set them to "not collected"
+        if (townEmpty) this.birthTown = null;
+        if (stateEmpty) this.birthState = null;
       }
+    } else {
+      //If birthCertificateType is not US, set town and state to empty so
+      //they aren't checked as "not collected"
+      if (townEmpty) this.birthTown = '';
+      if (stateEmpty) this.birthState = '';
+    }
   }
 
   @Column({ nullable: true })
