@@ -19,6 +19,7 @@ import { fireEvent, wait } from '@testing-library/dom';
 
 const enrollment = {
   child: {} as Child,
+  childId: '',
   id: 1,
   site: { id: 1, siteName: 'Site' } as Site,
   ageGroup: AgeGroup.InfantToddler,
@@ -61,6 +62,8 @@ describe('EditRecord', () => {
           child={child}
           currentEnrollment={enrollment}
           afterSaveSuccess={jest.fn()}
+          noRecordedEnrollments={false}
+          setAlerts={jest.fn()}
           topHeadingLevel="h2"
         />,
         { before: waitExpandChangeEnrollment }
@@ -71,6 +74,8 @@ describe('EditRecord', () => {
           child={child}
           currentEnrollment={enrollment}
           afterSaveSuccess={jest.fn()}
+          noRecordedEnrollments={false}
+          setAlerts={jest.fn()}
           topHeadingLevel="h2"
         />,
         { before: waitExpandChangeEnrollment }
