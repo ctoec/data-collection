@@ -18,6 +18,7 @@ import { fireEvent, wait } from '@testing-library/dom';
 
 const enrollment = {
   child: {} as Child,
+  childId: '',
   id: 1,
   site: { id: 1, siteName: 'Site' } as Site,
   ageGroup: AgeGroup.InfantToddler,
@@ -71,6 +72,7 @@ describe('EditRecord', () => {
             enrollment={enrollment}
             orgId={1}
             afterSaveSuccess={jest.fn()}
+            setAlerts={jest.fn()}
             topHeadingLevel="h3"
           />,
           { before, name }
@@ -80,6 +82,7 @@ describe('EditRecord', () => {
             enrollment={enrollment}
             orgId={1}
             afterSaveSuccess={jest.fn()}
+            setAlerts={jest.fn()}
             topHeadingLevel="h2"
           />,
           { before, name }

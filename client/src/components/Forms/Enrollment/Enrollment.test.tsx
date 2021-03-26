@@ -26,12 +26,14 @@ const child = {
     {
       id: 1,
       child: {} as Child,
+      childId: '',
       site: { siteName: 'Site A', organization: { id: 1 } } as Site,
       entry: moment.utc('2020-09-03'),
     },
     {
       id: 2,
       child: {} as Child,
+      childId: '',
       site: { siteName: 'Site B', organization: { id: 1 } } as Site,
       entry: moment.utc('2019-09-03'),
       exit: moment.utc('2020-08-01'),
@@ -56,6 +58,7 @@ describe('Forms', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h2"
       />,
       { wrapInRouter: true }
     );
@@ -65,6 +68,7 @@ describe('Forms', () => {
         child={child}
         afterSaveSuccess={jest.fn()}
         setAlerts={jest.fn()}
+        topHeadingLevel="h2"
       />,
       { wrapInRouter: true }
     );
