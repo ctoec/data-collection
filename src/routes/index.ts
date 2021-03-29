@@ -21,13 +21,13 @@ export const router = express.Router();
 router.use('/template', templateRouter);
 
 /* AUTHENTICATED ROUTES */
-router.use('/users', authenticate, usersRouter);
+router.use(authenticate, usersRouter);
 
 router.use('/enrollment-reports', authenticate, enrollmentReportsRouter);
 
 router.use('/children', authenticate, childrenRouter);
 
-router.use('/families', authenticate, familyRouter);
+router.use(authenticate, familyRouter);
 
 router.use('/enrollments', authenticate, enrollmentsRouter);
 
@@ -37,7 +37,7 @@ router.use('/sites', authenticate, sitesRouter);
 
 router.use('/reporting-periods', authenticate, reportingPeriodsRouter);
 
-router.use('/oec-report', authenticate, oecReportRouter);
+router.use(authenticate, oecReportRouter);
 
 router.use('/revision-request', authenticate, revisionsRouter);
 

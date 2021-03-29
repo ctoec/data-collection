@@ -3,11 +3,23 @@ import { getManager, In } from 'typeorm';
 import { OECReport as OECReportInterface } from '../../client/src/shared/models';
 import { BadRequestError } from '../middleware/error/errors';
 import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
+import { passAsyncError } from '../middleware/error/passAsyncError';
+import { Request, Response } from 'express';
 
-export async function createOecReport(
-  user: User,
-  organizationId: number
-): Promise<void> {
+export { createOecReport, checkIfAllOrgsSubmitted, getOecReport };
+
+const getOecReport = passAsyncError(async (req: Request, res: Response) => {
+  const organizationId: number = Number(req.params['organizationId']);
+  const foundOrg = await getManager().findOne(OECReport, {
+    where: { organizationId },
+  });
+  res.send({ submitted: foundOrg ? true : false });
+});
+
+const createOecReport = passAsyncError(async (req: Request, res: Response) => {
+  const organizationId: number = Number(req.params['organizationId']);
+  const user: User = req.user;
+
   // Verify that the user has org permissions for the org they're
   // trying to submit for
   if (!user.orgPermissions.some((p) => p.organizationId === organizationId)) {
@@ -22,15 +34,19 @@ export async function createOecReport(
     },
   });
   await getManager().save(report);
-}
+});
 
-export async function checkIfAllOrgsSubmitted(user: User) {
-  const orgIds = await getReadAccessibleOrgIds(user);
-  const foundReports = await getManager().find(OECReport, {
-    where: { organizationId: In(orgIds) },
-  });
-  
-  return orgIds.every((oid) =>
-    foundReports.some((foundReport: OECReport) => foundReport.organizationId === Number(oid))
-  );
-}
+const checkIfAllOrgsSubmitted = passAsyncError(
+  async (req: Request, res: Response) => {
+    const orgIds = await getReadAccessibleOrgIds(req.user);
+    const foundReports = await getManager().find(OECReport, {
+      where: { organizationId: In(orgIds) },
+    });
+
+    return orgIds.every((oid) =>
+      foundReports.some(
+        (foundReport: OECReport) => foundReport.organizationId === Number(oid)
+      )
+    );
+  }
+);

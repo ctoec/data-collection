@@ -1,5 +1,37 @@
+import { Request, Response } from 'express';
 import { User, Site, Organization } from '../entity';
 import { getManager } from 'typeorm';
+import { BadRequestError } from '../middleware/error/errors';
+import { passAsyncError } from '../middleware/error/passAsyncError';
+
+export { getCurrentUser, updateCurrentUser };
+
+/**
+ * Returns the user associated with the
+ * authenticated request, augmented with all
+ * read/write sites and orgs
+ */
+const getCurrentUser = async (req: Request, res: Response) => {
+  const user: User = req.user;
+  await addDataToUser(user);
+  res.send(user);
+};
+
+const updateCurrentUser = passAsyncError(
+  async (req: Request, res: Response) => {
+    try {
+      const user: User = req.user;
+      const updatedUser = getManager().merge(User, user, req.body);
+      await getManager().save(updatedUser);
+      res.sendStatus(200);
+    } catch (err) {
+      console.error(err);
+      throw new BadRequestError('User information not saved.');
+    }
+  }
+);
+
+//////////////////////////////////////////////////////////////
 
 /**
  * Augment a user object with site and organization data.
@@ -9,7 +41,7 @@ import { getManager } from 'typeorm';
  * level access, but not both)
  * @param user
  */
-export const addDataToUser = async (user: User) => {
+async function addDataToUser(user: User) {
   const sites =
     user.siteIds && user.siteIds.length
       ? await getManager().findByIds(Site, user.siteIds)
@@ -27,4 +59,4 @@ export const addDataToUser = async (user: User) => {
 
   user.sites = sites;
   user.organizations = organizations;
-};
+}
