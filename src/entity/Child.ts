@@ -100,7 +100,7 @@ export class Child implements ChildInterface {
     const stateEmpty = !this.birthState;
     const idEmpty = !this.birthCertificateId;
 
-    if (this.birthCertificateType === BirthCertificateType.US){
+    if (this.birthCertificateType === BirthCertificateType.US) {
       // If birthCertificateType is set to US, but no info provided, change to Unavailable
       if (townEmpty && stateEmpty && idEmpty) {
         this.birthCertificateType = BirthCertificateType.Unavailable;
