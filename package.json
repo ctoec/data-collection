@@ -79,7 +79,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./hooks/pre-commit.sh"
+      "pre-commit": "./scripts/pre-commit.sh"
     }
   }
 }
