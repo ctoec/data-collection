@@ -21,7 +21,7 @@ const expandModal = async (renderResult: RenderResult) => {
 describe('EditRecord', () => {
   describe('DeleteRecord', () => {
     it('matches snapshot', async () => {
-      await renderHelper(<DeleteRecord child={child} />, {
+      await renderHelper(<DeleteRecord child={child} setAlerts={jest.fn()} />, {
         before: expandModal,
       });
 
@@ -30,7 +30,7 @@ describe('EditRecord', () => {
     });
 
     it('passes AXE accessibility checks', async () => {
-      await renderHelper(<DeleteRecord child={child} />, {
+      await renderHelper(<DeleteRecord child={child} setAlerts={jest.fn()} />, {
         before: expandModal,
       });
 

@@ -85,6 +85,7 @@ describe('BatchEdit', () => {
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
         showFieldOrFieldset={showFieldInBatchEditForm}
+        topHeadingLevel="h3"
       />,
       { wrapInRouter: true }
     );
@@ -95,6 +96,7 @@ describe('BatchEdit', () => {
         afterSaveSuccess={jest.fn}
         setAlerts={jest.fn()}
         showFieldOrFieldset={showFieldInBatchEditForm}
+        topHeadingLevel="h3"
       />,
       { wrapInRouter: true }
     );
@@ -106,6 +108,7 @@ describe('BatchEdit', () => {
           afterSaveSuccess={jest.fn}
           setAlerts={jest.fn()}
           showFieldOrFieldset={showFieldInBatchEditForm}
+          topHeadingLevel="h3"
         />,
         { wrapInRouter: true }
       );
