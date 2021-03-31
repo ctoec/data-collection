@@ -160,8 +160,8 @@ export const Preview: React.FC = () => {
 
           <h2 className="margin-bottom-2">
             <span className="usa-step-indicator__current-step">3</span>
-            <span className="usa-step-indicator__total-steps"> of 3</span>Preview
-            changes and upload file
+            <span className="usa-step-indicator__total-steps"> of 3</span>
+            Preview changes and upload file
           </h2>
 
           <p>
@@ -183,7 +183,7 @@ export const Preview: React.FC = () => {
           </div>
         ) : (
           <>
-            <div className="grid-container">
+            <div className="grid-container upload-roster">
               <div className="grid-row desktop:grid-col-4 three-column-card">
                 <Card className="font-body-lg">
                   <p className="margin-top-0 margin-bottom-0">
