@@ -1,9 +1,7 @@
-import { Child, Enrollment } from '../entity';
 import { ValidationError, validate } from 'class-validator';
 import { getAllColumnMetadata } from '../template';
 import { ObjectWithValidationErrors } from '../../client/src/shared/models';
 import { ColumnMetadata } from '../../client/src/shared/models';
-import { propertyDateSorter } from './propertyDateSorter';
 
 /**
  * Given a parent object with validation errors that include child object
@@ -81,81 +79,3 @@ export async function validateObject<T extends ObjectWithValidationErrors>(
     metadata
   );
 }
-
-/**
- * Given an array of 'rows' (assumed to be a property of some
- * entity), filter out any objects in those rows that have been
- * soft-deleted.
- * @param rows
- */
-export const removeDeletedElements = (rows?: any[]) => {
-  if (!rows) return [];
-  return rows.filter((row: any) => !row.deletedDate);
-};
-
-/**
- * Perform a complete filter of all soft-deleted sub-entities
- * from a given child. Filter's the child's family's income
- * determinations, the child's enrollments, and the fundings of
- * all remaining enrollments.
- * @param child
- */
-export const removeDeletedEntitiesFromChild = (child: Child) => {
-  if (!child) return undefined;
-  if (child.family) {
-    child.family.incomeDeterminations = removeDeletedElements(
-      child.family.incomeDeterminations
-    );
-  }
-  child.enrollments = removeDeletedElements(child.enrollments);
-  child.enrollments.forEach((e: Enrollment) => {
-    e.fundings = removeDeletedElements(e.fundings);
-  });
-};
-
-/**
- * Sort enrollments, fundings, and income determinations
- * @param child
- */
-const sortEntities = (child: Child) => {
-  if (!child) return;
-  if (child.enrollments) {
-    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
-      if (enrollmentA.fundings) {
-        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
-          propertyDateSorter(
-            fundingA,
-            fundingB,
-            (f) => f.firstReportingPeriod.period
-          )
-        );
-      }
-
-      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.entry);
-    });
-  }
-
-  if (child.family?.incomeDeterminations) {
-    child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
-      (determinationA, determinationB) =>
-        propertyDateSorter(
-          determinationA,
-          determinationB,
-          (d) => d.determinationDate
-        )
-    );
-  }
-};
-
-/**
- * Apply all post-processing to a child record:
- * 	- remove deleted entities
- * 	- sort entities by date
- * 	- validate full object tree
- * @param child
- */
-export const postProcessChild = async (child: Child) => {
-  removeDeletedEntitiesFromChild(child);
-  sortEntities(child);
-  return validateObject(child);
-};

@@ -1,4 +1,4 @@
-import { removeDeletedElements } from '../utils/processChild';
+import { removeDeletedElements } from '../utils/filterSoftRemoved';
 import { getManager, In, IsNull } from 'typeorm';
 import {
   ChangeFundingRequest,
