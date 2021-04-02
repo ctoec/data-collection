@@ -9,7 +9,7 @@ import { apiGet } from '../../../utils/api';
 export const useValidationErrorCounts = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const {
-    query: { organizationId },
+    rosterUser: { activeOrgId },
   } = useContext(RosterContext);
 
   const [validationErrors, setValidationErrors] = useState<{
@@ -21,13 +21,13 @@ export const useValidationErrorCounts = () => {
   });
 
   useEffect(() => {
-    if (!organizationId) return;
-
     apiGet(
-      `children/validation-errors?${stringify({ organizationId })}`,
+      `children/validation-errors?${stringify({
+        organizationId: activeOrgId,
+      })}`,
       accessToken
     ).then((res) => setValidationErrors(res));
-  }, [organizationId, accessToken]);
+  }, [activeOrgId, accessToken]);
 
   return [validationErrors];
 };

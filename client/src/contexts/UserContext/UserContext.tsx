@@ -12,7 +12,6 @@ import moment, { Moment } from 'moment';
 
 export type UserContextType = {
   user: User | null;
-  isSiteLevelUser: boolean;
   loading: boolean;
   setConfidentialityAgreedDate: Dispatch<SetStateAction<Date>>;
   confidentialityAgreedDate: Moment | null;
@@ -20,7 +19,6 @@ export type UserContextType = {
 
 const UserContext = React.createContext<UserContextType>({
   user: null,
-  isSiteLevelUser: false,
   loading: true,
   confidentialityAgreedDate: null,
   setConfidentialityAgreedDate: () => {},
@@ -79,7 +77,6 @@ const UserProvider: React.FC<UserProviderPropsType> = ({ children }) => {
       value={{
         loading: userLoading,
         user,
-        isSiteLevelUser: user?.accessType === 'site',
         confidentialityAgreedDate: user?.confidentialityAgreedDate || null,
         setConfidentialityAgreedDate,
       }}

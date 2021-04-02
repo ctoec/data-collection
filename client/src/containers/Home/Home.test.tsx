@@ -21,7 +21,6 @@ const userProps = {
   loading: false,
   user: testUser,
   confidentialityAgreedDate: moment(),
-  isSiteLevelUser: false,
   setConfidentialityAgreedDate: () => {},
 };
 

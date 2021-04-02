@@ -21,7 +21,6 @@ import {
 const commonUserProvider = {
   loading: false,
   confidentialityAgreedDate: moment.utc(),
-  isSiteLevelUser: false,
   setConfidentialityAgreedDate: () => {},
 };
 
@@ -153,9 +152,6 @@ const multiOrgUser = {
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useLocation: () => ({
-    search: '?organization=1',
-  }),
 }));
 
 jest.mock('./hooks/usePaginatedChildData');
@@ -177,8 +173,8 @@ describe('Roster', () => {
   beforeEach(() => {
     paginatedChildDataMock.usePaginatedChildData.mockReturnValue({
       childRecords,
+      updateChildRecords: () => {},
       fetching: false,
-      mutate: async () => undefined,
       error: undefined,
     });
     apiMock.apiGet.mockReturnValue(
@@ -191,7 +187,6 @@ describe('Roster', () => {
       value={{
         ...commonUserProvider,
         user: oneSiteUser,
-        isSiteLevelUser: true,
       }}
     >
       <RosterProvider>

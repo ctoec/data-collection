@@ -39,7 +39,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
 
-  const { query, updateCurrentRosterCache } = useContext(RosterContext);
+  const { query, updateChildRecords } = useContext(RosterContext);
 
   const onSubmit = (withdraw: WithdrawRequest) => {
     setIsSaving(true);
@@ -48,12 +48,12 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       jsonParse: false,
     })
       .then(() => {
-        apiGet(`children/${child.id}`, accessToken).then((withdrawnChild) => {
-          updateCurrentRosterCache(withdrawnChild);
+        apiGet(`children/${child.id}`, accessToken).then((updatedChild) => {
+          updateChildRecords({ updatedChild });
           toggleIsOpen();
           history.push({
             pathname: '/roster',
-            search: stringify(query ?? {}),
+            search: stringify(query),
             state: {
               alerts: [
                 {

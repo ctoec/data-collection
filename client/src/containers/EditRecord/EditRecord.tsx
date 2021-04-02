@@ -54,7 +54,7 @@ const EditRecord: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { updateCurrentRosterCache } = useContext(RosterContext);
+  const { updateChildRecords } = useContext(RosterContext);
 
   // Child re-fetch
   const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
@@ -62,7 +62,7 @@ const EditRecord: React.FC = () => {
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        updateCurrentRosterCache(updatedChild);
+        updateChildRecords({ updatedChild });
 
         const newAlerts: AlertProps[] = [];
         const missingInfoAlertProps = getMissingInfoAlertProps(updatedChild);

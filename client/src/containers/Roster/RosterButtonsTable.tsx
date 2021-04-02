@@ -13,7 +13,7 @@ import { MonthFilterModal } from './MonthFilterModal';
 import { QUERY_STRING_MONTH_FORMAT } from '../../containers/Roster/rosterUtils';
 
 export const RosterButtonsTable: React.FC = () => {
-  const { query, updateActiveMonthQuery, updateWithdrawnQuery } = useContext(
+  const { query, updateQueryMonth, updateQueryWithdrawn } = useContext(
     RosterContext
   );
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,7 +40,7 @@ export const RosterButtonsTable: React.FC = () => {
               <Button
                 text={<TextWithIcon Icon={History} text="Withdrawn records" />}
                 appearance="unstyled"
-                onClick={() => updateWithdrawnQuery(true)}
+                onClick={() => updateQueryWithdrawn(true)}
                 className="margin-right-2"
               />
               <Button
@@ -58,7 +58,7 @@ export const RosterButtonsTable: React.FC = () => {
                   moment.utc(query.month, QUERY_STRING_MONTH_FORMAT) ??
                   undefined
                 }
-                setFilterByMonth={updateActiveMonthQuery}
+                setFilterByMonth={updateQueryMonth}
                 toggleModal={toggleModal}
                 isModalOpen={isModalOpen}
               />

@@ -1,22 +1,23 @@
 import { TabItem } from '@ctoec/component-library';
-import { stringify } from 'query-string';
-import { useHistory } from 'react-router-dom';
 import { useContext, useMemo } from 'react';
 import moment from 'moment';
 import RosterContext, {
+  ALL_SITES,
   RosterQueryParams,
 } from '../../../contexts/RosterContext/RosterContext';
-import UserContext from '../../../contexts/UserContext/UserContext';
 import { Site, Organization } from '../../../shared/models';
 import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils/';
 import pluralize from 'pluralize';
 
-const ALL_SITES = 'all-sites';
-
 export const useOrgSiteProps = () => {
-  const history = useHistory();
-  const { user } = useContext(UserContext);
-  const { childRecords, fetching, query } = useContext(RosterContext);
+  const {
+    childRecords,
+    fetching,
+    query,
+    updateQueryOrgId,
+    updateQuerySite,
+    rosterUser: { activeOrgId, user },
+  } = useContext(RosterContext);
   const orgChildCount = childRecords?.length ?? 0;
 
   return useMemo(() => {
@@ -27,26 +28,9 @@ export const useOrgSiteProps = () => {
     const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
       // If it has a nested item type then it's an org
       if (clickedItem.nestedItemType) {
-        // Remove site param if clickedId !== current orgId
-        if (clickedId !== query.organizationId) delete query.site;
-        history.push({
-          search: stringify({
-            ...query,
-            organizationId: clickedId,
-          }),
-        });
+        updateQueryOrgId(clickedId);
       } else {
-        // Push a specific site id if specific site clicked
-        if (clickedId !== ALL_SITES) {
-          history.push({
-            search: stringify({ ...query, site: clickedId }),
-          });
-        }
-        // Or remove site param from search if 'All sites' clicked
-        else {
-          delete query.site;
-          history.push({ search: stringify(query) });
-        }
+        updateQuerySite(clickedId);
       }
     };
 
@@ -62,7 +46,7 @@ export const useOrgSiteProps = () => {
     // and no super header
     if (organizations.length > 1) {
       const orgSites = sites.filter(
-        (s) => `${s.organizationId}` === query.organizationId
+        (s) => `${s.organizationId}` === activeOrgId
       );
       return {
         h1Text: query.withdrawn
@@ -73,7 +57,7 @@ export const useOrgSiteProps = () => {
           items: getOrganizationTabItems(organizations, orgSites),
           onClick: tabNavOnClick,
           nestedActiveId: query.site,
-          activeId: query.organizationId,
+          activeId: activeOrgId,
         },
         subHeaderText: getSubHeaderText(orgChildCount, orgSites, query),
         superHeaderText: '',

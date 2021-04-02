@@ -8,7 +8,6 @@ import {
   AlertProps,
 } from '@ctoec/component-library';
 import moment from 'moment';
-import UserContext from '../../contexts/UserContext/UserContext';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { apiPut } from '../../utils/api';
@@ -42,13 +41,13 @@ const SUBMITTED: AlertProps = {
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-  const { user, isSiteLevelUser } = useContext(UserContext);
   const {
     childRecords,
     fetching,
     query,
-    updateActiveMonthQuery,
-    updateWithdrawnQuery,
+    rosterUser: { activeOrgId, isMultiOrgUser, isSiteLevelUser, user },
+    updateQueryMonth,
+    updateQueryWithdrawn,
   } = useContext(RosterContext);
   const [{ numActiveErrors, numWithdrawnErrors }] = useValidationErrorCounts();
   const [isSubmitted, setIsSubmitted] = useIsSubmitted();
@@ -70,7 +69,7 @@ const Roster: React.FC = () => {
       numActiveErrors,
       numWithdrawnErrors,
       alertType,
-      query.organizationId
+      activeOrgId
     );
     setAlerts((_alerts) => [
       isSubmitted ? SUBMITTED : undefined,
@@ -86,7 +85,7 @@ const Roster: React.FC = () => {
     numActiveErrors,
     numWithdrawnErrors,
     alertType,
-    query.organizationId,
+    activeOrgId,
   ]);
 
   // Function to submit data to OEC, to pass down into submit button
@@ -97,8 +96,8 @@ const Roster: React.FC = () => {
       window.scrollTo(0, 0);
       setAlertType('error');
       // If there's an active org, submit
-    } else if (query.organizationId) {
-      await apiPut(`oec-report/${query.organizationId}`, undefined, {
+    } else if (activeOrgId) {
+      await apiPut(`oec-report/${activeOrgId}`, undefined, {
         accessToken,
       }).then(() => {
         setSubmittedModalOpen(true);
@@ -119,7 +118,7 @@ const Roster: React.FC = () => {
     ? {
         items: getAccordionItems(siteFilteredChildren, {
           hideCapacity: isSiteLevelUser || !!query.site,
-          hideOrgColumn: (user?.organizations ?? []).length <= 1,
+          hideOrgColumn: !isMultiOrgUser,
           hideExitColumn: !query.withdrawn,
         }),
         titleHeadingLevel: (rosterH2 ? 'h3' : 'h2') as HeadingLevel,
@@ -131,11 +130,7 @@ const Roster: React.FC = () => {
     <>
       <div className="Roster grid-container">
         <BackButton
-          location={
-            query.month || query.withdrawn
-              ? `/roster?organization=${query.organizationId}`
-              : '/'
-          }
+          location={query.month || query.withdrawn ? '/roster' : '/'}
         />
         <DataCompleteModal
           isOpen={submittedModalOpen}
@@ -160,14 +155,14 @@ const Roster: React.FC = () => {
                 filterTitleText={
                   moment.utc(query.month)?.format('MMMM YYYY') ?? undefined
                 }
-                reset={() => updateActiveMonthQuery(undefined)}
+                reset={() => updateQueryMonth(undefined)}
                 icon="calendar"
               />
             )}
             {!!query.withdrawn && (
               <RosterFilterIndicator
                 filterTitleText="Withdrawn enrollments"
-                reset={() => updateWithdrawnQuery(false)}
+                reset={() => updateQueryWithdrawn(undefined)}
                 icon="history"
               />
             )}
@@ -203,7 +198,7 @@ const Roster: React.FC = () => {
               id="submit-button"
               text="My Jul-Dec data is complete"
               onClick={submitToOEC}
-              disabled={!query.organizationId}
+              disabled={!activeOrgId}
             />
           )}
         </FixedBottomBar>

@@ -1,8 +1,12 @@
 import { stringify } from 'query-string';
 import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR';
 import { Child } from '../../../shared/models';
-import { cache } from 'swr';
-import { RosterQueryParams } from '../../../contexts/RosterContext/RosterContext';
+import {
+  RosterQueryParams,
+  UpdateCacheOpts,
+  UpdateCacheParams,
+} from '../../../contexts/RosterContext/RosterContext';
+import cloneDeep from 'lodash/cloneDeep';
 
 const PAGE_SIZE = 100;
 
@@ -31,15 +35,12 @@ export const usePaginatedChildData = ({
       return null;
     }
 
-    // Paginated api query (but only once we have organizationId param)
-    return organizationId
-      ? `children${withdrawn ? '/withdrawn' : ''}?${stringify({
-          organizationId,
-          skip: index * PAGE_SIZE,
-          take: PAGE_SIZE,
-          month,
-        })}`
-      : null;
+    return `children${withdrawn ? '/withdrawn' : ''}?${stringify({
+      organizationId,
+      month,
+      skip: index * PAGE_SIZE,
+      take: PAGE_SIZE,
+    })}`;
   });
 
   if (error) {
@@ -64,27 +65,32 @@ export const usePaginatedChildData = ({
 
   return {
     childRecords: childrenArrays ? childrenArrays.flat() : [],
-    mutate,
+    // Mutate the cache with updated child data
+    // Or nothing to refresh the cache
+    updateChildRecords: ({ updatedChild, opts }: UpdateCacheParams = {}) => {
+      if (updatedChild) {
+        const data = cloneDeep(childrenArrays ?? []);
+        if (opts === UpdateCacheOpts.Add) {
+          data[data.length - 1]?.push(updatedChild);
+        } else {
+          for (const page of data) {
+            const childIdx = page?.findIndex((c) => c.id === updatedChild.id);
+            if (childIdx > -1) {
+              if (opts === UpdateCacheOpts.Remove) {
+                page.splice(childIdx, 1);
+              } else {
+                page.splice(childIdx, 1, updatedChild);
+              }
+            }
+          }
+          mutate(data);
+        }
+        // okay now _really_ mutate: https://github.com/vercel/swr/issues/908
+        // (or refresh https://benborgers.com/posts/swr-refresh)
+        mutate();
+      }
+    },
     fetching,
     error,
   };
 };
-
-/**
- * Clear caches for `children` queries. If organizationId is supplied,
- * then only clear caches for queries made with that id as a query param,
- * otherwise clear all child caches
- *
- * @param organizationId
- */
-export const clearChildrenCaches = (organizationId?: string) =>
-  cache
-    .keys()
-    .filter(
-      (key) =>
-        key.includes('children') &&
-        (organizationId
-          ? key.includes(`organizationId=${organizationId}`)
-          : true)
-    )
-    .forEach((childrenCacheKey) => cache.delete(childrenCacheKey));

@@ -9,17 +9,17 @@ import { apiGet } from '../../../utils/api';
 export const useIsSubmitted = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const {
-    query: { organizationId },
+    rosterUser: { activeOrgId },
   } = useContext(RosterContext);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   useEffect(() => {
-    if (!organizationId) return;
+    if (!activeOrgId) return;
 
-    apiGet(`oec-report/${organizationId}`, accessToken).then((res) => {
+    apiGet(`oec-report/${activeOrgId}`, accessToken).then((res) => {
       setIsSubmitted(!!res?.submitted);
     });
-  }, [organizationId, accessToken]);
+  }, [activeOrgId, accessToken]);
 
   return [isSubmitted, setIsSubmitted] as const;
 };

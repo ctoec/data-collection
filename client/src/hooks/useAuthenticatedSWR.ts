@@ -20,7 +20,7 @@ export function useAuthenticatedSWR<T>(
 ) {
   const { accessToken } = useContext(AuthenticationContext);
   return useSWR(
-    !path ? null : [path, accessToken],
+    !path || !accessToken ? null : [path, accessToken],
     config
   ) as responseInterface<T, string>;
 }
@@ -39,7 +39,7 @@ export function useAuthenticatedSWRInfinite<T>(
 
   const getKey = (index: number, prevData: T | null) => {
     const path = getPath(index, prevData);
-    const key = !path ? null : [path, accessToken];
+    const key = !path || !accessToken ? null : [path, accessToken];
     return key;
   };
   return useSWRInfinite(getKey) as SWRInfiniteResponseInterface<T, string>;

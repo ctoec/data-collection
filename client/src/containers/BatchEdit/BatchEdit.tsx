@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import {
   SideNav,
@@ -12,20 +12,21 @@ import { BackButton } from '../../components/BackButton';
 import { hasValidationError } from '../../utils/hasValidationError';
 import pluralize from 'pluralize';
 import { nameFormatter } from '../../utils/formatters';
-import { Link, useParams, useLocation } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { BatchEditItemContent } from './BatchEditItemContent';
 import { Child } from '../../shared/models';
 import { getBatchEditErrorDetailsString } from './listSteps';
 import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
-import { stringify, parse } from 'query-string';
+import { stringify } from 'query-string';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { useAlerts } from '../../hooks/useAlerts';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 const BatchEdit: React.FC = () => {
   const { childId } = useParams() as { childId: string };
-  const { organizationId } = parse(useLocation().search) as {
-    organizationId: string;
-  };
+  const {
+    rosterUser: { activeOrgId },
+  } = useContext(RosterContext);
   const [alertElements] = useAlerts();
 
   const h1Ref = getH1RefForTitle();
@@ -34,7 +35,7 @@ const BatchEdit: React.FC = () => {
   >(
     childId
       ? null // no need to fetch all children for single record batch edit
-      : `children/missing-info?${stringify({ organizationId })}`,
+      : `children/missing-info?${stringify({ organizationId: activeOrgId })}`,
     {
       revalidateOnFocus: false,
     }
@@ -154,7 +155,6 @@ const BatchEdit: React.FC = () => {
                 <BatchEditItemContent
                   childId={activeRecordId}
                   moveNextRecord={moveNextRecord}
-                  organizationId={organizationId}
                   mutate={mutate}
                 />
               </ErrorBoundary>

@@ -29,17 +29,20 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
   const history = useHistory();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { query, updateCurrentRosterCache } = useContext(RosterContext);
+  const { query, updateChildRecords } = useContext(RosterContext);
 
   function deleteRecord() {
     setIsDeleting(true);
     apiDelete(`children/${child.id}`, { accessToken })
       .then(() => {
-        updateCurrentRosterCache(child, UpdateCacheOpts.Remove);
+        updateChildRecords({
+          updatedChild: child,
+          opts: UpdateCacheOpts.Remove,
+        });
         toggleIsOpen();
         history.push({
           pathname: '/roster',
-          search: stringify(query ?? {}),
+          search: stringify(query),
           state: {
             alerts: [
               {

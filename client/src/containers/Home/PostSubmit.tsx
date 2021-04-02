@@ -158,7 +158,7 @@ export const PostSubmitHome: React.FC = () => {
                 <p className="text-base-darker">
                   {pluralize('enrollment', s.count, true)}
                 </p>
-                <Link to={`/roster?organization=${s.orgId}&site=${s.siteId}`}>
+                <Link to={`/roster?organizationId=${s.orgId}&site=${s.siteId}`}>
                   <TextWithIcon
                     text="View site roster"
                     iconSide="right"

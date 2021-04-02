@@ -10,15 +10,16 @@ import {
 } from '@ctoec/component-library';
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
+import { stringify } from 'query-string';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { BatchUploadResponse } from '../../shared/payloads';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { apiPost } from '../../utils/api';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { handleJWTError } from '../../utils/handleJWTError';
-import { clearChildrenCaches } from '../Roster/hooks';
 import { getPreviewTableAccordionItems } from './getPreviewTableAccordionItems';
 
 const props: ProgressIndicatorProps = {
@@ -41,6 +42,7 @@ const props: ProgressIndicatorProps = {
 export const Preview: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
+  const { updateChildRecords, query } = useContext(RosterContext);
   const history = useHistory();
   const { state } = useLocation();
 
@@ -74,7 +76,7 @@ export const Preview: React.FC = () => {
             rawBody: true,
           }
         );
-        clearChildrenCaches();
+        updateChildRecords();
         setPreview(resp);
       } catch (error) {
         handleJWTError(history, (err) => {
@@ -104,15 +106,19 @@ export const Preview: React.FC = () => {
         }
       );
 
-      clearChildrenCaches();
-      history.push(`/roster`, {
-        alerts: [
-          {
-            type: 'success',
-            heading: 'Your records have been uploaded!',
-            text: buildUploadSuccessText(resp),
-          },
-        ],
+      updateChildRecords();
+      history.push({
+        pathname: '/roster',
+        search: stringify(query),
+        state: {
+          alerts: [
+            {
+              type: 'success',
+              heading: 'Your records have been uploaded!',
+              text: buildUploadSuccessText(resp),
+            },
+          ],
+        },
       });
     } catch (error) {
       handleJWTError(history, (err) => {

@@ -45,7 +45,7 @@ const CreateRecord: React.FC = () => {
     }))
   );
 
-  const { query, updateCurrentRosterCache } = useContext(RosterContext);
+  const { query, updateChildRecords } = useContext(RosterContext);
 
   // On initial load, set url hash to first step hash
   useEffect(() => {
@@ -84,7 +84,7 @@ const CreateRecord: React.FC = () => {
       if (indexOfCurrentStep === steps.length - 1) {
         history.push({
           pathname: '/roster',
-          search: stringify(query ?? {}),
+          search: stringify(query),
           state: {
             alerts: [
               {
@@ -104,10 +104,10 @@ const CreateRecord: React.FC = () => {
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        updateCurrentRosterCache(
+        updateChildRecords({
           updatedChild,
-          refetchChild < 1 ? UpdateCacheOpts.Add : undefined
-        );
+          opts: refetchChild < 1 ? UpdateCacheOpts.Add : undefined,
+        });
         if (refetchChild === 0) return;
 
         const currentStepStatus = steps[indexOfCurrentStep]?.status({
