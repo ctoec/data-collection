@@ -4,6 +4,7 @@ import {
 } from '../../client/src/shared/payloads/SummaryResponse';
 import { getManager } from 'typeorm';
 import { Child, Organization, User } from '../entity';
+import moment from 'moment';
 
 export async function getSummaryResponse(): Promise<SummaryResponse> {
   const sites = await getSiteSummaries();
@@ -38,7 +39,18 @@ async function getOrganizationCount(): Promise<number> {
 }
 
 async function getChildCount(): Promise<number> {
-  return getManager().count(Child);
+  return (
+    getManager()
+      .createQueryBuilder(Child, 'Child')
+      .leftJoinAndSelect('Child.enrollments', 'enrollment')
+      // Only count children who are associated with a current enrollment
+      .where(
+        `enrollment.deletedDate IS NULL AND enrollment.exit <= CONVERT(date, '${moment
+          .utc()
+          .toISOString()}')`
+      )
+      .getCount()
+  );
 }
 
 async function getSiteSummaries(): Promise<SiteSummary[]> {
