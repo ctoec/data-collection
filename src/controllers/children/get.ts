@@ -133,7 +133,7 @@ export const getActiveChildren = async (
     activeMonth = moment(), // Default to the current month
     skip,
     take,
-  } = selectParms;
+  } = selectParms ?? {};
 
   // Filter children with enrollments in the active month
   const start = activeMonth.startOf('month').format('YYYY-MM-DD');

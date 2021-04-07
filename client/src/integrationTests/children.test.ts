@@ -36,17 +36,18 @@ describe('integration', () => {
       ) as Site;
     });
     describe('children', () => {
-      let children: Child[];
       it('GET /children', async () => {
         // Create child so there's at least one
-        await createChild(organization);
+        const { id: childId } = await createChild(organization);
+        await createEnrollment(childId, site);
 
-        children = await apiGet('children', '', TEST_OPTS);
+        const children = await apiGet('children', '', TEST_OPTS);
         expect(children).not.toHaveLength(0);
       });
 
-      it('GET /children?count=true', async () => {
-        const { count } = await apiGet('children?count=true', '', TEST_OPTS);
+      it('GET /children/count', async () => {
+        const children = await apiGet('children', '', TEST_OPTS);
+        const { count } = await apiGet('children/metadata', '', TEST_OPTS);
         expect(count).toEqual(children.length);
       });
 
@@ -61,9 +62,9 @@ describe('integration', () => {
         );
       });
 
-      it('GET /children?missing-info=true', async () => {
+      it('GET /children/missing-info', async () => {
         const missingInfoChildren: Child[] = await apiGet(
-          'children?missing-info=true',
+          'children/missing-info',
           '',
           TEST_OPTS
         );
