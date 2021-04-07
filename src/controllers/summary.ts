@@ -38,7 +38,15 @@ async function getOrganizationCount(): Promise<number> {
 }
 
 async function getChildCount(): Promise<number> {
-  return getManager().count(Child);
+  return (
+    getManager()
+      .createQueryBuilder(Child, 'Child')
+      .leftJoinAndSelect('Child.enrollments', 'enrollment')
+      .where('enrollment.deletedDate IS NULL')
+      // Only count children who are associated with a current enrollment
+      .andWhere('enrollment.exit IS NULL')
+      .getCount()
+  );
 }
 
 async function getSiteSummaries(): Promise<SiteSummary[]> {
