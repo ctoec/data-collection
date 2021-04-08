@@ -13,6 +13,7 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { BatchUploadResponse } from '../../shared/payloads';
+import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import { apiPost } from '../../utils/api';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
@@ -143,97 +144,104 @@ export const Preview: React.FC = () => {
     : undefined;
 
   return (
-    <div className="grid-container">
-      <BackButton />
+    <>
+      <div className="grid-container">
+        <BackButton />
 
-      <div className="grid-row display-block">
-        <h1 ref={h1Ref} className="margin-bottom-4">
-          Upload your enrollment data
-        </h1>
+        <div className="grid-row display-block">
+          <h1 ref={h1Ref} className="margin-bottom-4">
+            Upload your enrollment data
+          </h1>
 
-        <ProgressIndicator
-          currentIndex={props.currentIndex}
-          steps={props.steps}
-        ></ProgressIndicator>
+          <ProgressIndicator
+            currentIndex={props.currentIndex}
+            steps={props.steps}
+          ></ProgressIndicator>
 
-        <h2 className="margin-bottom-2">
-          <span className="usa-step-indicator__current-step">3</span>
-          <span className="usa-step-indicator__total-steps"> of 3</span>Preview
-          changes and upload file
-        </h2>
+          <h2 className="margin-bottom-2">
+            <span className="usa-step-indicator__current-step">3</span>
+            <span className="usa-step-indicator__total-steps"> of 3</span>
+            Preview changes and upload file
+          </h2>
 
-        <p>
-          Here is a summary of the changes you're uploading in this file. If
-          everything looks right, upload your changes to your roster.
-        </p>
+          <p>
+            Here is a summary of the changes you're uploading in this file. If
+            everything looks right, upload your changes to your roster.
+          </p>
+        </div>
       </div>
       <LoadingWrapper text={loadingText} loading={loading}>
         {error ? (
-          <Alert
-            text="Something went wrong with your upload!"
-            actionItem={
-              <Link to="/upload">Try to upload a different file</Link>
-            }
-            type="error"
-          />
+          <div className="grid-container">
+            <Alert
+              text="Something went wrong with your upload!"
+              actionItem={
+                <Link to="/upload">Try to upload a different file</Link>
+              }
+              type="error"
+            />
+          </div>
         ) : (
           <>
-            <div className="grid-row desktop:grid-col-4 three-column-card">
-              <Card className="font-body-lg">
-                <p className="margin-top-0 margin-bottom-0">
-                  Total records in this file
-                </p>
-                <p className="text-bold margin-top-0 margin-bottom-0">
-                  {preview
-                    ? preview.new + preview.updated + preview.withdrawn
-                    : ''}
-                </p>
-              </Card>
-            </div>
-            <div className="grid-row three-column-layout">
-              <div className="desktop:grid-col-4 three-column-card">
+            <div className="grid-container upload-roster">
+              <div className="grid-row desktop:grid-col-4 three-column-card">
                 <Card className="font-body-lg">
-                  <p className="margin-top-0 margin-bottom-0">New</p>
+                  <p className="margin-top-0 margin-bottom-0">
+                    Total records in this file
+                  </p>
                   <p className="text-bold margin-top-0 margin-bottom-0">
-                    {preview ? preview.new : ''}
+                    {preview
+                      ? preview.new + preview.updated + preview.withdrawn
+                      : ''}
                   </p>
                 </Card>
               </div>
-              <div className="desktop:grid-col-4 three-column-card">
-                <Card className="font-body-lg">
-                  <p className="margin-top-0 margin-bottom-0">Updated</p>
-                  <p className="text-bold margin-top-0 margin-bottom-0">
-                    {preview ? preview.updated : ''}
-                  </p>
-                </Card>
+              <div className="grid-row three-column-layout">
+                <div className="desktop:grid-col-4 three-column-card">
+                  <Card className="font-body-lg">
+                    <p className="margin-top-0 margin-bottom-0">New</p>
+                    <p className="text-bold margin-top-0 margin-bottom-0">
+                      {preview ? preview.new : ''}
+                    </p>
+                  </Card>
+                </div>
+                <div className="desktop:grid-col-4 three-column-card">
+                  <Card className="font-body-lg">
+                    <p className="margin-top-0 margin-bottom-0">Updated</p>
+                    <p className="text-bold margin-top-0 margin-bottom-0">
+                      {preview ? preview.updated : ''}
+                    </p>
+                  </Card>
+                </div>
+                <div className="desktop:grid-col-4 three-column-card">
+                  <Card className="font-body-lg">
+                    <p className="margin-top-0 margin-bottom-0">Withdrawn</p>
+                    <p className="text-bold margin-top-0 margin-bottom-0">
+                      {preview ? preview.withdrawn : ''}
+                    </p>
+                  </Card>
+                </div>
               </div>
-              <div className="desktop:grid-col-4 three-column-card">
-                <Card className="font-body-lg">
-                  <p className="margin-top-0 margin-bottom-0">Withdrawn</p>
-                  <p className="text-bold margin-top-0 margin-bottom-0">
-                    {preview ? preview.withdrawn : ''}
-                  </p>
-                </Card>
-              </div>
-            </div>
 
-            <div className="grid-row upload-preview-table">
-              {previewAccordionItems ? (
-                <Accordion {...previewAccordionItems} />
-              ) : (
-                <></>
-              )}
+              <div className="grid-row upload-preview-table">
+                {previewAccordionItems ? (
+                  <Accordion {...previewAccordionItems} />
+                ) : (
+                  <></>
+                )}
+              </div>
             </div>
-
-            <Button text="Cancel upload" href="/home" appearance="outline" />
-            <Button
-              id="upload-button"
-              text="Save changes to roster"
-              onClick={confirmUpload}
-            />
+            <FixedBottomBar>
+              <Button text="Cancel upload" href="/home" appearance="outline" />
+              <Button
+                id="upload-button"
+                text="Save changes to roster"
+                onClick={confirmUpload}
+              />
+            </FixedBottomBar>
           </>
         )}
       </LoadingWrapper>
-    </div>
+    </>
   );
 };
