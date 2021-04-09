@@ -23,7 +23,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
-      - checkout
+      - attach_workspace:
+          at: .
       - node/install-packages:
           pkg-manager: yarn
           cache-path: node_modules
@@ -238,6 +239,7 @@ workflows:
       - install:
           requires:
             - hold
+            - pull
       - build:
           env: devsecure
           requires:
