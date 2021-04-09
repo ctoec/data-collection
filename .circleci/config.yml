@@ -166,11 +166,13 @@ workflows:
             - build
   e2e-tests:
     jobs:
+      - pull
       - hold:
           type: approval
       - install:
           requires:
             - hold
+            - pull
       - build:
           env: qa
           requires:
@@ -192,7 +194,7 @@ workflows:
           filters:
               branches:
                 ignore:
-                  - remove-extra-deploy-workflow
+                  - base
       - install:
           requires:
             - hold
@@ -212,7 +214,7 @@ workflows:
           filters:
               branches:
                 only:
-                  - remove-extra-deploy-workflow
+                  - base
   deploy-to-qa:
     jobs:
       - pull
@@ -238,7 +240,7 @@ workflows:
           filters:
               branches:
                 ignore:
-                  - remove-extra-deploy-workflow
+                  - base
       - install:
           requires:
             - hold
