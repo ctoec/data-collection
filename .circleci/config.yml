@@ -121,11 +121,8 @@ jobs:
   e2e_test:
     description: 'Run e2e tests against a deployed pre-prod env'
     parameters:
-      api_test_host:
-        description: 'The host to use for api integration tests'
-        type: string
-      launch_url:
-        description: 'The host to use for browserstack e2e tests'
+      env:
+        description: 'The environment to run e2e tests against (qa, devsecure, staging)'
         type: string
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
@@ -138,8 +135,8 @@ jobs:
       - run:
           name: Setup environment variables
           command: |
-            echo "export API_TEST_HOST=<<parameters.api_test_host>>" >> $BASH_ENV
-            echo "export LAUNCH_URL=<<parameters.launch_url>>" >> $BASH_ENV
+            echo "export API_TEST_HOST=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
+            echo "export LAUNCH_URL=<https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
       - run:
           working_directory: e2e-tests
           name: Install e2e test dependencies
@@ -154,9 +151,12 @@ jobs:
           command: SKIP_PREFLIGHT_CHECK=true yarn test-integration
 
 workflows:
-  local-tests-and-deploy-if-base:
+  local-tests:
     jobs:
-      - install
+      - pull
+      - install:
+          requires:
+            - pull
       - build:
           env: staging
           requires:
@@ -164,19 +164,7 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
-          env: staging
-          requires:
-            - test
-          filters:
-            branches:
-              only: base
-      - e2e_test:
-          api_test_host: "https://staging.ece-fawkes.ctoecskylight.com"
-          launch_url: "https://staging.ece-fawkes.ctoecskylight.com"
-          requires:
-            - deploy
-  qa-tests:
+  e2e-tests:
     jobs:
       - hold:
           type: approval
@@ -192,18 +180,23 @@ workflows:
           requires:
             - build
       - e2e_test:
-          api_test_host: "https://qa.ece-fawkes.ctoecskylight.com"
-          launch_url: "https://qa.ece-fawkes.ctoecskylight.com"
+          env: qa
           requires:
             - deploy
 
   deploy-to-staging:
     jobs:
+      - pull
       - hold:
           type: approval
+          filters:
+              branches:
+                ignore:
+                  - remove-extra-deploy-workflow
       - install:
           requires:
             - hold
+            - pull
       - build:
           env: staging
           requires:
@@ -212,13 +205,23 @@ workflows:
           env: staging
           requires:
             - build
+      - e2e_test:
+          env: staging
+          requires:
+            - deploy
+          filters:
+              branches:
+                only:
+                  - remove-extra-deploy-workflow
   deploy-to-qa:
     jobs:
+      - pull
       - hold:
           type: approval
       - install:
           requires:
             - hold
+            - pull
       - build:
           env: qa
           requires:
@@ -250,11 +253,13 @@ workflows:
             - build
   deploy-to-prod:
     jobs:
+      - pull
       - hold:
           type: approval
       - install:
           requires:
             - hold
+            - pull
       - build:
           env: prod
           requires:
