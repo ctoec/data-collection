@@ -136,7 +136,7 @@ jobs:
           name: Setup environment variables
           command: |
             echo "export API_TEST_HOST=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
-            echo "export LAUNCH_URL=<https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
+            echo "export LAUNCH_URL=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
       - run:
           working_directory: e2e-tests
           name: Install e2e test dependencies
