@@ -7,6 +7,7 @@ import {
   InlineIcon,
   LoadingWrapper,
 } from '@ctoec/component-library';
+import { stringify } from 'query-string';
 import { RecordFormProps } from '../../components/Forms/types';
 import { listSteps } from './listSteps';
 import { nameFormatter } from '../../utils/formatters';
@@ -21,7 +22,6 @@ import RosterContext from '../../contexts/RosterContext/RosterContext';
 
 type BatchEditItemContentProps = {
   childId: string;
-  organizationId?: string;
   moveNextRecord: (_?: Child[]) => void;
   mutate?: (_: mutateCallback<Child[]>, __: boolean) => void;
   isSingleRecord?: boolean;
@@ -35,7 +35,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
 }) => {
   const [child, setChild] = useState<Child>();
 
-  const { setAlerts } = useAlerts();
+  const [, setAlerts] = useAlerts();
   const history = useHistory();
 
   const [steps, setSteps] = useState<StepProps<RecordFormProps>[]>();
@@ -44,21 +44,25 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
   const { accessToken } = useContext(AuthenticationContext);
   const [triggerRefetchCount, setTriggerRefetchCount] = useState(0);
 
-  const { updateCurrentRosterCache } = useContext(RosterContext);
+  const { updateChildRecords, query } = useContext(RosterContext);
 
   // Special function for single record batch edit because we use the child's
   // name information in an alert
   const singleRecordSuccess = () => {
-    history.push(`/roster`, {
-      alerts: [
-        {
-          type: 'success',
-          heading: 'Changed saved!',
-          text: `${
-            child?.firstName ? child?.firstName : 'Child'
-          }'s record now has all required information.`,
-        },
-      ],
+    history.push({
+      pathname: '/roster',
+      search: stringify(query),
+      state: {
+        alerts: [
+          {
+            type: 'success',
+            heading: 'Changed saved!',
+            text: `${
+              child?.firstName ? child?.firstName : 'Child'
+            }'s record now has all required information.`,
+          },
+        ],
+      },
     });
   };
   const afterRecordAction = isSingleRecord
@@ -115,7 +119,7 @@ export const BatchEditItemContent: React.FC<BatchEditItemContentProps> = ({
             return children;
           }, false);
         }
-        updateCurrentRosterCache(updatedChild);
+        updateChildRecords({ updatedChild });
 
         if (triggerRefetchCount) moveNextStep(updatedChildren);
       })

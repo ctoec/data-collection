@@ -4,23 +4,18 @@ import {
   History,
   TextWithIcon,
 } from '@ctoec/component-library';
-import { Moment } from 'moment';
-import React, { useState } from 'react';
+import moment from 'moment';
+import React, { useContext, useState } from 'react';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { MonthFilterModal } from './MonthFilterModal';
+import { QUERY_STRING_MONTH_FORMAT } from '../../containers/Roster/rosterUtils';
 
-type RosterButtonsTable = {
-  filterByMonth?: Moment;
-  setFilterByMonth: (_: any) => void;
-  updateWithdrawnOnly: (_: any) => void;
-};
-
-export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
-  filterByMonth,
-  setFilterByMonth,
-  updateWithdrawnOnly,
-}) => {
+export const RosterButtonsTable: React.FC = () => {
+  const { query, updateQueryMonth, updateQueryWithdrawn } = useContext(
+    RosterContext
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen((o) => !o);
   return (
@@ -45,7 +40,7 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
               <Button
                 text={<TextWithIcon Icon={History} text="Withdrawn records" />}
                 appearance="unstyled"
-                onClick={() => updateWithdrawnOnly(true)}
+                onClick={() => updateQueryWithdrawn(true)}
                 className="margin-right-2"
               />
               <Button
@@ -59,8 +54,11 @@ export const RosterButtonsTable: React.FC<RosterButtonsTable> = ({
                 onClick={toggleModal}
               />
               <MonthFilterModal
-                filterByMonth={filterByMonth}
-                setFilterByMonth={setFilterByMonth}
+                filterByMonth={
+                  moment.utc(query.month, QUERY_STRING_MONTH_FORMAT) ??
+                  undefined
+                }
+                setFilterByMonth={updateQueryMonth}
                 toggleModal={toggleModal}
                 isModalOpen={isModalOpen}
               />

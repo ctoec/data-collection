@@ -5,7 +5,6 @@ import { ErrorBoundary, Header, NavLinkProps } from '@ctoec/component-library';
 import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { mailToLinkProps } from '../../components/MailToLink';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const App: React.FC = () => {

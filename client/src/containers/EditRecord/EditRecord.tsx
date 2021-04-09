@@ -32,7 +32,7 @@ const EditRecord: React.FC = () => {
     childId: string;
   };
   const { accessToken } = useContext(AuthenticationContext);
-  const { alertElements, setAlerts } = useAlerts();
+  const [alertElements, setAlerts] = useAlerts();
   const [child, setChild] = useState<Child>();
 
   // Persist active tab in URL hash
@@ -54,15 +54,14 @@ const EditRecord: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { updateCurrentRosterCache } = useContext(RosterContext);
+  const { updateChildRecords } = useContext(RosterContext);
 
   // Child re-fetch
-  const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
-  useEffect(() => {
+  const refreshChild = (saveUpdate: boolean = false) =>
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        updateCurrentRosterCache(updatedChild);
+        updateChildRecords({ updatedChild });
 
         const newAlerts: AlertProps[] = [];
         const missingInfoAlertProps = getMissingInfoAlertProps(updatedChild);
@@ -71,8 +70,8 @@ const EditRecord: React.FC = () => {
           newAlerts.push(missingInfoAlertProps);
         }
 
-        // Only set success alert on a GET that happens after an update (refetch count > 0)
-        if (triggerRefetchCounter > 0) {
+        // Only set success alert on a GET that happens after an saving update
+        if (saveUpdate) {
           newAlerts.push({
             type: 'success',
             heading: 'Record updated',
@@ -86,11 +85,14 @@ const EditRecord: React.FC = () => {
       .catch((err) => {
         throw new Error(err);
       });
-  }, [accessToken, childId, triggerRefetchCounter]);
+
+  useEffect(() => {
+    refreshChild();
+  }, [accessToken, childId]);
 
   useFocusFirstError([child]);
 
-  const afterSaveSuccess = () => setTriggerRefetchCounter((r) => r + 1);
+  const afterSaveSuccess = () => refreshChild(true);
   const commonFormProps = {
     child,
     afterSaveSuccess,

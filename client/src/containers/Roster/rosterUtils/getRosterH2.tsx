@@ -1,6 +1,6 @@
 import React from 'react';
 import { Site } from '../../../shared/models';
-import { RosterQueryParams } from '../Roster';
+import { RosterQueryParams } from '../../../contexts/RosterContext/RosterContext';
 import pluralize from 'pluralize';
 
 export function getRosterH2(

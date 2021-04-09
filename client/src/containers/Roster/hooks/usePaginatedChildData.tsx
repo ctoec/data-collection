@@ -1,8 +1,12 @@
 import { stringify } from 'query-string';
 import { useAuthenticatedSWRInfinite } from '../../../hooks/useAuthenticatedSWR';
 import { Child } from '../../../shared/models';
-import { cache } from 'swr';
-import { RosterQueryParams } from '../Roster';
+import {
+  RosterQueryParams,
+  UpdateCacheOpts,
+  UpdateCacheParams,
+} from '../../../contexts/RosterContext/RosterContext';
+import cloneDeep from 'lodash/cloneDeep';
 
 const PAGE_SIZE = 100;
 
@@ -11,8 +15,12 @@ const PAGE_SIZE = 100;
  * automatically requesting the next page of data while it exists
  * by incrementing useSWRInfinite "page size".
  */
-export const usePaginatedChildData = (query: RosterQueryParams) => {
-  let stillFetching = true;
+export const usePaginatedChildData = ({
+  month,
+  organizationId,
+  withdrawn,
+}: RosterQueryParams) => {
+  let fetching = true;
   // Fetch child data, filtered by organization and month
   const {
     data: childrenArrays,
@@ -20,26 +28,24 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
     size,
     setSize,
     error,
+    revalidate,
   } = useAuthenticatedSWRInfinite<Child[]>((index, prevData) => {
     // Base case -- no more data to fetch when prev data length = 0
     if (prevData && !prevData.length) {
-      stillFetching = false;
+      fetching = false;
       return null;
     }
 
-    // Paginated api query (but only once we have organizationId param)
-    return query.organization
-      ? `children?${stringify({
-          organizationId: query.organization,
-          skip: index * PAGE_SIZE,
-          take: PAGE_SIZE,
-          month: query.month,
-        })}`
-      : null;
+    return `children${withdrawn ? '/withdrawn' : ''}?${stringify({
+      organizationId,
+      month,
+      skip: index * PAGE_SIZE,
+      take: PAGE_SIZE,
+    })}`;
   });
 
   if (error) {
-    stillFetching = false;
+    fetching = false;
   }
 
   // Trigger next fetch if
@@ -54,33 +60,37 @@ export const usePaginatedChildData = (query: RosterQueryParams) => {
     ) {
       setSize(size + 1);
     } else {
-      stillFetching = false;
+      fetching = false;
     }
   }
 
   return {
-    children: childrenArrays ? childrenArrays.flat() : childrenArrays,
-    mutate,
-    stillFetching,
+    childRecords: childrenArrays ? childrenArrays.flat() : [],
     error,
+    fetching,
+    // Mutate the cache with updated child data
+    updateChildRecords: ({ updatedChild, opts }: UpdateCacheParams) => {
+      const data = cloneDeep(childrenArrays ?? []);
+      if (opts === UpdateCacheOpts.Add) {
+        data[data.length - 1]?.push(updatedChild);
+      } else {
+        for (const page of data) {
+          const childIdx = page?.findIndex((c) => c.id === updatedChild.id);
+          if (childIdx > -1) {
+            if (opts === UpdateCacheOpts.Remove) {
+              page.splice(childIdx, 1);
+            } else {
+              page.splice(childIdx, 1, updatedChild);
+            }
+          }
+        }
+        mutate(data);
+        // okay now _really_ mutate: https://github.com/vercel/swr/issues/908
+        mutate();
+      }
+    },
+    // TODO: Apparently this will be deprecated, but the alternative is really poorly defined
+    // https://github.com/vercel/swr/discussions/812#discussioncomment-203697
+    revalidate,
   };
 };
-
-/**
- * Clear caches for `children` queries. If organizationId is supplied,
- * then only clear caches for queries made with that id as a query param,
- * otherwise clear all child caches
- *
- * @param organizationId
- */
-export const clearChildrenCaches = (organizationId?: string) =>
-  cache
-    .keys()
-    .filter(
-      (key) =>
-        key.includes('children') &&
-        (organizationId
-          ? key.includes(`organizationId=${organizationId}`)
-          : true)
-    )
-    .forEach((childrenCacheKey) => cache.delete(childrenCacheKey));
