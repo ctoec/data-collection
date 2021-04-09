@@ -5,6 +5,7 @@
 @import './containers/Home/Home.scss';
 @import './containers/EditRecord/EditRecord.scss';
 @import './containers/Roster/Roster.scss';
+@import './containers/Upload/Upload.scss';
 
 p,
 ol {
@@ -16,7 +17,45 @@ legend .usa-label {
   font-weight: bold !important;
 }
 
-.h2 {
+// Override some carbon defaults for now
+.usa-button {
+  min-height: unset;
+}
+
+.usa-form .usa-button[type='submit'] {
+  margin-top: 1.5rem; // match other button styles
+  margin-bottom: unset;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: bold;
+  margin: 1rem 0 1rem 0;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 26px;
+}
+
+h3 {
+  font-size: 22px;
+}
+
+h4 {
+  font-size: 18px;
+}
+
+p {
+  margin: 1rem 0 1rem 0;
+}
+
+h2 {
   font-size: 1.5rem;
   display: block;
   margin-block-start: 0.83rem;

@@ -13,12 +13,16 @@ import {
   TObjectDriller,
 } from '@ctoec/component-library';
 import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
-import { ChangeFunding, ChangeEnrollment } from '../../../../shared/payloads';
+import {
+  ChangeFundingRequest,
+  ChangeEnrollmentRequest,
+} from '../../../../shared/payloads';
 import { stringify } from 'querystring';
 import { useAuthenticatedSWR } from '../../../../hooks/useAuthenticatedSWR';
 import { getValidationStatusForFields } from '../../../../utils/getValidationStatus';
 import { HideErrorProps } from '../../types';
 import { getCurrentFunding } from '../../../../utils/models';
+import { getStrippedFundingSourceName } from '../../../../utils/getFundingSpaceDisplayName';
 
 type FundingFieldProps<T> = {
   fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
@@ -35,7 +39,11 @@ const fsToId = (fs: string) => fs.replace(/\s/g, '');
  * or as part of creating a new enrollment.
  */
 export const NewFundingField = <
-  T extends ChangeFunding | ChangeEnrollment | Enrollment | Funding
+  T extends
+    | ChangeFundingRequest
+    | ChangeEnrollmentRequest
+    | Enrollment
+    | Funding
 >({
   fundingAccessor = (data) => data as TObjectDriller<Funding>,
   getEnrollment,
@@ -109,7 +117,7 @@ export const NewFundingField = <
         return {
           id,
           value: id,
-          text: fundingSource,
+          text: getStrippedFundingSourceName(fundingSource),
           onChange: () => {},
           expansion: (
             <>

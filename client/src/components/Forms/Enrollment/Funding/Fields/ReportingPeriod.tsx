@@ -14,9 +14,9 @@ import {
   TObjectDriller,
 } from '@ctoec/component-library';
 import {
-  ChangeFunding,
-  ChangeEnrollment,
-  Withdraw,
+  ChangeFundingRequest,
+  ChangeEnrollmentRequest,
+  WithdrawRequest,
 } from '../../../../../shared/payloads';
 import { reportingPeriodFormatter } from '../../../../../utils/formatters';
 import { getValidationStatusForField } from '../../../../../utils/getValidationStatus';
@@ -42,7 +42,12 @@ type ReportingPeriodProps<T> = {
  * this component does not do any funding source checking/filtering
  */
 export const ReportingPeriodField = <
-  T extends Funding | ChangeFunding | Withdraw | ChangeEnrollment | Enrollment
+  T extends
+    | Funding
+    | ChangeFundingRequest
+    | WithdrawRequest
+    | ChangeEnrollmentRequest
+    | Enrollment
 >({
   accessor,
   fundingSource,
@@ -93,11 +98,11 @@ export const ReportingPeriodField = <
     if ((data as TObjectDriller<Enrollment>).at('fundings').value) {
       objDriller = (data as TObjectDriller<Enrollment>).at('fundings').at(0);
     } else if (
-      (data as TObjectDriller<ChangeEnrollment>)
+      (data as TObjectDriller<ChangeEnrollmentRequest>)
         .at('newEnrollment')
         .at('fundings').value
     ) {
-      objDriller = (data as TObjectDriller<ChangeEnrollment>)
+      objDriller = (data as TObjectDriller<ChangeEnrollmentRequest>)
         .at('newEnrollment')
         .at('fundings')
         .at(0);

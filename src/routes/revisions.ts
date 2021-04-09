@@ -6,11 +6,11 @@ import { getManager } from 'typeorm';
 import { AddSiteRequest } from '../entity/AddSiteRequest';
 import { UpdateSiteRequest } from '../entity/UpdateSiteRequest';
 import { ChangeFundingSpaceRequest } from '../entity/ChangeFundingSpaceRequest';
-import { getFundingSpaceDisplayName } from '../../client/src/containers/Home/utils/getFundingSpaceDisplayName';
+import { getFundingSpaceDisplayName } from '../../client/src/utils/getFundingSpaceDisplayName';
 
 export const revisionsRouter = express.Router();
 
-/**
+/**w
  * POST /revision-request/:organizationId
  *
  * Saves a change request object accumulated from a user filling out

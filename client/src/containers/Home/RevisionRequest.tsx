@@ -1,5 +1,4 @@
-import { Button, Checkbox, TextInput } from '@ctoec/component-library';
-import Divider from '@material-ui/core/Divider';
+import { Button, Checkbox, TextInput, Divider } from '@ctoec/component-library';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BackButton } from '../../components/BackButton';
@@ -17,7 +16,7 @@ import { getFundingSpaceCheckboxes } from './utils/getFundingSpaceCheckboxes';
 import {
   getFundingSpaceDisplayName,
   getStrippedFundingSourceName,
-} from './utils/getFundingSpaceDisplayName';
+} from '../../utils/getFundingSpaceDisplayName';
 
 /**
  * Form to allow a user to request changes to their accessible sites

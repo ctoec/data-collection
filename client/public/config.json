@@ -1,6 +1,7 @@
 {
   "qa": {
-    "WingedKeysUri": "https://qa.ece-wingedkeys.ctoecskylight.com"
+    "WingedKeysUri": "https://qa.ece-wingedkeys.ctoecskylight.com",
+    "GoogleAnalyticsTrackingId": "UA-191041839-2"
   },
   "devsecure": {
     "WingedKeysUri": "https://devsecure.ece-wingedkeys.ctoecskylight.com"
@@ -12,6 +13,7 @@
     "WingedKeysUri": "https://localhost:5050"
   },
   "prod": {
-    "WingedKeysUri": "https://ece-login.ctoec.org"
+    "WingedKeysUri": "https://ece-login.ctoec.org",
+    "GoogleAnalyticsTrackingId": "UA-191041839-1"
   }
 }

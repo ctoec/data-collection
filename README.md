@@ -2,50 +2,59 @@
 
 A web application to collect information from child care providers in the State of Connecticut.
 
-## Development
+## Setup
+The OEC data collection application has just a few prerequisites that need to be handled before it's ready for use.
 
-### Requirements
+1. Install [Docker](https://hub.docker.com/search?q=&type=edition&offering=community).
+1. Install [Docker Compose](https://docs.docker.com/compose/install/), which is included in some OS distributions but must be installed separately in others.
+1. Ensure you have the following libraries installed on your machine:
+   - [Node 12](https://nodejs.org/en/download/)
+   - [Yarn](https://yarnpkg.com/lang/en/docs/install/)
+1. Clone (or bind mount) the [`winged-keys` project](https://github.com/ctoec/winged-keys) (our authentication layer) into the **root directory of this project**.
+1. Follow the steps outlined in the corresponding README to set up the `winged-keys` project.
 
-1. Bind mount or clone [`winged-keys`](https://github.com/ctoec/winged-keys) into the top-level of this directory.
-1. Install (if you haven't already) [Docker](https://hub.docker.com/search?q=&type=edition&offering=community). Make sure you have [Docker Compose](https://docs.docker.com/compose/install/), which is included in some OS distributions but must be installed separately in others.
+You may need to [allocate more memory to Docker](https://stackoverflow.com/a/44533437) (say, ~4 GB). 
 
-### Running the app
+If you are developing on an M1/ARM system, you [may](https://github.com/microsoft/mssql-docker/issues/668) need to update the `image` of `db` and `winged-keys-db` in `docker-compose.yaml` to `mcr.microsoft.com/azure-sql-edge`.
 
-1. Install all corresponding yarn dependencies, based on the static versions specified in `yarn.lock`
+## Usage
+Once the required libraries are installed, getting the application up and running is a pretty simple task.
 
-   - Via the containers:
+1. Install yarn packages, for both client **and** server projects.  This can be accomplished one of two ways:
 
-   ```sh
-   docker-compose run -T --rm --entrypoint "yarn install --frozen-lockfile --network-concurrency 1" client
-   docker-compose run -T --rm --entrypoint "yarn install --frozen-lockfile" server
-   ```
-
-   **NOTE**: This `docker-compose run` command is only necessary on initial set up, since the containers cannot start without installed dependencies. To execute yarn commands once the containers have started, you can use `docker-compose exec`.
-
-   - Via a local yarn installation, yarn requires an updated version of node
-
+   - Via Yarn:
    ```sh
    yarn install --frozen-lockfile
    cd client && yarn install --frozen-lockfile
    ```
 
-1. Start application:
+   - Via Docker:
+   ```sh
+   docker-compose run -T --rm --entrypoint "yarn install --frozen-lockfile --network-concurrency 1" client
+   docker-compose run -T --rm --entrypoint "yarn install --frozen-lockfile" server
+   ```
+
+      **NOTE**: The `docker-compose run` command is only necessary on initial set up, since the containers cannot start without installed dependencies. To execute yarn commands once the containers have started, you can use `docker-compose exec`.
+
+1. Start up the application, running it in the background.
    ```sh
    docker-compose up -d
    ```
-1. Ensure application is running and confirm port mappings:
+1. The application should be up and running at https://localhost:5001.  You can also confirm the application is running by checking on the port mappings.
 
    ```sh
    docker-compose ps
        Name                            Command               State           Ports
    --------------------------------------------------------------------------------------------------
    data-collection_client_1           yarn start                       Up
-   data-collection_db_1               /opt/mssql/bin/permissions ...   Up      1433/tcp
+   data-collection_db_1               /opt/mssql/bin/permissions ...   Up      1401/tcp, 0.0.0.0:5002->1433/tcp
    data-collection_server_1           yarn run watch                   Up      0.0.0.0:5001->3000/tcp
-   data-collection_winged-keys-db_1   /opt/mssql/bin/permissions ...   Up      1433/tcp
+   data-collection_winged-keys-db_1   /opt/mssql/bin/permissions ...   Up      1401/tcp, 0.0.0.0:5051->1433/tcp
    data-collection_winged-keys_1      sh /entrypoint.sh                Up      0.0.0.0:5050->5050/tcp
 
    ```
+
+(Stop the application running in the background with `docker-compose down`.)
 
 ### Architecture
 
@@ -57,11 +66,11 @@ This mono-repo consists of three main parts:
 
 ### Database
 
-The application has a SQL Server backend. We use [typeORM](https://typeorm.io/) to manage database migrations. [Read more about our specific use of typeORM here](src/entity/README.md)
+The application has a SQL Server backend. We use [TypeORM](https://typeorm.io/) to manage database migrations. [Read more about our specific use of typeORM here](src/entity/README.md)
 
-### Testing
+## Testing
 
-#### Unit/Integration testing
+### Unit/Integration testing
 
 Frontend and backend unit/integration tests exist, and can be run with `yarn test` in either the `src` or `client/src` directories.
 
@@ -81,12 +90,13 @@ $ docker-compose exec client yarn test
 
 Frontend tests include snapshot matching tests. If a change was made that creates a legitimate change to a snapshot, or snapshots need to be deleted, created, or renamed, run tests with `-u` flag
 
-#### Integration/End-to-end testing
+### Integration/End-to-end testing
 
 We do two types of full-stack testing which encompass the client <-> server interactions and server <-> database interactions.
 Because we don't mock or instantiate a SQL Server instance for our unit/integration tests, these tests can only be run against a full stack of the app (either a local docker-compose stack, or a deployed stack)
 
-1. **API Tests**: perhaps a bit confusingly, API integration tests are written in the `client` dir, because we already have a util for calling the api there! find them [here](client/src/integrationTests)
+### API Tests
+Perhaps a bit confusingly, API integration tests are written in the `client` dir, because we already have a util for calling the api there! find them [here](client/src/integrationTests)
 
    To run these tests:
 
@@ -98,7 +108,8 @@ Because we don't mock or instantiate a SQL Server instance for our unit/integrat
 
    Set `TEST_API_PATH` env var to run them against an environment other than the default `http://localhost:5001`
 
-2. **End-to-end Tests**: these [nightwatch](https://nightwatchjs.org/)-powered selemnium tests run in Browserstack. Thus, they can only be run against a deployed stack (for now, there are ways to set up Browserstack for local apps but we haven't done that). They live [here](e2e-tests), and there's more info about them [here](e2e-tests/README.md)
+### E2E Tests
+These [nightwatch](https://nightwatchjs.org/)-powered selemnium tests run in Browserstack. Thus, they can only be run against a deployed stack (for now, there are ways to set up Browserstack for local apps but we haven't done that). They live [here](e2e-tests), and there's more info about them [here](e2e-tests/README.md)
 
    To run the e2e tests:
    **NOTE**: Be sure to add browserstack credentials to a .env file or export them as env vars

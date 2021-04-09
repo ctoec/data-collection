@@ -4,6 +4,7 @@ const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { scrollToElement } = require('../utils/scrollToElement');
 const { enterFormValue } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
+const { UploadFileTypes } = require('../utils/UploadFileTypes');
 
 module.exports = {
   '@tags': ['child', 'change'],
@@ -11,14 +12,14 @@ module.exports = {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await uploadFile(browser);
+    await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
     await navigateToRoster(browser);
     await clickOnChildInRoster(browser);
 
     const newFirstNameText = 'New first name';
     await enterFormValue(browser, 'firstName', newFirstNameText);
 
-    const saveButtonArgs = ['xpath', "//*/input[contains(@value,'Save')]"];
+    const saveButtonArgs = ['css selector', 'button[type="submit"]'];
     await scrollToElement(browser, saveButtonArgs);
     await browser.click(...saveButtonArgs);
     await scrollToElement(browser, ['css selector', 'header']);

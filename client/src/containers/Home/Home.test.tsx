@@ -24,9 +24,16 @@ const userProps = {
   setConfidentialityAgreedDate: () => {},
 };
 
+const authProps = {
+  loading: false,
+  accessToken: 'notBlank',
+};
+
 const HomeWithUserProvider = (
   <UserContext.Provider value={{ ...userProps }}>
-    <Home />
+    <AuthenticationContext.Provider value={{ ...authProps }}>
+      <Home />
+    </AuthenticationContext.Provider>
   </UserContext.Provider>
 );
 
@@ -40,13 +47,14 @@ jest.mock('../../utils/api');
 import * as api from '../../utils/api';
 import { waitFor } from '@testing-library/react';
 import { RevisionRequest } from './RevisionRequest';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 const apiMock = api as jest.Mocked<typeof api>;
 
 describe('Home', () => {
   snapshotTestHelper(HomeWithUserProvider, {
     before: async () => {
       apiMock.apiGet.mockReturnValue(
-        new Promise((resolve) => resolve({ submitted: false }))
+        new Promise((resolve) => resolve({ allSubmitted: false }))
       );
       return waitFor(() => expect(apiMock.apiGet).toBeCalled());
     },
@@ -57,7 +65,7 @@ describe('Home', () => {
   snapshotTestHelper(HomeWithUserProvider, {
     before: async () => {
       apiMock.apiGet.mockReturnValue(
-        new Promise((resolve) => resolve({ submitted: true }))
+        new Promise((resolve) => resolve({ allSubmitted: true }))
       );
       return waitFor(() => expect(apiMock.apiGet).toBeCalled());
     },
@@ -67,6 +75,12 @@ describe('Home', () => {
 
   accessibilityTestHelper(HomeWithUserProvider, {
     wrapInRouter: true,
+    before: async () => {
+      apiMock.apiGet.mockReturnValue(
+        new Promise((resolve) => resolve({ allSubmitted: true }))
+      );
+      return waitFor(() => expect(apiMock.apiGet).toBeCalled());
+    },
   });
 
   snapshotTestHelper(RevisionFormWithUserProvider, {

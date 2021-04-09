@@ -8,6 +8,7 @@ import {
   AgeGroupField,
   NewFundingField,
   EnrollmentEndDateField,
+  ExitReasonField,
 } from './Fields';
 import UserContext from '../../../contexts/UserContext/UserContext';
 import { RecordFormProps } from '../types';
@@ -104,15 +105,6 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
   const onSubmit = (updatedData: Enrollment) => {
     setLoading(true);
 
-    //  Because the radio group for the Site field broadcasts ID as a string,
-    //  but the API is expecting a number (as it should)
-    if (
-      !!updatedData.site &&
-      !!updatedData.site.id &&
-      typeof updatedData.site.id === 'string'
-    ) {
-      updatedData.site.id = parseInt(updatedData.site.id);
-    }
     saveData(updatedData)
       .then(afterSaveSuccess)
       .catch((err) => {
@@ -152,7 +144,10 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
           <EnrollmentStartDateField<Enrollment> />
         )}
         {showFieldOrFieldset(enrollment, ['exit']) && (
-          <EnrollmentEndDateField<Enrollment> />
+          <>
+            <EnrollmentEndDateField<Enrollment> />
+            <ExitReasonField<Enrollment> />
+          </>
         )}
         {showFieldOrFieldset(enrollment, ['model']) && (
           <CareModelField<Enrollment> />

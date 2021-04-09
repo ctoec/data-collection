@@ -221,11 +221,13 @@ exports[`EditRecord FamilyInfo matches snapshot 1`] = `
     <div
       class="grid-row margin-top-2"
     >
-      <input
-        class="usa-button"
+      <button
+        class="usa-button bx--btn bx--btn--primary"
+        tabindex="0"
         type="submit"
-        value="Save"
-      />
+      >
+        Save
+      </button>
     </div>
   </form>
 </DocumentFragment>

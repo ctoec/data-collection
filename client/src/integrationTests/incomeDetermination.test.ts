@@ -23,7 +23,7 @@ const TEST_OPTS: ApiOpts = {
 describe('integration', () => {
   describe('api', () => {
     let organization: Organization;
-    beforeAll(async () => {
+    beforeEach(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
@@ -33,8 +33,9 @@ describe('integration', () => {
       organization = user.organizations?.shift() as Organization;
     });
 
-    afterAll(() => {
+    afterEach(() => {
       enableFetchMocks();
+      jest.resetAllMocks();
     });
 
     describe('income determinations', () => {

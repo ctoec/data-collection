@@ -3,6 +3,7 @@ const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
 const { scrollToElement } = require('../utils/scrollToElement');
+const { UploadFileTypes } = require('../utils/UploadFileTypes');
 
 module.exports = {
   '@tags': ['child', 'withdraw'],
@@ -10,7 +11,9 @@ module.exports = {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await uploadFile(browser);
+    await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
+
+    await sortMissingInfoChildrenLast(browser);
     const clickedChildLinkText = await clickOnChildInRoster(browser);
     const lastName = clickedChildLinkText.split(',')[0];
 
@@ -36,7 +39,16 @@ module.exports = {
     // input with options extending "over" the button so need direct injection
     // to click it
     await browser.execute(function () {
-      document.querySelector('input[value="Withdraw"]').click();
+      // woof, this is pretty yuck
+      document
+        .evaluate(
+          '//*/button[contains(text(), "Withdraw")]',
+          document,
+          null,
+          9, // https://developer.mozilla.org/en-US/docs/Web/API/Document/evaluate#result_types
+          null
+        )
+        .singleNodeValue.click();
     }, []);
 
     // These two elements say the withdraw happened when the alert appears
@@ -44,13 +56,25 @@ module.exports = {
       'xpath',
       "//*/h2[contains(., 'Record withdrawn')]"
     );
-    await browser.waitForElementVisible(
-      'xpath',
-      "//*/p[contains(., '19 children enrolled')]"
-    );
 
     // This expect allows the test to end with a success code
     browser.expect.element('p.usa-alert__text').text.to.contain(lastName);
     browser.end();
   },
 };
+
+//  SUPER SORTING HACK so that children without missing info are at the top of the page,
+//  because we can't withdraw children that are missing info
+async function sortMissingInfoChildrenLast(browser) {
+  await browser.execute(`window.scrollTo(280,900);`);
+  await browser.click(
+    'xpath',
+    "//*/button[contains(text(), 'Missing info')][1]"
+  );
+
+  await browser.execute(`window.scrollTo(280,900);`);
+  await browser.click(
+    'xpath',
+    "//*/button[contains(text(), 'Missing info')][1]"
+  );
+}

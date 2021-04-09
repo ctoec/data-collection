@@ -153,7 +153,8 @@ export function parseEnrollmentReportRow(
  * Other values return true.
  * @param value
  */
-export function getBoolean(value: string): boolean {
+export function getBoolean(value: string | number | boolean): boolean {
+  if (typeof value === 'boolean' || typeof value === 'number') return !!value;
   if (['Y', 'YES'].includes(value?.trim().toUpperCase())) return true;
   else if (['N', 'NO'].includes(value?.toUpperCase())) return false;
   return null;
@@ -178,10 +179,6 @@ export function getDate(value: string | number, prop: string): Moment {
   }
   if (typeof value === 'number') {
     parsedDate = excelDateToDate(value);
-  }
-  // Override the day value of funding period dates to be 01
-  if (parsedDate && prop.toLowerCase().includes('period')) {
-    return parsedDate.startOf('month');
   }
   return parsedDate;
 }

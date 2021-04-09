@@ -11,7 +11,11 @@ import {
   Site,
 } from '../shared/models';
 import moment, { Moment } from 'moment';
-import { ChangeFunding, Withdraw, ChangeEnrollment } from '../shared/payloads';
+import {
+  ChangeFundingRequest,
+  WithdrawRequest,
+  ChangeEnrollmentRequest,
+} from '../shared/payloads';
 
 jest.mock('../utils/getCurrentHost');
 import * as util from '../utils/getCurrentHost';
@@ -28,7 +32,7 @@ describe('integration', () => {
     let reportingPeriods: ReportingPeriod[] | undefined;
     let organization: Organization;
     let site: Site;
-    beforeAll(async () => {
+    beforeEach(async () => {
       disableFetchMocks();
       utilMock.getCurrentHost.mockReturnValue(
         process.env.API_TEST_HOST || 'http://localhost:5001'
@@ -41,8 +45,9 @@ describe('integration', () => {
       ) as Site;
       reportingPeriods = await apiGet(`reporting-periods`, '', TEST_OPTS);
     });
-    afterAll(() => {
+    afterEach(() => {
       enableFetchMocks();
+      jest.resetAllMocks();
     });
     describe('enrollments', () => {
       it('PUT /enrollments/id', async () => {
@@ -105,7 +110,7 @@ describe('integration', () => {
             rp.period > (currentFunding.firstReportingPeriod?.period as Moment)
         );
 
-        const changeFunding: ChangeFunding = {
+        const changeFunding: ChangeFundingRequest = {
           newFunding: {
             firstReportingPeriod: period,
           } as Funding,
@@ -156,7 +161,7 @@ describe('integration', () => {
 
         const exit = moment().utc();
         const exitReason = 'an exit reason';
-        const withdraw: Withdraw = {
+        const withdraw: WithdrawRequest = {
           exit,
           exitReason,
         };

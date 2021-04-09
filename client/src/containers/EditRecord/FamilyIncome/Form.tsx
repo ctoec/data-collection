@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RecordFormProps } from '../../../components/Forms';
 import { IncomeDetermination } from '../../../shared/models';
 import { RedeterminationCard } from './RedeterminationCard';
-import { Button, InlineIcon, TextWithIcon } from '@ctoec/component-library';
+import { Button, InlineIcon } from '@ctoec/component-library';
 import { EditDeterminationCard } from './EditDeterminationCard';
 import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 import { determinationHasNoInformation } from '../../../utils/determinationHasNoInformation';
@@ -23,9 +23,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
     throw new Error('Family income form rendered without family');
   }
 
-  const [showRedeterminationForm, setShowRedeterminationForm] = useState(false);
   const [currentIsNew, setCurrentIsNew] = useState(false);
-
   const determinations: IncomeDetermination[] =
     child.family.incomeDeterminations || []; // assume they're sorted
 
@@ -39,6 +37,13 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
   const currentDetermination: IncomeDetermination | undefined =
     determinations[0];
   const pastDeterminations: IncomeDetermination[] = determinations.slice(1);
+
+  // If a user somehow broke the create flow and got here without
+  // a child having _any_ dets at all, there's no det to pull an ID
+  // from, so direct the user to redetermine
+  const [showRedeterminationForm, setShowRedeterminationForm] = useState(
+    currentDetermination === undefined
+  );
 
   return (
     <>
@@ -60,6 +65,7 @@ export const FamilyIncomeForm: React.FC<RecordFormProps> = ({
           onCancel={() => setShowRedeterminationForm(false)}
           setAlerts={setAlerts}
           topHeadingLevel={getNextHeadingLevel(topHeadingLevel)}
+          noRecordedDets={noRecordedDets}
         />
       )}
       <div className="margin-top-1">

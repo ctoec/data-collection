@@ -17,6 +17,11 @@ import PrivacyPolicy from './containers/PrivacyPolicy/PrivacyPolicy';
 import Help from './containers/Help/Help';
 import SupportRequest from './containers/Help/SupportRequest';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
+import { ReviewMissingInfo } from './containers/Upload/ReviewMissingInfo';
+import { Preview } from './containers/Upload/Preview';
+import Overview from './containers/Overview/Overview';
+import { SiteOverview } from './containers/Overview/Site/Site';
+import { OrganizationOverview } from './containers/Overview/Organization/Organization';
 
 export type RouteConfig = {
   path: string;
@@ -49,6 +54,22 @@ export const routes: RouteConfig[] = [
     path: '/logout',
     component: Login,
     unauthorized: true,
+  },
+  {
+    path: '/overview',
+    component: Overview,
+    unauthorized: false,
+    exact: true,
+  },
+  {
+    path: '/overview/site/:id',
+    component: SiteOverview,
+    unauthorized: false,
+  },
+  {
+    path: '/overview/organization/:id',
+    component: OrganizationOverview,
+    unauthorized: false,
   },
   {
     path: '/home',
@@ -93,6 +114,16 @@ export const routes: RouteConfig[] = [
   {
     path: '/upload',
     component: Upload,
+    unauthorized: false,
+  },
+  {
+    path: '/missing-info',
+    component: ReviewMissingInfo,
+    unauthorized: false,
+  },
+  {
+    path: '/preview',
+    component: Preview,
     unauthorized: false,
   },
   {

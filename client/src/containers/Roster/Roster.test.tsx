@@ -172,7 +172,7 @@ const helperOpts = {
 };
 
 describe('Roster', () => {
-  beforeAll(async () => {
+  beforeEach(() => {
     paginatedChildDataMock.usePaginatedChildData.mockReturnValue({
       children,
       stillFetching: false,
@@ -237,5 +237,5 @@ describe('Roster', () => {
     helperOpts
   );
 
-  afterAll(() => jest.clearAllMocks());
+  afterEach(() => jest.clearAllMocks());
 });

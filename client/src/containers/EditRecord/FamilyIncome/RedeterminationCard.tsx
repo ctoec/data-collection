@@ -14,6 +14,7 @@ type RedeterminationCardProps = {
   onCancel: () => void;
   setAlerts: RecordFormProps['setAlerts'];
   topHeadingLevel: HeadingLevel;
+  noRecordedDets: boolean;
 };
 
 /**
@@ -26,14 +27,18 @@ export const RedeterminationCard: React.FC<RedeterminationCardProps> = ({
   onCancel,
   setAlerts,
   topHeadingLevel,
+  noRecordedDets = false,
 }) => {
+  const title = noRecordedDets
+    ? 'Determine family income'
+    : 'Redetermine family income';
   return (
     <>
-      <Heading level={topHeadingLevel}>Redetermine family income</Heading>
+      <Heading level={topHeadingLevel}>{title}</Heading>
       <Card>
         <FamilyIncomeForm
           id={'redetermine-family-income'}
-          legend={'Redetermine family income'}
+          legend={title}
           child={child}
           afterSaveSuccess={afterSaveSuccess}
           setAlerts={setAlerts}

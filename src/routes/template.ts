@@ -17,7 +17,7 @@ import {
 import { FakeChildrenTypes } from '../../client/src/shared/models';
 import { streamUploadedChildren } from '../controllers/export';
 import { parseQueryString } from '../utils/parseQueryString';
-import { TemplateMetadata } from '../../client/src/shared/payloads';
+import { TemplateMetadataResponse } from '../../client/src/shared/payloads';
 
 export const templateRouter = express.Router();
 /**
@@ -29,7 +29,7 @@ export const templateRouter = express.Router();
  * 	- column metadata from the FlattenedEnrollment model
  */
 templateRouter.get('/metadata', (_, res) => {
-  const templateMetadata: TemplateMetadata = {
+  const templateMetadata: TemplateMetadataResponse = {
     version: TEMPLATE_VERSION,
     lastUpdated: TEMPLATE_LAST_UPDATED,
     columnMetadata: getAllColumnMetadata(),

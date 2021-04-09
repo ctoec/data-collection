@@ -9,5 +9,5 @@ morgan.token('userId', function (req) {
 // Also, only log requests for the backend services (at /api), not the requests for the static UI content
 export const requestLogger = morgan(
   ':remote-addr - :userId [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length]',
-  { skip: (req) => !(req as Request).baseUrl.includes('api') }
+  { skip: (req) => !(req as Request).baseUrl?.includes('api') }
 );

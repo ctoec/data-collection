@@ -33,6 +33,7 @@ services:
       WINGED_KEYS_HOST: 'https://winged-keys:5050'
       # Change this to true if you want to create a test user with permissions for multiple organizations
       MULTI_ORG_USER: 'false'
+      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
     depends_on:
       - db
 
@@ -41,12 +42,16 @@ services:
     environment:
       SA_PASSWORD: TestPassword1
       ACCEPT_EULA: Y
+    ports:
+      - 5002:1433
 
   winged-keys-db:
     image: mcr.microsoft.com/mssql/server
     environment:
       SA_PASSWORD: TestPassword1
       ACCEPT_EULA: Y
+    ports:
+      - 5051:1433
   winged-keys:
     build:
       context: .

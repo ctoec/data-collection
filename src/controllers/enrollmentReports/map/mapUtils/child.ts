@@ -72,8 +72,18 @@ export const mapChild = (
     suffix: source.suffix,
     birthdate: source.birthdate,
     birthCertificateType: birthCertificateType,
-    birthTown: source.birthTown,
-    birthState: source.birthState,
+    // Need these corrections to defeat Excel: xlsx parses CSVs
+    // aggressively, storing things in a sparse representation.
+    // Blanks are interpreted as properties not existing, and
+    // there are NO parsing options to change this because the
+    // problem is with Excel itself. So we need to force conditionally
+    // expected properties to appear with the empty string.
+    birthTown: (source as Object).hasOwnProperty('birthTown')
+      ? source.birthTown
+      : '',
+    birthState: (source as Object).hasOwnProperty('birthState')
+      ? source.birthState
+      : '',
     birthCertificateId: source.birthCertificateId,
     americanIndianOrAlaskaNative: source.americanIndianOrAlaskaNative,
     asian: source.asian,
@@ -89,6 +99,49 @@ export const mapChild = (
     organization,
     family,
   });
+};
+
+/**
+ * Updates the various fields of a child's birth certificate.
+ *
+ * @param child
+ * @param source
+ * @param childrenToUpdate
+ */
+export const updateBirthCertificateInfo = (
+  child: Child,
+  source: EnrollmentReportRow,
+  childrenToUpdate: Child[]
+) => {
+  let madeAChange = false;
+  if (
+    child.birthCertificateType === BirthCertificateType.Unavailable &&
+    source.birthCertificateType
+  ) {
+    const birthCertificateType: BirthCertificateType = mapEnum(
+      BirthCertificateType,
+      source.birthCertificateType
+    );
+    child.birthCertificateType = birthCertificateType;
+    madeAChange = true;
+  }
+  if (child.birthCertificateType === BirthCertificateType.US) {
+    if (!child.birthCertificateId) {
+      child.birthCertificateId = source.birthCertificateId;
+      madeAChange = true;
+    }
+    if (!child.birthState) {
+      child.birthState = source.birthState;
+      madeAChange = true;
+    }
+    if (!child.birthTown) {
+      child.birthTown = source.birthTown;
+      madeAChange = true;
+    }
+  }
+
+  if (madeAChange) childrenToUpdate.push(child);
+  return madeAChange;
 };
 
 /**

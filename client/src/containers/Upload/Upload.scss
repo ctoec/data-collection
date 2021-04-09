@@ -1,0 +1,38 @@
+.upload-roster {
+  margin-bottom: 5rem;
+}
+
+.three-column-layout {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.three-column-card {
+  margin: 0.5em;
+  width: 30%;
+  max-width: 30%;
+}
+
+.missing-info-table {
+  width: 100%;
+}
+
+.missing-info-icon svg {
+  height: 2em;
+  width: 2em;
+  vertical-align: middle;
+  display: inline-block;
+  position: relative;
+  top: -0.1em;
+  left: 0.1em;
+  margin-right: 0.25em;
+}
+
+.upload-preview-table {
+  .bx--accordion__content {
+    padding-right: 0;
+  }
+}

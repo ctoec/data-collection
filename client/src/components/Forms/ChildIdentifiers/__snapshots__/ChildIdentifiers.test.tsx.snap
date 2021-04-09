@@ -266,11 +266,13 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
         </span>
       </div>
     </fieldset>
-    <input
-      class="usa-button"
+    <button
+      class="usa-button bx--btn bx--btn--primary"
+      tabindex="0"
       type="submit"
-      value="Save"
-    />
+    >
+      Save
+    </button>
   </form>
 </DocumentFragment>
 `;
@@ -567,11 +569,13 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
         </span>
       </div>
     </fieldset>
-    <input
-      class="usa-button"
+    <button
+      class="usa-button bx--btn bx--btn--primary"
+      tabindex="0"
       type="submit"
-      value="Save"
-    />
+    >
+      Save
+    </button>
   </form>
 </DocumentFragment>
 `;
@@ -868,11 +872,13 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
         </span>
       </div>
     </fieldset>
-    <input
-      class="usa-button"
+    <button
+      class="usa-button bx--btn bx--btn--primary"
+      tabindex="0"
       type="submit"
-      value="Save"
-    />
+    >
+      Save
+    </button>
   </form>
 </DocumentFragment>
 `;

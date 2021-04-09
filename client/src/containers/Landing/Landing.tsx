@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Redirect } from 'react-router-dom';
-import cx from 'classnames';
 import { ReactComponent as ArrowRight } from '@ctoec/component-library/dist/assets/images/arrowForward.svg';
 import {
   Button,
@@ -23,7 +22,11 @@ const Landing: React.FC = () => {
 
   // If the user is logged in, don't show the splash page
   if (user) {
-    return <Redirect to="/home" />;
+    return user.isAdmin ? (
+      <Redirect to="/overview/" />
+    ) : (
+      <Redirect to="/home" />
+    );
   }
 
   return (
@@ -90,8 +93,22 @@ const Landing: React.FC = () => {
                   />
                 }
               />
-              {/* <h3>Get help with ECE Reporter</h3> */}
-              {/* TODO: HELP PAGE LINK */}
+              <h3>Get help with ECE Reporter</h3>
+              <Button
+                appearance="unstyled"
+                external={true}
+                href="https://help.ece-reporter.ctoec.org"
+                className="margin-bottom-3 display-block"
+                text={
+                  <TextWithIcon
+                    text="View how-to guides"
+                    Icon={ArrowRight}
+                    direction="right"
+                    iconSide="right"
+                    className="text-underline"
+                  />
+                }
+              />
               <h3>Learn more about OEC</h3>
               <Button
                 appearance="unstyled"
@@ -127,7 +144,7 @@ const Landing: React.FC = () => {
           </div>
         </div>
       </div>
-      <footer className={cx('bg-base-lightest', 'padding-y-6', 'footer')}>
+      <footer className="bg-base-lightest padding-y-6 footer">
         <div className="grid-container">
           <div className="grid-row grid-gap">
             <div className="grid-col-9">
@@ -139,7 +156,7 @@ const Landing: React.FC = () => {
                 better for you.
               </p>
               <a
-                className="usa-button usa-button--outline"
+                className="usa-button usa-button--outline margin-top-3"
                 href="https://forms.monday.com/forms/f5bcf5d3d611b99f45ffb8187cd6c2b9?r=use1"
                 target="_blank"
               >

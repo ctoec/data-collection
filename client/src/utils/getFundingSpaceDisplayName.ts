@@ -1,4 +1,4 @@
-import { FundingSource, FundingSpace } from '../../../shared/models';
+import { FundingSource, FundingSpace } from '../shared/models';
 
 /**
  * Util function that cleans up a funding source name by stripping

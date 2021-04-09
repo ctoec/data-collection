@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Form, Button, FormSubmitButton } from '@ctoec/component-library';
-import { ChangeFunding } from '../../../../shared/payloads';
+import { ChangeFundingRequest } from '../../../../shared/payloads';
 import { NewFundingField } from '../../../../components/Forms/Enrollment/Fields';
 import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Funding/Fields';
 import { Enrollment, FundingSource } from '../../../../shared/models';
@@ -26,7 +26,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const { accessToken } = useContext(AuthenticationContext);
-  const onSubmit = (updatedData: ChangeFunding) => {
+  const onSubmit = (updatedData: ChangeFundingRequest) => {
     setLoading(true);
     apiPost(`enrollments/${enrollment.id}/change-funding`, updatedData, {
       accessToken,
@@ -54,21 +54,21 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
   }
 
   return (
-    <Form<ChangeFunding>
+    <Form<ChangeFundingRequest>
       id="change-funding-form"
       className="usa-form"
       data={{}}
       onSubmit={onSubmit}
     >
       {changeType === 'start' && (
-        <NewFundingField<ChangeFunding>
+        <NewFundingField<ChangeFundingRequest>
           fundingAccessor={(data) => data.at('newFunding')}
           getEnrollment={() => enrollment}
           organizationId={orgId}
         />
       )}
       {!!activeFunding && (
-        <ReportingPeriodField<ChangeFunding>
+        <ReportingPeriodField<ChangeFundingRequest>
           accessor={(data) => data.at('oldFunding').at('lastReportingPeriod')}
           fundingSource={activeFunding.fundingSpace?.source as FundingSource} // This is known to have a value (check on line 44)
           isLast={true}

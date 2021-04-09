@@ -1,17 +1,12 @@
-import React from 'react';
 import { Column } from '@ctoec/component-library';
-import { ErrorObjectForTable } from './ErrorObjectForTable';
+import React from 'react';
+import { EnrollmentColumnError } from '../../shared/payloads';
 
-/**
- * Tabular column formatter that displays a dictionary of
- * counts of validation errors as a formatted table within
- * a file upload modal.
- */
-export const tableColumns: () => Column<ErrorObjectForTable>[] = () => {
-  const columns: Column<ErrorObjectForTable>[] = [
+export const misingInfoTableColumns: () => Column<EnrollmentColumnError>[] = () => {
+  const columns: Column<EnrollmentColumnError>[] = [
     {
       name: 'Column name',
-      sort: (row) => row.property || '',
+      sort: (row) => row.column || '',
       cell: ({ row }) => (
         <th scope="row" className="font-body-2xs">
           <p>{row.formattedName}</p>
@@ -20,16 +15,16 @@ export const tableColumns: () => Column<ErrorObjectForTable>[] = () => {
     },
     {
       name: '# of errors',
-      sort: (row) => row.property || '',
+      sort: (row) => row.column || '',
       cell: ({ row }) => (
         <th scope="row" className="font-body-2xs">
-          <p>{row.count}</p>
+          <p>{row.errorCount}</p>
         </th>
       ),
     },
     {
       name: 'Child records with errors',
-      sort: (row) => row.property || '',
+      sort: (row) => row.column || '',
       cell: ({ row }) => (
         <th scope="row" className="font-body-2xs">
           <p>
