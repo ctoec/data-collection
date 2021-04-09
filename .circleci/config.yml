@@ -4,7 +4,7 @@ orbs:
   node: circleci/node@4.0.0
 
 jobs:
-  install:
+  pull:
     docker:
       - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
         aws_auth:
@@ -12,6 +12,17 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - checkout
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .
+  install:
+    docker:
+      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
       - node/install-packages:
           pkg-manager: yarn
           cache-path: node_modules
@@ -216,11 +227,17 @@ workflows:
             - build
   deploy-to-devsecure:
     jobs:
+      - pull
       - hold:
           type: approval
+          filters:
+              branches:
+                ignore:
+                  - remove-extra-deploy-workflow
       - install:
           requires:
             - hold
+            - pull
       - build:
           env: devsecure
           requires:
