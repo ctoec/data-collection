@@ -54,7 +54,9 @@ Once the required libraries are installed, getting the application up and runnin
 
    ```
 
-(Stop the application running in the background with `docker-compose down`.)
+Stop the application running in the background with `docker-compose down`.
+
+Reset the database data with `docker-compose rm -s -f db && docker-compose up -d db && docker-compose restart server`.
 
 ### Architecture
 
