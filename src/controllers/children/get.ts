@@ -1,5 +1,5 @@
 import { getManager } from 'typeorm';
-import { User, FundingSpace, Child } from '../../entity';
+import { User, Enrollment, FundingSpace, Child } from '../../entity';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import moment, { Moment } from 'moment';
 import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
@@ -140,8 +140,9 @@ export const getActiveChildren = async (
   const end = activeMonth.endOf('month').format('YYYY-MM-DD');
 
   const qb = await queryBuilderBuilder({ user, organizationIds });
+  // Either no enrollment or overlapping with time range
   qb.andWhere(
-    'enrollment.entry <= :end AND (enrollment.exit >= :start OR enrollment.exit IS NULL)',
+    '(enrollment.entry <= :end OR enrollment.entry IS NULL) AND (enrollment.exit >= :start OR enrollment.exit IS NULL)',
     {
       start,
       end,
@@ -166,7 +167,19 @@ export const getWithdrawnChildren = async (
   const { skip, take } = selectParms;
 
   const qb = await queryBuilderBuilder({ user, organizationIds });
-  qb.andWhere('enrollment.exit IS NOT NULL');
+  // Empty enrollments qualify as "active"
+  qb.andWhere('enrollment.entry IS NOT NULL');
+  // Subquery: find active enrollments by childId
+  qb.andWhere((qb) => {
+    const subQuery = qb
+      .subQuery()
+      .select('e.childId')
+      .from(Enrollment, 'e')
+      .where('e.exit IS NULL');
+
+    // Inverse: Child not included as those with active enrollments
+    return 'NOT Child.id IN ' + subQuery.getQuery();
+  });
 
   if (skip) qb.skip(skip);
   if (take) qb.take(take);
@@ -284,7 +297,10 @@ export const getErrorCounts = async (user: User, organizationIds: string[]) => {
   const children = await getMissingInfoChildren(user, organizationIds);
   return children.reduce(
     (counts, child) => {
-      if (child.enrollments?.some((enrollment) => !enrollment.exit)) {
+      if (
+        !child.enrollments?.length ||
+        child.enrollments?.some((enrollment) => !enrollment.exit)
+      ) {
         counts.activeErrorsCount += 1;
       } else {
         counts.withdrawnErrorsCount += 1;

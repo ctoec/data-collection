@@ -46,9 +46,10 @@ describe('integration', () => {
       });
 
       it('GET /children/count', async () => {
-        const children = await apiGet('children', '', TEST_OPTS);
+        const active = await apiGet('children', '', TEST_OPTS);
+        const withdrawn = await apiGet('children/withdrawn', '', TEST_OPTS);
         const { count } = await apiGet('children/metadata', '', TEST_OPTS);
-        expect(count).toEqual(children.length);
+        expect(count).toEqual(active.length + withdrawn.length);
       });
 
       it('GET /children?organizationId', async () => {
@@ -77,7 +78,7 @@ describe('integration', () => {
       it('GET /children?month=MMM-YYYY', async () => {
         // Create child and enrollment
         const { id: childId } = await createChild(organization);
-        await createEnrollment(childId, site);
+        await createEnrollment(childId, site, { withFunding: true });
         // by default, enrollment is created with start date 09/01/2020
         const activeMonth = moment('2020-08-01', 'YYYY-MM-DD');
         const activeInMonthChildren: Child[] = await apiGet(
@@ -90,8 +91,6 @@ describe('integration', () => {
           activeInMonthChildren.some((child) => child.id === childId)
         ).not.toBeTruthy();
         activeInMonthChildren.forEach((child) => {
-          expect(child.enrollments).not.toBeUndefined();
-          expect(child.enrollments).not.toHaveLength(0);
           expect(
             child.enrollments?.every((enrollment) =>
               enrollment.entry?.isSameOrBefore(activeMonth.endOf('month'))

@@ -111,7 +111,11 @@ const Roster: React.FC = () => {
   // Organization filtering happens on the server-side,
   // but site filtering needs to happen in the client-side, if a
   // site is requested
-  const siteFilteredChildren = applySiteFilter(childRecords, query.site);
+  const siteFilteredChildren = applySiteFilter(
+    childRecords,
+    query.site,
+    query.withdrawn
+  );
   const siteChildCount = (siteFilteredChildren || []).length;
   const siteIsEmpty = siteChildCount === 0;
   const rosterH2 = getRosterH2(siteChildCount, user?.sites, query);
