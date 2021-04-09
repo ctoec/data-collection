@@ -202,7 +202,7 @@ export const RevisionRequest: React.FC = () => {
   );
 
   // Send the accumulated changes to be written to the DB
-  const submitRequest = () => {
+  const submitRequest = async () => {
     const revisionRequest = {
       updateSiteRequests: updateRequests.filter(
         (r) => r.newName !== '' || r.remove
@@ -212,7 +212,7 @@ export const RevisionRequest: React.FC = () => {
       ),
       fundingSpaceRequests: userFundingSpaces,
     };
-    apiPost(`revision-request/${userOrgs[0].id}`, revisionRequest, {
+    await apiPost(`revision-request/${userOrgs[0].id}`, revisionRequest, {
       accessToken,
       jsonParse: false,
     }).catch((err) => {

@@ -1,16 +1,101 @@
-import { removeDeletedEntitiesFromChild } from '../../utils/filterSoftRemoved';
-import {
-  getManager,
-  FindManyOptions,
-  FindOneOptions,
-  SelectQueryBuilder,
-} from 'typeorm';
-import { User, Child } from '../../entity';
-import { validateObject } from '../../utils/validateObject';
+import { getManager } from 'typeorm';
+import { User, Enrollment, FundingSpace, Child } from '../../entity';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
-import { Moment } from 'moment';
-import { propertyDateSorter } from '../../utils/propertyDateSorter';
+import moment, { Moment } from 'moment';
 import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
+import { validateObject } from '../../utils/processChild';
+import { groupBy } from 'underscore';
+import { getCurrentFunding } from '../../utils/getCurrentFunding';
+import { NestedFundingSpaces } from '../../../client/src/shared/payloads/NestedFundingSpaces';
+import { getFundingSpaces } from '../../controllers/fundingSpaces';
+import { intersection } from 'lodash';
+
+const whereNotDeleted = (field: string) => `${field}.deletedDate IS NULL`;
+
+/**
+ * Get base query for getting children for given user. Applies organizationId filter to
+ * all organizations the user has read-access for.
+ * If user has site-level access, also applies a site filter to only return children
+ * and enrollments for those sites. It also sorts enrollment and financial information.
+ */
+const queryBuilderBuilder = async ({
+  user,
+  organizationIds,
+}: {
+  user: User;
+  organizationIds?: string[];
+}) => {
+  const readOrgIds = await getReadAccessibleOrgIds(user);
+  const orgIds = organizationIds?.length
+    ? intersection(readOrgIds, organizationIds)
+    : readOrgIds;
+
+  const qb = await getManager()
+    .createQueryBuilder(Child, 'Child')
+    // Restrict via org access
+    .where('Child.organizationId IN (:...orgIds)', {
+      // SQLServer doesn't like queries like "IN ()", so supply
+      // an impossible value for empty arrays
+      orgIds: orgIds.length ? orgIds : ['NULL'],
+    })
+    .leftJoinAndSelect('Child.organization', 'organization')
+    // Add family (with income)
+    .leftJoinAndSelect('Child.family', 'family')
+    .leftJoinAndSelect(
+      'family.incomeDeterminations',
+      'family_incomeDetermination',
+      whereNotDeleted('family_incomeDetermination')
+    );
+
+  // Enrollments with fundings
+  qb.leftJoinAndSelect(
+    'Child.enrollments',
+    'enrollment',
+    whereNotDeleted('enrollment')
+  )
+    .leftJoinAndSelect('enrollment.site', 'enrollment_site')
+    .leftJoinAndSelect(
+      'enrollment_site.organization',
+      'enrollment_site_organization'
+    )
+    .leftJoinAndSelect(
+      'enrollment.fundings',
+      'enrollment_funding',
+      whereNotDeleted('enrollment_funding')
+    )
+    .leftJoinAndSelect(
+      'enrollment_funding.fundingSpace',
+      'funding_fundingSpace'
+    )
+    .leftJoinAndSelect(
+      'enrollment_funding.firstReportingPeriod',
+      'funding_firstReportingPeriod'
+    )
+    .leftJoinAndSelect(
+      'enrollment_funding.lastReportingPeriod',
+      'funding_lastReportingPeriod'
+    );
+
+  // Restrict via site access
+  if (user.accessType === 'site') {
+    qb.andWhere(
+      '(enrollment.siteId IN (:...siteIds) OR (enrollment.siteId IS NULL AND (Child.authorId = :userId OR enrollment.authorId = :userId)))',
+      {
+        siteIds: user.siteIds,
+        userId: user.id,
+      }
+    );
+  }
+
+  // Sort enrollments (and funding) and income determinations
+  qb.orderBy({
+    'family_incomeDetermination.determinationDate': 'DESC',
+    'enrollment.entry': 'DESC',
+    'enrollment_funding.firstReportingPeriod': 'DESC',
+  });
+
+  return qb;
+};
 
 /**
  * Get child by id, with related family and related
@@ -19,79 +104,107 @@ import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
  * @param id
  */
 export const getChildById = async (id: string, user: User): Promise<Child> => {
-  const opts = await getFindOpts(user, { id });
-  const child = await getManager().findOne(Child, opts);
-  return await postProcessChild(child);
+  const qb = await queryBuilderBuilder({ user });
+  qb.andWhere('Child.id = :id', { id });
+
+  const child = await qb.getOne();
+  return await validateObject(child);
 };
 
 /**
- * Get all children the given user has access to.
+ * Get all active children for the current month that the given user has access.
  * Optionally, can filter to only return children:
  * 	- for specific organizations
- *  - with active enrollments in a specific month
- * 	- with missing info
+ *  - with active enrollments for a different time frame
  * Supports pagination with skip and take parameters, which
  * leverages offset fetch capability of sorted sql server query
  * (https://docs.microsoft.com/en-us/sql/t-sql/queries/select-order-by-clause-transact-sql?view=sql-server-ver15#syntax)
  */
-export const getChildren = async (
+export const getActiveChildren = async (
   user: User,
-  filterOpts: {
-    organizationIds?: string[];
-    missingInfoOnly?: boolean;
+  organizationIds?: string[],
+  selectParms?: {
     activeMonth?: Moment;
     skip?: number;
     take?: number;
-  } = {}
+  }
 ) => {
-  let {
-    organizationIds,
-    missingInfoOnly,
-    activeMonth,
+  const {
+    activeMonth = moment(), // Default to the current month
     skip,
     take,
-  } = filterOpts;
+  } = selectParms ?? {};
 
-  const opts = (await getFindOpts(user, {
-    organizationIds,
-  })) as FindManyOptions<Child>;
-  opts.skip = skip;
-  opts.take = take;
+  // Filter children with enrollments in the active month
+  const start = activeMonth.startOf('month').format('YYYY-MM-DD');
+  const end = activeMonth.endOf('month').format('YYYY-MM-DD');
 
-  let children = await getManager().find(Child, opts);
-  children = await Promise.all(children.map(postProcessChild));
+  const qb = await queryBuilderBuilder({ user, organizationIds });
+  // Either no enrollment or overlapping with time range
+  qb.andWhere(
+    '(enrollment.entry <= :end OR enrollment.entry IS NULL) AND (enrollment.exit >= :start OR enrollment.exit IS NULL)',
+    {
+      start,
+      end,
+    }
+  );
 
-  // If missing info qs param
-  if (missingInfoOnly) {
-    // Return all children with missing info
-    return children.filter(
-      (child) => child.validationErrors && child.validationErrors.length
-    );
+  if (skip) qb.skip(skip);
+  if (take) qb.take(take);
+
+  const children = await qb.getMany();
+  return await Promise.all(children.map(validateObject));
+};
+
+export const getWithdrawnChildren = async (
+  user: User,
+  organizationIds?: string[],
+  selectParms?: {
+    skip?: number;
+    take?: number;
   }
-  // Else if month qs param
-  else if (activeMonth) {
-    // Do not return children withouth active enrollment during or before that month
-    return children.filter((c) => {
-      // filter out enrollments after the current month filter
-      c.enrollments = c.enrollments?.filter(
-        (e) => e.entry && e.entry.isSameOrBefore(activeMonth.endOf('month'))
-      );
+) => {
+  const { skip, take } = selectParms;
 
-      // filter out children with no qualifying enrollments
-      return c.enrollments && c.enrollments.length;
-    });
-  }
+  const qb = await queryBuilderBuilder({ user, organizationIds });
+  // Empty enrollments qualify as "active"
+  qb.andWhere('enrollment.entry IS NOT NULL');
+  // Subquery: find active enrollments by childId
+  qb.andWhere((qb) => {
+    const subQuery = qb
+      .subQuery()
+      .select('e.childId')
+      .from(Enrollment, 'e')
+      .where('e.exit IS NULL');
 
-  // Default return all children
-  return children;
+    // Inverse: Child not included as those with active enrollments
+    return 'NOT Child.id IN ' + subQuery.getQuery();
+  });
+
+  if (skip) qb.skip(skip);
+  if (take) qb.take(take);
+
+  const children = await qb.getMany();
+  return await Promise.all(children.map(validateObject));
+};
+
+export const getMissingInfoChildren = async (
+  user: User,
+  organizationIds: string[]
+) => {
+  const qb = await queryBuilderBuilder({ user, organizationIds });
+  const preProcessedChildren = await qb.getMany();
+  const children = await Promise.all(preProcessedChildren.map(validateObject));
+
+  return children.filter((child) => child?.validationErrors?.length);
 };
 
 /**
  * Get count of all children the given user has access to
  */
-export const getCount = async (user: User) => {
-  const opts = await getFindOpts(user);
-  return getManager().count(Child, opts);
+export const getCount = async (user: User, organizationIds) => {
+  const qb = await queryBuilderBuilder({ user, organizationIds });
+  return await qb.getCount();
 };
 
 /**
@@ -100,15 +213,19 @@ export const getCount = async (user: User) => {
  * structure that pairs this count with id properties of the site
  * so that the front-end can send useres directly to a particular
  * site roster.
- * @param children
  */
-export const getSiteCountMap = async (user: User, children: Child[]) => {
+export const getSiteCountMap = async (
+  user: User,
+  organizationIds: string[]
+) => {
   const siteCounts: {
     siteName: string;
     count: number;
     orgId: number;
     siteId: number;
   }[] = [];
+  const qb = await queryBuilderBuilder({ user, organizationIds });
+  const children = await qb.getMany();
 
   children.forEach((c) => {
     const enrollment = getCurrentEnrollment(c);
@@ -138,109 +255,72 @@ export const getSiteCountMap = async (user: User, children: Child[]) => {
 };
 
 /**
- * Get base query for getting children for given user. Applies organizationId filter,
- * either as supplied by user or all organizations the user has read-access for.
- * If user has site-level access, also applies a site filter to only return children
- * and enrollments for those sites
- * @param user
- * @param organizationIds
+ * Function that accumulates the distribution of how all children in
+ * an organization are assigned to their various funding spaces
+ * across age groups and enrollment times. Handles partitioning for
+ * displaying so that the front end just has to spit this back out.
  */
-const getFindOpts = async (
+export const getFundingSpaceMap = async (
   user: User,
-  filterOpts: {
-    id?: string;
-    organizationIds?: string[];
-  } = {}
-) => {
-  const { id, organizationIds } = filterOpts;
-  const readOrgIds = await getReadAccessibleOrgIds(user);
-  const filterOrgIds =
-    organizationIds?.filter((orgId) => readOrgIds.includes(orgId)) ||
-    readOrgIds;
+  organizationIds: string[]
+): Promise<NestedFundingSpaces> => {
+  const qb = await queryBuilderBuilder({ user, organizationIds });
+  const children = await qb.getMany();
 
-  const opts: FindManyOptions<Child> | FindOneOptions<Child> = {
-    relations: [
-      'family',
-      'family.incomeDeterminations',
-      'enrollments',
-      'enrollments.site',
-      'enrollments.site.organization',
-      'enrollments.fundings',
-      'organization',
-    ],
-    where: (qb: SelectQueryBuilder<Child>) => {
-      qb.where('Child.organizationId IN (:...orgIds)', {
-        // SQLServer doesn't like queries like "IN ()", so supply
-        // an impossible value for empty arrays
-        orgIds: filterOrgIds.length ? filterOrgIds : ['NULL'],
-      });
+  const fundingSpaces = await getFundingSpaces(user, organizationIds);
+  const fundingSpacesDisplay = {} as NestedFundingSpaces;
 
-      if (id) {
-        qb.andWhere('Child.id = :id', { id });
-      }
+  const fundingSpacesWithChildCount = fundingSpaces.map((fs) => {
+    const filledSeats = children.filter((child) => {
+      const currentFunding = getCurrentFunding({ child: child });
+      return currentFunding?.fundingSpace?.id === fs.id;
+    }).length;
+    return { ...fs, filled: filledSeats };
+  });
 
-      // On deck for typeORM to implement where for nested relations in find
-      // https://github.com/typeorm/typeorm/issues/2707
-      // Until then, use the generated aliases to do nested filtering
-      if (user.accessType === 'site') {
-        qb.andWhere(
-          '(Child__enrollments.siteId IN (:...siteIds) OR (Child__enrollments.siteId IS NULL AND (Child.authorId = :userId OR Child__enrollments.authorId = :userId)))',
-          {
-            siteIds: user.siteIds,
-            userId: user.id,
-          }
-        );
-      }
-    },
-    loadEagerRelations: true,
-  };
+  const spacesBySource = groupBy(
+    fundingSpacesWithChildCount,
+    (fs: FundingSpace) => fs.source
+  );
 
-  return opts;
-};
-
-/**
- * Apply all post-processing to a child record:
- * 	- remove deleted entities
- * 	- sort entities by date
- * 	- validate full object tree
- * @param child
- */
-const postProcessChild = async (child: Child) => {
-  removeDeletedEntitiesFromChild(child);
-  sortEntities(child);
-  return validateObject(child);
-};
-
-/**
- * Sort enrollments, fundings, and income determinations
- * @param child
- */
-const sortEntities = (child: Child) => {
-  if (!child) return;
-  if (child.enrollments) {
-    child.enrollments = child.enrollments.sort((enrollmentA, enrollmentB) => {
-      if (enrollmentA.fundings) {
-        enrollmentA.fundings = enrollmentA.fundings.sort((fundingA, fundingB) =>
-          propertyDateSorter(
-            fundingA,
-            fundingB,
-            (f) => f.firstReportingPeriod.period
-          )
-        );
-      }
-
-      return propertyDateSorter(enrollmentA, enrollmentB, (e) => e.entry);
-    });
-  }
-
-  if (child.family?.incomeDeterminations) {
-    child.family.incomeDeterminations = child.family.incomeDeterminations.sort(
-      (determinationA, determinationB) =>
-        propertyDateSorter(
-          determinationA,
-          determinationB,
-          (d) => d.determinationDate
-        )
+  for (const source in spacesBySource) {
+    fundingSpacesDisplay[source] = groupBy(
+      spacesBySource[source],
+      (fs: FundingSpace) => fs.ageGroup
     );
   }
+
+  return fundingSpacesDisplay;
+};
+
+export const getErrorCounts = async (user: User, organizationIds: string[]) => {
+  const children = await getMissingInfoChildren(user, organizationIds);
+  return children.reduce(
+    (counts, child) => {
+      if (
+        !child.enrollments?.length ||
+        child.enrollments?.some((enrollment) => !enrollment.exit)
+      ) {
+        counts.activeErrorsCount += 1;
+      } else {
+        counts.withdrawnErrorsCount += 1;
+      }
+      return counts;
+    },
+    { activeErrorsCount: 0, withdrawnErrorsCount: 0 }
+  );
+};
+
+export const getMetadata = async (
+  user: User,
+  organizationIds: string[],
+  showFundings?: boolean
+) => {
+  const count = await getCount(user, organizationIds);
+  const siteCountMap = await getSiteCountMap(user, organizationIds);
+  const fundingSpacesMap = showFundings
+    ? await getFundingSpaceMap(user, organizationIds)
+    : null;
+
+  return { count, fundingSpacesMap, siteCountMap };
 };

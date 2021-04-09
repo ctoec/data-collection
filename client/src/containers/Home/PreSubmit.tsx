@@ -22,7 +22,7 @@ export const PreSubmitHome: React.FC = () => {
   // We might have a success alert pushed from the revision request
   // form, so check whether we do (but filter so that we only show
   // one if a user submits multiple forms)
-  const { setAlerts, alertElements } = useAlerts();
+  const [alertElements, setAlerts] = useAlerts();
   useEffect(() => {
     setAlerts((_alerts) => [
       _alerts.find((a) => a?.heading === 'Request received!'),
@@ -38,10 +38,8 @@ export const PreSubmitHome: React.FC = () => {
     // Determine the funding spaces map for the organization, if
     // the user has the permissions that enable this
     if (showFundings) {
-      apiGet('funding-spaces?fundingMap=true', accessToken)
-        .then((res) => {
-          setFundingSpacesDisplay(res.fundingSpacesMap);
-        })
+      apiGet('funding-spaces/funding-map', accessToken)
+        .then((res) => setFundingSpacesDisplay(res.fundingSpacesMap))
         .catch((err) => {
           throw new Error(err);
         });

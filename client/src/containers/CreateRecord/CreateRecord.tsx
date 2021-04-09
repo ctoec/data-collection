@@ -12,7 +12,9 @@ import { useFocusFirstError } from '../../hooks/useFocusFirstError';
 import { listSteps } from './listSteps';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { nameFormatter } from '../../utils/formatters';
-import RosterContext from '../../contexts/RosterContext/RosterContext';
+import RosterContext, {
+  UpdateCacheOpts,
+} from '../../contexts/RosterContext/RosterContext';
 import { stringify } from 'query-string';
 
 type LocationType = Location & {
@@ -43,7 +45,7 @@ const CreateRecord: React.FC = () => {
     }))
   );
 
-  const { rosterQuery, updateCurrentRosterCache } = useContext(RosterContext);
+  const { query, updateChildRecords } = useContext(RosterContext);
 
   // On initial load, set url hash to first step hash
   useEffect(() => {
@@ -82,7 +84,7 @@ const CreateRecord: React.FC = () => {
       if (indexOfCurrentStep === steps.length - 1) {
         history.push({
           pathname: '/roster',
-          search: stringify(rosterQuery || {}),
+          search: stringify(query),
           state: {
             alerts: [
               {
@@ -102,7 +104,10 @@ const CreateRecord: React.FC = () => {
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
-        updateCurrentRosterCache(updatedChild, { add: refetchChild < 1 });
+        updateChildRecords({
+          updatedChild,
+          opts: refetchChild < 1 ? UpdateCacheOpts.Add : undefined,
+        });
         if (refetchChild === 0) return;
 
         const currentStepStatus = steps[indexOfCurrentStep]?.status({
@@ -124,7 +129,7 @@ const CreateRecord: React.FC = () => {
   // After child is updated, programmatically focus on the first input with an error
   useFocusFirstError([child]);
 
-  const { alertElements, setAlerts } = useAlerts();
+  const [alertElements, setAlerts] = useAlerts();
 
   const hideErrors = useMemo(
     () => (_hash: string) => {

@@ -3,21 +3,6 @@ import { getAllColumnMetadata } from '../template';
 import { ObjectWithValidationErrors } from '../../client/src/shared/models';
 import { ColumnMetadata } from '../../client/src/shared/models';
 
-export async function validateObject<T extends ObjectWithValidationErrors>(
-  object: T | undefined
-) {
-  if (!object) return;
-
-  let validationErrors = await validate(object, {
-    validationError: { value: false, target: false },
-  });
-  const metadata = getAllColumnMetadata();
-  return distributeValidationErrorsToSubObjects(
-    object,
-    validationErrors,
-    metadata
-  );
-}
 /**
  * Given a parent object with validation errors that include child object
  * validations, adds validationErrors property to each child object
@@ -77,4 +62,20 @@ function distributeValidationErrorsToSubObjects<
     });
 
   return parentObject;
+}
+
+export async function validateObject<T extends ObjectWithValidationErrors>(
+  object: T | undefined
+) {
+  if (!object) return;
+
+  let validationErrors = await validate(object, {
+    validationError: { value: false, target: false },
+  });
+  const metadata = getAllColumnMetadata();
+  return distributeValidationErrorsToSubObjects(
+    object,
+    validationErrors,
+    metadata
+  );
 }

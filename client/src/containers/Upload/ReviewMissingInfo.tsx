@@ -11,7 +11,6 @@ import { BackButton } from '../../components/BackButton';
 import { EnrollmentColumnError } from '../../shared/payloads';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { misingInfoTableColumns } from './missingInfoTableColumns';
-import { ReactComponent as Arrow } from '@ctoec/component-library/dist/assets/images/uswds/arrowRight.svg';
 
 const props: ProgressIndicatorProps = {
   currentIndex: 1,
@@ -33,15 +32,14 @@ const props: ProgressIndicatorProps = {
 export const ReviewMissingInfo: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const history = useHistory();
-  const { state } = useLocation();
+  const { state } = useLocation() as { state: any };
 
   //  If there's no state suplied, the user presumably tried to get here manually, which isn't allowed
   if (!state) {
     history.push('/upload');
   }
 
-  const missingInfo: EnrollmentColumnError[] = (state as any)
-    .enrollmentColumnErrors;
+  const missingInfo: EnrollmentColumnError[] = state.enrollmentColumnErrors;
   const file = (state as any).file;
 
   return (

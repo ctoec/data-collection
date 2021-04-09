@@ -23,37 +23,90 @@ childrenRouter.get(
     const organizationIds = parseQueryString(req, 'organizationId', {
       forceArray: true,
     }) as string[];
-    const count = parseQueryString(req, 'count');
-    const missingInfo = parseQueryString(req, 'missing-info') as string;
     const activeMonth = parseQueryString(req, 'month', {
       post: (monthStr) => moment.utc(monthStr, 'MMM-YYYY'),
     }) as Moment;
     const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
     const take = parseQueryString(req, 'take', { post: parseInt }) as number;
-    const siteMap = parseQueryString(req, 'siteMap');
-
-    if (count && count === 'true') {
-      const count = await controller.getCount(req.user);
-      res.send({ count });
-      return;
-    }
-
-    const children = await controller.getChildren(req.user, {
+    const children = await controller.getActiveChildren(
+      req.user,
       organizationIds,
-      missingInfoOnly: missingInfo === 'true',
-      activeMonth,
-      skip,
-      take,
-    });
+      {
+        activeMonth,
+        skip,
+        take,
+      }
+    );
 
-    // Send back a nice pretty display structure for the user's home
-    // page if they've submitted their data
-    if (siteMap && siteMap === 'true') {
-      const siteCountMap = await controller.getSiteCountMap(req.user, children);
-      res.send({ siteCountMap });
-    } else {
-      res.send(children);
-    }
+    res.send(children);
+  })
+);
+
+childrenRouter.get(
+  '/withdrawn',
+  passAsyncError(async (req, res) => {
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
+    const take = parseQueryString(req, 'take', { post: parseInt }) as number;
+    const children = await controller.getWithdrawnChildren(
+      req.user,
+      organizationIds,
+      {
+        skip,
+        take,
+      }
+    );
+
+    res.send(children);
+  })
+);
+
+childrenRouter.get(
+  '/metadata',
+  passAsyncError(async (req, res) => {
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const showFundings = parseQueryString(req, 'showFundings') as string;
+    const metadata = await controller.getMetadata(
+      req.user,
+      organizationIds,
+      showFundings === 'true'
+    );
+
+    res.send(metadata);
+  })
+);
+
+childrenRouter.get(
+  '/missing-info',
+  passAsyncError(async (req, res) => {
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const missingInfoChildren = await controller.getMissingInfoChildren(
+      req.user,
+      organizationIds
+    );
+
+    res.send(missingInfoChildren);
+  })
+);
+
+childrenRouter.get(
+  '/validation-errors',
+  passAsyncError(async (req, res) => {
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const validationErrors = await controller.getErrorCounts(
+      req.user,
+      organizationIds
+    );
+
+    res.send(validationErrors);
   })
 );
 

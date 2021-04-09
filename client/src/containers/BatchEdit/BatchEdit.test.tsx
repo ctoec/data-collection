@@ -5,6 +5,7 @@ import { Child, Family } from '../../shared/models';
 import moment from 'moment';
 import { ValidationError } from 'class-validator';
 import { waitFor } from '@testing-library/dom';
+import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 
 const children: Child[] = [
   {
@@ -24,27 +25,47 @@ const apiMock = api as jest.Mocked<typeof api>;
 const waitGetChild = () => waitFor(() => expect(apiMock.apiGet).toBeCalled());
 
 describe('BatchEdit', () => {
-  snapshotTestHelper(<BatchEdit />, {
-    before: async () => {
-      apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([])));
-      return waitGetChild();
-    },
-    wrapInRouter: true,
-    wrapInSWRConfig: true,
-    name: 'matches snapshot when no records are missing info',
-  });
+  snapshotTestHelper(
+    <AuthenticationContext.Provider
+      value={{
+        accessToken: 'faketoken',
+        loading: false,
+      }}
+    >
+      <BatchEdit />
+    </AuthenticationContext.Provider>,
+    {
+      before: async () => {
+        apiMock.apiGet.mockReturnValue(new Promise((resolve) => resolve([])));
+        return waitGetChild();
+      },
+      wrapInRouter: true,
+      wrapInSWRConfig: true,
+      name: 'matches snapshot when no records are missing info',
+    }
+  );
 
-  snapshotTestHelper(<BatchEdit />, {
-    before: async () => {
-      apiMock.apiGet.mockReturnValue(
-        new Promise((resolve) => resolve(children))
-      );
-      return waitGetChild();
-    },
-    wrapInRouter: true,
-    wrapInSWRConfig: true,
-    name: 'matches snapshot when >0 records are missing info',
-  });
+  snapshotTestHelper(
+    <AuthenticationContext.Provider
+      value={{
+        accessToken: 'faketoken',
+        loading: false,
+      }}
+    >
+      <BatchEdit />
+    </AuthenticationContext.Provider>,
+    {
+      before: async () => {
+        apiMock.apiGet.mockReturnValue(
+          new Promise((resolve) => resolve(children))
+        );
+        return waitGetChild();
+      },
+      wrapInRouter: true,
+      wrapInSWRConfig: true,
+      name: 'matches snapshot when >0 records are missing info',
+    }
+  );
 
   accessibilityTestHelper(<BatchEdit />, { wrapInRouter: true });
 

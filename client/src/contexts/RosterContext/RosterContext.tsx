@@ -1,105 +1,145 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Child } from '../../shared/models';
-import { cache } from 'swr';
-import { stringify } from 'query-string';
-import cloneDeep from 'lodash/cloneDeep';
+
+import { Moment } from 'moment';
+import { stringify, parse } from 'query-string';
+import { useHistory } from 'react-router-dom';
+import UserContext from '../../contexts/UserContext/UserContext';
+import { User } from '../../shared/models';
+import { usePaginatedChildData } from '../../containers/Roster/hooks';
+import { getQueryMonthFormat } from '../../containers/Roster/rosterUtils';
+
+export const ALL_SITES = 'all-sites';
 
 export type RosterQueryParams = {
-  organization?: string;
+  organizationId?: string;
   site?: string;
   month?: string;
   withdrawn?: boolean;
 };
 
-type UpdateCacheOpts = {
-  remove?: boolean;
-  add?: boolean;
+export enum UpdateCacheOpts {
+  Remove,
+  Add,
+}
+
+export type UpdateCacheParams = {
+  updatedChild: Child;
+  opts?: UpdateCacheOpts;
 };
+
 export type RosterContextType = {
-  updateCurrentRosterCache: (
-    updatedChild: Child,
-    opts?: UpdateCacheOpts
-  ) => void;
-  setRosterQuery: (_: RosterQueryParams) => void;
-  rosterQuery: RosterQueryParams | undefined;
+  childRecords: Child[];
+  fetching: boolean;
+  query: RosterQueryParams;
+  revalidate: () => Promise<boolean>;
+  rosterUser: {
+    activeOrgId?: string;
+    isMultiOrgUser: boolean;
+    isSiteLevelUser: boolean;
+    user?: User | null;
+  };
+  updateChildRecords: (params: UpdateCacheParams) => void;
+  updateQueryMonth: (newMonth?: Moment) => void;
+  updateQueryOrgId: (newId: string) => void;
+  updateQuerySite: (newId: string) => void;
+  updateQueryWithdrawn: (withdrawn?: boolean) => void;
 };
 
-const RosterContext = React.createContext<RosterContextType>({
-  updateCurrentRosterCache: () => {},
-  setRosterQuery: () => {},
-  rosterQuery: undefined,
-});
+const defaultCtx = {
+  childRecords: [],
+  fetching: false,
+  query: {
+    organizationId: undefined,
+    site: undefined,
+    month: undefined,
+    withdrawn: undefined,
+  },
+  revalidate: async () => await false,
+  rosterUser: {
+    isMultiOrgUser: false,
+    isSiteLevelUser: false,
+  },
+  updateChildRecords: () => {},
+  updateQueryMonth: () => {},
+  updateQueryOrgId: () => {},
+  updateQuerySite: () => {},
+  updateQueryWithdrawn: () => {},
+};
 
-const { Provider } = RosterContext;
+const RosterContext = React.createContext<RosterContextType>(defaultCtx);
 
 const RosterProvider: React.FC = ({ children }) => {
-  const [rosterQuery, setRosterQuery] = useState<RosterQueryParams>();
+  const { user } = useContext(UserContext);
+  const history = useHistory();
+  const query: RosterQueryParams = parse(history.location.search);
 
-  /**
-   * useSWR provides a `mutate` callback to update cache values, but I cannot
-   * get it to work for the inifite flavor of the hook. This is a workaround
-   * that directly mutates the cache that underlies the SWR stuff without
-   * any of the other logic baked in to the mutate func (logic around if the
-   * changes should actually be applied, I guess? because they're not)
-   * @param updatedChild
-   */
-  function updateCurrentRosterCache(
-    updatedChild: Child,
-    opts?: UpdateCacheOpts
-  ) {
-    const { remove, add } = opts || {};
-    // If user has not visited roster (there is no query stored in this context)
-    // then we don't need to update a roster cache
-    if (rosterQuery) {
-      const key = cache.keys().find(
-        (key) =>
-          // special marker for inifinite cache values (https://github.com/vercel/swr/blob/master/src/use-swr-infinite.ts#L124)
-          key.includes('many') &&
-          // key for the current filtered roster the user is viewing
-          key.includes(
-            `children?${stringify({
-              organizationId: rosterQuery.organization,
-              month: rosterQuery.month,
-            })}`
-          ) &&
-          // filter out cache values we don't want (useSWR stores errors and isValidating state in cache as well)
-          !key.includes('validating') &&
-          !key.includes('err')
-      );
+  // Multi-org users have the active org in the query, else arbitrarily pick first
+  const activeOrgId =
+    query.organizationId ?? user?.organizations?.[0]?.id.toString();
+  const isMultiOrgUser = (user?.organizations ?? []).length > 1;
+  if (isMultiOrgUser) query.organizationId = activeOrgId;
 
-      // If cache value exists, update it (immutably, with cloneDeep)
-      if (key) {
-        const paginatedChildren: Child[][] = cloneDeep(cache.get(key) || []);
-        if (add) {
-          paginatedChildren[paginatedChildren.length - 1].push(updatedChild);
-        } else {
-          for (const page of paginatedChildren) {
-            const childIdx = page.findIndex((c) => c.id === updatedChild.id);
-            if (childIdx > -1) {
-              if (remove) {
-                page.splice(childIdx, 1);
-                break;
-              }
-              page.splice(childIdx, 1, updatedChild);
-              break;
-            }
-          }
-        }
-        cache.set(key, paginatedChildren);
-      }
-    }
-  }
+  const { error, ...childData } = usePaginatedChildData(query);
+  if (error) console.error(error);
 
   return (
-    <Provider
+    <RosterContext.Provider
       value={{
-        updateCurrentRosterCache,
-        setRosterQuery,
-        rosterQuery,
+        ...childData,
+        query,
+        rosterUser: {
+          activeOrgId,
+          isMultiOrgUser,
+          isSiteLevelUser: user?.accessType === 'site',
+          user,
+        },
+        updateQueryMonth: (newMonth?: Moment) => {
+          const month = getQueryMonthFormat(newMonth);
+          history.push({
+            search: stringify({
+              ...query,
+              withdrawn: defaultCtx.query.withdrawn,
+              month,
+            }),
+          });
+        },
+        updateQueryOrgId: (newId: string) => {
+          // Remove site param if newId !== current orgId
+          if (newId !== query.organizationId) delete query.site;
+          history.push({
+            search: stringify({
+              ...query,
+              organizationId: newId,
+            }),
+          });
+        },
+        updateQuerySite: (newId: string) => {
+          // Push a specific site id if specific site selected
+          if (newId !== ALL_SITES) {
+            history.push({
+              search: stringify({ ...query, site: newId }),
+            });
+          }
+          // Or remove site param from search if 'All sites' selected
+          else {
+            delete query.site;
+            history.push({ search: stringify(query) });
+          }
+        },
+        updateQueryWithdrawn: (withdrawn?: boolean) => {
+          history.push({
+            search: stringify({
+              ...query,
+              month: defaultCtx.query.month,
+              withdrawn,
+            }),
+          });
+        },
       }}
     >
       {children}
-    </Provider>
+    </RosterContext.Provider>
   );
 };
 

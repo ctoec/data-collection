@@ -12,7 +12,9 @@ import { apiDelete } from '../../../utils/api';
 import { Child } from '../../../shared/models';
 import { RecordFormProps } from '../../../components/Forms';
 import { nameFormatter } from '../../../utils/formatters';
-import RosterContext from '../../../contexts/RosterContext/RosterContext';
+import RosterContext, {
+  UpdateCacheOpts,
+} from '../../../contexts/RosterContext/RosterContext';
 
 type DeleteProps = {
   child: Child;
@@ -27,17 +29,20 @@ export const DeleteRecord: React.FC<DeleteProps> = ({ child, setAlerts }) => {
   const history = useHistory();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { rosterQuery, updateCurrentRosterCache } = useContext(RosterContext);
+  const { query, updateChildRecords } = useContext(RosterContext);
 
   function deleteRecord() {
     setIsDeleting(true);
     apiDelete(`children/${child.id}`, { accessToken })
       .then(() => {
-        updateCurrentRosterCache(child, { remove: true });
+        updateChildRecords({
+          updatedChild: child,
+          opts: UpdateCacheOpts.Remove,
+        });
         toggleIsOpen();
         history.push({
           pathname: '/roster',
-          search: stringify(rosterQuery || {}),
+          search: stringify(query),
           state: {
             alerts: [
               {
