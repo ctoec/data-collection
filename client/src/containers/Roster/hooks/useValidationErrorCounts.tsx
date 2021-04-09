@@ -13,11 +13,11 @@ export const useValidationErrorCounts = () => {
   } = useContext(RosterContext);
 
   const [validationErrors, setValidationErrors] = useState<{
-    numActiveErrors: number;
-    numWithdrawnErrors: number;
+    activeErrorsCount: number;
+    withdrawnErrorsCount: number;
   }>({
-    numActiveErrors: 0,
-    numWithdrawnErrors: 0,
+    activeErrorsCount: 0,
+    withdrawnErrorsCount: 0,
   });
 
   useEffect(() => {

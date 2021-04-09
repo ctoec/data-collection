@@ -28,6 +28,7 @@ export const usePaginatedChildData = ({
     size,
     setSize,
     error,
+    revalidate,
   } = useAuthenticatedSWRInfinite<Child[]>((index, prevData) => {
     // Base case -- no more data to fetch when prev data length = 0
     if (prevData && !prevData.length) {
@@ -65,32 +66,31 @@ export const usePaginatedChildData = ({
 
   return {
     childRecords: childrenArrays ? childrenArrays.flat() : [],
+    error,
+    fetching,
     // Mutate the cache with updated child data
-    // Or nothing to refresh the cache
-    updateChildRecords: ({ updatedChild, opts }: UpdateCacheParams = {}) => {
-      if (updatedChild) {
-        const data = cloneDeep(childrenArrays ?? []);
-        if (opts === UpdateCacheOpts.Add) {
-          data[data.length - 1]?.push(updatedChild);
-        } else {
-          for (const page of data) {
-            const childIdx = page?.findIndex((c) => c.id === updatedChild.id);
-            if (childIdx > -1) {
-              if (opts === UpdateCacheOpts.Remove) {
-                page.splice(childIdx, 1);
-              } else {
-                page.splice(childIdx, 1, updatedChild);
-              }
+    updateChildRecords: ({ updatedChild, opts }: UpdateCacheParams) => {
+      const data = cloneDeep(childrenArrays ?? []);
+      if (opts === UpdateCacheOpts.Add) {
+        data[data.length - 1]?.push(updatedChild);
+      } else {
+        for (const page of data) {
+          const childIdx = page?.findIndex((c) => c.id === updatedChild.id);
+          if (childIdx > -1) {
+            if (opts === UpdateCacheOpts.Remove) {
+              page.splice(childIdx, 1);
+            } else {
+              page.splice(childIdx, 1, updatedChild);
             }
           }
-          mutate(data);
         }
+        mutate(data);
         // okay now _really_ mutate: https://github.com/vercel/swr/issues/908
-        // (or refresh https://benborgers.com/posts/swr-refresh)
         mutate();
       }
     },
-    fetching,
-    error,
+    // TODO: Apparently this will be deprecated, but the alternative is really poorly defined
+    // https://github.com/vercel/swr/discussions/812#discussioncomment-203697
+    revalidate,
   };
 };

@@ -49,7 +49,9 @@ const Roster: React.FC = () => {
     updateQueryMonth,
     updateQueryWithdrawn,
   } = useContext(RosterContext);
-  const [{ numActiveErrors, numWithdrawnErrors }] = useValidationErrorCounts();
+  const [
+    { activeErrorsCount, withdrawnErrorsCount },
+  ] = useValidationErrorCounts();
   const [isSubmitted, setIsSubmitted] = useIsSubmitted();
   const [submittedModalOpen, setSubmittedModalOpen] = useState(false);
   const [alertElements, setAlerts] = useAlerts();
@@ -66,8 +68,8 @@ const Roster: React.FC = () => {
   const [alertType, setAlertType] = useState<'warning' | 'error'>('warning');
   useEffect(() => {
     const childrenWithErrorsAlert = getChildrenWithErrorsAlert(
-      numActiveErrors,
-      numWithdrawnErrors,
+      activeErrorsCount,
+      withdrawnErrorsCount,
       alertType,
       activeOrgId
     );
@@ -82,8 +84,8 @@ const Roster: React.FC = () => {
     ]);
   }, [
     isSubmitted,
-    numActiveErrors,
-    numWithdrawnErrors,
+    activeErrorsCount,
+    withdrawnErrorsCount,
     alertType,
     activeOrgId,
   ]);
@@ -92,7 +94,7 @@ const Roster: React.FC = () => {
   async function submitToOEC() {
     // Block submit if there are incomplete records / records with errors
     // Scroll to top of page and change alert to error, not warning
-    if (numActiveErrors + numWithdrawnErrors > 0) {
+    if (activeErrorsCount + withdrawnErrorsCount > 0) {
       window.scrollTo(0, 0);
       setAlertType('error');
       // If there's an active org, submit

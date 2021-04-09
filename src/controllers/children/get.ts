@@ -284,13 +284,10 @@ export const getErrorCounts = async (user: User, organizationIds: string[]) => {
   const children = await getMissingInfoChildren(user, organizationIds);
   return children.reduce(
     (counts, child) => {
-      if (
-        child.enrollments?.length &&
-        child.enrollments?.some((enrollment) => !enrollment.exit)
-      ) {
-        counts.withdrawnErrorsCount += 1;
-      } else {
+      if (child.enrollments?.some((enrollment) => !enrollment.exit)) {
         counts.activeErrorsCount += 1;
+      } else {
+        counts.withdrawnErrorsCount += 1;
       }
       return counts;
     },

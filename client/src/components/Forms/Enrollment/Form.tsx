@@ -82,14 +82,14 @@ export const EnrollmentForm: React.FC<EnrollmentFormProps> = ({
       : getCurrentEnrollment(child)) || ({} as Enrollment);
 
   const createEnrollment = async (updatedData: Enrollment) =>
-    apiPost(
+    await apiPost(
       `children/${child.id}/change-enrollment`,
       { newEnrollment: updatedData },
       { accessToken, jsonParse: false }
     );
 
   const updateEnrollment = async (updatedData: Enrollment) =>
-    apiPut(`enrollments/${enrollment.id}`, updatedData, {
+    await apiPut(`enrollments/${enrollment.id}`, updatedData, {
       accessToken,
     });
 

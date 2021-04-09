@@ -18,7 +18,7 @@ export function getChildrenWithErrorsAlert(
   let alertText = `Required information is missing for
         ${pluralize('record', activeErrorsCounts, true)}.`;
   if (withdrawnErrorsCounts > 0) {
-    alertText = `Required information is missing for ${withdrawnErrorsCounts} active ${pluralize(
+    alertText = `Required information is missing for ${activeErrorsCounts} active ${pluralize(
       'record',
       activeErrorsCounts
     )} and ${withdrawnErrorsCounts} withdrawn ${pluralize(

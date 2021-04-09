@@ -43,7 +43,7 @@ export const PostSubmitHome: React.FC = () => {
 
         // Also determine the funding spaces map for the organization, if
         // the user has the permissions that enable this
-        if (fundingSpacesMap) {
+        if (showFundings && fundingSpacesMap) {
           setFundingSpacesDisplay(fundingSpacesMap);
         }
       })

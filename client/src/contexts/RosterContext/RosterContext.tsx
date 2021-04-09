@@ -24,7 +24,7 @@ export enum UpdateCacheOpts {
 }
 
 export type UpdateCacheParams = {
-  updatedChild?: Child;
+  updatedChild: Child;
   opts?: UpdateCacheOpts;
 };
 
@@ -32,13 +32,14 @@ export type RosterContextType = {
   childRecords: Child[];
   fetching: boolean;
   query: RosterQueryParams;
+  revalidate: () => Promise<boolean>;
   rosterUser: {
     activeOrgId?: string;
     isMultiOrgUser: boolean;
     isSiteLevelUser: boolean;
     user?: User | null;
   };
-  updateChildRecords: (params?: UpdateCacheParams) => void;
+  updateChildRecords: (params: UpdateCacheParams) => void;
   updateQueryMonth: (newMonth?: Moment) => void;
   updateQueryOrgId: (newId: string) => void;
   updateQuerySite: (newId: string) => void;
@@ -54,6 +55,7 @@ const defaultCtx = {
     month: undefined,
     withdrawn: undefined,
   },
+  revalidate: async () => await false,
   rosterUser: {
     isMultiOrgUser: false,
     isSiteLevelUser: false,

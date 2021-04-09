@@ -42,7 +42,7 @@ const props: ProgressIndicatorProps = {
 export const Preview: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-  const { updateChildRecords, query } = useContext(RosterContext);
+  const { revalidate, query } = useContext(RosterContext);
   const history = useHistory();
   const { state } = useLocation();
 
@@ -76,7 +76,6 @@ export const Preview: React.FC = () => {
             rawBody: true,
           }
         );
-        updateChildRecords();
         setPreview(resp);
       } catch (error) {
         handleJWTError(history, (err) => {
@@ -106,7 +105,7 @@ export const Preview: React.FC = () => {
         }
       );
 
-      updateChildRecords();
+      await revalidate();
       history.push({
         pathname: '/roster',
         search: stringify(query),

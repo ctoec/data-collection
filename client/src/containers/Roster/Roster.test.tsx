@@ -176,6 +176,7 @@ describe('Roster', () => {
       updateChildRecords: () => {},
       fetching: false,
       error: undefined,
+      revalidate: async () => await true,
     });
     apiMock.apiGet.mockReturnValue(
       new Promise((resolve) => resolve({ submitted: false }))

@@ -57,8 +57,7 @@ const EditRecord: React.FC = () => {
   const { updateChildRecords } = useContext(RosterContext);
 
   // Child re-fetch
-  const [triggerRefetchCounter, setTriggerRefetchCounter] = useState(0);
-  useEffect(() => {
+  const refreshChild = (saveUpdate: boolean = false) =>
     apiGet(`children/${childId}`, accessToken)
       .then((updatedChild) => {
         setChild(updatedChild);
@@ -71,8 +70,8 @@ const EditRecord: React.FC = () => {
           newAlerts.push(missingInfoAlertProps);
         }
 
-        // Only set success alert on a GET that happens after an update (refetch count > 0)
-        if (triggerRefetchCounter > 0) {
+        // Only set success alert on a GET that happens after an saving update
+        if (saveUpdate) {
           newAlerts.push({
             type: 'success',
             heading: 'Record updated',
@@ -86,11 +85,14 @@ const EditRecord: React.FC = () => {
       .catch((err) => {
         throw new Error(err);
       });
-  }, [accessToken, childId, triggerRefetchCounter]);
+
+  useEffect(() => {
+    refreshChild();
+  }, [accessToken, childId]);
 
   useFocusFirstError([child]);
 
-  const afterSaveSuccess = () => setTriggerRefetchCounter((r) => r + 1);
+  const afterSaveSuccess = () => refreshChild(true);
   const commonFormProps = {
     child,
     afterSaveSuccess,

@@ -98,19 +98,18 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   }
 
   const createDetermination = async (updatedData: IncomeDetermination) =>
-    apiPost(
+    await apiPost(
       `families/${child?.family?.id}/income-determinations`,
       updatedData,
       { accessToken }
     );
 
-  const updateDetermination = async (updatedData: IncomeDetermination) => {
-    apiPut(
+  const updateDetermination = async (updatedData: IncomeDetermination) =>
+    await apiPut(
       `families/${child?.family?.id}/income-determinations/${determination.id}`,
       updatedData,
       { accessToken }
     );
-  };
 
   const saveData = determination.id ? updateDetermination : createDetermination;
 

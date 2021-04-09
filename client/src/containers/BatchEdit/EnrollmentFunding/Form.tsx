@@ -32,22 +32,16 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
       />
     );
   }
-
-  let enrollmentsWithValidationErrors = child?.enrollments?.map(
-    (enrollment) => {
-      // will return true if enrollment has validation errors,
-      // including if any fundings have validation errors
-      if (doesEnrollmentFormHaveErrors(child, enrollment.id)) {
-        const fundingsWithValidationErrors = enrollment.fundings?.filter(
-          (funding) =>
-            doesFundingFormHaveErrors(child, enrollment.id, funding.id)
-        );
-        const enrollmentWithValidationErrors = { ...enrollment };
-        enrollmentWithValidationErrors.fundings = fundingsWithValidationErrors;
-        return enrollmentWithValidationErrors;
-      }
-    }
-  );
+  // will return true if enrollment has validation errors,
+  // including if any fundings have validation errors
+  const enrollmentsWithValidationErrors = child?.enrollments
+    ?.filter(({ id }) => doesEnrollmentFormHaveErrors(child, id))
+    ?.map((enrollment) => ({
+      ...enrollment,
+      fundings: enrollment.fundings?.filter((funding) =>
+        doesFundingFormHaveErrors(child, enrollment.id, funding.id)
+      ),
+    }));
 
   return (
     <>
