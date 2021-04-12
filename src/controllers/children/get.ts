@@ -10,6 +10,11 @@ import { NestedFundingSpaces } from '../../../client/src/shared/payloads/NestedF
 import { getFundingSpaces } from '../../controllers/fundingSpaces';
 import { intersection } from 'lodash';
 
+type skipTake = {
+  skip?: number;
+  take?: number;
+};
+
 const whereNotDeleted = (field: string) => `${field}.deletedDate IS NULL`;
 
 /**
@@ -120,27 +125,17 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
  * leverages offset fetch capability of sorted sql server query
  * (https://docs.microsoft.com/en-us/sql/t-sql/queries/select-order-by-clause-transact-sql?view=sql-server-ver15#syntax)
  */
-export const getActiveChildren = async (
+const activeChildrenQuery = async (
   user: User,
-  organizationIds?: string[],
-  selectParms?: {
-    activeMonth?: Moment;
-    skip?: number;
-    take?: number;
-  }
+  organizationIds: string[],
+  selectParams: {
+    end: string;
+    start: string;
+  } & skipTake
 ) => {
-  const {
-    activeMonth = moment(), // Default to the current month
-    skip,
-    take,
-  } = selectParms ?? {};
-
-  // Filter children with enrollments in the active month
-  const start = activeMonth.startOf('month').format('YYYY-MM-DD');
-  const end = activeMonth.endOf('month').format('YYYY-MM-DD');
-
+  const { end, start, skip, take } = selectParams;
   const qb = await queryBuilderBuilder({ user, organizationIds });
-  // Either no enrollment or overlapping with time range
+  // Filter children: either with no enrollment or overlapping with time range
   qb.andWhere(
     '(enrollment.entry <= :end OR enrollment.entry IS NULL) AND (enrollment.exit >= :start OR enrollment.exit IS NULL)',
     {
@@ -152,19 +147,45 @@ export const getActiveChildren = async (
   if (skip) qb.skip(skip);
   if (take) qb.take(take);
 
+  return qb;
+};
+
+export const getActiveChildren = async (
+  user: User,
+  organizationIds?: string[],
+  selectParams?: {
+    month?: Moment;
+  } & skipTake
+) => {
+  const { month = moment(), ...restParams } = selectParams;
+  const qb = await activeChildrenQuery(user, organizationIds, {
+    end: month.endOf('month').format('YYYY-MM-DD'),
+    start: month.startOf('month').format('YYYY-MM-DD'),
+    ...restParams,
+  });
   const children = await qb.getMany();
   return await Promise.all(children.map(validateObject));
+};
+
+/**
+ * Get count of active children
+ */
+export const getActiveChildrenCount = async (user: User, organizationIds) => {
+  const month = moment();
+  const qb = await activeChildrenQuery(user, organizationIds, {
+    end: month.endOf('month').format('YYYY-MM-DD'),
+    start: month.startOf('month').format('YYYY-MM-DD'),
+  });
+
+  return await qb.getCount();
 };
 
 export const getWithdrawnChildren = async (
   user: User,
   organizationIds?: string[],
-  selectParms?: {
-    skip?: number;
-    take?: number;
-  }
+  selectParams?: skipTake
 ) => {
-  const { skip, take } = selectParms;
+  const { skip, take } = selectParams;
 
   const qb = await queryBuilderBuilder({ user, organizationIds });
   // Empty enrollments qualify as "active"
@@ -197,14 +218,6 @@ export const getMissingInfoChildren = async (
   const children = await Promise.all(preProcessedChildren.map(validateObject));
 
   return children.filter((child) => child?.validationErrors?.length);
-};
-
-/**
- * Get count of all children the given user has access to
- */
-export const getCount = async (user: User, organizationIds) => {
-  const qb = await queryBuilderBuilder({ user, organizationIds });
-  return await qb.getCount();
 };
 
 /**
@@ -316,7 +329,7 @@ export const getMetadata = async (
   organizationIds: string[],
   showFundings?: boolean
 ) => {
-  const count = await getCount(user, organizationIds);
+  const count = await getActiveChildrenCount(user, organizationIds);
   const siteCountMap = await getSiteCountMap(user, organizationIds);
   const fundingSpacesMap = showFundings
     ? await getFundingSpaceMap(user, organizationIds)

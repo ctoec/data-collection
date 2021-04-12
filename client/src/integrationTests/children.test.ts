@@ -47,9 +47,8 @@ describe('integration', () => {
 
       it('GET /children/count', async () => {
         const active = await apiGet('children', '', TEST_OPTS);
-        const withdrawn = await apiGet('children/withdrawn', '', TEST_OPTS);
         const { count } = await apiGet('children/metadata', '', TEST_OPTS);
-        expect(count).toEqual(active.length + withdrawn.length);
+        expect(count).toEqual(active.length);
       });
 
       it('GET /children?organizationId', async () => {
