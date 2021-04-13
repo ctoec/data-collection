@@ -33,7 +33,7 @@ import {
   rowHasNewDetermination,
   rowHasNewEnrollment,
   rowHasNewFunding,
-} from '../map/mapUtils';
+} from './mapUtils';
 import { getLastIncomeDetermination } from '../../../utils/getLastIncomeDetermination';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
 import { validate } from 'class-validator';

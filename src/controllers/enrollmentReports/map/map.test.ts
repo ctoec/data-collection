@@ -25,14 +25,10 @@ import {
 import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
 import {
   getRaceIndicated,
-  lookUpOrganization,
   lookUpSite,
   mapEnum,
   mapFundingTime,
-  MISSING_PROVIDER_ERROR,
-  isIdentifierMatch,
   updateBirthCertificateInfo,
-  updateFamilyAddress,
   rowHasNewDetermination,
   rowHasNewEnrollment,
   getExitReason,
@@ -42,37 +38,6 @@ import moment from 'moment';
 
 describe('controllers', () => {
   describe('enrollmentReports', () => {
-    describe('lookUpOrganization', () => {
-      it('returns the organization if only one organization', () => {
-        const inputOrg = { id: 1 } as Organization;
-        const org = lookUpOrganization({} as EnrollmentReportRow, [inputOrg]);
-        expect(org).toEqual(inputOrg);
-      });
-      it('throws an error if the source row does not have a provider name', () => {
-        expect(() => lookUpOrganization({} as EnrollmentReportRow, [])).toThrow(
-          new BadRequestError(MISSING_PROVIDER_ERROR)
-        );
-      });
-      it.each([
-        ['org1', 'org1'],
-        ['org1000', undefined],
-      ])(
-        'returns the organization from the list that matches source provider name',
-        (sourceProviderName, resultOrgName) => {
-          const inputOrgs = [
-            { providerName: 'org1' },
-            { providerName: 'org2' },
-          ] as Organization[];
-          const source = {
-            providerName: sourceProviderName,
-          } as EnrollmentReportRow;
-
-          const org = lookUpOrganization(source, inputOrgs);
-          expect(org?.providerName).toEqual(resultOrgName);
-        }
-      );
-    });
-
     describe('lookUpSite', () => {
       it('returns undefined if source row does not have siteName', () => {
         const site = lookUpSite({} as EnrollmentReportRow, 1, []);
@@ -301,140 +266,6 @@ describe('controllers', () => {
       );
     });
 
-    describe('isIdentifierMatch', () => {
-      const SASID = '1234567890';
-      const UNIQUEID = '123-45-67890';
-      const BIRTHDATE = moment('10-20-2019', 'MM-DD-YYYY');
-      const FIRSTNAME = 'Firstname';
-      const LASTNAME = 'Lastname';
-
-      it('is match for child with same SASID, birtdate, first name, and last name', () => {
-        const child = {
-          sasid: SASID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          sasidUniqueId: SASID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).toBeTruthy();
-      });
-
-      it('is match for child with same UniqueId, birthdate, first name and last name', () => {
-        const child = {
-          uniqueId: UNIQUEID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          sasidUniqueId: UNIQUEID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).toBeTruthy();
-      });
-
-      it('is match for child with no sasid/uniqueId, and same birthdate, firstname and last name', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).toBeTruthy();
-      });
-
-      it('is not a match for child with different sasid', () => {
-        const child = {
-          sasid: SASID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different uniqueId', () => {
-        const child = {
-          uniqueId: UNIQUEID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different birthdate', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE.clone().add(2, 'month'),
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different first name', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: 'Other name',
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different last name', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: 'Other name',
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-    });
-
     describe('updateBirthCertificateInfo', () => {
       const US_CERT = BirthCertificateType.US;
       const US_CERT_ID = '12345678901';
@@ -511,95 +342,6 @@ describe('controllers', () => {
         expect(updatedCert).toBeFalsy();
         expect(CHILDREN_TO_UPDATE.length).toEqual(0);
         expect(child.birthCertificateType).toEqual(NON_US_CERT);
-      });
-    });
-
-    describe('updateFamilyAddress', () => {
-      const STREET = 'street';
-      const TOWN = 'town';
-      const STATE = 'state';
-      const ZIP = '12345';
-      const NEW_STREET = 'new street';
-      const NEW_TOWN = 'new town';
-      const NEW_STATE = 'new state';
-      const NEW_ZIP = '98765';
-      const HOMELESSNESS = UndefinableBoolean.No;
-      const NEW_HOMELESSNESS = UndefinableBoolean.Yes;
-      let FAMILIES_TO_UPDATE: Family[];
-
-      it('change homelessness status if present', () => {
-        FAMILIES_TO_UPDATE = [];
-        const family = {
-          streetAddress: STREET,
-          town: TOWN,
-          state: STATE,
-          zipCode: ZIP,
-          homelessness: HOMELESSNESS,
-        } as Family;
-        const other = {
-          homelessness: NEW_HOMELESSNESS,
-        } as EnrollmentReportRow;
-        const updatedFam = updateFamilyAddress(
-          family,
-          other,
-          FAMILIES_TO_UPDATE
-        );
-
-        expect(updatedFam).toBeTruthy();
-        expect(FAMILIES_TO_UPDATE.length).toEqual(1);
-        expect(family.homelessness).toEqual(NEW_HOMELESSNESS);
-      });
-
-      it('update address information if new', () => {
-        FAMILIES_TO_UPDATE = [];
-        const family = {
-          streetAddress: STREET,
-          town: TOWN,
-          state: STATE,
-          zipCode: ZIP,
-        } as Family;
-        const other = {
-          streetAddress: NEW_STREET,
-          town: NEW_TOWN,
-          state: NEW_STATE,
-          zipCode: NEW_ZIP,
-        } as EnrollmentReportRow;
-        const updatedFam = updateFamilyAddress(
-          family,
-          other,
-          FAMILIES_TO_UPDATE
-        );
-
-        expect(updatedFam).toBeTruthy();
-        expect(FAMILIES_TO_UPDATE.length).toEqual(1);
-        expect(family.streetAddress).toEqual(NEW_STREET);
-        expect(family.town).toEqual(NEW_TOWN);
-        expect(family.state).toEqual(NEW_STATE);
-        expect(family.zipCode).toEqual(NEW_ZIP);
-      });
-
-      it('no update if address is not new', () => {
-        FAMILIES_TO_UPDATE = [];
-        const family = {
-          streetAddress: STREET,
-          town: TOWN,
-          state: STATE,
-          zipCode: ZIP,
-        } as Family;
-        const other = {
-          streetAddress: STREET,
-          town: TOWN,
-          state: STATE,
-          zipCode: ZIP,
-        } as EnrollmentReportRow;
-        const updatedFam = updateFamilyAddress(
-          family,
-          other,
-          FAMILIES_TO_UPDATE
-        );
-
-        expect(updatedFam).toBeFalsy();
-        expect(FAMILIES_TO_UPDATE.length).toEqual(0);
       });
     });
 

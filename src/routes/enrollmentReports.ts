@@ -3,7 +3,6 @@ import { getManager } from 'typeorm';
 import multer from 'multer';
 import { BadRequestError, ApiError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
 import {
@@ -12,7 +11,7 @@ import {
   EnrollmentReportUploadResponse,
 } from '../../client/src/shared/payloads';
 import { ChangeTag, Child } from '../../client/src/shared/models';
-import { MapController } from '../controllers/enrollmentReports/new/MapController';
+import { MapController } from '../controllers/enrollmentReports/map/MapController';
 import { batchSave } from '../controllers/enrollmentReports/map/mapUtils/batchSave';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
