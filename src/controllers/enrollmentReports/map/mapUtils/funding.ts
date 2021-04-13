@@ -7,6 +7,7 @@ import {
   ReportingPeriod,
 } from '../../../../entity';
 import {
+  AgeGroup,
   ChangeTag,
   FundingSource,
   FundingTime,
@@ -28,7 +29,7 @@ import { Moment } from 'moment';
 export const mapFunding = (
   source: EnrollmentReportRow,
   organization: Organization,
-  enrollment: Enrollment,
+  ageGroup: AgeGroup,
   fundingSpaces: FundingSpace[],
   reportingPeriods: ReportingPeriod[]
 ) => {
@@ -48,7 +49,7 @@ export const mapFunding = (
         fs.organizationId === organization.id &&
         fs.source === fundingSource &&
         fs.time === fundingTime &&
-        fs.ageGroup === enrollment.ageGroup
+        fs.ageGroup === ageGroup
     );
   }
 
@@ -72,6 +73,7 @@ export const mapFunding = (
 
   // If the user supplied _any_ funding-related fields, create
   // a populated funding.
+  let funding: Funding;
   if (
     source.fundingSpace ||
     source.time ||
@@ -82,12 +84,9 @@ export const mapFunding = (
       firstReportingPeriod,
       lastReportingPeriod,
       fundingSpace,
-      enrollment,
     });
   } else {
-    return getManager().create(Funding, {
-      enrollment,
-    });
+    return getManager().create(Funding, {});
   }
 };
 
@@ -161,7 +160,7 @@ export const handleFundingUpdate = (
     const funding = mapFunding(
       source,
       organization,
-      enrollment,
+      enrollment.ageGroup,
       userFundingSpaces,
       userReportingPeriods
     );
@@ -233,7 +232,10 @@ export const handleFundingUpdate = (
  * Simple util to determine whether the periodStart and periodEnd properties
  * of a given reporting period are date-inclusive of a given moment.
  */
-const reportingPeriodIncludesDate = (rp: ReportingPeriod, date: Moment) => {
+export const reportingPeriodIncludesDate = (
+  rp: ReportingPeriod,
+  date: Moment
+) => {
   return (
     rp.periodStart.isSameOrBefore(date) && rp.periodEnd.isSameOrAfter(date)
   );

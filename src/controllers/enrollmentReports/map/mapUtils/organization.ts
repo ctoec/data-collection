@@ -21,9 +21,10 @@ export const lookUpOrganization = (
 
   if (!source.providerName) throw new BadRequestError(MISSING_PROVIDER_ERROR);
 
-  return organizations.find(
+  const organization = organizations.find(
     (organization) =>
       organization.providerName.toLowerCase() ===
-      source.providerName.toLowerCase()
+      source.providerName.trim().toLowerCase()
   );
+  return organization;
 };

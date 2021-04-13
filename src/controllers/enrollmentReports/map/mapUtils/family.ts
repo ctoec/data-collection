@@ -75,7 +75,10 @@ export const updateFamilyAddress = (
  * @param source
  * @param family
  */
-const rowHasNewAddress = (source: EnrollmentReportRow, family: Family) => {
+export const rowHasNewAddress = (
+  source: EnrollmentReportRow,
+  family: Family
+) => {
   return (
     (!!source.streetAddress && source.streetAddress !== family.streetAddress) ||
     (!!source.town && source.town !== family.town) ||

@@ -7,10 +7,13 @@ import { validate } from 'class-validator';
 import * as controller from '../controllers/enrollmentReports/index';
 import fs from 'fs';
 import {
-  BatchUploadResponse,
+  EnrollmentReportCheckResponse,
   EnrollmentColumnError,
+  EnrollmentReportUploadResponse,
 } from '../../client/src/shared/payloads';
 import { ChangeTag, Child } from '../../client/src/shared/models';
+import { MapController } from '../controllers/enrollmentReports/new/MapController';
+import { batchSave } from '../controllers/enrollmentReports/map/mapUtils/batchSave';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
   ChangeTag.AgedUp,
@@ -49,38 +52,32 @@ enrollmentReportsRouter.post(
   '/check',
   upload,
   passAsyncError(async (req, res) => {
-    return getManager().transaction(async (tManager) => {
+    return getManager().transaction(async (transaction) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const { children: reportChildren } = await controller.mapRows(
-          tManager,
-          reportRows,
-          req.user,
-          { save: false }
-        );
-
-        const childrenWithErrors = await Promise.all(
-          reportChildren.map(async (child) => ({
-            ...child,
-            validationErrors: await validate(child, {
-              validationError: { target: false, value: false },
-            }),
-          }))
-        );
+        const mapController = new MapController();
+        await mapController.initialize(transaction, req.user);
+        const reportChildren = await mapController.mapRows(reportRows);
 
         const enrollmentColumnErrors: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
-          childrenWithErrors
+          reportChildren
         );
 
         // Log children with errors, without PII, to make troubleshooting easier
         if (enrollmentColumnErrors?.length) {
-          logUploadErrors(req.user.id, childrenWithErrors);
+          logUploadErrors(req.user.id, reportChildren);
         }
 
         // Only remove the file from disk if we could successfully parse it
         if (req.file && req.file.path) fs.unlinkSync(req.file.path);
 
-        res.send(enrollmentColumnErrors);
+        const response: EnrollmentReportCheckResponse = {
+          columnErrors: enrollmentColumnErrors,
+          uploadPreview: controller.formatUploadPreview(reportChildren),
+          ...getUploadCounts(reportChildren),
+        };
+
+        res.send(response);
       } catch (err) {
         if (err instanceof ApiError) throw err;
         console.error(
@@ -137,56 +134,27 @@ const logUploadErrors = (userId: number, childrenWithErrors: Child[]) => {
  * 	- returns new EnrollmentReport on success
  */
 enrollmentReportsRouter.post(
-  '/:shouldSave',
+  '/',
   upload,
   passAsyncError(async (req, res) => {
-    return getManager().transaction(async (tManager) => {
+    return getManager().transaction(async (transaction) => {
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
-        const shouldSave = req.params['shouldSave'] === 'true';
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const mapResult = await controller.mapRows(
-          tManager,
-          reportRows,
-          req.user,
-          { save: shouldSave }
-        );
+        const mapController = new MapController();
+        await mapController.initialize(transaction, req.user);
+        const reportChildren = await mapController.mapRows(reportRows);
 
-        // Augment with validation errors to determine missing info
-        if (!shouldSave) {
-          mapResult.children = await Promise.all(
-            mapResult.children.map(async (c) => ({
-              ...c,
-              validationErrors: await validate(c),
-            }))
-          );
-        }
-
-        // TODO: Decide if there's any benefit in actually creating the EnrollmentReport entity,
-        // which maps childIds to the upload they came from.
-        // Not useful now, but may be useful when users are uploading incremental update reports
-        // and we have a need to display to the user which records were updated/added by their
-        // upload. Skip creating the report for now to save time (esp for large uploads)
+        // Save to DB
+        await batchSave(req.user, transaction, reportChildren);
 
         // Use tags to decide which kinds of uploads/updates were performed
         // on each record
-        let numNew = 0,
-          numUpdated = 0,
-          numWithdrawn = 0;
-        mapResult.children.forEach((child, idx) => {
-          if (child.enrollments?.every((e) => e.exit)) numWithdrawn += 1;
-          const tags = mapResult.changeTagsForChildren[idx];
-          if (tags.includes(ChangeTag.NewRecord)) numNew += 1;
-          if (CHANGE_TAGS_DENOTING_UPDATE.some((t) => tags.includes(t)))
-            numUpdated += 1;
-        });
+        const response: EnrollmentReportUploadResponse = getUploadCounts(
+          reportChildren
+        );
 
-        res.status(201).json({
-          new: numNew,
-          updated: numUpdated,
-          withdrawn: numWithdrawn,
-          uploadPreview: controller.formatUploadPreview(mapResult),
-        } as BatchUploadResponse);
+        res.status(201).send(response);
 
         // Only remove the file from disk if we successfully parsed it
         if (req.file && req.file.path) fs.unlinkSync(req.file.path);
@@ -200,3 +168,18 @@ enrollmentReportsRouter.post(
     });
   })
 );
+
+const getUploadCounts = (children: Child[]) => {
+  return children.reduce(
+    (response, child) => {
+      if (child.tags.includes(ChangeTag.NewRecord)) response.newCount += 1;
+      else if (CHANGE_TAGS_DENOTING_UPDATE.some((t) => child.tags.includes(t)))
+        response.updatedCount += 1;
+      else if (child.tags.includes(ChangeTag.WithdrawnRecord))
+        response.withdrawnCount += 1;
+
+      return response;
+    },
+    { newCount: 0, updatedCount: 0, withdrawnCount: 0 }
+  );
+};
