@@ -23,7 +23,7 @@ childrenRouter.get(
     const organizationIds = parseQueryString(req, 'organizationId', {
       forceArray: true,
     }) as string[];
-    const activeMonth = parseQueryString(req, 'month', {
+    const month = parseQueryString(req, 'month', {
       post: (monthStr) => moment.utc(monthStr, 'MMM-YYYY'),
     }) as Moment;
     const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
@@ -32,7 +32,7 @@ childrenRouter.get(
       req.user,
       organizationIds,
       {
-        activeMonth,
+        month,
         skip,
         take,
       }
