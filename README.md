@@ -54,7 +54,9 @@ Once the required libraries are installed, getting the application up and runnin
 
    ```
 
-(Stop the application running in the background with `docker-compose down`.)
+Stop the application running in the background with `docker-compose down`.
+
+Reset the database data with `docker-compose rm -s -f db && docker-compose up -d db && docker-compose restart server`.
 
 ### Architecture
 
@@ -106,7 +108,7 @@ Perhaps a bit confusingly, API integration tests are written in the `client` dir
 
    ```
 
-   Set `TEST_API_PATH` env var to run them against an environment other than the default `http://localhost:5001`
+   Set `API_TEST_HOST` env var to run them against an environment other than the default `http://localhost:5001`
 
 ### E2E Tests
 These [nightwatch](https://nightwatchjs.org/)-powered selemnium tests run in Browserstack. Thus, they can only be run against a deployed stack (for now, there are ways to set up Browserstack for local apps but we haven't done that). They live [here](e2e-tests), and there's more info about them [here](e2e-tests/README.md)

@@ -1,7 +1,7 @@
 import { getManager } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Child, Family, User } from '../../entity';
-import { validateObject } from '../../utils/validateObject';
+import { validateObject } from '../../utils/processChild';
 import { getAllColumnMetadata } from '../../template';
 import { TEMPLATE_SECTIONS } from '../../../client/src/shared/constants';
 import { BadRequestError } from '../../middleware/error/errors';

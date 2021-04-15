@@ -1,53 +1,40 @@
 import { TabItem } from '@ctoec/component-library';
-import { stringify, parse } from 'query-string';
-import { useHistory } from 'react-router-dom';
 import { useContext, useMemo } from 'react';
 import moment from 'moment';
-import UserContext from '../../../contexts/UserContext/UserContext';
+import RosterContext, {
+  ALL_SITES,
+  RosterQueryParams,
+} from '../../../contexts/RosterContext/RosterContext';
 import { Site, Organization } from '../../../shared/models';
-import { RosterQueryParams } from '../Roster';
 import { QUERY_STRING_MONTH_FORMAT } from '../rosterUtils/';
 import pluralize from 'pluralize';
 
-const ALL_SITES = 'all-sites';
-
-export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
-  const history = useHistory();
-  const { user } = useContext(UserContext);
+export const useOrgSiteProps = () => {
+  const {
+    childRecords,
+    fetching,
+    query,
+    updateQueryOrgId,
+    updateQuerySite,
+    rosterUser: { activeOrgId, user },
+  } = useContext(RosterContext);
+  const orgChildCount = childRecords?.length ?? 0;
 
   return useMemo(() => {
-    const organizations = user?.organizations || [];
-    const sites = user?.sites || [];
-    const query = parse(history.location.search) as RosterQueryParams;
+    const organizations = user?.organizations ?? [];
+    const sites = user?.sites ?? [];
 
     // Function to update search query when user clicks on tab nav
     const tabNavOnClick = (clickedId: string, clickedItem: TabItem) => {
       // If it has a nested item type then it's an org
       if (clickedItem.nestedItemType) {
-        // Remove site param if clickedId !== current orgId
-        if (clickedId !== query.organization) delete query.site;
-        history.push({
-          search: stringify({
-            ...query,
-            organization: clickedId,
-          }),
-        });
+        updateQueryOrgId(clickedId);
       } else {
-        // Push a specific site id if specific site clicked
-        if (clickedId !== ALL_SITES) {
-          history.push({
-            search: stringify({ ...query, site: clickedId }),
-          });
-        }
-        // Or remove site param from search if 'All sites' clicked
-        else {
-          delete query.site;
-          history.push({ search: stringify(query) });
-        }
+        updateQuerySite(clickedId);
       }
     };
 
-    if (isLoading) {
+    if (fetching) {
       return {
         h1Text: 'Loading...',
       };
@@ -59,7 +46,7 @@ export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
     // and no super header
     if (organizations.length > 1) {
       const orgSites = sites.filter(
-        (s) => `${s.organizationId}` === query.organization
+        (s) => `${s.organizationId}` === activeOrgId
       );
       return {
         h1Text: query.withdrawn
@@ -70,7 +57,7 @@ export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
           items: getOrganizationTabItems(organizations, orgSites),
           onClick: tabNavOnClick,
           nestedActiveId: query.site,
-          activeId: query.organization,
+          activeId: activeOrgId,
         },
         subHeaderText: getSubHeaderText(orgChildCount, orgSites, query),
         superHeaderText: '',
@@ -106,7 +93,7 @@ export const useOrgSiteProps = (isLoading: boolean, orgChildCount: number) => {
       subHeaderText: getSubHeaderText(orgChildCount, sites, query),
       superHeaderText: organizations?.[0]?.providerName,
     };
-  }, [isLoading, orgChildCount]);
+  }, [fetching, orgChildCount]);
 };
 
 /****************** HELPER FUNCTIONS  ***********************/

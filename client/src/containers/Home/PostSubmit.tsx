@@ -34,31 +34,22 @@ export const PostSubmitHome: React.FC = () => {
   ] = useState<NestedFundingSpaces>();
   const [siteCountDisplay, setSiteCountDisplay] = useState();
   useEffect(() => {
-    apiGet('children?count=true', accessToken)
-      .then((res) => setUserRosterCount(res.count))
+    apiGet(`children/metadata?showFundings=${showFundings}`, accessToken)
+      .then(({ count, fundingSpacesMap, siteCountMap }) => {
+        setUserRosterCount(count);
+        // Get the site count data structure, too, so we can divide up
+        // user-accessible sites into individual cards
+        setSiteCountDisplay(siteCountMap);
+
+        // Also determine the funding spaces map for the organization, if
+        // the user has the permissions that enable this
+        if (showFundings && fundingSpacesMap) {
+          setFundingSpacesDisplay(fundingSpacesMap);
+        }
+      })
       .catch((err) => {
         throw new Error(err);
       });
-
-    // Get the site count data structure, too, so we can divide up
-    // user-accessible sites into individual cards
-    apiGet('children?siteMap=true', accessToken)
-      .then((res) => setSiteCountDisplay(res.siteCountMap))
-      .catch((err) => {
-        throw new Error(err);
-      });
-
-    // Also determine the funding spaces map for the organization, if
-    // the user has the permissions that enable this
-    if (showFundings) {
-      apiGet('funding-spaces?fundingMap=true', accessToken)
-        .then((res) => {
-          setFundingSpacesDisplay(res.fundingSpacesMap);
-        })
-        .catch((err) => {
-          throw new Error(err);
-        });
-    }
   }, [accessToken]);
 
   return (
@@ -167,7 +158,7 @@ export const PostSubmitHome: React.FC = () => {
                 <p className="text-base-darker">
                   {pluralize('enrollment', s.count, true)}
                 </p>
-                <Link to={`/roster?organization=${s.orgId}&site=${s.siteId}`}>
+                <Link to={`/roster?organizationId=${s.orgId}&site=${s.siteId}`}>
                   <TextWithIcon
                     text="View site roster"
                     iconSide="right"

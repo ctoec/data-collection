@@ -36,18 +36,19 @@ describe('integration', () => {
       ) as Site;
     });
     describe('children', () => {
-      let children: Child[];
       it('GET /children', async () => {
         // Create child so there's at least one
-        await createChild(organization);
+        const { id: childId } = await createChild(organization);
+        await createEnrollment(childId, site);
 
-        children = await apiGet('children', '', TEST_OPTS);
+        const children = await apiGet('children', '', TEST_OPTS);
         expect(children).not.toHaveLength(0);
       });
 
-      it('GET /children?count=true', async () => {
-        const { count } = await apiGet('children?count=true', '', TEST_OPTS);
-        expect(count).toEqual(children.length);
+      it('GET /children/count', async () => {
+        const active = await apiGet('children', '', TEST_OPTS);
+        const { count } = await apiGet('children/metadata', '', TEST_OPTS);
+        expect(count).toEqual(active.length);
       });
 
       it('GET /children?organizationId', async () => {
@@ -61,9 +62,9 @@ describe('integration', () => {
         );
       });
 
-      it('GET /children?missing-info=true', async () => {
+      it('GET /children/missing-info', async () => {
         const missingInfoChildren: Child[] = await apiGet(
-          'children?missing-info=true',
+          'children/missing-info',
           '',
           TEST_OPTS
         );
@@ -76,7 +77,7 @@ describe('integration', () => {
       it('GET /children?month=MMM-YYYY', async () => {
         // Create child and enrollment
         const { id: childId } = await createChild(organization);
-        await createEnrollment(childId, site);
+        await createEnrollment(childId, site, { withFunding: true });
         // by default, enrollment is created with start date 09/01/2020
         const activeMonth = moment('2020-08-01', 'YYYY-MM-DD');
         const activeInMonthChildren: Child[] = await apiGet(
@@ -89,8 +90,6 @@ describe('integration', () => {
           activeInMonthChildren.some((child) => child.id === childId)
         ).not.toBeTruthy();
         activeInMonthChildren.forEach((child) => {
-          expect(child.enrollments).not.toBeUndefined();
-          expect(child.enrollments).not.toHaveLength(0);
           expect(
             child.enrollments?.every((enrollment) =>
               enrollment.entry?.isSameOrBefore(activeMonth.endOf('month'))

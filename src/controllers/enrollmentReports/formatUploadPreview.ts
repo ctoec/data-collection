@@ -5,7 +5,6 @@ import {
   getLastEnrollment,
   getLastFunding,
 } from '../../../client/src/utils/models';
-import { validate } from 'class-validator';
 
 /**
  * Build the data structure that will map to the table we'll show
