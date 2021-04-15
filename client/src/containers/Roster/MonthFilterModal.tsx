@@ -23,7 +23,7 @@ export const MonthFilterModal: React.FC<MonthFilterModal> = ({
 }) => {
   // Duplicate of month value on roster-- needed bc we want to preserve the value but don't want to trigger the filtering until the user clicks the button
   const [selectedMonth, setSelectedMonth] = useState<Moment | undefined>(
-    filterByMonth
+    filterByMonth?.isValid() ? filterByMonth : undefined
   );
   const monthRecentEnough = selectedMonth?.isSameOrAfter(
     moment('July 2020', 'MMMM YYYY')
@@ -56,7 +56,9 @@ export const MonthFilterModal: React.FC<MonthFilterModal> = ({
           <div className={cx('grid-row', { 'margin-left-3': !!monthStatus })}>
             <DateInput
               defaultValue={selectedMonth}
-              onChange={(moment) => setSelectedMonth(moment)}
+              onChange={(moment) =>
+                setSelectedMonth(moment ? moment : undefined)
+              }
               label="View your roster for a past month"
               id="roster-filter-date-input"
               hideField={{
