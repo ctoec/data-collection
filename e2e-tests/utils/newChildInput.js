@@ -9,16 +9,8 @@ module.exports = {
       newValue: 'From e2e test',
     },
     {
-      id: 'dateOfBirth-picker-month',
-      newValue: '10',
-    },
-    {
-      id: 'dateOfBirth-picker-day',
-      newValue: '10',
-    },
-    {
-      id: 'dateOfBirth-picker-year',
-      newValue: '2017',
+      id: 'dateOfBirth-picker-input',
+      newValue: '10/10/2017',
     },
     {
       id: 'Non-US-birth-certificate',
@@ -84,16 +76,8 @@ module.exports = {
       newValue: '40000',
     },
     {
-      id: 'determination-date--month',
-      newValue: '10',
-    },
-    {
-      id: 'determination-date--day',
-      newValue: '10',
-    },
-    {
-      id: 'determination-date--year',
-      newValue: '2018',
+      id: 'determination-date--input',
+      newValue: '10/10/2018',
     },
   ],
   enrollmentFundingFields: [
@@ -102,16 +86,8 @@ module.exports = {
       clickLabel: true,
     },
     {
-      id: 'start-date-month',
-      newValue: '10',
-    },
-    {
-      id: 'start-date-day',
-      newValue: '10',
-    },
-    {
-      id: 'start-date-year',
-      newValue: '2018',
+      id: 'start-date-input',
+      newValue: '10/10/2018',
     },
     {
       id: 'In-person',
