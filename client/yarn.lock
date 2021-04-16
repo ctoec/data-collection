@@ -1250,9 +1250,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@git://github.com/ctoec/component-library.git#137-replace-date-picker-carbon":
+"@ctoec/component-library@^1.1.15":
   version "1.1.15"
-  resolved "git://github.com/ctoec/component-library.git#8e32cb7b85ee69db8c24bf1b3619abfbad1057d5"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.15.tgz#d29789ca12c58370c52437677ed168d90e86cc89"
+  integrity sha512-SAe2+9bZZ5WwcLFRb3u5Y0qFkjoU6X57xX6OTGAXYhZhnjINWrgF1HaVNV7eYa4MY0+/bJtXPAa76u76c4wsBQ==
   dependencies:
     "@types/carbon-components" "^10.23.0"
     "@types/carbon-components-react" "^7.26.0"
