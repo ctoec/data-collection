@@ -42,6 +42,9 @@
     "typescript": "^3.9.5",
     "uswds": "2.9.0"
   },
+  "resolutions": {
+    "react-scripts/webpack/**/ssri": "6.0.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
