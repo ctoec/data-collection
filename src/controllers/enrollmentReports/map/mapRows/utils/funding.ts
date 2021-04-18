@@ -1,19 +1,19 @@
 import { getManager } from 'typeorm';
 import {
-  Enrollment,
   Funding,
   Organization,
   FundingSpace,
   ReportingPeriod,
-} from '../../../../entity';
+} from '../../../../../entity';
 import {
   AgeGroup,
   FundingSource,
   FundingTime,
-} from '../../../../../client/src/shared/models';
-import { EnrollmentReportRow } from '../../../../template';
+} from '../../../../../../client/src/shared/models';
+import { EnrollmentReportRow } from '../../../../../template';
 import { mapEnum, mapFundingTime } from '.';
 import { Moment } from 'moment';
+import { reportingPeriodIncludesDate } from '../../../../../utils/reportingPeriodIncludesDate';
 
 /**
  * Create a Funding object from FlattenedEnrollment source,
@@ -51,7 +51,6 @@ export const mapFunding = (
     );
   }
 
-  // TODO: Cache ReportingPeriods, as they'll be reused a lot
   let firstReportingPeriod: ReportingPeriod,
     lastReportingPeriod: ReportingPeriod;
   if (source.firstReportingPeriod) {
@@ -69,81 +68,11 @@ export const mapFunding = (
     );
   }
 
-  // If the user supplied _any_ funding-related fields, create
-  // a populated funding.
-  let funding: Funding;
-  if (
-    source.fundingSpace ||
-    source.time ||
-    source.firstReportingPeriod ||
-    source.lastReportingPeriod
-  ) {
-    return getManager().create(Funding, {
-      firstReportingPeriod,
-      lastReportingPeriod,
-      fundingSpace,
-    });
-  } else {
-    return getManager().create(Funding, {});
-  }
-};
-
-/**
- * Util function that determines whether the funding object mapped
- * from a current EnrollmentReportRow contains new or different
- * information from a child's current funding.
- * @param fundingFromRow
- * @param funding
- */
-export const rowHasNewFunding = (fundingFromRow: Funding, funding: Funding) => {
-  if (!fundingFromRow) return false;
-  if (!fundingFromRow.fundingSpace && !fundingFromRow.firstReportingPeriod)
-    return false;
-  return (
-    (fundingFromRow.fundingSpace &&
-      fundingFromRow.fundingSpace.source !== funding.fundingSpace.source) ||
-    (fundingFromRow.fundingSpace &&
-      fundingFromRow.fundingSpace?.time !== funding.fundingSpace.time) ||
-    (fundingFromRow.firstReportingPeriod &&
-      fundingFromRow.firstReportingPeriod.period.format('MM/DD/YYYY') !==
-        funding.firstReportingPeriod.period.format('MM/DD/YYYY')) ||
-    (fundingFromRow.lastReportingPeriod &&
-      fundingFromRow.lastReportingPeriod.period.format('MM/DD/YYYY') !==
-        funding.lastReportingPeriod.period.format('MM/DD.YYYY'))
-  );
-};
-
-export const rowEndsCurrentFunding = (
-  fundingFromRow: Funding,
-  funding: Funding
-) => {
-  if (!fundingFromRow) return false;
-  return (
-    fundingFromRow.fundingSpace &&
-    fundingFromRow.fundingSpace.source === funding.fundingSpace.source &&
-    fundingFromRow.fundingSpace &&
-    fundingFromRow.fundingSpace?.time === funding.fundingSpace.time &&
-    fundingFromRow.firstReportingPeriod &&
-    fundingFromRow.firstReportingPeriod.period.format('MM/DD/YYYY') ===
-      funding.firstReportingPeriod.period.format('MM/DD/YYYY') &&
-    fundingFromRow.lastReportingPeriod &&
-    fundingFromRow.lastReportingPeriod.period.isSameOrAfter(
-      funding.firstReportingPeriod.period
-    )
-  );
-};
-
-/**
- * Simple util to determine whether the periodStart and periodEnd properties
- * of a given reporting period are date-inclusive of a given moment.
- */
-export const reportingPeriodIncludesDate = (
-  rp: ReportingPeriod,
-  date: Moment
-) => {
-  return (
-    rp.periodStart.isSameOrBefore(date) && rp.periodEnd.isSameOrAfter(date)
-  );
+  return getManager().create(Funding, {
+    firstReportingPeriod,
+    lastReportingPeriod,
+    fundingSpace,
+  });
 };
 
 /**

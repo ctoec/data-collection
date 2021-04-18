@@ -1,6 +1,6 @@
-import { UpdateMetaData } from '../../../../entity/embeddedColumns/UpdateMetaData';
+import { UpdateMetaData } from '../../../entity/embeddedColumns/UpdateMetaData';
 import { EntityManager } from 'typeorm';
-import { User, Child, Enrollment, Funding } from '../../../../entity';
+import { User, Child, Enrollment, Funding } from '../../../entity';
 
 /**
  * SQL Server driver has an upper limit of 2100 parameters per query.

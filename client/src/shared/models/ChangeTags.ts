@@ -6,4 +6,5 @@ export enum ChangeTag {
   WithdrawnRecord = 'Withdrawn Record',
   IncomeDet = 'New Income Determination',
   Edited = 'Edited Information',
+  Edit = 'Edit',
 }

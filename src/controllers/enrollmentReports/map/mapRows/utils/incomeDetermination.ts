@@ -1,5 +1,5 @@
-import { Family, IncomeDetermination } from '../../../../entity';
-import { EnrollmentReportRow } from '../../../../template';
+import { Family, IncomeDetermination } from '../../../../../entity';
+import { EnrollmentReportRow } from '../../../../../template';
 import { getManager } from 'typeorm';
 
 /**
@@ -17,37 +17,6 @@ export const mapIncomeDetermination = (
     incomeNotDisclosed: source.incomeNotDisclosed || false,
     family,
   });
-};
-
-/**
- * Util function that determines whether an income determination mapped
- * from an EnrollmentReportRow provides any new or different information
- * from the income determination currently associated with a child's
- * family.
- * @param detFromRow
- * @param determination
- */
-export const rowHasNewDetermination = (
-  detFromRow,
-  determination: IncomeDetermination
-) => {
-  if (
-    detFromRow.income === undefined &&
-    detFromRow.numberOfPeople === undefined &&
-    detFromRow.determinationDate === undefined
-  ) {
-    return false;
-  }
-  return (
-    (detFromRow.income &&
-      parseFloat(detFromRow.income) !== determination.income) ||
-    (detFromRow.numberOfPeople &&
-      parseFloat(detFromRow.numberOfPeople) !== determination.numberOfPeople) ||
-    (detFromRow.determinationDate &&
-      detFromRow.determinationDate.format('MM/DD/YYYY') !==
-        determination.determinationDate.format('MM/DD/YYYY')) ||
-    detFromRow.incomeNotDisclosed !== determination.incomeNotDisclosed
-  );
 };
 
 /**

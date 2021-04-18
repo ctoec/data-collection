@@ -1,12 +1,12 @@
 import { getManager } from 'typeorm';
-import { Child, Family, Organization } from '../../../../entity';
+import { Child, Family, Organization } from '../../../../../entity';
 import {
   Gender,
   BirthCertificateType,
   UniqueIdType,
   UndefinableBoolean,
-} from '../../../../../client/src/shared/models';
-import { EnrollmentReportRow } from '../../../../template';
+} from '../../../../../../client/src/shared/models';
+import { EnrollmentReportRow } from '../../../../../template';
 import { mapEnum } from '.';
 
 /**
@@ -99,49 +99,6 @@ export const mapChild = (
     organization,
     family,
   });
-};
-
-/**
- * Updates the various fields of a child's birth certificate.
- *
- * @param child
- * @param source
- * @param childrenToUpdate
- */
-export const updateBirthCertificateInfo = (
-  child: Child,
-  source: EnrollmentReportRow,
-  childrenToUpdate: Child[]
-) => {
-  let madeAChange = false;
-  if (
-    child.birthCertificateType === BirthCertificateType.Unavailable &&
-    source.birthCertificateType
-  ) {
-    const birthCertificateType: BirthCertificateType = mapEnum(
-      BirthCertificateType,
-      source.birthCertificateType
-    );
-    child.birthCertificateType = birthCertificateType;
-    madeAChange = true;
-  }
-  if (child.birthCertificateType === BirthCertificateType.US) {
-    if (!child.birthCertificateId) {
-      child.birthCertificateId = source.birthCertificateId;
-      madeAChange = true;
-    }
-    if (!child.birthState) {
-      child.birthState = source.birthState;
-      madeAChange = true;
-    }
-    if (!child.birthTown) {
-      child.birthTown = source.birthTown;
-      madeAChange = true;
-    }
-  }
-
-  if (madeAChange) childrenToUpdate.push(child);
-  return madeAChange;
 };
 
 /**

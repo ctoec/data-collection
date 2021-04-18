@@ -11,8 +11,8 @@ import {
   EnrollmentReportUploadResponse,
 } from '../../client/src/shared/payloads';
 import { ChangeTag, Child } from '../../client/src/shared/models';
-import { MapController } from '../controllers/enrollmentReports/map/MapController';
-import { batchSave } from '../controllers/enrollmentReports/map/mapUtils/batchSave';
+import { batchSave } from '../controllers/enrollmentReports/map/batchSave';
+import * as mapController from '../controllers/enrollmentReports/map';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
   ChangeTag.AgedUp,
@@ -54,9 +54,14 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (transaction) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const mapController = new MapController();
-        await mapController.initialize(transaction, req.user);
-        const reportChildren = await mapController.mapRows(reportRows);
+        const thingHolder = await mapController.setUpThingHolder(
+          transaction,
+          req.user
+        );
+        const reportChildren = await mapController.mapRows(
+          reportRows,
+          thingHolder
+        );
 
         const enrollmentColumnErrors: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
           reportChildren
@@ -140,12 +145,17 @@ enrollmentReportsRouter.post(
       // Ingest upload by parsing, mapping, and saving uploaded data
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const mapController = new MapController();
-        await mapController.initialize(transaction, req.user);
-        const reportChildren = await mapController.mapRows(reportRows);
+        const thingHolder = await mapController.setUpThingHolder(
+          transaction,
+          req.user
+        );
+        const reportChildren = await mapController.mapRows(
+          reportRows,
+          thingHolder
+        );
 
         // Save to DB
-        await batchSave(req.user, transaction, reportChildren);
+        await mapController.batchSave(req.user, transaction, reportChildren);
 
         // Use tags to decide which kinds of uploads/updates were performed
         // on each record
