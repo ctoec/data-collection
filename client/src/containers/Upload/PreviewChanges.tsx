@@ -19,6 +19,8 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
   enrollmentReportCheck,
   file,
   setAlerts,
+  setFile,
+  setCurrentStepIndex,
 }) => {
   const history = useHistory();
   const { accessToken } = useContext(AuthenticationContext);
@@ -154,7 +156,14 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
             </div>
           </div>
           <FixedBottomBar>
-            <Button text="Cancel upload" href="/home" appearance="outline" />
+            <Button
+              text="Cancel upload"
+              appearance="outline"
+              onClick={() => {
+                setFile(undefined);
+                setCurrentStepIndex(0);
+              }}
+            />
             <Button
               id="upload-button"
               text="Save changes to roster"

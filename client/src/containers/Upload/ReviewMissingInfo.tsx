@@ -45,10 +45,10 @@ export const ReviewMissingInfo: React.FC<StepContentProps> = ({
           text="Cancel upload"
           onClick={() => {
             setFile(undefined);
-            setCurrentStepIndex((currentStepIdx) => currentStepIdx - 1);
+            setCurrentStepIndex(0);
           }}
         />
-        <Button
+        <Buttonw
           text="Next"
           onClick={() =>
             setCurrentStepIndex((currentStepIdx) => currentStepIdx + 1)

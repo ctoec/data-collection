@@ -18,7 +18,7 @@ export type StepContentProps = {
   file?: File;
 };
 
-const STEPS = [
+const UPLOAD_WIZARD_STEPS = [
   {
     label: 'Choose file',
     description: 'Choose your enrollment file',
@@ -47,7 +47,7 @@ const UploadWizard: React.FC = () => {
   const [file, setFile] = useState<File>();
   const { alertElements, setAlerts } = useAlerts();
 
-  const StepContent = STEPS[currentStepIndex].content;
+  const StepContent = UPLOAD_WIZARD_STEPS[currentStepIndex].content;
   return (
     <div className="grid-container">
       {alertElements}
@@ -56,15 +56,18 @@ const UploadWizard: React.FC = () => {
           Upload your enrollment data
         </h1>
 
-        <ProgressIndicator currentIndex={currentStepIndex} steps={STEPS} />
+        <ProgressIndicator
+          currentIndex={currentStepIndex}
+          steps={UPLOAD_WIZARD_STEPS}
+        />
         <h2 className="margin-bottom-2">
           <span className="usa-step-indicator__current-step">
             {currentStepIndex + 1}
           </span>
           <span className="usa-step-indicator__total-steps">
-            of {STEPS.length}
+            of {UPLOAD_WIZARD_STEPS.length}
           </span>
-          {STEPS[currentStepIndex].description}
+          {UPLOAD_WIZARD_STEPS[currentStepIndex].description}
         </h2>
 
         <StepContent
