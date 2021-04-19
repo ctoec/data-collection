@@ -1,3 +1,4 @@
+import { EnrollmentReportUploadResponse } from '.';
 import { UploadPreviewRow } from '../../containers/Upload/UploadPreviewRow';
 
 export type EnrollmentColumnError = {
@@ -10,7 +11,5 @@ export type EnrollmentColumnError = {
 export interface EnrollmentReportCheckResponse {
   uploadPreview: UploadPreviewRow[];
   columnErrors: EnrollmentColumnError[];
-  newCount: number;
-  updatedCount: number;
-  withdrawnCount: number;
+  counts: EnrollmentReportUploadResponse;
 }

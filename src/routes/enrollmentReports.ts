@@ -78,7 +78,7 @@ enrollmentReportsRouter.post(
         const response: EnrollmentReportCheckResponse = {
           columnErrors: enrollmentColumnErrors,
           uploadPreview: controller.formatUploadPreview(reportChildren),
-          ...getUploadCounts(reportChildren),
+          counts: getUploadCounts(reportChildren),
         };
 
         res.send(response);
@@ -186,9 +186,10 @@ const getUploadCounts = (children: Child[]) => {
         response.updatedCount += 1;
       else if (child.tags.includes(ChangeTag.WithdrawnRecord))
         response.withdrawnCount += 1;
+      else response.unchangedCount += 1;
 
       return response;
     },
-    { newCount: 0, updatedCount: 0, withdrawnCount: 0 }
+    { newCount: 0, updatedCount: 0, withdrawnCount: 0, unchangedCount: 0 }
   );
 };

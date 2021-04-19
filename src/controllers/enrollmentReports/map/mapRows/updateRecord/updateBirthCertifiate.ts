@@ -14,6 +14,7 @@ export const updateBirthCertificate = (
 ) => {
   if (
     !row.birthCertificateType ||
+    row.birthCertificateType === match.birthCertificateType ||
     row.birthCertificateType === BirthCertificateType.Unavailable
   )
     return;

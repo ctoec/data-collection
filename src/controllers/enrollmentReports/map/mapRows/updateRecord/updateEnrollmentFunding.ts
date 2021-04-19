@@ -1,8 +1,4 @@
-import { propertyDateSorter } from '../../../../../utils/propertyDateSorter';
-import {
-  ChangeTag,
-  ExitReason,
-} from '../../../../../../client/src/shared/models';
+import { ChangeTag } from '../../../../../../client/src/shared/models';
 import { Child, Enrollment, Funding } from '../../../../../entity';
 import { EnrollmentReportRow } from '../../../../../template';
 import { MapThingHolder } from '../../setUpMapThingHolder';
@@ -14,126 +10,125 @@ export const updateEnrollmentFunding = (
   match: Child,
   thingHolder: MapThingHolder
 ) => {
-  const site = lookUpSite(row, match.organization.id, thingHolder.sites);
-  const mostRecentEnrollment = match.enrollments
-    ?.sort((a, b) => propertyDateSorter(a, b, (e) => e.exit))
-    .slice(-1)[0];
-  const currentFunding = mostRecentEnrollment?.fundings?.find(
-    (f) => !f.lastReportingPeriod
-  );
-
-  const newEnrollment = mapEnrollment(row, site, match);
-  const newFunding = mapFunding(
-    row,
-    match.organization,
-    newEnrollment.ageGroup,
-    thingHolder.fundingSpaces,
-    thingHolder.reportingPeriods
-  );
-
-  if (rowHasExitForCurrentEnrollment(newEnrollment, mostRecentEnrollment)) {
-    mostRecentEnrollment.exit = newEnrollment.exit;
-    mostRecentEnrollment.exitReason = newEnrollment.exitReason;
-    currentFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
-    match.tags.push(ChangeTag.WithdrawnRecord);
+  if (!row.site && !row.entry && !row.ageGroup) {
     return;
   }
 
-  if (rowHasNewEnrollment(row, newEnrollment, mostRecentEnrollment)) {
+  const site = lookUpSite(row, match.organization.id, thingHolder.sites);
+  const newEnrollment =
+    row.site && row.entry && row.ageGroup
+      ? mapEnrollment(row, site, match)
+      : undefined;
+  const matchingEnrollment = getEnrollmentMatch(
+    newEnrollment,
+    match.enrollments
+  );
+
+  const newFunding =
+    row.fundingSpace && row.firstReportingPeriod
+      ? mapFunding(
+          row,
+          match.organization,
+          newEnrollment.ageGroup,
+          thingHolder.fundingSpaces,
+          thingHolder.reportingPeriods
+        )
+      : undefined;
+  const matchingFunding = getFundingMatch(
+    newFunding,
+    matchingEnrollment?.fundings
+  );
+
+  if (rowHasExitForCurrentEnrollment(newEnrollment, matchingEnrollment)) {
+    matchingEnrollment.exit = newEnrollment.exit;
+    matchingEnrollment.exitReason = newEnrollment.exitReason;
+    matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
+    match.tags.push(ChangeTag.WithdrawnRecord);
+  } else if (rowHasNewEnrollment(newEnrollment, matchingEnrollment)) {
     newEnrollment.fundings = [newFunding];
     if (match.enrollments) match.enrollments.push(newEnrollment);
     else match.enrollments = [newEnrollment];
-
-    match.tags.push(
-      mostRecentEnrollment?.exitReason === ExitReason.AgedOut
-        ? ChangeTag.AgedUp
-        : ChangeTag.ChangedEnrollment
-    );
-    return;
-  }
-
-  if (rowEndsCurrentFunding(newFunding, currentFunding)) {
-    currentFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
+    match.tags.push(ChangeTag.ChangedEnrollment);
+  } else if (rowEndsCurrentFunding(newFunding, matchingFunding)) {
+    matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
     match.tags.push(ChangeTag.ChangedFunding);
-  }
-
-  if (rowHasNewFunding(newFunding, currentFunding)) {
-    mostRecentEnrollment.fundings.push(newFunding);
+  } else if (rowHasNewFunding(newFunding, matchingFunding)) {
+    matchingEnrollment.fundings.push(newFunding);
     match.tags.push(ChangeTag.ChangedFunding);
   }
 };
+
+const getEnrollmentMatch = (
+  enrollmentFromRow: Enrollment,
+  enrollments: Enrollment[] | undefined
+) =>
+  enrollments?.find(
+    (e) =>
+      // Sites match
+      e.site &&
+      enrollmentFromRow.site?.id === e.site?.id &&
+      // Age groups match
+      e.ageGroup &&
+      enrollmentFromRow.ageGroup === e.ageGroup &&
+      // Entry dates match
+      e.entry &&
+      enrollmentFromRow.entry.isSame(e.entry, 'day') &&
+      // If existing enrollment has exit date, then exit dates match
+      (e.exit ? enrollmentFromRow.exit.isSame(e.exit, 'day') : true)
+  );
 
 const rowHasExitForCurrentEnrollment = (
-  enrollmentFromRow: Enrollment,
-  enrollment: Enrollment
-) => {
-  return (
-    enrollmentFromRow.site &&
-    enrollmentFromRow.site.siteName === enrollment.site.siteName &&
-    enrollmentFromRow.model === enrollment.model &&
-    enrollmentFromRow.ageGroup &&
-    enrollmentFromRow.ageGroup === enrollment.ageGroup &&
-    enrollmentFromRow.entry &&
-    enrollmentFromRow.entry.format('MM/DD/YYYY') ===
-      enrollment.entry.format('MM/DD/YYYY') &&
-    enrollmentFromRow.exit !== undefined &&
-    enrollment.entry.isSameOrBefore(enrollmentFromRow.exit)
-  );
-};
+  newEnrollment: Enrollment | undefined,
+  matchingEnrollment: Enrollment | undefined
+) =>
+  // Matching enrollment exists, and does not have exit date
+  !!matchingEnrollment &&
+  !matchingEnrollment.exit &&
+  // and new enrollment exists and does have exit date
+  !!newEnrollment?.exit;
 
 const rowHasNewEnrollment = (
-  source: EnrollmentReportRow,
-  enrollmentFromRow: Enrollment,
-  enrollment: Enrollment
-) => {
-  if (!enrollmentFromRow) return false;
-  if (!enrollment) return true;
-  return (
-    (enrollmentFromRow.site &&
-      enrollmentFromRow.site.siteName !== enrollment.site.siteName) ||
-    (source.model && enrollmentFromRow.model !== enrollment.model) ||
-    (enrollmentFromRow.ageGroup &&
-      enrollmentFromRow.ageGroup !== enrollment.ageGroup) ||
-    (enrollmentFromRow.entry &&
-      enrollmentFromRow.entry.format('MM/DD/YYYY') !==
-        enrollment.entry.format('MM/DD/YYYY'))
+  newEnrollment: Enrollment | undefined,
+  matchingEnrollment: Enrollment | undefined
+) =>
+  // Matching enrollment does not exist
+  !matchingEnrollment &&
+  // and new enrollment does exist
+  !!newEnrollment;
+
+const getFundingMatch = (
+  fundingFromRow: Funding,
+  fundings: Funding[] | undefined
+) =>
+  fundings?.find(
+    (f) =>
+      // Funding spaces match
+      f.fundingSpace &&
+      fundingFromRow.fundingSpace?.id === f.fundingSpace.id &&
+      // First reporting periods match
+      f.firstReportingPeriod &&
+      fundingFromRow.firstReportingPeriod?.id === f.firstReportingPeriod.id &&
+      // If existing funding has last reporting period, then last reporting periods match
+      (f.lastReportingPeriod
+        ? fundingFromRow.lastReportingPeriod?.id === f.lastReportingPeriod.id
+        : true)
   );
-};
 
 export const rowEndsCurrentFunding = (
-  fundingFromRow: Funding,
-  funding: Funding
-) => {
-  if (!fundingFromRow) return false;
-  return (
-    fundingFromRow.fundingSpace &&
-    fundingFromRow.fundingSpace.source === funding.fundingSpace.source &&
-    fundingFromRow.fundingSpace &&
-    fundingFromRow.fundingSpace?.time === funding.fundingSpace.time &&
-    fundingFromRow.firstReportingPeriod &&
-    fundingFromRow.firstReportingPeriod.period.format('MM/DD/YYYY') ===
-      funding.firstReportingPeriod.period.format('MM/DD/YYYY') &&
-    fundingFromRow.lastReportingPeriod &&
-    fundingFromRow.lastReportingPeriod.period.isSameOrAfter(
-      funding.firstReportingPeriod.period
-    )
-  );
-};
+  newFunding: Funding | undefined,
+  matchingFunding: Funding | undefined
+) =>
+  // Matching funding exists, and does not have last reporting period
+  !!matchingFunding &&
+  !matchingFunding.lastReportingPeriod &&
+  // and new funding exists and does have last reporting period
+  !!newFunding?.lastReportingPeriod;
 
-export const rowHasNewFunding = (fundingFromRow: Funding, funding: Funding) => {
-  if (!fundingFromRow) return false;
-  if (!fundingFromRow.fundingSpace && !fundingFromRow.firstReportingPeriod)
-    return false;
-  return (
-    (fundingFromRow.fundingSpace &&
-      fundingFromRow.fundingSpace.source !== funding.fundingSpace.source) ||
-    (fundingFromRow.fundingSpace &&
-      fundingFromRow.fundingSpace?.time !== funding.fundingSpace.time) ||
-    (fundingFromRow.firstReportingPeriod &&
-      fundingFromRow.firstReportingPeriod.period.format('MM/DD/YYYY') !==
-        funding.firstReportingPeriod.period.format('MM/DD/YYYY')) ||
-    (fundingFromRow.lastReportingPeriod &&
-      fundingFromRow.lastReportingPeriod.period.format('MM/DD/YYYY') !==
-        funding.lastReportingPeriod.period.format('MM/DD.YYYY'))
-  );
-};
+export const rowHasNewFunding = (
+  newFunding: Funding | undefined,
+  matchingFunding: Funding | undefined
+) =>
+  // Matching funding does not exist
+  !matchingFunding &&
+  // and new funding does exist
+  !!newFunding;

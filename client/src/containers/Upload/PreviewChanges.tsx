@@ -1,13 +1,11 @@
 import {
   Accordion,
-  Alert,
   Button,
   Card,
-  HeadingLevel,
   LoadingWrapper,
 } from '@ctoec/component-library';
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { EnrollmentReportUploadResponse } from '../../shared/payloads';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
@@ -16,9 +14,8 @@ import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { getPreviewTableAccordionItems } from './getPreviewTableAccordionItems';
 import { StepContentProps } from './UploadWizard';
-import { getAccordionItems } from '../Roster/rosterUtils';
 
-export const Preview: React.FC<StepContentProps> = ({
+export const PreviewChanges: React.FC<StepContentProps> = ({
   enrollmentReportCheck,
   file,
   setAlerts,
@@ -100,9 +97,7 @@ export const Preview: React.FC<StepContentProps> = ({
 
   const {
     uploadPreview,
-    newCount,
-    updatedCount,
-    withdrawnCount,
+    counts: { newCount, updatedCount, withdrawnCount, unchangedCount },
   } = enrollmentReportCheck;
 
   return (
@@ -120,7 +115,7 @@ export const Preview: React.FC<StepContentProps> = ({
                   Total records in this file
                 </p>
                 <p className="text-bold margin-top-0 margin-bottom-0">
-                  {newCount + updatedCount + withdrawnCount}
+                  {newCount + updatedCount + withdrawnCount + unchangedCount}
                 </p>
               </Card>
             </div>

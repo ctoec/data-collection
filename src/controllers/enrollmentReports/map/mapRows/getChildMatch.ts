@@ -9,13 +9,10 @@ export const getChildMatch = async (
   organization: Organization,
   thingHolder: MapThingHolder
 ) => {
-  console.log('cache match', thingHolder.mappedChildren);
   const cacheMatch = getChildMatchFromCache(row, organization, thingHolder);
-  console.log('cache match', cacheMatch);
   if (cacheMatch) return cacheMatch;
 
   const dbMatch = await getChildMatchFromDB(row, organization, thingHolder);
-  console.log('db match', dbMatch);
   if (dbMatch) {
     const child = await getChildById(dbMatch.id, thingHolder.user);
     const childWithTags = { ...child, tags: [] };
@@ -29,7 +26,6 @@ const getChildMatchFromDB = async (
   organization: Organization,
   thingHolder: MapThingHolder
 ) => {
-  console.log('DB MATCHING');
   const dbMatchQuery = thingHolder.transaction
     .createQueryBuilder(Child, 'child')
     .where('organizationId = :organizationId', {

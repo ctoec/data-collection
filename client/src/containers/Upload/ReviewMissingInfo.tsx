@@ -7,6 +7,7 @@ import { StepContentProps } from './UploadWizard';
 export const ReviewMissingInfo: React.FC<StepContentProps> = ({
   setCurrentStepIndex,
   enrollmentReportCheck,
+  setFile,
 }) => {
   return (
     <div>
@@ -42,9 +43,10 @@ export const ReviewMissingInfo: React.FC<StepContentProps> = ({
         <Button
           appearance="outline"
           text="Cancel upload"
-          onClick={() =>
-            setCurrentStepIndex((currentStepIdx) => currentStepIdx - 1)
-          }
+          onClick={() => {
+            setFile(undefined);
+            setCurrentStepIndex((currentStepIdx) => currentStepIdx - 1);
+          }}
         />
         <Button
           text="Next"

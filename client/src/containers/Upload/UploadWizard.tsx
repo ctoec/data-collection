@@ -3,7 +3,7 @@ import React, { SetStateAction, useState } from 'react';
 import { useAlerts } from '../../hooks/useAlerts';
 import { EnrollmentReportCheckResponse } from '../../shared/payloads';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { Preview } from './Preview';
+import { PreviewChanges } from './PreviewChanges';
 import { ReviewMissingInfo } from './ReviewMissingInfo';
 import Upload from './Upload';
 
@@ -32,7 +32,7 @@ const STEPS = [
   {
     label: 'Preview and upload',
     description: 'Preview changes and upload file',
-    content: Preview,
+    content: PreviewChanges,
   },
 ];
 
