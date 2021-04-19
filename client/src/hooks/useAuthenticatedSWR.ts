@@ -40,6 +40,9 @@ export function useAuthenticatedSWRInfinite<T>(
   const getKey = (index: number, prevData: T | null) => {
     const path = getPath(index, prevData);
     const key = !path || !accessToken ? null : [path, accessToken];
+    console.log('THE KEY', key);
+    console.log('THE PATH', path);
+    console.log('THE ACCESS TOKEN', accessToken);
     return key;
   };
   return useSWRInfinite(getKey) as SWRInfiniteResponseInterface<T, string>;
