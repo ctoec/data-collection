@@ -5,6 +5,7 @@ import useSWR, {
   useSWRInfinite,
   SWRInfiniteResponseInterface,
   ConfigInterface,
+  cache
 } from 'swr';
 
 /**
@@ -43,6 +44,8 @@ export function useAuthenticatedSWRInfinite<T>(
     console.log('THE KEY', key);
     console.log('THE PATH', path);
     console.log('THE ACCESS TOKEN', accessToken);
+    console.log('THE CACHE CONTENTS', cache.get(key));
+
     return key;
   };
   return useSWRInfinite(getKey) as SWRInfiniteResponseInterface<T, string>;
