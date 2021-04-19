@@ -70,6 +70,7 @@ const defaultCtx = {
 const RosterContext = React.createContext<RosterContextType>(defaultCtx);
 
 const RosterProvider: React.FC = ({ children }) => {
+  console.log('ROSTER PROVIDER INIT');
   const { user } = useContext(UserContext);
   const history = useHistory();
   const query: RosterQueryParams = parse(history.location.search);
