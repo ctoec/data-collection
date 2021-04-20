@@ -5,6 +5,14 @@ import { MapThingHolder } from '../setUpMapThingHolder';
 export const MISSING_PROVIDER_ERROR =
   'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.';
 
+/**
+ * Look up organization that matches source provider name.
+ *
+ * If the user has only one organization, that is used regardless of the value from the row.
+ *
+ * If one cannot be matched, then an ApiError is thrown to return early from the processing
+ * and return an error response to the API caller.
+ */
 export const lookUpOrganization = (
   source: EnrollmentReportRow,
   thingHolder: MapThingHolder

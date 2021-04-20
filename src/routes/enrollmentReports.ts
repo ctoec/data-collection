@@ -11,7 +11,7 @@ import {
   EnrollmentReportUploadResponse,
 } from '../../client/src/shared/payloads';
 import { ChangeTag, Child } from '../../client/src/shared/models';
-import { batchSave } from '../controllers/enrollmentReports/map/batchSave';
+import { batchUpsertMappedEntities } from '../controllers/enrollmentReports/map/batchUpsertMappingEntities';
 import * as mapController from '../controllers/enrollmentReports/map';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
@@ -155,7 +155,11 @@ enrollmentReportsRouter.post(
         );
 
         // Save to DB
-        await mapController.batchSave(req.user, transaction, reportChildren);
+        await mapController.batchUpsertMappedEntities(
+          req.user,
+          transaction,
+          reportChildren
+        );
 
         // Use tags to decide which kinds of uploads/updates were performed
         // on each record

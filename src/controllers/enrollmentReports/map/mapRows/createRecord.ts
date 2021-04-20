@@ -11,6 +11,21 @@ import { lookUpSite } from './lookUpSite';
 import { MapThingHolder } from '../setUpMapThingHolder';
 import { Organization } from '../../../../entity';
 
+/**
+ * Create a new record from an EnrollmentReportRow
+ * for which no matching child was found, and adds child to the
+ * mappedChildren cache.
+ *
+ * Creates full object graph (family, income determinations, child, enrollment, funding)
+ * regardless of if the information provided is complete
+ * i.e. will create an empty funding if no funding information is provided,
+ * because every enrollment requires a funding.
+ * If this requirement changes, be sure to update the mapping utils.
+ *
+ * @param row
+ * @param organization
+ * @param thingHolder
+ */
 export const createRecord = async (
   row: EnrollmentReportRow,
   organization: Organization,

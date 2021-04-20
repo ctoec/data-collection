@@ -4,6 +4,16 @@ import { EnrollmentReportRow } from '../../../../template';
 import { Brackets } from 'typeorm';
 import { MapThingHolder } from '../setUpMapThingHolder';
 
+/**
+ * Looks for an existing match for the child from the given EnrollmentReportRow
+ * in the in-memory mappedChild cache, and upon failure in the database.
+ *
+ * If a database match is found, it is added to the mappedChildren cache.
+ *
+ * @param row
+ * @param organization
+ * @param thingHolder
+ */
 export const getChildMatch = async (
   row: EnrollmentReportRow,
   organization: Organization,
@@ -21,6 +31,17 @@ export const getChildMatch = async (
   }
 };
 
+/**
+ * Queries the database for a child record that matches the row on:
+ * - firstname
+ * - lastname
+ * - birthdate
+ * - sasid or unique id if it is present in the row
+ * 	(note: this means you cannot update a record to include a new uniqueId via batch upload)
+ * @param row
+ * @param organization
+ * @param thingHolder
+ */
 const getChildMatchFromDB = async (
   row: EnrollmentReportRow,
   organization: Organization,
@@ -54,6 +75,16 @@ const getChildMatchFromDB = async (
   return dbMatchQuery.getOne();
 };
 
+/**
+ * Looks in the mappedChildren cache for a record that matches the row on:
+ * - firstname
+ * - lastname
+ * - birthdate
+ * - sasid or unique id if it is present in the row
+ * @param row
+ * @param organization
+ * @param thingHolder
+ */
 const getChildMatchFromCache = (
   row: EnrollmentReportRow,
   organization: Organization,

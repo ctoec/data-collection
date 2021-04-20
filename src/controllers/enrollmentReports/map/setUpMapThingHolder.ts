@@ -9,6 +9,13 @@ import {
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
 import { EntityManager, In } from 'typeorm';
 
+/**
+ * A param bag for the mapping process containing:
+ * - DB data for mapping, so it can be re-used in each mapping with only one initial lookup
+ * - the transaction EntityManager
+ * - the request user (needed for utils that get DB entities)
+ * - the cache of all mapped children
+ */
 export type MapThingHolder = {
   transaction: EntityManager;
   user: User;
@@ -20,6 +27,12 @@ export type MapThingHolder = {
   mappedChildren: Child[];
 };
 
+/**
+ * Set up mapping param bag by pulling DB values and initializing
+ * empty child cache
+ * @param transaction
+ * @param user
+ */
 export const setUpThingHolder = async (
   transaction: EntityManager,
   user: User

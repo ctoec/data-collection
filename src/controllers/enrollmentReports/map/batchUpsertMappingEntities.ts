@@ -35,7 +35,19 @@ export async function doBatchSave<T>(
   return createdData;
 }
 
-export async function batchSave(
+/**
+ * Decomposes child graphs into constituent DB entities and writes
+ * changes to DB.
+ * Entities must be saved in order so that any newly created entity
+ * can be referenced by id in dependent entities. I.e. families must
+ * be upserted before income determination / child can be created,
+ * because income det and child need to reference familyId.
+ *
+ * @param user
+ * @param transaction
+ * @param children
+ */
+export async function batchUpsertMappedEntities(
   user: User,
   transaction: EntityManager,
   children: Child[]
@@ -47,9 +59,11 @@ export async function batchSave(
     children.map((c) => c.family)
   );
 
-  // Insert new income determination entities
+  // Update familyId references and
+  // unsert new income determination entities
+  // (Editing income determinations is not supported at present)
   const incomeDetsForUpsert = children.reduce((newIncomeDets, child, idx) => {
-    const newIncomeDet = child.family.incomeDeterminations
+    child.family.incomeDeterminations
       ?.filter((det) => !det.id)
       .forEach((det) => {
         det.familyId = upsertedFamilies[idx].id;
@@ -72,7 +86,11 @@ export async function batchSave(
     })
   );
 
-  // Upsert enrollment entities with updated child references and removed funding references
+  // Update childId references and
+  // remove funding references and
+  // map fundings into enrollment-indexed array
+  // so they can be upserted with updated enrollment references and
+  // upsert enrollment entities with updated
   const fundingsByEnrollment: Funding[][] = [];
   const enrollmentsForUpsert: Enrollment[] = [];
   children.forEach((child, idx) => {
@@ -91,7 +109,8 @@ export async function batchSave(
     enrollmentsForUpsert
   );
 
-  // Upsert funding entities with updated enrollment references
+  // Update enrollment references and
+  // upsert funding entities
   const fundingsForUpsert = fundingsByEnrollment.reduce(
     (flatFundings, enrollmentFundings, idx) => {
       enrollmentFundings?.forEach((f) => {

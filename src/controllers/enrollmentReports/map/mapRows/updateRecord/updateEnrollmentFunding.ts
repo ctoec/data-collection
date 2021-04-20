@@ -1,63 +1,96 @@
 import { ChangeTag } from '../../../../../../client/src/shared/models';
-import { Child, Enrollment, Funding } from '../../../../../entity';
+import {
+  Child,
+  Enrollment,
+  EnrollmentReport,
+  Funding,
+} from '../../../../../entity';
 import { EnrollmentReportRow } from '../../../../../template';
 import { MapThingHolder } from '../../setUpMapThingHolder';
 import { mapEnrollment, mapFunding } from '../utils';
 import { lookUpSite } from '../lookUpSite';
 
+/**
+ * Update enrollment and funding information. A row can either:
+ * - end an existing, current enrollment (and if it has current funding, end that as well) OR
+ * - end an existing, current funding OR
+ * - create a new enrollment, with a funding OR
+ * - create a new funding for an existing enrollment
+ */
 export const updateEnrollmentFunding = (
   row: EnrollmentReportRow,
   match: Child,
   thingHolder: MapThingHolder
 ) => {
+  // If no enrollment information is provided, don't update anything
   if (!row.site && !row.entry && !row.ageGroup) {
     return;
   }
 
+  // Get the site for the row enrollment
   const site = lookUpSite(row, match.organization.id, thingHolder.sites);
-  const newEnrollment =
-    row.site && row.entry && row.ageGroup
-      ? mapEnrollment(row, site, match)
-      : undefined;
+  // Create enrollment entity from row values
+  const newEnrollment = mapEnrollment(row, site, match);
+  // Look up an existing enrollment that matches the row enrollment
+  // (may not exist)
   const matchingEnrollment = getEnrollmentMatch(
     newEnrollment,
     match.enrollments
   );
 
-  const newFunding =
-    row.fundingSpace && row.firstReportingPeriod
-      ? mapFunding(
-          row,
-          match.organization,
-          newEnrollment.ageGroup,
-          thingHolder.fundingSpaces,
-          thingHolder.reportingPeriods
-        )
-      : undefined;
+  // Create funding entity from row values
+  const newFunding = mapFunding(
+    row,
+    match.organization,
+    newEnrollment.ageGroup,
+    thingHolder.fundingSpaces,
+    thingHolder.reportingPeriods
+  );
+  // Look up an existing funding that matches row funding
+  // (may not exist)
   const matchingFunding = getFundingMatch(
     newFunding,
     matchingEnrollment?.fundings
   );
 
+  // If row exits a current enrollment, end enrollment and funding
   if (rowHasExitForCurrentEnrollment(newEnrollment, matchingEnrollment)) {
     matchingEnrollment.exit = newEnrollment.exit;
     matchingEnrollment.exitReason = newEnrollment.exitReason;
     matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
     match.tags.push(ChangeTag.WithdrawnRecord);
-  } else if (rowHasNewEnrollment(newEnrollment, matchingEnrollment)) {
+  }
+  // If row has new enrollment, create new enrollment and funding
+  else if (rowHasNewEnrollment(matchingEnrollment)) {
     newEnrollment.fundings = [newFunding];
     if (match.enrollments) match.enrollments.push(newEnrollment);
     else match.enrollments = [newEnrollment];
     match.tags.push(ChangeTag.ChangedEnrollment);
-  } else if (rowEndsCurrentFunding(newFunding, matchingFunding)) {
+  }
+  // If row ends a current funding, end funding
+  else if (rowEndsCurrentFunding(newFunding, matchingFunding)) {
     matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
     match.tags.push(ChangeTag.ChangedFunding);
-  } else if (rowHasNewFunding(newFunding, matchingFunding)) {
+  }
+  // If row has new funding, create new funding
+  else if (rowHasNewFunding(matchingFunding)) {
     matchingEnrollment.fundings.push(newFunding);
     match.tags.push(ChangeTag.ChangedFunding);
   }
 };
 
+/**
+ * Find an existing enrollment that matches the enrollment from row values.
+ * Enrollment considered to match if:
+ * - sites are the same AND
+ * - age gruops are the same AND
+ * - entry date is the same AND
+ * - if exit date exists, exit date is the same
+ *
+ * Enrollments with missing site age group and entry will not
+ * be considered matching, so enrollments with out site/agegroup/entry
+ * cannot be updated by file upload.
+ */
 const getEnrollmentMatch = (
   enrollmentFromRow: Enrollment,
   enrollments: Enrollment[] | undefined
@@ -77,58 +110,74 @@ const getEnrollmentMatch = (
       (e.exit ? enrollmentFromRow.exit.isSame(e.exit, 'day') : true)
   );
 
+/**
+ * Determines if newEnrollment (from row) ends an existing enrollment.
+ * Enrollment ends existing enrollment if:
+ * - existing matching enrollment was found AND
+ * - existing matching enrollment does not have an exit date AND
+ * - new enrollment from row does have an exit date
+ *
+ * @param newEnrollment
+ * @param matchingEnrollment
+ */
 const rowHasExitForCurrentEnrollment = (
-  newEnrollment: Enrollment | undefined,
+  newEnrollment: Enrollment,
   matchingEnrollment: Enrollment | undefined
-) =>
-  // Matching enrollment exists, and does not have exit date
-  !!matchingEnrollment &&
-  !matchingEnrollment.exit &&
-  // and new enrollment exists and does have exit date
-  !!newEnrollment?.exit;
+) => !!matchingEnrollment && !matchingEnrollment.exit && !!newEnrollment.exit;
 
-const rowHasNewEnrollment = (
-  newEnrollment: Enrollment | undefined,
-  matchingEnrollment: Enrollment | undefined
-) =>
+/**
+ * Determines if newEnrollment from row is a new enrollment.
+ * Enrollment is new if:
+ * - no existing matching enrollment was found
+ */
+const rowHasNewEnrollment = (matchingEnrollment: Enrollment | undefined) =>
   // Matching enrollment does not exist
-  !matchingEnrollment &&
-  // and new enrollment does exist
-  !!newEnrollment;
+  !matchingEnrollment;
 
+/**
+ * Find an existing funding that matches the funding from row values.
+ * Fundings are considered matching if
+ * - They reference the same funding space AND
+ * - they reference the same first reporting period AND
+ * - if a last reporting period exists, they reference the same last reporting period
+ * @param fundingFromRow
+ * @param fundings
+ */
 const getFundingMatch = (
   fundingFromRow: Funding,
   fundings: Funding[] | undefined
 ) =>
   fundings?.find(
     (f) =>
-      // Funding spaces match
       f.fundingSpace &&
       fundingFromRow.fundingSpace?.id === f.fundingSpace.id &&
-      // First reporting periods match
       f.firstReportingPeriod &&
       fundingFromRow.firstReportingPeriod?.id === f.firstReportingPeriod.id &&
-      // If existing funding has last reporting period, then last reporting periods match
       (f.lastReportingPeriod
         ? fundingFromRow.lastReportingPeriod?.id === f.lastReportingPeriod.id
         : true)
   );
 
+/**
+ * Determines if a new funding from row ends a current funding.
+ * Funding ends current funding if:
+ * - existing matching funding was found AND
+ * - existing matching funding does not have last reporting period AND
+ * - new funding from row does have a last reporting period
+ */
 export const rowEndsCurrentFunding = (
-  newFunding: Funding | undefined,
-  matchingFunding: Funding | undefined
+  newFunding: Funding,
+  matchingFunding: Funding
 ) =>
-  // Matching funding exists, and does not have last reporting period
   !!matchingFunding &&
   !matchingFunding.lastReportingPeriod &&
-  // and new funding exists and does have last reporting period
-  !!newFunding?.lastReportingPeriod;
+  !!newFunding.lastReportingPeriod;
 
-export const rowHasNewFunding = (
-  newFunding: Funding | undefined,
-  matchingFunding: Funding | undefined
-) =>
-  // Matching funding does not exist
-  !matchingFunding &&
-  // and new funding does exist
-  !!newFunding;
+/**
+ * Determines if a new funding from row is a new funding.
+ * Funding is new if:
+ * - existing matching funding was not found
+ * @param matchingFunding
+ */
+export const rowHasNewFunding = (matchingFunding: Funding | undefined) =>
+  !matchingFunding;

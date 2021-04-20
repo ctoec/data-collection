@@ -48,7 +48,7 @@ export const ReviewMissingInfo: React.FC<StepContentProps> = ({
             setCurrentStepIndex(0);
           }}
         />
-        <Buttonw
+        <Button
           text="Next"
           onClick={() =>
             setCurrentStepIndex((currentStepIdx) => currentStepIdx + 1)
