@@ -1250,10 +1250,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@^1.1.15":
-  version "1.1.15"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.15.tgz#d29789ca12c58370c52437677ed168d90e86cc89"
-  integrity sha512-SAe2+9bZZ5WwcLFRb3u5Y0qFkjoU6X57xX6OTGAXYhZhnjINWrgF1HaVNV7eYa4MY0+/bJtXPAa76u76c4wsBQ==
+"@ctoec/component-library@^1.1.16":
+  version "1.1.16"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.16.tgz#69d05f14fc35820c7a13876ff462ca91831f436d"
+  integrity sha512-zmkv/lo0Sxq9YWcyriYZYsXULS0F3h89YZ6/B7hD9qGL2zAsiFZ+OFriGAOAdP9McjoQoL795152InlWLkL5Qw==
   dependencies:
     "@types/carbon-components" "^10.23.0"
     "@types/carbon-components-react" "^7.26.0"
