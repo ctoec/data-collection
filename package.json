@@ -5,7 +5,6 @@
   "repository": "https://github.com/ctoec/data-collection.git",
   "license": "MIT",
   "dependencies": {
-    "@ctoec/component-library": "^1.1.16",
     "@fast-csv/format": "^4.3.1",
     "@types/express": "^4.17.6",
     "@types/express-jwt": "^0.0.42",
@@ -80,7 +79,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "./hooks/pre-commit.sh"
+      "pre-commit": "./scripts/pre-commit.sh"
     }
   }
 }
