@@ -71,6 +71,11 @@ const RosterContext = React.createContext<RosterContextType>(defaultCtx);
 
 const RosterProvider: React.FC = ({ children }) => {
   const { user } = useContext(UserContext);
+
+  if (user?.isAdmin) {
+    return <></>;
+  }
+
   const history = useHistory();
   const query: RosterQueryParams = parse(history.location.search);
 

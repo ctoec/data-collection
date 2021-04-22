@@ -42,5 +42,8 @@ export function useAuthenticatedSWRInfinite<T>(
     const key = !path || !accessToken ? null : [path, accessToken];
     return key;
   };
-  return useSWRInfinite(getKey) as SWRInfiniteResponseInterface<T, string>;
+  return useSWRInfinite(getKey, {
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  }) as SWRInfiniteResponseInterface<T, string>;
 }
