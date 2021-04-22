@@ -60,7 +60,7 @@
     "serve": "node dist/src/index.js",
     "serve-debug": "nodemon --inspect dist/src/index.js",
     "start": "npm run serve",
-    "test": "jest",
+    "test": "jest --logHeapUsage",
     "e2e": "yarn --cwd e2e-tests test",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js ",
     "watch": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"cyan.bold,green.bold\" \"npm run watch-ts\" \"npm run watch-node\"",
