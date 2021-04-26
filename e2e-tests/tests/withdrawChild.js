@@ -4,8 +4,14 @@ const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
 const { scrollToElement } = require('../utils/scrollToElement');
 const { UploadFileTypes } = require('../utils/UploadFileTypes');
+const { clearDb } = require('../utils/clearDb');
 
 module.exports = {
+
+  before(browser) {
+    clearDb();
+  },
+
   '@tags': ['child', 'withdraw'],
   withdrawChild: async function (browser) {
     await browser.init();

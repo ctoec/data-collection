@@ -2,8 +2,14 @@ const { login } = require('../utils/login');
 const { clickOnChildInRoster } = require('../utils/clickOnChildInRoster');
 const { uploadFile } = require('../utils/uploadFile');
 const { UploadFileTypes } = require('../utils/UploadFileTypes');
+const { clearDb } = require('../utils/clearDb');
 
 module.exports = {
+
+  before(browser) {
+    clearDb();
+  },
+
   '@tags': ['child', 'delete'],
   deleteChild: async function (browser) {
     try {

@@ -5,8 +5,14 @@ const { scrollToElement } = require('../utils/scrollToElement');
 const { enterFormValue } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
 const { UploadFileTypes } = require('../utils/UploadFileTypes');
+const { clearDb } = require('../utils/clearDb');
 
 module.exports = {
+
+  before(browser) {
+    clearDb();
+  },
+  
   '@tags': ['child', 'change'],
   changeChild: async function (browser) {
     await browser.init();

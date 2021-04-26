@@ -2,8 +2,14 @@ const { FakeChildrenTypes } = require('../utils/FakeChildrenTypes');
 const { login } = require('../utils/login');
 const { uploadFile } = require('../utils/uploadFile');
 const { UploadFileTypes } = require('../utils/UploadFileTypes');
+const { clearDb } = require('../utils/clearDb');
 
 module.exports = {
+
+  before(browser) {
+    clearDb();
+  },
+
   '@tags': ['upload'],
   uploadMissingOptional: async function (browser) {
     await browser.init();
