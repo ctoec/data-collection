@@ -174,15 +174,15 @@ workflows:
             - hold
             - pull
       - build:
-          env: qa
+          env: automation
           requires:
             - install
       - deploy:
-          env: qa
+          env: automation
           requires:
             - build
       - e2e_test:
-          env: qa
+          env: automation
           requires:
             - deploy
 
