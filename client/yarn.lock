@@ -1273,29 +1273,6 @@
     typescript "^3.9.0"
     uswds "2.9.0"
 
-"@ctoec/component-library@https://github.com/ctoec/component-library.git#proper-modal-fix":
-  version "1.1.14"
-  resolved "https://github.com/ctoec/component-library.git#e2b154a6d896345b096709a35cf432ac14afc115"
-  dependencies:
-    "@types/carbon-components" "^10.23.0"
-    "@types/carbon-components-react" "^7.26.0"
-    "@types/pluralize" "^0.0.29"
-    "@types/react-modal" "^3.10.6"
-    carbon-components "^10.25.0"
-    carbon-components-react "^7.25.0"
-    carbon-icons "^7.0.7"
-    dompurify "^2.0.12"
-    html-react-parser "^0.13.0"
-    lodash "^4.17.15"
-    pluralize "^8.0.0"
-    react "^16.13.1"
-    react-dates "^21.8.0"
-    react-dom "^16.13.1"
-    react-modal "^3.11.2"
-    react-router-dom "^5.2.0"
-    typescript "^3.9.0"
-    uswds "2.9.0"
-
 "@dabh/diagnostics@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@dabh/diagnostics/-/diagnostics-2.0.2.tgz#290d08f7b381b8f94607dc8f471a12c675f9db31"
