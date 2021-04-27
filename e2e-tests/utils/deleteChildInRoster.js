@@ -1,5 +1,5 @@
 const { scrollToElement } = require('./scrollToElement');
-const { clickOnChildInRoster } = require('./FakeChildrenTypes');
+const { clickOnChildInRoster } = require('./clickOnChildInRoster');
 const { navigateToRoster } = require('./navigateToRoster');
 
 module.exports = {
