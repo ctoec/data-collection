@@ -7,10 +7,8 @@ import { BadRequestError, ApiError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/enrollmentReports';
 import { ChangeTag } from '../../client/src/shared/models';
-import { parseQueryString } from '../utils/parseQueryString';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
-  ChangeTag.AgedUp,
   ChangeTag.ChangedEnrollment,
   ChangeTag.ChangedFunding,
   ChangeTag.Edited,
@@ -23,7 +21,7 @@ export const enrollmentReportsRouter = express.Router();
 // it persists to disk, it's easier to debug
 const storage = multer.diskStorage({
   destination: '/tmp/uploads',
-  filename: (req, file, callback) =>
+  filename: (req, _, callback) =>
     callback(null, `user_${req.user?.id}_` + new Date().toISOString()),
 });
 const upload = multer({ storage }).single('file');
@@ -127,9 +125,7 @@ enrollmentReportsRouter.post(
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (transaction) => {
-      const childRecords = parseQueryString(req, 'childRecords', {
-        forceArray: true,
-      }) as Child[];
+      const { childRecords = [] } = req.body;
 
       // Save to DB
       await controller.batchUpsertMappedEntities(

@@ -6,8 +6,10 @@ import {
   Enrollment,
   FundingSpace,
   Funding,
+  Organization,
   ReportingPeriod,
 } from '../../../entity';
+import { BadRequestError } from '../../../middleware/error/errors';
 import {
   BirthCertificateType,
   Gender,
@@ -19,19 +21,60 @@ import {
 } from '../../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
 import { getRaceIndicated, mapEnum, mapFundingTime } from './entities';
-import { lookUpSite } from './utils';
 import {
+  MISSING_PROVIDER_ERROR,
+  lookUpOrganization,
+  lookUpSite,
+} from './utils';
+import {
+  updateFamilyAddress,
   updateBirthCertificate,
   getEnrollmentMatch,
   getFundingMatch,
+  rowHasNewAddress,
   rowHasNewDetermination,
   rowHasNewEnrollment,
   rowHasNewFunding,
 } from './updates';
+import { TransactionMetadata } from './mapRows';
 import moment from 'moment';
 
 describe('controllers', () => {
   describe('enrollmentReports', () => {
+    describe('lookUpOrganization', () => {
+      it('returns the organization if only one organization', () => {
+        const inputOrg = { id: 1 } as Organization;
+        const org = lookUpOrganization(
+          {} as EnrollmentReportRow,
+          { organizations: [inputOrg] } as TransactionMetadata
+        );
+        expect(org).toEqual(inputOrg);
+      });
+      it('throws an error if the source row does not have a provider name', () => {
+        expect(() =>
+          lookUpOrganization(
+            {} as EnrollmentReportRow,
+            { organizations: [] } as TransactionMetadata
+          )
+        ).toThrow(new BadRequestError(MISSING_PROVIDER_ERROR));
+      });
+      it('returns the organization from the list that matches source provider name', () => {
+        const sourceProviderName = 'org1';
+        const inputOrgs = [
+          { providerName: 'org1' },
+          { providerName: 'org2' },
+        ] as Organization[];
+        const source = {
+          providerName: sourceProviderName,
+        } as EnrollmentReportRow;
+
+        const org = lookUpOrganization(source, {
+          organizations: inputOrgs,
+        } as TransactionMetadata);
+        expect(org?.providerName).toEqual(sourceProviderName);
+      });
+    });
+
     describe('lookUpSite', () => {
       it('returns undefined if source row does not have siteName', () => {
         const site = lookUpSite({} as EnrollmentReportRow, 1, []);
@@ -332,6 +375,61 @@ describe('controllers', () => {
 
         expect(child.birthCertificateId).toBeFalsy();
         expect(child.birthCertificateType).toEqual(NON_US_CERT);
+      });
+    });
+
+    describe('updateFamilyAddress', () => {
+      const STREET = 'street';
+      const TOWN = 'town';
+      const STATE = 'state';
+      const ZIP = '12345';
+      const NEW_STREET = 'new street';
+      const NEW_TOWN = 'new town';
+      const NEW_STATE = 'new state';
+      const NEW_ZIP = '98765';
+
+      it('update address information if new', () => {
+        const child = {
+          family: {
+            streetAddress: STREET,
+            town: TOWN,
+            state: STATE,
+            zipCode: ZIP,
+          },
+          tags: [],
+        } as Child;
+        const other = {
+          streetAddress: NEW_STREET,
+          town: NEW_TOWN,
+          state: NEW_STATE,
+          zipCode: NEW_ZIP,
+        } as EnrollmentReportRow;
+        updateFamilyAddress(other, child);
+
+        expect(child.family.streetAddress).toEqual(NEW_STREET);
+        expect(child.family.town).toEqual(NEW_TOWN);
+        expect(child.family.state).toEqual(NEW_STATE);
+        expect(child.family.zipCode).toEqual(NEW_ZIP);
+      });
+
+      it('no update if address is not new', () => {
+        const child = {
+          family: {
+            streetAddress: STREET,
+            town: TOWN,
+            state: STATE,
+            zipCode: ZIP,
+          },
+          tags: [],
+        } as Child;
+        const other = {
+          streetAddress: STREET,
+          town: TOWN,
+          state: STATE,
+          zipCode: ZIP,
+        } as EnrollmentReportRow;
+
+        expect(rowHasNewAddress(other, child.family)).toBeFalsy();
       });
     });
 

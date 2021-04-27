@@ -3,7 +3,6 @@ import Landing from './containers/Landing/Landing';
 import TemplateDownload from './containers/TemplateDownload/TemplateDownload';
 import Login from './containers/Login/Login';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
-import Upload from './containers/Upload/Upload';
 import Home from './containers/Home/Home';
 import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';

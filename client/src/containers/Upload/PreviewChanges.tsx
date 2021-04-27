@@ -44,7 +44,7 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
     try {
       const resp: EnrollmentReportUploadResponse = await apiPost(
         `enrollment-reports`,
-        childRecords,
+        { childRecords },
         { accessToken }
       );
 

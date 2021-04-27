@@ -69,7 +69,7 @@ export async function validateObject<T extends ObjectWithValidationErrors>(
 ) {
   if (!object) return;
 
-  let validationErrors = await validate(object, {
+  const validationErrors = await validate(object, {
     validationError: { value: false, target: false },
   });
   const metadata = getAllColumnMetadata();
