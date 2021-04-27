@@ -12,8 +12,8 @@ module.exports = {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
     await deleteChildInRoster(browser);
+    await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
     await sortMissingInfoChildrenLast(browser);
     const clickedChildLinkText = await clickOnChildInRoster(browser);
     const lastName = clickedChildLinkText.split(',')[0];
