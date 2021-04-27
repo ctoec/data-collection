@@ -4,6 +4,7 @@ const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
 const { scrollToElement } = require('../utils/scrollToElement');
 const { UploadFileTypes } = require('../utils/UploadFileTypes');
+const { deleteChildInRoster } = require('../utils/deleteChildInRoster');
 
 module.exports = {
   '@tags': ['child', 'withdraw'],
@@ -12,7 +13,7 @@ module.exports = {
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
     await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
-
+    await deleteChildInRoster(browser);
     await sortMissingInfoChildrenLast(browser);
     const clickedChildLinkText = await clickOnChildInRoster(browser);
     const lastName = clickedChildLinkText.split(',')[0];
