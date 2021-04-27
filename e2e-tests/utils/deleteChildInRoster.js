@@ -5,14 +5,14 @@ const { navigateToRoster } = require('./navigateToRoster');
 module.exports = {
   deleteChildInRoster: async function (
     browser,
-    // Clicks on first child by default
+    // delete on first child by default
     selectorArgs = [
       'xpath',
-      "//*/button[@type='button' and contains(., 'Delete record')][0]",
+      "//*/button[@type='button' and contains(., 'Delete record')][1]",
     ],
     deleteSelectorArgs = [
       'xpath',
-      "//*/button[@type='button' and contains(., 'Yes, delete record')][0]",
+      "//*/button[@type='button' and contains(., 'Yes, delete record')][1]",
     ]
   ) {
     await navigateToRoster(browser);
