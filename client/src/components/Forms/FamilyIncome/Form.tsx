@@ -90,8 +90,14 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   let determination: IncomeDetermination;
   const dets = child?.family?.incomeDeterminations || [];
-  if (inCreateFlow) {
-    determination = dets[0] || ({} as IncomeDetermination);
+  if (inCreateFlow || redetermine) {
+    determination =
+      ({
+        numberOfPeople: dets[0].numberOfPeople,
+        income: dets[0].income,
+        determinationDate: dets[0].determinationDate,
+        incomeNotDisclosed: dets[0].incomeNotDisclosed,
+      } as IncomeDetermination) || ({} as IncomeDetermination);
   } else {
     determination =
       dets.find((d) => d.id === incomeDeterminationId) ||
@@ -100,7 +106,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   }
 
   const createDetermination = async (updatedData: IncomeDetermination) => {
-    console.log('create determination', updatedData);
     await apiPost(
       `families/${child?.family?.id}/income-determinations`,
       updatedData,
@@ -108,7 +113,6 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
     );
   };
   const updateDetermination = async (updatedData: IncomeDetermination) => {
-    console.log('update determination');
     await apiPut(
       `families/${child?.family?.id}/income-determinations/${determination.id}`,
       updatedData,
