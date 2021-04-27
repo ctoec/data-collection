@@ -4,25 +4,30 @@ import {
   Organization,
   FundingSpace,
   ReportingPeriod,
-} from '../../../../../entity';
+} from '../../../../entity';
 import {
   AgeGroup,
   FundingSource,
   FundingTime,
-} from '../../../../../../client/src/shared/models';
-import { EnrollmentReportRow } from '../../../../../template';
+} from '../../../../../client/src/shared/models';
+import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum, mapFundingTime } from '.';
 import { Moment } from 'moment';
-import { reportingPeriodIncludesDate } from '../../../../../utils/reportingPeriodIncludesDate';
+
+export const reportingPeriodIncludesDate = (
+  rp: ReportingPeriod,
+  date: Moment
+) => rp.periodStart.isSameOrBefore(date) && rp.periodEnd.isSameOrAfter(date);
 
 /**
  * Create a Funding object from FlattenedEnrollment source,
  * associated with a FundingSpace for given organization and ageGroup
  * (already parsed from source, stored as enrollment.ageGroup)
- * @param transaction
  * @param source
  * @param organization
- * @param enrollment
+ * @param ageGroup
+ * @param fundingSpaces
+ * @param reportingPeriods
  */
 export const mapFunding = (
   source: EnrollmentReportRow,

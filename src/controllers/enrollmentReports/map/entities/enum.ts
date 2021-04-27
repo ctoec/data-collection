@@ -1,4 +1,4 @@
-import { normalizeString } from '../../../../../utils/normalizeString';
+import { normalizeString } from '../../../../utils/normalizeString';
 import {
   Gender,
   AgeGroup,
@@ -6,7 +6,7 @@ import {
   CareModel,
   BirthCertificateType,
   UndefinableBoolean,
-} from '../../../../../../client/src/shared/models';
+} from '../../../../../client/src/shared/models';
 
 /**
  * Helper function to lookup enum values from source string values.

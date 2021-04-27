@@ -1,6 +1,6 @@
 import { BadRequestError } from '../../../../middleware/error/errors';
 import { EnrollmentReportRow } from '../../../../template';
-import { MapThingHolder } from '../setUpMapThingHolder';
+import { TransactionMetadata } from '../mapRows';
 
 export const MISSING_PROVIDER_ERROR =
   'You uploaded a file with missing information.\nProvider name is required for every record in your upload. Make sure this column is not empty.';
@@ -15,21 +15,21 @@ export const MISSING_PROVIDER_ERROR =
  */
 export const lookUpOrganization = (
   source: EnrollmentReportRow,
-  thingHolder: MapThingHolder
+  transactionMetadata: TransactionMetadata
 ) => {
-  if (thingHolder.organizations?.length === 1)
-    return thingHolder.organizations[0];
+  if (transactionMetadata.organizations?.length === 1)
+    return transactionMetadata.organizations[0];
 
   if (!source.providerName) throw new BadRequestError(MISSING_PROVIDER_ERROR);
 
-  const organization = thingHolder.organizations.find(
+  const organization = transactionMetadata.organizations.find(
     (organization) =>
       organization.providerName.toLowerCase() ===
       source.providerName.trim().toLowerCase()
   );
 
   if (!organization) {
-    const organizationNames = thingHolder.organizations.map(
+    const organizationNames = transactionMetadata.organizations.map(
       (o) => o.providerName
     );
     throw new BadRequestError(

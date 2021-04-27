@@ -1,10 +1,10 @@
 import {
   BirthCertificateType,
   ChangeTag,
-} from '../../../../../../client/src/shared/models';
-import { Child } from '../../../../../entity';
-import { EnrollmentReportRow } from '../../../../../template';
-import { mapEnum } from '../../..';
+} from '../../../../../client/src/shared/models';
+import { Child } from '../../../../entity';
+import { EnrollmentReportRow } from '../../../../template';
+import { mapEnum } from '../../';
 
 /**
  * Update birth certificate information if necessary

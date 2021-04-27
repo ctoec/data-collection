@@ -1,8 +1,8 @@
-import { ChangeTag } from '../../../../../../client/src/shared/models';
-import { Child, IncomeDetermination } from '../../../../../entity';
-import { EnrollmentReportRow } from '../../../../../template';
-import { mapIncomeDetermination } from '../../..';
-import { getLastIncomeDetermination } from '../../../../../utils/getLastIncomeDetermination';
+import { ChangeTag } from '../../../../../client/src/shared/models';
+import { Child, IncomeDetermination } from '../../../../entity';
+import { EnrollmentReportRow } from '../../../../template';
+import { mapIncomeDetermination } from '../..';
+import { getLastIncomeDetermination } from '../../../../utils/getLastIncomeDetermination';
 
 /**
  * Create a new income determination for the given match.Family

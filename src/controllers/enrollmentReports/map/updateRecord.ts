@@ -1,14 +1,15 @@
-import { Child } from '../../../../../entity';
-import { EnrollmentReportRow } from '../../../../../template';
-import { MapThingHolder } from '../../setUpMapThingHolder';
-import { updateBirthCertificate } from './updateBirthCertifiate';
-import { updateEnrollmentFunding } from './updateEnrollmentFunding';
-import { updateFamilyAddress } from './updateFamilyAddress';
-import { updateIncomeDetermination } from './updateIncomeDetermination';
+import { Child } from '../../../entity';
+import { EnrollmentReportRow } from '../../../template';
+import { TransactionMetadata } from './mapRows';
+import { updateBirthCertificate } from './updates/updateBirthCertificate';
+import { updateEnrollmentFunding } from './updates/updateEnrollmentFunding';
+import { updateFamilyAddress } from './updates/updateFamilyAddress';
+import { updateIncomeDetermination } from './updates/updateIncomeDetermination';
 
 /**
  * Update an existing child object graph from the mappedChild cache
  * (either encountered earlier in the upload or pulled from DB).
+ * Updates object by reference.
  * Supported changes include:
  * - updating birth certificate information
  * - updating family address
@@ -20,15 +21,15 @@ import { updateIncomeDetermination } from './updateIncomeDetermination';
  *    - adding new funding
  * @param row
  * @param match
- * @param thingHolder
+ * @param transactionMetadata
  */
 export const updateRecord = (
   row: EnrollmentReportRow,
   match: Child,
-  thingHolder: MapThingHolder
+  transactionMetadata: TransactionMetadata
 ) => {
   updateBirthCertificate(row, match);
   updateFamilyAddress(row, match);
   updateIncomeDetermination(row, match);
-  updateEnrollmentFunding(row, match, thingHolder);
+  updateEnrollmentFunding(row, match, transactionMetadata);
 };

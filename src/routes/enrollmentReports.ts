@@ -1,18 +1,13 @@
 import express from 'express';
-import { getManager } from 'typeorm';
+import fs from 'fs';
 import multer from 'multer';
+import { getManager } from 'typeorm';
+import { Child } from '../entity';
 import { BadRequestError, ApiError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import * as controller from '../controllers/enrollmentReports/index';
-import fs from 'fs';
-import {
-  EnrollmentReportCheckResponse,
-  EnrollmentColumnError,
-  EnrollmentReportUploadResponse,
-} from '../../client/src/shared/payloads';
-import { ChangeTag, Child } from '../../client/src/shared/models';
-import { batchUpsertMappedEntities } from '../controllers/enrollmentReports/map/batchUpsertMappingEntities';
-import * as mapController from '../controllers/enrollmentReports/map';
+import * as controller from '../controllers/enrollmentReports';
+import { ChangeTag } from '../../client/src/shared/models';
+import { parseQueryString } from '../utils/parseQueryString';
 
 const CHANGE_TAGS_DENOTING_UPDATE = [
   ChangeTag.AgedUp,
@@ -28,11 +23,10 @@ export const enrollmentReportsRouter = express.Router();
 // it persists to disk, it's easier to debug
 const storage = multer.diskStorage({
   destination: '/tmp/uploads',
-  filename: (req, file, callback) => {
-    return callback(null, `user_${req.user?.id}_` + new Date().toISOString());
-  },
+  filename: (req, file, callback) =>
+    callback(null, `user_${req.user?.id}_` + new Date().toISOString()),
 });
-const upload = multer({ storage: storage }).single('file');
+const upload = multer({ storage }).single('file');
 
 /**
  * /enrollment-reports/check POST
@@ -54,34 +48,25 @@ enrollmentReportsRouter.post(
     return getManager().transaction(async (transaction) => {
       try {
         const reportRows = controller.parseUploadedTemplate(req.file);
-        const thingHolder = await mapController.setUpThingHolder(
+        const childRecords = await controller.mapRows(
           transaction,
-          req.user
+          req.user,
+          reportRows
         );
-        const reportChildren = await mapController.mapRows(
-          reportRows,
-          thingHolder
-        );
-
-        const enrollmentColumnErrors: EnrollmentColumnError[] = await controller.checkErrorsInChildren(
-          reportChildren
+        const columnErrors = await controller.checkErrorsInChildren(
+          childRecords
         );
 
-        // Log children with errors, without PII, to make troubleshooting easier
-        if (enrollmentColumnErrors?.length) {
-          logUploadErrors(req.user.id, reportChildren);
-        }
+        if (columnErrors?.length) logUploadErrors(req.user.id, childRecords);
 
         // Only remove the file from disk if we could successfully parse it
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
+        if (req?.file?.path) fs.unlinkSync(req.file.path);
 
-        const response: EnrollmentReportCheckResponse = {
-          columnErrors: enrollmentColumnErrors,
-          uploadPreview: controller.formatUploadPreview(reportChildren),
-          counts: getUploadCounts(reportChildren),
-        };
-
-        res.send(response);
+        res.send({
+          columnErrors,
+          childRecords,
+          counts: getUploadCounts(childRecords),
+        });
       } catch (err) {
         if (err instanceof ApiError) throw err;
         console.error(
@@ -142,46 +127,23 @@ enrollmentReportsRouter.post(
   upload,
   passAsyncError(async (req, res) => {
     return getManager().transaction(async (transaction) => {
-      // Ingest upload by parsing, mapping, and saving uploaded data
-      try {
-        const reportRows = controller.parseUploadedTemplate(req.file);
-        const thingHolder = await mapController.setUpThingHolder(
-          transaction,
-          req.user
-        );
-        const reportChildren = await mapController.mapRows(
-          reportRows,
-          thingHolder
-        );
+      const childRecords = parseQueryString(req, 'childRecords', {
+        forceArray: true,
+      }) as Child[];
 
-        // Save to DB
-        await mapController.batchUpsertMappedEntities(
-          req.user,
-          transaction,
-          reportChildren
-        );
+      // Save to DB
+      await controller.batchUpsertMappedEntities(
+        req.user,
+        transaction,
+        childRecords
+      );
 
-        // Use tags to decide which kinds of uploads/updates were performed
-        // on each record
-        const response: EnrollmentReportUploadResponse = getUploadCounts(
-          reportChildren
-        );
-
-        res.status(201).send(response);
-
-        // Only remove the file from disk if we successfully parsed it
-        if (req.file && req.file.path) fs.unlinkSync(req.file.path);
-      } catch (err) {
-        if (err instanceof ApiError) throw err;
-        console.error('Error parsing uploaded enrollment report: ', err);
-        throw new BadRequestError(
-          'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
-        );
-      }
+      res.status(201).send(getUploadCounts(childRecords));
     });
   })
 );
 
+// Use tags to count which kinds of uploads/updates were performed
 const getUploadCounts = (children: Child[]) => {
   return children.reduce(
     (response, child) => {

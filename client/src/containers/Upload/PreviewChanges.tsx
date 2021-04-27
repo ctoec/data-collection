@@ -6,46 +6,46 @@ import {
 } from '@ctoec/component-library';
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { stringify } from 'query-string';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
+import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { EnrollmentReportUploadResponse } from '../../shared/payloads';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
+import { useAlerts } from '../../hooks/useAlerts';
 import { apiPost } from '../../utils/api';
-import { getFormDataBlob } from '../../utils/getFormDataBlob';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { getPreviewTableAccordionItems } from './getPreviewTableAccordionItems';
 import { StepContentProps } from './UploadWizard';
 
 export const PreviewChanges: React.FC<StepContentProps> = ({
   enrollmentReportCheck,
-  file,
-  setAlerts,
-  setFile,
   setCurrentStepIndex,
+  setEnrollmentReportCheck,
 }) => {
+  if (!enrollmentReportCheck) throw new Error('Something went wrong');
+
+  const {
+    childRecords,
+    counts: { newCount, updatedCount, withdrawnCount, unchangedCount },
+  } = enrollmentReportCheck;
+
   const history = useHistory();
   const { accessToken } = useContext(AuthenticationContext);
+  const { query, revalidate } = useContext(RosterContext);
+  const [_, setAlerts] = useAlerts();
 
   const [loading, setLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('');
 
   async function confirmUpload() {
-    if (!file) {
-      throw new Error('Something went wrong');
-    }
-
     setLoadingText('Uploading changes...');
     setLoading(true);
 
     try {
-      const formData = getFormDataBlob(file);
       const resp: EnrollmentReportUploadResponse = await apiPost(
         `enrollment-reports`,
-        formData,
-        {
-          accessToken,
-          headers: { 'content-type': formData.type },
-          rawBody: true,
-        }
+        childRecords,
+        { accessToken }
       );
 
       await revalidate();
@@ -92,15 +92,6 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
 
     return uploadText;
   }
-
-  if (!enrollmentReportCheck) {
-    throw new Error('Something went wrong');
-  }
-
-  const {
-    uploadPreview,
-    counts: { newCount, updatedCount, withdrawnCount, unchangedCount },
-  } = enrollmentReportCheck;
 
   return (
     <>
@@ -150,7 +141,7 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
 
             <div className="grid-row upload-preview-table">
               <Accordion
-                items={getPreviewTableAccordionItems(uploadPreview)}
+                items={getPreviewTableAccordionItems(childRecords)}
                 titleHeadingLevel="h3"
               />
             </div>
@@ -160,7 +151,7 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
               text="Cancel upload"
               appearance="outline"
               onClick={() => {
-                setFile(undefined);
+                setEnrollmentReportCheck(undefined);
                 setCurrentStepIndex(0);
               }}
             />

@@ -1,20 +1,19 @@
-import { ChangeTag } from '../../../../../client/src/shared/models';
-import { EnrollmentReportRow } from '../../../../template';
+import { ChangeTag } from '../../../../client/src/shared/models';
+import { EnrollmentReportRow } from '../../../template';
 import {
   mapFamily,
   mapIncomeDetermination,
   mapChild,
   mapEnrollment,
   mapFunding,
-} from '../..';
-import { lookUpSite } from './lookUpSite';
-import { MapThingHolder } from '../setUpMapThingHolder';
-import { Organization } from '../../../../entity';
+} from '..';
+import { lookUpSite } from './utils';
+import { TransactionMetadata } from './mapRows';
+import { Organization } from '../../../entity';
 
 /**
  * Create a new record from an EnrollmentReportRow
- * for which no matching child was found, and adds child to the
- * mappedChildren cache.
+ * for which no matching child was found.
  *
  * Creates full object graph (family, income determinations, child, enrollment, funding)
  * regardless of if the information provided is complete
@@ -24,32 +23,34 @@ import { Organization } from '../../../../entity';
  *
  * @param row
  * @param organization
- * @param thingHolder
+ * @param transactionMetadata
  */
 export const createRecord = async (
   row: EnrollmentReportRow,
   organization: Organization,
-  thingHolder: MapThingHolder
+  transactionMetadata: TransactionMetadata
 ) => {
   const family = mapFamily(row, organization);
-  const incomeDetermination = mapIncomeDetermination(row, family);
-  family.incomeDeterminations = [incomeDetermination];
+  family.incomeDeterminations = [mapIncomeDetermination(row, family)];
 
   const child = mapChild(row, organization, family);
   child.family = family;
 
-  const site = lookUpSite(row, organization.id, thingHolder.sites);
+  const site = lookUpSite(row, organization.id, transactionMetadata.sites);
   const enrollment = mapEnrollment(row, site, child);
   const funding = mapFunding(
     row,
     organization,
     enrollment.ageGroup,
-    thingHolder.fundingSpaces,
-    thingHolder.reportingPeriods
+    transactionMetadata.fundingSpaces,
+    transactionMetadata.reportingPeriods
   );
 
   enrollment.fundings = [funding];
   child.enrollments = [enrollment];
 
-  thingHolder.mappedChildren.push({ ...child, tags: [ChangeTag.NewRecord] });
+  return {
+    ...child,
+    tags: [ChangeTag.NewRecord],
+  };
 };

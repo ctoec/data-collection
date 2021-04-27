@@ -1,6 +1,6 @@
-import { ChangeTag } from '../../../../../../client/src/shared/models';
-import { Child, Family } from '../../../../../entity';
-import { EnrollmentReportRow } from '../../../../../template';
+import { ChangeTag } from '../../../../../client/src/shared/models';
+import { Child, Family } from '../../../../entity';
+import { EnrollmentReportRow } from '../../../../template';
 
 /**
  * Update family address if necessary
@@ -14,7 +14,7 @@ export const updateFamilyAddress = (row: EnrollmentReportRow, match: Child) => {
     match.family.state = row.state;
     match.family.zipCode = row.zipCode;
 
-    match.tags.push(ChangeTag.Edit);
+    match.tags.push(ChangeTag.Edited);
   }
 };
 

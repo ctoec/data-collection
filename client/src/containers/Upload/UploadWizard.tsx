@@ -1,4 +1,4 @@
-import { AlertProps, ProgressIndicator } from '@ctoec/component-library';
+import { ProgressIndicator } from '@ctoec/component-library';
 import React, { SetStateAction, useState } from 'react';
 import { useAlerts } from '../../hooks/useAlerts';
 import { EnrollmentReportCheckResponse } from '../../shared/payloads';
@@ -8,14 +8,11 @@ import { ReviewMissingInfo } from './ReviewMissingInfo';
 import Upload from './Upload';
 
 export type StepContentProps = {
-  setAlerts: React.Dispatch<SetStateAction<(AlertProps | undefined)[]>>;
   setCurrentStepIndex: React.Dispatch<SetStateAction<number>>;
   setEnrollmentReportCheck: React.Dispatch<
     SetStateAction<EnrollmentReportCheckResponse | undefined>
   >;
   enrollmentReportCheck?: EnrollmentReportCheckResponse;
-  setFile: React.Dispatch<SetStateAction<File | undefined>>;
-  file?: File;
 };
 
 const UPLOAD_WIZARD_STEPS = [
@@ -44,8 +41,7 @@ const UploadWizard: React.FC = () => {
     enrollmentReportCheck,
     setEnrollmentReportCheck,
   ] = useState<EnrollmentReportCheckResponse>();
-  const [file, setFile] = useState<File>();
-  const { alertElements, setAlerts } = useAlerts();
+  const [alertElements] = useAlerts();
 
   const StepContent = UPLOAD_WIZARD_STEPS[currentStepIndex].content;
   return (
@@ -72,11 +68,8 @@ const UploadWizard: React.FC = () => {
 
         <StepContent
           setCurrentStepIndex={setCurrentStepIndex}
-          setAlerts={setAlerts}
           setEnrollmentReportCheck={setEnrollmentReportCheck}
           enrollmentReportCheck={enrollmentReportCheck}
-          setFile={setFile}
-          file={file}
         />
       </div>
     </div>

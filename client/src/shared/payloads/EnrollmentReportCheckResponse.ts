@@ -1,5 +1,5 @@
 import { EnrollmentReportUploadResponse } from '.';
-import { UploadPreviewRow } from '../../containers/Upload/UploadPreviewRow';
+import { Child } from '../../shared/models';
 
 export type EnrollmentColumnError = {
   column: string;
@@ -9,7 +9,7 @@ export type EnrollmentColumnError = {
 };
 
 export interface EnrollmentReportCheckResponse {
-  uploadPreview: UploadPreviewRow[];
+  childRecords: Child[];
   columnErrors: EnrollmentColumnError[];
   counts: EnrollmentReportUploadResponse;
 }

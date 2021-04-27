@@ -1,3 +1,4 @@
-export * from './batchUpsertMappingEntities';
-export * from './mapRows/mapRows';
-export * from './setUpMapThingHolder';
+export * from './batchUpsert';
+export * from './createRecord';
+export * from './mapRows';
+export * from './updateRecord';

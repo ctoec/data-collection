@@ -1,14 +1,9 @@
-import { ChangeTag } from '../../../../../../client/src/shared/models';
-import {
-  Child,
-  Enrollment,
-  EnrollmentReport,
-  Funding,
-} from '../../../../../entity';
-import { EnrollmentReportRow } from '../../../../../template';
-import { MapThingHolder } from '../../setUpMapThingHolder';
-import { mapEnrollment, mapFunding } from '../utils';
-import { lookUpSite } from '../lookUpSite';
+import { ChangeTag } from '../../../../../client/src/shared/models';
+import { Child, Enrollment, Funding } from '../../../../entity';
+import { EnrollmentReportRow } from '../../../../template';
+import { TransactionMetadata } from '../mapRows';
+import { mapEnrollment, mapFunding } from '../entities';
+import { lookUpSite } from '../utils';
 
 /**
  * Update enrollment and funding information. A row can either:
@@ -20,7 +15,7 @@ import { lookUpSite } from '../lookUpSite';
 export const updateEnrollmentFunding = (
   row: EnrollmentReportRow,
   match: Child,
-  thingHolder: MapThingHolder
+  transactionMetadata: TransactionMetadata
 ) => {
   // If no enrollment information is provided, don't update anything
   if (!row.site && !row.entry && !row.ageGroup) {
@@ -28,7 +23,11 @@ export const updateEnrollmentFunding = (
   }
 
   // Get the site for the row enrollment
-  const site = lookUpSite(row, match.organization.id, thingHolder.sites);
+  const site = lookUpSite(
+    row,
+    match.organization.id,
+    transactionMetadata.sites
+  );
   // Create enrollment entity from row values
   const newEnrollment = mapEnrollment(row, site, match);
   // Look up an existing enrollment that matches the row enrollment
@@ -43,8 +42,8 @@ export const updateEnrollmentFunding = (
     row,
     match.organization,
     newEnrollment.ageGroup,
-    thingHolder.fundingSpaces,
-    thingHolder.reportingPeriods
+    transactionMetadata.fundingSpaces,
+    transactionMetadata.reportingPeriods
   );
   // Look up an existing funding that matches row funding
   // (may not exist)
@@ -91,7 +90,7 @@ export const updateEnrollmentFunding = (
  * be considered matching, so enrollments with out site/agegroup/entry
  * cannot be updated by file upload.
  */
-const getEnrollmentMatch = (
+export const getEnrollmentMatch = (
   enrollmentFromRow: Enrollment,
   enrollments: Enrollment[] | undefined
 ) =>
@@ -130,7 +129,9 @@ const rowHasExitForCurrentEnrollment = (
  * Enrollment is new if:
  * - no existing matching enrollment was found
  */
-const rowHasNewEnrollment = (matchingEnrollment: Enrollment | undefined) =>
+export const rowHasNewEnrollment = (
+  matchingEnrollment: Enrollment | undefined
+) =>
   // Matching enrollment does not exist
   !matchingEnrollment;
 
@@ -143,7 +144,7 @@ const rowHasNewEnrollment = (matchingEnrollment: Enrollment | undefined) =>
  * @param fundingFromRow
  * @param fundings
  */
-const getFundingMatch = (
+export const getFundingMatch = (
   fundingFromRow: Funding,
   fundings: Funding[] | undefined
 ) =>

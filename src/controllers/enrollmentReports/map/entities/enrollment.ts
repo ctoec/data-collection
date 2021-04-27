@@ -1,9 +1,6 @@
-import { Child, Site, Enrollment } from '../../../../../entity';
-import {
-  AgeGroup,
-  CareModel,
-} from '../../../../../../client/src/shared/models';
-import { EnrollmentReportRow } from '../../../../../template';
+import { Child, Site, Enrollment } from '../../../../entity';
+import { AgeGroup, CareModel } from '../../../../../client/src/shared/models';
+import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum } from '.';
 import { getManager } from 'typeorm';
 

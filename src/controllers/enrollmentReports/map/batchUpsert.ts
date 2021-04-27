@@ -1,6 +1,6 @@
 import { UpdateMetaData } from '../../../entity/embeddedColumns/UpdateMetaData';
 import { EntityManager } from 'typeorm';
-import { User, Child, Enrollment, Funding } from '../../../entity';
+import { User, Child, Funding } from '../../../entity';
 
 /**
  * SQL Server driver has an upper limit of 2100 parameters per query.
@@ -8,6 +8,7 @@ import { User, Child, Enrollment, Funding } from '../../../entity';
  * that'll end up in the query (couldn't find any better way to do this
  * from typeORM), chunk the inserts into batches that will have <2000
  * parameters per batch.
+ * @param user
  * @param transaction
  * @param entities
  */
@@ -63,13 +64,11 @@ export async function batchUpsertMappedEntities(
   // unsert new income determination entities
   // (Editing income determinations is not supported at present)
   const incomeDetsForUpsert = children.reduce((newIncomeDets, child, idx) => {
-    child.family.incomeDeterminations
-      ?.filter((det) => !det.id)
-      .forEach((det) => {
-        det.familyId = upsertedFamilies[idx].id;
-        det.family = undefined;
-        newIncomeDets.push(det);
-      });
+    child.family.incomeDeterminations.forEach((det) => {
+      det.familyId = upsertedFamilies[idx].id;
+      det.family = undefined; // For typeorm
+      newIncomeDets.push(det);
+    });
 
     return newIncomeDets;
   }, []);
@@ -81,7 +80,7 @@ export async function batchUpsertMappedEntities(
     transaction,
     children.map((c, idx) => {
       c.familyId = upsertedFamilies[idx].id;
-      c.family = undefined;
+      c.family = undefined; // For typeorm
       return transaction.create(Child, c);
     })
   );
@@ -92,21 +91,25 @@ export async function batchUpsertMappedEntities(
   // so they can be upserted with updated enrollment references and
   // upsert enrollment entities with updated
   const fundingsByEnrollment: Funding[][] = [];
-  const enrollmentsForUpsert: Enrollment[] = [];
-  children.forEach((child, idx) => {
-    child.enrollments?.map((e) => {
-      const enrollmentForUpsert = transaction.create(Enrollment, e);
-      enrollmentForUpsert.fundings = undefined;
-      fundingsByEnrollment.push(e.fundings);
-      enrollmentForUpsert.child = undefined;
-      enrollmentForUpsert.childId = upsertedChildren[idx].id;
-      enrollmentsForUpsert.push(enrollmentForUpsert);
-    });
-  });
   const upsertedEnrollments = await doBatchSave(
     user,
     transaction,
-    enrollmentsForUpsert
+    children.reduce(
+      (enrollments, child, idx) => [
+        ...enrollments,
+        ...child.enrollments?.map((e) => {
+          fundingsByEnrollment.push(e.fundings);
+
+          return {
+            ...e,
+            fundings: undefined, // For typeorm
+            child: undefined, // For typeorm
+            childId: upsertedChildren[idx].id,
+          };
+        }),
+      ],
+      []
+    )
   );
 
   // Update enrollment references and
@@ -114,7 +117,7 @@ export async function batchUpsertMappedEntities(
   const fundingsForUpsert = fundingsByEnrollment.reduce(
     (flatFundings, enrollmentFundings, idx) => {
       enrollmentFundings?.forEach((f) => {
-        f.enrollment = undefined;
+        f.enrollment = undefined; // For typeorm
         f.enrollmentId = upsertedEnrollments[idx].id;
         flatFundings.push(f);
       });

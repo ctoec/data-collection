@@ -1,12 +1,12 @@
 import { getManager } from 'typeorm';
-import { Child, Family, Organization } from '../../../../../entity';
+import { Child, Family, Organization } from '../../../../entity';
 import {
   Gender,
   BirthCertificateType,
   UniqueIdType,
   UndefinableBoolean,
-} from '../../../../../../client/src/shared/models';
-import { EnrollmentReportRow } from '../../../../../template';
+} from '../../../../../client/src/shared/models';
+import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum } from '.';
 
 /**

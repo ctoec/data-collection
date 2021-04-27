@@ -1,7 +1,7 @@
-import { UndefinableBoolean } from '../../../../../../client/src/shared/models';
-import { Organization, Family } from '../../../../../entity';
+import { UndefinableBoolean } from '../../../../../client/src/shared/models';
+import { Organization, Family } from '../../../../entity';
 
-import { EnrollmentReportRow } from '../../../../../template';
+import { EnrollmentReportRow } from '../../../../template';
 import { mapEnum } from './enum';
 import { getManager } from 'typeorm';
 

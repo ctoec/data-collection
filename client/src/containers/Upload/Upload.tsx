@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import {
@@ -9,11 +9,12 @@ import {
 import { apiPost } from '../../utils/api';
 import { getErrorHeading, getErrorText } from '../../utils/error';
 import { handleJWTError } from '../../utils/handleJWTError';
+import { BackButton } from '../../components/BackButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
+import { useAlerts } from '../../hooks/useAlerts';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 import { EnrollmentReportCheckResponse } from '../../shared/payloads';
 import { getFormDataBlob } from '../../utils/getFormDataBlob';
-import { BackButton } from '../../components/BackButton';
 import { StepContentProps } from './UploadWizard';
 
 const ACCEPTABLE_ROWS = [
@@ -27,85 +28,24 @@ const ACCEPTABLE_ROWS = [
 ];
 
 const Upload: React.FC<StepContentProps> = ({
-  setAlerts,
   setCurrentStepIndex,
   setEnrollmentReportCheck,
-  setFile,
-  file,
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
+  const [_, setAlerts] = useAlerts();
 
   const [loading, setLoading] = useState(false);
-
-  // Check the file for errors if there is a file
-  useEffect(() => {
-    (async function submitUpload() {
-      if (!file) return;
-
-      setLoading(true);
-      try {
-        const formData = getFormDataBlob(file);
-        const checkResponse: EnrollmentReportCheckResponse = await apiPost(
-          `enrollment-reports/check`,
-          formData,
-          {
-            accessToken,
-            headers: { 'content-type': formData.type },
-            rawBody: true,
-          }
-        );
-
-        setEnrollmentReportCheck(checkResponse);
-        setCurrentStepIndex((currentStepIdx) => currentStepIdx + 1);
-      } catch (error) {
-        handleJWTError(history, (e) => {
-          setAlerts([
-            {
-              heading: getErrorHeading(e),
-              text: getErrorText(error),
-              type: 'error',
-              actionItem: (
-                <div>
-                  <p className="margin-bottom-1 text-bold">
-                    Download the data collection template
-                  </p>
-                  <CSVExcelDownloadButton
-                    fileType="xlsx"
-                    whichDownload="template"
-                    className="margin-bottom-1"
-                  />
-                  <CSVExcelDownloadButton
-                    fileType="csv"
-                    whichDownload="template"
-                    className="margin-bottom-1"
-                  />
-                </div>
-              ),
-            },
-          ]);
-
-          clearFile();
-        })(error);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [file]);
-
   const [fileKey, setFileKey] = useState(0);
 
-  function clearFile() {
-    // When the file is cleared, change the key to force the file component to rerender/reset
-    setFile(undefined);
-    setFileKey((oldKey) => oldKey + 1);
-  }
+  // When the file is cleared, change the key to force the file component to rerender/reset
+  const clearFile = () => setFileKey((oldKey) => oldKey + 1);
 
-  function triggerUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  async function triggerUpload(event: React.ChangeEvent<HTMLInputElement>) {
     event.preventDefault();
-    const _file = event?.target?.files?.[0];
+    const file = event?.target?.files?.[0];
 
-    if (!_file) {
+    if (!file) {
       clearFile();
       setAlerts([
         {
@@ -116,7 +56,53 @@ const Upload: React.FC<StepContentProps> = ({
       return;
     }
 
-    setFile(_file);
+    setLoading(true);
+    try {
+      const formData = getFormDataBlob(file);
+      const checkResponse: EnrollmentReportCheckResponse = await apiPost(
+        `enrollment-reports/check`,
+        formData,
+        {
+          accessToken,
+          headers: { 'content-type': formData.type },
+          rawBody: true,
+        }
+      );
+
+      setEnrollmentReportCheck(checkResponse);
+      setCurrentStepIndex((currentStepIdx) => currentStepIdx + 1);
+    } catch (error) {
+      handleJWTError(history, (e) => {
+        setAlerts([
+          {
+            heading: getErrorHeading(e),
+            text: getErrorText(error),
+            type: 'error',
+            actionItem: (
+              <div>
+                <p className="margin-bottom-1 text-bold">
+                  Download the data collection template
+                </p>
+                <CSVExcelDownloadButton
+                  fileType="xlsx"
+                  whichDownload="template"
+                  className="margin-bottom-1"
+                />
+                <CSVExcelDownloadButton
+                  fileType="csv"
+                  whichDownload="template"
+                  className="margin-bottom-1"
+                />
+              </div>
+            ),
+          },
+        ]);
+
+        clearFile();
+      })(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
