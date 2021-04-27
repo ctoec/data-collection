@@ -92,12 +92,14 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   const dets = child?.family?.incomeDeterminations || [];
 
   if (inCreateFlow || redetermine) {
-    if (dets[0]) {
-      let { id, ...newDets } = dets[0];
-      determination = newDets as IncomeDetermination;
-    } else {
-      determination = {} as IncomeDetermination;
-    }
+    // if (dets[0]) {
+    //   let { id, ...newDets } = dets[0];
+    //   determination = newDets as IncomeDetermination;
+    // } else {
+    //   determination = {} as IncomeDetermination;
+    // }
+    const { id, ...newDet } = dets[0] ?? {};
+    determination = newDet as IncomeDetermination;
   } else {
     determination =
       dets.find((d) => d.id === incomeDeterminationId) ||
