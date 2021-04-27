@@ -59,6 +59,7 @@ type FamilyIncomeFormProps = {
   incomeDeterminationId?: number;
   CancelButton?: JSX.Element;
   isFirstRecordedDet?: boolean;
+  redetermine?: boolean;
 } & RecordFormProps;
 
 export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
@@ -67,6 +68,7 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   child,
   incomeDeterminationId,
   CancelButton,
+  redetermine = false,
   afterSaveSuccess,
   setAlerts,
   hideErrors,
@@ -97,21 +99,27 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
       ({} as IncomeDetermination);
   }
 
-  const createDetermination = async (updatedData: IncomeDetermination) =>
+  const createDetermination = async (updatedData: IncomeDetermination) => {
+    console.log('create determination', updatedData);
     await apiPost(
       `families/${child?.family?.id}/income-determinations`,
       updatedData,
       { accessToken }
     );
-
-  const updateDetermination = async (updatedData: IncomeDetermination) =>
+  };
+  const updateDetermination = async (updatedData: IncomeDetermination) => {
+    console.log('update determination');
     await apiPut(
       `families/${child?.family?.id}/income-determinations/${determination.id}`,
       updatedData,
       { accessToken }
     );
+  };
 
-  const saveData = determination.id ? updateDetermination : createDetermination;
+  const saveData =
+    determination.id && !redetermine
+      ? updateDetermination
+      : createDetermination;
 
   const onFinally = () => {
     if (isMounted()) {

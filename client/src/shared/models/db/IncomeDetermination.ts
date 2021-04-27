@@ -3,7 +3,7 @@ import { Moment } from 'moment';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
 
 export interface IncomeDetermination extends ObjectWithValidationErrors {
-  id: number;
+  id?: number;
   numberOfPeople?: number;
   income?: number;
   determinationDate?: Moment;
