@@ -3,6 +3,9 @@
     "WingedKeysUri": "https://qa.ece-wingedkeys.ctoecskylight.com",
     "GoogleAnalyticsTrackingId": "UA-191041839-2"
   },
+  "automation": {
+    "WingedKeysUri": "https://automation.ece-wingedkeys.ctoecskylight.com"
+  },
   "devsecure": {
     "WingedKeysUri": "https://devsecure.ece-wingedkeys.ctoecskylight.com"
   },
