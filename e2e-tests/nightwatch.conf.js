@@ -16,7 +16,7 @@ https: nightwatch_config = {
     disable_error_log: true,
   },
   launch_url:
-    process.env.LAUNCH_URL || 'https://staging.ece-fawkes.ctoecskylight.com',
+    process.env.LAUNCH_URL || 'https://automation.ece-fawkes.ctoecskylight.com',
   test_settings: {
     default: {
       globals: {
