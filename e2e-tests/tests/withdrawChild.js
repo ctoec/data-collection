@@ -4,7 +4,6 @@ const { enterFormValue, clickFormEl } = require('../utils/enterFormValue');
 const { uploadFile } = require('../utils/uploadFile');
 const { scrollToElement } = require('../utils/scrollToElement');
 const { UploadFileTypes } = require('../utils/UploadFileTypes');
-const { deleteChildInRoster } = require('../utils/deleteChildInRoster');
 
 module.exports = {
   '@tags': ['child', 'withdraw'],
@@ -12,8 +11,8 @@ module.exports = {
     await browser.init();
     await browser.timeoutsImplicitWait(10000);
     await login(browser);
-    await deleteChildInRoster(browser);
     await uploadFile(browser, UploadFileTypes.CSV, 'complete', true);
+
     await sortMissingInfoChildrenLast(browser);
     const clickedChildLinkText = await clickOnChildInRoster(browser);
     const lastName = clickedChildLinkText.split(',')[0];
@@ -27,6 +26,7 @@ module.exports = {
 
     // Fill out the withdraw modal form with acceptable values
     await enterFormValue(browser, 'end-date-input', `01/10/2020`);
+
     await clickFormEl(browser, 'exit-reason', { clickChildIndex: 3 });
     const lastReportingPeriodArgs = ['css selector', '#last-reporting-period'];
     await scrollToElement(browser, lastReportingPeriodArgs);
