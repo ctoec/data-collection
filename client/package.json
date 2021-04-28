@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ctoec/component-library": "^1.1.14",
+    "@ctoec/component-library": "^1.1.17",
     "@openid/appauth": "^1.2.7",
     "@testing-library/dom": "^7.24.1",
     "@testing-library/jest-dom": "^4.2.4",
@@ -48,7 +48,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen --silent --testPathIgnorePatterns ./*/integrationTests",
+    "test": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen --silent --testPathIgnorePatterns ./*/integrationTests --runInBand",
     "test-integration": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen --silent --runInBand --testTimeout=50000 --testPathPattern ./*/integrationTests",
     "test-local": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject"
