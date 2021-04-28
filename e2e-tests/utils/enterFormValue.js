@@ -10,6 +10,7 @@ module.exports = {
 
     //  Hacks to click somewhere else on the page to hide the calendar display
     //  In order to prevent it from keeping other elements out of view
+    //  TODO: Kill with fire
     if (id === 'determination-date--input') {
       await browser.click('xpath', "//*/h2[contains(., 'income')]");
     } else if (id === 'start-date-input') {
