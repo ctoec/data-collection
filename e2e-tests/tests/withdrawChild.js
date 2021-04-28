@@ -26,7 +26,6 @@ module.exports = {
 
     // Fill out the withdraw modal form with acceptable values
     await enterFormValue(browser, 'end-date-input', `01/10/2020`);
-    await browser.click('xpath', "//*/h2[contains(., 'Withdraw')]");
 
     await clickFormEl(browser, 'exit-reason', { clickChildIndex: 3 });
     const lastReportingPeriodArgs = ['css selector', '#last-reporting-period'];
