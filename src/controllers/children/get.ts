@@ -157,7 +157,7 @@ export const getActiveChildren = async (
     month?: Moment;
   } & skipTake
 ) => {
-  const { month = moment(), ...restParams } = selectParams;
+  const { month = moment(), ...restParams } = selectParams ?? {};
   const qb = await activeChildrenQuery(user, organizationIds, {
     end: month.endOf('month').format('YYYY-MM-DD'),
     start: month.startOf('month').format('YYYY-MM-DD'),
