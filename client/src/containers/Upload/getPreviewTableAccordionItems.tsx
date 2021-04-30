@@ -100,10 +100,13 @@ export const formatUploadPreview = (mappedChildren: Child[]) => {
     const previewRow: UploadPreviewRow = {
       name: nameFormatter(c, { lastNameFirst: true, capitalize: true }),
       ageGroup: recentEnrollment?.ageGroup,
-      // Greater than 1 here because we didn't save nested enrollments and
-      // fundings to the DB, so the "every child has a funded enrollment"
-      // validator goes off for every child--ignore it
-      missingInfo: (c?.validationErrors?.length ?? 0) > 1,
+      missingInfo:
+        // Greater than 1 here because we didn't save nested enrollments and
+        // fundings to the DB, so the "every child has a funded enrollment"
+        // validator goes off for every child--ignore it
+        (c?.validationErrors?.length ?? 0) > 1 ||
+        // But check for additional sub-errors
+        !!c?.validationErrors?.[0]?.children?.length,
       tags: c?.tags ?? [],
       birthDate: c?.birthdate?.format('MM/DD/YYYY') ?? '-',
       fundingSource: recentFunding?.fundingSpace?.source ?? '-',

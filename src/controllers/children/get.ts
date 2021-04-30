@@ -3,7 +3,7 @@ import { User, Enrollment, FundingSpace, Child } from '../../entity';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import moment, { Moment } from 'moment';
 import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
-import { validateObject } from '../../utils/processChild';
+import { validateChild } from '../../utils/validateChild';
 import { groupBy } from 'underscore';
 import { getCurrentFunding } from '../../utils/getCurrentFunding';
 import { NestedFundingSpaces } from '../../../client/src/shared/payloads/NestedFundingSpaces';
@@ -113,7 +113,7 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
   qb.andWhere('Child.id = :id', { id });
 
   const child = await qb.getOne();
-  return await validateObject(child);
+  return await validateChild(child);
 };
 
 /**
@@ -164,7 +164,7 @@ export const getActiveChildren = async (
     ...restParams,
   });
   const children = await qb.getMany();
-  return await Promise.all(children.map(validateObject));
+  return await Promise.all(children.map(validateChild));
 };
 
 /**
@@ -206,7 +206,7 @@ export const getWithdrawnChildren = async (
   if (take) qb.take(take);
 
   const children = await qb.getMany();
-  return await Promise.all(children.map(validateObject));
+  return await Promise.all(children.map(validateChild));
 };
 
 export const getMissingInfoChildren = async (
@@ -215,7 +215,7 @@ export const getMissingInfoChildren = async (
 ) => {
   const qb = await queryBuilderBuilder({ user, organizationIds });
   const preProcessedChildren = await qb.getMany();
-  const children = await Promise.all(preProcessedChildren.map(validateObject));
+  const children = await Promise.all(preProcessedChildren.map(validateChild));
 
   return children.filter((child) => child?.validationErrors?.length);
 };

@@ -1,4 +1,4 @@
-import { EntityManager, In } from 'typeorm';
+import { EntityManager, In, getManager } from 'typeorm';
 import { EnrollmentReportRow } from '../../../template';
 import {
   lookUpOrganization,
@@ -9,6 +9,7 @@ import { ApiError } from '../../../middleware/error/errors';
 import { createRecord } from './createRecord';
 import { updateRecord } from './updateRecord';
 import {
+  Child,
   Organization,
   Site,
   FundingSpace,
@@ -16,7 +17,7 @@ import {
   User,
 } from '../../../entity';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
-import { validateObject } from '../../../utils/processChild';
+import { validateChild } from '../../../utils/validateChild';
 
 /**
  * A param bag for the mapping process containing:
@@ -107,7 +108,11 @@ export const mapRows = async (
       }
 
       // Finally, else: no match, so create and add to cache
-      const newRecord = createRecord(row, organization, transactionMetadata);
+      const newRecord = await createRecord(
+        row,
+        organization,
+        transactionMetadata
+      );
       childRecordsCache.push(newRecord);
     } catch (err) {
       if (err instanceof ApiError) throw err;
@@ -116,5 +121,20 @@ export const mapRows = async (
     }
   }
 
-  return await Promise.all(childRecordsCache.map(validateObject));
+  /**
+   * This should not be necessary.
+   * We need `validateChild` to add validation errors to the records in memory.
+   * It uses `class-validator`, which requires that objects be class-instantiated.
+   * `typeorm` only allows us to do that through `create`.
+   * Doing so destroys the `tags` built on the object.
+   * So:
+   * 1. class instantiate `create`, 2. preserve `tags`, 3. then `validateChild`.
+   */
+  return await Promise.all(
+    childRecordsCache.map((childRecord) => {
+      const classifiedChild = getManager().create(Child, childRecord);
+      classifiedChild.tags = childRecord.tags;
+      return validateChild(classifiedChild);
+    })
+  );
 };

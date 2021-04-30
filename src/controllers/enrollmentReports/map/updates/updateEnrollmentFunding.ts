@@ -56,7 +56,8 @@ export const updateEnrollmentFunding = (
   if (rowHasExitForCurrentEnrollment(newEnrollment, matchingEnrollment)) {
     matchingEnrollment.exit = newEnrollment.exit;
     matchingEnrollment.exitReason = newEnrollment.exitReason;
-    matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
+    if (matchingFunding)
+      matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
     match.tags.push(ChangeTag.WithdrawnRecord);
   }
   // If row has new enrollment, create new enrollment and funding

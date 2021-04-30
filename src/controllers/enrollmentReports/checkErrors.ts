@@ -68,13 +68,11 @@ export const checkErrorsInChildren = async (
   });
 
   await Promise.all(
-    children
-      .filter((c) => c.validationErrors?.length)
-      .map(async (child) => {
-        child.validationErrors.map((e) =>
-          processErrorsInFields(child, e, errorDict, errorOccursIn)
-        );
-      })
+    children.map(async (child) => {
+      child.validationErrors.map((e) =>
+        processErrorsInFields(child, e, errorDict, errorOccursIn)
+      );
+    })
   );
 
   // Only need fields with error counts; send back a formated

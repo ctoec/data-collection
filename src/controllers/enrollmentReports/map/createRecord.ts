@@ -48,9 +48,7 @@ export const createRecord = async (
 
   enrollment.fundings = [funding];
   child.enrollments = [enrollment];
+  child.tags = [ChangeTag.NewRecord];
 
-  return {
-    ...child,
-    tags: [ChangeTag.NewRecord],
-  };
+  return child;
 };
