@@ -2,7 +2,7 @@ import { ChangeTag } from '../../../../../client/src/shared/models';
 import { Child, Enrollment, Funding } from '../../../../entity';
 import { EnrollmentReportRow } from '../../../../template';
 import { TransactionMetadata } from '../mapRows';
-import { mapEnrollment, mapFunding } from '../entities';
+import { addEnrollment, addFunding } from '../entities';
 import { lookUpSite } from '../utils';
 
 /**
@@ -29,7 +29,7 @@ export const updateEnrollmentFunding = (
     transactionMetadata.sites
   );
   // Create enrollment entity from row values
-  const newEnrollment = mapEnrollment(row, site, match);
+  const newEnrollment = addEnrollment(row, site, match);
   // Look up an existing enrollment that matches the row enrollment
   // (may not exist)
   const matchingEnrollment = getEnrollmentMatch(
@@ -38,7 +38,7 @@ export const updateEnrollmentFunding = (
   );
 
   // Create funding entity from row values
-  const newFunding = mapFunding(
+  const newFunding = addFunding(
     row,
     match.organization,
     newEnrollment.ageGroup,
@@ -93,7 +93,7 @@ export const updateEnrollmentFunding = (
  */
 export const getEnrollmentMatch = (
   enrollmentFromRow: Enrollment,
-  enrollments: Enrollment[] | undefined
+  enrollments: Enrollment[]
 ) =>
   enrollments?.find(
     (e) =>
@@ -122,7 +122,7 @@ export const getEnrollmentMatch = (
  */
 const rowHasExitForCurrentEnrollment = (
   newEnrollment: Enrollment,
-  matchingEnrollment: Enrollment | undefined
+  matchingEnrollment: Enrollment
 ) => !!matchingEnrollment && !matchingEnrollment.exit && !!newEnrollment.exit;
 
 /**
@@ -130,9 +130,7 @@ const rowHasExitForCurrentEnrollment = (
  * Enrollment is new if:
  * - no existing matching enrollment was found
  */
-export const rowHasNewEnrollment = (
-  matchingEnrollment: Enrollment | undefined
-) =>
+export const rowHasNewEnrollment = (matchingEnrollment: Enrollment) =>
   // Matching enrollment does not exist
   !matchingEnrollment;
 
@@ -145,10 +143,7 @@ export const rowHasNewEnrollment = (
  * @param fundingFromRow
  * @param fundings
  */
-export const getFundingMatch = (
-  fundingFromRow: Funding,
-  fundings: Funding[] | undefined
-) =>
+export const getFundingMatch = (fundingFromRow: Funding, fundings: Funding[]) =>
   fundings?.find(
     (f) =>
       f.fundingSpace &&
@@ -181,5 +176,4 @@ export const rowEndsCurrentFunding = (
  * - existing matching funding was not found
  * @param matchingFunding
  */
-export const rowHasNewFunding = (matchingFunding: Funding | undefined) =>
-  !matchingFunding;
+export const rowHasNewFunding = (matchingFunding: Funding) => !matchingFunding;

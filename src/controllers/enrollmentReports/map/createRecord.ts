@@ -1,11 +1,11 @@
 import { ChangeTag } from '../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../template';
 import {
-  mapFamily,
-  mapIncomeDetermination,
-  mapChild,
-  mapEnrollment,
-  mapFunding,
+  addFamily,
+  addIncomeDetermination,
+  addChild,
+  addEnrollment,
+  addFunding,
 } from '..';
 import { lookUpSite } from './utils';
 import { TransactionMetadata } from './mapRows';
@@ -30,15 +30,15 @@ export const createRecord = async (
   organization: Organization,
   transactionMetadata: TransactionMetadata
 ) => {
-  const family = mapFamily(row, organization);
-  family.incomeDeterminations = [mapIncomeDetermination(row, family)];
+  const family = addFamily(row, organization);
+  family.incomeDeterminations = [addIncomeDetermination(row, family)];
 
-  const child = mapChild(row, organization, family);
+  const child = addChild(row, organization, family);
   child.family = family;
 
   const site = lookUpSite(row, organization.id, transactionMetadata.sites);
-  const enrollment = mapEnrollment(row, site, child);
-  const funding = mapFunding(
+  const enrollment = addEnrollment(row, site, child);
+  const funding = addFunding(
     row,
     organization,
     enrollment.ageGroup,

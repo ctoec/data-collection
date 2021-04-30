@@ -11,7 +11,7 @@ import {
   FundingTime,
 } from '../../../../../client/src/shared/models';
 import { EnrollmentReportRow } from '../../../../template';
-import { mapEnum, mapFundingTime } from '.';
+import { mapEnum, addFundingTime } from '.';
 import { Moment } from 'moment';
 
 export const reportingPeriodIncludesDate = (
@@ -29,7 +29,7 @@ export const reportingPeriodIncludesDate = (
  * @param fundingSpaces
  * @param reportingPeriods
  */
-export const mapFunding = (
+export const addFunding = (
   source: EnrollmentReportRow,
   organization: Organization,
   ageGroup: AgeGroup,
@@ -43,7 +43,7 @@ export const mapFunding = (
       isFundingSource: true,
     }
   );
-  const fundingTime: FundingTime = mapFundingTime(source.time, fundingSource);
+  const fundingTime: FundingTime = addFundingTime(source.time, fundingSource);
 
   let fundingSpace: FundingSpace;
   if (fundingSource && fundingTime) {

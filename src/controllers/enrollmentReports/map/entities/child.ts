@@ -14,7 +14,7 @@ import { mapEnum } from '.';
  * TODO: How do we handle blocking data errors in a single row?
  * @param source
  */
-export const mapChild = (
+export const addChild = (
   source: EnrollmentReportRow,
   organization: Organization,
   family: Family

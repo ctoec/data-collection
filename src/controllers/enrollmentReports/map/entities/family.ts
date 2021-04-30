@@ -11,7 +11,7 @@ import { getManager } from 'typeorm';
  * TODO: Lookup existing families before creating new one
  * @param source
  */
-export const mapFamily = (
+export const addFamily = (
   source: EnrollmentReportRow,
   organization: Organization
 ) => {

@@ -20,7 +20,7 @@ import {
   FundingSourceTime,
 } from '../../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
-import { getRaceIndicated, mapEnum, mapFundingTime } from './entities';
+import { getRaceIndicated, mapEnum, addFundingTime } from './entities';
 import {
   MISSING_PROVIDER_ERROR,
   lookUpOrganization,
@@ -291,10 +291,10 @@ describe('controllers', () => {
               it.each(formats)('can parse format: %s', (format) => {
                 const formatAsInt = parseInt(format);
                 if (!isNaN(formatAsInt)) {
-                  const parsedFromInt = mapFundingTime(formatAsInt, source);
+                  const parsedFromInt = addFundingTime(formatAsInt, source);
                   expect(parsedFromInt).toEqual(time);
                 }
-                const parsed = mapFundingTime(format, source);
+                const parsed = addFundingTime(format, source);
                 expect(parsed).toEqual(time);
               });
             }

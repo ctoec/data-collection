@@ -6,7 +6,7 @@ import { getManager } from 'typeorm';
  * Create IncomeDetermination object from FlattenedEnrollment source.
  * @param source
  */
-export const mapIncomeDetermination = (
+export const addIncomeDetermination = (
   source: EnrollmentReportRow,
   family: Family
 ) => {

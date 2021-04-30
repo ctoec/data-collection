@@ -10,7 +10,7 @@ import { getManager } from 'typeorm';
  * @param source
  * @param site
  */
-export const mapEnrollment = (
+export const addEnrollment = (
   source: EnrollmentReportRow,
   site: Site,
   child: Child

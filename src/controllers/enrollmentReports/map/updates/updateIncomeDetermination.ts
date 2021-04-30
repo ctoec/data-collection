@@ -1,7 +1,7 @@
 import { ChangeTag } from '../../../../../client/src/shared/models';
 import { Child, IncomeDetermination } from '../../../../entity';
 import { EnrollmentReportRow } from '../../../../template';
-import { mapIncomeDetermination } from '../..';
+import { addIncomeDetermination } from '../..';
 import { getLastIncomeDetermination } from '../../../../utils/getLastIncomeDetermination';
 
 /**
@@ -13,7 +13,7 @@ export const updateIncomeDetermination = (
   match: Child
 ) => {
   const currentDetermination = getLastIncomeDetermination(match.family);
-  const newDetermination = mapIncomeDetermination(row, match.family);
+  const newDetermination = addIncomeDetermination(row, match.family);
 
   if (rowHasNewDetermination(newDetermination, currentDetermination)) {
     match.family.incomeDeterminations.push(newDetermination);
