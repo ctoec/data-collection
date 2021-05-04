@@ -14,6 +14,7 @@ import { exportRouter } from './export';
 import { oecReportRouter } from './oecReport';
 import { revisionsRouter } from './revisions';
 import { summaryRouter } from './summary';
+import { organizationsRouter } from './organizations';
 
 export const router = express.Router();
 
@@ -44,3 +45,5 @@ router.use('/revision-request', authenticate, revisionsRouter);
 router.use('/export', authenticate, exportRouter);
 
 router.use('/summary', authenticate, summaryRouter);
+
+router.use('/organizations', authenticate, organizationsRouter);

@@ -53,6 +53,19 @@ const App: React.FC = () => {
     },
   ];
 
+  const adminNavItems: NavLinkProps[] = [
+    {
+      type: 'primary',
+      text: 'Overview',
+      path: '/overview',
+    },
+    {
+      type: 'primary',
+      text: 'Organizations',
+      path: '/organizations',
+    },
+  ];
+
   return (
     <div className="App">
       {/* In case it really hits the fan and not even the header works */}
@@ -67,7 +80,7 @@ const App: React.FC = () => {
           showPrimaryNavItems={!!user?.firstName && !!confidentialityAgreedDate}
           navItems={[
             ...secondaryNavItems,
-            ...(user?.isAdmin ? [] : primaryNavItems),
+            ...(user?.isAdmin ? adminNavItems : primaryNavItems),
           ]}
           userFirstName={user?.firstName}
         />
