@@ -21,19 +21,3 @@ organizationsRouter.get(
     res.send(organizations);
   })
 );
-
-// fundingSpacesRouter.get(
-//   '/funding-map',
-//   passAsyncError(async (req, res) => {
-//     const organizationIds = parseQueryString(req, 'organizationId', {
-//       forceArray: true,
-//     }) as string[];
-
-//     const fundingSpacesMap = await getFundingSpaceMap(
-//       req.user,
-//       organizationIds
-//     );
-
-//     res.send({ fundingSpacesMap });
-//   })
-// );
