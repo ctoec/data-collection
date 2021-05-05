@@ -42,6 +42,7 @@ export const RedeterminationCard: React.FC<RedeterminationCardProps> = ({
           child={child}
           afterSaveSuccess={afterSaveSuccess}
           setAlerts={setAlerts}
+          redetermine={true}
           CancelButton={
             <Button text="Cancel" appearance="outline" onClick={onCancel} />
           }

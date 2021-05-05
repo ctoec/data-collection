@@ -59,6 +59,7 @@ type FamilyIncomeFormProps = {
   incomeDeterminationId?: number;
   CancelButton?: JSX.Element;
   isFirstRecordedDet?: boolean;
+  redetermine?: boolean;
 } & RecordFormProps;
 
 export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
@@ -67,6 +68,7 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
   child,
   incomeDeterminationId,
   CancelButton,
+  redetermine = false,
   afterSaveSuccess,
   setAlerts,
   hideErrors,
@@ -88,8 +90,10 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
 
   let determination: IncomeDetermination;
   const dets = child?.family?.incomeDeterminations || [];
-  if (inCreateFlow) {
-    determination = dets[0] || ({} as IncomeDetermination);
+
+  if (inCreateFlow || redetermine) {
+    const { id, ...newDet } = dets[0] ?? {};
+    determination = newDet as IncomeDetermination;
   } else {
     determination =
       dets.find((d) => d.id === incomeDeterminationId) ||
@@ -111,7 +115,10 @@ export const FamilyIncomeForm: React.FC<FamilyIncomeFormProps> = ({
       { accessToken }
     );
 
-  const saveData = determination.id ? updateDetermination : createDetermination;
+  const saveData =
+    determination.id && !redetermine
+      ? updateDetermination
+      : createDetermination;
 
   const onFinally = () => {
     if (isMounted()) {
