@@ -1,6 +1,8 @@
 import { Column, Table } from '@ctoec/component-library';
 import React from 'react';
 import { OrganizationSummary } from '../../shared/payloads/OrganizationsResponse';
+import { FundingSource } from '../../shared/models/FundingSource';
+import { getStrippedFundingSourceName } from '../../utils/getFundingSpaceDisplayName';
 
 type OrganizationTableProps = {
   orgs?: Array<OrganizationSummary>;
@@ -38,12 +40,12 @@ const TableColumns: () => Column<OrganizationSummary>[] = () => {
     {
       name: 'Number of Sites',
       className: 'text-no-wrap',
-      sort: (row) => row.sites.length,
+      sort: (row) => row.siteCount,
       cell: ({ row }) => (
         <td>
           {/* Deactivate links until site/org detail pages are built */}
           {/* <Link to={`${pathname}/organization/${row.organizationId}`}> */}
-          {row.sites.length}
+          {row.siteCount ? row.siteCount : 0}
           {/* </Link> */}
         </td>
       ),
@@ -55,11 +57,16 @@ const TableColumns: () => Column<OrganizationSummary>[] = () => {
         <td className="maxw-card-lg">
           {/* Deactivate links until site/org detail pages are built */}
           {/* <Link to={`${pathname}/organization/${row.organizationId}`}> */}
-          {/* {row.sites.map((site) => site.siteName).join(', ')} */}
-          {Array.from(
-            new Set(row.fundingSpaces.map((space) => space.source))
-          ).join(', ')}
-          {/* </Link> */}
+          {row.fundingSource
+            ? row.fundingSource
+                .split(',')
+                .map((fs) =>
+                  getStrippedFundingSourceName(
+                    FundingSource[fs as keyof typeof FundingSource]
+                  )
+                )
+                .join(', ')
+            : ''}
         </td>
       ),
     },

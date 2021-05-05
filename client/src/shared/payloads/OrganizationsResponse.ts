@@ -7,6 +7,6 @@ export interface OrganizationSummary {
   providerName: string;
   communityId?: number;
   uniqueIdType: string;
-  sites: Site[];
-  fundingSpaces: FundingSpace[];
+  siteCount: number;
+  fundingSource: string;
 }

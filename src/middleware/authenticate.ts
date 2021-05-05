@@ -86,6 +86,8 @@ const getUser = async (wingedKeysId: string) => {
         where: { organizationId: In(allOrgIds) },
       })
     : [];
+  console.log('*****user.sitePermissions', user.sitePermissions);
+  console.log('*******sitesFromAllOrgs', sitesFromAllOrgs);
 
   // Create list of distinct site ids the user can access
   const allSiteIds = Array.from(
@@ -94,6 +96,8 @@ const getUser = async (wingedKeysId: string) => {
       ...sitesFromAllOrgs.map((site) => site.id),
     ])
   );
+
+  console.log('*****ALLSITEIDS', allSiteIds);
 
   // Determine access pattern level of the user
   user.accessType =
