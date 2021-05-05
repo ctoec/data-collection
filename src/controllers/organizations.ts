@@ -1,7 +1,6 @@
 import { User, Organization } from '../entity';
 import { getManager, In } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
-import { OrganizationSummary } from '../../client/src/shared/payloads/OrganizationsResponse';
 
 /**
  * Get all organizations a given user has access to,
@@ -14,8 +13,6 @@ export const getOrganizations = async (
 ): Promise<Organization[]> => {
   if (!organizationIds?.length)
     organizationIds = await getReadAccessibleOrgIds(user);
-
-  console.log('&^%%^&%^&^%^&organizationIds', organizationIds);
 
   return getManager().query(
     `select o.id, o.providername AS providerName, s.siteCount, string_agg(fs.source, ',') as fundingSource

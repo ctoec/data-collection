@@ -15,13 +15,6 @@ export const getReadAccessibleOrgIds = async (
     await getManager().findByIds(Site, user.siteIds || [])
   ).map((site) => site.organizationId);
 
-  console.log(
-    'GETREADaccessable ids ******** &&&&&',
-    Array.from(new Set([...siteOrgIds, ...user.organizationIds])).map(
-      (id) => `${id}`
-    )
-  );
-
   // combine and deduplicate site org Ids + org Ids
   return Array.from(new Set([...siteOrgIds, ...user.organizationIds])).map(
     (id) => `${id}`
