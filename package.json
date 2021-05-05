@@ -39,7 +39,7 @@
     "reflect-metadata": "^0.1.10",
     "ts-jest": "^26.4.1",
     "ts-node": "^8.10.2",
-    "tsoa": "^3.2.1",
+    "tsoa": "^3.7.0",
     "typeorm": "^0.2.29",
     "typescript": "^3.9.7",
     "underscore": "^1.12.0",
