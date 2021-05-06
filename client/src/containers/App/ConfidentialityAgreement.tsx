@@ -23,10 +23,10 @@ export const ConfidentialityAgreement: React.FC = ({ children }) => {
         <div className="tablet:grid-col-8">
           <h1>Confidentiality agreement</h1>
           <p>
-            Connecticut’s Early Childhood Information System (ECIS) contains
-            Personally Identifiable Information (PII) that is confidential
+            Connecticut's Early Childhood Education Reporting system (ECE Reporter) 
+            contains Personally Identifiable Information (PII) that is confidential
             pursuant to federal and state law. By logging onto and accessing
-            ECIS, I hereby acknowledge that the information contained therein
+            ECE Reporter, I hereby acknowledge that the information contained therein
             shall only be disclosed to authorized personnel and used as
             permitted by federal and state law. I further agree that I will only
             use this information for the Connecticut Office of Early Childhood
