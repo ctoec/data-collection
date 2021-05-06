@@ -1,20 +1,13 @@
-import { User, Organization } from '../entity';
+import { Organization } from '../entity';
 import { getManager, In } from 'typeorm';
-import { getReadAccessibleOrgIds } from '../utils/getReadAccessibleOrgIds';
 
 /**
  * Get all organizations a given user has access to,
  * with a count of sites and a list of funding sources
  * @param user
  */
-export const getOrganizations = async (
-  user: User,
-  organizationIds?: string[]
-): Promise<Organization[]> => {
-  if (!organizationIds?.length)
-    organizationIds = await getReadAccessibleOrgIds(user);
-
-  return getManager().query(
+export const getOrganizations = async (): Promise<Organization[]> =>
+  getManager().query(
     `select o.id, o.providername AS providerName, s.siteCount, string_agg(fs.source, ',') as fundingSource
 from organization o left join (
     select distinct organizationid, source
@@ -26,4 +19,3 @@ from organization o left join (
         ) s on fs.organizationid = s.organizationId
 group by o.id, o.providername, s.siteCount`
   );
-};

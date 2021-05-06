@@ -14,9 +14,9 @@ const Organizations: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
 
   const [data, setData] = useState<OrganizationSummary[]>([]);
-  apiGet(`organizations/`, accessToken).then((res: OrganizationSummary[]) => {
-    setData(res);
-  });
+  apiGet(`organizations/`, accessToken).then((res: OrganizationSummary[]) =>
+    setData(res)
+  );
 
   return !user?.isAdmin ? (
     <Redirect to="/home" />
