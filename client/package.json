@@ -44,7 +44,8 @@
   },
   "resolutions": {
     "react-scripts/webpack/**/ssri": "6.0.2",
-    "react-scripts/**/lodash": "^4.17.21"
+    "react-scripts/**/lodash": "^4.17.21",
+    "react-scripts/**/hosted-git-info": "^3.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
