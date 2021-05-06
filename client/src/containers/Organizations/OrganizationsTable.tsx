@@ -10,19 +10,15 @@ type OrganizationTableProps = {
 
 export const OrganizationsTable: React.FC<OrganizationTableProps> = ({
   orgs = [],
-}) => {
-  return (
-    <>
-      <Table<OrganizationSummary>
-        id="site-summary-table"
-        rowKey={(row) => row.id}
-        fullWidth={true}
-        data={orgs}
-        columns={TableColumns()}
-      />
-    </>
-  );
-};
+}) => (
+  <Table<OrganizationSummary>
+    id="site-summary-table"
+    rowKey={(row) => row.id}
+    fullWidth={true}
+    data={orgs}
+    columns={TableColumns()}
+  />
+);
 
 const TableColumns: () => Column<OrganizationSummary>[] = () => {
   const columns: Column<OrganizationSummary>[] = [
@@ -31,8 +27,8 @@ const TableColumns: () => Column<OrganizationSummary>[] = () => {
       sort: (row) => row.providerName,
       cell: ({ row }) => (
         <th scope="row">
-          {/* Deactivate links until site/org detail pages are built */}
-          {/* <Link to={`${pathname}/site/${row.id}`}>{row.siteName}</Link> */}
+          {/* Deactivate links until org detail pages are built */}
+          {/* <Link to={`organization/${row.id}`}>{row.providerName}</Link> */}
           {row.providerName}
         </th>
       ),
@@ -41,22 +37,13 @@ const TableColumns: () => Column<OrganizationSummary>[] = () => {
       name: 'Number of Sites',
       className: 'text-no-wrap',
       sort: (row) => row.siteCount,
-      cell: ({ row }) => (
-        <td>
-          {/* Deactivate links until site/org detail pages are built */}
-          {/* <Link to={`${pathname}/organization/${row.organizationId}`}> */}
-          {row.siteCount ? row.siteCount : 0}
-          {/* </Link> */}
-        </td>
-      ),
+      cell: ({ row }) => <td>{row.siteCount ? row.siteCount : 0}</td>,
     },
     {
       name: 'Funding Spaces',
       // sort: (row) => row.fundingSpaces.length,
       cell: ({ row }) => (
         <td className="maxw-card-lg">
-          {/* Deactivate links until site/org detail pages are built */}
-          {/* <Link to={`${pathname}/organization/${row.organizationId}`}> */}
           {row.fundingSource
             ? row.fundingSource
                 .split(',')
