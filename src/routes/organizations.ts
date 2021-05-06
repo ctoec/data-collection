@@ -1,22 +1,18 @@
 import express from 'express';
+import { ForbiddenError } from '../middleware/error/errors';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/organizations';
-import { parseQueryString } from '../utils/parseQueryString';
-import { getFundingSpaceMap } from '../controllers/children';
 
 export const organizationsRouter = express.Router();
 
 organizationsRouter.get(
   '/',
   passAsyncError(async (req, res) => {
-    const organizationIds = parseQueryString(req, 'organizationId', {
-      forceArray: true,
-    }) as string[];
-
-    const organizations = await controller.getOrganizations(
-      req.user,
-      organizationIds
-    );
+    const user = req.user;
+    if (!user.isAdmin) {
+      throw new ForbiddenError();
+    }
+    const organizations = await controller.getOrganizations();
 
     res.send(organizations);
   })
