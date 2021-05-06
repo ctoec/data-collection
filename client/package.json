@@ -43,7 +43,8 @@
     "uswds": "2.9.0"
   },
   "resolutions": {
-    "react-scripts/webpack/**/ssri": "6.0.2"
+    "react-scripts/webpack/**/ssri": "6.0.2",
+    "react-scripts/**/lodash": "^4.17.21"
   },
   "scripts": {
     "start": "react-scripts start",
