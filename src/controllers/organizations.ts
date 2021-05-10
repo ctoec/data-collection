@@ -1,5 +1,5 @@
 import { Organization } from '../entity';
-import { getManager, In } from 'typeorm';
+import { getManager } from 'typeorm';
 
 /**
  * Get all organizations a given user has access to,

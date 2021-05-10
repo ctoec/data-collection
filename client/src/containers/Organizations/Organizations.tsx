@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Redirect } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { useAuthenticatedSWR } from '../../hooks/useAuthenticatedSWR';
 import { OrganizationSummary } from '../../shared/payloads/OrganizationsResponse';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { OrganizationsTable } from './OrganizationsTable';
