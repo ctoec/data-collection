@@ -1,8 +1,6 @@
 import { Column, Table } from '@ctoec/component-library';
 import React from 'react';
 import { UserSummary } from '../../shared/payloads/UsersResponse';
-import { FundingSource } from '../../shared/models/FundingSource';
-import { getStrippedFundingSourceName } from '../../utils/getFundingSpaceDisplayName';
 
 type UserTableProps = {
   users?: Array<UserSummary>;
