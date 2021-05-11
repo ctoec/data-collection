@@ -64,6 +64,11 @@ const App: React.FC = () => {
       text: 'Organizations',
       path: '/organizations',
     },
+    {
+      type: 'primary',
+      text: 'Users',
+      path: '/users',
+    },
   ];
 
   return (

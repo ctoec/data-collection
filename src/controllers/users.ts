@@ -28,3 +28,12 @@ export const addDataToUser = async (user: User) => {
   user.sites = sites;
   user.organizations = organizations;
 };
+
+export const getUsers = async (): Promise<User[]> =>
+  getManager().query(
+    `select u.id, concat(u.lastName, ', ', u.firstName) as name, u.email, string_agg(o.providerName, ', ') as organizations
+from [user] u
+    join organization_permission op on u.id = op.userId
+join organization o on op.organizationId = o.id
+group by u.id, u.lastName, u.firstName, u.email;`
+  );

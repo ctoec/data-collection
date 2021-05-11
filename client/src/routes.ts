@@ -23,6 +23,7 @@ import Overview from './containers/Overview/Overview';
 import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
 import Organizations from './containers/Organizations/Organizations';
+import Users from './containers/Users/Users';
 
 export type RouteConfig = {
   path: string;
@@ -70,6 +71,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/organizations',
     component: Organizations,
+    unauthorized: false,
+  },
+  {
+    path: '/users',
+    component: Users,
     unauthorized: false,
   },
   {
