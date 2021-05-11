@@ -20,44 +20,37 @@ export const OrganizationsTable: React.FC<OrganizationTableProps> = ({
   />
 );
 
-const TableColumns: () => Column<OrganizationSummary>[] = () => {
-  const columns: Column<OrganizationSummary>[] = [
-    {
-      name: 'Name',
-      sort: (row) => row.providerName,
-      cell: ({ row }) => (
-        <th scope="row">
-          {/* Deactivate links until org detail pages are built */}
-          {/* <Link to={`organization/${row.id}`}>{row.providerName}</Link> */}
-          {row.providerName}
-        </th>
-      ),
-    },
-    {
-      name: 'Number of Sites',
-      className: 'text-no-wrap',
-      sort: (row) => row.siteCount,
-      cell: ({ row }) => <td>{row.siteCount ? row.siteCount : 0}</td>,
-    },
-    {
-      name: 'Funding Spaces',
-      // sort: (row) => row.fundingSpaces.length,
-      cell: ({ row }) => (
-        <td className="maxw-card-lg">
-          {row.fundingSource
-            ? row.fundingSource
-                .split(',')
-                .map((fs) =>
-                  getStrippedFundingSourceName(
-                    FundingSource[fs as keyof typeof FundingSource]
-                  )
-                )
-                .join(', ')
-            : ''}
-        </td>
-      ),
-    },
-  ];
-
-  return columns;
-};
+const TableColumns: () => Column<OrganizationSummary>[] = () => [
+  {
+    name: 'Name',
+    sort: (row) => row.providerName,
+    cell: ({ row }) => (
+      <th scope="row">
+        {/* Deactivate links until org detail pages are built */}
+        {/* <Link to={`organization/${row.id}`}>{row.providerName}</Link> */}
+        {row.providerName}
+      </th>
+    ),
+  },
+  {
+    name: 'Number of Sites',
+    className: 'text-no-wrap',
+    sort: (row) => row.siteCount,
+    cell: ({ row }) => <td>{row.siteCount ?? 0}</td>,
+  },
+  {
+    name: 'Funding Spaces',
+    cell: ({ row }) => (
+      <td className="maxw-card-lg">
+        {row?.fundingSource
+          ?.split(',')
+          .map((fs) =>
+            getStrippedFundingSourceName(
+              FundingSource[fs as keyof typeof FundingSource]
+            )
+          )
+          .join(', ') ?? ''}
+      </td>
+    ),
+  },
+];
