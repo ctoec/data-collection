@@ -1,4 +1,4 @@
-import { EntityManager, In, getManager } from 'typeorm';
+import { In, getManager } from 'typeorm';
 import { EnrollmentReportRow } from '../../../template';
 import {
   lookUpOrganization,
@@ -19,15 +19,7 @@ import {
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
 import { validateChild } from '../../../utils/validateChild';
 
-/**
- * A param bag for the mapping process containing:
- * - DB data for mapping, so it can be re-used in each mapping with only one initial lookup
- * - the transaction EntityManager
- * - the request user (needed for utils that get DB entities)
- * - the cache of all mapped children
- */
 export type TransactionMetadata = {
-  transaction: EntityManager;
   user: User;
   organizations: Organization[];
   sites: Site[];
@@ -41,10 +33,7 @@ export type TransactionMetadata = {
  * @param transaction
  * @param user
  */
-export const getTransactionData = async (
-  transaction: EntityManager,
-  user: User
-) => {
+export const getTransactionData = async (user: User) => {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
   const [
     organizations,
@@ -52,16 +41,15 @@ export const getTransactionData = async (
     fundingSpaces,
     reportingPeriods,
   ] = await Promise.all([
-    transaction.findByIds(Organization, readAccessibleOrgIds),
-    transaction.findByIds(Site, user.siteIds),
-    transaction.find(FundingSpace, {
+    getManager().findByIds(Organization, readAccessibleOrgIds),
+    getManager().findByIds(Site, user.siteIds),
+    getManager().find(FundingSpace, {
       where: { organizationId: In(readAccessibleOrgIds) },
     }),
-    transaction.find(ReportingPeriod),
+    getManager().find(ReportingPeriod),
   ]);
 
   return {
-    transaction,
     user,
     organizations,
     sites,
@@ -70,12 +58,8 @@ export const getTransactionData = async (
   };
 };
 
-export const mapRows = async (
-  transaction: EntityManager,
-  user: User,
-  rows: EnrollmentReportRow[]
-) => {
-  const transactionMetadata = await getTransactionData(transaction, user);
+export const mapRows = async (user: User, rows: EnrollmentReportRow[]) => {
+  const transactionMetadata = await getTransactionData(user);
   const childRecordsCache = [];
 
   for (const row of rows) {

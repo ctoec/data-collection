@@ -43,39 +43,31 @@ enrollmentReportsRouter.post(
   '/check',
   upload,
   passAsyncError(async (req, res) => {
-    return getManager().transaction(async (transaction) => {
-      try {
-        const reportRows = controller.parseUploadedTemplate(req.file);
-        const childRecords = await controller.mapRows(
-          transaction,
-          req.user,
-          reportRows
-        );
-        const columnErrors = await controller.checkErrorsInChildren(
-          childRecords
-        );
+    try {
+      const reportRows = controller.parseUploadedTemplate(req.file);
+      const childRecords = await controller.mapRows(req.user, reportRows);
+      const columnErrors = await controller.checkErrorsInChildren(childRecords);
 
-        if (columnErrors?.length) logUploadErrors(req.user.id, childRecords);
+      if (columnErrors?.length) logUploadErrors(req.user.id, childRecords);
 
-        // Only remove the file from disk if we could successfully parse it
-        if (req?.file?.path) fs.unlinkSync(req.file.path);
+      // Only remove the file from disk if we could successfully parse it
+      if (req?.file?.path) fs.unlinkSync(req.file.path);
 
-        res.send({
-          columnErrors,
-          childRecords,
-          counts: getUploadCounts(childRecords),
-        });
-      } catch (err) {
-        if (err instanceof ApiError) throw err;
-        console.error(
-          'Unable to determine validation errors in spreadsheet: ',
-          err
-        );
-        throw new BadRequestError(
-          'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
-        );
-      }
-    });
+      res.send({
+        columnErrors,
+        childRecords,
+        counts: getUploadCounts(childRecords),
+      });
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error(
+        'Unable to determine validation errors in spreadsheet: ',
+        err
+      );
+      throw new BadRequestError(
+        'Your file isn’t in the correct format. Use the spreadsheet template without changing the headers.'
+      );
+    }
   })
 );
 
@@ -109,16 +101,7 @@ const logUploadErrors = (userId: number, childrenWithErrors: Child[]) => {
 /**
  * /enrollment-reports POST
  *
- * Ingests an uploaded file, leveraging multer middleware to
- * save it to /tmp/uploads. Then:
- * 	- cleans up existing data for the user as necessary
- * 		(either deleting all child data, or child data associated with the
- * 		sites specified by overwriteSites query string params)
- *  - parses the saved file into an array of EnrollmentReportRows
- *  - maps EnrollmentReportRows to child records, which are persisted to the DB
- * 	- record which child records were updated by this enrollment report
- * 		and saves that to the DB as an EnrollmentReport
- * 	- returns new EnrollmentReport on success
+ * Upserts child records previously transformed by /check
  */
 enrollmentReportsRouter.post(
   '/',

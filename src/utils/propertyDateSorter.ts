@@ -16,8 +16,8 @@ export const propertyDateSorter = <T>(
   let result = 0;
   if (!aDate) result = 1;
   if (!bDate) result = -1;
-  if (aDate.isSameOrBefore(bDate)) result = 1;
-  if (bDate.isSameOrBefore(aDate)) result = -1;
+  if (aDate?.isSameOrBefore(bDate)) result = 1;
+  if (bDate?.isSameOrBefore(aDate)) result = -1;
   if (inverse) result = -1 * result;
 
   return result;

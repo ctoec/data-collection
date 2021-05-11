@@ -1,6 +1,6 @@
 import { Organization, Child } from '../../../../entity';
 import { EnrollmentReportRow } from '../../../../template';
-import { Brackets } from 'typeorm';
+import { Brackets, getManager } from 'typeorm';
 import { TransactionMetadata } from '../mapRows';
 import { getChildById } from '../../../children';
 
@@ -20,7 +20,7 @@ export const getChildMatchFromDB = async (
   organization: Organization,
   transactionMetadata: TransactionMetadata
 ) => {
-  const dbMatchQuery = transactionMetadata.transaction
+  const dbMatchQuery = getManager()
     .createQueryBuilder(Child, 'child')
     .where('organizationId = :organizationId', {
       organizationId: organization.id,
@@ -74,7 +74,7 @@ export const getChildMatchFromCache = (
       row.lastName === child.lastName &&
       organization.id === child.organizationId &&
       row.birthdate.toISOString() === child.birthdate.toISOString() &&
-      (row.sasidUniqueId
+      (row.sasidUniqueId || child.sasid || child.uniqueId
         ? row.sasidUniqueId === child.sasid ||
           row.sasidUniqueId === child.uniqueId
         : true)
