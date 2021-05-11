@@ -14,7 +14,7 @@ organizationsRouter.post(
       const { name } = req.body;
       const nameExists = await doesOrgNameExist(name);
       if (nameExists) {
-        res.status(200).send({ id: undefined });
+        throw new BadRequestError('Name already exists.', { id: undefined });
       }
       else {
         const newOrg = await getManager().save(
@@ -22,7 +22,7 @@ organizationsRouter.post(
         );
         res.status(201).send({ id: newOrg.id });
       }
-      
+
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error creating organization: ', err);

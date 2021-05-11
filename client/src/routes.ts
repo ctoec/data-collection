@@ -73,7 +73,7 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/createOrg',
+    path: '/create-org',
     component: CreateOrg,
     unauthorized: false,
     exact: true,

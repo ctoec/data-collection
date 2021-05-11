@@ -1,4 +1,4 @@
-import { AlertProps, Button, Divider, TextInput } from '@ctoec/component-library';
+import { Button, Divider, TextInput } from '@ctoec/component-library';
 import React, { useContext, useState } from 'react';
 import { Redirect } from 'react-router';
 import { BackButton } from '../../components/BackButton';
@@ -17,34 +17,31 @@ const CreateOrg: React.FC = () => {
   const [alertElements, setAlerts] = useAlerts();
 
   const createNewOrg = async () => {
-    const { id } = await apiPost(
+    const res = await apiPost(
       `organizations/`,
       { name: newOrgName},
       { accessToken, jsonParse: true }
     ).catch((err) => {
-      throw new Error(err);
+      
+      // Special 4XX error if an org with given name already existed
+      if (err.message.includes('exists')) {
+        setAlerts([{
+          type: 'error',
+          heading: 'Organization already exists',
+          text: `An organization with name "${newOrgName}" already exists.`
+        }]);
+      }
+      else throw new Error(err);
     });
-    const newAlerts: AlertProps[] = [];
-
-    // Case where the org existed, so we didn't create anything, so there's 
-    // no new ID
-    if (id !== undefined) {
-      newAlerts.push({
+    
+    // Got a DB ID from the newly created org
+    if (res?.id) {
+      setAlerts([{
         type: 'success',
         heading: 'Organization created',
         text: `Organization "${newOrgName}" was successfully created!`
-      });
+      }]);
     }
-
-    // Got a DB ID from the newly created org
-    else {
-      newAlerts.push({
-        type: 'error',
-        heading: 'Organization already exists',
-        text: `An organization with name "${newOrgName}" already exists.`
-      })
-    }
-    setAlerts(newAlerts);
   };
 
   // return !user?.isAdmin ? (

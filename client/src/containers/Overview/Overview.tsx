@@ -42,7 +42,7 @@ const Overview: React.FC = () => {
             {totalChildren} children enrolled across {totalSites} sites with
             data
           </p>
-          <Button text="Create new organization" href="/createOrg" />
+          <Button text="Create new organization" href="/create-org" />
         </div>
         <div className="tablet:grid-col-12 margin-bottom-2">
           <h2>Onboarding Summary</h2>
