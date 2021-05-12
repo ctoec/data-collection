@@ -1,16 +1,13 @@
 import { Button, Divider, TextInput } from '@ctoec/component-library';
 import React, { useContext, useState } from 'react';
-import { Redirect } from 'react-router';
 import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
-import UserContext from '../../contexts/UserContext/UserContext';
 import { useAlerts } from '../../hooks/useAlerts';
 import { apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 
 const CreateOrg: React.FC = () => {
-  const { user } = useContext(UserContext);
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const [newOrgName, setNewOrgName] = useState<string>("");
@@ -44,12 +41,10 @@ const CreateOrg: React.FC = () => {
     }
   };
 
-  // return !user?.isAdmin ? (
-    // <Redirect to="/home" />) : 
   return (
     <>
       <div className="grid-container margin-top-2">
-        <BackButton location="/" />
+        <BackButton location="/organizations" />
         {alertElements}
         <h1 ref={h1Ref}>Create Organization</h1>
         <p>

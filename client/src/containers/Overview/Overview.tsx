@@ -7,7 +7,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { SummaryCard } from './SummaryCard';
 import { SiteSummaryTabNav } from './SiteSummaryTabNav';
 import pluralize from 'pluralize';
-import { Button } from '@ctoec/component-library';
 
 const Overview: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -42,7 +41,6 @@ const Overview: React.FC = () => {
             {totalChildren} children enrolled across {totalSites} sites with
             data
           </p>
-          <Button text="Create new organization" href="/create-org" />
         </div>
         <div className="tablet:grid-col-12 margin-bottom-2">
           <h2>Onboarding Summary</h2>
