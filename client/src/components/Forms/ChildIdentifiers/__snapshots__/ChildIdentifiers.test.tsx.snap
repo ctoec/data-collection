@@ -126,68 +126,38 @@ exports[`EditRecord ChildIdentifiers matches snapshot - no unique id 1`] = `
         class="usa-hint text-italic"
         id="dateOfBirth-picker-hint"
       >
-        For example: 6 21 2008
+        For example: 06/21/2008
       </span>
       <div>
         <div
-          class="flex-row flex-align-end usa-memorable-date"
+          class="bx--form-item"
         >
           <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
+            class="bx--date-picker bx--date-picker--simple"
+            id="dateOfBirth-picker-picker"
           >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-month"
+            <div
+              class="bx--date-picker-container"
             >
-              Month 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-month"
-              max="12"
-              min="1"
-              type="number"
-              value=""
-            />
-          </div>
-          <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-day"
-            >
-              Day 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-day"
-              max="31"
-              min="1"
-              type="number"
-              value=""
-            />
-          </div>
-          <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-year"
-            >
-              Year 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-year"
-              max="2200"
-              min="1000"
-              type="number"
-              value=""
-            />
+              <label
+                class="bx--label bx--visually-hidden"
+                for="dateOfBirth-picker-input"
+              >
+                Date picker
+              </label>
+              <div
+                class="bx--date-picker-input__wrapper"
+              >
+                <input
+                  class="bx--date-picker__input"
+                  id="dateOfBirth-picker-input"
+                  pattern="\\\\d{1,2}\\\\/\\\\d{1,2}\\\\/\\\\d{4}"
+                  placeholder="mm/dd/yyyy"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -429,68 +399,38 @@ exports[`EditRecord ChildIdentifiers matches snapshot - other unique id 1`] = `
         class="usa-hint text-italic"
         id="dateOfBirth-picker-hint"
       >
-        For example: 6 21 2008
+        For example: 06/21/2008
       </span>
       <div>
         <div
-          class="flex-row flex-align-end usa-memorable-date"
+          class="bx--form-item"
         >
           <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
+            class="bx--date-picker bx--date-picker--simple"
+            id="dateOfBirth-picker-picker"
           >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-month"
+            <div
+              class="bx--date-picker-container"
             >
-              Month 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-month"
-              max="12"
-              min="1"
-              type="number"
-              value=""
-            />
-          </div>
-          <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-day"
-            >
-              Day 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-day"
-              max="31"
-              min="1"
-              type="number"
-              value=""
-            />
-          </div>
-          <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-year"
-            >
-              Year 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-year"
-              max="2200"
-              min="1000"
-              type="number"
-              value=""
-            />
+              <label
+                class="bx--label bx--visually-hidden"
+                for="dateOfBirth-picker-input"
+              >
+                Date picker
+              </label>
+              <div
+                class="bx--date-picker-input__wrapper"
+              >
+                <input
+                  class="bx--date-picker__input"
+                  id="dateOfBirth-picker-input"
+                  pattern="\\\\d{1,2}\\\\/\\\\d{1,2}\\\\/\\\\d{4}"
+                  placeholder="mm/dd/yyyy"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -732,68 +672,38 @@ exports[`EditRecord ChildIdentifiers matches snapshot - sasid 1`] = `
         class="usa-hint text-italic"
         id="dateOfBirth-picker-hint"
       >
-        For example: 6 21 2008
+        For example: 06/21/2008
       </span>
       <div>
         <div
-          class="flex-row flex-align-end usa-memorable-date"
+          class="bx--form-item"
         >
           <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
+            class="bx--date-picker bx--date-picker--simple"
+            id="dateOfBirth-picker-picker"
           >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-month"
+            <div
+              class="bx--date-picker-container"
             >
-              Month 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-month"
-              max="12"
-              min="1"
-              type="number"
-              value=""
-            />
-          </div>
-          <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-day"
-            >
-              Day 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-day"
-              max="31"
-              min="1"
-              type="number"
-              value=""
-            />
-          </div>
-          <div
-            class="oec-date-input__input margin-right-1 margin-top-0 usa-form-group"
-          >
-            <label
-              class="usa-label"
-              for="dateOfBirth-picker-year"
-            >
-              Year 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input usa-input--inline"
-              id="dateOfBirth-picker-year"
-              max="2200"
-              min="1000"
-              type="number"
-              value=""
-            />
+              <label
+                class="bx--label bx--visually-hidden"
+                for="dateOfBirth-picker-input"
+              >
+                Date picker
+              </label>
+              <div
+                class="bx--date-picker-input__wrapper"
+              >
+                <input
+                  class="bx--date-picker__input"
+                  id="dateOfBirth-picker-input"
+                  pattern="\\\\d{1,2}\\\\/\\\\d{1,2}\\\\/\\\\d{4}"
+                  placeholder="mm/dd/yyyy"
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
