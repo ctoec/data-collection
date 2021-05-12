@@ -14,7 +14,7 @@ import { mapEnum } from '.';
  * TODO: How do we handle blocking data errors in a single row?
  * @param source
  */
-export const mapChild = (
+export const addChild = (
   source: EnrollmentReportRow,
   organization: Organization,
   family: Family
@@ -102,49 +102,6 @@ export const mapChild = (
 };
 
 /**
- * Updates the various fields of a child's birth certificate.
- *
- * @param child
- * @param source
- * @param childrenToUpdate
- */
-export const updateBirthCertificateInfo = (
-  child: Child,
-  source: EnrollmentReportRow,
-  childrenToUpdate: Child[]
-) => {
-  let madeAChange = false;
-  if (
-    child.birthCertificateType === BirthCertificateType.Unavailable &&
-    source.birthCertificateType
-  ) {
-    const birthCertificateType: BirthCertificateType = mapEnum(
-      BirthCertificateType,
-      source.birthCertificateType
-    );
-    child.birthCertificateType = birthCertificateType;
-    madeAChange = true;
-  }
-  if (child.birthCertificateType === BirthCertificateType.US) {
-    if (!child.birthCertificateId) {
-      child.birthCertificateId = source.birthCertificateId;
-      madeAChange = true;
-    }
-    if (!child.birthState) {
-      child.birthState = source.birthState;
-      madeAChange = true;
-    }
-    if (!child.birthTown) {
-      child.birthTown = source.birthTown;
-      madeAChange = true;
-    }
-  }
-
-  if (madeAChange) childrenToUpdate.push(child);
-  return madeAChange;
-};
-
-/**
  * Determine if an enrollment report row has no indication of the
  * respective child's race (in which case, assume not disclosed).
  * @param source
@@ -158,20 +115,3 @@ export const getRaceIndicated = (source: EnrollmentReportRow) => {
     !!source.white
   );
 };
-
-/**
- * Determine whether a given enrollment report row from an
- * uploaded sheet has demographic/identifier information matching
- * a given child.
- * @param child
- * @param other
- */
-export const isIdentifierMatch = (child: Child, other: EnrollmentReportRow) =>
-  child.firstName === other.firstName &&
-  child.lastName === other.lastName &&
-  child.birthdate &&
-  child.birthdate?.format('MM/DD/YYYY') ===
-    other.birthdate?.format('MM/DD/YYYY') &&
-  ((child.sasid && child.sasid === other.sasidUniqueId) ||
-    (child.uniqueId && child.uniqueId === other.sasidUniqueId) ||
-    (!child.sasid && !child.uniqueId));

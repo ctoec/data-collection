@@ -9,7 +9,6 @@ import {
   UndefinableBoolean,
   Site,
   AgeGroup,
-  FundingSource,
   FundingSpace,
   Funding,
 } from '../shared/models';

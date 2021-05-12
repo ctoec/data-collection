@@ -14,10 +14,11 @@ export const propertyDateSorter = <T>(
   const bDate = accessor(b);
 
   let result = 0;
-  if (!aDate) return 1;
-  if (!bDate) return -1;
-  if (aDate.isSameOrBefore(bDate)) result = 1;
-  if (bDate.isSameOrBefore(aDate)) result = -1;
+  if (!aDate) result = 1;
+  if (!bDate) result = -1;
+  if (aDate?.isSameOrBefore(bDate)) result = 1;
+  if (bDate?.isSameOrBefore(aDate)) result = -1;
   if (inverse) result = -1 * result;
+
   return result;
 };
