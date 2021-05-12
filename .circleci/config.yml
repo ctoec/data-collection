@@ -80,9 +80,9 @@ jobs:
       - run:
           name: Run npm audit for back-end dependencies
           command: yarn audit
-      - run:
-          name: Run npm audit for front-end dependencies
-          command: cd client && yarn audit --level high   # TODO: Remove audit level once CRA supports Postcss 8
+      #   - run:
+      #       name: Run npm audit for front-end dependencies
+      #       command: cd client && yarn audit --level high   # TODO: Remove audit level once CRA supports Postcss 8
       - run:
           name: Run back-end tests
           command: yarn run test
