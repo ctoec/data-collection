@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Redirect } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -13,7 +13,17 @@ const Users: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
 
   const [data, setData] = useState<UserSummary[]>([]);
-  apiGet(`users/`, accessToken).then((res: UserSummary[]) => setData(res));
+  // apiGet(`users/`, accessToken).then((res: UserSummary[]) => setData(res));
+
+  useEffect(() => {
+    (async function loadUsers() {
+      if (user && accessToken) {
+        await apiGet(`users/`, accessToken).then((res: UserSummary[]) =>
+          setData(res)
+        );
+      }
+    })();
+  }, [user, accessToken]);
 
   return !user?.isAdmin ? (
     <Redirect to="/home" />
