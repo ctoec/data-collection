@@ -10,7 +10,7 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-  const [newOrgName, setNewOrgName] = useState<string>("");
+  const [newOrgName, setNewOrgName] = useState("");
   const [alertElements, setAlerts] = useAlerts();
 
   const createNewOrg = async () => {
@@ -21,7 +21,7 @@ const CreateOrg: React.FC = () => {
     ).catch((err) => {
       
       // Special 4XX error if an org with given name already existed
-      if (err.message.includes('exists')) {
+      if (err.includes('exists')) {
         setAlerts([{
           type: 'error',
           heading: 'Organization already exists',

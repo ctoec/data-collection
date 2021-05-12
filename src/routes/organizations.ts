@@ -3,7 +3,7 @@ import { Organization } from '../entity';
 import { getManager } from 'typeorm';
 import * as controller from '../controllers/organizations';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { ApiError, BadRequestError, ForbiddenError } from '../middleware/error/errors';
+import { ApiError, BadRequestError, ForbiddenError, ResourceConflictError } from '../middleware/error/errors';
 
 export const organizationsRouter = express.Router();
 
@@ -14,7 +14,7 @@ organizationsRouter.post(
       const { name } = req.body;
       const nameExists = await controller.doesOrgNameExist(name);
       if (nameExists) {
-        throw new BadRequestError('Name already exists.', { id: undefined });
+        throw new ResourceConflictError('Name already exists.');
       }
       else {
         const newOrg = await getManager().save(
