@@ -1,13 +1,12 @@
 import { EnrollmentReportRow } from '../../../template';
 import {
-  Organization,
   Site,
   Child,
-  Family,
   IncomeDetermination,
   Enrollment,
   FundingSpace,
   Funding,
+  Organization,
   ReportingPeriod,
 } from '../../../entity';
 import { BadRequestError } from '../../../middleware/error/errors';
@@ -19,25 +18,25 @@ import {
   FundingSource,
   FundingTime,
   FundingSourceTime,
-  UndefinableBoolean,
-  ExitReason,
 } from '../../../../client/src/shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../../../client/src/shared/constants';
+import { getRaceIndicated, mapEnum, addFundingTime } from './entities';
 import {
-  getRaceIndicated,
+  MISSING_PROVIDER_ERROR,
   lookUpOrganization,
   lookUpSite,
-  mapEnum,
-  mapFundingTime,
-  MISSING_PROVIDER_ERROR,
-  isIdentifierMatch,
-  updateBirthCertificateInfo,
+} from './utils';
+import {
   updateFamilyAddress,
+  updateBirthCertificate,
+  getEnrollmentMatch,
+  getFundingMatch,
+  rowHasNewAddress,
   rowHasNewDetermination,
   rowHasNewEnrollment,
-  getExitReason,
   rowHasNewFunding,
-} from './mapUtils';
+} from './updates';
+import { TransactionMetadata } from './mapRows';
 import moment from 'moment';
 
 describe('controllers', () => {
@@ -45,32 +44,35 @@ describe('controllers', () => {
     describe('lookUpOrganization', () => {
       it('returns the organization if only one organization', () => {
         const inputOrg = { id: 1 } as Organization;
-        const org = lookUpOrganization({} as EnrollmentReportRow, [inputOrg]);
+        const org = lookUpOrganization(
+          {} as EnrollmentReportRow,
+          { organizations: [inputOrg] } as TransactionMetadata
+        );
         expect(org).toEqual(inputOrg);
       });
       it('throws an error if the source row does not have a provider name', () => {
-        expect(() => lookUpOrganization({} as EnrollmentReportRow, [])).toThrow(
-          new BadRequestError(MISSING_PROVIDER_ERROR)
-        );
+        expect(() =>
+          lookUpOrganization(
+            {} as EnrollmentReportRow,
+            { organizations: [] } as TransactionMetadata
+          )
+        ).toThrow(new BadRequestError(MISSING_PROVIDER_ERROR));
       });
-      it.each([
-        ['org1', 'org1'],
-        ['org1000', undefined],
-      ])(
-        'returns the organization from the list that matches source provider name',
-        (sourceProviderName, resultOrgName) => {
-          const inputOrgs = [
-            { providerName: 'org1' },
-            { providerName: 'org2' },
-          ] as Organization[];
-          const source = {
-            providerName: sourceProviderName,
-          } as EnrollmentReportRow;
+      it('returns the organization from the list that matches source provider name', () => {
+        const sourceProviderName = 'org1';
+        const inputOrgs = [
+          { providerName: 'org1' },
+          { providerName: 'org2' },
+        ] as Organization[];
+        const source = {
+          providerName: sourceProviderName,
+        } as EnrollmentReportRow;
 
-          const org = lookUpOrganization(source, inputOrgs);
-          expect(org?.providerName).toEqual(resultOrgName);
-        }
-      );
+        const org = lookUpOrganization(source, {
+          organizations: inputOrgs,
+        } as TransactionMetadata);
+        expect(org?.providerName).toEqual(sourceProviderName);
+      });
     });
 
     describe('lookUpSite', () => {
@@ -289,10 +291,10 @@ describe('controllers', () => {
               it.each(formats)('can parse format: %s', (format) => {
                 const formatAsInt = parseInt(format);
                 if (!isNaN(formatAsInt)) {
-                  const parsedFromInt = mapFundingTime(formatAsInt, source);
+                  const parsedFromInt = addFundingTime(formatAsInt, source);
                   expect(parsedFromInt).toEqual(time);
                 }
-                const parsed = mapFundingTime(format, source);
+                const parsed = addFundingTime(format, source);
                 expect(parsed).toEqual(time);
               });
             }
@@ -301,215 +303,77 @@ describe('controllers', () => {
       );
     });
 
-    describe('isIdentifierMatch', () => {
-      const SASID = '1234567890';
-      const UNIQUEID = '123-45-67890';
-      const BIRTHDATE = moment('10-20-2019', 'MM-DD-YYYY');
-      const FIRSTNAME = 'Firstname';
-      const LASTNAME = 'Lastname';
-
-      it('is match for child with same SASID, birtdate, first name, and last name', () => {
-        const child = {
-          sasid: SASID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          sasidUniqueId: SASID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).toBeTruthy();
-      });
-
-      it('is match for child with same UniqueId, birthdate, first name and last name', () => {
-        const child = {
-          uniqueId: UNIQUEID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          sasidUniqueId: UNIQUEID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).toBeTruthy();
-      });
-
-      it('is match for child with no sasid/uniqueId, and same birthdate, firstname and last name', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).toBeTruthy();
-      });
-
-      it('is not a match for child with different sasid', () => {
-        const child = {
-          sasid: SASID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different uniqueId', () => {
-        const child = {
-          uniqueId: UNIQUEID,
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different birthdate', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE.clone().add(2, 'month'),
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different first name', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: 'Other name',
-          lastName: LASTNAME,
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-
-      it('is not a match for child with different last name', () => {
-        const child = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: LASTNAME,
-        } as Child;
-        const other = {
-          birthdate: BIRTHDATE,
-          firstName: FIRSTNAME,
-          lastName: 'Other name',
-        } as EnrollmentReportRow;
-
-        expect(isIdentifierMatch(child, other)).not.toBeTruthy();
-      });
-    });
-
-    describe('updateBirthCertificateInfo', () => {
+    describe('updateBirthCertificate', () => {
       const US_CERT = BirthCertificateType.US;
       const US_CERT_ID = '12345678901';
       const US_TOWN = 'town';
       const US_STATE = 'state';
       const UNKNOWN_CERT = BirthCertificateType.Unavailable;
       const NON_US_CERT = BirthCertificateType.NonUS;
-      let CHILDREN_TO_UPDATE: Child[];
 
       it("add birth certificate info if it doesn't exist", () => {
-        CHILDREN_TO_UPDATE = [];
-        const child = { birthCertificateType: UNKNOWN_CERT } as Child;
+        const child = {
+          birthCertificateType: UNKNOWN_CERT,
+          tags: [],
+        } as Child;
         const other = {
           birthCertificateType: US_CERT,
           birthCertificateId: US_CERT_ID,
           birthTown: US_TOWN,
           birthState: US_STATE,
-        } as EnrollmentReportRow;
-        const updatedCert = updateBirthCertificateInfo(
-          child,
-          other,
-          CHILDREN_TO_UPDATE
+        };
+        updateBirthCertificate(
+          {
+            ...child,
+            ...other,
+          } as EnrollmentReportRow,
+          child
         );
 
-        expect(updatedCert).toBeTruthy();
-        expect(CHILDREN_TO_UPDATE.length).toEqual(1);
+        expect(child.birthCertificateId).toBeTruthy();
         expect(child.birthCertificateType).toEqual(US_CERT);
         expect(child.birthState).toEqual(US_STATE);
         expect(child.birthTown).toEqual(US_TOWN);
         expect(child.birthCertificateId).toEqual(US_CERT_ID);
       });
-
       it('update US birth cert with information that was missing', () => {
-        CHILDREN_TO_UPDATE = [];
         const child = {
           birthCertificateType: US_CERT,
           birthCertificateId: US_CERT_ID,
           birthState: US_STATE,
+          tags: [],
         } as Child;
         const other = {
           birthCertificateType: US_CERT,
           birthCertificateId: US_CERT_ID,
           birthTown: US_TOWN,
           birthState: US_STATE,
-        } as EnrollmentReportRow;
-        const updatedCert = updateBirthCertificateInfo(
-          child,
-          other,
-          CHILDREN_TO_UPDATE
+        };
+        updateBirthCertificate(
+          {
+            ...child,
+            ...other,
+          } as EnrollmentReportRow,
+          child
         );
 
-        expect(updatedCert).toBeTruthy();
-        expect(CHILDREN_TO_UPDATE.length).toEqual(1);
+        expect(child.birthTown).toBeTruthy();
         expect(child.birthTown).toEqual(US_TOWN);
       });
-
       it("don't update birth cert info if it's already there", () => {
-        CHILDREN_TO_UPDATE = [];
         const child = {
           birthCertificateType: NON_US_CERT,
-        } as Child;
+        } as EnrollmentReportRow;
         const other = {
           birthCertificateType: US_CERT,
           birthCertificateId: US_CERT_ID,
           birthTown: US_TOWN,
           birthState: US_STATE,
-        } as EnrollmentReportRow;
-        const updatedCert = updateBirthCertificateInfo(
-          child,
-          other,
-          CHILDREN_TO_UPDATE
-        );
+          tags: [],
+        } as Child;
+        updateBirthCertificate(child, other);
 
-        expect(updatedCert).toBeFalsy();
-        expect(CHILDREN_TO_UPDATE.length).toEqual(0);
+        expect(child.birthCertificateId).toBeFalsy();
         expect(child.birthCertificateType).toEqual(NON_US_CERT);
       });
     });
@@ -523,83 +387,49 @@ describe('controllers', () => {
       const NEW_TOWN = 'new town';
       const NEW_STATE = 'new state';
       const NEW_ZIP = '98765';
-      const HOMELESSNESS = UndefinableBoolean.No;
-      const NEW_HOMELESSNESS = UndefinableBoolean.Yes;
-      let FAMILIES_TO_UPDATE: Family[];
-
-      it('change homelessness status if present', () => {
-        FAMILIES_TO_UPDATE = [];
-        const family = {
-          streetAddress: STREET,
-          town: TOWN,
-          state: STATE,
-          zipCode: ZIP,
-          homelessness: HOMELESSNESS,
-        } as Family;
-        const other = {
-          homelessness: NEW_HOMELESSNESS,
-        } as EnrollmentReportRow;
-        const updatedFam = updateFamilyAddress(
-          family,
-          other,
-          FAMILIES_TO_UPDATE
-        );
-
-        expect(updatedFam).toBeTruthy();
-        expect(FAMILIES_TO_UPDATE.length).toEqual(1);
-        expect(family.homelessness).toEqual(NEW_HOMELESSNESS);
-      });
 
       it('update address information if new', () => {
-        FAMILIES_TO_UPDATE = [];
-        const family = {
-          streetAddress: STREET,
-          town: TOWN,
-          state: STATE,
-          zipCode: ZIP,
-        } as Family;
+        const child = {
+          family: {
+            streetAddress: STREET,
+            town: TOWN,
+            state: STATE,
+            zipCode: ZIP,
+          },
+          tags: [],
+        } as Child;
         const other = {
           streetAddress: NEW_STREET,
           town: NEW_TOWN,
           state: NEW_STATE,
           zipCode: NEW_ZIP,
         } as EnrollmentReportRow;
-        const updatedFam = updateFamilyAddress(
-          family,
-          other,
-          FAMILIES_TO_UPDATE
-        );
+        updateFamilyAddress(other, child);
 
-        expect(updatedFam).toBeTruthy();
-        expect(FAMILIES_TO_UPDATE.length).toEqual(1);
-        expect(family.streetAddress).toEqual(NEW_STREET);
-        expect(family.town).toEqual(NEW_TOWN);
-        expect(family.state).toEqual(NEW_STATE);
-        expect(family.zipCode).toEqual(NEW_ZIP);
+        expect(child.family.streetAddress).toEqual(NEW_STREET);
+        expect(child.family.town).toEqual(NEW_TOWN);
+        expect(child.family.state).toEqual(NEW_STATE);
+        expect(child.family.zipCode).toEqual(NEW_ZIP);
       });
 
       it('no update if address is not new', () => {
-        FAMILIES_TO_UPDATE = [];
-        const family = {
-          streetAddress: STREET,
-          town: TOWN,
-          state: STATE,
-          zipCode: ZIP,
-        } as Family;
+        const child = {
+          family: {
+            streetAddress: STREET,
+            town: TOWN,
+            state: STATE,
+            zipCode: ZIP,
+          },
+          tags: [],
+        } as Child;
         const other = {
           streetAddress: STREET,
           town: TOWN,
           state: STATE,
           zipCode: ZIP,
         } as EnrollmentReportRow;
-        const updatedFam = updateFamilyAddress(
-          family,
-          other,
-          FAMILIES_TO_UPDATE
-        );
 
-        expect(updatedFam).toBeFalsy();
-        expect(FAMILIES_TO_UPDATE.length).toEqual(0);
+        expect(rowHasNewAddress(other, child.family)).toBeFalsy();
       });
     });
 
@@ -608,8 +438,8 @@ describe('controllers', () => {
       const NUMBER_OF_PEOPLE = 3;
       const DETERMINATION_DATE = moment('10/21/2020');
       const NOT_DISCLOSED = true;
-      const NEW_INCOME = '20000';
-      const NEW_HOUSEHOLD_SIZE = '5';
+      const NEW_INCOME = 20000;
+      const NEW_HOUSEHOLD_SIZE = 5;
       const NEW_DETERMINATION_DATE = moment('1/1/2021');
       const NEW_NOT_DISCLOSED = false;
 
@@ -623,11 +453,10 @@ describe('controllers', () => {
           income: NEW_INCOME,
           numberOfPeople: NEW_HOUSEHOLD_SIZE,
           determinationDate: NEW_DETERMINATION_DATE,
-        };
+        } as IncomeDetermination;
         const isNewDet = rowHasNewDetermination(other, determination);
         expect(isNewDet).toBeTruthy();
       });
-
       it('adds an income det to a record with income not disclosed', () => {
         const determination = {
           incomeNotDisclosed: NOT_DISCLOSED,
@@ -637,11 +466,10 @@ describe('controllers', () => {
           numberOfPeople: NEW_HOUSEHOLD_SIZE,
           determinationDate: NEW_DETERMINATION_DATE,
           incomeNotDisclosed: NEW_NOT_DISCLOSED,
-        };
+        } as IncomeDetermination;
         const isNewDet = rowHasNewDetermination(other, determination);
         expect(isNewDet).toBeTruthy();
       });
-
       it('correctly identifies rows that have no new income information', () => {
         const determination = {
           income: INCOME,
@@ -649,10 +477,10 @@ describe('controllers', () => {
           determinationDate: DETERMINATION_DATE,
         } as IncomeDetermination;
         const other = {
-          income: INCOME.toString(),
-          numberOfPeople: NUMBER_OF_PEOPLE.toString(),
+          income: INCOME,
+          numberOfPeople: NUMBER_OF_PEOPLE,
           determinationDate: DETERMINATION_DATE,
-        };
+        } as IncomeDetermination;
         const isNewDet = rowHasNewDetermination(other, determination);
         expect(isNewDet).toBeFalsy();
       });
@@ -681,27 +509,8 @@ describe('controllers', () => {
             ageGroup: NEW_AGE_GROUP,
             entry: NEW_ENTRY,
           } as Enrollment;
-          const row = { model: NEW_MODEL } as EnrollmentReportRow;
-          const isNewEnrollment = rowHasNewEnrollment(row, other, enrollment);
-          expect(isNewEnrollment).toBeTruthy();
-        });
-
-        it('does nothing if a row has no enrollment info at all', () => {
-          const enrollment = {
-            site: SITE,
-            model: MODEL,
-            ageGroup: AGE_GROUP,
-            entry: ENTRY,
-          } as Enrollment;
-          const other = {
-            site: null,
-            model: CareModel.Unknown,
-            ageGroup: null,
-            entry: null,
-          } as Enrollment;
-          const row = { model: undefined } as EnrollmentReportRow;
-          const isNewEnrollment = rowHasNewEnrollment(row, other, enrollment);
-          expect(isNewEnrollment).toBeFalsy();
+          const matchingEnrollment = getEnrollmentMatch(enrollment, [other]);
+          expect(rowHasNewEnrollment(matchingEnrollment)).toBeTruthy();
         });
         it('does nothing if a row has an identical enrollment', () => {
           const enrollment = {
@@ -716,54 +525,15 @@ describe('controllers', () => {
             ageGroup: AGE_GROUP,
             entry: ENTRY,
           } as Enrollment;
-          const row = { model: MODEL } as EnrollmentReportRow;
-          const isNewEnrollment = rowHasNewEnrollment(row, other, enrollment);
-          expect(isNewEnrollment).toBeFalsy();
-        });
-      });
-
-      describe('getExitReason', () => {
-        const prevEnrollment = {
-          site: SITE,
-          model: MODEL,
-          ageGroup: AGE_GROUP,
-          entry: ENTRY,
-        } as Enrollment;
-        it('identifies age outs', () => {
-          const newEnrollment = {
-            site: SITE,
-            model: MODEL,
-            ageGroup: NEW_AGE_GROUP,
-            entry: NEW_ENTRY,
-          } as Enrollment;
-          const exitReason = getExitReason(prevEnrollment, newEnrollment);
-          expect(exitReason).toEqual(ExitReason.AgedOut);
-        });
-        it('identifies moving within sites/models', () => {
-          const newEnrollment = {
-            site: NEW_SITE,
-            model: NEW_MODEL,
-            ageGroup: AGE_GROUP,
-            entry: NEW_ENTRY,
-          } as Enrollment;
-          const exitReason = getExitReason(prevEnrollment, newEnrollment);
-          expect(exitReason).toEqual(ExitReason.MovedWithinProgram);
-        });
-        it('finds other exit reasons', () => {
-          const newEnrollment = {
-            site: SITE,
-            model: MODEL,
-            ageGroup: AGE_GROUP,
-            entry: NEW_ENTRY,
-          } as Enrollment;
-          const exitReason = getExitReason(prevEnrollment, newEnrollment);
-          expect(exitReason).toEqual(ExitReason.Unknown);
+          const matchingEnrollment = getEnrollmentMatch(enrollment, [other]);
+          expect(rowHasNewEnrollment(matchingEnrollment)).toBeFalsy();
         });
       });
     });
 
     describe('rowHasNewFunding', () => {
       const FUNDING_SPACE = {
+        id: 1,
         source: FundingSource.CDC,
         time: FundingTime.FullTime,
       } as FundingSpace;
@@ -771,6 +541,7 @@ describe('controllers', () => {
         period: moment('10/20/2020'),
       } as ReportingPeriod;
       const NEW_FUNDING_SPACE = {
+        id: 2,
         source: FundingSource.CSR,
         time: FundingTime.PartTime,
       } as FundingSpace;
@@ -787,21 +558,8 @@ describe('controllers', () => {
           fundingSpace: NEW_FUNDING_SPACE,
           firstReportingPeriod: NEW_FIRST_PERIOD,
         } as Funding;
-        const isNewFunding = rowHasNewFunding(other, funding);
-        expect(isNewFunding).toBeTruthy();
-      });
-      it('does nothing if row has no funding info', () => {
-        const funding = {
-          fundingSpace: FUNDING_SPACE,
-          firstReportingPeriod: FIRST_PERIOD,
-          lastReportingPeriod: undefined,
-        } as Funding;
-        const other = {
-          fundingSpace: null,
-          firstReportingPeriod: null,
-        } as Funding;
-        const isNewFunding = rowHasNewFunding(other, funding);
-        expect(isNewFunding).toBeFalsy();
+        const matchingFunding = getFundingMatch(funding, [other]);
+        expect(rowHasNewFunding(matchingFunding)).toBeTruthy();
       });
       it('does nothing if the funding in a row is the same', () => {
         const funding = {
@@ -812,8 +570,8 @@ describe('controllers', () => {
           fundingSpace: FUNDING_SPACE,
           firstReportingPeriod: FIRST_PERIOD,
         } as Funding;
-        const isNewFunding = rowHasNewFunding(other, funding);
-        expect(isNewFunding).toBeFalsy();
+        const matchingFunding = getFundingMatch(funding, [other]);
+        expect(rowHasNewFunding(matchingFunding)).toBeFalsy();
       });
     });
   });

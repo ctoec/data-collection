@@ -7,7 +7,9 @@ import {
   Table,
 } from '@ctoec/component-library';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
-import { AgeGroup } from '../../shared/models';
+import { nameFormatter } from '../../utils/formatters';
+import { getLastEnrollment, getLastFunding } from '../../utils/models';
+import { AgeGroup, Child } from '../../shared/models';
 import { getPreviewTableColumns } from './previewTableColumns';
 import { UploadPreviewRow } from './UploadPreviewRow';
 
@@ -30,9 +32,10 @@ export type RowsByAgeGroup = {
  * @param opts
  */
 export function getPreviewTableAccordionItems(
-  children: UploadPreviewRow[]
+  children: Child[]
 ): AccordionItemProps[] {
-  const childrenByAgeGroup = getChildrenByAgeGroup(children);
+  const uploadPreview = formatUploadPreview(children);
+  const childrenByAgeGroup = getChildrenByAgeGroup(uploadPreview);
 
   return Object.entries(childrenByAgeGroup)
     .filter(
@@ -85,6 +88,36 @@ export function getPreviewTableAccordionItems(
       isExpanded: ageGroupChildren.length <= MAX_LENGTH_EXPANDED,
     }));
 }
+
+/**
+ * Build the table preview of a user's upload.
+ * @param mapResult
+ */
+export const formatUploadPreview = (mappedChildren: Child[]) => {
+  const formattedPreview: UploadPreviewRow[] = mappedChildren.map((c) => {
+    const recentEnrollment = getLastEnrollment(c);
+    const recentFunding = getLastFunding(recentEnrollment);
+    const previewRow: UploadPreviewRow = {
+      name: nameFormatter(c, { lastNameFirst: true, capitalize: true }),
+      ageGroup: recentEnrollment?.ageGroup,
+      missingInfo:
+        // Greater than 1 here because we didn't save nested enrollments and
+        // fundings to the DB, so the "every child has a funded enrollment"
+        // validator goes off for every child--ignore it
+        (c?.validationErrors?.length ?? 0) > 1 ||
+        // But check for additional sub-errors
+        !!c?.validationErrors?.[0]?.children?.length,
+      tags: c?.tags ?? [],
+      birthDate: c?.birthdate?.format('MM/DD/YYYY') ?? '-',
+      fundingSource: recentFunding?.fundingSpace?.source ?? '-',
+      spaceType: recentFunding?.fundingSpace?.time ?? '-',
+      site: recentEnrollment?.site?.siteName ?? '-',
+      enrollmentDate: recentEnrollment?.entry?.format('MM/DD/YYYY') ?? '-',
+    };
+    return previewRow;
+  });
+  return formattedPreview;
+};
 
 function getChildrenByAgeGroup(
   filteredChildren: UploadPreviewRow[]

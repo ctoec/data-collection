@@ -21,6 +21,7 @@ import {
   Gender,
   BirthCertificateType,
   UndefinableBoolean,
+  ChangeTag,
 } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
@@ -192,6 +193,9 @@ export class Child implements ChildInterface {
   @ManyToOne(() => Family)
   family?: Family;
 
+  @Column()
+  familyId: number;
+
   @ManyToOne(() => Organization, { nullable: false })
   organization: Organization;
 
@@ -213,4 +217,6 @@ export class Child implements ChildInterface {
   deletedDate: Date;
 
   validationErrors?: ValidationError[];
+
+  tags?: ChangeTag[];
 }

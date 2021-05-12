@@ -141,6 +141,11 @@ export function parseEnrollmentReportRow(
     if (prop.match(/zipcode/i)) {
       rawEnrollment[prop] = getZipCode(value);
     }
+
+    // Parse sasidId as string
+    if (prop === 'sasidUniqueId' && value) {
+      rawEnrollment[prop] = value.toString();
+    }
   });
 
   return rawEnrollment as EnrollmentReportRow;
