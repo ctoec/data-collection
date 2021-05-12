@@ -43,6 +43,8 @@
     "uswds": "2.9.0"
   },
   "resolutions": {
+    "postcss": "^8.2.10",
+    "react-markdown/remark-parse/trim": "^0.0.3",
     "react-scripts/webpack/**/ssri": "6.0.2",
     "react-scripts/**/lodash": "^4.17.21",
     "react-scripts/**/hosted-git-info": "^3.0.8"
