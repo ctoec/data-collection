@@ -13,7 +13,6 @@ const Users: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
 
   const [data, setData] = useState<UserSummary[]>([]);
-  // apiGet(`users/`, accessToken).then((res: UserSummary[]) => setData(res));
 
   useEffect(() => {
     (async function loadUsers() {
