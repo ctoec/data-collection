@@ -19,6 +19,7 @@ import UploadWizard from './containers/Upload/UploadWizard';
 import Overview from './containers/Overview/Overview';
 import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
+import CreateOrg from './containers/CreateOrg/CreateOrg';
 import Organizations from './containers/Organizations/Organizations';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
 
@@ -74,6 +75,12 @@ export const routes: RouteConfig[] = [
     path: '/overview/organization/:id',
     component: OrganizationOverview,
     unauthorized: false,
+  },
+  {
+    path: '/create-org',
+    component: CreateOrg,
+    unauthorized: false,
+    exact: true,
   },
   {
     path: '/home',
