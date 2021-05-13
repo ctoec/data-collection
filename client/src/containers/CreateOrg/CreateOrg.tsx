@@ -20,7 +20,6 @@ const CreateOrg: React.FC = () => {
       { accessToken, jsonParse: true }
     )
       .then((_) => {
-        // Got a DB ID from the newly created org
         setAlerts([{
           type: 'success',
           heading: 'Organization created',
