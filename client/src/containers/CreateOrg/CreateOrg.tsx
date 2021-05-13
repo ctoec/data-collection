@@ -16,8 +16,8 @@ const CreateOrg: React.FC = () => {
   const createNewOrg = async () => {
     await apiPost(
       `organizations/`,
-      { name: newOrgName},
-      { accessToken, jsonParse: true }
+      { name: newOrgName },
+      { accessToken, jsonParse: false }
     )
       .then((_) => {
         setAlerts([{
