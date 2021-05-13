@@ -19,7 +19,7 @@ const Organizations: React.FC = () => {
     (async function loadUsers() {
       if (user && accessToken) {
         await apiGet(
-          `organizations/`,
+          `organizations`,
           accessToken
         ).then((res: OrganizationSummary[]) => setData(res));
       }
