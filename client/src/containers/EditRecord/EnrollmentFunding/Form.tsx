@@ -4,7 +4,7 @@ import { EditFundingCard } from './EditFundingCard';
 import { ChangeEnrollmentCard } from './ChangeEnrollment/Card';
 import { ChangeFundingCard } from './ChangeFunding/Card';
 import { EditEnrollmentCard } from './EditEnrollmentCard';
-import { Enrollment, Funding } from '../../../shared/models';
+import { Enrollment } from '../../../shared/models';
 import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 import { InlineIcon } from '@ctoec/component-library';
 import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
@@ -48,19 +48,6 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   const pastEnrollments: Enrollment[] = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
-
-  const sortFundingsByDate = (fundings: Funding[] | undefined) => {
-    if (!fundings) return [];
-    return fundings.sort((a, b) => {
-      if (
-        a.firstReportingPeriod?.period.isSameOrBefore(
-          b.firstReportingPeriod?.period
-        )
-      )
-        return 1;
-      else return -1;
-    });
-  };
 
   const commonProps = {
     afterSaveSuccess,
@@ -107,7 +94,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
             topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
             noRecordedEnrollments={noRecordedEnrollments}
           />
-          {sortFundingsByDate(currentEnrollment.fundings).map(
+          {currentEnrollment?.fundings?.map(
             (funding, idx) =>
               !noRecordedEnrollments && (
                 <EditFundingCard
@@ -147,7 +134,7 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
                 enrollmentId={enrollment.id}
                 topHeadingLevel={getNextHeadingLevel(topHeadingLevel, 2)}
               />
-              {sortFundingsByDate(enrollment.fundings).map((funding) => (
+              {enrollment?.fundings?.map((funding) => (
                 <EditFundingCard
                   {...commonProps}
                   key={funding.id}

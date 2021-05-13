@@ -49,6 +49,17 @@ export class BadRequestError extends ApiError {
 }
 
 /**
+ * Custom error class for 409 Conflict in request error.
+ */
+export class ResourceConflictError extends ApiError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ResourceConflictError';
+    this.status = 409;
+  }
+}
+
+/**
  * Custom error class for 500 Internal Server
  */
 export class InternalServerError extends ApiError {

@@ -11,9 +11,9 @@ const PD_REGEX = /partday/g;
  * Leverage funding source -> time -> format mappings from FUNDING_SOURCE_TIMES
  * to determine the valid funding time entered by the user.
  */
-export const mapFundingTime = (
-  value: number | string | undefined,
-  fundingSource: FundingSource | undefined
+export const addFundingTime = (
+  value: number | string,
+  fundingSource: FundingSource
 ) => {
   if (!value) return;
 

@@ -1,6 +1,6 @@
 import { ValidationError, validate } from 'class-validator';
+import { Child } from '../entity';
 import { getAllColumnMetadata } from '../template';
-import { ObjectWithValidationErrors } from '../../client/src/shared/models';
 import { ColumnMetadata } from '../../client/src/shared/models';
 
 /**
@@ -9,15 +9,11 @@ import { ColumnMetadata } from '../../client/src/shared/models';
  * that has its own errors.
  * @param parentObject
  */
-function distributeValidationErrorsToSubObjects<
-  T extends ObjectWithValidationErrors
->(
-  parentObject: T,
+function distributeValidationErrorsToSubObjects(
+  parentObject: Child,
   validationErrors: ValidationError[],
   metadata: ColumnMetadata[]
-): T {
-  if (!parentObject || !validationErrors.length) return parentObject;
-
+) {
   // Add validation errors to the object passed in
   parentObject.validationErrors = validationErrors.map((e) => {
     const { formattedName, propertyName } =
@@ -64,17 +60,13 @@ function distributeValidationErrorsToSubObjects<
   return parentObject;
 }
 
-export async function validateObject<T extends ObjectWithValidationErrors>(
-  object: T | undefined
-) {
-  if (!object) return;
-
-  let validationErrors = await validate(object, {
+export async function validateChild(child: Child) {
+  const validationErrors = await validate(child, {
     validationError: { value: false, target: false },
   });
   const metadata = getAllColumnMetadata();
   return distributeValidationErrorsToSubObjects(
-    object,
+    child,
     validationErrors,
     metadata
   );
