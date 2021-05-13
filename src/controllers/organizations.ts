@@ -1,13 +1,22 @@
 import { Organization } from "../entity";
 import { getManager } from "typeorm";
+import { ResourceConflictError } from "../middleware/error/errors";
 
-export async function doesOrgNameExist(name: string) {
+async function doesOrgNameExist(name: string) {
   const existing = await getManager().findOne(
     Organization,
     { where: { providerName: name }}
   );
   return !!existing;
 };
+
+export async function createOrganization(name: string) {
+  const nameExists = await doesOrgNameExist(name);
+  if (nameExists) throw new ResourceConflictError('Name already exists.');
+  await getManager().save(
+    getManager().create(Organization, { providerName: name })
+  );
+}
 
 /**
  * Get all organizations a given user has access to,

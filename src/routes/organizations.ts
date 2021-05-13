@@ -1,9 +1,7 @@
 import express, { Request, Response } from 'express';
-import { Organization } from '../entity';
-import { getManager } from 'typeorm';
 import * as controller from '../controllers/organizations';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { ApiError, BadRequestError, ForbiddenError, ResourceConflictError } from '../middleware/error/errors';
+import { ApiError, ForbiddenError, InternalServerError } from '../middleware/error/errors';
 
 export const organizationsRouter = express.Router();
 
@@ -11,17 +9,14 @@ organizationsRouter.post(
   '/',
   passAsyncError(async (req: Request, res: Response) => {
     try {
+      if (!req.user.isAdmin) throw new ForbiddenError();
       const { name } = req.body;
-      const nameExists = await controller.doesOrgNameExist(name);
-      if (nameExists) throw new ResourceConflictError('Name already exists.');
-      const newOrg = await getManager().save(
-        getManager().create(Organization, { providerName: name })
-      );
+      await controller.createOrganization(name);
       res.sendStatus(201);
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error creating organization: ', err);
-      throw new BadRequestError('New organization not created.');
+      throw new InternalServerError('New organization not created.');
     }
   })
 )
