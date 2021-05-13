@@ -3,7 +3,6 @@ import { apiGet, apiPost, ApiOpts, apiPut, apiDelete } from '../utils/api';
 import {
   Child,
   Enrollment,
-  FundingSpace,
   Funding,
   ReportingPeriod,
   Organization,
@@ -11,11 +10,7 @@ import {
   Site,
 } from '../shared/models';
 import moment, { Moment } from 'moment';
-import {
-  ChangeFundingRequest,
-  WithdrawRequest,
-  ChangeEnrollmentRequest,
-} from '../shared/payloads';
+import { ChangeFundingRequest, WithdrawRequest } from '../shared/payloads';
 
 jest.mock('../utils/getCurrentHost');
 import * as util from '../utils/getCurrentHost';

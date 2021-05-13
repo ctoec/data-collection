@@ -1,5 +1,5 @@
 import { Enrollment, Family, Organization } from '.';
-import { Gender } from '../';
+import { ChangeTag, Gender } from '../';
 
 import { Moment } from 'moment';
 import { ObjectWithValidationErrors } from '../ObjectWithValidationErrors';
@@ -41,4 +41,6 @@ export interface Child extends ObjectWithValidationErrors {
   family?: Family;
   organization: Organization;
   enrollments?: Array<Enrollment>;
+
+  tags?: ChangeTag[];
 }
