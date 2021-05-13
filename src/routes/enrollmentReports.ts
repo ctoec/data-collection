@@ -127,14 +127,13 @@ const getUploadCounts = (children: Child[]) => {
   return children.reduce(
     (response, child) => {
       if (child.tags.includes(ChangeTag.NewRecord)) response.newCount += 1;
-      else if (CHANGE_TAGS_DENOTING_UPDATE.some((t) => child.tags.includes(t)))
-        response.updatedCount += 1;
       else if (child.tags.includes(ChangeTag.WithdrawnRecord))
         response.withdrawnCount += 1;
-      else response.unchangedCount += 1;
+      else if (CHANGE_TAGS_DENOTING_UPDATE.some((t) => child.tags.includes(t)))
+        response.updatedCount += 1;
 
       return response;
     },
-    { newCount: 0, updatedCount: 0, withdrawnCount: 0, unchangedCount: 0 }
+    { newCount: 0, updatedCount: 0, withdrawnCount: 0 }
   );
 };
