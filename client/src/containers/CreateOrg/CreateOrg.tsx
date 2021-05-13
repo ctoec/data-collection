@@ -14,31 +14,31 @@ const CreateOrg: React.FC = () => {
   const [alertElements, setAlerts] = useAlerts();
 
   const createNewOrg = async () => {
-    const res = await apiPost(
+    await apiPost(
       `organizations/`,
       { name: newOrgName},
       { accessToken, jsonParse: true }
-    ).catch((err) => {
-      
-      // Special 4XX error if an org with given name already existed
-      if (err.includes('exists')) {
+    )
+      .then((_) => {
+        // Got a DB ID from the newly created org
         setAlerts([{
-          type: 'error',
-          heading: 'Organization already exists',
-          text: `An organization with name "${newOrgName}" already exists.`
+          type: 'success',
+          heading: 'Organization created',
+          text: `Organization "${newOrgName}" was successfully created!`
         }]);
+      })
+      .catch((err) => {
+        // Special 4XX error if an org with given name already existed
+        if (err.includes('exists')) {
+          setAlerts([{
+            type: 'error',
+            heading: 'Organization already exists',
+            text: `An organization with name "${newOrgName}" already exists.`
+          }]);
+        }
+        else throw new Error(err);
       }
-      else throw new Error(err);
-    });
-    
-    // Got a DB ID from the newly created org
-    if (res?.id) {
-      setAlerts([{
-        type: 'success',
-        heading: 'Organization created',
-        text: `Organization "${newOrgName}" was successfully created!`
-      }]);
-    }
+    );
   };
 
   return (
