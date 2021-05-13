@@ -17,7 +17,7 @@ const Users: React.FC = () => {
   useEffect(() => {
     (async function loadUsers() {
       if (user && accessToken) {
-        await apiGet(`users/`, accessToken).then((res: UserSummary[]) =>
+        await apiGet(`users`, accessToken).then((res: UserSummary[]) =>
           setData(res)
         );
       }
