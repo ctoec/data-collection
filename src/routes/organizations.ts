@@ -4,7 +4,7 @@ import { getManager } from 'typeorm';
 import * as orgController from '../controllers/organizations';
 import * as siteController from '../controllers/sites';
 import { passAsyncError } from '../middleware/error/passAsyncError';
-import { ApiError, BadRequestError, ForbiddenError, ResourceConflictError } from '../middleware/error/errors';
+import { ApiError, ForbiddenError, InternalServerError } from '../middleware/error/errors';
 
 export const organizationsRouter = express.Router();
 
@@ -12,10 +12,14 @@ organizationsRouter.post(
   '/',
   passAsyncError(async (req: Request, res: Response) => {
     try {
+      if (!req.user.isAdmin) throw new ForbiddenError();
       const { name, sites } = req.body;
 
       // All or nothing approach to creating new orgs, so if either the
       // org name is taken or *any* site name is taken, fail the whole thing
+      
+      // await controller.createOrganization(name);
+      
       const orgNameExists = await orgController.doesOrgNameExist(name);
       const siteNamesAllUnique = await siteController.areSiteNamesUnique(
         sites.map((newSite) => newSite.name)
@@ -49,13 +53,13 @@ organizationsRouter.post(
         ));        
         newOrg.sites = createdSites;
         await getManager().save(newOrg);
-        res.status(201).send({ id: newOrg.id });
+        res.sendStatus(201);
       }
 
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error creating organization: ', err);
-      throw new BadRequestError('New organization not created.');
+      throw new InternalServerError('New organization not created.');
     }
   })
 )
@@ -64,11 +68,8 @@ organizationsRouter.get(
   '/',
   passAsyncError(async (req, res) => {
     const user = req.user;
-    if (!user.isAdmin) {
-      throw new ForbiddenError();
-    }
-    const organizations = await orgController.getOrganizations();
-
+    if (!user.isAdmin) throw new ForbiddenError();
+    const organizations = await controller.getOrganizations();
     res.send(organizations);
   })
 );

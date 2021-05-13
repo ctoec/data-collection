@@ -23,30 +23,31 @@ const CreateOrg: React.FC = () => {
           heading: 'Site is incomplete',
           text: `One or more requested sites is missing required information.`
         }]);
+        return;
       }
     });
-
-    const res = await apiPost(
+      
+    await apiPost(
       `organizations/`,
       {
         name: newOrgName,
         sites: newSites,
       },
-      { accessToken, jsonParse: true }
-    ).catch((err) => {
-      const alertToSet = getErrorMessage(err, newOrgName);
-      if (alertToSet) setAlerts(alertToSet);
-      else throw new Error(err);
-    });
-    
-    // Got a DB ID from the newly created org
-    if (res?.id) {
-      setAlerts([{
-        type: 'success',
-        heading: 'Organization created',
-        text: `Organization "${newOrgName}" was successfully created!`
-      }]);
-    }
+      { accessToken, jsonParse: false }
+    )
+      .then((_) => {
+        setAlerts([{
+          type: 'success',
+          heading: 'Organization created',
+          text: `Organization "${newOrgName}" was successfully created!`
+        }]);
+      })
+      .catch((err) => {
+        const alertToSet = getErrorMessage(err, newOrgName);
+        if (alertToSet) setAlerts(alertToSet);
+        else throw new Error(err);
+      }
+    );
   };
 
   const [newSites, setNewSites] = useState<NewSite[]>([]);

@@ -30,7 +30,7 @@ getConnectionOptions().then((connectionOptions) => {
 
       app.use(requestLogger);
       // Register pre-processing middlewares
-      app.use(json({ reviver: dateReviver }));
+      app.use(json({ reviver: dateReviver, limit: '50mb' }));
 
       // Register business logic routes
       app.use('/api', apiRouter);

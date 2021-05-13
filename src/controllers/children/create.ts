@@ -1,7 +1,7 @@
 import { getManager } from 'typeorm';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
 import { Child, Family, User } from '../../entity';
-import { validateObject } from '../../utils/processChild';
+import { validateChild } from '../../utils/validateChild';
 import { getAllColumnMetadata } from '../../template';
 import { TEMPLATE_SECTIONS } from '../../../client/src/shared/constants';
 import { BadRequestError } from '../../middleware/error/errors';
@@ -31,7 +31,7 @@ export const createChild = async (_child: Child, user: User) => {
     },
   });
 
-  const validatedChild = await validateObject(newChild);
+  const validatedChild = await validateChild(newChild);
   const identifierSectionMetadata = getAllColumnMetadata()
     .filter((m) => m.section === TEMPLATE_SECTIONS.CHILD_IDENT)
     .map((m) => m.propertyName);
