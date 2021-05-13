@@ -26,7 +26,7 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
 
   const {
     childRecords,
-    counts: { newCount, updatedCount, withdrawnCount, unchangedCount },
+    counts: { newCount, updatedCount, withdrawnCount },
   } = enrollmentReportCheck;
 
   const history = useHistory();
@@ -108,7 +108,7 @@ export const PreviewChanges: React.FC<StepContentProps> = ({
                   Total records in this file
                 </p>
                 <p className="text-bold margin-top-0 margin-bottom-0">
-                  {newCount + updatedCount + withdrawnCount + unchangedCount}
+                  {childRecords.length}
                 </p>
               </Card>
             </div>
