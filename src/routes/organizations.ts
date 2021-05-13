@@ -17,7 +17,7 @@ organizationsRouter.post(
       const newOrg = await getManager().save(
         getManager().create(Organization, { providerName: name })
       );
-      res.status(201).send({ id: newOrg.id });
+      res.sendStatus(201);
     } catch (err) {
       if (err instanceof ApiError) throw err;
       console.error('Error creating organization: ', err);
