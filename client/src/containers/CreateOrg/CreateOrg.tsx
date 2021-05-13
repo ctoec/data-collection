@@ -4,9 +4,10 @@ import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useAlerts } from '../../hooks/useAlerts';
+import { NewSite, Region } from '../../shared/models';
 import { apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { NewSite, getNewSiteCard } from './getCreateSiteCard';
+import { getNewSiteCard } from './getCreateSiteCard';
 import { getErrorMessage } from './getErrorMessage';
 
 const CreateOrg: React.FC = () => {
@@ -16,17 +17,21 @@ const CreateOrg: React.FC = () => {
   const [alertElements, setAlerts] = useAlerts();
 
   const createNewOrg = async () => {
-    newSites.forEach((ns) => {
-      if (ns.name === '' && ns.region === '') {
-        setAlerts([{
-          type: 'error',
-          heading: 'Site is incomplete',
-          text: `One or more requested sites is missing required information.`
-        }]);
-        return;
-      }
-    });
-      
+
+    // Don't even send an API request if a site card is missing
+    // some required info
+    const allSitesOkay = newSites.every(
+      (ns) => (ns.name !== '' && ns.titleI && ns.region)
+    );
+    if (!allSitesOkay) {
+      setAlerts([{
+        type: 'error',
+        heading: 'Site is incomplete',
+        text: `One or more requested sites is missing required information.`
+      }]);
+      return
+    }
+
     await apiPost(
       `organizations/`,
       {
@@ -54,8 +59,8 @@ const CreateOrg: React.FC = () => {
   const addNewSite = () => {
     setNewSites(o => [...o, {
       name: '',
-      titleI: false,
-      region: '',
+      titleI: (null as unknown as boolean),
+      region: (null as unknown as Region),
       facilityCode: '',
       licenseNumber: '',
       registryId: '',

@@ -1,20 +1,7 @@
 import { Card, Select, TextInput } from '@ctoec/component-library';
 import React from 'react';
 import { Region } from '../../shared/models';
-
-/**
- * Basic type to hold the state information for creating a new site
- * as part of creating a new organization.
- */
-export type NewSite = {
-  name: string;
-  titleI: boolean;
-  region: string;
-  facilityCode?: string;
-  licenseNumber?: string;
-  registryId?: string;
-  naeycId?: string;
-}
+import { NewSite } from '../../shared/models';
 
 /**
  * Function that maps the state information in a new site object
