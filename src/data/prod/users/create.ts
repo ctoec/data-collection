@@ -42,6 +42,7 @@ export const createUserData = async (
   const parsedData = parse<UserRow>(sheetData, USER_ROW_PROPS);
 
   let createdCount = 0;
+  let updatedCount = 0;
 
   console.log(`Attempting to create ${parsedData.length} winged-keys users...`);
   await createWingedKeysUsers(
@@ -82,9 +83,27 @@ export const createUserData = async (
         );
         createdCount += 1;
       } else {
-        console.log(
-          `\tUser ${row.userName} with username ${row.email} already exists`
-        );
+        let updatedUser: Partial<User> = {};
+
+        if (!!_firstName && _firstName !== user.firstName)  updatedUser.firstName = _firstName;
+        if (!!_lastName && _lastName !== user.lastName)  updatedUser.lastName = _lastName;
+        if (!!row.email && row.email !== user.email)  updatedUser.email = row.email;
+
+        if (!!Object.keys(updatedUser).length) {
+          await getManager('script').save(User, {
+            ...updatedUser,
+            wingedKeysId
+          });
+  
+          console.log(
+            `\Updated user for ${user.firstName} ${user.lastName} with app id ${user.id}`
+          );
+          updatedCount += 1;
+        } else {
+          console.log(
+            `\tUser ${row.userName} with username ${row.email} already exists`
+          );
+        }
       }
 
       const somePermissionsCreated = await createOrgOrSitePermissions(
@@ -103,6 +122,7 @@ export const createUserData = async (
   }
 
   console.log(`Successfully created ${createdCount} users`);
+  console.log(`Successfully updated ${updatedCount} users`);
 };
 
 async function getWingedKeysIds(connectionOpts: DBConnectionOpts) {
