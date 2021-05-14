@@ -16,7 +16,7 @@ const Organizations: React.FC = () => {
   const [data, setData] = useState<OrganizationSummary[]>([]);
 
   useEffect(() => {
-    (async function loadUsers() {
+    (async function loadOrganizations() {
       if (user && accessToken) {
         await apiGet(
           `organizations`,
