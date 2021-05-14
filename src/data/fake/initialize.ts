@@ -185,6 +185,7 @@ async function createDummyRows() {
       firstName: 'DUMMY_FIRST_NAME',
       lastName: 'DUMMY_LAST_NAME',
       wingedKeysId: 'DUMMY_WINGEDKEYS_ID',
+      email: 'DUMMY_EMAIL@EMAIL.COM'
     })
   );
 

@@ -73,6 +73,7 @@ export const createUserData = async (
             firstName: _firstName,
             lastName: _lastName,
             wingedKeysId,
+            email: row.email
           })
         );
 

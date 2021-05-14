@@ -10,6 +10,14 @@ import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
 import { organizations } from '../data/fake/organizations';
 
+interface WingedKeysUser {
+  name: string;
+  given_name: string;
+  family_name: string;
+  email: string;
+  email_verified: boolean;
+}
+
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
  * with appropriate key from JWKS (JSON web key set).
@@ -112,7 +120,7 @@ const getUser = async (wingedKeysId: string) => {
  */
 async function getUserFromWingedKeys(
   bearerToken: string
-): Promise<AxiosResponse<any>> {
+): Promise<AxiosResponse<WingedKeysUser>> {
   return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
     headers: {
       authorization: bearerToken,
@@ -132,7 +140,7 @@ async function getUserFromWingedKeys(
  */
 async function createUserWithOrgPermissions(
   wingedKeysId: string,
-  wingedKeysUser: { given_name: string; family_name: string }
+  wingedKeysUser: WingedKeysUser
 ): Promise<User> {
   let user: User;
 
@@ -141,6 +149,7 @@ async function createUserWithOrgPermissions(
       wingedKeysId,
       firstName: wingedKeysUser.given_name,
       lastName: wingedKeysUser.family_name,
+      email: wingedKeysUser.email,
       confidentialityAgreedDate: null,
     });
 
