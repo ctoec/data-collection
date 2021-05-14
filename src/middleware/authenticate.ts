@@ -62,7 +62,7 @@ const decodeClaim = jwt({
  */
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
-    let claims = (req.claims || {}) as TokenClaims;
+    const claims = (req.claims ?? {}) as TokenClaims;
 
     if (claims.sub) {
       let fawkesUser = await getUser(req.claims.sub);
