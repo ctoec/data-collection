@@ -11,7 +11,6 @@ export * from './FundingSource';
 export * from './FundingSourceTime';
 export * from './FundingTime';
 export * from './Gender';
-export * from './NewSite';
 export * from './Region';
 export * from './ObjectWithValidationErrors';
 export * from './UndefinableBoolean';

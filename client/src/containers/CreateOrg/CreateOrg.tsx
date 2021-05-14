@@ -4,7 +4,7 @@ import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useAlerts } from '../../hooks/useAlerts';
-import { NewSite, Region } from '../../shared/models';
+import { Region, Site } from '../../shared/models';
 import { apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { getNewSiteCard } from './getCreateSiteCard';
@@ -21,7 +21,7 @@ const CreateOrg: React.FC = () => {
     // Don't even send an API request if a site card is missing
     // some required info
     const allSitesOkay = newSites.every(
-      (ns) => (ns.name !== '' && ns.titleI && ns.region)
+      (ns) => (ns.siteName !== '' && ns.titleI && ns.region)
     );
     if (!allSitesOkay) {
       setAlerts([{
@@ -48,23 +48,23 @@ const CreateOrg: React.FC = () => {
         }]);
       })
       .catch((err) => {
-        const alertToSet = getErrorMessage(err, newOrgName);
+        const alertToSet = getErrorMessage(err);
         if (alertToSet) setAlerts(alertToSet);
         else throw new Error(err);
       }
     );
   };
 
-  const [newSites, setNewSites] = useState<NewSite[]>([]);
+  const [newSites, setNewSites] = useState<Partial<Site>[]>([]);
   const addNewSite = () => {
     setNewSites(o => [...o, {
-      name: '',
+      siteName: '',
       titleI: (null as unknown as boolean),
       region: (null as unknown as Region),
-      facilityCode: '',
-      licenseNumber: '',
-      registryId: '',
-      naeycId: '',
+      facilityCode: undefined,
+      licenseNumber: undefined,
+      registryId: undefined,
+      naeycId: undefined,
     }]);
   }
   useEffect(() => {

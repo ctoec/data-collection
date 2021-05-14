@@ -1,7 +1,6 @@
 import { Card, Select, TextInput } from '@ctoec/component-library';
 import React from 'react';
-import { Region } from '../../shared/models';
-import { NewSite } from '../../shared/models';
+import { Region, Site } from '../../shared/models';
 
 /**
  * Function that maps the state information in a new site object
@@ -9,7 +8,7 @@ import { NewSite } from '../../shared/models';
  * Each card maintains its own state data and we collect it at
  * the end.
  */
-export const getNewSiteCard = (card: NewSite, numberOnPage: number) => {
+export const getNewSiteCard = (card: Partial<Site>, numberOnPage: number) => {
   return (
     <Card>
       <div className="display-flex flex-row grid-row grid-gap">
@@ -19,7 +18,7 @@ export const getNewSiteCard = (card: NewSite, numberOnPage: number) => {
             id={`new-site-${numberOnPage}-name-input`}
             type="input"
             onChange={(e: any) => {
-              card.name = e.target.value;
+              card.siteName = e.target.value;
               return e.target.value;
             }}
           />
@@ -30,7 +29,7 @@ export const getNewSiteCard = (card: NewSite, numberOnPage: number) => {
                 id={`new-site-${numberOnPage}-facility-input`}
                 type="input"
                 onChange={(e: any) => {
-                  card.facilityCode = e.target.value;
+                  card.facilityCode = parseInt(e.target.value);
                   return e.target.value;
                 }}
               />
@@ -41,7 +40,7 @@ export const getNewSiteCard = (card: NewSite, numberOnPage: number) => {
                 id={`new-site-${numberOnPage}-license-input`}
                 type="input"
                 onChange={(e: any) => {
-                  card.licenseNumber = e.target.value;
+                  card.licenseNumber = parseInt(e.target.value);
                   return e.target.value;
                 }}
               />
@@ -72,7 +71,7 @@ export const getNewSiteCard = (card: NewSite, numberOnPage: number) => {
             id={`new-site-${numberOnPage}-registry-input`}
             type="input"
             onChange={(e: any) => {
-              card.registryId = e.target.value;
+              card.registryId = parseInt(e.target.value);
               return e.target.value;
             }}
           />
@@ -95,7 +94,7 @@ export const getNewSiteCard = (card: NewSite, numberOnPage: number) => {
             id={`new-site-${numberOnPage}-naeyc-input`}
             type="input"
             onChange={(e: any) => {
-              card.naeycId = e.target.value;
+              card.naeycId = parseInt(e.target.value);
               return e.target.value;
             }}
           />
