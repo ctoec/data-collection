@@ -2,26 +2,24 @@ import React, { useContext, useState, useEffect } from 'react';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { Redirect } from 'react-router-dom';
 import UserContext from '../../contexts/UserContext/UserContext';
-import { OrganizationSummary } from '../../shared/payloads/OrganizationsResponse';
+import { UserSummary } from '../../shared/payloads/UsersResponse';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { OrganizationsTable } from './OrganizationsTable';
+import { UsersTable } from './UsersTable';
 import { apiGet } from '../../utils/api';
-import { Button } from '@ctoec/component-library';
 
-const Organizations: React.FC = () => {
+const Users: React.FC = () => {
   const { user } = useContext(UserContext);
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
 
-  const [data, setData] = useState<OrganizationSummary[]>([]);
+  const [data, setData] = useState<UserSummary[]>([]);
 
   useEffect(() => {
-    (async function loadOrganizations() {
+    (async function loadUsers() {
       if (user && accessToken) {
-        await apiGet(
-          `organizations`,
-          accessToken
-        ).then((res: OrganizationSummary[]) => setData(res));
+        await apiGet(`users`, accessToken).then((res: UserSummary[]) =>
+          setData(res)
+        );
       }
     })();
   }, [user, accessToken]);
@@ -32,12 +30,11 @@ const Organizations: React.FC = () => {
     <div className="grid-container">
       <div className="grid-row grid-gap">
         <div className="tablet:grid-col-12 margin-top-4 margin-bottom-2">
-          <h1 ref={h1Ref} className="margin-top-0 margin-bottom-4">
-            Organizations
+          <h1 ref={h1Ref} className="margin-top-0">
+            Users
           </h1>
-          <Button text="Create new organization" href="/create-org" />
           <div className="tablet:grid-col-12 margin-top-4">
-            <OrganizationsTable orgs={data} />
+            <UsersTable users={data} />
           </div>
         </div>
       </div>
@@ -45,4 +42,4 @@ const Organizations: React.FC = () => {
   );
 };
 
-export default Organizations;
+export default Users;

@@ -1,0 +1,26 @@
+.bx--data-table {
+  thead {
+    background-color: #fff;
+    th {
+      font-weight: 700;
+    }
+  }
+  tbody {
+    tr {
+      &:hover {
+        background: #fff;
+        td {
+          background: #fff;
+          color: #1b1b1b;
+        }
+      }
+      td {
+        color: #1b1b1b;
+      }
+    }
+  }
+  .bx--table-header-label {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+}

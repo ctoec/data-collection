@@ -21,6 +21,7 @@ import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
 import CreateOrg from './containers/CreateOrg/CreateOrg';
 import Organizations from './containers/Organizations/Organizations';
+import Users from './containers/Users/Users';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
 
 export type RouteConfig = {
@@ -69,6 +70,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/organizations',
     component: Organizations,
+    unauthorized: false,
+  },
+  {
+    path: '/users',
+    component: Users,
     unauthorized: false,
   },
   {
