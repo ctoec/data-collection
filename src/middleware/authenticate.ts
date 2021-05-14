@@ -55,6 +55,9 @@ const addUser = passAsyncError(
         );
 
         if (res?.data?.sub === req.claims.sub) {
+          console.log('AH SWEET HERE IT IS', req.claims);
+          console.log('THE DATA TOO', res.data);
+          console.log('THE SUB', req.claims.sub);
           fawkesUser = await createUserWithOrgPermissions(
             req.claims.sub,
             res.data
