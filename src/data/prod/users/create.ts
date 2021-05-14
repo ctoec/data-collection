@@ -101,7 +101,7 @@ export const createUserData = async (
           updatedCount += 1;
         } else {
           console.log(
-            `\tUser ${row.userName} with username ${row.email} already exists`
+            `\tUser ${row.userName} with username ${row.email} already exists, and no updates have been specified.`
           );
         }
       }
