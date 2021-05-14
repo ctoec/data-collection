@@ -1,5 +1,5 @@
 # Creating data
-Application data that is not user-generated must be created, and `src/data/prod/create.ts` is a script to do that.
+Application data that is not user-generated must be created (or potentially updated), and `src/data/prod/upsert.ts` is a script to do that.
 From csv data with formats defined [here](https://docs.google.com/spreadsheets/d/1H7Q5sPkcGqgdZdqzJpH2f-PluQgEfLZ6Dxy4xmIQTZ4/edit#gid=664790308), the script optionally creates
 - Organizations and their funding spaces
 - Sites
