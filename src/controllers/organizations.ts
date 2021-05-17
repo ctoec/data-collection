@@ -60,6 +60,6 @@ from organization o left join (
         select organizationid, count(*) as siteCount
         from site
         group by organizationid
-        ) s on fs.organizationid = s.organizationId
+        ) s on o.id = s.organizationId
 group by o.id, o.providername, s.siteCount`
   );

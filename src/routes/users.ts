@@ -4,6 +4,7 @@ import { User } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/users';
 import { BadRequestError } from '../middleware/error/errors';
+import { ForbiddenError } from '../middleware/error/errors';
 
 export const usersRouter = express.Router();
 
@@ -19,6 +20,19 @@ usersRouter.get('/current', async (req, res) => {
   await controller.addDataToUser(user);
   res.send(user);
 });
+
+usersRouter.get(
+  '/',
+  passAsyncError(async (req, res) => {
+    const user = req.user;
+    if (!user.isAdmin) {
+      throw new ForbiddenError();
+    }
+    const users = await controller.getUsers();
+
+    res.send(users);
+  })
+);
 
 usersRouter.post(
   '/current',
