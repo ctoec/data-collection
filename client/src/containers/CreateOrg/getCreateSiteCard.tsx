@@ -22,30 +22,6 @@ export const getNewSiteCard = (card: Partial<Site>, numberOnPage: number) => {
               return e.target.value;
             }}
           />
-          <div className="grid-row grid-gap">
-            <div className="tablet:grid-col-6">
-              <TextInput
-                label="Facility code (optional)"
-                id={`new-site-${numberOnPage}-facility-input`}
-                type="input"
-                onChange={(e: any) => {
-                  card.facilityCode = parseInt(e.target.value);
-                  return e.target.value;
-                }}
-              />
-            </div>
-            <div className="tablet:grid-col-6">
-              <TextInput
-                label="License number (optional)"
-                id={`new-site-${numberOnPage}-license-input`}
-                type="input"
-                onChange={(e: any) => {
-                  card.licenseNumber = parseInt(e.target.value);
-                  return e.target.value;
-                }}
-              />
-            </div>
-          </div>
         </div>
         <div className="tablet:grid-col-3">
           <Select
@@ -66,15 +42,6 @@ export const getNewSiteCard = (card: Partial<Site>, numberOnPage: number) => {
               return e.target.value;
             }}
           />
-          <TextInput
-            label="Registry id (optional)"
-            id={`new-site-${numberOnPage}-registry-input`}
-            type="input"
-            onChange={(e: any) => {
-              card.registryId = parseInt(e.target.value);
-              return e.target.value;
-            }}
-          />
         </div>
         <div className="tablet:grid-col-3">
           <Select
@@ -89,6 +56,43 @@ export const getNewSiteCard = (card: Partial<Site>, numberOnPage: number) => {
               return e.target.value;
             }}
           />
+        </div>
+      </div>
+      <div className="display-flex flex-row grid-row grid-gap">
+        <div className="tablet:grid-col-3">
+          <TextInput
+            label="Facility code (optional)"
+            id={`new-site-${numberOnPage}-facility-input`}
+            type="input"
+            onChange={(e: any) => {
+              card.facilityCode = parseInt(e.target.value);
+              return e.target.value;
+            }}
+          />
+        </div>
+        <div className="tablet:grid-col-3">
+          <TextInput
+            label="License number (optional)"
+            id={`new-site-${numberOnPage}-license-input`}
+            type="input"
+            onChange={(e: any) => {
+              card.licenseNumber = parseInt(e.target.value);
+              return e.target.value;
+            }}
+          />
+        </div>
+        <div className="tablet:grid-col-3">
+          <TextInput
+            label="Registry id (optional)"
+            id={`new-site-${numberOnPage}-registry-input`}
+            type="input"
+            onChange={(e: any) => {
+              card.registryId = parseInt(e.target.value);
+              return e.target.value;
+            }}
+          />
+        </div>
+        <div className="tablet:grid-col-3">
           <TextInput
             label="NAEYC ID (optional)"
             id={`new-site-${numberOnPage}-naeyc-input`}
@@ -99,7 +103,7 @@ export const getNewSiteCard = (card: Partial<Site>, numberOnPage: number) => {
             }}
           />
         </div>
-      </div>
+      </div>        
     </Card>
   );
 };
