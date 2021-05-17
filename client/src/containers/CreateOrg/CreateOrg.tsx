@@ -80,13 +80,8 @@ const CreateOrg: React.FC = () => {
   };
   const [newSites, setNewSites] = useState<Partial<Site>[]>([{ ...emptySite }]);
   const addNewSite = () => {
-    setNewSites(o => [...o, { ...emptySite }]);
+    setNewSites(currentSites => [...currentSites, { ...emptySite }]);
   }
-  useEffect(() => {
-    if(newSites.length === 0) {
-      addNewSite();
-    }
-  }, [newSites]);
 
   return (
     <>
