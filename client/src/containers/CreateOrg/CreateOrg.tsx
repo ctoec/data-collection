@@ -1,5 +1,6 @@
 import { Button, Divider, TextInput } from '@ctoec/component-library';
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
@@ -15,6 +16,7 @@ const CreateOrg: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
   const [newOrgName, setNewOrgName] = useState("");
   const [alertElements, setAlerts] = useAlerts();
+  const history = useHistory();
 
   const createNewOrg = async () => {
 
@@ -49,11 +51,15 @@ const CreateOrg: React.FC = () => {
       { accessToken, jsonParse: false }
     )
       .then((_) => {
-        setAlerts([{
-          type: 'success',
-          heading: 'Organization created',
-          text: `Organization "${newOrgName}" was successfully created!`
-        }]);
+        history.push('/organizations', {
+          alerts: [
+            {
+              type: 'success',
+              heading: 'Organization created',
+              text: `Organization "${newOrgName}" was successfully created!`
+            }
+          ]
+        })
       })
       .catch((err) => {
         const alertToSet = getErrorMessage(err);
