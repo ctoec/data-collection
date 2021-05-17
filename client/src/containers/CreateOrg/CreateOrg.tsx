@@ -19,9 +19,17 @@ const CreateOrg: React.FC = () => {
   const createNewOrg = async () => {
 
     // Don't even send an API request if a site card is missing
-    // some required info
+    // some required info, or there's no org name
+    if (newOrgName === "") {
+      setAlerts([{
+        type: 'error',
+        heading: 'Organization name is missing',
+        text: 'You must provide a valid organization name before submitting.'
+      }])
+      return
+    }
     const allSitesOkay = newSites.every(
-      (ns) => (ns.siteName !== '' && ns.titleI && ns.region)
+      (ns) => (ns.siteName !== '' && ns.titleI !== null && ns.region)
     );
     if (!allSitesOkay) {
       setAlerts([{
@@ -55,17 +63,18 @@ const CreateOrg: React.FC = () => {
     );
   };
 
-  const [newSites, setNewSites] = useState<Partial<Site>[]>([]);
+  const emptySite: Partial<Site> = {
+    siteName: '',
+    titleI: (null as unknown as boolean),
+    region: (null as unknown as Region),
+    facilityCode: undefined,
+    licenseNumber: undefined,
+    registryId: undefined,
+    naeycId: undefined,
+  };
+  const [newSites, setNewSites] = useState<Partial<Site>[]>([{ ...emptySite }]);
   const addNewSite = () => {
-    setNewSites(o => [...o, {
-      siteName: '',
-      titleI: (null as unknown as boolean),
-      region: (null as unknown as Region),
-      facilityCode: undefined,
-      licenseNumber: undefined,
-      registryId: undefined,
-      naeycId: undefined,
-    }]);
+    setNewSites(o => [...o, { ...emptySite }]);
   }
   useEffect(() => {
     if(newSites.length === 0) {
@@ -73,26 +82,9 @@ const CreateOrg: React.FC = () => {
     }
   }, [newSites]);
 
-  const siteSection = (
-    <>
-      <h2 className="margin-top-4">Sites</h2>
-      <Divider />
-      <p className="margin-top-2 margin-bottom-2">
-        Make sure each new site you create has a name, a Title I designation, and a selected region.
-      </p>
-      {newSites.map((card, idx) => (
-        getNewSiteCard(card, idx+1)
-      ))}
-      <Button
-        className="margin-top-2 margin-bottom-4"
-        text="Add another site"
-        onClick={addNewSite} />
-    </>
-  );
-
   return (
     <>
-      <div className="grid-container margin-top-2 margin-bottom-4">
+      <div className="container-with-bottom-margin grid-container margin-top-2">
         <BackButton location="/organizations" />
         {alertElements}
         <h1 ref={h1Ref}>Create Organization</h1>
@@ -111,7 +103,19 @@ const CreateOrg: React.FC = () => {
             return e.target.value;
           }}
         />
-        {siteSection}
+        <h2 className="margin-top-4">Sites</h2>
+        <Divider />
+        <p className="margin-top-2 margin-bottom-2">
+          Make sure each new site you create has a name, a Title I designation, and a selected region.
+        </p>
+        {newSites.map((card, idx) => (
+          getNewSiteCard(card, idx+1)
+        ))}
+        <Button
+          className="margin-top-2 margin-bottom-4"
+          text="Add another site"
+          onClick={addNewSite}
+        />
       </div>
       <FixedBottomBar>
         <Button text="Create organization" onClick={createNewOrg} />

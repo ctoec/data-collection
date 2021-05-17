@@ -6,7 +6,6 @@ import { OrganizationSummary } from '../../shared/payloads/OrganizationsResponse
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { OrganizationsTable } from './OrganizationsTable';
 import { apiGet } from '../../utils/api';
-import { Button } from '@ctoec/component-library';
 
 const Organizations: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -27,7 +26,9 @@ const Organizations: React.FC = () => {
           <h1 ref={h1Ref} className="margin-top-0 margin-bottom-4">
             Organizations
           </h1>
-          <Button text="Create new organization" href="/create-org" />
+          <a href="/create-org" className="usa-button">
+            Create new organization
+          </a>
           <div className="tablet:grid-col-12 margin-top-4">
             <OrganizationsTable orgs={data} />
           </div>
