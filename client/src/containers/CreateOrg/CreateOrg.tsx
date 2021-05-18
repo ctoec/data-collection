@@ -8,7 +8,7 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { Region, Site } from '../../shared/models';
 import { apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { getNewSiteCard } from './getCreateSiteCard';
+import { NewSiteFormCard } from './NewSiteFormCard';
 import { getErrorMessage } from './getErrorMessage';
 
 const CreateOrg: React.FC = () => {
@@ -109,8 +109,8 @@ const CreateOrg: React.FC = () => {
         <p className="margin-top-2 margin-bottom-2">
           Make sure each new site you create has a name, a Title I designation, and a selected region.
         </p>
-        {newSites.map((card, idx) => (
-          getNewSiteCard(card, idx+1)
+        {newSites.map((ns, idx) => (
+          <NewSiteFormCard newSite={ns} numberOnPage={idx+1} />
         ))}
         <Button
           className="margin-top-2 margin-bottom-4"
