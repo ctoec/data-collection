@@ -1,11 +1,8 @@
 import { getManager, In } from 'typeorm';
 import { ConnectionPool } from 'mssql';
-import {
-  User
-} from '../../../entity';
-import { DBConnectionOpts } from './upsert';
+import { User } from '../../../entity';
 
-import { keyBy } from 'lodash';
+import { DBConnectionOpts } from './config';
 
 interface BasicWingedKeysUser {
   id: string;
@@ -17,10 +14,14 @@ interface WingedKeysUsersMap {
   [key: string]: BasicWingedKeysUser;
 }
 
-export async function updateFawkesUsers(wingedkeysDbConnectionOpts: DBConnectionOpts) {
+export async function updateFawkesUsers(
+  wingedkeysDbConnectionOpts: DBConnectionOpts
+) {
   let updatedCount = 0;
 
-  const wkUsersById: WingedKeysUsersMap = await getWingedKeysUsersById(wingedkeysDbConnectionOpts);
+  const wkUsersById: WingedKeysUsersMap = await getWingedKeysUsersById(
+    wingedkeysDbConnectionOpts
+  );
 
   let usersToUpdate = await getManager('script').find(User, {
     where: { wingedKeysId: In(Object.keys(wkUsersById)) },
@@ -37,14 +38,17 @@ export async function updateFawkesUsers(wingedkeysDbConnectionOpts: DBConnection
 
       let updatedUser: Partial<User> = {};
 
-      if (!!firstName && firstName !== user.firstName)  updatedUser.firstName = firstName;
-      if (!!lastName && lastName !== user.lastName)  updatedUser.lastName = lastName;
-      if (!!wingedKeysUser.email && wingedKeysUser.email !== user.email)  updatedUser.email = wingedKeysUser.email;
+      if (!!firstName && firstName !== user.firstName)
+        updatedUser.firstName = firstName;
+      if (!!lastName && lastName !== user.lastName)
+        updatedUser.lastName = lastName;
+      if (!!wingedKeysUser.email && wingedKeysUser.email !== user.email)
+        updatedUser.email = wingedKeysUser.email;
 
       if (!!Object.keys(updatedUser).length) {
         await getManager('script').save(User, {
           ...updatedUser,
-          wingedKeysId: wingedKeysUser.id
+          wingedKeysId: wingedKeysUser.id,
         });
 
         console.log(
@@ -57,16 +61,21 @@ export async function updateFawkesUsers(wingedkeysDbConnectionOpts: DBConnection
         );
       }
     } catch (err) {
-      console.error(`\tError updating user ${user.firstName} ${user.lastName}`, err);
+      console.error(
+        `\tError updating user ${user.firstName} ${user.lastName}`,
+        err
+      );
     }
   }
 
   console.log(`Successfully updated ${updatedCount} users!`);
-};
+}
 
 //////////////////////////////////////////////////////////////////////
 
-async function getWingedKeysUsersById(connectionOpts: DBConnectionOpts): Promise<WingedKeysUsersMap> {
+async function getWingedKeysUsersById(
+  connectionOpts: DBConnectionOpts
+): Promise<WingedKeysUsersMap> {
   let pool: ConnectionPool;
 
   try {
@@ -87,6 +96,6 @@ async function getWingedKeysUsersById(connectionOpts: DBConnectionOpts): Promise
   } catch (err) {
     console.error('Error fetching users from wingedkeys', err);
   } finally {
-    if(!!pool.close) pool.close();
+    if (!!pool.close) pool.close();
   }
 }

@@ -10,6 +10,7 @@ import {
 } from '../../../entity';
 import { parse } from '../utils';
 import { createWingedKeysUsers } from './wingedKeys';
+import { DBConnectionOpts, SiteConnectionOpts } from './config';
 
 export class UserRow {
   parentOrgNames: string = '';
@@ -19,19 +20,6 @@ export class UserRow {
 }
 
 export const USER_ROW_PROPS = Object.keys(new UserRow());
-
-export type SiteConnectionOpts = {
-  url: string;
-  user: string;
-  password: string;
-};
-
-export type DBConnectionOpts = {
-  server: string;
-  port: number;
-  user: string;
-  password: string;
-};
 
 export const createUserData = async (
   sheetData: WorkSheet,
