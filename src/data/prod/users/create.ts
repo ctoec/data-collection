@@ -42,7 +42,6 @@ export const createUserData = async (
   const parsedData = parse<UserRow>(sheetData, USER_ROW_PROPS);
 
   let createdCount = 0;
-  let updatedCount = 0;
 
   console.log(`Attempting to create ${parsedData.length} winged-keys users...`);
   await createWingedKeysUsers(
@@ -104,7 +103,6 @@ export const createUserData = async (
   }
 
   console.log(`Successfully created ${createdCount} users`);
-  console.log(`Successfully updated ${updatedCount} users`);
 };
 
 async function getWingedKeysIds(connectionOpts: DBConnectionOpts) {
