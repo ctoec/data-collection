@@ -74,7 +74,7 @@ export const createUserData = async (
             firstName: _firstName,
             lastName: _lastName,
             wingedKeysId,
-            email: row.email
+            email: row.email,
           })
         );
 
@@ -83,9 +83,9 @@ export const createUserData = async (
         );
         createdCount += 1;
       } else {
-          console.log(
-            `\tUser ${row.userName} with username ${row.email} already exists.`
-          );
+        console.log(
+          `\tUser ${row.userName} with username ${row.email} already exists.`
+        );
       }
 
       const somePermissionsCreated = await createOrgOrSitePermissions(
