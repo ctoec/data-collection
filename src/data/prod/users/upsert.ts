@@ -83,27 +83,9 @@ export const createUserData = async (
         );
         createdCount += 1;
       } else {
-        let updatedUser: Partial<User> = {};
-
-        if (!!_firstName && _firstName !== user.firstName)  updatedUser.firstName = _firstName;
-        if (!!_lastName && _lastName !== user.lastName)  updatedUser.lastName = _lastName;
-        if (!!row.email && row.email !== user.email)  updatedUser.email = row.email;
-
-        if (!!Object.keys(updatedUser).length) {
-          await getManager('script').save(User, {
-            ...updatedUser,
-            wingedKeysId
-          });
-  
           console.log(
-            `\Updated user for ${user.firstName} ${user.lastName} with app id ${user.id}`
+            `\tUser ${row.userName} with username ${row.email} already exists.`
           );
-          updatedCount += 1;
-        } else {
-          console.log(
-            `\tUser ${row.userName} with username ${row.email} already exists, and no updates have been specified.`
-          );
-        }
       }
 
       const somePermissionsCreated = await createOrgOrSitePermissions(
