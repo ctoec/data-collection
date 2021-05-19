@@ -53,13 +53,6 @@ const CreateOrg: React.FC = () => {
       return;
     }
 
-    //   const emptyFundingSpace: Partial<FundingSpace> = {
-    //   source: (null as unknown) as FundingSource,
-    //   ageGroup: (null as unknown) as AgeGroup,
-    //   capacity: undefined,
-    //   time: (null as unknown) as FundingTime,
-    // };
-
     const allFundingSpaceOkay = newFundingSpaces.every(
       (nfs) =>
         !!nfs.source &&
