@@ -17,6 +17,7 @@ import Help from './containers/Help/Help';
 import SupportRequest from './containers/Help/SupportRequest';
 import UploadWizard from './containers/Upload/UploadWizard';
 import Overview from './containers/Overview/Overview';
+import EditUser from './containers/Users/EditUser';
 import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
 import CreateOrg from './containers/CreateOrg/CreateOrg';
@@ -87,6 +88,11 @@ export const routes: RouteConfig[] = [
     component: CreateOrg,
     unauthorized: false,
     exact: true,
+  },
+  {
+    path: '/edit-user/:id',
+    component: EditUser,
+    unauthorized: false,
   },
   {
     path: '/home',
