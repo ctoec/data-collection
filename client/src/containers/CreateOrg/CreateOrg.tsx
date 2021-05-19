@@ -123,11 +123,16 @@ const CreateOrg: React.FC = () => {
   const [newFundingSpaces, setNewFundingSpaces] = useState<
     Partial<FundingSpace>[]
   >([{ ...emptyFundingSpace }]);
+
   const addNewFundingSpace = () => {
     setNewFundingSpaces((currentFundingSpaces) => [
       ...currentFundingSpaces,
       { ...emptyFundingSpace },
     ]);
+  };
+
+  const removeFundingSpace = () => {
+    setNewFundingSpaces(newFundingSpaces.slice(0, newFundingSpaces.length - 1));
   };
 
   return (
@@ -171,6 +176,15 @@ const CreateOrg: React.FC = () => {
         {newFundingSpaces.map((nfs, idx) => (
           <NewFundingSpaceCard newFundingSpace={nfs} numberOnPage={idx + 1} />
         ))}
+        {newFundingSpaces.length > 1 ? (
+          <Button
+            className="margin-top-2 margin-bottom-4"
+            text="Remove funding space"
+            onClick={removeFundingSpace}
+          />
+        ) : (
+          ''
+        )}
         <Button
           className="margin-top-2 margin-bottom-4"
           text="Add another funding space"
