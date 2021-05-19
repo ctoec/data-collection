@@ -3,7 +3,7 @@ import { getManager } from 'typeorm';
 import { User } from '../entity';
 import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/users';
-import { BadRequestError } from '../middleware/error/errors';
+import { ApiError, BadRequestError, InternalServerError } from '../middleware/error/errors';
 import { ForbiddenError } from '../middleware/error/errors';
 
 export const usersRouter = express.Router();
@@ -29,8 +29,22 @@ usersRouter.get(
       throw new ForbiddenError();
     }
     const users = await controller.getUsers();
-
     res.send(users);
+  })
+);
+
+usersRouter.get(
+  '/by-email/:email',
+  passAsyncError(async (req, res) => {
+    try {
+      const email = req.params['email'];
+      const users = await controller.getUsersByEmail(email);
+      res.send(users);
+    } catch (err) {
+      if (err instanceof ApiError) throw err;
+      console.error('Error finding user by email address: ', err);
+      throw new InternalServerError('Unable to find users for create organization.');
+    }
   })
 );
 

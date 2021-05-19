@@ -5,16 +5,23 @@ import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useAlerts } from '../../hooks/useAlerts';
-import { Region, Site } from '../../shared/models';
-import { apiPost } from '../../utils/api';
+import { Region, Site, User } from '../../shared/models';
+import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { NewSiteFormCard } from './NewSiteFormCard';
 import { getErrorMessage } from './getErrorMessage';
+import pluralize from 'pluralize';
 
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const [newOrgName, setNewOrgName] = useState("");
+  const [lookupUser, setLookupUser] = useState("");
+  const [foundUsers, setFoundUsers] = useState<User[]>([]);
+
+  // Need some extra state to control when to display the email lookup
+  // results, since the found users list already starts as empty
+  const [showSearchResults, setShowSearchResults] = useState(false);
   const [alertElements, setAlerts] = useAlerts();
   const history = useHistory();
 
@@ -69,6 +76,20 @@ const CreateOrg: React.FC = () => {
     );
   };
 
+  const searchForUsers = async () => {
+    if (lookupUser === "") return;
+    setShowSearchResults(false);
+    await apiGet(`/users/by-email/${lookupUser}`, accessToken)
+      .then((res) => {
+        setFoundUsers(res);
+        setShowSearchResults(true);
+      })
+      .catch((err) => {
+        console.error(err);
+      }
+    );
+  };
+
   const emptySite: Partial<Site> = {
     siteName: '',
     titleI: (null as unknown as boolean),
@@ -113,10 +134,59 @@ const CreateOrg: React.FC = () => {
           <NewSiteFormCard newSite={ns} numberOnPage={idx+1} />
         ))}
         <Button
-          className="margin-top-2 margin-bottom-4"
+          className="margin-top-2"
           text="Add another site"
           onClick={addNewSite}
         />
+        <h2 className="margin-top-4">Users and permissions</h2>
+        <Divider />
+        <p className="margin-top-2 margin-bottom-2">
+          If users have not already been created for this organization,
+          you may skip this step and add users later.
+        </p>
+        <TextInput
+          label="Search for user to add to organization"
+          id='new-org-user-search'
+          type="input"
+          onChange={(e: any) => {
+            setLookupUser(e.target.value);
+            return e.target.value;
+          }}
+        />
+        <Button
+          className="margin-top-2 margin-bottom-4"
+          text="Search"
+          onClick={searchForUsers}
+        />
+        {showSearchResults && (
+          <>
+            <p className="margin-bottom-2 text-bold">
+              {
+                `We found ${foundUsers.length === 0
+                  ? '0 users'
+                  : pluralize('user', foundUsers.length, true)
+                } matching your criteria.`
+              }
+            </p>
+            <div className="margin-bottom-4">
+              {foundUsers.map((u) => (
+                <div className="grid-row grid-gap">
+                  <div className="tablet:grid-col-4">
+                    {u.email}
+                  </div>
+                  <div className="tablet:grid-col-2">
+                    <Button
+                      appearance="unstyled"
+                      text="Add user"
+                      // TODO: Add functionality to actually add this user to the org in later ticket
+                      onClick={() => {}}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
       <FixedBottomBar>
         <Button text="Create organization" onClick={createNewOrg} />

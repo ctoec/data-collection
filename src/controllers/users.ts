@@ -41,3 +41,13 @@ export const getUsers = async (): Promise<User[]> =>
     JOIN organization o on op.organizationId = o.id
     GROUP BY u.id, u.lastName, u.firstName, u.email`
   );
+
+  /**
+   * Finds all users in the DB whose email is an exact match
+   * for the provided string.
+   */
+export const getUsersByEmail = async (email: string) => {
+  const users = await getManager().find(User, { where: { email: email } });
+  const usersWithValidEmails = (users || []).filter((u) => u.email && u.email !== "");
+  return usersWithValidEmails;
+};
