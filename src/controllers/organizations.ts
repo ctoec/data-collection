@@ -49,6 +49,22 @@ export async function createOrganization(
     )
   );
   newOrg.sites = createdSites;
+
+  const createdFundingSpaces: FundingSpace[] = await Promise.all(
+    fundingSpaces.map(
+      async (f: Partial<FundingSpace>) =>
+        await getManager().save(
+          getManager().create(FundingSpace, {
+            source: f.source,
+            ageGroup: f.ageGroup,
+            capacity: f.capacity,
+            time: f.time,
+            organizationId: newOrg.id,
+          })
+        )
+    )
+  );
+  newOrg.fundingSpaces = createdFundingSpaces;
   await getManager().save(newOrg);
 }
 

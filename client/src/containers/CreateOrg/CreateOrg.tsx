@@ -17,7 +17,7 @@ import { apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { NewSiteFormCard } from './NewSiteFormCard';
 import { getErrorMessage } from './getErrorMessage';
-import { getNewFundingSpaceCard } from './getCreateFundingSpaceCard';
+import { NewFundingSpaceCard } from './getCreateFundingSpaceCard';
 
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -48,6 +48,32 @@ const CreateOrg: React.FC = () => {
           type: 'error',
           heading: 'Site is incomplete',
           text: `One or more requested sites is missing required information.`,
+        },
+      ]);
+      return;
+    }
+
+    //   const emptyFundingSpace: Partial<FundingSpace> = {
+    //   source: (null as unknown) as FundingSource,
+    //   ageGroup: (null as unknown) as AgeGroup,
+    //   capacity: undefined,
+    //   time: (null as unknown) as FundingTime,
+    // };
+
+    const allFundingSpaceOkay = newFundingSpaces.every(
+      (nfs) =>
+        !!nfs.source &&
+        !!nfs.ageGroup &&
+        (!!nfs.capacity || nfs.capacity === 0) &&
+        !!nfs.time
+    );
+
+    if (!allFundingSpaceOkay) {
+      setAlerts([
+        {
+          type: 'error',
+          heading: 'Funding space is incomplete',
+          text: `One or more requested funding spaces is missing required information.`,
         },
       ]);
       return;
@@ -101,9 +127,9 @@ const CreateOrg: React.FC = () => {
     time: (null as unknown) as FundingTime,
   };
 
-  const [newFundingSpaces, setNewFundingSpaces] = useState<Partial<Site>[]>([
-    { ...emptyFundingSpace },
-  ]);
+  const [newFundingSpaces, setNewFundingSpaces] = useState<
+    Partial<FundingSpace>[]
+  >([{ ...emptyFundingSpace }]);
   const addNewFundingSpace = () => {
     setNewFundingSpaces((currentFundingSpaces) => [
       ...currentFundingSpaces,
@@ -149,9 +175,9 @@ const CreateOrg: React.FC = () => {
 
         <h2 className="margin-top-4">Funding spaces</h2>
         <Divider />
-        {newFundingSpaces.map((card, idx) =>
-          getNewFundingSpaceCard(card, idx + 1)
-        )}
+        {newFundingSpaces.map((nfs, idx) => (
+          <NewFundingSpaceCard newFundingSpace={nfs} numberOnPage={idx + 1} />
+        ))}
         <Button
           className="margin-top-2 margin-bottom-4"
           text="Add another funding space"
