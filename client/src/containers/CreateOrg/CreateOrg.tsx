@@ -15,9 +15,9 @@ import {
 import { FundingSpace } from '../../shared/models/db/FundingSpace';
 import { apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
-import { getNewSiteCard } from './getCreateSiteCard';
-import { getNewFundingSpaceCard } from './getCreateFundingSpaceCard';
+import { NewSiteFormCard } from './NewSiteFormCard';
 import { getErrorMessage } from './getErrorMessage';
+import { getNewFundingSpaceCard } from './getCreateFundingSpaceCard';
 
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -138,7 +138,9 @@ const CreateOrg: React.FC = () => {
           Make sure each new site you create has a name, a Title I designation,
           and a selected region.
         </p>
-        {newSites.map((card, idx) => getNewSiteCard(card, idx + 1))}
+        {newSites.map((ns, idx) => (
+          <NewSiteFormCard newSite={ns} numberOnPage={idx + 1} />
+        ))}
         <Button
           className="margin-top-2 margin-bottom-4"
           text="Add another site"

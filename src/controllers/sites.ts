@@ -30,9 +30,8 @@ export async function getSites(
  * @returns 
  */
 export async function areSiteNamesUnique(siteNames: string[]) {
-  const foundSites = await Promise.all(siteNames.map(
-    async (siteName) => await getManager().findOne(
-      Site, { where: { siteName: siteName } }
-  )));
-  return foundSites.every((s) => !s);
+  const foundSites = await getManager().find(
+    Site, { where: { siteName: In(siteNames) } }
+  )
+  return !foundSites?.length;
 }
