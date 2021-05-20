@@ -118,13 +118,17 @@ const CreateOrg: React.FC = () => {
     ageGroup: (null as unknown) as AgeGroup,
     capacity: undefined,
     time: (null as unknown) as FundingTime,
+    display: true,
   };
 
   const [newFundingSpaces, setNewFundingSpaces] = useState<
     Partial<FundingSpace>[]
   >([{ ...emptyFundingSpace }]);
 
+  let sortCount = 0;
+
   const addNewFundingSpace = () => {
+    sortCount++;
     setNewFundingSpaces((currentFundingSpaces) => [
       ...currentFundingSpaces,
       { ...emptyFundingSpace },
@@ -138,8 +142,11 @@ const CreateOrg: React.FC = () => {
       })
     );
     setNewFundingSpaces(
-      newFundingSpaces.filter((fs, index, arr) => {
-        return index !== idx - 1;
+      newFundingSpaces.map((fs, index) => {
+        if (index == idx - 1) {
+          fs.display = false;
+        }
+        return fs;
       })
     );
     e.preventDefault();
