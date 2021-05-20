@@ -1,5 +1,5 @@
 import { Button, Divider, TextInput } from '@ctoec/component-library';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
@@ -31,7 +31,7 @@ const CreateOrg: React.FC = () => {
       return
     }
     const allSitesOkay = newSites.every(
-      (ns) => (ns.siteName !== '' && ns.titleI !== null && ns.region)
+      (ns) => (ns.siteName !== '' && ns.titleI !== undefined && ns.region)
     );
     if (!allSitesOkay) {
       setAlerts([{
@@ -71,7 +71,6 @@ const CreateOrg: React.FC = () => {
 
   const emptySite: Partial<Site> = {
     siteName: '',
-    titleI: (null as unknown as boolean),
     region: (null as unknown as Region),
     facilityCode: undefined,
     licenseNumber: undefined,
@@ -81,6 +80,9 @@ const CreateOrg: React.FC = () => {
   const [newSites, setNewSites] = useState<Partial<Site>[]>([{ ...emptySite }]);
   const addNewSite = () => {
     setNewSites(currentSites => [...currentSites, { ...emptySite }]);
+  }
+  const removeLastSite = () => {
+    setNewSites(currentSites => currentSites.slice(0, currentSites.length - 1));
   }
 
   return (
@@ -112,15 +114,21 @@ const CreateOrg: React.FC = () => {
         {newSites.map((ns, idx) => (
           <NewSiteFormCard newSite={ns} numberOnPage={idx+1} />
         ))}
-        <Button
-          className="margin-top-2 margin-bottom-4"
-          text="Add another site"
-          onClick={addNewSite}
-        />
+        <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
+          <Button
+            text="Add another site"
+            onClick={addNewSite}
+          />
+          <Button
+            appearance="outline"
+            text="Remove last site"
+            onClick={removeLastSite}
+          />
+        </div>
       </div>
       <FixedBottomBar>
         <Button text="Create organization" onClick={createNewOrg} />
-        <Button text="Cancel" href="/" appearance="outline"/>
+        <Button text="Cancel" href="/organizations" appearance="outline"/>
       </FixedBottomBar>
     </>
   );
