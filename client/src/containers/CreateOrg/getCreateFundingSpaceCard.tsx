@@ -13,6 +13,7 @@ import { FundingSpace } from '../../shared/models/db/FundingSpace';
 type NewFundingSpaceFormCardProps = {
   newFundingSpace: Partial<FundingSpace>;
   numberOnPage: number;
+  remove: Function;
 };
 
 /**
@@ -24,6 +25,7 @@ type NewFundingSpaceFormCardProps = {
 export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
   newFundingSpace,
   numberOnPage,
+  remove,
 }) => {
   const [fundingTimes, setFundingTimes] = useState<FundingTime[]>([]);
 
@@ -34,6 +36,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
       }
     });
   };
+  console.log('rendering : ', newFundingSpace);
 
   return (
     <Card>
@@ -46,6 +49,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
               text: r,
               value: r,
             }))}
+            defaultValue={newFundingSpace.source ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.source = e.target.value;
               updateFundingTime(e.target.value);
@@ -61,6 +65,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
               text: r,
               value: r,
             }))}
+            defaultValue={newFundingSpace.ageGroup ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.ageGroup = e.target.value;
               return e.target.value;
@@ -75,6 +80,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
               text: f,
               value: f,
             }))}
+            defaultValue={newFundingSpace.time ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.time = e.target.value;
               return e.target.value;
@@ -86,11 +92,24 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             label={`Capacity`}
             id={`new-funding-space-${numberOnPage}-capacity-input`}
             type="input"
+            value={newFundingSpace.capacity ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.capacity = e.target.value;
               return e.target.value;
             }}
           />
+        </div>
+      </div>
+      <div className="display-flex flex-row grid-row grid-gap">
+        <div className="tablet:grid-col-3 margin-top-3">
+          <a
+            href="#"
+            onClick={(e) => {
+              remove(e, numberOnPage);
+            }}
+          >
+            Remove
+          </a>
         </div>
       </div>
     </Card>

@@ -131,8 +131,18 @@ const CreateOrg: React.FC = () => {
     ]);
   };
 
-  const removeFundingSpace = () => {
-    setNewFundingSpaces(newFundingSpaces.slice(0, newFundingSpaces.length - 1));
+  const removeFundingSpace = (e: Event, idx: number) => {
+    console.log(
+      newFundingSpaces.filter((fs, index, arr) => {
+        return index !== idx - 1;
+      })
+    );
+    setNewFundingSpaces(
+      newFundingSpaces.filter((fs, index, arr) => {
+        return index !== idx - 1;
+      })
+    );
+    e.preventDefault();
   };
 
   return (
@@ -174,17 +184,21 @@ const CreateOrg: React.FC = () => {
         <h2 className="margin-top-4">Funding spaces</h2>
         <Divider />
         {newFundingSpaces.map((nfs, idx) => (
-          <NewFundingSpaceCard newFundingSpace={nfs} numberOnPage={idx + 1} />
+          <NewFundingSpaceCard
+            newFundingSpace={nfs}
+            numberOnPage={idx + 1}
+            remove={removeFundingSpace}
+          />
         ))}
-        {newFundingSpaces.length > 1 ? (
+        {/* {newFundingSpaces.length > 1 ? (
           <Button
             className="margin-top-2 margin-bottom-4"
             text="Remove funding space"
-            onClick={removeFundingSpace}
+            // onClick={removeFundingSpace}
           />
         ) : (
           ''
-        )}
+        )} */}
         <Button
           className="margin-top-2 margin-bottom-4"
           text="Add another funding space"
