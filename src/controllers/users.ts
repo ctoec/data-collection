@@ -48,6 +48,5 @@ export const getUsers = async (): Promise<User[]> =>
    */
 export const getUsersByEmail = async (email: string) => {
   const users = await getManager().find(User, { where: { email: email } });
-  const usersWithValidEmails = (users || []).filter((u) => u.email && u.email !== "");
-  return usersWithValidEmails;
+  return users;
 };

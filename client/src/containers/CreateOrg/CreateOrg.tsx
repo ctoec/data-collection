@@ -1,5 +1,5 @@
 import { Button, Divider, TextInput } from '@ctoec/component-library';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
@@ -11,12 +11,12 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { NewSiteFormCard } from './NewSiteFormCard';
 import { getErrorMessage } from './getErrorMessage';
 import pluralize from 'pluralize';
+// import { SearchBar } from './SearchBar';
 
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
   const [newOrgName, setNewOrgName] = useState("");
-  const [lookupUser, setLookupUser] = useState("");
   const [foundUsers, setFoundUsers] = useState<User[]>([]);
 
   // Need some extra state to control when to display the email lookup
@@ -76,16 +76,16 @@ const CreateOrg: React.FC = () => {
     );
   };
 
-  const searchForUsers = async () => {
-    if (lookupUser === "") return;
+  const searchForUsers = async (query: string) => {
     setShowSearchResults(false);
-    await apiGet(`/users/by-email/${lookupUser}`, accessToken)
+    await apiGet(`/users/by-email/${query}`, accessToken)
       .then((res) => {
         setFoundUsers(res);
         setShowSearchResults(true);
       })
       .catch((err) => {
         console.error(err);
+        throw new Error(err);
       }
     );
   };
@@ -144,28 +144,18 @@ const CreateOrg: React.FC = () => {
           If users have not already been created for this organization,
           you may skip this step and add users later.
         </p>
-        <TextInput
-          label="Search for user to add to organization"
-          id='new-org-user-search'
-          type="input"
-          onChange={(e: any) => {
-            setLookupUser(e.target.value);
-            return e.target.value;
-          }}
-        />
-        <Button
-          className="margin-top-2 margin-bottom-4"
-          text="Search"
-          onClick={searchForUsers}
-        />
+        {/* <SearchBar
+          id="new-org-user-search"
+          labelText="Search for user to add to organization"
+          placeholderText="Search"
+          onSearch={searchForUsers}
+          className="tablet:grid-col-6"
+        /> */}
         {showSearchResults && (
           <>
             <p className="margin-bottom-2 text-bold">
               {
-                `We found ${foundUsers.length === 0
-                  ? '0 users'
-                  : pluralize('user', foundUsers.length, true)
-                } matching your criteria.`
+                `We found ${pluralize('user', foundUsers.length, true)} matching your criteria.`
               }
             </p>
             <div className="margin-bottom-4">
