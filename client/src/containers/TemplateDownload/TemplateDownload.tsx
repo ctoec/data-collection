@@ -19,17 +19,10 @@ const TemplateDownload: React.FC = () => {
       <div className="grid-row grid-gap border-bottom border-base-lighter padding-bottom-2">
         <div className="tablet:grid-col-8">
           <h1 ref={h1Ref}>File upload template</h1>
-          {lastUpdated && (
-            <p>
-              Last updated:{' '}
-              <span className="text-bold">
-                {lastUpdated.format('MMMM DD, YYYY')}
-              </span>
-            </p>
-          )}
           <p>
-            You can use this template to upload many enrollment records to ECE
-            Reporter.
+            Use this template to upload all of your many enrollment records to
+            ECE Reporter. Keep in mind that you need to use this template to
+            enter your data — other formats won’t work.
           </p>
           <CSVExcelDownloadButton
             fileType="xlsx"
