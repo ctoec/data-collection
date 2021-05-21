@@ -118,7 +118,6 @@ const CreateOrg: React.FC = () => {
     ageGroup: (null as unknown) as AgeGroup,
     capacity: undefined,
     time: (null as unknown) as FundingTime,
-    display: true,
   };
 
   const [newFundingSpaces, setNewFundingSpaces] = useState<
@@ -135,21 +134,13 @@ const CreateOrg: React.FC = () => {
     ]);
   };
 
-  const removeFundingSpace = (e: Event, idx: number) => {
-    console.log(
-      newFundingSpaces.filter((fs, index, arr) => {
-        return index !== idx - 1;
-      })
-    );
-    setNewFundingSpaces(
-      newFundingSpaces.map((fs, index) => {
-        if (index == idx - 1) {
-          fs.display = false;
-        }
-        return fs;
-      })
-    );
-    e.preventDefault();
+  const removeFundingSpace = (idx: number) => {
+    setNewFundingSpaces((currentSites) => {
+      const list = [...currentSites];
+      list.splice(idx - 1, 1);
+      console.log('new list', list);
+      return list;
+    });
   };
 
   return (
@@ -190,13 +181,18 @@ const CreateOrg: React.FC = () => {
 
         <h2 className="margin-top-4">Funding spaces</h2>
         <Divider />
-        {newFundingSpaces.map((nfs, idx) => (
-          <NewFundingSpaceCard
-            newFundingSpace={nfs}
-            numberOnPage={idx + 1}
-            remove={removeFundingSpace}
-          />
-        ))}
+        {newFundingSpaces.map((nfs, idx) => {
+          if (nfs) {
+            return (
+              <NewFundingSpaceCard
+                newFundingSpace={nfs}
+                // key={nfs.toString() + idx}
+                numberOnPage={idx + 1}
+                remove={removeFundingSpace}
+              />
+            );
+          }
+        })}
         {/* {newFundingSpaces.length > 1 ? (
           <Button
             className="margin-top-2 margin-bottom-4"
