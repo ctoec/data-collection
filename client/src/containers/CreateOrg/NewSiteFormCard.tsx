@@ -1,4 +1,5 @@
 import { Card, Form, Select, TextInput } from '@ctoec/component-library';
+import { NumberInput } from 'carbon-components-react';
 import React from 'react';
 import { Region, Site } from '../../shared/models';
 
@@ -19,106 +20,83 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
 }) => {
   return (
     <Card>
-      <Form<Partial<Site>>
-        className="full-width-form"
-        data={newSite}
-        onSubmit={() => {}}
-        autoComplete="off"
-      >
-        <div className="display-flex flex-row grid-row grid-gap">
-          <div className="tablet:grid-col-6">
-            <TextInput
-              label={`Site Name #${numberOnPage}`}
-              id={`new-site-${numberOnPage}-name-input`}
-              type="input"
-              onChange={(e: any) => {
-                newSite.siteName = e.target.value;
-                return e.target.value;
-              }}
-            />
-          </div>
-          <div className="tablet:grid-col-3">
-            <Select
-              id={`new-site-${numberOnPage}-title1-select`}
-              label="Title I"
-              options={[
-                {
-                  text: 'Yes',
-                  value: 'Yes'
-                },
-                {
-                  text: 'No',
-                  value: 'No'
-                }
-              ]}
-              onChange={(e: any) => {
-                newSite.titleI = e.target.value === 'Yes' ? true : false;
-                return e.target.value;
-              }}
-            />
-          </div>
-          <div className="tablet:grid-col-3">
-            <Select
-              id={`new-site-${numberOnPage}-region-select`}
-              label="Region"
-              options={Object.values(Region).map((r) => ({
-                text: r,
-                value: r
-              }))}
-              onChange={(e: any) => {
-                newSite.region = e.target.value;
-                return e.target.value;
-              }}
-            />
-          </div>
+      <div className="display-flex flex-row grid-row grid-gap">
+        <div className="tablet:grid-col-6">
+          <TextInput
+            label={`Site Name #${numberOnPage}`}
+            id={`new-site-${numberOnPage}-name-input`}
+            type="input"
+            onChange={(e: any) => {
+              newSite.siteName = e.target.value;
+              return e.target.value;
+            }}
+          />
         </div>
-        <div className="display-flex flex-row grid-row grid-gap">
-          <div className="tablet:grid-col-3">
-            <TextInput
-              label="Facility code (optional)"
-              id={`new-site-${numberOnPage}-facility-input`}
-              type="input"
-              onChange={(e: any) => {
-                newSite.facilityCode = parseInt(e.target.value);
-                return e.target.value;
-              }}
-            />
-          </div>
-          <div className="tablet:grid-col-3">
-            <TextInput
-              label="License number (optional)"
-              id={`new-site-${numberOnPage}-license-input`}
-              type="input"
-              onChange={(e: any) => {
-                newSite.licenseNumber = parseInt(e.target.value);
-                return e.target.value;
-              }}
-            />
-          </div>
-          <div className="tablet:grid-col-3">
-            <TextInput
-              label="Registry id (optional)"
-              id={`new-site-${numberOnPage}-registry-input`}
-              type="input"
-              onChange={(e: any) => {
-                newSite.registryId = parseInt(e.target.value);
-                return e.target.value;
-              }}
-            />
-          </div>
-          <div className="tablet:grid-col-3">
-            <TextInput
-              label="NAEYC ID (optional)"
-              id={`new-site-${numberOnPage}-naeyc-input`}
-              type="input"
-              onChange={(e: any) => {
-                newSite.naeycId = parseInt(e.target.value);
-                return e.target.value;
-              }}
-            />
-          </div>
+        <div className="tablet:grid-col-3">
+          <Select
+            id={`new-site-${numberOnPage}-title1-select`}
+            label="Title I"
+            options={[
+              {
+                text: 'Yes',
+                value: 'Yes'
+              },
+              {
+                text: 'No',
+                value: 'No'
+              }
+            ]}
+            onChange={(e: any) => {
+              newSite.titleI = e.target.value === 'Yes' ? true : false;
+              return e.target.value;
+            }}
+          />
         </div>
-      </Form>
+        <div className="tablet:grid-col-3">
+          <Select
+            id={`new-site-${numberOnPage}-region-select`}
+            label="Region"
+            options={Object.values(Region).map((r) => ({
+              text: r,
+              value: r
+            }))}
+            onChange={(e: any) => {
+              newSite.region = e.target.value;
+              return e.target.value;
+            }}
+          />
+        </div>
+      </div>
+      <div className="display-flex flex-row grid-row grid-gap">
+        <div className="tablet:grid-col-3">
+          <NumberInput
+            label="Facility code (optional)"
+            id={`new-site-${numberOnPage}-facility-input`}
+            value={newSite.facilityCode ?? ""}
+          />
+        </div>
+        <div className="tablet:grid-col-3">
+          <NumberInput
+            label="License number (optional)"
+            id={`new-site-${numberOnPage}-license-input`}
+            value={newSite.licenseNumber ?? ""}
+          />
+        </div>
+        <div className="tablet:grid-col-3">
+          <NumberInput
+            label="Registry id (optional)"
+            id={`new-site-${numberOnPage}-registry-input`}
+            value={newSite.registryId ?? ""}
+          />
+        </div>
+        <div className="tablet:grid-col-3">
+          <NumberInput
+            label="NAEYC ID (optional)"
+            id={`new-site-${numberOnPage}-naeyc-input`}
+            value={newSite.naeycId ?? ""}
+          />
+        </div>
+      </div>
     </Card>
   );
 };
