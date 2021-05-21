@@ -72,28 +72,60 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
           <NumberInput
             label="Facility code (optional)"
             id={`new-site-${numberOnPage}-facility-input`}
-            value={newSite.facilityCode ?? ""}
+            value={""}
+            onChange={(e: any) => {
+              newSite.facilityCode = parseInt(e.target.value);
+              return e.target.value;
+            }}
+            allowEmpty={true}
+            //  @ts-ignore
+            hideSteppers={true}
+            light={true}
           />
         </div>
         <div className="tablet:grid-col-3">
           <NumberInput
             label="License number (optional)"
             id={`new-site-${numberOnPage}-license-input`}
-            value={newSite.licenseNumber ?? ""}
+            value={""}
+            onChange={(e: any) => {
+              newSite.licenseNumber = parseInt(e.target.value);
+              return e.target.value;
+            }}
+            allowEmpty={true}
+            //  @ts-ignore
+            hideSteppers={true}
+            light={true}
           />
         </div>
         <div className="tablet:grid-col-3">
           <NumberInput
             label="Registry id (optional)"
             id={`new-site-${numberOnPage}-registry-input`}
-            value={newSite.registryId ?? ""}
+            value={""}
+            onChange={(e: any) => {
+              newSite.registryId = parseInt(e.target.value);
+              return e.target.value;
+            }}
+            allowEmpty={true}
+            //  @ts-ignore
+            hideSteppers={true}
+            light={true}
           />
         </div>
         <div className="tablet:grid-col-3">
           <NumberInput
             label="NAEYC ID (optional)"
             id={`new-site-${numberOnPage}-naeyc-input`}
-            value={newSite.naeycId ?? ""}
+            value={""}
+            onChange={(e: any) => {
+              newSite.naeycId = parseInt(e.target.value);
+              return e.target.value;
+            }}
+            allowEmpty={true}
+            //  @ts-ignore
+            hideSteppers={true}
+            light={true}
           />
         </div>
       </div>
