@@ -1,4 +1,4 @@
-import { Card, Select, TextInput } from '@ctoec/component-library';
+import { Card, TextInput, Button, Select } from '@ctoec/component-library';
 import React, { useState, useEffect } from 'react';
 import {
   Region,
@@ -43,7 +43,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
       <div className="display-flex flex-row grid-row grid-gap">
         <div className="tablet:grid-col-3">
           <Select
-            id={`new-funding-space-${numberOnPage}-funding-source-select`}
+            id={`new-funding-space-${numberOnPage}-${new Date().getTime()}-funding-source-select`}
             label="Funding source"
             options={Object.values(FundingSource).map((r) => ({
               text: r,
@@ -51,6 +51,11 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             }))}
             defaultValue={newFundingSpace.source ?? undefined}
             onChange={(e: any) => {
+              console.log('funding space e.target.value: ', e.target.value);
+              console.log(
+                'funding space newFundingSpace.source: ',
+                newFundingSpace.source
+              );
               newFundingSpace.source = e.target.value;
               updateFundingTime(e.target.value);
               return e.target.value;
@@ -102,14 +107,14 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
       </div>
       <div className="display-flex flex-row grid-row grid-gap">
         <div className="tablet:grid-col-3 margin-top-3">
-          <a
-            href="#"
-            onClick={(e) => {
-              remove(e, numberOnPage);
+          <Button
+            className="margin-top-2 margin-bottom-4"
+            appearance="unstyled"
+            text="Remove"
+            onClick={() => {
+              remove(numberOnPage);
             }}
-          >
-            Remove
-          </a>
+          />
         </div>
       </div>
     </Card>
