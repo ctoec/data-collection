@@ -29,15 +29,6 @@ import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { getChildrenWithErrorsAlert } from './rosterUtils/getChildrenWithErrorsAlert';
 import { DataCompleteModal } from './DataCompleteModal';
 
-// Define a constant for the alert that shows once an organization
-// has submitted its data to OEC
-const SUBMITTED: AlertProps = {
-  text:
-    'Make revisions and updates, such as new enrollments, directly in your ECE reporter roster.',
-  heading: 'You completed your July to December data collection!',
-  type: 'info',
-};
-
 const Roster: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
@@ -74,12 +65,7 @@ const Roster: React.FC = () => {
       activeOrgId
     );
     setAlerts((_alerts) => [
-      isSubmitted ? SUBMITTED : undefined,
-      ..._alerts.filter(
-        (a) =>
-          a?.heading !== childrenWithErrorsAlert?.heading &&
-          a?.heading !== SUBMITTED.heading
-      ),
+      ..._alerts.filter((a) => a?.heading !== childrenWithErrorsAlert?.heading),
       childrenWithErrorsAlert,
     ]);
   }, [
@@ -143,8 +129,40 @@ const Roster: React.FC = () => {
           closeModal={() => setSubmittedModalOpen(false)}
         />
         {alertElements}
+
         <div className="grid-row flex-align-center">
           <div className="tablet:grid-col-9">
+            <p>
+              The Roster allows you to view and update the enrollment data you
+              submitted previously. Using the Roster, you can:
+            </p>
+            <ul className="margin-left-2 bx--list--unordered">
+              <li className="line-height-body-4 bx--list__item">
+                Review current enrollment, see enrollment data from past months,
+                and export data
+              </li>
+              <li className="line-height-body-4 bx--list__item">
+                Add a new child to your program
+              </li>
+              <li className="line-height-body-4 bx--list__item">
+                Withdraw a child from your program or delete their entry from
+                you records
+              </li>
+              <li className="line-height-body-4 bx--list__item">
+                Make changes to information about children in your program —
+                such as their address, family income, and more
+              </li>
+            </ul>
+            <p>
+              Learn more about using the Roster in our{' '}
+              <a
+                target="_blank"
+                href="https://help.ece-reporter.ctoec.org/#how-to-use-the-roster-to-maintain-enrollment-data"
+              >
+                help section
+              </a>
+              .
+            </p>
             <h1 className="margin-bottom-0" ref={h1Ref}>
               {superHeaderText && (
                 <div className="margin-bottom-1 font-body-sm text-base-darker">
