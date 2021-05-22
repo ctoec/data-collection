@@ -5,7 +5,6 @@ import {
   LoadingWrapper,
   ErrorBoundary,
   Button,
-  AlertProps,
 } from '@ctoec/component-library';
 import moment from 'moment';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';

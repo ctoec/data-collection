@@ -91,6 +91,9 @@ exports[`Home snapshot matches post-submit user 1`] = `
         class="oec-divider"
       />
     </div>
+    <p>
+      The Office of Early Childhood’s ECE Reporter is an easy and secure way for you to submit state-funded child enrollment data every month. You can use it to track all new enrollments and withdrawals and changes to age group, site, and funding.
+    </p>
     <h2>
       Updates and tasks
     </h2>
@@ -118,77 +121,6 @@ exports[`Home snapshot matches post-submit user 1`] = `
         </div>
         <div
           class="usa-alert__body flex-auto display-flex flex-align-center"
-        />
-      </div>
-    </div>
-    <div
-      class="grid-row margin-top-2"
-    >
-      <div
-        class="oec-card oec-card--stacked"
-      >
-        <div
-          class="oec-card-cell"
-        >
-          <div
-            class="grid-container padding-0"
-          >
-            <span
-              class="grid-row font-body-lg text-bold"
-            >
-              <div
-                class="text-center"
-              >
-                <span
-                  class="oec-inline-icon oec-inline-icon--complete"
-                >
-                  <svg
-                    height="126"
-                    viewBox="0 0 126 126"
-                    width="126"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <title>
-                      Shape
-                    </title>
-                    <path
-                      d="M116.752 31.163c-5.595-9.586-13.185-17.176-22.771-22.771C84.393 2.797 73.926 0 62.573 0 51.221 0 40.751 2.797 31.165 8.392c-9.587 5.594-17.177 13.184-22.772 22.771C2.797 40.75 0 51.22 0 62.571c0 11.352 2.798 21.82 8.392 31.408 5.595 9.585 13.185 17.176 22.772 22.771 9.587 5.595 20.056 8.392 31.408 8.392s21.822-2.797 31.408-8.392c9.586-5.594 17.176-13.185 22.771-22.771 5.594-9.587 8.391-20.057 8.391-31.408 0-11.352-2.797-21.822-8.39-31.408zm-13.608 19.876L58.905 95.278c-1.032 1.032-2.281 1.549-3.748 1.549-1.412 0-2.634-.517-3.666-1.549L21.997 65.786c-.977-.979-1.466-2.199-1.466-3.666 0-1.521.488-2.771 1.466-3.749l7.414-7.332c1.033-1.032 2.254-1.548 3.667-1.548 1.413 0 2.635.516 3.667 1.548l18.413 18.413 33.241-33.16c1.032-1.032 2.254-1.548 3.666-1.548 1.411 0 2.635.516 3.666 1.548l7.414 7.333c.979.977 1.467 2.226 1.467 3.747 0 1.467-.488 2.689-1.468 3.667z"
-                      fill="#1B1B1B"
-                    />
-                  </svg>
-                  <span
-                    class="usa-sr-only"
-                  >
-                    (complete)
-                  </span>
-                </span>
-              </div>
-              Thank you for completing your July to December 2020 data collection!
-            </span>
-            <p
-              class="grid-row"
-            >
-              OEC appreciates all that you do to improve the lives of children and families.
-            </p>
-            <h3
-              class="grid-row"
-            >
-              What's next?
-            </h3>
-            <p
-              class="grid-row margin-bottom-1em"
-            >
-              Keep your roster updated with new enrollments and withdrawals, and with age group, site, and funding changes.
-            </p>
-            <p
-              class="grid-row"
-            >
-              We're working on a feature to allow updating from excel files. Until then, you can make any needed changes directly in your ECE Reporter roster.
-            </p>
-          </div>
-        </div>
-        <div
-          class=""
         />
       </div>
     </div>

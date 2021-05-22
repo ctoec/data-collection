@@ -27,6 +27,43 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
       <div
         class="tablet:grid-col-9"
       >
+        <p>
+          The Roster allows you to view and update the enrollment data you submitted previously. Using the Roster, you can:
+        </p>
+        <ul
+          class="margin-left-2 bx--list--unordered"
+        >
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Review current enrollment, see enrollment data from past months, and export data
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Add a new child to your program
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Withdraw a child from your program or delete their entry from you records
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Make changes to information about children in your program — such as their address, family income, and more
+          </li>
+        </ul>
+        <p>
+          Learn more about using the Roster in our 
+          <a
+            href="https://help.ece-reporter.ctoec.org/#how-to-use-the-roster-to-maintain-enrollment-data"
+            target="_blank"
+          >
+            help section
+          </a>
+          .
+        </p>
         <h1
           class="margin-bottom-0"
         >
@@ -1267,6 +1304,43 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
       <div
         class="tablet:grid-col-9"
       >
+        <p>
+          The Roster allows you to view and update the enrollment data you submitted previously. Using the Roster, you can:
+        </p>
+        <ul
+          class="margin-left-2 bx--list--unordered"
+        >
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Review current enrollment, see enrollment data from past months, and export data
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Add a new child to your program
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Withdraw a child from your program or delete their entry from you records
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Make changes to information about children in your program — such as their address, family income, and more
+          </li>
+        </ul>
+        <p>
+          Learn more about using the Roster in our 
+          <a
+            href="https://help.ece-reporter.ctoec.org/#how-to-use-the-roster-to-maintain-enrollment-data"
+            target="_blank"
+          >
+            help section
+          </a>
+          .
+        </p>
         <h1
           class="margin-bottom-0"
         >
@@ -2409,6 +2483,43 @@ exports[`Roster matches snapshot for site level user 1`] = `
       <div
         class="tablet:grid-col-9"
       >
+        <p>
+          The Roster allows you to view and update the enrollment data you submitted previously. Using the Roster, you can:
+        </p>
+        <ul
+          class="margin-left-2 bx--list--unordered"
+        >
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Review current enrollment, see enrollment data from past months, and export data
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Add a new child to your program
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Withdraw a child from your program or delete their entry from you records
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Make changes to information about children in your program — such as their address, family income, and more
+          </li>
+        </ul>
+        <p>
+          Learn more about using the Roster in our 
+          <a
+            href="https://help.ece-reporter.ctoec.org/#how-to-use-the-roster-to-maintain-enrollment-data"
+            target="_blank"
+          >
+            help section
+          </a>
+          .
+        </p>
         <h1
           class="margin-bottom-0"
         >
@@ -3473,6 +3584,43 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
       <div
         class="tablet:grid-col-9"
       >
+        <p>
+          The Roster allows you to view and update the enrollment data you submitted previously. Using the Roster, you can:
+        </p>
+        <ul
+          class="margin-left-2 bx--list--unordered"
+        >
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Review current enrollment, see enrollment data from past months, and export data
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Add a new child to your program
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Withdraw a child from your program or delete their entry from you records
+          </li>
+          <li
+            class="line-height-body-4 bx--list__item"
+          >
+            Make changes to information about children in your program — such as their address, family income, and more
+          </li>
+        </ul>
+        <p>
+          Learn more about using the Roster in our 
+          <a
+            href="https://help.ece-reporter.ctoec.org/#how-to-use-the-roster-to-maintain-enrollment-data"
+            target="_blank"
+          >
+            help section
+          </a>
+          .
+        </p>
         <h1
           class="margin-bottom-0"
         >

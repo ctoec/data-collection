@@ -8,7 +8,6 @@ import {
   Alert,
   ArrowRight,
   Card,
-  InlineIcon,
   TextWithIcon,
   Divider,
   Button,

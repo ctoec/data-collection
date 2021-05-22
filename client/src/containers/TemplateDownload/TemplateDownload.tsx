@@ -1,18 +1,11 @@
 import React from 'react';
-import useSWR, { responseInterface } from 'swr';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { ReactComponent as Image } from '../../images/SpreadsheetIllustration.svg';
 import { BackButton } from '../../components/BackButton';
-import { TemplateMetadataResponse } from '../../shared/payloads';
 
 const TemplateDownload: React.FC = () => {
   const h1Ref = getH1RefForTitle();
-  const { data: templateMetadata } = useSWR('template/metadata', {
-    dedupingInterval: 100000,
-  }) as responseInterface<TemplateMetadataResponse, string>;
-  const { lastUpdated } = templateMetadata || {};
-
   return (
     <div className="grid-container">
       <BackButton />
