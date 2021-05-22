@@ -293,7 +293,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-5"
+              aria-controls="accordion-item-19"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -328,7 +328,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-5"
+              id="accordion-item-19"
             >
               <div>
                 <hr
@@ -804,7 +804,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-6"
+              aria-controls="accordion-item-20"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -839,7 +839,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-6"
+              id="accordion-item-20"
             >
               <div>
                 <hr
@@ -1561,7 +1561,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-3"
+              aria-controls="accordion-item-11"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -1596,7 +1596,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-3"
+              id="accordion-item-11"
             >
               <div>
                 <hr
@@ -2026,7 +2026,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-4"
+              aria-controls="accordion-item-12"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -2061,7 +2061,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-4"
+              id="accordion-item-12"
             >
               <div>
                 <hr
@@ -2671,7 +2671,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         class="bx--accordion__item bx--accordion__item--active"
       >
         <button
-          aria-controls="accordion-item-1"
+          aria-controls="accordion-item-5"
           aria-expanded="true"
           class="bx--accordion__heading"
           type="button"
@@ -2706,7 +2706,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         </button>
         <div
           class="bx--accordion__content"
-          id="accordion-item-1"
+          id="accordion-item-5"
         >
           <div>
             <hr
@@ -3136,7 +3136,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         class="bx--accordion__item bx--accordion__item--active"
       >
         <button
-          aria-controls="accordion-item-2"
+          aria-controls="accordion-item-6"
           aria-expanded="true"
           class="bx--accordion__heading"
           type="button"
@@ -3171,7 +3171,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         </button>
         <div
           class="bx--accordion__content"
-          id="accordion-item-2"
+          id="accordion-item-6"
         >
           <div>
             <hr
@@ -3841,7 +3841,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-7"
+              aria-controls="accordion-item-26"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -3876,7 +3876,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-7"
+              id="accordion-item-26"
             >
               <div>
                 <hr
@@ -4306,7 +4306,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-8"
+              aria-controls="accordion-item-27"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -4341,7 +4341,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-8"
+              id="accordion-item-27"
             >
               <div>
                 <hr
