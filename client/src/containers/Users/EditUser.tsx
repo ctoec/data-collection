@@ -28,6 +28,7 @@ const EditUser: React.FC = () => {
 
   const [user, setUser] = useState<User | null>(null);
   const [saving, setSaving] = useState(false);
+  const [cancelToggle, setCancelToggle] = useState(false);
 
   useEffect(() => {
     (async function loadUser() {
@@ -66,7 +67,9 @@ const EditUser: React.FC = () => {
               <Divider />
               {user.email && (
                 <>
-                  <h3>Email Address</h3>
+                  <p>
+                    <span className="text-bold">Email</span>
+                  </p>
                   <p>{user.email}</p>
                   <p>
                     If you need to make changes to user emails, please{' '}
@@ -84,9 +87,18 @@ const EditUser: React.FC = () => {
                 id="change-enrollment-form"
                 className="usa-form"
                 data={user}
+                key={cancelToggle.toString()}
                 onSubmit={(_user: User) => {
                   setSaving(true);
                   apiPut(`users/${user.id}`, _user, { accessToken })
+                    .then(() => {
+                      setAlerts([
+                        {
+                          type: 'success',
+                          text: 'Your changes have been saved',
+                        },
+                      ]);
+                    })
                     .catch((err) => {
                       console.error(err);
                       setAlerts([
@@ -101,45 +113,59 @@ const EditUser: React.FC = () => {
               >
                 <FormField<User, TextInputProps, string | null>
                   getValue={(data) => data.at('firstName')}
-                  parseOnChangeEvent={(e) => e.target.value}
                   inputComponent={TextInput}
                   type="input"
                   id="firstName"
-                  label={<h3>First name</h3>}
+                  label={<span className="text-bold">First name</span>}
+                  status={(data) =>
+                    !data.at('firstName').value
+                      ? {
+                          type: 'error',
+                          id: `status-firstName`,
+                          message: 'First name cannot be empty',
+                        }
+                      : undefined
+                  }
                 />
-                {user.middleName && (
-                  <FormField<User, TextInputProps, string | null>
-                    getValue={(data) => data.at('middleName')}
-                    parseOnChangeEvent={(e) => e.target.value}
-                    inputComponent={TextInput}
-                    type="input"
-                    id="middleName"
-                    label={<h3>Middle name</h3>}
-                  />
-                )}
+                <FormField<User, TextInputProps, string | null>
+                  getValue={(data) => data.at('middleName')}
+                  inputComponent={TextInput}
+                  type="input"
+                  id="middleName"
+                  label={<span className="text-bold">Middle name</span>}
+                />
                 <FormField<User, TextInputProps, string | null>
                   getValue={(data) => data.at('lastName')}
-                  parseOnChangeEvent={(e) => e.target.value}
                   inputComponent={TextInput}
                   type="input"
                   id="lastName"
-                  label={<h3>Last name</h3>}
+                  label={<span className="text-bold">Last name</span>}
+                  status={(data) =>
+                    !data.at('lastName').value
+                      ? {
+                          type: 'error',
+                          id: `status-lastName`,
+                          message: 'Last name cannot be empty',
+                        }
+                      : undefined
+                  }
                 />
-                {user.suffix && (
-                  <FormField<User, TextInputProps, string | null>
-                    getValue={(data) => data.at('suffix')}
-                    parseOnChangeEvent={(e) => e.target.value}
-                    inputComponent={TextInput}
-                    type="input"
-                    id="suffix"
-                    label={<h3>Suffix</h3>}
-                  />
-                )}
+                <FormField<User, TextInputProps, string | null>
+                  getValue={(data) => data.at('suffix')}
+                  inputComponent={TextInput}
+                  type="input"
+                  id="suffix"
+                  label={<span className="text-bold">Suffix</span>}
+                />
                 <FormSubmitButton
                   text={saving ? 'Saving...' : 'Save changes'}
                   disabled={saving}
                 />
-                <Button text="Cancel" appearance="outline" />
+                <Button
+                  text="Cancel"
+                  appearance="outline"
+                  onClick={() => setCancelToggle(!cancelToggle)}
+                />
               </Form>
             </>
           ) : (

@@ -52,7 +52,7 @@ export const updateUserName = async (id: string, updatedUser: User) => {
   const foundUser = await getUserById(id);
   foundUser.firstName = updatedUser.firstName;
   foundUser.middleName = updatedUser.middleName;
-  foundUser.lastName = updatedUser.firstName;
+  foundUser.lastName = updatedUser.lastName;
   foundUser.suffix = updatedUser.suffix;
   await getManager().save(foundUser);
 };
