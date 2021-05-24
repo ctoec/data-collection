@@ -39,7 +39,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
   console.log('rendering : ', newFundingSpace);
 
   return (
-    <Card className={newFundingSpace.display ? '' : 'usa-sr-only'}>
+    <Card>
       <div className="display-flex flex-row grid-row grid-gap">
         <div className="tablet:grid-col-3">
           <Select
