@@ -137,7 +137,7 @@ const Roster: React.FC = () => {
             </p>
             <ul className="margin-left-2 bx--list--unordered">
               <li className="line-height-body-4 bx--list__item">
-                Review current enrollment, see enrollment data from past months,
+                Review current enrollments, see enrollment data from past months,
                 and export data
               </li>
               <li className="line-height-body-4 bx--list__item">
