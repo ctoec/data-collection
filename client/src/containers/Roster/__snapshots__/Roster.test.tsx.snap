@@ -36,7 +36,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
           <li
             class="line-height-body-4 bx--list__item"
           >
-            Review current enrollment, see enrollment data from past months, and export data
+            Review current enrollments, see enrollment data from past months, and export data
           </li>
           <li
             class="line-height-body-4 bx--list__item"
@@ -1313,7 +1313,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
           <li
             class="line-height-body-4 bx--list__item"
           >
-            Review current enrollment, see enrollment data from past months, and export data
+            Review current enrollments, see enrollment data from past months, and export data
           </li>
           <li
             class="line-height-body-4 bx--list__item"
@@ -2492,7 +2492,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
           <li
             class="line-height-body-4 bx--list__item"
           >
-            Review current enrollment, see enrollment data from past months, and export data
+            Review current enrollments, see enrollment data from past months, and export data
           </li>
           <li
             class="line-height-body-4 bx--list__item"
@@ -3593,7 +3593,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
           <li
             class="line-height-body-4 bx--list__item"
           >
-            Review current enrollment, see enrollment data from past months, and export data
+            Review current enrollments, see enrollment data from past months, and export data
           </li>
           <li
             class="line-height-body-4 bx--list__item"
