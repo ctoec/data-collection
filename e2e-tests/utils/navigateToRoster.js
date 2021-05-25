@@ -10,6 +10,6 @@ module.exports = {
       'xpath',
       '//*/p[contains(text(),"enrolled at ")]',
     ];
-    await browser.waitForElementPresent(...rosterHeaderArgs);
+    await browser.waitForElementVisible(...rosterHeaderArgs);
   },
 };
