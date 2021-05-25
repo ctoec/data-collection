@@ -6,8 +6,10 @@ import { UserSummary } from '../../shared/payloads/UsersResponse';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { UsersTable } from './UsersTable';
 import { apiGet } from '../../utils/api';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const Users: React.FC = () => {
+  const [alertElements] = useAlerts();
   const { user } = useContext(UserContext);
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
@@ -29,6 +31,7 @@ const Users: React.FC = () => {
   ) : (
     <div className="grid-container">
       <div className="grid-row grid-gap">
+        {alertElements}
         <div className="tablet:grid-col-12 margin-top-4 margin-bottom-2">
           <h1 ref={h1Ref} className="margin-top-0">
             Users
