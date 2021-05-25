@@ -37,7 +37,7 @@ const CreateOrg: React.FC = () => {
       return
     }
     const allSitesOkay = newSites.every(
-      (ns) => (ns.siteName !== '' && ns.titleI !== null && ns.region)
+      (ns) => (ns.siteName !== '' && ns.titleI !== undefined && ns.region)
     );
     if (!allSitesOkay) {
       setAlerts([{
@@ -91,7 +91,6 @@ const CreateOrg: React.FC = () => {
 
   const emptySite: Partial<Site> = {
     siteName: '',
-    titleI: (null as unknown as boolean),
     region: (null as unknown as Region),
     facilityCode: undefined,
     licenseNumber: undefined,
