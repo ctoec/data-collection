@@ -13,7 +13,7 @@ module.exports = {
     await navigateToRoster(browser);
 
     const selectorArgs = ['xpath', `//*/a[contains(., 'Add a record')]`]
-    await scrollToElement(browser, selectorArgs);
+    await scrollToElement(browser, selectorArgs, false);
     await browser.click(...selectorArgs);
     
     await browser.waitForElementVisible('body');
