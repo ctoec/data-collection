@@ -1,10 +1,9 @@
 import express from 'express';
 import { getManager } from 'typeorm';
-import { User } from '../entity';
-import { passAsyncError } from '../middleware/error/passAsyncError';
 import * as controller from '../controllers/users';
-import { ApiError, BadRequestError, InternalServerError } from '../middleware/error/errors';
-import { ForbiddenError } from '../middleware/error/errors';
+import { User } from '../entity';
+import { ApiError, BadRequestError, ForbiddenError, InternalServerError } from '../middleware/error/errors';
+import { passAsyncError } from '../middleware/error/passAsyncError';
 
 export const usersRouter = express.Router();
 
@@ -17,7 +16,7 @@ export const usersRouter = express.Router();
  */
 usersRouter.get('/current', async (req, res) => {
   const user = req.user;
-  await controller.addDataToUser(user);
+  await controller.addSiteAndOrgDataToUser(user);
   res.send(user);
 });
 
@@ -45,6 +44,27 @@ usersRouter.get(
       console.error('Error finding user by email address: ', err);
       throw new InternalServerError('Unable to find users for create organization.');
     }
+  })
+);
+
+usersRouter.get(
+  '/:id',
+  passAsyncError(async ({ user, params }, res) => {
+    if (!user.isAdmin) throw new ForbiddenError();
+    if (!params.id) throw new BadRequestError('No user ID provided.');
+    const foundUser = await controller.getUserById(params.id);
+    res.send(foundUser);
+  })
+);
+
+usersRouter.put(
+  '/:id',
+  passAsyncError(async ({ user, params, body }, res) => {
+    if (!user.isAdmin) throw new ForbiddenError();
+    if (!params.id || !body)
+      throw new BadRequestError('No user information provided.');
+    await controller.updateUserName(params.id, body);
+    res.sendStatus(200);
   })
 );
 

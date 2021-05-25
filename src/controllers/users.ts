@@ -1,5 +1,6 @@
 import { User, Site, Organization } from '../entity';
 import { getManager } from 'typeorm';
+import { NotFoundError } from '../middleware/error/errors';
 
 /**
  * Augment a user object with site and organization data.
@@ -9,13 +10,12 @@ import { getManager } from 'typeorm';
  * level access, but not both)
  * @param user
  */
-export const addDataToUser = async (user: User) => {
+export const addSiteAndOrgDataToUser = async (user: User) => {
   const sites =
     user.siteIds && user.siteIds.length
       ? await getManager().findByIds(Site, user.siteIds)
       : [];
 
-  //
   const orgIds =
     user.organizationIds && user.organizationIds.length
       ? user.organizationIds
@@ -49,4 +49,19 @@ export const getUsers = async (): Promise<User[]> =>
 export const getUsersByEmail = async (email: string) => {
   const users = await getManager().find(User, { where: { email } });
   return users;
+};
+
+export const getUserById = async (id: string) => {
+  const foundUser = await getManager().findOne(User, id);
+  if (!foundUser) throw new NotFoundError();
+  return foundUser;
+};
+
+export const updateUserName = async (id: string, updatedUser: User) => {
+  const foundUser = await getUserById(id);
+  foundUser.firstName = updatedUser.firstName;
+  foundUser.middleName = updatedUser.middleName;
+  foundUser.lastName = updatedUser.lastName;
+  foundUser.suffix = updatedUser.suffix;
+  await getManager().save(foundUser);
 };

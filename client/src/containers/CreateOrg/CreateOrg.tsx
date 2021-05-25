@@ -102,6 +102,9 @@ const CreateOrg: React.FC = () => {
   const addNewSite = () => {
     setNewSites(currentSites => [...currentSites, { ...emptySite }]);
   }
+  const removeLastSite = () => {
+    setNewSites(currentSites => currentSites.slice(0, currentSites.length - 1));
+  }
 
   return (
     <>
@@ -132,11 +135,17 @@ const CreateOrg: React.FC = () => {
         {newSites.map((ns, idx) => (
           <NewSiteFormCard newSite={ns} numberOnPage={idx+1} />
         ))}
-        <Button
-          className="margin-top-2"
-          text="Add another site"
-          onClick={addNewSite}
-        />
+        <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
+          <Button
+            text="Add another site"
+            onClick={addNewSite}
+          />
+          <Button
+            appearance="outline"
+            text="Remove last site"
+            onClick={removeLastSite}
+          />
+        </div>
         <h2 className="margin-top-4">Users and permissions</h2>
         <Divider />
         <p className="margin-top-2 margin-bottom-2">
@@ -179,7 +188,7 @@ const CreateOrg: React.FC = () => {
       </div>
       <FixedBottomBar>
         <Button text="Create organization" onClick={createNewOrg} />
-        <Button text="Cancel" href="/" appearance="outline"/>
+        <Button text="Cancel" href="/organizations" appearance="outline"/>
       </FixedBottomBar>
     </>
   );
