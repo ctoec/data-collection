@@ -6,7 +6,6 @@ import { DBConnectionOpts } from './config';
 
 interface BasicWingedKeysUser {
   id: string;
-  userName: string;
   email: string;
 }
 
@@ -34,41 +33,30 @@ export async function updateFawkesUsers(
         throw new Error('This is actually impossible');
       }
 
-      const [firstName, lastName] = wingedKeysUser.userName.split(' ');
-
-      let updatedUser: Partial<User> = {};
-
-      if (!!firstName && firstName !== user.firstName)
-        updatedUser.firstName = firstName;
-      if (!!lastName && lastName !== user.lastName)
-        updatedUser.lastName = lastName;
-      if (!!wingedKeysUser.email && wingedKeysUser.email !== user.email)
-        updatedUser.email = wingedKeysUser.email;
-
-      if (!!Object.keys(updatedUser).length) {
+      if (!!wingedKeysUser.email && wingedKeysUser.email !== user.email) {
         await getManager('script').save(User, {
-          ...updatedUser,
+          email: wingedKeysUser.email,
           wingedKeysId: wingedKeysUser.id,
         });
 
         console.log(
-          `\Updated user for ${user.firstName} ${user.lastName} with app id ${user.id}`
+          `\Updated email for ${user.firstName} ${user.lastName} with app id ${user.id}`
         );
         updatedCount += 1;
       } else {
         console.log(
-          `\tUser ${wingedKeysUser.userName} is already fully up-to-date.`
+          `\tUser ${wingedKeysUser.email} already has a fully up-to-date email.`
         );
       }
     } catch (err) {
       console.error(
-        `\tError updating user ${user.firstName} ${user.lastName}`,
+        `\tError updating user ${user.email}`,
         err
       );
     }
   }
 
-  console.log(`Successfully updated ${updatedCount} users!`);
+  console.log(`Successfully updated ${updatedCount} users' emails!`);
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -84,7 +72,7 @@ async function getWingedKeysUsersById(
       database: 'wingedkeys',
     }).connect();
 
-    const res = await pool.query(`SELECT id, email, username FROM AspNetUsers`);
+    const res = await pool.query(`SELECT id, email FROM AspNetUsers`);
 
     return res.recordset.reduce(
       (acc: WingedKeysUsersMap, user: BasicWingedKeysUser) => {
