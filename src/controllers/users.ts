@@ -47,6 +47,6 @@ export const getUsers = async (): Promise<User[]> =>
    * for the provided string.
    */
 export const getUsersByEmail = async (email: string) => {
-  const users = await getManager().find(User, { where: { email: email } });
+  const users = await getManager().find(User, { where: { email } });
   return users;
 };

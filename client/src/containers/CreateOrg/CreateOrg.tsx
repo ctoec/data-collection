@@ -1,4 +1,4 @@
-import { Button, Divider, TextInput } from '@ctoec/component-library';
+import { Button, Divider, TextInput, SearchBar } from '@ctoec/component-library';
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { BackButton } from '../../components/BackButton';
@@ -11,7 +11,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { NewSiteFormCard } from './NewSiteFormCard';
 import { getErrorMessage } from './getErrorMessage';
 import pluralize from 'pluralize';
-// import { SearchBar } from './SearchBar';
 
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -144,13 +143,13 @@ const CreateOrg: React.FC = () => {
           If users have not already been created for this organization,
           you may skip this step and add users later.
         </p>
-        {/* <SearchBar
+        <SearchBar
           id="new-org-user-search"
           labelText="Search for user to add to organization"
           placeholderText="Search"
           onSearch={searchForUsers}
           className="tablet:grid-col-6"
-        /> */}
+        />
         {showSearchResults && (
           <>
             <p className="margin-bottom-2 text-bold">
