@@ -1,0 +1,13 @@
+.container-with-bottom-margin {
+  margin-bottom: 4rem !important;
+}
+
+.bx--label {
+  @extend .usa-label;
+  color: rgb(27, 27, 27) !important;
+}
+
+.bx--number__input-wrapper input[type='number'] {
+  border: .0625rem solid #1b1b1b !important;
+}
+

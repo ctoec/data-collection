@@ -6,7 +6,7 @@ import { OrganizationSummary } from '../../shared/payloads/OrganizationsResponse
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { OrganizationsTable } from './OrganizationsTable';
 import { apiGet } from '../../utils/api';
-import { Button } from '@ctoec/component-library';
+import { useAlerts } from '../../hooks/useAlerts';
 
 const Organizations: React.FC = () => {
   const { user } = useContext(UserContext);
@@ -14,6 +14,16 @@ const Organizations: React.FC = () => {
   const { accessToken } = useContext(AuthenticationContext);
 
   const [data, setData] = useState<OrganizationSummary[]>([]);
+  
+  // We might have a success alert pushed from the create org page
+  // so check whether we do (but filter so that we only show one
+  // if a user created multiple orgs)
+  const [alertElements, setAlerts] = useAlerts();
+  useEffect(() => {
+    setAlerts((_alerts) => [
+      _alerts.find((a) => a?.heading === 'Organization created'),
+    ]);
+  }, []);
 
   useEffect(() => {
     (async function loadOrganizations() {
@@ -30,12 +40,15 @@ const Organizations: React.FC = () => {
     <Redirect to="/home" />
   ) : (
     <div className="grid-container">
+      {alertElements.length > 0 && alertElements}
       <div className="grid-row grid-gap">
         <div className="tablet:grid-col-12 margin-top-4 margin-bottom-2">
           <h1 ref={h1Ref} className="margin-top-0 margin-bottom-4">
             Organizations
           </h1>
-          <Button text="Create new organization" href="/create-org" />
+          <a href="/create-org" className="usa-button">
+            Create new organization
+          </a>
           <div className="tablet:grid-col-12 margin-top-4">
             <OrganizationsTable orgs={data} />
           </div>
