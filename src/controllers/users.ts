@@ -42,6 +42,15 @@ export const getUsers = async (): Promise<User[]> =>
     GROUP BY u.id, u.lastName, u.firstName, u.email`
   );
 
+  /**
+   * Finds all users in the DB whose email is an exact match
+   * for the provided string.
+   */
+export const getUsersByEmail = async (email: string) => {
+  const users = await getManager().find(User, { where: { email } });
+  return users;
+};
+
 export const getUserById = async (id: string) => {
   const foundUser = await getManager().findOne(User, id);
   if (!foundUser) throw new NotFoundError();
