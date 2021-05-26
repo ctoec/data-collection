@@ -34,7 +34,7 @@ import { DataCompleteModal } from './DataCompleteModal';
 const SUBMITTED: AlertProps = {
   text:
     'Make revisions and updates, such as new enrollments, directly in your ECE reporter roster.',
-  heading: 'You completed your July to December data collection!',
+  heading: 'You completed your January to May data collection!',
   type: 'info',
 };
 
@@ -202,7 +202,7 @@ const Roster: React.FC = () => {
           {!isSiteLevelUser && (
             <Button
               id="submit-button"
-              text="My Jul-Dec data is complete"
+              text="My Jan-May data is complete"
               onClick={submitToOEC}
               disabled={!activeOrgId}
             />

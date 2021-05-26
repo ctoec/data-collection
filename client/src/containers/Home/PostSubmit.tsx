@@ -114,7 +114,7 @@ export const PostSubmitHome: React.FC = () => {
               <div className="text-center">
                 <InlineIcon icon="complete" />
               </div>
-              Thank you for completing your July to December 2020 data
+              Thank you for completing your January to May 2021 data
               collection!
             </span>
             <p className="grid-row">
