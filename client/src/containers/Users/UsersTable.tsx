@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { UserSummary } from '../../shared/payloads/UsersResponse';
 import {
   Table,
@@ -31,7 +32,9 @@ export const UsersTable: React.FC<UserTableProps> = ({ users = [] }) => (
     <TableBody>
       {users.map((row) => (
         <TableRow key={row.id}>
-          <TableCell key="name">{row.name}</TableCell>
+          <TableCell key="name">
+            <Link to={`edit-user/${row.id}`}>{row.name}</Link>
+          </TableCell>
           <TableCell key="email">{row.email}</TableCell>
           <TableCell key="organizations">{row.organizations}</TableCell>
         </TableRow>

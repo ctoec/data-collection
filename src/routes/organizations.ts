@@ -14,8 +14,13 @@ organizationsRouter.post(
   passAsyncError(async (req: Request, res: Response) => {
     try {
       if (!req.user.isAdmin) throw new ForbiddenError();
+<<<<<<< HEAD
       const { name, sites, fundingSpaces } = req.body;
       await controller.createOrganization(name, sites, fundingSpaces);
+=======
+      const { name, sites } = req.body;
+      await controller.createOrganization(name, sites);
+>>>>>>> 5dfd25dced4a2b6f3f45a2df2f502d2fe5b75489
       res.sendStatus(201);
     } catch (err) {
       if (err instanceof ApiError) throw err;
