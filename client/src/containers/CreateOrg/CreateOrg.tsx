@@ -1,4 +1,9 @@
-import { Button, Divider, TextInput, SearchBar } from '@ctoec/component-library';
+import {
+  Button,
+  Divider,
+  TextInput,
+  SearchBar,
+} from '@ctoec/component-library';
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { BackButton } from '../../components/BackButton';
@@ -11,20 +16,20 @@ import {
   FundingSource,
   AgeGroup,
   FundingTime,
-  User
+  User,
 } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { NewSiteFormCard } from './NewSiteFormCard';
 import { getErrorMessage } from './getErrorMessage';
 import { FundingSpace } from '../../shared/models/db/FundingSpace';
-import { NewFundingSpaceCard } from './getCreateFundingSpaceCard';
+import { NewFundingSpaceCard } from './NewFundingSpaceFormCard';
 import pluralize from 'pluralize';
 
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
-  const [newOrgName, setNewOrgName] = useState("");
+  const [newOrgName, setNewOrgName] = useState('');
   const [foundUsers, setFoundUsers] = useState<User[]>([]);
 
   // Need some extra state to control when to display the email lookup
@@ -34,27 +39,30 @@ const CreateOrg: React.FC = () => {
   const history = useHistory();
 
   const createNewOrg = async () => {
-
     // Don't even send an API request if a site card is missing
     // some required info, or there's no org name
-    if (newOrgName === "") {
-      setAlerts([{
-        type: 'error',
-        heading: 'Organization name is missing',
-        text: 'You must provide a valid organization name before submitting.'
-      }])
-      return
+    if (newOrgName === '') {
+      setAlerts([
+        {
+          type: 'error',
+          heading: 'Organization name is missing',
+          text: 'You must provide a valid organization name before submitting.',
+        },
+      ]);
+      return;
     }
     const allSitesOkay = newSites.every(
-      (ns) => (ns.siteName !== '' && ns.titleI !== undefined && ns.region)
+      (ns) => ns.siteName !== '' && ns.titleI !== undefined && ns.region
     );
     if (!allSitesOkay) {
-      setAlerts([{
-        type: 'error',
-        heading: 'Site is incomplete',
-        text: `One or more requested sites is missing required information.`
-      }]);
-      return
+      setAlerts([
+        {
+          type: 'error',
+          heading: 'Site is incomplete',
+          text: `One or more requested sites is missing required information.`,
+        },
+      ]);
+      return;
     }
 
     const allFundingSpaceOkay = newFundingSpaces.every(
@@ -91,10 +99,10 @@ const CreateOrg: React.FC = () => {
             {
               type: 'success',
               heading: 'Organization created',
-              text: `Organization "${newOrgName}" was successfully created!`
-            }
-          ]
-        })
+              text: `Organization "${newOrgName}" was successfully created!`,
+            },
+          ],
+        });
       })
       .catch((err) => {
         const alertToSet = getErrorMessage(err);
@@ -135,12 +143,18 @@ const CreateOrg: React.FC = () => {
     ]);
   };
 
+  const removeItem = (current: Array<any>, idx: number) => {
+    const list = [...current];
+    list.splice(idx - 1, 1);
+    return list;
+  };
+
   const removeFundingSpace = (idx: number) => {
-    setNewFundingSpaces((currentSites) => {
-      const list = [...currentSites];
-      list.splice(idx - 1, 1);
-      return list;
-    });
+    setNewFundingSpaces((current) => removeItem(current, idx));
+  };
+
+  const removeSite = (idx: number) => {
+    setNewSites((current) => removeItem(current, idx));
   };
 
   const searchForUsers = async (query: string) => {
@@ -153,25 +167,8 @@ const CreateOrg: React.FC = () => {
       .catch((err) => {
         console.error(err);
         throw new Error(err);
-      }
-    );
+      });
   };
-
-  // const emptySite: Partial<Site> = {
-  //   siteName: '',
-  //   region: (null as unknown as Region),
-  //   facilityCode: undefined,
-  //   licenseNumber: undefined,
-  //   registryId: undefined,
-  //   naeycId: undefined,
-  // };
-  // const [newSites, setNewSites] = useState<Partial<Site>[]>([{ ...emptySite }]);
-  // const addNewSite = () => {
-  //   setNewSites(currentSites => [...currentSites, { ...emptySite }]);
-  // }
-  const removeLastSite = () => {
-    setNewSites(currentSites => currentSites.slice(0, currentSites.length - 1));
-  }
 
   return (
     <>
@@ -197,21 +194,18 @@ const CreateOrg: React.FC = () => {
         <h2 className="margin-top-4">Sites</h2>
         <Divider />
         <p className="margin-top-2 margin-bottom-2">
-          Make sure each new site you create has a name, a Title I designation, and a selected region.
+          Make sure each new site you create has a name, a Title I designation,
+          and a selected region.
         </p>
         {newSites.map((ns, idx) => (
-          <NewSiteFormCard newSite={ns} numberOnPage={idx+1} />
+          <NewSiteFormCard
+            newSite={ns}
+            numberOnPage={idx + 1}
+            remove={removeSite}
+          />
         ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
-          <Button
-            text="Add another site"
-            onClick={addNewSite}
-          />
-          <Button
-            appearance="outline"
-            text="Remove last site"
-            onClick={removeLastSite}
-          />
+          <Button text="Add another site" onClick={addNewSite} />
         </div>
         <h2 className="margin-top-4">Funding spaces</h2>
         <Divider />
@@ -226,16 +220,18 @@ const CreateOrg: React.FC = () => {
             );
           }
         })}
-        <Button
-          className="margin-top-2 margin-bottom-4"
-          text="Add another funding space"
-          onClick={addNewFundingSpace}
-        />
+        <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
+          <Button
+            className="margin-top-2 margin-bottom-4"
+            text="Add another funding space"
+            onClick={addNewFundingSpace}
+          />
+        </div>
         <h2 className="margin-top-4">Users and permissions</h2>
         <Divider />
         <p className="margin-top-2 margin-bottom-2">
-          If users have not already been created for this organization,
-          you may skip this step and add users later.
+          If users have not already been created for this organization, you may
+          skip this step and add users later.
         </p>
         <SearchBar
           id="new-org-user-search"
@@ -247,16 +243,16 @@ const CreateOrg: React.FC = () => {
         {showSearchResults && (
           <>
             <p className="margin-bottom-2 text-bold">
-              {
-                `We found ${pluralize('user', foundUsers.length, true)} matching your criteria.`
-              }
+              {`We found ${pluralize(
+                'user',
+                foundUsers.length,
+                true
+              )} matching your criteria.`}
             </p>
             <div className="margin-bottom-4">
               {foundUsers.map((u) => (
                 <div className="grid-row grid-gap">
-                  <div className="tablet:grid-col-4">
-                    {u.email}
-                  </div>
+                  <div className="tablet:grid-col-4">{u.email}</div>
                   <div className="tablet:grid-col-2">
                     <Button
                       appearance="unstyled"
@@ -273,7 +269,7 @@ const CreateOrg: React.FC = () => {
       </div>
       <FixedBottomBar>
         <Button text="Create organization" onClick={createNewOrg} />
-        <Button text="Cancel" href="/organizations" appearance="outline"/>
+        <Button text="Cancel" href="/organizations" appearance="outline" />
       </FixedBottomBar>
     </>
   );
