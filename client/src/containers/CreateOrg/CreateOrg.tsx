@@ -124,10 +124,7 @@ const CreateOrg: React.FC = () => {
     Partial<FundingSpace>[]
   >([{ ...emptyFundingSpace }]);
 
-  let sortCount = 0;
-
   const addNewFundingSpace = () => {
-    sortCount++;
     setNewFundingSpaces((currentFundingSpaces) => [
       ...currentFundingSpaces,
       { ...emptyFundingSpace },
@@ -138,7 +135,6 @@ const CreateOrg: React.FC = () => {
     setNewFundingSpaces((currentSites) => {
       const list = [...currentSites];
       list.splice(idx - 1, 1);
-      console.log('new list', list);
       return list;
     });
   };
@@ -186,22 +182,12 @@ const CreateOrg: React.FC = () => {
             return (
               <NewFundingSpaceCard
                 newFundingSpace={nfs}
-                // key={nfs.toString() + idx}
                 numberOnPage={idx + 1}
                 remove={removeFundingSpace}
               />
             );
           }
         })}
-        {/* {newFundingSpaces.length > 1 ? (
-          <Button
-            className="margin-top-2 margin-bottom-4"
-            text="Remove funding space"
-            // onClick={removeFundingSpace}
-          />
-        ) : (
-          ''
-        )} */}
         <Button
           className="margin-top-2 margin-bottom-4"
           text="Add another funding space"

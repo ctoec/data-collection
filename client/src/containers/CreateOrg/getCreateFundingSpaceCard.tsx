@@ -1,12 +1,6 @@
 import { Card, TextInput, Button, Select } from '@ctoec/component-library';
 import React, { useState, useEffect } from 'react';
-import {
-  Region,
-  Site,
-  FundingSource,
-  AgeGroup,
-  FundingTime,
-} from '../../shared/models';
+import { FundingSource, AgeGroup, FundingTime } from '../../shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 import { FundingSpace } from '../../shared/models/db/FundingSpace';
 
@@ -27,21 +21,27 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
   numberOnPage,
   remove,
 }) => {
-  const [fundingTimes, setFundingTimes] = useState<FundingTime[]>([]);
-
-  const updateFundingTime = (source: FundingSource) => {
+  const getFundingTimes = (source: FundingSource) => {
+    let tmp: FundingTime[] = [];
     FUNDING_SOURCE_TIMES.forEach((fst) => {
       if (fst.fundingSources.includes(source)) {
-        setFundingTimes(fst.fundingTimes.map((ft) => ft.value));
+        tmp = [...fst.fundingTimes.map((ft) => ft.value)];
       }
     });
+    return tmp;
   };
-  console.log('rendering : ', newFundingSpace);
+
+  const [fundingTimes, setFundingTimes] = useState<FundingTime[]>(
+    newFundingSpace.source ? getFundingTimes(newFundingSpace.source) : []
+  );
 
   return (
     <Card>
       <div className="display-flex flex-row grid-row grid-gap">
-        <div className="tablet:grid-col-3">
+        <div
+          className="tablet:grid-col-3"
+          key={newFundingSpace.source ?? undefined}
+        >
           <Select
             id={`new-funding-space-${numberOnPage}-${new Date().getTime()}-funding-source-select`}
             label="Funding source"
@@ -51,18 +51,16 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             }))}
             defaultValue={newFundingSpace.source ?? undefined}
             onChange={(e: any) => {
-              console.log('funding space e.target.value: ', e.target.value);
-              console.log(
-                'funding space newFundingSpace.source: ',
-                newFundingSpace.source
-              );
               newFundingSpace.source = e.target.value;
-              updateFundingTime(e.target.value);
+              setFundingTimes(getFundingTimes(e.target.value));
               return e.target.value;
             }}
           />
         </div>
-        <div className="tablet:grid-col-3">
+        <div
+          className="tablet:grid-col-3"
+          key={newFundingSpace.ageGroup ?? undefined}
+        >
           <Select
             id={`new-funding-space-${numberOnPage}-age-group-select`}
             label="Age group"
@@ -77,11 +75,17 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             }}
           />
         </div>
-        <div className="tablet:grid-col-3">
+        <div
+          className="tablet:grid-col-3"
+          key={newFundingSpace.time ?? undefined}
+        >
           <Select
             id={`new-funding-space-${numberOnPage}-space-type-select`}
             label="Space type"
-            options={fundingTimes.map((f) => ({
+            options={(newFundingSpace.source
+              ? getFundingTimes(newFundingSpace.source)
+              : fundingTimes
+            ).map((f) => ({
               text: f,
               value: f,
             }))}
