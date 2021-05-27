@@ -12,11 +12,15 @@ module.exports = {
     await login(browser);
     await navigateToRoster(browser);
 
-    const selectorArgs = ['xpath', `//*/a[contains(., 'Add a record')]`]
-    await scrollToElement(browser, selectorArgs, false);
-    await browser.click(...selectorArgs);
-    
-    await browser.waitForElementVisible('body');
+    // In case the Alert would otherwise reset the scroll, wait and re-scroll
+    await browser.pause(3000);
+    await browser.execute(`window.scrollTo(0,500);`);
+    await browser.click('xpath', '//*/a[contains(@href,"/create-record")]');
+
+    await browser.waitForElementVisible(
+      'xpath',
+      '//*/p[contains(text(),"required unless otherwise specified")]'
+    );
     browser.assert.title('Add a child record');
 
     // All but the first name
