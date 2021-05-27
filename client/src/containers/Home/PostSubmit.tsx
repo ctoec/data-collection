@@ -8,7 +8,6 @@ import {
   Alert,
   ArrowRight,
   Card,
-  InlineIcon,
   TextWithIcon,
   Divider,
   Button,
@@ -96,6 +95,12 @@ export const PostSubmitHome: React.FC = () => {
       <div className="margin-top-4 margin-bottom-4">
         <Divider />
       </div>
+      <p>
+        The Office of Early Childhood’s ECE Reporter is an easy and secure way
+        for you to submit state-funded child enrollment data every month. You
+        can use it to track all new enrollments and withdrawals and changes to
+        age group, site, and funding.
+      </p>
       <h2>Updates and tasks</h2>
       <Alert
         type="info"
@@ -107,33 +112,6 @@ export const PostSubmitHome: React.FC = () => {
           </span>
         }
       />
-      <div className="grid-row margin-top-2">
-        <Card>
-          <div className="grid-container padding-0">
-            <span className="grid-row font-body-lg text-bold">
-              <div className="text-center">
-                <InlineIcon icon="complete" />
-              </div>
-              Thank you for completing your January to May 2021 data
-              collection!
-            </span>
-            <p className="grid-row">
-              OEC appreciates all that you do to improve the lives of children
-              and families.
-            </p>
-            <h3 className="grid-row">What's next?</h3>
-            <p className="grid-row margin-bottom-1em">
-              Keep your roster updated with new enrollments and withdrawals, and
-              with age group, site, and funding changes.
-            </p>
-            <p className="grid-row">
-              We're working on a feature to allow updating from excel files.
-              Until then, you can make any needed changes directly in your ECE
-              Reporter roster.
-            </p>
-          </div>
-        </Card>
-      </div>
       <div className="margin-top-4 margin-bottom-4">
         <Divider />
       </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Alert,
   QuestionIllustration,
   Card,
   HowToIcon,
@@ -23,16 +22,6 @@ const Help: React.FC = () => {
             To get support with ECE Reporter, you can either browse our how-to
             guides or reach out to the support team.
           </p>
-          <Alert
-            heading="Help keep children's data safe and secure"
-            type="info"
-            text={
-              <span>
-                Don't share any personally identifying child information over
-                the support form or email.
-              </span>
-            }
-          />
         </div>
         <div className="tablet:grid-col-4" role="presentation">
           <QuestionIllustration />

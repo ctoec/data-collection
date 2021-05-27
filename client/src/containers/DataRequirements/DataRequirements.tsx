@@ -28,8 +28,8 @@ const DataRequirements: React.FC = () => {
         </span>
       </p>
       <p>
-        ECE Reporter will allow you to share your state-funded enrollment data
-        with the Office of Early Childhood (OEC).
+        OEC has specific requirements for enrollment data. This page gives you
+        all the details about what data is required and what’s optional.
       </p>
       <p>
         <span id="enrollments-to-include" className="text-bold">
@@ -43,21 +43,7 @@ const DataRequirements: React.FC = () => {
           <li>{fundingSource.split('-')[1]}</li>
         ))}
       </ul>
-      <p>
-        <span id="data-collection-period" className="text-bold">
-          Data collection period
-        </span>
-        <br />
-        The data collection period begins 07/01/2020 and continues through
-        12/31/2020.
-      </p>
-      <p>
-        <span id="data-submission-deadline" className="text-bold">
-          Data submission deadline
-        </span>
-        <br />
-        You must submit your data to OEC by 03/08/2021.
-      </p>
+      <p>OEC asks that all users submit updated data at least monthly.</p>
       <h2
         id="data-elements"
         className="border-top border-base-lighter padding-top-1"
