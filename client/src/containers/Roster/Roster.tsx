@@ -198,7 +198,6 @@ const Roster: React.FC = () => {
       </div>
       {childRecords?.length && !isSubmitted && (
         <FixedBottomBar>
-          <Button text="Back to home" href="/home" appearance="outline" />
           {!isSiteLevelUser && (
             <Button
               id="submit-button"

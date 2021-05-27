@@ -25,7 +25,7 @@ const Landing: React.FC = () => {
     return user.isAdmin ? (
       <Redirect to="/overview/" />
     ) : (
-      <Redirect to="/home" />
+      <Redirect to="/roster/" />
     );
   }
 

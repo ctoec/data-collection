@@ -23,11 +23,12 @@ import { RevisionRequest } from './containers/Home/RevisionRequest';
 
 export type RouteConfig = {
   path: string;
-  component: React.FC<any>;
+  component?: React.FC<any>;
   exact?: boolean;
   routes?: RouteConfig[];
   unauthorized?: boolean;
   props?: any;
+  redirect?: string;
 };
 
 export const routes: RouteConfig[] = [
@@ -70,11 +71,6 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/home',
-    component: Home,
-    unauthorized: false,
-  },
-  {
     path: '/data-requirements',
     component: DataRequirements,
     unauthorized: true,
@@ -107,6 +103,11 @@ export const routes: RouteConfig[] = [
   {
     path: '/roster',
     component: Roster,
+    unauthorized: false,
+  },
+  {
+    path: '/home',
+    redirect: '/roster',
     unauthorized: false,
   },
   {
