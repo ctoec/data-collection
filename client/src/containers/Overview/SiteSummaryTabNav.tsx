@@ -42,13 +42,13 @@ export const SiteSummaryTabNav: React.FC<DataStatusTabNavProps> = ({
     >
       {activeTab === SITE_TYPE.COMPLETED ? (
         <SiteSummaryTable
-          headerText="completed July to December data"
+          headerText="completed January to May data"
           sites={completedSites}
           showSubmissionDate
         />
       ) : activeTab === SITE_TYPE.IN_PROGRESS ? (
         <SiteSummaryTable
-          headerText="in-progress July to December data"
+          headerText="in-progress January to May data"
           sites={inProgressSites}
         />
       ) : (

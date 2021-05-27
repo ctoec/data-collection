@@ -219,7 +219,7 @@ const Roster: React.FC = () => {
           {!isSiteLevelUser && (
             <Button
               id="submit-button"
-              text="My Jul-Dec data is complete"
+              text="My Jan-May data is complete"
               onClick={submitToOEC}
               disabled={!activeOrgId}
             />
