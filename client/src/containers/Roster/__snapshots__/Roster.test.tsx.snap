@@ -1232,7 +1232,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
           tabindex="0"
           type="button"
         >
-          My Jul-Dec data is complete
+          My Jan-May data is complete
         </button>
       </div>
     </div>
@@ -2374,7 +2374,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
           tabindex="0"
           type="button"
         >
-          My Jul-Dec data is complete
+          My Jan-May data is complete
         </button>
       </div>
     </div>
