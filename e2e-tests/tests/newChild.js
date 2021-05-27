@@ -1,6 +1,7 @@
 const { login } = require('../utils/login');
 const { navigateToRoster } = require('../utils/navigateToRoster');
 const { enterFormSection } = require('../utils/enterFormSection');
+const { scrollToElement } = require ('../utils/scrollToElement');
 const { headerMatch } = require('../utils/headerMatch');
 const newChildInput = require('../utils/newChildInput');
 
@@ -9,12 +10,14 @@ module.exports = {
   newChild: async function (browser) {
     // Initializes with the launch_url value set in config
     await browser.init();
-    // Log in
+
     await login(browser);
-    // Navigate to roster
     await navigateToRoster(browser);
-    // Add child
-    await browser.click('xpath', `//*/a[contains(., 'Add a record')]`);
+
+    const selectorArgs = ['xpath', `//*/a[contains(., 'Add a record')]`]
+    await scrollToElement(browser, selectorArgs);
+    await browser.click(...selectorArgs);
+
     await browser.waitForElementVisible('body');
     browser.assert.title('Add a child record');
 

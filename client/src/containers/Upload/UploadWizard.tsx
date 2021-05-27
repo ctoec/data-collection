@@ -1,5 +1,6 @@
 import { ProgressIndicator } from '@ctoec/component-library';
 import React, { SetStateAction, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAlerts } from '../../hooks/useAlerts';
 import { EnrollmentReportCheckResponse } from '../../shared/payloads';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
@@ -56,6 +57,18 @@ const UploadWizard: React.FC = () => {
           currentIndex={currentStepIndex}
           steps={UPLOAD_WIZARD_STEPS}
         />
+        {currentStepIndex === 0 && (
+          <p>
+            You can use the <Link to="/template">data collection template</Link>
+            &nbsp;to enter all of the required state-funded enrollment data. When
+            you’re finished, you can upload the complete template below. After
+            your data is in the system, you can also{' '}
+            <Link to="/roster">
+              use the Roster to make changes to your data
+            </Link>
+            .
+          </p>
+        )}
         <h2 className="margin-bottom-2">
           <span className="usa-step-indicator__current-step">
             {currentStepIndex + 1}
