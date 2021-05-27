@@ -35,7 +35,7 @@ exports[`DataRequirements matches snapshot 1`] = `
       />
     </p>
     <p>
-      ECE Reporter will allow you to share your state-funded enrollment data with the Office of Early Childhood (OEC).
+      OEC has specific requirements for enrollment data. This page gives you all the details about what data is required and what’s optional.
     </p>
     <p>
       <span
@@ -65,24 +65,7 @@ exports[`DataRequirements matches snapshot 1`] = `
       </li>
     </ul>
     <p>
-      <span
-        class="text-bold"
-        id="data-collection-period"
-      >
-        Data collection period
-      </span>
-      <br />
-      The data collection period begins 07/01/2020 and continues through 12/31/2020.
-    </p>
-    <p>
-      <span
-        class="text-bold"
-        id="data-submission-deadline"
-      >
-        Data submission deadline
-      </span>
-      <br />
-      You must submit your data to OEC by 03/08/2021.
+      OEC asks that all users submit updated data at least monthly.
     </p>
     <h2
       class="border-top border-base-lighter padding-top-1"
