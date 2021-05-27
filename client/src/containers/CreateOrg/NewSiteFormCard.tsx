@@ -26,7 +26,6 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
   numberOnPage,
   remove,
 }) => {
-  console.log('newSite', newSite);
   return (
     <Card>
       <div className="display-flex flex-row grid-row grid-gap">
@@ -42,7 +41,10 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             }}
           />
         </div>
-        <div className="tablet:grid-col-3" key={newSite.titleI?.toString()}>
+        <div
+          className="tablet:grid-col-3"
+          key={`titleI-${numberOnPage}-${newSite.titleI?.toString()}`}
+        >
           <Select
             id={`new-site-${numberOnPage}-title1-select`}
             label="Title I"
@@ -63,7 +65,10 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             }}
           />
         </div>
-        <div className="tablet:grid-col-3" key={newSite.region}>
+        <div
+          className="tablet:grid-col-3"
+          key={`region-${numberOnPage}-${newSite.region}`}
+        >
           <Select
             id={`new-site-${numberOnPage}-region-select`}
             label="Region"

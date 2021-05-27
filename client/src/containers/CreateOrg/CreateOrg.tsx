@@ -113,7 +113,6 @@ const CreateOrg: React.FC = () => {
 
   const emptySite: Partial<Site> = {
     siteName: '',
-    titleI: (null as unknown) as boolean,
     region: (null as unknown) as Region,
     facilityCode: undefined,
     licenseNumber: undefined,

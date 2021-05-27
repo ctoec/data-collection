@@ -40,10 +40,10 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
       <div className="display-flex flex-row grid-row grid-gap">
         <div
           className="tablet:grid-col-3"
-          key={newFundingSpace.source ?? undefined}
+          key={`new-funding-space-${numberOnPage}-funding-source-select-${newFundingSpace.source}`}
         >
           <Select
-            id={`new-funding-space-${numberOnPage}-${new Date().getTime()}-funding-source-select`}
+            id={`new-funding-space-${numberOnPage}-funding-source-select`}
             label="Funding source"
             options={Object.values(FundingSource).map((r) => ({
               text: r,
@@ -59,7 +59,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={newFundingSpace.ageGroup ?? undefined}
+          key={`new-funding-space-${numberOnPage}-age-group-select-${newFundingSpace.ageGroup}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-age-group-select`}
@@ -77,7 +77,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={newFundingSpace.time ?? undefined}
+          key={`new-funding-space-${numberOnPage}-space-type-select-${newFundingSpace.time}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-space-type-select`}
