@@ -2,8 +2,10 @@
 # applications, specifically for local development
 
 echo "Clearing out all old dependencies..."
+cd ../
 rm -rf node_modules
 rm -rf dist
+
 cd client
 rm -rf node_modules
 rm -rf build

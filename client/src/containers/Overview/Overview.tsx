@@ -57,7 +57,7 @@ const Overview: React.FC = () => {
           </div>
           <div className="display-flex flex-row ">
             <SummaryCard
-              header="Complete Dec-July request"
+              header="Complete Jan-May request"
               body={
                 <>
                   {completedSites.length}
