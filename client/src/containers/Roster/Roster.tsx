@@ -120,9 +120,6 @@ const Roster: React.FC = () => {
   return (
     <>
       <div className="Roster grid-container">
-        <BackButton
-          location={query.month || query.withdrawn ? '/roster' : '/'}
-        />
         <DataCompleteModal
           isOpen={submittedModalOpen}
           closeModal={() => setSubmittedModalOpen(false)}
@@ -137,8 +134,8 @@ const Roster: React.FC = () => {
             </p>
             <ul className="margin-left-2 bx--list--unordered">
               <li className="line-height-body-4 bx--list__item">
-                Review current enrollments, see enrollment data from past months,
-                and export data
+                Review current enrollments, see enrollment data from past
+                months, and export data
               </li>
               <li className="line-height-body-4 bx--list__item">
                 Add a new child to your program

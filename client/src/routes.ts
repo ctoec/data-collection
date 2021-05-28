@@ -20,15 +20,16 @@ import Overview from './containers/Overview/Overview';
 import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
+import RedirectHome from './containers/App/RedirectHome';
 
 export type RouteConfig = {
   path: string;
-  component?: React.FC<any>;
+  component: React.FC<any>;
   exact?: boolean;
   routes?: RouteConfig[];
   unauthorized?: boolean;
   props?: any;
-  redirect?: string;
+  redirectPaths?: string[];
 };
 
 export const routes: RouteConfig[] = [
@@ -107,8 +108,8 @@ export const routes: RouteConfig[] = [
   },
   {
     path: '/home',
-    redirect: '/roster',
-    unauthorized: false,
+    exact: true,
+    component: RedirectHome,
   },
   {
     path: '/upload',
