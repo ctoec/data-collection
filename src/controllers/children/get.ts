@@ -9,6 +9,8 @@ import { getCurrentFunding } from '../../utils/getCurrentFunding';
 import { NestedFundingSpaces } from '../../../client/src/shared/payloads/NestedFundingSpaces';
 import { getFundingSpaces } from '../../controllers/fundingSpaces';
 import { intersection } from 'lodash';
+import { AgeGroup } from '../../../client/src/shared/models';
+import { AgeGroupCount } from '../../../client/src/shared/payloads/AgeGroupCount';
 
 type skipTake = {
   skip?: number;
@@ -179,6 +181,21 @@ export const getActiveChildrenCount = async (user: User, organizationIds) => {
 
   return await qb.getCount();
 };
+
+export const getChildrenCountByAgeGroup = async (user: User, organizationIds) => {
+  const month = moment();
+  const qb = await activeChildrenQuery(user, organizationIds, {
+    end: month.endOf('month').format('YYYY-MM-DD'),
+    start: month.startOf('month').format('YYYY-MM-DD'),
+  });
+  const children = await qb.getMany();
+  const ageGroupCounts: AgeGroupCount = Object.values(AgeGroup).reduce((a, v) => {return {...a, [v]: 0}}, {}) as AgeGroupCount;
+  children.forEach((child) => {
+    const group = getCurrentEnrollment(child).ageGroup;
+    ageGroupCounts[group] += 1;
+  });
+  return ageGroupCounts;
+}
 
 export const getWithdrawnChildren = async (
   user: User,

@@ -4,7 +4,7 @@
 @import './containers/Help/Help.scss';
 @import './containers/Home/Home.scss';
 @import './containers/EditRecord/EditRecord.scss';
-@import './containers/Roster/Roster.scss';
+@import './containers/RosterOld/Roster.scss';
 @import './containers/Upload/Upload.scss';
 
 p,
@@ -25,6 +25,22 @@ legend .usa-label {
 .usa-form .usa-button[type='submit'] {
   margin-top: 1.5rem; // match other button styles
   margin-bottom: unset;
+}
+
+// Make the three column cards generally available, since they're used
+// in both the upload wizard and on the roster
+.three-column-layout {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  flex: 1;
+  align-items: flex-start;
+}
+
+.three-column-card {
+  margin: 0.5em;
+  width: 30%;
+  max-width: 30%;
 }
 
 h1,
