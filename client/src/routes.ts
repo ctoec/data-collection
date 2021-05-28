@@ -29,7 +29,6 @@ export type RouteConfig = {
   routes?: RouteConfig[];
   unauthorized?: boolean;
   props?: any;
-  redirectPaths?: string[];
 };
 
 export const routes: RouteConfig[] = [
