@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Landing from './containers/Landing/Landing';
 import TemplateDownload from './containers/TemplateDownload/TemplateDownload';
 import Login from './containers/Login/Login';
@@ -19,7 +20,8 @@ import Overview from './containers/Overview/Overview';
 import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
-import RedirectHome from './containers/App/RedirectHome';
+
+const RedirectHome = () => <Redirect to="/" />;
 
 export type RouteConfig = {
   path: string;
