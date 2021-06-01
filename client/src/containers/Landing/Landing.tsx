@@ -23,9 +23,9 @@ const Landing: React.FC = () => {
   // If the user is logged in, don't show the splash page
   if (user) {
     return user.isAdmin ? (
-      <Redirect to="/overview/" />
+      <Redirect to="/overview" />
     ) : (
-      <Redirect to="/roster/" />
+      <Redirect to="/roster" />
     );
   }
 

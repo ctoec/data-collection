@@ -12,7 +12,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { getAccordionItems, applySiteFilter, getRosterH2 } from './rosterUtils';
-import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
 import {
   useIsSubmitted,
