@@ -21,8 +21,6 @@ import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
 
-const RedirectHome = () => <Redirect to="/" />;
-
 export type RouteConfig = {
   path: string;
   component: React.FC<any>;
@@ -109,7 +107,7 @@ export const routes: RouteConfig[] = [
   {
     path: '/home',
     exact: true,
-    component: RedirectHome,
+    component: () => <Redirect to="/" />,
   },
   {
     path: '/upload',
