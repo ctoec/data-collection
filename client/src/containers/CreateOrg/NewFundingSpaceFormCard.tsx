@@ -1,5 +1,6 @@
 import { Card, TextInput, Button, Select } from '@ctoec/component-library';
-import React, { useState, useEffect } from 'react';
+import { NumberInput } from 'carbon-components-react';
+import React, { useState } from 'react';
 import { FundingSource, AgeGroup, FundingTime } from '../../shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 import { FundingSpace } from '../../shared/models/db/FundingSpace';
@@ -97,15 +98,18 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
           />
         </div>
         <div className="tablet:grid-col-3">
-          <TextInput
+          <NumberInput
             label={`Capacity`}
             id={`new-funding-space-${numberOnPage}-capacity-input`}
-            type="input"
-            value={newFundingSpace.capacity ?? undefined}
+            value={newFundingSpace.capacity ?? ''}
             onChange={(e: any) => {
               newFundingSpace.capacity = e.target.value;
               return e.target.value;
             }}
+            allowEmpty={true}
+            //  @ts-ignore
+            hideSteppers={true}
+            light={true}
           />
         </div>
       </div>

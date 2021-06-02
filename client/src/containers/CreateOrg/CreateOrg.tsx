@@ -113,7 +113,7 @@ const CreateOrg: React.FC = () => {
 
   const emptySite: Partial<Site> = {
     siteName: '',
-    region: (null as unknown) as Region,
+    region: undefined,
     facilityCode: undefined,
     licenseNumber: undefined,
     registryId: undefined,
@@ -125,10 +125,10 @@ const CreateOrg: React.FC = () => {
   };
 
   const emptyFundingSpace: Partial<FundingSpace> = {
-    source: (null as unknown) as FundingSource,
-    ageGroup: (null as unknown) as AgeGroup,
+    source: undefined,
+    ageGroup: undefined,
     capacity: undefined,
-    time: (null as unknown) as FundingTime,
+    time: undefined,
   };
 
   const [newFundingSpaces, setNewFundingSpaces] = useState<
@@ -208,17 +208,13 @@ const CreateOrg: React.FC = () => {
         </div>
         <h2 className="margin-top-4">Funding spaces</h2>
         <Divider />
-        {newFundingSpaces.map((nfs, idx) => {
-          if (nfs) {
-            return (
-              <NewFundingSpaceCard
-                newFundingSpace={nfs}
-                numberOnPage={idx + 1}
-                remove={removeFundingSpace}
-              />
-            );
-          }
-        })}
+        {newFundingSpaces.map((nfs, idx) => (
+          <NewFundingSpaceCard
+            newFundingSpace={nfs}
+            numberOnPage={idx + 1}
+            remove={removeFundingSpace}
+          />
+        ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
           <Button
             className="margin-top-2 margin-bottom-4"
