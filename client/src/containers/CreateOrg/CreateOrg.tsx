@@ -10,14 +10,7 @@ import { BackButton } from '../../components/BackButton';
 import { FixedBottomBar } from '../../components/FixedBottomBar/FixedBottomBar';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { useAlerts } from '../../hooks/useAlerts';
-import {
-  Region,
-  Site,
-  FundingSource,
-  AgeGroup,
-  FundingTime,
-  User,
-} from '../../shared/models';
+import { Site, User } from '../../shared/models';
 import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { NewSiteFormCard } from './NewSiteFormCard';
