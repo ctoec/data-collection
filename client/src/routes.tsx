@@ -1,9 +1,9 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Landing from './containers/Landing/Landing';
 import TemplateDownload from './containers/TemplateDownload/TemplateDownload';
 import Login from './containers/Login/Login';
 import PageNotFound from './containers/PageNotFound/PageNotFound';
-import Home from './containers/Home/Home';
 import EditRecord from './containers/EditRecord/EditRecord';
 import DataRequirements from './containers/DataRequirements/DataRequirements';
 import SubmitSuccess from './containers/SubmitSuccess/SubmitSuccess';
@@ -70,11 +70,6 @@ export const routes: RouteConfig[] = [
     unauthorized: false,
   },
   {
-    path: '/home',
-    component: Home,
-    unauthorized: false,
-  },
-  {
     path: '/data-requirements',
     component: DataRequirements,
     unauthorized: true,
@@ -108,6 +103,11 @@ export const routes: RouteConfig[] = [
     path: '/roster',
     component: Roster,
     unauthorized: false,
+  },
+  {
+    path: '/home',
+    exact: true,
+    component: () => <Redirect to="/" />,
   },
   {
     path: '/upload',

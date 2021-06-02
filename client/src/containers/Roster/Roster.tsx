@@ -12,7 +12,6 @@ import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { apiPut } from '../../utils/api';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import { getAccordionItems, applySiteFilter, getRosterH2 } from './rosterUtils';
-import { BackButton } from '../../components/BackButton';
 import { RosterButtonsTable } from './RosterButtonsTable';
 import {
   useIsSubmitted,
@@ -120,9 +119,6 @@ const Roster: React.FC = () => {
   return (
     <>
       <div className="Roster grid-container">
-        <BackButton
-          location={query.month || query.withdrawn ? '/roster' : '/'}
-        />
         <DataCompleteModal
           isOpen={submittedModalOpen}
           closeModal={() => setSubmittedModalOpen(false)}
@@ -137,8 +133,8 @@ const Roster: React.FC = () => {
             </p>
             <ul className="margin-left-2 bx--list--unordered">
               <li className="line-height-body-4 bx--list__item">
-                Review current enrollments, see enrollment data from past months,
-                and export data
+                Review current enrollments, see enrollment data from past
+                months, and export data
               </li>
               <li className="line-height-body-4 bx--list__item">
                 Add a new child to your program
@@ -215,7 +211,6 @@ const Roster: React.FC = () => {
       </div>
       {childRecords?.length && !isSubmitted && (
         <FixedBottomBar>
-          <Button text="Back to home" href="/home" appearance="outline" />
           {!isSiteLevelUser && (
             <Button
               id="submit-button"

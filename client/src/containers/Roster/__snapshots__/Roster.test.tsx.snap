@@ -5,22 +5,6 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
   <div
     class="Roster grid-container"
   >
-    <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold bx--btn bx--btn--primary"
-      tabindex="0"
-      type="button"
-    >
-      <span
-        class="oec-text-with-icon"
-      >
-        <svg
-          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
-        >
-          arrowRight.svg
-        </svg>
-        Back
-      </span>
-    </button>
     <div
       class="grid-row flex-align-center"
     >
@@ -293,7 +277,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-19"
+              aria-controls="accordion-item-16"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -328,7 +312,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-19"
+              id="accordion-item-16"
             >
               <div>
                 <hr
@@ -804,7 +788,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-20"
+              aria-controls="accordion-item-17"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -839,7 +823,7 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-20"
+              id="accordion-item-17"
             >
               <div>
                 <hr
@@ -1258,12 +1242,6 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
       <div
         class="grid-container"
       >
-        <a
-          class="bx--link usa-button usa-button--outline"
-          href="/home"
-        >
-          Back to home
-        </a>
         <button
           class="usa-button bx--btn bx--btn--primary"
           tabindex="0"
@@ -1282,22 +1260,6 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
   <div
     class="Roster grid-container"
   >
-    <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold bx--btn bx--btn--primary"
-      tabindex="0"
-      type="button"
-    >
-      <span
-        class="oec-text-with-icon"
-      >
-        <svg
-          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
-        >
-          arrowRight.svg
-        </svg>
-        Back
-      </span>
-    </button>
     <div
       class="grid-row flex-align-center"
     >
@@ -1561,7 +1523,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-11"
+              aria-controls="accordion-item-9"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -1596,7 +1558,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-11"
+              id="accordion-item-9"
             >
               <div>
                 <hr
@@ -2026,7 +1988,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-12"
+              aria-controls="accordion-item-10"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -2061,7 +2023,7 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-12"
+              id="accordion-item-10"
             >
               <div>
                 <hr
@@ -2437,12 +2399,6 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
       <div
         class="grid-container"
       >
-        <a
-          class="bx--link usa-button usa-button--outline"
-          href="/home"
-        >
-          Back to home
-        </a>
         <button
           class="usa-button bx--btn bx--btn--primary"
           tabindex="0"
@@ -2461,22 +2417,6 @@ exports[`Roster matches snapshot for site level user 1`] = `
   <div
     class="Roster grid-container"
   >
-    <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold bx--btn bx--btn--primary"
-      tabindex="0"
-      type="button"
-    >
-      <span
-        class="oec-text-with-icon"
-      >
-        <svg
-          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
-        >
-          arrowRight.svg
-        </svg>
-        Back
-      </span>
-    </button>
     <div
       class="grid-row flex-align-center"
     >
@@ -2671,7 +2611,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         class="bx--accordion__item bx--accordion__item--active"
       >
         <button
-          aria-controls="accordion-item-5"
+          aria-controls="accordion-item-4"
           aria-expanded="true"
           class="bx--accordion__heading"
           type="button"
@@ -2706,7 +2646,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         </button>
         <div
           class="bx--accordion__content"
-          id="accordion-item-5"
+          id="accordion-item-4"
         >
           <div>
             <hr
@@ -3136,7 +3076,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         class="bx--accordion__item bx--accordion__item--active"
       >
         <button
-          aria-controls="accordion-item-6"
+          aria-controls="accordion-item-5"
           aria-expanded="true"
           class="bx--accordion__heading"
           type="button"
@@ -3171,7 +3111,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
         </button>
         <div
           class="bx--accordion__content"
-          id="accordion-item-6"
+          id="accordion-item-5"
         >
           <div>
             <hr
@@ -3544,14 +3484,7 @@ exports[`Roster matches snapshot for site level user 1`] = `
     >
       <div
         class="grid-container"
-      >
-        <a
-          class="bx--link usa-button usa-button--outline"
-          href="/home"
-        >
-          Back to home
-        </a>
-      </div>
+      />
     </div>
   </div>
 </DocumentFragment>
@@ -3562,22 +3495,6 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
   <div
     class="Roster grid-container"
   >
-    <button
-      class="usa-button usa-button--unstyled margin-top-2 text-bold bx--btn bx--btn--primary"
-      tabindex="0"
-      type="button"
-    >
-      <span
-        class="oec-text-with-icon"
-      >
-        <svg
-          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-left oec-text-with-icon__icon--side-left"
-        >
-          arrowRight.svg
-        </svg>
-        Back
-      </span>
-    </button>
     <div
       class="grid-row flex-align-center"
     >
@@ -3841,7 +3758,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-26"
+              aria-controls="accordion-item-22"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -3876,7 +3793,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-26"
+              id="accordion-item-22"
             >
               <div>
                 <hr
@@ -4306,7 +4223,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             class="bx--accordion__item bx--accordion__item--active"
           >
             <button
-              aria-controls="accordion-item-27"
+              aria-controls="accordion-item-23"
               aria-expanded="true"
               class="bx--accordion__heading"
               type="button"
@@ -4341,7 +4258,7 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
             </button>
             <div
               class="bx--accordion__content"
-              id="accordion-item-27"
+              id="accordion-item-23"
             >
               <div>
                 <hr
