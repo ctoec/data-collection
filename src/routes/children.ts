@@ -28,7 +28,6 @@ childrenRouter.get(
     }) as Moment;
     const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
     const take = parseQueryString(req, 'take', { post: parseInt }) as number;
-    const count = parseQueryString(req, 'count', { post: (countStr) => countStr === 'true' }) as boolean;
     const children = await controller.getActiveChildren(
       req.user,
       organizationIds,
@@ -38,13 +37,18 @@ childrenRouter.get(
         take,
       }
     );
-    if (count) {
-      const ageGroupCounts = await controller.getChildrenCountByAgeGroup(req.user, organizationIds);
-      res.send(ageGroupCounts);
-      return;
-    }
-
     res.send(children);
+  })
+);
+
+childrenRouter.get(
+  '/count',
+  passAsyncError(async (req, res) => {
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const ageGroupCounts = await controller.getChildrenCountByAgeGroup(req.user, organizationIds);
+    res.send(ageGroupCounts);
   })
 );
 

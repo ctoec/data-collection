@@ -182,18 +182,22 @@ export const getActiveChildrenCount = async (user: User, organizationIds) => {
   return await qb.getCount();
 };
 
+/**
+ * Counts the number of children in each age group enrolled at sites
+ * associated with all of a user's organizations. No records are
+ * returned, only the counts within each age group.
+ */
 export const getChildrenCountByAgeGroup = async (user: User, organizationIds) => {
   const month = moment();
-  const qb = await activeChildrenQuery(user, organizationIds, {
-    end: month.endOf('month').format('YYYY-MM-DD'),
-    start: month.startOf('month').format('YYYY-MM-DD'),
-  });
-  const children = await qb.getMany();
-  const ageGroupCounts: AgeGroupCount = Object.values(AgeGroup).reduce((a, v) => {return {...a, [v]: 0}}, {}) as AgeGroupCount;
-  children.forEach((child) => {
-    const group = getCurrentEnrollment(child).ageGroup;
-    ageGroupCounts[group] += 1;
-  });
+  let ageGroupCounts = {} as AgeGroupCount;
+  await Promise.all(Object.keys(AgeGroup).map(async (group) => {
+    const qb = await activeChildrenQuery(user, organizationIds, {
+      end: month.endOf('month').format('YYYY-MM-DD'),
+      start: month.startOf('month').format('YYYY-MM-DD'),
+    });
+    qb.andWhere('enrollment.ageGroup = :group', { group });
+    ageGroupCounts[AgeGroup[group]] = await qb.getCount();
+  }));
   return ageGroupCounts;
 }
 

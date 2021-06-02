@@ -1,5 +1,7 @@
+import { AgeGroup } from "../models";
+
 export type AgeGroupCount = {
-  'Infant/toddler': number, 
-  'Preschool': number,
-  'School aged': number,
+  [AgeGroup.InfantToddler]: number,
+  [AgeGroup.Preschool]: number,
+  [AgeGroup.SchoolAge]: number,
 }
