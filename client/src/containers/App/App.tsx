@@ -38,11 +38,6 @@ const App: React.FC = () => {
   const primaryNavItems: NavLinkProps[] = [
     {
       type: 'primary',
-      text: 'Home',
-      path: '/home',
-    },
-    {
-      type: 'primary',
       text: 'File upload',
       path: '/upload',
     },
