@@ -1,5 +1,5 @@
 import { BookType } from 'xlsx';
-import { ColumnMetadata } from '../../client/src/shared/models';
+import { ColumnMetadata, UniqueIdType } from '../../client/src/shared/models';
 import { Child, Enrollment, Funding } from '../entity';
 import { Response } from 'express';
 import { isMoment } from 'moment';
@@ -102,9 +102,25 @@ function flattenChild(
       return;
     } else {
       const valueFound = objectsToCheck.some((o) => {
-        if (o && o.hasOwnProperty(propertyName)) {
-          childString.push(formatProperty(o[propertyName], propertyName));
-          return true;
+        if (o && o.hasOwnProperty(propertyName) || propertyName === 'sasidUniqueId') {
+          // Special case: template has a joint 'sasid/unique ID' field, but
+          // child objects have only 'sasid' and 'uniqueId' fields, so can't
+          // check strict 'ownProperty'
+          if (propertyName === 'sasidUniqueId') {
+            if (child.organization?.uniqueIdType === UniqueIdType.SASID) {
+              childString.push(formatProperty(
+                child[UniqueIdType.SASID.toLowerCase()], UniqueIdType.SASID.toLowerCase())
+              );
+            }
+            else {
+              childString.push(formatProperty(child['uniqueId'], 'uniqueId'));
+            }
+            return true;
+          }
+          else {
+            childString.push(formatProperty(o[propertyName], propertyName));
+            return true;
+          }
         }
         return false;
       });
