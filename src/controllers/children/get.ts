@@ -187,7 +187,7 @@ export const getActiveChildrenCount = async (user: User, organizationIds) => {
  * associated with all of a user's organizations. No records are
  * returned, only the counts within each age group.
  */
-export const getChildrenCountByAgeGroup = async (user: User, organizationIds) => {
+export const getChildrenCountByAgeGroup = async (user: User, organizationIds): Promise<AgeGroupCount> => {
   const month = moment();
   let ageGroupCounts = {} as AgeGroupCount;
   await Promise.all(Object.keys(AgeGroup).map(async (group) => {

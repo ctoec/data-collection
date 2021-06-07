@@ -1,8 +1,9 @@
 import { Card } from '@ctoec/component-library';
 import React from 'react';
+import { AgeGroup } from '../../shared/models';
 
 type RosterSummaryCardProps = {
-  ageGroup: string;
+  ageGroup: AgeGroup;
   count: number;
 }
 
