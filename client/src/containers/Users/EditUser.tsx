@@ -59,15 +59,10 @@ const EditUser: React.FC = () => {
   const [foundOrgs, setFoundOrgs] = useState<Organization[]>([]);
   const searchForOrgs = async (query: string) => {
     setShowSearchResults(false);
-    await apiGet(`/organizations/by-name/${query}`, accessToken)
-      .then((res) => {
-        setFoundOrgs(res);
-        setShowSearchResults(true);
-      })
-      .catch((err) => {
-        console.error(err);
-        throw new Error(err);
-      });
+    await apiGet(`/organizations/${query}`, accessToken).then((res) => {
+      setFoundOrgs(res);
+      setShowSearchResults(true);
+    });
   };
 
   return !adminUser?.isAdmin ? (
@@ -191,7 +186,8 @@ const EditUser: React.FC = () => {
           )}
         </div>
       </div>
-      <h2 className="margin-top-4">Add organization</h2>
+      <h2 className="margin-top-4">Permissions</h2>
+      <h3 className="margin-top-4">Add Organization</h3>
       <Divider />
       <SearchBar
         id="new-user-org-search"

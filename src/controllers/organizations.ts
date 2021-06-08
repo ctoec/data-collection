@@ -53,27 +53,29 @@ export async function createOrganization(name: string, sites: Partial<Site>[]) {
  * with a count of sites and a list of funding sources
  * @param user
  */
-export const getOrganizations = async (): Promise<Organization[]> =>
-  getManager().query(
-    `select o.id, o.providername AS providerName, s.siteCount, string_agg(fs.source, ',') as fundingSource
-from organization o left join (
-    select distinct organizationid, source
-    from funding_space
-) fs on o.id = fs.organizationId left join (
-        select organizationid, count(*) as siteCount
-        from site
-        group by organizationid
-        ) s on o.id = s.organizationId
-group by o.id, o.providername, s.siteCount`
-  );
+export const getOrganizations = async (
+  name?: string
+): Promise<Organization[]> =>
+  name ? getOrgsByName(name) : getAllAccessibleOrgs();
 
-function escapeLikeString(raw: string): string {
-  return raw.replace(/[\\%_]/g, '\\$&');
-}
+const escapeLikeString = (raw: string): string =>
+  raw.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\s\\]/g, '%');
 
-export const getOrgsByName = async (name: string) => {
-  const orgs = await getManager().find(Organization, {
+const getOrgsByName = (name: string) =>
+  getManager().find(Organization, {
     where: { providerName: ILike(`%${escapeLikeString(name)}%`) },
   });
-  return orgs;
-};
+
+const getAllAccessibleOrgs = () =>
+  getManager().query(
+    `select o.id, o.providername AS providerName, s.siteCount, string_agg(fs.source, ',') as fundingSource
+    from organization o left join (
+        select distinct organizationid, source
+        from funding_space
+    ) fs on o.id = fs.organizationId left join (
+            select organizationid, count(*) as siteCount
+            from site
+            group by organizationid
+            ) s on o.id = s.organizationId
+    group by o.id, o.providername, s.siteCount`
+  );

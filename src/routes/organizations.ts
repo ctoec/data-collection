@@ -26,28 +26,12 @@ organizationsRouter.post(
 );
 
 organizationsRouter.get(
-  '/',
+  '/:name',
   passAsyncError(async (req, res) => {
     const user = req.user;
     if (!user.isAdmin) throw new ForbiddenError();
-    const organizations = await controller.getOrganizations();
+    const name = req.params['name'] ?? null;
+    const organizations = await controller.getOrganizations(name);
     res.send(organizations);
-  })
-);
-
-organizationsRouter.get(
-  '/by-name/:name',
-  passAsyncError(async (req, res) => {
-    try {
-      const name = req.params['name'];
-      const orgs = await controller.getOrgsByName(name);
-      res.send(orgs);
-    } catch (err) {
-      if (err instanceof ApiError) throw err;
-      console.error('Error finding user by email address: ', err);
-      throw new InternalServerError(
-        'Unable to find users for create organization.'
-      );
-    }
   })
 );
