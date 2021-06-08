@@ -55,7 +55,8 @@
     "tsoa/@tsoa/cli/handlebars": "^4.7.7",
     "tsoa/@tsoa/cli/merge": "^2.1.1",
     "jest/**/hosted-git-info": "^3.0.8",
-    "concurrently/**/hosted-git-info": "^3.0.8"
+    "concurrently/**/hosted-git-info": "^3.0.8",
+    "**/glob-parent":"^5.1.2"
   },
   "scripts": {
     "build": "rm -rf dist/ && npm run build-ts",
