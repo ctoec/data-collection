@@ -37,8 +37,18 @@ childrenRouter.get(
         take,
       }
     );
-
     res.send(children);
+  })
+);
+
+childrenRouter.get(
+  '/count',
+  passAsyncError(async (req, res) => {
+    const organizationIds = parseQueryString(req, 'organizationId', {
+      forceArray: true,
+    }) as string[];
+    const ageGroupCounts = await controller.getChildrenCountByAgeGroup(req.user, organizationIds);
+    res.send(ageGroupCounts);
   })
 );
 
