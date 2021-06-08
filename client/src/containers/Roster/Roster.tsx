@@ -43,15 +43,25 @@ const Roster: React.FC = () => {
   return (
     <div className="margin-top-4 grid-container">
       <h1 ref={h1ref}>{userOrg.providerName}</h1>
+      
       <p>
-        {`Your roster has 
-          ${
-            Object.values(childCounts).reduce(
-              (a: number, v: any) => a += v, 0)
+        Your roster has&nbsp;
+        <span className="text-underline">
+          {
+            pluralize(
+              'child',
+              Object.values(childCounts)
+                .reduce((a: number, v: any) => a += v, 0),
+              true)
           }
-        children enrolled across ${pluralize('sites', sites.length, true)}.`
-        }
+        </span>
+        &nbsp;enrolled across&nbsp;
+        <span className="text-underline">
+          {pluralize('sites', sites.length, true)}
+        </span>
+        .
       </p>
+
       <div className="grid-row three-column-layout">
         <RosterSummaryCard
           ageGroup={AgeGroup.InfantToddler}
