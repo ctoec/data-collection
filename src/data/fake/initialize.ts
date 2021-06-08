@@ -110,7 +110,13 @@ export const initialize = async () => {
         })
       );
 
-      if (!(await getManager().find(FundingSpace)).length) {
+      const fundingSpacesForOrg = await getManager().find(FundingSpace, {
+        where: {
+          organizationId: organization.id,
+        }
+      });
+
+      if (!fundingSpacesForOrg?.length) {
         const fundingSpacesToAdd = await Promise.all(
           getFakeFundingSpaces(organization).map((fs) => {
             return getManager().create(FundingSpace, omit(fs, 'id'));
