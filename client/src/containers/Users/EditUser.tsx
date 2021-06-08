@@ -57,7 +57,7 @@ const EditUser: React.FC = () => {
 
   const [foundOrgs, setFoundOrgs] = useState<Organization[] | null>(null);
   const searchForOrgs = async (query: string) => {
-    await apiGet(`/organizations/${query}`, accessToken).then((res) => {
+    await apiGet(`/organizations/?name=${query}`, accessToken).then((res) => {
       setFoundOrgs(res);
     });
   };

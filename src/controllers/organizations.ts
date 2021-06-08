@@ -53,10 +53,8 @@ export async function createOrganization(name: string, sites: Partial<Site>[]) {
  * with a count of sites and a list of funding sources
  * @param user
  */
-export const getOrganizations = async (
-  name?: string
-): Promise<Organization[]> =>
-  name ? getOrgsByName(name) : getAllAccessibleOrgs();
+export const getOrganizations = async (query): Promise<Organization[]> =>
+  query.name ? getOrgsByName(query.name) : getAllAccessibleOrgs();
 
 const escapeLikeString = (raw: string): string =>
   raw.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\s\\]/g, '%');

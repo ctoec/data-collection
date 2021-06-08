@@ -26,12 +26,11 @@ organizationsRouter.post(
 );
 
 organizationsRouter.get(
-  '/:name',
+  '/',
   passAsyncError(async (req, res) => {
     const user = req.user;
     if (!user.isAdmin) throw new ForbiddenError();
-    const name = req.params['name'] ?? null;
-    const organizations = await controller.getOrganizations(name);
+    const organizations = await controller.getOrganizations(req.query);
     res.send(organizations);
   })
 );
