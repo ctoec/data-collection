@@ -22,15 +22,10 @@ const Roster: React.FC = () => {
   useEffect(() => {
     if (user && userOrg && accessToken) {
       (async function getRosterSubHeader() {
-        try {
-          const counts = await apiGet(`children/count?${stringify({
-            organizationId: userOrg.id,
-          })}`, accessToken);
-          setChildCounts(counts);
-        } catch (error) {
-          console.error(error);
-          throw new Error(error);
-        }
+        const counts = await apiGet(`children/count?${stringify({
+          organizationId: userOrg.id,
+        })}`, accessToken);
+        setChildCounts(counts);
       })()
     }
   }, [user, userOrg, accessToken]);
@@ -39,13 +34,8 @@ const Roster: React.FC = () => {
   useEffect(() => {
     if (user && userOrg && accessToken) {
       (async function getSites() {
-        try {
-          const sites = await apiGet('sites', accessToken);
-          setSites(sites);
-        } catch (error) {
-          console.error(error);
-          throw new Error(error);
-        }
+        const sites = await apiGet('sites', accessToken);
+        setSites(sites);
       })()
     }
   }, [user, userOrg, accessToken])
