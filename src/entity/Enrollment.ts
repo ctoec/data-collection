@@ -69,8 +69,12 @@ export class Enrollment implements EnrollmentInterface {
   entry?: Moment;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  @ValidateIf((c) => !!c.entry)
   @MomentComparison({
-    compareFunc: (exit: Moment) => exit.isBefore(moment()),
+    compareFunc: (exit: Moment) => {
+      console.log('*********THIS****', this);
+      return exit.isBefore(moment());
+    },
     message: 'Exit cannot be in the future.',
   })
   exit?: Moment;
