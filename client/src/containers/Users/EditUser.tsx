@@ -55,13 +55,11 @@ const EditUser: React.FC = () => {
     })();
   }, [adminUser, accessToken]);
 
-  const [showSearchResults, setShowSearchResults] = useState(false);
-  const [foundOrgs, setFoundOrgs] = useState<Organization[]>([]);
+  const [foundOrgs, setFoundOrgs] = useState<Organization[] | null>(null);
   const searchForOrgs = async (query: string) => {
-    setShowSearchResults(false);
+    setFoundOrgs([]);
     await apiGet(`/organizations/${query}`, accessToken).then((res) => {
       setFoundOrgs(res);
-      setShowSearchResults(true);
     });
   };
 
@@ -196,7 +194,7 @@ const EditUser: React.FC = () => {
         onSearch={searchForOrgs}
         className="tablet:grid-col-6"
       />
-      {showSearchResults && (
+      {foundOrgs && (
         <>
           <p className="margin-bottom-2 text-bold">
             {`We found ${pluralize(
