@@ -41,7 +41,9 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
       <div className="display-flex flex-row grid-row grid-gap">
         <div
           className="tablet:grid-col-3"
-          key={`new-funding-space-${numberOnPage}-funding-source-select-${newFundingSpace.source}`}
+          key={`new-funding-space-${numberOnPage}-funding-source-select-${
+            newFundingSpace.source
+          }-${Date.now()}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-funding-source-select`}
@@ -60,7 +62,9 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-funding-space-${numberOnPage}-age-group-select-${newFundingSpace.ageGroup}`}
+          key={`new-funding-space-${numberOnPage}-age-group-select-${
+            newFundingSpace.ageGroup
+          }-${Date.now()}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-age-group-select`}
@@ -78,7 +82,9 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-funding-space-${numberOnPage}-space-type-select-${newFundingSpace.time}`}
+          key={`new-funding-space-${numberOnPage}-space-type-select-${
+            newFundingSpace.time
+          }-${Date.now()}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-space-type-select`}
@@ -97,7 +103,13 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             }}
           />
         </div>
-        <div className="tablet:grid-col-3">
+
+        <div
+          className="tablet:grid-col-3"
+          key={`new-funding-space-${numberOnPage}-capacity-${
+            newFundingSpace.capacity
+          }-${Date.now()}`}
+        >
           <NumberInput
             label={`Capacity`}
             id={`new-funding-space-${numberOnPage}-capacity-input`}

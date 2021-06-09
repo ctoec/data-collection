@@ -18,6 +18,7 @@ import { getErrorMessage } from './getErrorMessage';
 import { FundingSpace } from '../../shared/models/db/FundingSpace';
 import { NewFundingSpaceCard } from './NewFundingSpaceFormCard';
 import pluralize from 'pluralize';
+import { uniqWith } from 'lodash';
 
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
@@ -66,12 +67,32 @@ const CreateOrg: React.FC = () => {
         !!nfs.time
     );
 
+    const allFundingSpacesUnique =
+      uniqWith(
+        newFundingSpaces,
+        (a: Partial<FundingSpace>, b: Partial<FundingSpace>) =>
+          a.source === b.source &&
+          a.ageGroup === b.ageGroup &&
+          a.time === b.time
+      ).length === newFundingSpaces.length;
+
     if (!allFundingSpaceOkay) {
       setAlerts([
         {
           type: 'error',
           heading: 'Funding space is incomplete',
           text: `One or more requested funding spaces is missing required information.`,
+        },
+      ]);
+      return;
+    }
+
+    if (!allFundingSpacesUnique) {
+      setAlerts([
+        {
+          type: 'error',
+          heading: 'Funding spaces are not unique',
+          text: `One or more requested funding spaces are not unique.`,
         },
       ]);
       return;
@@ -98,6 +119,7 @@ const CreateOrg: React.FC = () => {
         });
       })
       .catch((err) => {
+        console.log('Error - ****', err);
         const alertToSet = getErrorMessage(err);
         if (alertToSet) setAlerts(alertToSet);
         else throw new Error(err);
@@ -194,6 +216,7 @@ const CreateOrg: React.FC = () => {
             newSite={ns}
             numberOnPage={idx + 1}
             remove={removeSite}
+            key={`newsite-form-card-${idx}`}
           />
         ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
@@ -206,6 +229,7 @@ const CreateOrg: React.FC = () => {
             newFundingSpace={nfs}
             numberOnPage={idx + 1}
             remove={removeFundingSpace}
+            key={`newFundingSpace-form-card-${idx}`}
           />
         ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
