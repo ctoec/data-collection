@@ -41,9 +41,7 @@ getConnectionOptions().then((connectionOptions) => {
       // Handle non-existant API routes
       app.use('/api', (_, res) => res.sendStatus(400));
 
-      const pathToReactApp = isDevelopment()
-        ? path.join(__dirname, '../client/build')
-        : path.join(__dirname, '../../client/build');
+      const pathToReactApp = path.join(__dirname, '../../client/build');
 
       /* Register SPA-serving middlewares */
       // Serve the static files from the React app
@@ -58,15 +56,15 @@ getConnectionOptions().then((connectionOptions) => {
       } else {
         // When in development, proxy requests to the docker container for the client
         const proxy = httpProxy.createProxy({
-          target: process.env.CLIENT_URL || 'http://client:3000',
+          target: process.env.CLIENT_URL || 'http://localhost:3000',
         });
         app.get('*', (req, res) => proxy.web(req, res));
       }
 
-      const port = process.env.PORT || 3000;
+      const port = process.env.PORT || 3001;
       app.listen(port);
 
       console.log('App is listening on port ' + port);
     })
-    .catch((err) => console.error('error connecting to DB with typeorm', err));
+    .catch((err) => console.error('Unable to open database connection', err));
 });

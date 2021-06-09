@@ -1,42 +1,6 @@
 version: '3.2'
 
 services:
-  client:
-    image: node:12
-    stdin_open: true
-    volumes:
-      - ./client:/home/node/app:cached
-      - ./shared:/home/node/shared:cached
-    working_dir: /home/node/app
-    entrypoint:
-      - yarn
-      - start
-    environment:
-      HOST: '0.0.0.0'
-
-  server:
-    image: node:12
-    stdin_open: true
-    volumes:
-      - ./:/home/node/app:cached
-    working_dir: /home/node/app
-    ports:
-      - 5001:3000
-    entrypoint:
-      - yarn
-      - run
-      - watch
-    environment:
-      HOST: '0.0.0.0'
-      NODE_ENV: development
-      DB_PASSWORD: TestPassword1
-      WINGED_KEYS_HOST: 'https://winged-keys:5050'
-      # Change this to true if you want to create a test user with permissions for multiple organizations
-      MULTI_ORG_USER: 'false'
-      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-    depends_on:
-      - db
-
   db:
     image: mcr.microsoft.com/mssql/server
     environment:

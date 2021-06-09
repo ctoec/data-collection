@@ -59,6 +59,7 @@
     "build": "rm -rf dist/ && npm run build-ts",
     "build-ts": "tsc",
     "debug": "npm run build && npm run watch-debug",
+    "local": "NODE_ENV=development MULTI_ORG_USER=false PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn run watch",
     "prettier-all": "prettier --single-quote --write **/*.{js,jsx,ts,tsx,json,css,scss}",
     "prettier": "prettier --single-quote --write",
     "serve": "node dist/src/index.js",

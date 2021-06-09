@@ -17,12 +17,13 @@ import { organizations } from '../data/fake/organizations';
  *
  * Adds the resulting claims to the "claims" property on the request.
  */
+
+ const wingedKeysHost = process.env.WINGED_KEYS_HOST || 'https://localhost:5050';
+
 const decodeClaim = jwt({
   secret: jwks.expressJwtSecret({
     cache: true,
-    jwksUri: `${
-      process.env.WINGED_KEYS_HOST || 'https://localhost:5050'
-    }/.well-known/openid-configuration/jwks`,
+    jwksUri: `${wingedKeysHost}/.well-known/openid-configuration/jwks`,
     strictSsl: false,
   }),
   algorithms: ['RS256'],
@@ -113,7 +114,7 @@ const getUser = async (wingedKeysId: string) => {
 async function getUserFromWingedKeys(
   bearerToken: string
 ): Promise<AxiosResponse<any>> {
-  return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
+  return await axios.get(`${wingedKeysHost}/connect/userinfo`, {
     headers: {
       authorization: bearerToken,
     },

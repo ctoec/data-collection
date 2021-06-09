@@ -52,6 +52,7 @@
     "react-scripts/**/hosted-git-info": "^3.0.8"
   },
   "scripts": {
+    "local": "SKIP_PREFLIGHT_CHECK=true yarn start",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "TZ=America/New_York CI=true react-scripts test --env=jest-environment-jsdom-sixteen --silent --testPathIgnorePatterns ./*/integrationTests --runInBand",

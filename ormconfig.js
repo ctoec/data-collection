@@ -1,6 +1,6 @@
 module.exports = {
-  host: process.env.DB_HOST || 'db',
-  port: parseInt(process.env.DB_PORT) || 1433,
+  host: process.env.DB_HOST || 'localhost',
+  port: parseInt(process.env.DB_PORT) || 5002,
   options: {
     // https://github.com/tediousjs/node-mssql#6x-to-7x-changes-pre-release
     trustServerCertificate: true,
