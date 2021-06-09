@@ -1,23 +1,5 @@
-import { getConnectionOptions, getConnectionManager, Connection } from 'typeorm';
-import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerConnectionOptions';
+import { Connection } from 'typeorm';
 import commandLineArgs from 'command-line-args';
-import {
-  Organization,
-  FundingSpace,
-  Site,
-  Enrollment,
-  Funding,
-  Family,
-  Child,
-  IncomeDetermination,
-  FundingTimeSplit,
-  Community,
-  OrganizationPermission,
-  SitePermission,
-  User,
-  CommunityPermission,
-  ReportingPeriod,
-} from '../../entity';
 import { read, parse, openFawkesDbConnection } from './utils';
 import { createOrganizationData } from './organizations';
 import { createSiteData } from './sites';
