@@ -74,28 +74,20 @@ const Upload: React.FC<StepContentProps> = ({
       handleJWTError(history, (e) => {
         setAlerts([
           {
-            heading: 'Files must be uploaded in the format of our data template.',
+            heading: 'There was an error uploading your file!',
             text: (
               <>
                 <p>
-                  Please re-upload your file using one of the templates provided below.
-                  If you need further support, send us a&nbsp;
+                  Files must be uploaded in the format of our data template.
+                  Please re-upload your file using one of the templates provided&nbsp;
+                  <a className="usa-button usa-button--unstyled" href="/template">
+                    here.
+                  </a>
+                  &nbsp;If you need further support, send us a&nbsp;
                   <a className="usa-button usa-button--unstyled" href="/support">
                     support request.
                   </a>
                 </p>
-                <div>
-                  <CSVExcelDownloadButton
-                    fileType="xlsx"
-                    whichDownload="template"
-                    className="margin-bottom-1"
-                  />
-                  <CSVExcelDownloadButton
-                    fileType="csv"
-                    whichDownload="template"
-                    className="margin-bottom-1"
-                  />
-                </div>
               </>
             ),
             type: 'error',
