@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import { UserRow } from './create';
 import fs from 'fs';
-import { SiteConnectionOpts } from './config';
+import { SiteConnectionOpts } from '../types';
 
 export const createWingedKeysUsers = async (
   userData: UserRow[],

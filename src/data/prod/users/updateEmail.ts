@@ -1,8 +1,10 @@
-import { getManager, In } from 'typeorm';
+import { Connection, getManager, In } from 'typeorm';
 import { ConnectionPool } from 'mssql';
 import { User } from '../../../entity';
 
-import { DBConnectionOpts } from './config';
+import { Config, DBConnectionOpts } from '../types';
+import { openFawkesDbConnection } from '../utils';
+import commandLineArgs from 'command-line-args';
 
 interface BasicWingedKeysUser {
   id: string;
@@ -13,14 +15,47 @@ interface WingedKeysUsersMap {
   [key: string]: BasicWingedKeysUser;
 }
 
-export async function updateFawkesUsers(
-  wingedkeysDbConnectionOpts: DBConnectionOpts
+(async function updateEmail() {
+  const optionDefns = [
+    { name: 'config', type: String }
+  ];
+  const options = commandLineArgs(optionDefns);
+
+  const configPath: string = options.config;
+
+  if (!configPath || !configPath.startsWith('/')) {
+    console.error(
+      '--config option is required, and must be absolute path to config file'
+    );
+    process.exit(1);
+  }
+  const config: Config = require(configPath);
+
+  try {
+    await updateFawkesUsers(config.wingedKeys.db, config.app.db);
+    process.exit(0);
+  } catch (e) {
+    console.error('Failed to update Fawkes user emails', e);
+    process.exit(1);
+  }
+})();
+
+///////////////////////////////////////////////////////////////
+
+async function updateFawkesUsers(
+  wingedkeysDbConnectionOpts: DBConnectionOpts,
+  fawkesDbConnectionOpts: DBConnectionOpts
 ) {
+  console.log('Starting update of Fawkes user emails...');
   let updatedCount = 0;
 
+  console.log('Retrieving all WingedKeys users...');
   const wkUsersById: WingedKeysUsersMap = await getWingedKeysUsersById(
     wingedkeysDbConnectionOpts
   );
+
+  console.log('Opening Fawkes database connection...');
+  const connection: Connection = await openFawkesDbConnection(fawkesDbConnectionOpts);
 
   let usersToUpdate = await getManager('script').find(User, {
     where: { wingedKeysId: In(Object.keys(wkUsersById)) },
@@ -28,15 +63,15 @@ export async function updateFawkesUsers(
 
   for (const user of usersToUpdate) {
     try {
-      const wingedKeysUser: BasicWingedKeysUser = wkUsersById[user.id];
+      const wingedKeysUser: BasicWingedKeysUser = wkUsersById[user.wingedKeysId];
       if (!wingedKeysUser) {
         throw new Error('This is actually impossible');
       }
 
       if (!!wingedKeysUser.email && wingedKeysUser.email !== user.email) {
         await getManager('script').save(User, {
-          email: wingedKeysUser.email,
-          wingedKeysId: wingedKeysUser.id,
+          ...user,
+          email: wingedKeysUser.email
         });
 
         console.log(
@@ -56,10 +91,11 @@ export async function updateFawkesUsers(
     }
   }
 
-  console.log(`Successfully updated ${updatedCount} users' emails!`);
+  console.log(`Successfully updated ${updatedCount} users emails!`);
+  if (!!connection) {
+    await connection.close();
+  }
 }
-
-//////////////////////////////////////////////////////////////////////
 
 async function getWingedKeysUsersById(
   connectionOpts: DBConnectionOpts
@@ -81,9 +117,7 @@ async function getWingedKeysUsersById(
       },
       {}
     );
-  } catch (err) {
-    console.error('Error fetching users from wingedkeys', err);
   } finally {
-    if (!!pool.close) pool.close();
+    if (!!pool?.close) pool.close();
   }
 }

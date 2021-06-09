@@ -27,12 +27,12 @@ $ yarn ts-node src/data/prod/create.ts --config `pwd`/config.json
 
 Alternatively, script can generate and send invite emails (through the winged-keys app) to users so they can set passwords and use the tool!
 
-## Updating existing user data
-There are times where we may need to update a user's email within WingedKeys, and will need to propagate that update over to Fawkes.  The `update` script handles just that, porting the state of all users in WingedKeys and applying that state to all corresponding users in Fawkes.
+## Updating existing user emails
+There are times where we may need to update a user's email within WingedKeys, and will need to propagate that update over to Fawkes.  The `updateEmail` script handles just that, porting the state of all users in WingedKeys and applying that state to all corresponding users in Fawkes.
 
 ### Usage
 ```
-$ yarn ts-node src/data/prod/update.ts --config [CONFIG_FILE_PATH]
+$ yarn ts-node src/data/prod/updateEmail.ts --config [CONFIG_FILE_PATH]
 ```
 where:
 - `CONFIG_FILE_PATH` is an absolute path to the config file
@@ -41,7 +41,7 @@ example:
 ```
 $ cp src/data/prod/config.example.json ./config.json
 $ vim config.json // edit config to contain real values!
-$ yarn ts-node src/data/prod/update.ts --config `pwd`/config.json
+$ yarn ts-node src/data/prod/users/updateEmail.ts --config `pwd`/config.json
 ```
 
 ## Configuration

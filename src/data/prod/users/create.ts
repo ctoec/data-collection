@@ -10,7 +10,7 @@ import {
 } from '../../../entity';
 import { parse } from '../utils';
 import { createWingedKeysUsers } from './wingedKeys';
-import { DBConnectionOpts, SiteConnectionOpts } from './config';
+import { DBConnectionOpts, SiteConnectionOpts } from '../types';
 
 export class UserRow {
   parentOrgNames: string = '';
