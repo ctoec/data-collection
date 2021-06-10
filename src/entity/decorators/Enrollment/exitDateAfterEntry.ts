@@ -16,7 +16,6 @@ export function ExitDateAfterEntry(
       options: { message: exitDateMustBeAfterEntry, ...validationOptions },
       validator: {
         validate(_, { object: enrollment }) {
-          console.log('*****enrollment', enrollment);
           if (!enrollment) return true;
           if (!(enrollment as Enrollment).exit) return true;
           return (enrollment as Enrollment).entry.isBefore(
