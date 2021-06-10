@@ -9,6 +9,7 @@ import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 import { InlineIcon } from '@ctoec/component-library';
 import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
 import { enrollmentHasNoInformation } from '../../../utils/enrollmentHasNoInformation';
+import moment, { Moment } from 'moment';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,
@@ -42,9 +43,9 @@ export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
     enrollments.length === 0 ||
     (enrollments.length === 1 && enrollmentHasNoInformation(enrollments[0]));
 
-  const currentEnrollment: Enrollment | undefined = enrollments.find(
-    (e) => !e.exit
-  );
+  const currentEnrollment: Enrollment | undefined = enrollments.find((e) => {
+    return !e.exit || moment().endOf('month').isBefore(e.exit);
+  });
   const pastEnrollments: Enrollment[] = currentEnrollment
     ? enrollments.filter((e) => e.id !== currentEnrollment.id)
     : enrollments;
