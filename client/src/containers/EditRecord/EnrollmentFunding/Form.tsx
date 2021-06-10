@@ -9,7 +9,7 @@ import { getNextHeadingLevel, Heading } from '../../../components/Heading';
 import { InlineIcon } from '@ctoec/component-library';
 import { fundingHasNoInformation } from '../../../utils/fundingHasNoInformation';
 import { enrollmentHasNoInformation } from '../../../utils/enrollmentHasNoInformation';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 
 export const EnrollmentFundingForm: React.FC<RecordFormProps> = ({
   child,

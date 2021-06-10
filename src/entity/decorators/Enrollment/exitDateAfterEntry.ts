@@ -1,6 +1,5 @@
 import { registerDecorator, ValidationOptions } from 'class-validator';
 import { Enrollment } from '../../Enrollment';
-import { Moment } from 'moment';
 
 const exitDateMustBeAfterEntry =
   'Enrollment exit date must be after entry date.';
