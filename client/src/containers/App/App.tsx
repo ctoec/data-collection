@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Switch } from 'react-router-dom';
-import { ErrorBoundary, Header, NavLinkProps } from '@ctoec/component-library';
+import { ErrorBoundary, Header, HeaderItemProps } from '@ctoec/component-library';
 
 import routes from '../../routes';
 import MakeRouteWithSubRoutes from './MakeRouteWithSubroute';
@@ -8,48 +8,50 @@ import UserContext from '../../contexts/UserContext/UserContext';
 import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps';
 
 const App: React.FC = () => {
-  const { user, confidentialityAgreedDate } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+
+   // TODO: When we tackle the admin nav bar, this will change because
+  // We'll probably use a pattern of a single top right nav bar,
+  // so the admin things may eventually migrate there.
+  // TLDR: The comment below (which is from the original page) is not true.
+  // Only non-admins see this.
 
   // All users see these "secondary" styled nav items
-  const secondaryNavItems: NavLinkProps[] = [
+  const navItems: HeaderItemProps[] = [
     {
-      text: 'Privacy policy',
-      type: 'secondary',
-      path: '/privacy',
+      label: 'Roster',
+      href: '/roster',
     },
     {
-      text: 'Data template',
-      type: 'secondary',
-      path: '/template',
+      label: 'Resources',
+      dropdownItems: [
+        {
+          label: 'Data template',
+          path: '/template'
+        },
+        {
+          label: 'Data requirements',
+          path: '/data-requirements'
+        },
+        {
+          label: 'Privacy policy',
+          path: '/privacy'
+        }
+      ],
     },
     {
-      type: 'secondary',
-      text: 'Data requirements',
-      path: '/data-requirements',
-    },
-    {
-      text: 'Help',
-      type: 'secondary',
-      path: '/help',
-    },
-  ];
-
-  // only non-admin users see these "primary" styled nav items
-  const primaryNavItems: NavLinkProps[] = [
-    {
-      type: 'primary',
-      text: 'Home',
-      path: '/home',
-    },
-    {
-      type: 'primary',
-      text: 'File upload',
-      path: '/upload',
-    },
-    {
-      type: 'primary',
-      text: 'Roster',
-      path: '/roster',
+      label: 'Help',
+      dropdownItems: [
+        {
+          label: 'How-to guides',
+          path: "https://help.ece-reporter.ctoec.org/",
+          target: "_blank"
+        },
+        {
+          label: 'Support requests',
+          path: '/support'
+        }
+      ],
     },
   ];
 
@@ -64,10 +66,8 @@ const App: React.FC = () => {
           primaryTitle="ECE Reporter"
           loginPath="/login"
           logoutPath="/logout"
-          showPrimaryNavItems={!!user?.firstName && !!confidentialityAgreedDate}
           navItems={[
-            ...secondaryNavItems,
-            ...(user?.isAdmin ? [] : primaryNavItems),
+            ...(user?.isAdmin ? [] : navItems),
           ]}
           userFirstName={user?.firstName}
         />

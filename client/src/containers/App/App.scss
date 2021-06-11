@@ -3,3 +3,43 @@ nav.usa-nav {
     list-style: none;
   }
 }
+
+.bx--text-truncate--end {
+  font-weight: bold !important;
+}
+
+.bx--header__menu-title {
+  font-weight: bold !important;
+  padding: 0 0.5rem !important;
+}
+
+.bx--header__menu-item:hover {
+  background-color: midnightblue !important;
+  color: white !important;
+}
+
+.bx--header__menu {
+  background-color: rgb(35, 83, 132) !important;
+  color: white !important;
+
+  .bx--text-truncate--end {
+    font-weight: normal !important;
+    color: white !important;
+  }
+}
+
+.bx--header__menu-arrow {
+  vertical-align: top;
+}
+
+.active-page::after {
+  background-color: #61366f;
+  border-radius: 0;
+  content: "";
+  display: block;
+  position: absolute;
+  height: .25rem;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0;
+}
