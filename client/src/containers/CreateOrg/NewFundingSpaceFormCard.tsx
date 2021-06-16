@@ -9,6 +9,14 @@ type NewFundingSpaceFormCardProps = {
   newFundingSpace: Partial<FundingSpace>;
   numberOnPage: number;
   remove: Function;
+  showErrors: Boolean;
+};
+
+type FundingSpaceValidation = {
+  source: Boolean;
+  ageGroup: Boolean;
+  capacity: Boolean;
+  time: Boolean;
 };
 
 /**
@@ -21,6 +29,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
   newFundingSpace,
   numberOnPage,
   remove,
+  showErrors,
 }) => {
   const getFundingTimes = (source: FundingSource) => {
     let tmp: FundingTime[] = [];
@@ -32,15 +41,49 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
     return tmp;
   };
 
+  //  Array of different field booleans so the form updates whenever
+  //  any field is updated.
+  const getMissingInfo = () => {
+    return {
+      source: !newFundingSpace.source,
+      ageGroup: !newFundingSpace.ageGroup,
+      capacity: !newFundingSpace.capacity && newFundingSpace.capacity != 0,
+      time: !newFundingSpace.time,
+    };
+  };
+
+  const updateMissingInfo = () => {
+    if (
+      Object.values(getMissingInfo()).toString() !=
+      Object.values(missingInfo).toString()
+    ) {
+      setMissingInfo(getMissingInfo());
+    }
+  };
+
   const [fundingTimes, setFundingTimes] = useState<FundingTime[]>(
     newFundingSpace.source ? getFundingTimes(newFundingSpace.source) : []
   );
 
+  const [missingInfo, setMissingInfo] = useState<FundingSpaceValidation>(
+    getMissingInfo()
+  );
+
+  const errorClass = (fieldError: Boolean) =>
+    showErrors && fieldError ? 'error-div' : '';
+
   return (
     <Card>
+      {Object.values(missingInfo).some((f) => f) && showErrors ? (
+        <div className="display-flex flex-row grid-row grid-gap error-text">
+          <div>*Please enter all required funding space information.</div>
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="display-flex flex-row grid-row grid-gap">
         <div
-          className="tablet:grid-col-3"
+          className={`tablet:grid-col-3 ${errorClass(missingInfo.source)}`}
           key={`new-funding-space-${numberOnPage}-funding-source-select-${
             newFundingSpace.source
           }-${Date.now()}`}
@@ -56,12 +99,14 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             onChange={(e: any) => {
               newFundingSpace.source = e.target.value;
               setFundingTimes(getFundingTimes(e.target.value));
+              updateMissingInfo();
               return e.target.value;
             }}
+            optional={false}
           />
         </div>
         <div
-          className="tablet:grid-col-3"
+          className={`tablet:grid-col-3 ${errorClass(missingInfo.ageGroup)}`}
           key={`new-funding-space-${numberOnPage}-age-group-select-${
             newFundingSpace.ageGroup
           }-${Date.now()}`}
@@ -76,12 +121,13 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             defaultValue={newFundingSpace.ageGroup ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.ageGroup = e.target.value;
+              updateMissingInfo();
               return e.target.value;
             }}
           />
         </div>
         <div
-          className="tablet:grid-col-3"
+          className={`tablet:grid-col-3 ${errorClass(missingInfo.time)}`}
           key={`new-funding-space-${numberOnPage}-space-type-select-${
             newFundingSpace.time
           }-${Date.now()}`}
@@ -99,13 +145,14 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             defaultValue={newFundingSpace.time ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.time = e.target.value;
+              updateMissingInfo();
               return e.target.value;
             }}
           />
         </div>
 
         <div
-          className="tablet:grid-col-3"
+          className={`tablet:grid-col-3 ${errorClass(missingInfo.capacity)}`}
           key={`new-funding-space-${numberOnPage}-capacity-${
             newFundingSpace.capacity
           }-${Date.now()}`}
@@ -122,6 +169,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             //  @ts-ignore
             hideSteppers={true}
             light={true}
+            onBlur={() => updateMissingInfo()}
           />
         </div>
       </div>

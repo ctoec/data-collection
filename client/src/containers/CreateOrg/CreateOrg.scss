@@ -6,3 +6,22 @@
   @extend .usa-label;
   color: rgb(27, 27, 27) !important;
 }
+
+.error-div {
+  label {
+    color: #b82a17 !important;
+    font-weight: bold;
+    &::before {
+      content: '*';
+    }
+  }
+  select,
+  .bx--number__input-wrapper input[type='number'],
+  input[type='text'] {
+    border-color: #b82a17 !important;
+    border-bottom-color: #b82a17 !important;
+    border-right-color: #b82a17 !important;
+    border-left-color: #b82a17 !important;
+    border-top-color: #b82a17 !important;
+  }
+}

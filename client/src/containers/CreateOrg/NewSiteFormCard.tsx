@@ -6,13 +6,20 @@ import {
   Button,
 } from '@ctoec/component-library';
 import { NumberInput } from 'carbon-components-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Region, Site } from '../../shared/models';
 
 type NewSiteFormCardProps = {
   newSite: Partial<Site>;
   numberOnPage: number;
   remove: Function;
+  showErrors: Boolean;
+};
+
+type SiteValidation = {
+  siteName: Boolean;
+  titleI: Boolean;
+  region: Boolean;
 };
 
 /**
@@ -25,12 +32,46 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
   newSite,
   numberOnPage,
   remove,
+  showErrors,
 }) => {
+  //  Array of different field booleans so the form updates whenever
+  //  any field is updated.
+  const getMissingInfo = () => {
+    return {
+      siteName: !newSite.siteName || newSite.siteName === '',
+      titleI: !newSite.titleI,
+      region: !newSite.region,
+    };
+  };
+
+  const updateMissingInfo = () => {
+    if (
+      Object.values(getMissingInfo()).toString() !=
+      Object.values(missingInfo).toString()
+    ) {
+      setMissingInfo(getMissingInfo());
+    }
+  };
+
+  const [missingInfo, setMissingInfo] = useState<SiteValidation>(
+    getMissingInfo()
+  );
+
+  const errorClass = (fieldError: Boolean) => {
+    return showErrors && fieldError ? 'error-div' : '';
+  };
   return (
     <Card>
+      {Object.values(missingInfo).some((f) => f) && showErrors ? (
+        <div className="display-flex flex-row grid-row grid-gap error-text">
+          <div>*Please enter all required site information.</div>
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="display-flex flex-row grid-row grid-gap">
         <div
-          className="tablet:grid-col-6"
+          className={`tablet:grid-col-6 ${errorClass(missingInfo.siteName)}`}
           key={`newsite-siteName-${newSite.siteName}-${Date.now()}`}
         >
           <TextInput
@@ -42,10 +83,11 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
               newSite.siteName = e.target.value;
               return e.target.value;
             }}
+            onBlur={() => updateMissingInfo()}
           />
         </div>
         <div
-          className="tablet:grid-col-3"
+          className={`tablet:grid-col-3 ${errorClass(missingInfo.titleI)}`}
           key={`titleI-${numberOnPage}-${newSite.titleI?.toString()}-${Date.now()}`}
         >
           <Select
@@ -64,12 +106,13 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             ]}
             onChange={(e: any) => {
               newSite.titleI = e.target.value === 'true' ? true : false;
+              updateMissingInfo();
               return e.target.value;
             }}
           />
         </div>
         <div
-          className="tablet:grid-col-3"
+          className={`tablet:grid-col-3 ${errorClass(missingInfo.region)}`}
           key={`region-${numberOnPage}-${newSite.region}-${Date.now()}`}
         >
           <Select
@@ -82,6 +125,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             }))}
             onChange={(e: any) => {
               newSite.region = e.target.value;
+              updateMissingInfo();
               return e.target.value;
             }}
           />

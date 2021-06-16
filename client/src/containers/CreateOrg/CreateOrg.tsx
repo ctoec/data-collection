@@ -30,33 +30,39 @@ const CreateOrg: React.FC = () => {
   // results, since the found users list already starts as empty
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [alertElements, setAlerts] = useAlerts();
+  const [showErrors, setShowErrors] = useState(false);
   const history = useHistory();
 
   const createNewOrg = async () => {
     // Don't even send an API request if a site card is missing
     // some required info, or there's no org name
+    setShowErrors(false);
+    setAlerts([]);
+    let errors = false;
     if (newOrgName === '') {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Organization name is missing',
           text: 'You must provide a valid organization name before submitting.',
         },
       ]);
-      return;
+      errors = true;
     }
     const allSitesOkay = newSites.every(
       (ns) => ns.siteName !== '' && ns.titleI !== undefined && ns.region
     );
     if (!allSitesOkay) {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Site is incomplete',
           text: `One or more requested sites is missing required information.`,
         },
       ]);
-      return;
+      errors = true;
     }
 
     const allFundingSpaceOkay = newFundingSpaces.every(
@@ -77,24 +83,31 @@ const CreateOrg: React.FC = () => {
       ).length === newFundingSpaces.length;
 
     if (!allFundingSpaceOkay) {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Funding space is incomplete',
           text: `One or more requested funding spaces is missing required information.`,
         },
       ]);
-      return;
+      errors = true;
     }
 
     if (!allFundingSpacesUnique) {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Funding spaces are not unique',
           text: `One or more requested funding spaces are not unique.`,
         },
       ]);
+      errors = true;
+    }
+
+    if (errors) {
+      setShowErrors(true);
       return;
     }
 
@@ -217,6 +230,7 @@ const CreateOrg: React.FC = () => {
             numberOnPage={idx + 1}
             remove={removeSite}
             key={`newsite-form-card-${idx}`}
+            showErrors={showErrors}
           />
         ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
@@ -230,6 +244,7 @@ const CreateOrg: React.FC = () => {
             numberOnPage={idx + 1}
             remove={removeFundingSpace}
             key={`newFundingSpace-form-card-${idx}`}
+            showErrors={showErrors}
           />
         ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
