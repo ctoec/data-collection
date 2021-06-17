@@ -1,9 +1,5 @@
-import {
-  Button,
-  Divider,
-  TextInput,
-  SearchBar,
-} from '@ctoec/component-library';
+import { Button, Divider, SearchBar } from '@ctoec/component-library';
+import { TextInput } from 'carbon-components-react';
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { BackButton } from '../../components/BackButton';
@@ -209,15 +205,20 @@ const CreateOrg: React.FC = () => {
         </p>
         <h2 className="margin-top-4">Organization Details</h2>
         <Divider />
-        <TextInput
-          label="Organization Name"
-          id="new-org-name-input"
-          type="input"
-          onChange={(e: any) => {
-            setNewOrgName(e.target.value);
-            return e.target.value;
-          }}
-        />
+        <div className="grid-row">
+          <div className="tablet:grid-col-6">
+            <TextInput
+              labelText="Organization Name"
+              id="new-org-name-input"
+              type="input"
+              invalid={showErrors && (!newOrgName || newOrgName == '')}
+              onBlur={(e: any) => {
+                setNewOrgName(e.target.value);
+                return e.target.value;
+              }}
+            />
+          </div>
+        </div>
         <h2 className="margin-top-4">Sites</h2>
         <Divider />
         <p className="margin-top-2 margin-bottom-2">

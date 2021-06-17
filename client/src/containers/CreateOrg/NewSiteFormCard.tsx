@@ -1,11 +1,10 @@
+import { Card, Button } from '@ctoec/component-library';
 import {
-  Card,
-  Form,
+  NumberInput,
   Select,
+  SelectItem,
   TextInput,
-  Button,
-} from '@ctoec/component-library';
-import { NumberInput } from 'carbon-components-react';
+} from 'carbon-components-react';
 import React, { useState } from 'react';
 import { Region, Site } from '../../shared/models';
 
@@ -36,7 +35,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
 }) => {
   //  Array of different field booleans so the form updates whenever
   //  any field is updated.
-  const getMissingInfo = () => {
+  const getMissingInfo = (): SiteValidation => {
     return {
       siteName: !newSite.siteName || newSite.siteName === '',
       titleI: !newSite.titleI,
@@ -45,10 +44,9 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
   };
 
   const updateMissingInfo = () => {
-    if (
-      Object.values(getMissingInfo()).toString() !=
-      Object.values(missingInfo).toString()
-    ) {
+    let mi = getMissingInfo() as any;
+    let cmi = missingInfo as any;
+    if (Object.keys(mi).some((k) => mi[k] != cmi[k])) {
       setMissingInfo(getMissingInfo());
     }
   };
@@ -60,6 +58,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
   const errorClass = (fieldError: Boolean) => {
     return showErrors && fieldError ? 'error-div' : '';
   };
+
   return (
     <Card>
       {Object.values(missingInfo).some((f) => f) && showErrors ? (
@@ -71,14 +70,15 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
       )}
       <div className="display-flex flex-row grid-row grid-gap">
         <div
-          className={`tablet:grid-col-6 ${errorClass(missingInfo.siteName)}`}
+          className="tablet:grid-col-6"
           key={`newsite-siteName-${newSite.siteName}-${Date.now()}`}
         >
           <TextInput
-            label={`Site Name #${numberOnPage}`}
+            labelText={`Site Name #${numberOnPage}`}
             id={`new-site-${numberOnPage}-name-input`}
             type="input"
-            value={newSite.siteName ?? undefined}
+            defaultValue={newSite.siteName ?? undefined}
+            invalid={showErrors && !!missingInfo.siteName}
             onChange={(e: any) => {
               newSite.siteName = e.target.value;
               return e.target.value;
@@ -87,48 +87,51 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
           />
         </div>
         <div
-          className={`tablet:grid-col-3 ${errorClass(missingInfo.titleI)}`}
+          className="tablet:grid-col-3"
           key={`titleI-${numberOnPage}-${newSite.titleI?.toString()}-${Date.now()}`}
         >
           <Select
             id={`new-site-${numberOnPage}-title1-select`}
-            label="Title I"
-            defaultValue={newSite.titleI?.toString() ?? undefined}
-            options={[
-              {
-                text: 'Yes',
-                value: 'true',
-              },
-              {
-                text: 'No',
-                value: 'false',
-              },
-            ]}
+            labelText="Title I"
+            defaultValue={
+              newSite.titleI === undefined
+                ? undefined
+                : newSite.titleI
+                ? 'Yes'
+                : 'No'
+            }
+            invalid={showErrors && !!missingInfo.titleI}
             onChange={(e: any) => {
-              newSite.titleI = e.target.value === 'true' ? true : false;
+              newSite.titleI = e.target.value === 'Yes' ? true : false;
               updateMissingInfo();
               return e.target.value;
             }}
-          />
+          >
+            <SelectItem value text="- Select -" />
+            <SelectItem value="Yes" text="Yes" />
+            <SelectItem value="No" text="No" />
+          </Select>
         </div>
         <div
-          className={`tablet:grid-col-3 ${errorClass(missingInfo.region)}`}
+          className="tablet:grid-col-3"
           key={`region-${numberOnPage}-${newSite.region}-${Date.now()}`}
         >
           <Select
             id={`new-site-${numberOnPage}-region-select`}
-            label="Region"
+            labelText="Region"
             defaultValue={newSite.region ?? undefined}
-            options={Object.values(Region).map((r) => ({
-              text: r,
-              value: r,
-            }))}
+            invalid={showErrors && !!missingInfo.region}
             onChange={(e: any) => {
               newSite.region = e.target.value;
               updateMissingInfo();
               return e.target.value;
             }}
-          />
+          >
+            <SelectItem value text="- Select -" />
+            {Object.values(Region).map((r) => (
+              <SelectItem value={r} text={r} />
+            ))}
+          </Select>
         </div>
       </div>
       <div className="display-flex flex-row grid-row grid-gap">
