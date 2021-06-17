@@ -30,7 +30,7 @@ organizationsRouter.get(
   passAsyncError(async (req, res) => {
     const user = req.user;
     if (!user.isAdmin) throw new ForbiddenError();
-    const organizations = await controller.getOrganizations();
+    const organizations = await controller.getOrganizations(req.query);
     res.send(organizations);
   })
 );

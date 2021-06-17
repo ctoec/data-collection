@@ -1,5 +1,5 @@
+import { getManager, ILike } from 'typeorm';
 import { Organization, Site, FundingSpace } from '../entity';
-import { getManager } from 'typeorm';
 import { ResourceConflictError } from '../middleware/error/errors';
 import * as siteController from '../controllers/sites';
 
@@ -74,16 +74,27 @@ export async function createOrganization(
  * with a count of sites and a list of funding sources
  * @param user
  */
-export const getOrganizations = async (): Promise<Organization[]> =>
+export const getOrganizations = async (query): Promise<Organization[]> =>
+  query.name ? getOrgsByName(query.name) : getAllAccessibleOrgs();
+
+const escapeLikeString = (raw: string): string =>
+  raw.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\s\\]/g, '%');
+
+const getOrgsByName = (name: string) =>
+  getManager().find(Organization, {
+    where: { providerName: ILike(`%${escapeLikeString(name)}%`) },
+  });
+
+const getAllAccessibleOrgs = () =>
   getManager().query(
     `select o.id, o.providername AS providerName, s.siteCount, string_agg(fs.source, ',') as fundingSource
-from organization o left join (
-    select distinct organizationid, source
-    from funding_space
-) fs on o.id = fs.organizationId left join (
-        select organizationid, count(*) as siteCount
-        from site
-        group by organizationid
-        ) s on o.id = s.organizationId
-group by o.id, o.providername, s.siteCount`
+    from organization o left join (
+        select distinct organizationid, source
+        from funding_space
+    ) fs on o.id = fs.organizationId left join (
+            select organizationid, count(*) as siteCount
+            from site
+            group by organizationid
+            ) s on o.id = s.organizationId
+    group by o.id, o.providername, s.siteCount`
   );
