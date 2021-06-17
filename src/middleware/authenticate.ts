@@ -10,6 +10,31 @@ import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
 import { organizations } from '../data/fake/organizations';
 
+interface UserInfoResponse {
+  sub: string
+  name: string;
+  given_name: string;
+  family_name: string;
+  preferred_username: string;
+}
+
+interface TokenClaims {
+  sub: string;  //  WingedKeys UUID
+  nbf: number;
+  exp: number;
+  iss: string;
+  aud: string;
+  client_id: string;
+  auth_time: number;
+  idp: string;
+  scope: string[];
+  amr: string[];
+
+  //  Custom user claims
+  email: string;
+  role: string[];
+}
+
 /**
  * Authentication middleware to decode auth JWT (JSON web token)
  * with appropriate key from JWKS (JSON web key set).
@@ -37,7 +62,9 @@ const decodeClaim = jwt({
  */
 const addUser = passAsyncError(
   async (req: Request, _: Response, next: NextFunction) => {
-    if (req.claims?.sub) {
+    const claims = (req.claims ?? {}) as TokenClaims;
+
+    if (claims.sub) {
       let fawkesUser = await getUser(req.claims.sub);
 
       // Only automatically create app user in test environments
@@ -46,9 +73,9 @@ const addUser = passAsyncError(
           req.headers.authorization
         );
 
-        if (res?.data?.sub === req.claims.sub) {
+        if (res?.data?.sub === claims.sub) {
           fawkesUser = await createUserWithOrgPermissions(
-            req.claims.sub,
+            claims,
             res.data
           );
         } else {
@@ -112,7 +139,7 @@ const getUser = async (wingedKeysId: string) => {
  */
 async function getUserFromWingedKeys(
   bearerToken: string
-): Promise<AxiosResponse<any>> {
+): Promise<AxiosResponse<UserInfoResponse>> {
   return await axios.get(`${process.env.WINGED_KEYS_HOST}/connect/userinfo`, {
     headers: {
       authorization: bearerToken,
@@ -127,20 +154,19 @@ async function getUserFromWingedKeys(
  * For test environments. Incoming requests from legit
  * wingek-keys users get an application user created for them,
  * with org-level permissions for a single test org
- * @param wingedKeysId
- * @param wingedKeysUser
  */
 async function createUserWithOrgPermissions(
-  wingedKeysId: string,
-  wingedKeysUser: { given_name: string; family_name: string }
-): Promise<User> {
+  tokenClaims: TokenClaims,
+  userInfo: UserInfoResponse
+  ): Promise<User> {
   let user: User;
 
   await getManager().transaction(async (manager) => {
     const _user = manager.create(User, {
-      wingedKeysId,
-      firstName: wingedKeysUser.given_name,
-      lastName: wingedKeysUser.family_name,
+      wingedKeysId: tokenClaims.sub,
+      firstName: userInfo.given_name,
+      lastName: userInfo.family_name,
+      email: tokenClaims.email,
       confidentialityAgreedDate: null,
     });
 

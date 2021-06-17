@@ -53,3 +53,6 @@ fawkes-bundle.zip
 */tests_output
 .env
 e2e-tests/upload.csv
+
+# Data manipulation script config file
+src/data/prod/config.json

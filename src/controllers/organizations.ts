@@ -1,5 +1,5 @@
-import { Organization, Site } from '../entity';
 import { getManager, ILike } from 'typeorm';
+import { Organization, Site, FundingSpace } from '../entity';
 import { ResourceConflictError } from '../middleware/error/errors';
 import * as siteController from '../controllers/sites';
 
@@ -10,7 +10,11 @@ async function doesOrgNameExist(name: string) {
   return !!existing;
 }
 
-export async function createOrganization(name: string, sites: Partial<Site>[]) {
+export async function createOrganization(
+  name: string,
+  sites: Partial<Site>[],
+  fundingSpaces: Partial<FundingSpace>[]
+) {
   // All or nothing approach to creating new orgs, so if either the
   // org name is taken or *any* site name is taken, fail the whole thing
   const orgNameExists = await doesOrgNameExist(name);
@@ -45,6 +49,23 @@ export async function createOrganization(name: string, sites: Partial<Site>[]) {
     )
   );
   newOrg.sites = createdSites;
+
+  const createdFundingSpaces: FundingSpace[] = await Promise.all(
+    fundingSpaces.map(
+      async (f: Partial<FundingSpace>) =>
+        await getManager().save(
+          getManager().create(FundingSpace, {
+            source: f.source,
+            ageGroup: f.ageGroup,
+            capacity: f.capacity,
+            time: f.time,
+            organizationId: newOrg.id,
+          })
+        )
+    )
+  );
+  newOrg.fundingSpaces = createdFundingSpaces;
+
   await getManager().save(newOrg);
 }
 
