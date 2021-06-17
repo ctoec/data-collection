@@ -7,7 +7,6 @@ import {
   ErrorBoundary,
 } from '@ctoec/component-library';
 import { apiPost } from '../../utils/api';
-import { getErrorHeading, getErrorText } from '../../utils/error';
 import { handleJWTError } from '../../utils/handleJWTError';
 import { BackButton } from '../../components/BackButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
@@ -33,7 +32,7 @@ const Upload: React.FC<StepContentProps> = ({
 }) => {
   const { accessToken } = useContext(AuthenticationContext);
   const history = useHistory();
-  const [_, setAlerts] = useAlerts();
+  const [alertElements, setAlerts] = useAlerts();
 
   const [loading, setLoading] = useState(false);
   const [fileKey, setFileKey] = useState(0);
@@ -75,26 +74,23 @@ const Upload: React.FC<StepContentProps> = ({
       handleJWTError(history, (e) => {
         setAlerts([
           {
-            heading: getErrorHeading(e),
-            text: getErrorText(error),
-            type: 'error',
-            actionItem: (
-              <div>
-                <p className="margin-bottom-1 text-bold">
-                  Download the data collection template
+            heading: 'There was an error uploading your file!',
+            text: (
+              <>
+                <p>
+                  Files must be uploaded in the format of our data template.
+                  Please re-upload your file using one of the templates provided&nbsp;
+                  <a className="usa-button usa-button--unstyled" href="/template">
+                    here.
+                  </a>
+                  &nbsp;If you need further support, send us a&nbsp;
+                  <a className="usa-button usa-button--unstyled" href="/support">
+                    support request.
+                  </a>
                 </p>
-                <CSVExcelDownloadButton
-                  fileType="xlsx"
-                  whichDownload="template"
-                  className="margin-bottom-1"
-                />
-                <CSVExcelDownloadButton
-                  fileType="csv"
-                  whichDownload="template"
-                  className="margin-bottom-1"
-                />
-              </div>
+              </>
             ),
+            type: 'error',
           },
         ]);
 
@@ -108,6 +104,7 @@ const Upload: React.FC<StepContentProps> = ({
   return (
     <div className="grid-container">
       <BackButton location="/" />
+      {alertElements}
 
       <div className="grid-row display-block margin-bottom-2">
         <p>
