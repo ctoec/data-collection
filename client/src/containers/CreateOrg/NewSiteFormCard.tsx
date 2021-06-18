@@ -71,7 +71,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
       <div className="display-flex flex-row grid-row grid-gap">
         <div
           className="tablet:grid-col-6"
-          key={`newsite-siteName-${newSite.siteName}-${Date.now()}`}
+          key={`newsite-siteName-${newSite.siteName}`}
         >
           <TextInput
             labelText={`Site Name #${numberOnPage}`}
@@ -88,7 +88,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`titleI-${numberOnPage}-${newSite.titleI?.toString()}-${Date.now()}`}
+          key={`titleI-${numberOnPage}-${newSite.titleI?.toString()}`}
         >
           <Select
             id={`new-site-${numberOnPage}-title1-select`}
@@ -114,7 +114,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`region-${numberOnPage}-${newSite.region}-${Date.now()}`}
+          key={`region-${numberOnPage}-${newSite.region}`}
         >
           <Select
             id={`new-site-${numberOnPage}-region-select`}
@@ -137,9 +137,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
       <div className="display-flex flex-row grid-row grid-gap">
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-facility-input-${
-            newSite.facilityCode
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-facility-input-${newSite.facilityCode}`}
         >
           <NumberInput
             label="Facility code (optional)"
@@ -157,9 +155,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-license-input-${
-            newSite.licenseNumber
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-license-input-${newSite.licenseNumber}`}
         >
           <NumberInput
             label="License number (optional)"
@@ -177,9 +173,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-registry-input-${
-            newSite.registryId
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-registry-input-${newSite.registryId}`}
         >
           <NumberInput
             label="Registry id (optional)"
@@ -197,9 +191,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-naeyc-input-${
-            newSite.naeycId
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-naeyc-input-${newSite.naeycId}`}
         >
           <NumberInput
             label="NAEYC ID (optional)"
