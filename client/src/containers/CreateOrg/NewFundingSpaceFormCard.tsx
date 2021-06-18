@@ -52,15 +52,6 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
     };
   };
 
-  const updateMissingInfo = () => {
-    if (
-      Object.values(getMissingInfo()).toString() !=
-      Object.values(missingInfo).toString()
-    ) {
-      setMissingInfo(getMissingInfo());
-    }
-  };
-
   const [fundingTimes, setFundingTimes] = useState<FundingTime[]>(
     newFundingSpace.source ? getFundingTimes(newFundingSpace.source) : []
   );
@@ -68,9 +59,6 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
   const [missingInfo, setMissingInfo] = useState<FundingSpaceValidation>(
     getMissingInfo()
   );
-
-  const errorClass = (fieldError: Boolean) =>
-    showErrors && fieldError ? 'error-div' : '';
 
   return (
     <Card>
@@ -94,7 +82,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             onChange={(e: any) => {
               newFundingSpace.source = e.target.value;
               setFundingTimes(getFundingTimes(e.target.value));
-              updateMissingInfo();
+              setMissingInfo(getMissingInfo());
               return e.target.value;
             }}
           >
@@ -115,7 +103,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             defaultValue={newFundingSpace.ageGroup ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.ageGroup = e.target.value;
-              updateMissingInfo();
+              setMissingInfo(getMissingInfo());
               return e.target.value;
             }}
           >
@@ -136,7 +124,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             defaultValue={newFundingSpace.time ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.time = e.target.value;
-              updateMissingInfo();
+              setMissingInfo(getMissingInfo());
               return e.target.value;
             }}
           >
@@ -162,11 +150,13 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
               newFundingSpace.capacity = e.target.value;
               return e.target.value;
             }}
+            invalid={showErrors && !!missingInfo.capacity}
+            invalidText=""
             allowEmpty={true}
             //  @ts-ignore
             hideSteppers={true}
             light={true}
-            onBlur={() => updateMissingInfo()}
+            onBlur={() => setMissingInfo(getMissingInfo())}
           />
         </div>
       </div>

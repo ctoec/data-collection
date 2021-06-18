@@ -43,27 +43,15 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
     };
   };
 
-  const updateMissingInfo = () => {
-    let mi = getMissingInfo() as any;
-    let cmi = missingInfo as any;
-    if (Object.keys(mi).some((k) => mi[k] != cmi[k])) {
-      setMissingInfo(getMissingInfo());
-    }
-  };
-
   const [missingInfo, setMissingInfo] = useState<SiteValidation>(
     getMissingInfo()
   );
-
-  const errorClass = (fieldError: Boolean) => {
-    return showErrors && fieldError ? 'error-div' : '';
-  };
 
   return (
     <Card>
       {Object.values(missingInfo).some((f) => f) && showErrors ? (
         <div className="display-flex flex-row grid-row grid-gap error-text">
-          <div>*Please enter all required site information.</div>
+          <div>Please enter all required site information.</div>
         </div>
       ) : (
         <></>
@@ -83,7 +71,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
               newSite.siteName = e.target.value;
               return e.target.value;
             }}
-            onBlur={() => updateMissingInfo()}
+            onBlur={() => setMissingInfo(getMissingInfo())}
           />
         </div>
         <div
@@ -103,7 +91,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             invalid={showErrors && !!missingInfo.titleI}
             onChange={(e: any) => {
               newSite.titleI = e.target.value === 'Yes' ? true : false;
-              updateMissingInfo();
+              setMissingInfo(getMissingInfo());
               return e.target.value;
             }}
           >
@@ -123,7 +111,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             invalid={showErrors && !!missingInfo.region}
             onChange={(e: any) => {
               newSite.region = e.target.value;
-              updateMissingInfo();
+              setMissingInfo(getMissingInfo());
               return e.target.value;
             }}
           >
