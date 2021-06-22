@@ -44,7 +44,7 @@ async function startUpload(browser, filePath) {
     '//*/h1[contains(text(),"Upload your enrollment data")]'
   );
 
-  await scrollToElement(browser, ['css selector', 'input[type="file"]']);
+  await browser.execute(`window.scrollTo(280,900);`);
 
   await browser.UploadLocalFile(filePath, '#report');
   await browser.pause(5000);
