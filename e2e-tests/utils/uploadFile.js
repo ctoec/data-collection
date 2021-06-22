@@ -36,8 +36,6 @@ async function uploadFile(
 //////////////////////////////////////////////////////////////////////////
 
 async function startUpload(browser, filePath) {
-  await scrollToElement(browser, ['xpath', "//*/a[contains(@href,'/upload')]"]);
-
   await browser.execute(function () {
     document.querySelector('a[href="/upload"]').click();
   });
@@ -45,6 +43,8 @@ async function startUpload(browser, filePath) {
     'xpath',
     '//*/h1[contains(text(),"Upload your enrollment data")]'
   );
+
+  await scrollToElement(browser, ['css selector', 'input[type="file"]']);
 
   await browser.UploadLocalFile(filePath, '#report');
   await browser.pause(5000);
