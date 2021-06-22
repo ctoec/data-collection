@@ -3,6 +3,7 @@ const { FakeChildrenTypes } = require('./FakeChildrenTypes');
 const {
   downloadFileToTestRunnerHost,
 } = require('../utils/downloadFileToTestRunnerHost');
+const scrollToElement = require('./scrollToElement');
 
 module.exports = {
   uploadFile,
@@ -35,6 +36,8 @@ async function uploadFile(
 //////////////////////////////////////////////////////////////////////////
 
 async function startUpload(browser, filePath) {
+  await scrollToElement(browser, ['xpath', "//*/a[contains(@href,'/upload')]"]);
+
   await browser.execute(function () {
     document.querySelector('a[href="/upload"]').click();
   });
