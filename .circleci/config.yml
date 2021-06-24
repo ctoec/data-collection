@@ -118,33 +118,12 @@ jobs:
       - run:
           name: Deploy to Elastic Beanstalk environment
           command: eb deploy ece-fawkes-<< parameters.env >>-env
-  e2e_test:
-    description: 'Run e2e tests against a deployed pre-prod env'
-    parameters:
-      env:
-        description: 'The environment to run e2e tests against (qa, devsecure, staging)'
-        type: string
-    docker:
-      - image: 906392371336.dkr.ecr.us-east-2.amazonaws.com/oec/node:12
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - attach_workspace:
           at: .
       - run:
           name: Setup environment variables
-          command: |
-            echo "export API_TEST_HOST=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
-            echo "export LAUNCH_URL=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
-      - run:
-          working_directory: e2e-tests
-          name: Install e2e test dependencies
-          command: yarn
-      - run:
-          working_directory: e2e-tests
-          name: Run e2e tests (in chrome)
-          command: yarn test
+          command: echo "export API_TEST_HOST=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
       - run:
           working_directory: client
           name: Run api integration tests
@@ -164,27 +143,6 @@ workflows:
       - test:
           requires:
             - build
-  e2e-tests:
-    jobs:
-      - pull
-      - hold:
-          type: approval
-      - install:
-          requires:
-            - hold
-            - pull
-      - build:
-          env: automation
-          requires:
-            - install
-      - deploy:
-          env: automation
-          requires:
-            - build
-      - e2e_test:
-          env: automation
-          requires:
-            - deploy
 
   deploy-to-staging:
     jobs:
@@ -207,14 +165,6 @@ workflows:
           env: staging
           requires:
             - build
-      - e2e_test:
-          env: staging
-          requires:
-            - deploy
-          filters:
-              branches:
-                only:
-                  - base
   deploy-to-qa:
     jobs:
       - pull

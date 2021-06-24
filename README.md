@@ -92,7 +92,7 @@ $ docker-compose exec client yarn test
 
 Frontend tests include snapshot matching tests. If a change was made that creates a legitimate change to a snapshot, or snapshots need to be deleted, created, or renamed, run tests with `-u` flag
 
-### Integration/End-to-end testing
+### Integration Testing
 
 We do two types of full-stack testing which encompass the client <-> server interactions and server <-> database interactions.
 Because we don't mock or instantiate a SQL Server instance for our unit/integration tests, these tests can only be run against a full stack of the app (either a local docker-compose stack, or a deployed stack)
@@ -109,19 +109,6 @@ Perhaps a bit confusingly, API integration tests are written in the `client` dir
    ```
 
    Set `API_TEST_HOST` env var to run them against an environment other than the default `http://localhost:5001`
-
-### E2E Tests
-These [nightwatch](https://nightwatchjs.org/)-powered selemnium tests run in Browserstack. Thus, they can only be run against a deployed stack (for now, there are ways to set up Browserstack for local apps but we haven't done that). They live [here](e2e-tests), and there's more info about them [here](e2e-tests/README.md)
-
-   To run the e2e tests:
-   **NOTE**: Be sure to add browserstack credentials to a .env file or export them as env vars
-
-   ```
-   $ cd e2e-tests
-   $ yarn test
-   ```
-
-   Set `LAUNCH_URL` env var to run them against an environment other than the default `https://staging.ece-fawkes.ctoecskylight.com`
 
 ## Deploy
 
