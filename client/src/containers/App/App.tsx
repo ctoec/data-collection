@@ -10,13 +10,7 @@ import { defaultErrorBoundaryProps } from '../../utils/defaultErrorBoundaryProps
 const App: React.FC = () => {
   const { user } = useContext(UserContext);
 
-   // TODO: When we tackle the admin nav bar, this will change because
-  // We'll probably use a pattern of a single top right nav bar,
-  // so the admin things may eventually migrate there.
-  // TLDR: The comment below (which is from the original page) is not true.
-  // Only non-admins see this.
-
-  // All users see these "secondary" styled nav items
+  // Non-admins see these items in their version of the nav bar
   const navItems: HeaderItemProps[] = [
     {
       label: 'Roster',
