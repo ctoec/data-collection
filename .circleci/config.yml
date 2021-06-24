@@ -91,6 +91,12 @@ jobs:
           working_directory: client
           # skip pre-flight checks to avoid the parent-directory node_module issues
           command: SKIP_PREFLIGHT_CHECK=true yarn run test
+      - run:
+          working_directory: client
+          name: Run api integration tests
+          command: |
+            echo "export API_TEST_HOST=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
+            SKIP_PREFLIGHT_CHECK=true yarn test-integration
   deploy:
     description: 'Job for deploying Fawkes to the specified environment'
     parameters:
@@ -118,16 +124,6 @@ jobs:
       - run:
           name: Deploy to Elastic Beanstalk environment
           command: eb deploy ece-fawkes-<< parameters.env >>-env
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Setup environment variables
-          command: echo "export API_TEST_HOST=https://<<parameters.env>>.ece-fawkes.ctoecskylight.com" >> $BASH_ENV
-      - run:
-          working_directory: client
-          name: Run api integration tests
-          command: SKIP_PREFLIGHT_CHECK=true yarn test-integration
 
 workflows:
   local-tests:
