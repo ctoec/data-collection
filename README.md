@@ -72,9 +72,9 @@ The application has a SQL Server backend. We use [TypeORM](https://typeorm.io/) 
 
 ## Testing
 
-### Unit/Integration testing
+### Unit Testing
 
-Frontend and backend unit/integration tests exist, and can be run with `yarn test` in either the `src` or `client/src` directories.
+Frontend and backend unit tests exist, and can be run with `yarn test` in either the `src` or `client/src` directories.
 
 ```
 $ cd src
@@ -91,24 +91,6 @@ $ docker-compose exec client yarn test
 ```
 
 Frontend tests include snapshot matching tests. If a change was made that creates a legitimate change to a snapshot, or snapshots need to be deleted, created, or renamed, run tests with `-u` flag
-
-### Integration Testing
-
-We do two types of full-stack testing which encompass the client <-> server interactions and server <-> database interactions.
-Because we don't mock or instantiate a SQL Server instance for our unit/integration tests, these tests can only be run against a full stack of the app (either a local docker-compose stack, or a deployed stack)
-
-### API Tests
-Perhaps a bit confusingly, API integration tests are written in the `client` dir, because we already have a util for calling the api there! find them [here](client/src/integrationTests)
-
-   To run these tests:
-
-   ```
-   $ cd client
-   $ yarn test-integration
-
-   ```
-
-   Set `API_TEST_HOST` env var to run them against an environment other than the default `http://localhost:5001`
 
 ## Deploy
 
