@@ -9,6 +9,8 @@ import { getCurrentFunding } from '../../utils/getCurrentFunding';
 import { NestedFundingSpaces } from '../../../client/src/shared/payloads/NestedFundingSpaces';
 import { getFundingSpaces } from '../../controllers/fundingSpaces';
 import { intersection } from 'lodash';
+import { AgeGroup } from '../../../client/src/shared/models';
+import { AgeGroupCount } from '../../../client/src/shared/payloads/AgeGroupCount';
 
 type skipTake = {
   skip?: number;
@@ -179,6 +181,25 @@ export const getActiveChildrenCount = async (user: User, organizationIds) => {
 
   return await qb.getCount();
 };
+
+/**
+ * Counts the number of children in each age group enrolled at sites
+ * associated with all of a user's organizations. No records are
+ * returned, only the counts within each age group.
+ */
+export const getChildrenCountByAgeGroup = async (user: User, organizationIds): Promise<AgeGroupCount> => {
+  const month = moment();
+  let ageGroupCounts = {} as AgeGroupCount;
+  await Promise.all(Object.keys(AgeGroup).map(async (group) => {
+    const qb = await activeChildrenQuery(user, organizationIds, {
+      end: month.endOf('month').format('YYYY-MM-DD'),
+      start: month.startOf('month').format('YYYY-MM-DD'),
+    });
+    qb.andWhere('enrollment.ageGroup = :group', { group });
+    ageGroupCounts[AgeGroup[group]] = await qb.getCount();
+  }));
+  return ageGroupCounts;
+}
 
 export const getWithdrawnChildren = async (
   user: User,

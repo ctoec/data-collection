@@ -10,7 +10,7 @@ import RosterContext from '../../contexts/RosterContext/RosterContext';
 import { AddRecordButton } from '../../components/AddRecordButton';
 import { CSVExcelDownloadButton } from '../../components/CSVExcelDownloadButton';
 import { MonthFilterModal } from './MonthFilterModal';
-import { QUERY_STRING_MONTH_FORMAT } from '../../containers/Roster/rosterUtils';
+import { QUERY_STRING_MONTH_FORMAT } from './rosterUtils/constants';
 
 export const RosterButtonsTable: React.FC = () => {
   const { query, updateQueryMonth, updateQueryWithdrawn } = useContext(
