@@ -69,7 +69,7 @@ exports[`App matches snapshot 1`] = `
             <div
               class="usa-nav__secondary usa-nav__secondary--extended"
             >
-              <ul
+              <div
                 class="usa-nav__secondary-links"
               >
                 <nav
@@ -227,7 +227,7 @@ exports[`App matches snapshot 1`] = `
                     </li>
                   </ul>
                 </nav>
-              </ul>
+              </div>
             </div>
           </div>
         </nav>
