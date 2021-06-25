@@ -16,6 +16,14 @@ import { NewFundingSpaceCard } from './NewFundingSpaceFormCard';
 import pluralize from 'pluralize';
 import { uniqWith } from 'lodash';
 
+export interface FundingSpaceWithErrors extends FundingSpace {
+  errors: String[];
+}
+
+export interface SiteWithErrors extends Site {
+  errors: String[];
+}
+
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
@@ -46,8 +54,11 @@ const CreateOrg: React.FC = () => {
       ]);
       errors = true;
     }
-    const allSitesOkay = newSites.every(
-      (ns) => ns.siteName !== '' && ns.titleI !== undefined && ns.region
+    // const allSitesOkay = newSites.every(
+    //   (ns) => ns.siteName !== '' && ns.titleI !== undefined && ns.region
+    // );
+    const allSitesOkay = !newSites.some(
+      (ns) => ns.errors && ns.errors.length > 0
     );
     if (!allSitesOkay) {
       setAlerts((current) => [
@@ -61,12 +72,8 @@ const CreateOrg: React.FC = () => {
       errors = true;
     }
 
-    const allFundingSpaceOkay = newFundingSpaces.every(
-      (nfs) =>
-        !!nfs.source &&
-        !!nfs.ageGroup &&
-        (!!nfs.capacity || nfs.capacity === 0) &&
-        !!nfs.time
+    const allFundingSpaceOkay = !newFundingSpaces.some(
+      (nfs) => nfs.errors && nfs.errors.length > 0
     );
 
     const allFundingSpacesUnique =
@@ -102,10 +109,8 @@ const CreateOrg: React.FC = () => {
       errors = true;
     }
 
-    if (errors) {
-      setShowErrors(true);
-      return;
-    }
+    setShowErrors(errors);
+    if (errors) return;
 
     await apiPost(
       `organizations/`,
@@ -135,7 +140,7 @@ const CreateOrg: React.FC = () => {
       });
   };
 
-  const emptySite: Partial<Site> = {
+  const emptySite: Partial<SiteWithErrors> = {
     siteName: '',
     region: undefined,
     facilityCode: undefined,
@@ -143,20 +148,23 @@ const CreateOrg: React.FC = () => {
     registryId: undefined,
     naeycId: undefined,
   };
-  const [newSites, setNewSites] = useState<Partial<Site>[]>([{ ...emptySite }]);
+  const [newSites, setNewSites] = useState<Partial<SiteWithErrors>[]>([
+    { ...emptySite },
+  ]);
   const addNewSite = () => {
     setNewSites((currentSites) => [...currentSites, { ...emptySite }]);
   };
 
-  const emptyFundingSpace: Partial<FundingSpace> = {
+  const emptyFundingSpace: Partial<FundingSpaceWithErrors> = {
     source: undefined,
     ageGroup: undefined,
     capacity: undefined,
     time: undefined,
+    errors: [],
   };
 
   const [newFundingSpaces, setNewFundingSpaces] = useState<
-    Partial<FundingSpace>[]
+    Partial<FundingSpaceWithErrors>[]
   >([{ ...emptyFundingSpace }]);
 
   const addNewFundingSpace = () => {
@@ -211,7 +219,7 @@ const CreateOrg: React.FC = () => {
               labelText="Organization Name"
               id="new-org-name-input"
               type="input"
-              invalid={showErrors && (!newOrgName || newOrgName == '')}
+              invalid={showErrors && !newOrgName}
               onBlur={(e: any) => {
                 setNewOrgName(e.target.value);
                 return e.target.value;

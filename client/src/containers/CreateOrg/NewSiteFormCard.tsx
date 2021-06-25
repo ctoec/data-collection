@@ -7,18 +7,19 @@ import {
 } from 'carbon-components-react';
 import React, { useState } from 'react';
 import { Region, Site } from '../../shared/models';
+import { SiteWithErrors } from './CreateOrg';
 
 type NewSiteFormCardProps = {
-  newSite: Partial<Site>;
+  newSite: Partial<SiteWithErrors>;
   numberOnPage: number;
   remove: Function;
   showErrors: Boolean;
 };
 
-type SiteValidation = {
-  siteName: Boolean;
-  titleI: Boolean;
-  region: Boolean;
+type SiteErrors = {
+  siteName: String;
+  titleI: String;
+  region: String;
 };
 
 /**
@@ -33,23 +34,36 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
   remove,
   showErrors,
 }) => {
-  //  Array of different field booleans so the form updates whenever
-  //  any field is updated.
-  const getMissingInfo = (): SiteValidation => {
-    return {
-      siteName: !newSite.siteName || newSite.siteName === '',
-      titleI: !newSite.titleI,
-      region: !newSite.region,
-    };
+  const Errors: SiteErrors = {
+    siteName: 'SITE_NAME',
+    titleI: 'TITLE_I',
+    region: 'REGION',
   };
 
-  const [missingInfo, setMissingInfo] = useState<SiteValidation>(
-    getMissingInfo()
+  const getMissingInfo = () => {
+    const tmp: String[] = [];
+    Object.keys(Errors).forEach((k) => {
+      const siteKey = k as keyof SiteWithErrors;
+      const errorKey = k as keyof SiteErrors;
+      if (!newSite[siteKey]) tmp.push(Errors[errorKey]);
+    });
+    return tmp;
+  };
+
+  const updateErrors = () => {
+    newSite.errors = getMissingInfo();
+    setMissingInfo(newSite.errors.join(','));
+  };
+
+  const [missingInfo, setMissingInfo] = useState<String>(
+    getMissingInfo().join(',')
   );
+
+  newSite.errors = getMissingInfo();
 
   return (
     <Card>
-      {Object.values(missingInfo).some((f) => f) && showErrors ? (
+      {!!missingInfo && showErrors ? (
         <div className="display-flex flex-row grid-row grid-gap error-text">
           <div>Please enter all required site information.</div>
         </div>
@@ -66,12 +80,12 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             id={`new-site-${numberOnPage}-name-input`}
             type="input"
             defaultValue={newSite.siteName ?? undefined}
-            invalid={showErrors && !!missingInfo.siteName}
+            invalid={showErrors && newSite.errors?.includes(Errors.siteName)}
             onChange={(e: any) => {
               newSite.siteName = e.target.value;
               return e.target.value;
             }}
-            onBlur={() => setMissingInfo(getMissingInfo())}
+            onBlur={() => updateErrors()}
           />
         </div>
         <div
@@ -88,10 +102,10 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
                 ? 'Yes'
                 : 'No'
             }
-            invalid={showErrors && !!missingInfo.titleI}
+            invalid={showErrors && newSite.errors?.includes(Errors.titleI)}
             onChange={(e: any) => {
               newSite.titleI = e.target.value === 'Yes' ? true : false;
-              setMissingInfo(getMissingInfo());
+              updateErrors();
               return e.target.value;
             }}
           >
@@ -108,10 +122,10 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             id={`new-site-${numberOnPage}-region-select`}
             labelText="Region"
             defaultValue={newSite.region ?? undefined}
-            invalid={showErrors && !!missingInfo.region}
+            invalid={showErrors && newSite.errors?.includes(Errors.region)}
             onChange={(e: any) => {
               newSite.region = e.target.value;
-              setMissingInfo(getMissingInfo());
+              updateErrors();
               return e.target.value;
             }}
           >
