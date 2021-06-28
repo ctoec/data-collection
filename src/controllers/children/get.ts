@@ -212,12 +212,13 @@ export const getWithdrawnChildren = async (
   // Empty enrollments qualify as "active"
   qb.andWhere('enrollment.entry IS NOT NULL');
   // Subquery: find active enrollments by childId
+  let end = moment().endOf('month').format('YYYY-MM-DD');
   qb.andWhere((qb) => {
     const subQuery = qb
       .subQuery()
       .select('e.childId')
       .from(Enrollment, 'e')
-      .where('e.exit IS NULL');
+      .where('(e.exit >= :end OR e.exit IS NULL)', { end });
 
     // Inverse: Child not included as those with active enrollments
     return 'NOT Child.id IN ' + subQuery.getQuery();

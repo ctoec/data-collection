@@ -13,9 +13,7 @@ Please outline the steps you've already taken to validate this body of work, alo
 
 ## Automated Testing
 - [ ] All unit tests are passing.
-- [ ] All e2e tests are passing.
 - [ ] If applicable, unit tests have been added to cover this changeset.
-- [ ] If applicable, e2e tests have been added to cover this changeset.
 
 ## Additional Context
 If there's anything additional information that those reviewing or validating this work should be aware of, please specify it here.
