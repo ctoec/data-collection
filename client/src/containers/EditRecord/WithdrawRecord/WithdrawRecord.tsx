@@ -150,8 +150,8 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               data={{} as WithdrawRequest}
               className="usa-form"
             >
-              <EnrollmentEndDateField<WithdrawRequest> />
               <ExitReasonField<WithdrawRequest> />
+              <EnrollmentEndDateField<WithdrawRequest> />
               {!!activeFunding && (
 								<FundingEndDateField<WithdrawRequest>
 									fundingAccessor={(data) => data.at('funding')}

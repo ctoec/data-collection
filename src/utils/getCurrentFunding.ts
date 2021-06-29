@@ -15,15 +15,14 @@ export const getCurrentFunding = (source: {
   if (!enrollment && !child) return;
 
   const today = moment.utc();
-  const currentEnrollment = (child.enrollments || []).find(
+  const currentEnrollment = enrollment ?? (child.enrollments || []).find(
     (enrollment) => !enrollment.exit || enrollment.exit.isSameOrAfter(today)
   );
 
-  const _enrollment = enrollment || (child ? currentEnrollment : undefined);
 
-  if (!_enrollment) return;
+  if (!currentEnrollment) return;
 
-  return (_enrollment.fundings || []).find(
+  return (currentEnrollment.fundings || []).find(
     (funding) =>
       !funding.endDate||
       funding.endDate.isSameOrAfter(today)

@@ -511,7 +511,7 @@ export class EnrollmentReportRow {
     example: '09/05/2016',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
-  fundingStartDate?: Moment = moment.invalid();
+  startDate?: Moment = moment.invalid();
 
   @ColumnMetadata({
     formattedName: 'funding end date',
@@ -524,7 +524,7 @@ export class EnrollmentReportRow {
     example: '06/09/2017',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
-  fundingEndDate?: Moment = moment.invalid();
+  endDate?: Moment = moment.invalid();
 }
 
 function makeFormatOptionsList(opts: string[]) {

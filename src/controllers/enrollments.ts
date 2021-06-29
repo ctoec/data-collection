@@ -47,8 +47,9 @@ export const changeFunding = async (
   changeFundingData: ChangeFundingRequest
 ) => {
 
-	if(!changeFundingData.newFunding.startDate) {
-		throw new BadRequestError("New funding start date is required.")
+	if(!changeFundingData.newFunding?.startDate &&
+		!changeFundingData.oldFunding?.endDate) {
+		throw new BadRequestError("New funding start date or old funding end date is required.")
 	}
   const enrollment = await getEnrollment(id, user, true);
   enrollment.fundings = removeDeletedElements(enrollment.fundings);

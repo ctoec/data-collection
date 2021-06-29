@@ -138,7 +138,9 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
 							: InlineIcon({ icon: 'incomplete' })
 						}
 						{' '}-{' '}
-            {(enrollment.exit && !hasValidationErrorForField(enrollment, 'exit'))
+            {hasValidationErrorForField(enrollment, 'exit')
+							? InlineIcon({ icon: 'incomplete' })
+							: !!enrollment.exit 
 							? enrollment.exit.format('MM/DD/YYYY') 
 							: 'present'
 						}

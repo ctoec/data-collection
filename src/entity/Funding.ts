@@ -15,6 +15,7 @@ import { ValidateNested, IsNotEmpty, ValidateIf } from 'class-validator';
 import { momentTransformer } from './transformers';
 import { Moment } from 'moment';
 import { EndDateAfterStartDate } from './decorators/Funding/endDateAfterStartDate';
+import { FundingBeginsAfterEnrollmentEntry } from './decorators/Funding/fundingBeginsAfterEnrollmentEntry';
 
 @Entity()
 export class Funding implements FundingInterface {
@@ -34,6 +35,7 @@ export class Funding implements FundingInterface {
 
 	@Column({ type: 'date', nullable: true, transformer: momentTransformer })
 	@IsNotEmpty()
+	@FundingBeginsAfterEnrollmentEntry()
 	startDate: Moment;
 
 	@Column({ type: 'date', nullable: true, transformer: momentTransformer })
