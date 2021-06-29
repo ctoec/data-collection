@@ -52,8 +52,9 @@ export const getUsersByEmail = async (email: string) => {
 };
 
 export const getUserById = async (id: string) => {
-  const foundUser = await getManager().findOne(User, id);
+  let foundUser = await getManager().findOne(User, id, { relations: ['orgPermissions'] });
   if (!foundUser) throw new NotFoundError();
+  await addSiteAndOrgDataToUser(foundUser);
   return foundUser;
 };
 
