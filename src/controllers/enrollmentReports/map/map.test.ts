@@ -7,7 +7,6 @@ import {
   FundingSpace,
   Funding,
   Organization,
-  ReportingPeriod,
 } from '../../../entity';
 import { BadRequestError } from '../../../middleware/error/errors';
 import {
@@ -537,26 +536,22 @@ describe('controllers', () => {
         source: FundingSource.CDC,
         time: FundingTime.FullTime,
       } as FundingSpace;
-      const FIRST_PERIOD = {
-        period: moment('10/20/2020'),
-      } as ReportingPeriod;
-      const NEW_FUNDING_SPACE = {
+      const START_DATE = moment('10/20/2020');
+			const NEW_FUNDING_SPACE = {
         id: 2,
         source: FundingSource.CSR,
         time: FundingTime.PartTime,
       } as FundingSpace;
-      const NEW_FIRST_PERIOD = {
-        period: moment('12/25/2020'),
-      } as ReportingPeriod;
+      const NEW_START_DATE = moment('12/25/2020');
 
       it('creates a new funding if there is new information', () => {
         const funding = {
           fundingSpace: FUNDING_SPACE,
-          firstReportingPeriod: FIRST_PERIOD,
+          startDate: START_DATE,
         } as Funding;
         const other = {
           fundingSpace: NEW_FUNDING_SPACE,
-          firstReportingPeriod: NEW_FIRST_PERIOD,
+          startDate: NEW_START_DATE,
         } as Funding;
         const matchingFunding = getFundingMatch(funding, [other]);
         expect(rowHasNewFunding(matchingFunding)).toBeTruthy();
@@ -564,11 +559,11 @@ describe('controllers', () => {
       it('does nothing if the funding in a row is the same', () => {
         const funding = {
           fundingSpace: FUNDING_SPACE,
-          firstReportingPeriod: FIRST_PERIOD,
+          startDate: START_DATE,
         } as Funding;
         const other = {
           fundingSpace: FUNDING_SPACE,
-          firstReportingPeriod: FIRST_PERIOD,
+          startDate: START_DATE,
         } as Funding;
         const matchingFunding = getFundingMatch(funding, [other]);
         expect(rowHasNewFunding(matchingFunding)).toBeFalsy();

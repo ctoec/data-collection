@@ -13,7 +13,6 @@ import {
   Organization,
   Site,
   FundingSpace,
-  ReportingPeriod,
   User,
 } from '../../../entity';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
@@ -24,7 +23,6 @@ export type TransactionMetadata = {
   organizations: Organization[];
   sites: Site[];
   fundingSpaces: FundingSpace[];
-  reportingPeriods: ReportingPeriod[];
 };
 
 /**
@@ -39,14 +37,12 @@ export const getTransactionData = async (user: User) => {
     organizations,
     sites,
     fundingSpaces,
-    reportingPeriods,
   ] = await Promise.all([
     getManager().findByIds(Organization, readAccessibleOrgIds),
     getManager().findByIds(Site, user.siteIds),
     getManager().find(FundingSpace, {
       where: { organizationId: In(readAccessibleOrgIds) },
     }),
-    getManager().find(ReportingPeriod),
   ]);
 
   return {
@@ -54,7 +50,6 @@ export const getTransactionData = async (user: User) => {
     organizations,
     sites,
     fundingSpaces,
-    reportingPeriods,
   };
 };
 

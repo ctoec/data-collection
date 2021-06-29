@@ -9,13 +9,12 @@ import {
 import { Funding as FundingInterface } from '../../client/src/shared/models';
 
 import { Enrollment } from './Enrollment';
-import { ReportingPeriod } from './ReportingPeriod';
 import { FundingSpace } from './FundingSpace';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
-import { ValidateNested, IsNotEmpty } from 'class-validator';
-import { LastReportingPeriodAfterFirst } from './decorators/Funding/lastReportingPeriodValidation';
-import { FundingBeginsAfterEnrollmentEntry } from './decorators/Funding/fundingBeginsAfterEnrollmentEntry';
-import { FundingDoesNotOverlap } from './decorators/Funding/fundingOverlapValidation';
+import { ValidateNested, IsNotEmpty, ValidateIf } from 'class-validator';
+import { momentTransformer } from './transformers';
+import { Moment } from 'moment';
+import { EndDateAfterStartDate } from './decorators/Funding/endDateAfterStartDate';
 
 @Entity()
 export class Funding implements FundingInterface {
@@ -33,16 +32,14 @@ export class Funding implements FundingInterface {
   @IsNotEmpty()
   fundingSpace?: FundingSpace;
 
-  @ManyToOne(() => ReportingPeriod, { eager: true })
-  @IsNotEmpty()
-  @FundingBeginsAfterEnrollmentEntry()
-  @FundingDoesNotOverlap()
-  firstReportingPeriod?: ReportingPeriod;
+	@Column({ type: 'date', nullable: true, transformer: momentTransformer })
+	@IsNotEmpty()
+	startDate: Moment;
 
-  @ManyToOne(() => ReportingPeriod, { eager: true })
-  @LastReportingPeriodAfterFirst()
-  @FundingDoesNotOverlap()
-  lastReportingPeriod?: ReportingPeriod;
+	@Column({ type: 'date', nullable: true, transformer: momentTransformer })
+	@ValidateIf(f => !!f.startDate)
+	@EndDateAfterStartDate()
+	endDate: Moment;
 
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;

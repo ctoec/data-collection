@@ -20,10 +20,11 @@ import { Site } from './Site';
 import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer, enumTransformer } from './transformers';
-import { FundingAgeGroupMatchesEnrollment } from './decorators/Enrollment/fundingAgeGroupValidation';
+import { FundingAgeGroupMatchesEnrollment } from './decorators/Enrollment/fundingsAgeGroupMatchesEnrollment';
 import { ExitDateAfterEntry } from './decorators/Enrollment/exitDateAfterEntry';
 import { MomentComparison } from './decorators/momentValidators';
 import moment from 'moment';
+import { FundingsDoNotOverlap } from './decorators/Enrollment/fundingsDoNotOverlap';
 
 @Entity()
 export class Enrollment implements EnrollmentInterface {
@@ -86,23 +87,9 @@ export class Enrollment implements EnrollmentInterface {
     cascade: ['update', 'soft-remove'],
     eager: true,
   })
-  @ValidateNested({ each: true })
+  @ValidateNested({ each: true, context: {} })
   @FundingAgeGroupMatchesEnrollment()
-  @IsNotEmpty()
-  @ValidateIf((enrollment) => {
-    // This is used by each funding
-    // See similar pattern between child and family
-    enrollment.fundings?.forEach((funding) => {
-      // Fundings must be undefined or we have circular json
-      funding.enrollment = { ...enrollment, fundings: undefined };
-      // But we still need access to the other fundings
-      funding.allFundings = enrollment.fundings.map((f) => ({
-        ...f,
-        enrollment: undefined,
-      }));
-    });
-    return true;
-  })
+	@FundingsDoNotOverlap()
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })

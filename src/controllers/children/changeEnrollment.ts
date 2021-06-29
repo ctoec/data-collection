@@ -9,7 +9,6 @@ import { getChildById } from './get';
 import { NotFoundError, BadRequestError } from '../../middleware/error/errors';
 import {
   User,
-  ReportingPeriod,
   Funding,
   Enrollment,
   Site,
@@ -17,6 +16,7 @@ import {
   Child,
 } from '../../entity';
 import { UpdateMetaData } from '../../entity/embeddedColumns/UpdateMetaData';
+import { getCurrentFunding } from '../../utils/getCurrentFunding';
 
 /**
  * Attempts to create a new enrollment, and optionally funding,
@@ -44,64 +44,26 @@ export const changeEnrollment = async (
     `Matching child found for ${id}.  Initiating enrollment change...`
   );
 
+
+	if(!changeEnrollmentData.newEnrollment.entry) {
+		throw new BadRequestError("New enrollment entry date is required.");
+	}
   // Get current enrollment
   return getManager().transaction(async (tManager) => {
     // Update current enrollment, if exists
     const currentEnrollment = (child.enrollments || []).find((e) => !e.exit);
 
     if (currentEnrollment) {
-      const currentFunding = (currentEnrollment.fundings || []).find(
-        (f) => !f.lastReportingPeriod
-      );
+			const currentFunding = getCurrentFunding({ enrollment: currentEnrollment })
+			currentEnrollment.exit = changeEnrollmentData.oldEnrollment?.exitDate ??
+				changeEnrollmentData.newEnrollment.entry?.clone().add(-1, 'day');
+
+
       // Update current funding, if exists
       if (currentFunding) {
-        const oldEnrollmentLastReportingPeriod =
-          changeEnrollmentData.oldEnrollment?.funding?.lastReportingPeriod;
-        const newEnrollmentNextReportingPeriod = idx(
-          changeEnrollmentData,
-          (_) => _.newEnrollment.fundings[0].firstReportingPeriod
-        );
-
-        // Require some way to determine last reporting period for current funding
-        if (
-          !oldEnrollmentLastReportingPeriod &&
-          !newEnrollmentNextReportingPeriod
-        ) {
-          throw new BadRequestError(
-            'Last reporting period for current funding must be provided if no new funding is provided'
-          );
-        }
-
-        // If the new funding first reporting period only has id
-        // look up period from DB to enable later look ups based
-        // on that value
-        if (
-          !oldEnrollmentLastReportingPeriod &&
-          newEnrollmentNextReportingPeriod &&
-          newEnrollmentNextReportingPeriod.id &&
-          !newEnrollmentNextReportingPeriod.period
-        ) {
-          newEnrollmentNextReportingPeriod.period = (
-            await tManager.findOne(
-              ReportingPeriod,
-              newEnrollmentNextReportingPeriod.id
-            )
-          ).period;
-        }
-
-        const lastReportingPeriod =
-          oldEnrollmentLastReportingPeriod ||
-          (await tManager.findOne(ReportingPeriod, {
-            where: {
-              period: newEnrollmentNextReportingPeriod.period
-                .clone()
-                .add(-1, 'month'),
-              type: currentFunding.fundingSpace.source,
-            },
-          }));
-
-        // Update current funding lastReportinPeriod
-        currentFunding.lastReportingPeriod = lastReportingPeriod;
+        currentFunding.endDate = changeEnrollmentData?.oldEnrollment?.funding?.endDate ??
+					currentEnrollment.exit;
+				
         await tManager.save(Funding, {
           ...currentFunding,
           updateMetaData: { author: user },
@@ -114,12 +76,6 @@ export const changeEnrollment = async (
         changeEnrollmentData.newEnrollment.ageGroup
           ? ExitReason.AgedOut
           : ExitReason.MovedWithinProgram;
-
-      // Update current enrollment exit date
-      const oldEnrollmentExit = changeEnrollmentData.oldEnrollment?.exitDate;
-      const newEnrollmentStart = changeEnrollmentData.newEnrollment.entry;
-      currentEnrollment.exit =
-        oldEnrollmentExit || newEnrollmentStart.clone().add(-1, 'day');
 
       await tManager.save(Enrollment, {
         ...currentEnrollment,
@@ -187,9 +143,9 @@ async function createNewEnrollment(
     const funding = tManager.create(Funding, {
       enrollment,
       fundingSpace: idx(newEnrollment, (_) => _.fundings[0].fundingSpace),
-      firstReportingPeriod: idx(
+      startDate: idx(
         newEnrollment,
-        (_) => _.fundings[0].firstReportingPeriod
+        (_) => _.fundings[0].startDate
       ),
     });
     await tManager.save(Funding, {

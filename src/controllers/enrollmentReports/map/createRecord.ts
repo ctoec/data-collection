@@ -43,7 +43,6 @@ export const createRecord = async (
     organization,
     enrollment.ageGroup,
     transactionMetadata.fundingSpaces,
-    transactionMetadata.reportingPeriods
   );
 
   enrollment.fundings = [funding];

@@ -5,7 +5,6 @@ import { Response } from 'express';
 import { isMoment } from 'moment';
 import { streamTabularData } from '../utils/generateFiles/streamTabularData';
 import { TEMPLATE_SECTIONS } from '../../client/src/shared/constants';
-import { reportingPeriodToString } from './reportingPeriods';
 import { getAllColumnMetadata } from '../template';
 
 /**
@@ -145,12 +144,6 @@ function formatProperty(value: any, propertyName: string) {
   }
   if (propertyName === 'site') {
     return value.siteName;
-  }
-  if (
-    propertyName === 'firstReportingPeriod' ||
-    propertyName === 'lastReportingPeriod'
-  ) {
-    return reportingPeriodToString(value);
   }
   if (typeof value === 'boolean') {
     if (value === true) {

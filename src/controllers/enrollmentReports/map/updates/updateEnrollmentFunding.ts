@@ -43,7 +43,6 @@ export const updateEnrollmentFunding = (
     match.organization,
     newEnrollment.ageGroup,
     transactionMetadata.fundingSpaces,
-    transactionMetadata.reportingPeriods
   );
   // Look up an existing funding that matches row funding
   // (may not exist)
@@ -57,7 +56,7 @@ export const updateEnrollmentFunding = (
     matchingEnrollment.exit = newEnrollment.exit;
     matchingEnrollment.exitReason = newEnrollment.exitReason;
     if (matchingFunding)
-      matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
+      matchingFunding.endDate = newFunding.endDate;
     match.tags.push(ChangeTag.WithdrawnRecord);
   }
   // If row has new enrollment, create new enrollment and funding
@@ -69,7 +68,7 @@ export const updateEnrollmentFunding = (
   }
   // If row ends a current funding, end funding
   else if (rowEndsCurrentFunding(newFunding, matchingFunding)) {
-    matchingFunding.lastReportingPeriod = newFunding.lastReportingPeriod;
+    matchingFunding.endDate = newFunding.endDate;
     match.tags.push(ChangeTag.ChangedFunding);
   }
   // If row has new funding, create new funding
@@ -138,8 +137,8 @@ export const rowHasNewEnrollment = (matchingEnrollment: Enrollment) =>
  * Find an existing funding that matches the funding from row values.
  * Fundings are considered matching if
  * - They reference the same funding space AND
- * - they reference the same first reporting period AND
- * - if a last reporting period exists, they reference the same last reporting period
+ * - they have the same start date
+ * - if an end date exists, they have the same end date
  * @param fundingFromRow
  * @param fundings
  */
@@ -148,27 +147,27 @@ export const getFundingMatch = (fundingFromRow: Funding, fundings: Funding[]) =>
     (f) =>
       f.fundingSpace &&
       fundingFromRow.fundingSpace?.id === f.fundingSpace.id &&
-      f.firstReportingPeriod &&
-      fundingFromRow.firstReportingPeriod?.id === f.firstReportingPeriod.id &&
-      (f.lastReportingPeriod
-        ? fundingFromRow.lastReportingPeriod?.id === f.lastReportingPeriod.id
-        : true)
+      f.startDate &&
+      fundingFromRow.startDate.isSame(f.startDate, 'day') &&
+			(f.endDate
+				? fundingFromRow.endDate.isSame(f.endDate, 'day')
+				: true)
   );
 
 /**
  * Determines if a new funding from row ends a current funding.
  * Funding ends current funding if:
  * - existing matching funding was found AND
- * - existing matching funding does not have last reporting period AND
- * - new funding from row does have a last reporting period
+ * - existing matching funding does not have end date
+ * - new funding from row does have an end date
  */
 export const rowEndsCurrentFunding = (
   newFunding: Funding,
   matchingFunding: Funding
 ) =>
   !!matchingFunding &&
-  !matchingFunding.lastReportingPeriod &&
-  !!newFunding.lastReportingPeriod;
+  !matchingFunding.endDate &&
+  !!newFunding.endDate;
 
 /**
  * Determines if a new funding from row is a new funding.

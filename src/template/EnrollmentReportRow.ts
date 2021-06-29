@@ -502,29 +502,29 @@ export class EnrollmentReportRow {
   time?: string = undefined;
 
   @ColumnMetadata({
-    formattedName: 'first funding period',
+    formattedName: 'funding start date',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition:
-      "The first reporting period (roughly equal to a month) during which the child occupied the funded space. The first funding period is often the same as the child's enrollment start month.",
+      "The first day the child occupied the funded space (usually, same as enrollment start date).",
     reason: UTILIZATION_REPORTING_REASON,
-    format: makeFormatOptionsList(REPORTING_PERIOD_FORMATS),
-    example: '10/2016',
+    format: makeFormatOptionsList(DATE_FORMATS),
+    example: '09/05/2016',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
-  firstReportingPeriod?: Moment = moment.invalid();
+  fundingStartDate?: Moment = moment.invalid();
 
   @ColumnMetadata({
-    formattedName: 'last funding period',
+    formattedName: 'funding end date',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.CONDITIONAL,
     requirementString: REQUIRED_IF_CHANGED_ENROLLMENT_FUNDING,
     definition:
-      'The last reporting period (roughly equal to a month) during which the child occupied the funded space.',
+      'The last day the child occupied the funded space (usually, same as enrollment end date).',
     reason: 'Used to track children moving between funding groups',
-    format: makeFormatOptionsList(REPORTING_PERIOD_FORMATS),
-    example: '08/2017',
+    format: makeFormatOptionsList(DATE_FORMATS),
+    example: '06/09/2017',
     section: TEMPLATE_SECTIONS.ENROLLMENT_FUNDING,
   })
-  lastReportingPeriod?: Moment = moment.invalid();
+  fundingEndDate?: Moment = moment.invalid();
 }
 
 function makeFormatOptionsList(opts: string[]) {
