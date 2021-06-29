@@ -1,22 +1,16 @@
 import { Card, Button } from '@ctoec/component-library';
 import { NumberInput, Select, SelectItem } from 'carbon-components-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FundingSource, AgeGroup, FundingTime } from '../../shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 import { FundingSpaceWithErrors } from './CreateOrg';
+import { FundingSpace } from '../../shared/models/db/FundingSpace';
 
 type NewFundingSpaceFormCardProps = {
   newFundingSpace: Partial<FundingSpaceWithErrors>;
   numberOnPage: number;
   remove: Function;
   showErrors: Boolean;
-};
-
-type FundingSpaceErrors = {
-  source: String;
-  ageGroup: String;
-  capacity: String;
-  time: String;
 };
 
 /**
@@ -41,44 +35,41 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
     return tmp;
   };
 
-  const Errors: FundingSpaceErrors = {
-    source: 'SOURCE',
-    ageGroup: 'AGE_GROUP',
-    capacity: 'CAPACITY',
-    time: 'TIME',
-  };
-
-  //  Array of different field booleans so the form updates whenever
-  //  any field is updated.
   const getMissingInfo = () => {
-    const tmp: String[] = [];
-    Object.keys(Errors).forEach((k) => {
-      const spaceKey = k as keyof FundingSpaceWithErrors;
-      const errorKey = k as keyof FundingSpaceErrors;
-      if (!newFundingSpace[spaceKey]) tmp.push(Errors[errorKey]);
+    const errors: Partial<Record<keyof FundingSpace, boolean>> = {
+      source: false,
+      ageGroup: false,
+      capacity: false,
+      time: false,
+    };
+    Object.keys(errors).forEach((k) => {
+      const key = k as keyof FundingSpace;
+      errors[key] = !newFundingSpace[key];
     });
-    return tmp;
+    return errors;
   };
 
   const updateErrors = () => {
-    newFundingSpace.errors = getMissingInfo();
-    setMissingInfo(newFundingSpace.errors.join(','));
+    newFundingSpace.errors = Object.values(getMissingInfo()).includes(true);
+    setMissingInfo(getMissingInfo());
   };
 
   const [fundingTimes, setFundingTimes] = useState<FundingTime[]>(
     newFundingSpace.source ? getFundingTimes(newFundingSpace.source) : []
   );
 
-  const [missingInfo, setMissingInfo] = useState<String>(
-    getMissingInfo().join(',')
-  );
+  const [missingInfo, setMissingInfo] = useState<
+    Partial<Record<keyof FundingSpace, boolean>>
+  >(getMissingInfo());
 
-  newFundingSpace.errors = getMissingInfo();
+  useEffect(() => {
+    newFundingSpace.errors = Object.values(getMissingInfo()).includes(true);
+  }, []);
 
   return (
     <Card>
       <>
-        {!!missingInfo && showErrors && (
+        {newFundingSpace.errors && showErrors && (
           <div className="display-flex flex-row grid-row grid-gap error-text">
             <div>Please enter all required funding space information.</div>
           </div>
@@ -92,9 +83,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
           <Select
             id={`new-funding-space-${numberOnPage}-funding-source-select`}
             labelText="Funding source"
-            invalid={
-              showErrors && !!newFundingSpace.errors?.includes(Errors.source)
-            }
+            invalid={showErrors && missingInfo.source}
             defaultValue={newFundingSpace.source ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.source = e.target.value;
@@ -116,9 +105,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
           <Select
             id={`new-funding-space-${numberOnPage}-age-group-select`}
             labelText="Age group"
-            invalid={
-              showErrors && newFundingSpace.errors?.includes(Errors.ageGroup)
-            }
+            invalid={showErrors && missingInfo.ageGroup}
             defaultValue={newFundingSpace.ageGroup ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.ageGroup = e.target.value;
@@ -139,9 +126,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
           <Select
             id={`new-funding-space-${numberOnPage}-space-type-select`}
             labelText="Space type"
-            invalid={
-              showErrors && newFundingSpace.errors?.includes(Errors.time)
-            }
+            invalid={showErrors && missingInfo.time}
             defaultValue={newFundingSpace.time ?? undefined}
             onChange={(e: any) => {
               newFundingSpace.time = e.target.value;
@@ -171,9 +156,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
               newFundingSpace.capacity = e.target.value;
               return e.target.value;
             }}
-            invalid={
-              showErrors && newFundingSpace.errors?.includes(Errors.capacity)
-            }
+            invalid={showErrors && missingInfo.capacity}
             invalidText=""
             allowEmpty={true}
             //  @ts-ignore

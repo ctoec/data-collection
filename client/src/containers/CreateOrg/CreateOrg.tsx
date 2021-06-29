@@ -17,11 +17,11 @@ import pluralize from 'pluralize';
 import { uniqWith } from 'lodash';
 
 export interface FundingSpaceWithErrors extends FundingSpace {
-  errors: String[];
+  errors: boolean;
 }
 
 export interface SiteWithErrors extends Site {
-  errors: String[];
+  errors: boolean;
 }
 
 const CreateOrg: React.FC = () => {
@@ -54,12 +54,8 @@ const CreateOrg: React.FC = () => {
       ]);
       errors = true;
     }
-    // const allSitesOkay = newSites.every(
-    //   (ns) => ns.siteName !== '' && ns.titleI !== undefined && ns.region
-    // );
-    const allSitesOkay = !newSites.some(
-      (ns) => ns.errors && ns.errors.length > 0
-    );
+
+    const allSitesOkay = newSites.every((ns) => !ns?.errors);
     if (!allSitesOkay) {
       setAlerts((current) => [
         ...current,
@@ -72,9 +68,7 @@ const CreateOrg: React.FC = () => {
       errors = true;
     }
 
-    const allFundingSpaceOkay = !newFundingSpaces.some(
-      (nfs) => nfs.errors && nfs.errors.length > 0
-    );
+    const allFundingSpaceOkay = newFundingSpaces.every((nfs) => !nfs?.errors);
 
     const allFundingSpacesUnique =
       uniqWith(
@@ -160,7 +154,7 @@ const CreateOrg: React.FC = () => {
     ageGroup: undefined,
     capacity: undefined,
     time: undefined,
-    errors: [],
+    errors: false,
   };
 
   const [newFundingSpaces, setNewFundingSpaces] = useState<

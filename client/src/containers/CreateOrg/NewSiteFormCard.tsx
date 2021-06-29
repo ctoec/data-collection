@@ -5,7 +5,7 @@ import {
   SelectItem,
   TextInput,
 } from 'carbon-components-react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Region, Site } from '../../shared/models';
 import { SiteWithErrors } from './CreateOrg';
 
@@ -14,12 +14,6 @@ type NewSiteFormCardProps = {
   numberOnPage: number;
   remove: Function;
   showErrors: Boolean;
-};
-
-type SiteErrors = {
-  siteName: String;
-  titleI: String;
-  region: String;
 };
 
 /**
@@ -34,36 +28,35 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
   remove,
   showErrors,
 }) => {
-  const Errors: SiteErrors = {
-    siteName: 'SITE_NAME',
-    titleI: 'TITLE_I',
-    region: 'REGION',
-  };
-
   const getMissingInfo = () => {
-    const tmp: String[] = [];
-    Object.keys(Errors).forEach((k) => {
-      const siteKey = k as keyof SiteWithErrors;
-      const errorKey = k as keyof SiteErrors;
-      if (!newSite[siteKey]) tmp.push(Errors[errorKey]);
+    const errors: Partial<Record<keyof Site, boolean>> = {
+      siteName: false,
+      titleI: false,
+      region: false,
+    };
+    Object.keys(errors).forEach((k) => {
+      const key = k as keyof Site;
+      errors[key] = !newSite[key];
     });
-    return tmp;
+    return errors;
   };
 
   const updateErrors = () => {
-    newSite.errors = getMissingInfo();
-    setMissingInfo(newSite.errors.join(','));
+    newSite.errors = Object.values(getMissingInfo()).includes(true);
+    setMissingInfo(getMissingInfo());
   };
 
-  const [missingInfo, setMissingInfo] = useState<String>(
-    getMissingInfo().join(',')
-  );
+  const [missingInfo, setMissingInfo] = useState<
+    Partial<Record<keyof Site, boolean>>
+  >(getMissingInfo());
 
-  newSite.errors = getMissingInfo();
+  useEffect(() => {
+    newSite.errors = Object.values(getMissingInfo()).includes(true);
+  }, []);
 
   return (
     <Card>
-      {!!missingInfo && showErrors ? (
+      {newSite.errors && showErrors ? (
         <div className="display-flex flex-row grid-row grid-gap error-text">
           <div>Please enter all required site information.</div>
         </div>
@@ -80,7 +73,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             id={`new-site-${numberOnPage}-name-input`}
             type="input"
             defaultValue={newSite.siteName ?? undefined}
-            invalid={showErrors && newSite.errors?.includes(Errors.siteName)}
+            invalid={showErrors && missingInfo.siteName}
             onChange={(e: any) => {
               newSite.siteName = e.target.value;
               return e.target.value;
@@ -102,7 +95,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
                 ? 'Yes'
                 : 'No'
             }
-            invalid={showErrors && newSite.errors?.includes(Errors.titleI)}
+            invalid={showErrors && missingInfo.titleI}
             onChange={(e: any) => {
               newSite.titleI = e.target.value === 'Yes' ? true : false;
               updateErrors();
@@ -122,7 +115,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             id={`new-site-${numberOnPage}-region-select`}
             labelText="Region"
             defaultValue={newSite.region ?? undefined}
-            invalid={showErrors && newSite.errors?.includes(Errors.region)}
+            invalid={showErrors && missingInfo.region}
             onChange={(e: any) => {
               newSite.region = e.target.value;
               updateErrors();
