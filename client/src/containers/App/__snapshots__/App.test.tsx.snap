@@ -78,23 +78,6 @@ exports[`App matches snapshot 1`] = `
                   <ul
                     class="bx--header__menu-bar"
                   >
-                    <li>
-                      <a
-                        class="bx--header__menu-item"
-                        href="/roster"
-                        tabindex="0"
-                      >
-                        <span
-                          class="bx--text-truncate--end"
-                        >
-                          <span
-                            class=""
-                          >
-                            Roster
-                          </span>
-                        </span>
-                      </a>
-                    </li>
                     <li
                       class="bx--header__submenu"
                     >
