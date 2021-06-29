@@ -2,10 +2,11 @@ import React, { useContext, useState } from 'react';
 import { Form, Button, FormSubmitButton } from '@ctoec/component-library';
 import { ChangeFundingRequest } from '../../../../shared/payloads';
 import { NewFundingField } from '../../../../components/Forms/Enrollment/Fields';
-import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Funding/Fields';
-import { Enrollment, FundingSource } from '../../../../shared/models';
+import { Enrollment } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
+import { getCurrentFunding } from '../../../../utils/models';
+import { FundingEndDateField } from '../../../../components/Forms/Enrollment/Funding/Fields/FundingEndDate';
 
 type ChangeFundingFormProps = {
   orgId: number;
@@ -37,10 +38,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
       .finally(() => setLoading(false));
   };
 
-  const activeFunding = enrollment.fundings?.find(
-    (f) => !f.lastReportingPeriod
-  );
-
+  const activeFunding = getCurrentFunding({ enrollment: enrollment }) 
   if (activeFunding && !activeFunding.fundingSpace) {
     return (
       <div>
@@ -68,13 +66,9 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
         />
       )}
       {!!activeFunding && (
-        <ReportingPeriodField<ChangeFundingRequest>
-          accessor={(data) => data.at('oldFunding').at('lastReportingPeriod')}
-          fundingSource={activeFunding.fundingSpace?.source as FundingSource} // This is known to have a value (check on line 44)
-          isLast={true}
-          label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
-          optional={changeType === 'start'}
-        />
+				<FundingEndDateField<ChangeFundingRequest>
+					fundingAccessor={(data) => data.at('oldFunding')}	
+				/>
       )}
       <div className="display-flex flex-align-center">
         <Button text="Cancel" appearance="outline" onClick={hideForm} />

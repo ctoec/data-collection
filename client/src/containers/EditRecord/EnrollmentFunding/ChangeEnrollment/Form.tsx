@@ -6,7 +6,7 @@ import {
   FormSubmitButton,
 } from '@ctoec/component-library';
 import { ChangeEnrollmentRequest } from '../../../../shared/payloads';
-import { Enrollment, Child, FundingSource } from '../../../../shared/models';
+import { Enrollment, Child } from '../../../../shared/models';
 import {
   SiteField,
   EnrollmentStartDateField,
@@ -14,12 +14,13 @@ import {
   AgeGroupField,
   NewFundingField,
 } from '../../../../components/Forms/Enrollment/Fields';
-import { ReportingPeriodField } from '../../../../components/Forms/Enrollment/Funding/Fields';
 import UserContext from '../../../../contexts/UserContext/UserContext';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { Heading, HeadingLevel } from '../../../../components/Heading';
 import { nameFormatter } from '../../../../utils/formatters';
+import { getCurrentFunding } from '../../../../utils/models';
+import { FundingEndDateField } from '../../../../components/Forms/Enrollment/Funding/Fields/FundingEndDate';
 
 export type ChangeEnrollmentFormProps = {
   afterSaveSuccess: () => void;
@@ -56,9 +57,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       .finally(() => setLoading(false));
   };
 
-  const activeFunding = currentEnrollment?.fundings?.find(
-    (f) => !f.lastReportingPeriod
-  );
+  const activeFunding = getCurrentFunding({ enrollment: currentEnrollment })
 
   if (activeFunding && !activeFunding?.fundingSpace) {
     return (
@@ -108,15 +107,9 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       {!!currentEnrollment && activeFunding && (
         <>
           <Heading level={topHeadingLevel}>Previous enrollment</Heading>
-          <ReportingPeriodField<ChangeEnrollmentRequest>
-            accessor={(data) =>
-              data.at('oldEnrollment').at('funding').at('lastReportingPeriod')
-            }
-            fundingSource={activeFunding.fundingSpace?.source as FundingSource} // This is known to have a value (check on line 58)
-            isLast={true}
-            optional={true}
-            label={`Last reporting period for current ${activeFunding.fundingSpace?.source} - ${activeFunding.fundingSpace?.time} funding`}
-          />
+					<FundingEndDateField<ChangeEnrollmentRequest>
+						fundingAccessor={(data) => data.at('oldEnrollment').at('funding')}
+					/>
         </>
       )}
 

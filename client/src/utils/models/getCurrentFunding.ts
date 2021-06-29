@@ -18,7 +18,7 @@ export const getCurrentFunding = (source: {
   const today = moment.utc();
   return (_enrollment.fundings || []).find(
     (funding) =>
-      !funding.lastReportingPeriod ||
-      funding.lastReportingPeriod.periodEnd.isSameOrAfter(today)
+      !funding.endDate ||
+      funding.endDate.isSameOrAfter(today)
   );
 };

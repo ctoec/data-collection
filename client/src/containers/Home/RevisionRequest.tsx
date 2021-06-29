@@ -6,8 +6,8 @@ import AuthenticationContext from '../../contexts/AuthenticationContext/Authenti
 import UserContext from '../../contexts/UserContext/UserContext';
 import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
 import { AgeGroup, FundingSpace, Site } from '../../shared/models';
-import { AddSiteRequest } from '../../shared/models/db/AddSiteRequest';
-import { ChangeFundingSpaceRequest } from '../../shared/models/db/ChangeFundingSpaceRequest';
+import { AddSiteRequest } from '../../shared/payloads/AddSiteRequest';
+import { ChangeFundingSpaceRequest } from '../../shared/payloads/ChangeFundingSpaceRequest';
 import { UpdateSiteRequest } from '../../shared/models/db/UpdateSiteRequest';
 import { apiGet, apiPost } from '../../utils/api';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';

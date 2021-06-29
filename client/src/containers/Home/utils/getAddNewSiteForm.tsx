@@ -1,6 +1,6 @@
 import { TextInput } from '@ctoec/component-library';
 import React from 'react';
-import { AddSiteRequest } from '../../../shared/models/db/AddSiteRequest';
+import { AddSiteRequest } from '../../../shared/payloads/AddSiteRequest';
 
 /**
  * Function to expand a new set of fields for a user to add a new

@@ -12,7 +12,11 @@ import {
   FormContext,
   TObjectDriller,
 } from '@ctoec/component-library';
-import { ContractSpaceField, ReportingPeriodField } from '../Funding/Fields';
+import { 
+	ContractSpaceField,
+	FundingStartDateField,
+	FundingEndDateField
+	} from '../Funding/Fields';
 import {
   ChangeFundingRequest,
   ChangeEnrollmentRequest,
@@ -127,21 +131,15 @@ export const NewFundingField = <
                 organizationId={organizationId}
                 fundingAccessor={fundingAccessor}
               />
-              <ReportingPeriodField<T>
-                fundingSource={fundingSource}
-                accessor={(data) =>
-                  fundingAccessor(data).at('firstReportingPeriod')
-                }
-              />
+							<FundingStartDateField<T>
+								fundingAccessor={fundingAccessor}
+							/>
               {/* Show last reporting period when field is editing an existing funding*/}
               {isEdit && (
-                <ReportingPeriodField<T>
-                  isLast={true}
-                  fundingSource={fundingSource}
-                  accessor={(data) =>
-                    fundingAccessor(data).at('lastReportingPeriod')
-                  }
-                />
+								<FundingEndDateField<T>
+									fundingAccessor={fundingAccessor}
+									optional
+								/>
               )}
             </>
           ),

@@ -7,7 +7,7 @@ export const fundingHasNoInformation = (funding: Funding | undefined) => {
   if (!funding) return true;
   return (
     !funding.fundingSpace &&
-    !funding.firstReportingPeriod &&
-    !funding.lastReportingPeriod
+    !funding.startDate &&
+    !funding.endDate
   );
 };

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Card, Button, Alert } from '@ctoec/component-library';
+import { Card, Button } from '@ctoec/component-library';
 import { Enrollment } from '../../../../shared/models';
 import { ChangeFundingForm } from './Form';
 import { RecordFormProps } from '../../../../components/Forms';
 import { Heading, HeadingLevel } from '../../../../components/Heading';
+import { getCurrentFunding } from '../../../../utils/models';
 
 type ChangeFundingCardProps = {
   enrollment: Enrollment;
@@ -27,10 +28,9 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
   topHeadingLevel,
 }) => {
   const [visibleForm, setVisibleForm] = useState<'end' | 'start'>();
-  const activeFunding = (enrollment.fundings || []).find(
-    (f) => !f.lastReportingPeriod
-  );
-  return (
+  const activeFunding = getCurrentFunding({ enrollment })
+	
+	return (
     <>
       {!!visibleForm && (
         <Card>

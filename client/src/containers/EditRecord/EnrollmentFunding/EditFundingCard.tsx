@@ -92,23 +92,6 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
       });
   }
 
-  // Don't want two incomplete icons if both reporting periods are
-  // missing, so see how many we need
-  let reportingPeriodDisplay = (
-    <>
-      {hasValidationErrorForField(funding, 'firstReportingPeriod') ? (
-        <InlineIcon icon="incomplete" />
-      ) : (
-        funding.firstReportingPeriod?.period.format('MMMM YYYY')
-      )}
-      {!funding.firstReportingPeriod
-        ? undefined
-        : funding.lastReportingPeriod
-        ? ` - ${funding.lastReportingPeriod.period.format('MMMM YYYY')}`
-        : ' - present'}
-    </>
-  );
-
   return (
     <Card
       key={fundingId}
@@ -135,8 +118,18 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
           </p>
         </div>
         <div className="flex-2">
-          <p className="margin-bottom-0">Reporting periods</p>
-          <p className="text-bold margin-top-0">{reportingPeriodDisplay}</p>
+          <p className="margin-bottom-0">Funding dates</p>
+          <p className="text-bold margin-top-0">
+						{funding.startDate 
+							? funding.startDate.format('MM/DD/YYYY')
+							: InlineIcon({ icon: 'incomplete' })
+						}
+						{' '}-{' '}
+						{(funding.endDate && !hasValidationErrorForField(funding, 'endDate'))
+							? funding.endDate.format('MM/DD/YYYY') 
+							: InlineIcon({ icon: 'incomplete' })
+						}
+					</p>
         </div>
         <div className="display-flex align-center flex-space-between">
           <div className="display-flex align-center margin-right-2">
