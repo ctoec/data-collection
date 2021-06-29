@@ -61,7 +61,7 @@ const App: React.FC = () => {
           loginPath="/login"
           logoutPath="/logout"
           navItems={[
-            ...(user?.isAdmin ? navItems.filter(item => item.label !== 'Roster') : navItems),
+            ...(!user || user?.isAdmin ? navItems.filter(item => item.label !== 'Roster') : navItems),
           ]}
           userFirstName={user?.firstName}
         />
