@@ -1253,7 +1253,7 @@
 
 "@ctoec/component-library@https://github.com/ctoec/component-library#header-styling":
   version "1.1.23"
-  resolved "https://github.com/ctoec/component-library#38bc51ee9571983a3ecbc90abe0519a87fcc08b9"
+  resolved "https://github.com/ctoec/component-library#bc216357f8b325a55e427197609ba4ed38e266c2"
   dependencies:
     "@types/carbon-components" "^10.27.0"
     "@types/carbon-components-react" "^7.33.0"
