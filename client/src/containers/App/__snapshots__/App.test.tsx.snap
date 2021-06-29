@@ -88,7 +88,7 @@ exports[`App matches snapshot 1`] = `
                           class="bx--text-truncate--end"
                         >
                           <span
-                            class="active-page"
+                            class=""
                           >
                             Roster
                           </span>
