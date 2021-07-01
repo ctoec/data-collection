@@ -6,6 +6,8 @@ import {
   ForbiddenError,
   InternalServerError,
 } from '../middleware/error/errors';
+import { getManager } from 'typeorm';
+import { Organization } from '../entity';
 
 export const organizationsRouter = express.Router();
 
@@ -34,3 +36,14 @@ organizationsRouter.get(
     res.send(organizations);
   })
 );
+
+organizationsRouter.get(
+  '/by-ids/:orgIds',
+  passAsyncError(async (req, res) => {
+    if (!req.user.isAdmin) throw new ForbiddenError();
+    const ids: number[] = JSON.parse(req.params['orgIds']);
+    const foundOrgs = await getManager().findByIds(Organization, ids, { relations: ['sites']})
+    console.log(ids);
+    res.send(foundOrgs);
+  })
+)

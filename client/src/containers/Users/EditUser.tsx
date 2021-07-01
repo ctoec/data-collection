@@ -9,10 +9,10 @@ import {
   LoadingWrapper,
   TextInputProps,
   TextInput,
-  SearchBar,
   useGenericContext,
   FormContext,
 } from '@ctoec/component-library';
+import { MultiSelect } from 'carbon-components-react';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
 import UserContext from '../../contexts/UserContext/UserContext';
@@ -20,9 +20,9 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { apiGet, apiPut } from '../../utils/api';
 import { User } from '../../shared/models/db/User';
-import pluralize from 'pluralize';
-import { Organization } from '../../shared/models/db/Organization';
+import { OrgSearchBar } from './OrgSearchBar';
 import produce from 'immer';
+import { Organization, Site } from '../../shared/models';
 
 const EditUser: React.FC = () => {
   const [alertElements, setAlerts] = useAlerts();
@@ -34,10 +34,10 @@ const EditUser: React.FC = () => {
   const h1Ref = getH1RefForTitle();
 
   const [user, setUser] = useState<User>();
+  const [orgsOnPage, setOrgsOnPage] = useState<Organization[]>([]);
+  // const [initSites, setInitSites] = useState<Site[]>([]);
   const [saving, setSaving] = useState(false);
   const [cancelToggle, setCancelToggle] = useState(false);
-
-  console.log(user);
 
   useEffect(() => {
     (async function loadUser() {
@@ -61,16 +61,48 @@ const EditUser: React.FC = () => {
     })();
   }, [adminUser, accessToken]);
 
+  // Have to maintain both an org's "full" list of sites, as well as
+  // the subset of those sites the user has access to, because 
+  // the multiselect options have to always show the full list
+  useEffect(() => {
+    (async function loadAccessibleOrgs() {
+      if (adminUser && accessToken && user) {
+        // For site-level users, this will still contain the orgs 
+        // associated with the sites they can access
+        const orgsToSend = (user.organizations || []).map((o) => o.id);
+        apiGet(`organizations/by-ids/${JSON.stringify(orgsToSend)}`, accessToken)
+          .then((res: Organization[]) => setOrgsOnPage(res))
+          .catch((err) => {
+            console.error(err);
+            history.push({
+              pathname: '/users',
+              state: {
+                alerts: [
+                  {
+                    type: 'error',
+                    text: 'Unable to determine sites associated with orgs'
+                  }
+                ]
+              }
+            })
+          })
+      }
+    })();
+  }, [adminUser, accessToken, user, user?.organizations]);
+
+  // useEffect(() => {
+  //   if (orgsOnPage.length > 0) {
+  //     console.log('running site effect');
+  //     const allSitesOnPage = orgsOnPage.reduce((_acc, org) => [..._acc, ...(org.sites || [])], [] as Site[]);
+  //     setInitSites(allSitesOnPage);
+  //   }
+  // }, [user, orgsOnPage]);
+
   const { updateData } = useGenericContext<User>(
     FormContext
   );
 
-  const [foundOrgs, setFoundOrgs] = useState<Organization[] | null>(null);
-  const searchForOrgs = async (query: string) => {
-    await apiGet(`/organizations/?name=${query}`, accessToken).then((res) => {
-      setFoundOrgs(res);
-    });
-  };
+  console.log(user);
 
   return !adminUser?.isAdmin ? (
     <Redirect to="/home" />
@@ -194,27 +226,87 @@ const EditUser: React.FC = () => {
                           <p className="text-bold">Remove?</p>
                         </div>
                       </div>
-                      {user.organizations.map((userOrg) => (
-                        <div className="grid-row grid-gap margin-bottom-1">
-                          <div className="tablet:grid-col-3">
-                            {userOrg.providerName}
+                      {user.organizations.map((userOrg) => {
+                        // These will always generate a match because it's just the full
+                        // version of the orgs the user can access
+                        // Never _actually_ undefined
+                        const fullOrg = orgsOnPage.find((o) => o.providerName === userOrg.providerName);
+                        const fullSites = fullOrg?.sites || [];
+                        // const multiSelectItems = fullSites.map((s) => s.siteName)
+                        // let didFilter = false;
+                        const initSites = (user.sites || []).filter((uSite) => fullSites.some((s) => s.id === uSite.id));
+                        // didFilter = true;
+                        // console.log(fullSites);
+                        console.log(initSites);
+                        // console.log([initSites[0]]);
+                        // const startingSites = initSites.filter((s) => fullSites.some((fs) => fs.id === s.id));
+                        // console.log(startingSites);
+                        return (
+                          // <LoadingWrapper loading={!didFilter}>
+                          <div className="grid-row grid-gap margin-bottom-1">
+                            <div className="tablet:grid-col-3 site-perm-field">
+                              {userOrg.providerName}
+                            </div>
+                            <div className="tablet:grid-col-6">
+                              <MultiSelect
+                                id="user-site-perms-multiselect"
+                                label={<></>}
+                                items={fullSites}
+                                selectionFeedback="fixed"
+                                // initialSelectedItems={initSites.filter((s) => fullSites.some((fs) => fs.id === s.id))}
+                                // initialSelectedItems={initSites}
+                                initialSelectedItems={[initSites[0]]}
+                                // initialSelectedItems={[fullSites[0]]}
+                                // item is never actually undefined here--will always have a name
+                                itemToString={(item) => (item ? item.siteName : "")}
+                                onChange={({ selectedItems }) => {
+                                  const selectedSiteNames = selectedItems.map((s) => s.siteName);
+                                  console.log(selectedSiteNames);
+                                  setUser(u => {
+                                    const updatedUser = produce<User>((user || {}) as User, draft => {
+                                      draft.sites = fullSites.filter((s) => selectedSiteNames.includes(s.siteName));
+                                      return draft;
+                                    })
+                                    updateData(updatedUser);
+                                    return updatedUser;
+                                  })
+                                }}
+                              />
+                            </div>
+                            <div className="tablet:grid-col-2 site-perm-field">
+                              <Button
+                                appearance="unstyled"
+                                className="marginless-button"
+                                text="Remove organization"
+                                onClick={() => {
+                                  setUser(u => {
+                                    const updatedUser = produce<User>((user || {}) as User, draft => {
+                                      draft.organizations = draft.organizations?.filter(
+                                        o => o.providerName !== userOrg.providerName
+                                      );
+                                      return draft;
+                                    });
+                                    updateData(updatedUser);
+                                    return updatedUser;
+                                  })
+                                }}
+                              />
+                            </div>
                           </div>
-                          <div className="tablet:grid-col-6">
-                            {}
-                          </div>
-                          <div className="tablet:grid-col-2">
-                            <Button
-                              appearance="unstyled"
-                              className="marginless-button"
-                              text="Remove organization"
-                            />
-                          </div>
-                        </div>
-                      ))}
+                          // </LoadingWrapper>
+                        )
+                      })}
                     </>
                   )}
                 </>
-
+                <h3 className="margin-top-4">Add Organization</h3>
+                <Divider />
+                <OrgSearchBar
+                  user={user}
+                  accessToken={accessToken}
+                  setUser={setUser}
+                  updateData={updateData}
+                />
                 <FormSubmitButton
                   text={saving ? 'Saving...' : 'Save changes'}
                   disabled={saving}
@@ -232,49 +324,7 @@ const EditUser: React.FC = () => {
         </div>
       </div>
       
-      <h3 className="margin-top-4">Add Organization</h3>
-      <Divider />
-      <SearchBar
-        id="new-user-org-search"
-        labelText="Search for organization to add"
-        placeholderText="Search"
-        onSearch={searchForOrgs}
-        className="tablet:grid-col-6"
-      />
-      {foundOrgs && (
-        <>
-          <p className="margin-bottom-2 text-bold">
-            {`We found ${pluralize(
-              'organization',
-              foundOrgs.length,
-              true
-            )} matching your criteria.`}
-          </p>
-          <div className="margin-bottom-4">
-            {foundOrgs.map((o) => (
-              <div className="grid-row grid-gap">
-                <div className="tablet:grid-col-4">{o.providerName}</div>
-                <div className="tablet:grid-col-2">
-                  <Button
-                    appearance="unstyled"
-                    text={user?.organizations?.find(org => org.providerName === o.providerName) ? "User already has access to this organization" : "Add organization"}
-                    onClick={() => {
-                      setUser(u => {
-                        const updatedUser = produce<User>((user || {}) as User, draft => {
-                          draft.organizations?.push(o);
-                        });
-                        updateData(updatedUser);
-                        return updatedUser;
-                      })
-                    }}
-                    disabled={user?.organizations?.find(org => org.providerName === o.providerName) ? true : false}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+      
     </div>
   );
 };
