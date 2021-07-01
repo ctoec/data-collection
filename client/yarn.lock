@@ -1251,9 +1251,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@https://github.com/ctoec/component-library#header-styling":
+"@ctoec/component-library@^1.1.23":
   version "1.1.23"
-  resolved "https://github.com/ctoec/component-library#bc216357f8b325a55e427197609ba4ed38e266c2"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.23.tgz#27fd5f914cfa2ac64beb2b0bbc3dd1039055c821"
+  integrity sha512-/zzEBQUfPk5/oVP6t0OmJMrZfap3h5/ANKXq2+sqADKuUBgO3OZyEhl0M714wopfqdDJ01WNy7moCZhXIekXMw==
   dependencies:
     "@types/carbon-components" "^10.27.0"
     "@types/carbon-components-react" "^7.33.0"
