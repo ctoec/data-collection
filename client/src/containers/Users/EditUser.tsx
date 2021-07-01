@@ -104,6 +104,10 @@ const EditUser: React.FC = () => {
 
   console.log(user);
 
+  // const getLabelText = () => {
+  //   if ()
+  // };
+
   return !adminUser?.isAdmin ? (
     <Redirect to="/home" />
   ) : (
@@ -226,42 +230,37 @@ const EditUser: React.FC = () => {
                           <p className="text-bold">Remove?</p>
                         </div>
                       </div>
-                      {user.organizations.map((userOrg) => {
+                      {user.organizations.map((userOrg, idx) => {
                         // These will always generate a match because it's just the full
                         // version of the orgs the user can access
                         // Never _actually_ undefined
                         const fullOrg = orgsOnPage.find((o) => o.providerName === userOrg.providerName);
-                        const fullSites = fullOrg?.sites || [];
+                        const fullSites = (fullOrg?.sites || []).map((s) => ({ ...s, label: s.siteName }));
                         // const multiSelectItems = fullSites.map((s) => s.siteName)
                         // let didFilter = false;
-                        const initSites = (user.sites || []).filter((uSite) => fullSites.some((s) => s.id === uSite.id));
+                        const initSites = (fullSites).filter((fullSite) => user.sites?.some((uSite) => uSite.siteName === fullSite.siteName));
                         // didFilter = true;
-                        // console.log(fullSites);
-                        console.log(initSites);
+                        console.log(fullSites.length);
+                        // console.log(initSites);
                         // console.log([initSites[0]]);
                         // const startingSites = initSites.filter((s) => fullSites.some((fs) => fs.id === s.id));
                         // console.log(startingSites);
                         return (
-                          // <LoadingWrapper loading={!didFilter}>
+                          <LoadingWrapper loading={!fullSites.length}>
                           <div className="grid-row grid-gap margin-bottom-1">
                             <div className="tablet:grid-col-3 site-perm-field">
                               {userOrg.providerName}
                             </div>
-                            <div className="tablet:grid-col-6">
+                            <div className="tablet:grid-col-6" key={`${userOrg.providerName}-${idx}-multiselect-${Date.now()}`}>
                               <MultiSelect
                                 id="user-site-perms-multiselect"
-                                label={<></>}
+                                // label={user.}
                                 items={fullSites}
                                 selectionFeedback="fixed"
-                                // initialSelectedItems={initSites.filter((s) => fullSites.some((fs) => fs.id === s.id))}
-                                // initialSelectedItems={initSites}
-                                initialSelectedItems={[initSites[0]]}
-                                // initialSelectedItems={[fullSites[0]]}
+                                initialSelectedItems={[...initSites]}
                                 // item is never actually undefined here--will always have a name
-                                itemToString={(item) => (item ? item.siteName : "")}
                                 onChange={({ selectedItems }) => {
                                   const selectedSiteNames = selectedItems.map((s) => s.siteName);
-                                  console.log(selectedSiteNames);
                                   setUser(u => {
                                     const updatedUser = produce<User>((user || {}) as User, draft => {
                                       draft.sites = fullSites.filter((s) => selectedSiteNames.includes(s.siteName));
@@ -293,7 +292,7 @@ const EditUser: React.FC = () => {
                               />
                             </div>
                           </div>
-                          // </LoadingWrapper>
+                          </LoadingWrapper>
                         )
                       })}
                     </>
