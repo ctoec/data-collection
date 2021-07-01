@@ -21,6 +21,7 @@ import { UpdateMetaData } from './embeddedColumns/UpdateMetaData';
 import { Moment } from 'moment';
 import { momentTransformer, enumTransformer } from './transformers';
 import { FundingAgeGroupMatchesEnrollment } from './decorators/Enrollment/fundingAgeGroupValidation';
+import { ExitDateAfterEntry } from './decorators/Enrollment/exitDateAfterEntry';
 import { MomentComparison } from './decorators/momentValidators';
 import moment from 'moment';
 
@@ -69,10 +70,8 @@ export class Enrollment implements EnrollmentInterface {
   entry?: Moment;
 
   @Column({ type: 'date', nullable: true, transformer: momentTransformer })
-  @MomentComparison({
-    compareFunc: (exit: Moment) => exit.isBefore(moment()),
-    message: 'Exit cannot be in the future.',
-  })
+  @ValidateIf((c) => !!c.entry)
+  @ExitDateAfterEntry()
   exit?: Moment;
 
   @Column({ nullable: true })

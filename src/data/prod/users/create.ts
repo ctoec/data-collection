@@ -10,6 +10,7 @@ import {
 } from '../../../entity';
 import { parse } from '../utils';
 import { createWingedKeysUsers } from './wingedKeys';
+import { DBConnectionOpts, SiteConnectionOpts } from '../types';
 
 export class UserRow {
   parentOrgNames: string = '';
@@ -19,19 +20,6 @@ export class UserRow {
 }
 
 export const USER_ROW_PROPS = Object.keys(new UserRow());
-
-export type SiteConnectionOpts = {
-  url: string;
-  user: string;
-  password: string;
-};
-
-export type DBConnectionOpts = {
-  server: string;
-  port: number;
-  user: string;
-  password: string;
-};
 
 export const createUserData = async (
   sheetData: WorkSheet,
@@ -73,6 +61,7 @@ export const createUserData = async (
             firstName: _firstName,
             lastName: _lastName,
             wingedKeysId,
+            email: row.email,
           })
         );
 
@@ -82,7 +71,7 @@ export const createUserData = async (
         createdCount += 1;
       } else {
         console.log(
-          `\tUser ${row.userName} with username ${row.email} already exists`
+          `\tUser ${row.userName} with username ${row.email} already exists.`
         );
       }
 

@@ -9,6 +9,7 @@ import {
   LoadingWrapper,
   TextInputProps,
   TextInput,
+  SearchBar,
 } from '@ctoec/component-library';
 import { BackButton } from '../../components/BackButton';
 import AuthenticationContext from '../../contexts/AuthenticationContext/AuthenticationContext';
@@ -17,6 +18,8 @@ import { useAlerts } from '../../hooks/useAlerts';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { apiGet, apiPut } from '../../utils/api';
 import { User } from '../../shared/models/db/User';
+import pluralize from 'pluralize';
+import { Organization } from '../../shared/models/db/Organization';
 
 const EditUser: React.FC = () => {
   const [alertElements, setAlerts] = useAlerts();
@@ -51,6 +54,13 @@ const EditUser: React.FC = () => {
           });
     })();
   }, [adminUser, accessToken]);
+
+  const [foundOrgs, setFoundOrgs] = useState<Organization[] | null>(null);
+  const searchForOrgs = async (query: string) => {
+    await apiGet(`/organizations/?name=${query}`, accessToken).then((res) => {
+      setFoundOrgs(res);
+    });
+  };
 
   return !adminUser?.isAdmin ? (
     <Redirect to="/home" />
@@ -173,6 +183,42 @@ const EditUser: React.FC = () => {
           )}
         </div>
       </div>
+      <h2 className="margin-top-4">Permissions</h2>
+      <h3 className="margin-top-4">Add Organization</h3>
+      <Divider />
+      <SearchBar
+        id="new-user-org-search"
+        labelText="Search for organization to add"
+        placeholderText="Search"
+        onSearch={searchForOrgs}
+        className="tablet:grid-col-6"
+      />
+      {foundOrgs && (
+        <>
+          <p className="margin-bottom-2 text-bold">
+            {`We found ${pluralize(
+              'organization',
+              foundOrgs.length,
+              true
+            )} matching your criteria.`}
+          </p>
+          <div className="margin-bottom-4">
+            {foundOrgs.map((o) => (
+              <div className="grid-row grid-gap">
+                <div className="tablet:grid-col-4">{o.providerName}</div>
+                <div className="tablet:grid-col-2">
+                  <Button
+                    appearance="unstyled"
+                    text="Add organization"
+                    // TODO: Add functionality to actually add this org to the user in later ticket
+                    onClick={() => {}}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 };
