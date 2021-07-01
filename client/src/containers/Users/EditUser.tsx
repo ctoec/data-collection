@@ -22,7 +22,7 @@ import { apiGet, apiPut } from '../../utils/api';
 import { User } from '../../shared/models/db/User';
 import { OrgSearchBar } from './OrgSearchBar';
 import produce from 'immer';
-import { Organization, Site } from '../../shared/models';
+import { Organization } from '../../shared/models';
 
 const EditUser: React.FC = () => {
   const [alertElements, setAlerts] = useAlerts();
@@ -35,7 +35,6 @@ const EditUser: React.FC = () => {
 
   const [user, setUser] = useState<User>();
   const [orgsOnPage, setOrgsOnPage] = useState<Organization[]>([]);
-  // const [initSites, setInitSites] = useState<Site[]>([]);
   const [saving, setSaving] = useState(false);
   const [cancelToggle, setCancelToggle] = useState(false);
 
@@ -90,23 +89,20 @@ const EditUser: React.FC = () => {
     })();
   }, [adminUser, accessToken, user, user?.organizations]);
 
-  // useEffect(() => {
-  //   if (orgsOnPage.length > 0) {
-  //     console.log('running site effect');
-  //     const allSitesOnPage = orgsOnPage.reduce((_acc, org) => [..._acc, ...(org.sites || [])], [] as Site[]);
-  //     setInitSites(allSitesOnPage);
-  //   }
-  // }, [user, orgsOnPage]);
-
   const { updateData } = useGenericContext<User>(
     FormContext
   );
 
-  console.log(user);
-
-  // const getLabelText = () => {
-  //   if ()
-  // };
+  const getLabelText = (org: Organization): string => {
+    if (!user) return "";
+    if (org.sites?.every((orgSite) => !user.sites?.some((userSite) => orgSite.siteName === userSite.siteName))) {
+      return "Select one or more sites for this organization";
+    }
+    if (org.sites?.every((orgSite) => user.sites?.some((userSite) => orgSite.siteName === userSite.siteName))) {
+      return "All sites selected at this organization";
+    }
+    return "Some sites selected for this organization";
+  };
 
   return !adminUser?.isAdmin ? (
     <Redirect to="/home" />
@@ -236,62 +232,70 @@ const EditUser: React.FC = () => {
                         // Never _actually_ undefined
                         const fullOrg = orgsOnPage.find((o) => o.providerName === userOrg.providerName);
                         const fullSites = (fullOrg?.sites || []).map((s) => ({ ...s, label: s.siteName }));
-                        // const multiSelectItems = fullSites.map((s) => s.siteName)
-                        // let didFilter = false;
                         const initSites = (fullSites).filter((fullSite) => user.sites?.some((uSite) => uSite.siteName === fullSite.siteName));
-                        // didFilter = true;
-                        console.log(fullSites.length);
-                        // console.log(initSites);
-                        // console.log([initSites[0]]);
-                        // const startingSites = initSites.filter((s) => fullSites.some((fs) => fs.id === s.id));
-                        // console.log(startingSites);
+                        console.log(initSites);
+                        let updatedUser: User;
                         return (
                           <LoadingWrapper loading={!fullSites.length}>
-                          <div className="grid-row grid-gap margin-bottom-1">
-                            <div className="tablet:grid-col-3 site-perm-field">
-                              {userOrg.providerName}
-                            </div>
-                            <div className="tablet:grid-col-6" key={`${userOrg.providerName}-${idx}-multiselect-${Date.now()}`}>
-                              <MultiSelect
-                                id="user-site-perms-multiselect"
-                                // label={user.}
-                                items={fullSites}
-                                selectionFeedback="fixed"
-                                initialSelectedItems={[...initSites]}
-                                // item is never actually undefined here--will always have a name
-                                onChange={({ selectedItems }) => {
-                                  const selectedSiteNames = selectedItems.map((s) => s.siteName);
-                                  setUser(u => {
-                                    const updatedUser = produce<User>((user || {}) as User, draft => {
-                                      draft.sites = fullSites.filter((s) => selectedSiteNames.includes(s.siteName));
-                                      return draft;
-                                    })
-                                    updateData(updatedUser);
-                                    return updatedUser;
-                                  })
-                                }}
-                              />
-                            </div>
-                            <div className="tablet:grid-col-2 site-perm-field">
-                              <Button
-                                appearance="unstyled"
-                                className="marginless-button"
-                                text="Remove organization"
-                                onClick={() => {
-                                  setUser(u => {
-                                    const updatedUser = produce<User>((user || {}) as User, draft => {
-                                      draft.organizations = draft.organizations?.filter(
-                                        o => o.providerName !== userOrg.providerName
-                                      );
+                            <div className="grid-row grid-gap margin-bottom-1">
+                              <div className="tablet:grid-col-3 site-perm-field">
+                                {userOrg.providerName}
+                              </div>
+                              <div className="tablet:grid-col-6" key={`${userOrg.providerName}-${idx}-multiselect-${Date.now()}`}>
+                                <MultiSelect
+                                  id="user-site-perms-multiselect"
+                                  label={getLabelText(fullOrg || {} as Organization)}
+                                  items={fullSites}
+                                  selectionFeedback="fixed"
+                                  initialSelectedItems={initSites}
+                                  // item is never actually undefined here--will always have a name
+                                  onMenuChange={(open: boolean) => {
+                                    if (!open && updatedUser) {
+                                      updateData(updatedUser);
+                                      setUser(u => updatedUser);
+                                    }
+                                  }}
+                                  onChange={({ selectedItems }) => {
+                                    updatedUser = produce<User>((user || {}) as User, draft => {
+                                      fullSites.forEach((fs) => {
+                                        // If it's in selected but not user's, add it
+                                        if (selectedItems.some((s) => fs.siteName === s.siteName)
+                                          && !draft.sites?.some((s) => s.siteName === fs.siteName)) {
+                                            draft.sites?.push(fs);
+                                        }
+                                        // If it's in user's but not selected, remove it
+                                        else if (draft.sites?.some((s) => s.siteName === fs.siteName)
+                                          && !selectedItems.some((s) => s.siteName === fs.siteName)) {
+                                            draft.sites = draft.sites?.filter((s) => s.siteName !== fs.siteName);
+                                        }
+                                      });
                                       return draft;
                                     });
-                                    updateData(updatedUser);
-                                    return updatedUser;
-                                  })
-                                }}
-                              />
+                                  }}
+                                />
+                              </div>
+                              <div className="tablet:grid-col-2 site-perm-field">
+                                <Button
+                                  appearance="unstyled"
+                                  className="marginless-button"
+                                  text="Remove organization"
+                                  onClick={() => {
+                                    setUser(u => {
+                                      const updatedUser = produce<User>((user || {}) as User, draft => {
+                                        draft.organizations = draft.organizations?.filter(
+                                          o => o.providerName !== userOrg.providerName
+                                        );
+                                        draft.sites = draft.sites?.filter((s) => fullSites.every((fs) => fs.siteName !== s.siteName));
+                                        console.log(draft.sites);
+                                        return draft;
+                                      });
+                                      updateData(updatedUser);
+                                      return updatedUser;
+                                    })
+                                  }}
+                                />
+                              </div>
                             </div>
-                          </div>
                           </LoadingWrapper>
                         )
                       })}

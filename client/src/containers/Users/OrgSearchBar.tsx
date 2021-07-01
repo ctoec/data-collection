@@ -57,7 +57,7 @@ export const OrgSearchBar: React.FC<OrgSearchProps> = ({
                         const updatedUser = produce<User>((user || {}) as User, draft => {
                           console.log(o.sites);
                           draft.organizations?.push(o);
-                          draft.sites = o.sites;
+                          draft.sites = draft.sites?.concat(o.sites || []);
                         });
                         updateData(updatedUser);
                         return updatedUser;
