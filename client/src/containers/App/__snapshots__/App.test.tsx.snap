@@ -69,50 +69,148 @@ exports[`App matches snapshot 1`] = `
             <div
               class="usa-nav__secondary usa-nav__secondary--extended"
             >
-              <ul
+              <div
                 class="usa-nav__secondary-links"
               >
-                <li
-                  class="usa-nav__secondary-item"
+                <nav
+                  class="bx--header__nav"
                 >
-                  <a
-                    class="usa-nav__link"
-                    href="/privacy"
+                  <ul
+                    class="bx--header__menu-bar"
                   >
-                    Privacy policy
-                  </a>
-                </li>
-                <li
-                  class="usa-nav__secondary-item"
-                >
-                  <a
-                    class="usa-nav__link"
-                    href="/template"
-                  >
-                    Data template
-                  </a>
-                </li>
-                <li
-                  class="usa-nav__secondary-item"
-                >
-                  <a
-                    class="usa-nav__link"
-                    href="/data-requirements"
-                  >
-                    Data requirements
-                  </a>
-                </li>
-                <li
-                  class="usa-nav__secondary-item"
-                >
-                  <a
-                    class="usa-nav__link"
-                    href="/help"
-                  >
-                    Help
-                  </a>
-                </li>
-              </ul>
+                    <li
+                      class="bx--header__submenu"
+                    >
+                      <a
+                        aria-expanded="false"
+                        aria-haspopup="menu"
+                        class="bx--header__menu-item bx--header__menu-title"
+                        href="#"
+                        tabindex="0"
+                      >
+                        Resources
+                        <svg
+                          aria-hidden="true"
+                          class="bx--header__menu-arrow"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          />
+                        </svg>
+                      </a>
+                      <ul
+                        class="bx--header__menu"
+                      >
+                        <li>
+                          <a
+                            class="bx--header__menu-item"
+                            href="/template"
+                            tabindex="0"
+                          >
+                            <span
+                              class="bx--text-truncate--end"
+                            >
+                              Data template
+                            </span>
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            class="bx--header__menu-item"
+                            href="/data-requirements"
+                            tabindex="0"
+                          >
+                            <span
+                              class="bx--text-truncate--end"
+                            >
+                              Data requirements
+                            </span>
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            class="bx--header__menu-item"
+                            href="/privacy"
+                            tabindex="0"
+                          >
+                            <span
+                              class="bx--text-truncate--end"
+                            >
+                              Privacy policy
+                            </span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li
+                      class="bx--header__submenu"
+                    >
+                      <a
+                        aria-expanded="false"
+                        aria-haspopup="menu"
+                        class="bx--header__menu-item bx--header__menu-title"
+                        href="#"
+                        tabindex="0"
+                      >
+                        Help
+                        <svg
+                          aria-hidden="true"
+                          class="bx--header__menu-arrow"
+                          fill="currentColor"
+                          focusable="false"
+                          height="16"
+                          preserveAspectRatio="xMidYMid meet"
+                          viewBox="0 0 16 16"
+                          width="16"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M8 11L3 6 3.7 5.3 8 9.6 12.3 5.3 13 6z"
+                          />
+                        </svg>
+                      </a>
+                      <ul
+                        class="bx--header__menu"
+                      >
+                        <li>
+                          <a
+                            class="bx--header__menu-item"
+                            href="https://help.ece-reporter.ctoec.org/"
+                            tabindex="0"
+                            target="_blank"
+                          >
+                            <span
+                              class="bx--text-truncate--end"
+                            >
+                              How-to guides
+                            </span>
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            class="bx--header__menu-item"
+                            href="/support"
+                            tabindex="0"
+                          >
+                            <span
+                              class="bx--text-truncate--end"
+                            >
+                              Support requests
+                            </span>
+                          </a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </nav>

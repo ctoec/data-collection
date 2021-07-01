@@ -1251,13 +1251,13 @@
   resolved "https://registry.yarnpkg.com/@csstools/normalize.css/-/normalize.css-10.1.0.tgz#f0950bba18819512d42f7197e56c518aa491cf18"
   integrity sha512-ij4wRiunFfaJxjB0BdrYHIH8FxBJpOwNPhhAcunlmPdXudL1WQV1qoP9un6JsEBAgQH+7UXyyjh0g7jTxXK6tg==
 
-"@ctoec/component-library@^1.1.18":
-  version "1.1.18"
-  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.18.tgz#11734b01538746cfa719c462867acc0c910426ba"
-  integrity sha512-pZkjpOpm6sR20oYJagDnc1k/r1jAWSB58fV67LqClY0NEPqARm4d98U8dyRkDohNu90rqWsuQp1zHmgBVtkYTQ==
+"@ctoec/component-library@^1.1.23":
+  version "1.1.23"
+  resolved "https://registry.yarnpkg.com/@ctoec/component-library/-/component-library-1.1.23.tgz#27fd5f914cfa2ac64beb2b0bbc3dd1039055c821"
+  integrity sha512-/zzEBQUfPk5/oVP6t0OmJMrZfap3h5/ANKXq2+sqADKuUBgO3OZyEhl0M714wopfqdDJ01WNy7moCZhXIekXMw==
   dependencies:
-    "@types/carbon-components" "^10.23.0"
-    "@types/carbon-components-react" "^7.26.0"
+    "@types/carbon-components" "^10.27.0"
+    "@types/carbon-components-react" "^7.33.0"
     "@types/pluralize" "^0.0.29"
     "@types/react-modal" "^3.10.6"
     dompurify "^2.0.12"
@@ -1875,15 +1875,15 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
-"@types/carbon-components-react@^7.26.0":
-  version "7.29.0"
-  resolved "https://registry.yarnpkg.com/@types/carbon-components-react/-/carbon-components-react-7.29.0.tgz#cefa126beb2929dada557f2193bcef71e4ff806a"
-  integrity sha512-FmFtBfiRBvZnlRRVloerJZWEcABy+JvcNs09KjPADyKQ14h6C7eMNjI/o39fHTVGECbOxj/4qiQtbaUdfCWouw==
+"@types/carbon-components-react@^7.33.0":
+  version "7.34.0"
+  resolved "https://registry.yarnpkg.com/@types/carbon-components-react/-/carbon-components-react-7.34.0.tgz#6db5801a4259877e552171ee9444c4358c6972d6"
+  integrity sha512-mnudJEAwYczGLajCchv1499CDXPXMiOOV6uLGScKEUl+ZaKteK2cLaBgClqelo4zGNzpD4VifSSgkgK2wnwL9g==
   dependencies:
     "@types/react" "*"
     flatpickr "4.6.1"
 
-"@types/carbon-components@^10.23.0":
+"@types/carbon-components@^10.27.0":
   version "10.27.0"
   resolved "https://registry.yarnpkg.com/@types/carbon-components/-/carbon-components-10.27.0.tgz#899579f1ec769bb8068b3943e369b7053b625661"
   integrity sha512-/GIo5AUfo9fhbILmrQVuzZVzEE5BxHLlB3haaGzr/o+P/1DLcaZd9vnd8WYq17Bi+uvsGGc/i9623eOkihToHg==
