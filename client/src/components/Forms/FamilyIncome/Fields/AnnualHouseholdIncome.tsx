@@ -10,6 +10,7 @@ import { getValidationStatusForFieldInFieldset } from '../../../../utils/getVali
 import { set } from 'lodash';
 import produce from 'immer';
 import { HideErrorProps } from '../../types';
+import { NumberInput } from 'carbon-components-react';
 
 /**
  * Component that receives the annual household income of a given
@@ -25,11 +26,14 @@ export const AnnualHouseholdIncomeField: React.FC<HideErrorProps> = ({
   } = useGenericContext<IncomeDetermination>(FormContext);
 
   return (
-    <TextInput
+    <NumberInput
       value={dataDriller.at('income').value}
-      type="input"
+      hideSteppers={true}
+      className="usa-label"
       onChange={(e) => {
+        console.log('e.target.value', e.target.value);
         const income = parseCurrencyFromString(e.target.value);
+        console.log('income', income);
         // Make sure to set not disclosed to false if we've entered info for
         // a partial det--prefer values over not disclosed
         const updatedDet = produce<IncomeDetermination>(
@@ -44,15 +48,15 @@ export const AnnualHouseholdIncomeField: React.FC<HideErrorProps> = ({
       }}
       id="income-determination"
       label="Annual household income"
-      status={
-        hideStatus
-          ? undefined
-          : getValidationStatusForFieldInFieldset(
-              dataDriller,
-              dataDriller.at('income').path,
-              {}
-            )
-      }
+      // status={
+      //   hideStatus
+      //     ? undefined
+      //     : getValidationStatusForFieldInFieldset(
+      //         dataDriller,
+      //         dataDriller.at('income').path,
+      //         {}
+      //       )
+      // }
       disabled={dataDriller.at('incomeNotDisclosed').value}
     />
   );
