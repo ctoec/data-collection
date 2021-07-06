@@ -36,7 +36,10 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
     };
     Object.keys(errors).forEach((k) => {
       const key = k as keyof Site;
-      errors[key] = !newSite[key];
+      errors[key] =
+        newSite[key] === undefined ||
+        newSite[key] === null ||
+        newSite[key] === '';
     });
     return errors;
   };
@@ -97,12 +100,17 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             }
             invalid={showErrors && missingInfo.titleI}
             onChange={(e: any) => {
-              newSite.titleI = e.target.value === 'Yes' ? true : false;
+              newSite.titleI =
+                e.target.value === 'Yes'
+                  ? true
+                  : e.target.value === 'No'
+                  ? false
+                  : undefined;
               updateErrors();
               return e.target.value;
             }}
           >
-            <SelectItem value text="- Select -" />
+            <SelectItem value="- Select -" text="- Select -" />
             <SelectItem value="Yes" text="Yes" />
             <SelectItem value="No" text="No" />
           </Select>
@@ -117,12 +125,13 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
             defaultValue={newSite.region ?? undefined}
             invalid={showErrors && missingInfo.region}
             onChange={(e: any) => {
-              newSite.region = e.target.value;
+              newSite.region =
+                e.target.value != '- Select -' ? e.target.value : undefined;
               updateErrors();
               return e.target.value;
             }}
           >
-            <SelectItem value text="- Select -" />
+            <SelectItem value="- Select -" text="- Select -" />
             {Object.values(Region).map((r) => (
               <SelectItem value={r} text={r} />
             ))}

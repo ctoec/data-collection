@@ -86,13 +86,14 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             invalid={showErrors && missingInfo.source}
             defaultValue={newFundingSpace.source ?? undefined}
             onChange={(e: any) => {
-              newFundingSpace.source = e.target.value;
+              newFundingSpace.source =
+                e.target.value != '- Select -' ? e.target.value : undefined;
               setFundingTimes(getFundingTimes(e.target.value));
               updateErrors();
               return e.target.value;
             }}
           >
-            <SelectItem value text="- Select -" />
+            <SelectItem value="- Select -" text="- Select -" />
             {Object.values(FundingSource).map((r) => (
               <SelectItem value={r} text={r} />
             ))}
@@ -108,12 +109,13 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             invalid={showErrors && missingInfo.ageGroup}
             defaultValue={newFundingSpace.ageGroup ?? undefined}
             onChange={(e: any) => {
-              newFundingSpace.ageGroup = e.target.value;
+              newFundingSpace.ageGroup =
+                e.target.value != '- Select -' ? e.target.value : undefined;
               updateErrors();
               return e.target.value;
             }}
           >
-            <SelectItem value text="- Select -" />
+            <SelectItem value="- Select -" text="- Select -" />
             {Object.values(AgeGroup).map((r) => (
               <SelectItem value={r} text={r} />
             ))}
@@ -129,12 +131,13 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
             invalid={showErrors && missingInfo.time}
             defaultValue={newFundingSpace.time ?? undefined}
             onChange={(e: any) => {
-              newFundingSpace.time = e.target.value;
+              newFundingSpace.time =
+                e.target.value != '- Select -' ? e.target.value : undefined;
               updateErrors();
               return e.target.value;
             }}
           >
-            <SelectItem value text="- Select -" />
+            <SelectItem value="- Select -" text="- Select -" />
             {(newFundingSpace.source
               ? getFundingTimes(newFundingSpace.source)
               : fundingTimes
