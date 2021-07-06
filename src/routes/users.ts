@@ -63,7 +63,8 @@ usersRouter.put(
     if (!user.isAdmin) throw new ForbiddenError();
     if (!params.id || !body)
       throw new BadRequestError('No user information provided.');
-    await controller.updateUserName(params.id, body);
+      console.log(body);
+    await controller.updateUser(params.id, body);
     res.sendStatus(200);
   })
 );

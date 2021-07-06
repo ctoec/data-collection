@@ -1,4 +1,4 @@
-import { User, Site, Organization } from '../entity';
+import { User, Site, Organization, OrganizationPermission, SitePermission } from '../entity';
 import { getManager, In } from 'typeorm';
 import { NotFoundError } from '../middleware/error/errors';
 
@@ -106,11 +106,100 @@ export const getUserById = async (id: string) => {
   return foundUser;
 };
 
-export const updateUserName = async (id: string, updatedUser: User) => {
+export const updateUser = async (id: string, updatedUser: User) => {
   const foundUser = await getUserById(id);
   foundUser.firstName = updatedUser.firstName;
   foundUser.middleName = updatedUser.middleName;
   foundUser.lastName = updatedUser.lastName;
   foundUser.suffix = updatedUser.suffix;
+
+  const newOrgPerms = [];
+  const newSitePerms = [];
+  const orgPermsToDelete = [];
+  const sitePermsToDelete = [];
+  const orgsInUpdatedUser = await getManager().findByIds(Organization, updatedUser.organizations.map(o => o.id), { relations: ['sites']});
+
+  updatedUser.organizations.forEach((newOrg) => {
+    const relevantOrg = orgsInUpdatedUser.find((o) => o.providerName === newOrg.providerName);
+    const allSitesPresentInUpdate = relevantOrg.sites.every((s) => updatedUser.sites.some((uSite) => uSite.id === s.id));
+    const allSitesPresentInOriginal = relevantOrg.sites.every((s) => foundUser.sites.some((fSite) => fSite.id === s.id));
+
+    // New org that's been added
+    if (!foundUser.organizations.some((foundOrg) => foundOrg.providerName === newOrg.providerName)) {
+      // All sites present -> user should have org access here
+      if (allSitesPresentInUpdate) {
+        newOrgPerms.push(newOrg.id);
+      }
+      else {
+        updatedUser.sites.forEach((s) => {
+          newSitePerms.push(s.id);
+        });
+      }
+    }
+
+    // User already connected to this org in some way
+    else {
+      if (allSitesPresentInUpdate && !allSitesPresentInOriginal) {
+        // Replace existing site perms with single org perm
+        foundUser.sites.forEach((s) => {
+          sitePermsToDelete.push(s.id);
+        });
+        newOrgPerms.push(newOrg.id);
+      }
+      else if (!allSitesPresentInUpdate && allSitesPresentInOriginal) {
+        // Remove old org perm and replace with new site perms
+        orgPermsToDelete.push(newOrg.id);
+        updatedUser.sites.forEach((s) => {
+          newSitePerms.push(s.id);
+        });
+      }
+      else {
+        // Find the diff and update accordingly
+        foundUser.sites.forEach(async (siteToDelete) => {
+          if (!updatedUser.sites.some((s) => siteToDelete.id === s.id)) {
+            sitePermsToDelete.push(siteToDelete.id);
+          }
+        });
+        updatedUser.sites.forEach(async (updatedSite) => {
+          if (!foundUser.sites.some((s) => s.id === updatedSite.id)) {
+            newSitePerms.push(updatedSite.id);
+          }
+        });
+      }
+    }
+  });
+
+  // Now check if there are any orgs that were deleted entirely from the user
+  foundUser.organizations.forEach((o) => {
+    if (!updatedUser.organizations.some(uOrg => uOrg.providerName === o.providerName)) {
+      const allSitesPresentInOriginal = o.sites.every(
+        (s) => foundUser.sites.some((fSite) => fSite.id === s.id)
+      );
+      // User had org permissions, so remove them
+      if (allSitesPresentInOriginal) {
+        orgPermsToDelete.push(o.id);
+      }
+      // Otherwise, just remove all the sites they had
+      else {
+        foundUser.sites.forEach((s) => {
+          if (s.organizationId === o.id) {
+            sitePermsToDelete.push(s.id);
+          }
+        })
+      }
+    }
+  });
+
+  await getManager().delete(OrganizationPermission, { user: foundUser, organizationId: In(orgPermsToDelete)});
+  await getManager().delete(SitePermission, { user: foundUser, siteId: In(sitePermsToDelete)});
+  newOrgPerms.forEach(async (newOrgId) => {
+    const newPerm = await getManager().create(OrganizationPermission, { user: foundUser, organizationId: newOrgId })
+    foundUser.orgPermissions.push(newPerm);
+  });
+  newSitePerms.forEach(async (newSiteId) => {
+    const newPerm = await getManager().create(SitePermission, { user: foundUser, siteId: newSiteId });
+    foundUser.sitePermissions.push(newPerm);
+  });
+  
   await getManager().save(foundUser);
 };

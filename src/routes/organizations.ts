@@ -43,7 +43,6 @@ organizationsRouter.get(
     if (!req.user.isAdmin) throw new ForbiddenError();
     const ids: number[] = JSON.parse(req.params['orgIds']);
     const foundOrgs = await getManager().findByIds(Organization, ids, { relations: ['sites']})
-    console.log(ids);
     res.send(foundOrgs);
   })
 )
