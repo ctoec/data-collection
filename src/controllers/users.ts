@@ -1,6 +1,7 @@
 import { User, Site, Organization, OrganizationPermission, SitePermission } from '../entity';
 import { getManager, In } from 'typeorm';
 import { NotFoundError } from '../middleware/error/errors';
+import { uniq } from 'underscore';
 
 /**
  * Fills out the organization and site ID fields on a user object
@@ -50,10 +51,9 @@ export const addSiteAndOrgDataToUser = async (user: User) => {
       ? await getManager().findByIds(Site, user.siteIds)
       : [];
 
-  const orgIds =
-    user.organizationIds && user.organizationIds.length
-      ? user.organizationIds
-      : sites.map((s) => s.organizationId);
+  // Need to append organizations for which the user can just
+  // access sites, too, so that they can be edited in the front-end
+  const orgIds = uniq((user.organizationIds || []).concat(sites.map((s) => s.organizationId)));
 
   const organizations = orgIds.length
     ? await getManager().findByIds(Organization, orgIds)
@@ -106,6 +106,16 @@ export const getUserById = async (id: string) => {
   return foundUser;
 };
 
+/**
+ * Updates the identifying and permission information for a user.
+ * Admins can change identifiers such as first and last name. To
+ * make permission updating easier, all of the user's old permissions
+ * are first wiped from the DB (to simplify the amount of diff case
+ * logic required), and then all permissions carried on the updated
+ * version of the user object are written.
+ * @param id 
+ * @param updatedUser 
+ */
 export const updateUser = async (id: string, updatedUser: User) => {
   const foundUser = await getUserById(id);
   foundUser.firstName = updatedUser.firstName;
@@ -115,91 +125,38 @@ export const updateUser = async (id: string, updatedUser: User) => {
 
   const newOrgPerms = [];
   const newSitePerms = [];
-  const orgPermsToDelete = [];
-  const sitePermsToDelete = [];
   const orgsInUpdatedUser = await getManager().findByIds(Organization, updatedUser.organizations.map(o => o.id), { relations: ['sites']});
 
   updatedUser.organizations.forEach((newOrg) => {
     const relevantOrg = orgsInUpdatedUser.find((o) => o.providerName === newOrg.providerName);
-    const allSitesPresentInUpdate = relevantOrg.sites.every((s) => updatedUser.sites.some((uSite) => uSite.id === s.id));
-    const allSitesPresentInOriginal = relevantOrg.sites.every((s) => foundUser.sites.some((fSite) => fSite.id === s.id));
-
-    // New org that's been added
-    if (!foundUser.organizations.some((foundOrg) => foundOrg.providerName === newOrg.providerName)) {
-      // All sites present -> user should have org access here
-      if (allSitesPresentInUpdate) {
-        newOrgPerms.push(newOrg.id);
-      }
-      else {
-        updatedUser.sites.forEach((s) => {
-          newSitePerms.push(s.id);
-        });
-      }
+    const allSitesPresent = relevantOrg.sites.every((s) => updatedUser.sites.some((uSite) => uSite.id === s.id));
+    // Access to all sites means it's an org level user
+    if (allSitesPresent) {
+      newOrgPerms.push(newOrg.id);
     }
-
-    // User already connected to this org in some way
+    // Otherwise, just give them the sites they have
     else {
-      if (allSitesPresentInUpdate && !allSitesPresentInOriginal) {
-        // Replace existing site perms with single org perm
-        foundUser.sites.forEach((s) => {
-          sitePermsToDelete.push(s.id);
-        });
-        newOrgPerms.push(newOrg.id);
-      }
-      else if (!allSitesPresentInUpdate && allSitesPresentInOriginal) {
-        // Remove old org perm and replace with new site perms
-        orgPermsToDelete.push(newOrg.id);
-        updatedUser.sites.forEach((s) => {
+      updatedUser.sites.forEach((s) => {
+        if (relevantOrg.sites.some((relevantSite) => relevantSite.siteName === s.siteName)) {
           newSitePerms.push(s.id);
-        });
-      }
-      else {
-        // Find the diff and update accordingly
-        foundUser.sites.forEach(async (siteToDelete) => {
-          if (!updatedUser.sites.some((s) => siteToDelete.id === s.id)) {
-            sitePermsToDelete.push(siteToDelete.id);
-          }
-        });
-        updatedUser.sites.forEach(async (updatedSite) => {
-          if (!foundUser.sites.some((s) => s.id === updatedSite.id)) {
-            newSitePerms.push(updatedSite.id);
-          }
-        });
-      }
+        }
+      })
     }
   });
 
-  // Now check if there are any orgs that were deleted entirely from the user
-  foundUser.organizations.forEach((o) => {
-    if (!updatedUser.organizations.some(uOrg => uOrg.providerName === o.providerName)) {
-      const allSitesPresentInOriginal = o.sites.every(
-        (s) => foundUser.sites.some((fSite) => fSite.id === s.id)
-      );
-      // User had org permissions, so remove them
-      if (allSitesPresentInOriginal) {
-        orgPermsToDelete.push(o.id);
-      }
-      // Otherwise, just remove all the sites they had
-      else {
-        foundUser.sites.forEach((s) => {
-          if (s.organizationId === o.id) {
-            sitePermsToDelete.push(s.id);
-          }
-        })
-      }
-    }
+  await getManager().transaction(async (tManager) => {
+    await tManager.delete(OrganizationPermission, { user: foundUser });
+    await tManager.delete(SitePermission, { user: foundUser });
+    newOrgPerms.forEach(async (newOrgId) => {
+      const newPerm = tManager.create(OrganizationPermission, { user: foundUser, organizationId: newOrgId });
+      await tManager.save(newPerm);
+      foundUser.orgPermissions.push(newPerm);
+    });
+    newSitePerms.forEach(async (newSiteId) => {
+      const newPerm = tManager.create(SitePermission, { user: foundUser, siteId: newSiteId });
+      await tManager.save(newPerm);
+      foundUser.sitePermissions.push(newPerm);
+    });
+    await tManager.save(foundUser);
   });
-
-  await getManager().delete(OrganizationPermission, { user: foundUser, organizationId: In(orgPermsToDelete)});
-  await getManager().delete(SitePermission, { user: foundUser, siteId: In(sitePermsToDelete)});
-  newOrgPerms.forEach(async (newOrgId) => {
-    const newPerm = await getManager().create(OrganizationPermission, { user: foundUser, organizationId: newOrgId })
-    foundUser.orgPermissions.push(newPerm);
-  });
-  newSitePerms.forEach(async (newSiteId) => {
-    const newPerm = await getManager().create(SitePermission, { user: foundUser, siteId: newSiteId });
-    foundUser.sitePermissions.push(newPerm);
-  });
-  
-  await getManager().save(foundUser);
 };

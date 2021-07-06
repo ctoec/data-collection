@@ -61,9 +61,7 @@ usersRouter.put(
   '/:id',
   passAsyncError(async ({ user, params, body }, res) => {
     if (!user.isAdmin) throw new ForbiddenError();
-    if (!params.id || !body)
-      throw new BadRequestError('No user information provided.');
-      console.log(body);
+    if (!params.id || !body) throw new BadRequestError('No user information provided.');
     await controller.updateUser(params.id, body);
     res.sendStatus(200);
   })
