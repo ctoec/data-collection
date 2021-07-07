@@ -1,9 +1,5 @@
-import {
-  Button,
-  Divider,
-  TextInput,
-  SearchBar,
-} from '@ctoec/component-library';
+import { Button, Divider, SearchBar } from '@ctoec/component-library';
+import { TextInput } from 'carbon-components-react';
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router';
 import { BackButton } from '../../components/BackButton';
@@ -20,6 +16,14 @@ import { NewFundingSpaceCard } from './NewFundingSpaceFormCard';
 import pluralize from 'pluralize';
 import { uniqWith } from 'lodash';
 
+export interface FundingSpaceWithErrors extends FundingSpace {
+  errors: boolean;
+}
+
+export interface SiteWithErrors extends Site {
+  errors: boolean;
+}
+
 const CreateOrg: React.FC = () => {
   const h1Ref = getH1RefForTitle();
   const { accessToken } = useContext(AuthenticationContext);
@@ -30,42 +34,41 @@ const CreateOrg: React.FC = () => {
   // results, since the found users list already starts as empty
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [alertElements, setAlerts] = useAlerts();
+  const [showErrors, setShowErrors] = useState(false);
   const history = useHistory();
 
   const createNewOrg = async () => {
     // Don't even send an API request if a site card is missing
     // some required info, or there's no org name
+    setShowErrors(false);
+    setAlerts([]);
+    let errors = false;
     if (newOrgName === '') {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Organization name is missing',
           text: 'You must provide a valid organization name before submitting.',
         },
       ]);
-      return;
+      errors = true;
     }
-    const allSitesOkay = newSites.every(
-      (ns) => ns.siteName !== '' && ns.titleI !== undefined && ns.region
-    );
+
+    const allSitesOkay = newSites.every((ns) => !ns?.errors);
     if (!allSitesOkay) {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Site is incomplete',
           text: `One or more requested sites is missing required information.`,
         },
       ]);
-      return;
+      errors = true;
     }
 
-    const allFundingSpaceOkay = newFundingSpaces.every(
-      (nfs) =>
-        !!nfs.source &&
-        !!nfs.ageGroup &&
-        (!!nfs.capacity || nfs.capacity === 0) &&
-        !!nfs.time
-    );
+    const allFundingSpaceOkay = newFundingSpaces.every((nfs) => !nfs?.errors);
 
     const allFundingSpacesUnique =
       uniqWith(
@@ -77,26 +80,31 @@ const CreateOrg: React.FC = () => {
       ).length === newFundingSpaces.length;
 
     if (!allFundingSpaceOkay) {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Funding space is incomplete',
           text: `One or more requested funding spaces is missing required information.`,
         },
       ]);
-      return;
+      errors = true;
     }
 
     if (!allFundingSpacesUnique) {
-      setAlerts([
+      setAlerts((current) => [
+        ...current,
         {
           type: 'error',
           heading: 'Funding spaces are not unique',
           text: `One or more requested funding spaces are not unique.`,
         },
       ]);
-      return;
+      errors = true;
     }
+
+    setShowErrors(errors);
+    if (errors) return;
 
     await apiPost(
       `organizations/`,
@@ -126,7 +134,7 @@ const CreateOrg: React.FC = () => {
       });
   };
 
-  const emptySite: Partial<Site> = {
+  const emptySite: Partial<SiteWithErrors> = {
     siteName: '',
     region: undefined,
     facilityCode: undefined,
@@ -134,20 +142,23 @@ const CreateOrg: React.FC = () => {
     registryId: undefined,
     naeycId: undefined,
   };
-  const [newSites, setNewSites] = useState<Partial<Site>[]>([{ ...emptySite }]);
+  const [newSites, setNewSites] = useState<Partial<SiteWithErrors>[]>([
+    { ...emptySite },
+  ]);
   const addNewSite = () => {
     setNewSites((currentSites) => [...currentSites, { ...emptySite }]);
   };
 
-  const emptyFundingSpace: Partial<FundingSpace> = {
+  const emptyFundingSpace: Partial<FundingSpaceWithErrors> = {
     source: undefined,
     ageGroup: undefined,
     capacity: undefined,
     time: undefined,
+    errors: false,
   };
 
   const [newFundingSpaces, setNewFundingSpaces] = useState<
-    Partial<FundingSpace>[]
+    Partial<FundingSpaceWithErrors>[]
   >([{ ...emptyFundingSpace }]);
 
   const addNewFundingSpace = () => {
@@ -196,15 +207,20 @@ const CreateOrg: React.FC = () => {
         </p>
         <h2 className="margin-top-4">Organization Details</h2>
         <Divider />
-        <TextInput
-          label="Organization Name"
-          id="new-org-name-input"
-          type="input"
-          onChange={(e: any) => {
-            setNewOrgName(e.target.value);
-            return e.target.value;
-          }}
-        />
+        <div className="grid-row">
+          <div className="tablet:grid-col-6">
+            <TextInput
+              labelText="Organization Name"
+              id="new-org-name-input"
+              type="input"
+              invalid={showErrors && !newOrgName}
+              onBlur={(e: any) => {
+                setNewOrgName(e.target.value);
+                return e.target.value;
+              }}
+            />
+          </div>
+        </div>
         <h2 className="margin-top-4">Sites</h2>
         <Divider />
         <p className="margin-top-2 margin-bottom-2">
@@ -217,6 +233,7 @@ const CreateOrg: React.FC = () => {
             numberOnPage={idx + 1}
             remove={removeSite}
             key={`newsite-form-card-${idx}`}
+            showErrors={showErrors}
           />
         ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">
@@ -230,6 +247,7 @@ const CreateOrg: React.FC = () => {
             numberOnPage={idx + 1}
             remove={removeFundingSpace}
             key={`newFundingSpace-form-card-${idx}`}
+            showErrors={showErrors}
           />
         ))}
         <div className="grid-row grid-gap margin-top-2 margin-bottom-4">

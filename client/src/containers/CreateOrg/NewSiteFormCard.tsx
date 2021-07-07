@@ -1,18 +1,19 @@
+import { Card, Button } from '@ctoec/component-library';
 import {
-  Card,
-  Form,
+  NumberInput,
   Select,
+  SelectItem,
   TextInput,
-  Button,
-} from '@ctoec/component-library';
-import { NumberInput } from 'carbon-components-react';
-import React from 'react';
+} from 'carbon-components-react';
+import React, { useState, useEffect } from 'react';
 import { Region, Site } from '../../shared/models';
+import { SiteWithErrors } from './CreateOrg';
 
 type NewSiteFormCardProps = {
-  newSite: Partial<Site>;
+  newSite: Partial<SiteWithErrors>;
   numberOnPage: number;
   remove: Function;
+  showErrors: Boolean;
 };
 
 /**
@@ -25,74 +26,122 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
   newSite,
   numberOnPage,
   remove,
+  showErrors,
 }) => {
+  const getMissingInfo = () => {
+    const errors: Partial<Record<keyof Site, boolean>> = {
+      siteName: false,
+      titleI: false,
+      region: false,
+    };
+    Object.keys(errors).forEach((k) => {
+      const key = k as keyof Site;
+      errors[key] =
+        newSite[key] === undefined ||
+        newSite[key] === null ||
+        newSite[key] === '';
+    });
+    return errors;
+  };
+
+  const updateErrors = () => {
+    newSite.errors = Object.values(getMissingInfo()).includes(true);
+    setMissingInfo(getMissingInfo());
+  };
+
+  const [missingInfo, setMissingInfo] = useState<
+    Partial<Record<keyof Site, boolean>>
+  >(getMissingInfo());
+
+  useEffect(() => {
+    newSite.errors = Object.values(getMissingInfo()).includes(true);
+  }, []);
+
   return (
     <Card>
+      {newSite.errors && showErrors ? (
+        <div className="display-flex flex-row grid-row grid-gap error-text">
+          <div>Please enter all required site information.</div>
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="display-flex flex-row grid-row grid-gap">
         <div
           className="tablet:grid-col-6"
-          key={`newsite-siteName-${newSite.siteName}-${Date.now()}`}
+          key={`newsite-siteName-${newSite.siteName}`}
         >
           <TextInput
-            label={`Site Name #${numberOnPage}`}
+            labelText={`Site Name #${numberOnPage}`}
             id={`new-site-${numberOnPage}-name-input`}
             type="input"
-            value={newSite.siteName ?? undefined}
+            defaultValue={newSite.siteName ?? undefined}
+            invalid={showErrors && missingInfo.siteName}
             onChange={(e: any) => {
               newSite.siteName = e.target.value;
               return e.target.value;
             }}
+            onBlur={() => updateErrors()}
           />
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`titleI-${numberOnPage}-${newSite.titleI?.toString()}-${Date.now()}`}
+          key={`titleI-${numberOnPage}-${newSite.titleI?.toString()}`}
         >
           <Select
             id={`new-site-${numberOnPage}-title1-select`}
-            label="Title I"
-            defaultValue={newSite.titleI?.toString() ?? undefined}
-            options={[
-              {
-                text: 'Yes',
-                value: 'true',
-              },
-              {
-                text: 'No',
-                value: 'false',
-              },
-            ]}
+            labelText="Title I"
+            defaultValue={
+              newSite.titleI === undefined
+                ? undefined
+                : newSite.titleI
+                ? 'Yes'
+                : 'No'
+            }
+            invalid={showErrors && missingInfo.titleI}
             onChange={(e: any) => {
-              newSite.titleI = e.target.value === 'true' ? true : false;
+              newSite.titleI =
+                e.target.value === 'Yes'
+                  ? true
+                  : e.target.value === 'No'
+                  ? false
+                  : undefined;
+              updateErrors();
               return e.target.value;
             }}
-          />
+          >
+            <SelectItem value="- Select -" text="- Select -" />
+            <SelectItem value="Yes" text="Yes" />
+            <SelectItem value="No" text="No" />
+          </Select>
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`region-${numberOnPage}-${newSite.region}-${Date.now()}`}
+          key={`region-${numberOnPage}-${newSite.region}`}
         >
           <Select
             id={`new-site-${numberOnPage}-region-select`}
-            label="Region"
+            labelText="Region"
             defaultValue={newSite.region ?? undefined}
-            options={Object.values(Region).map((r) => ({
-              text: r,
-              value: r,
-            }))}
+            invalid={showErrors && missingInfo.region}
             onChange={(e: any) => {
-              newSite.region = e.target.value;
+              newSite.region =
+                e.target.value != '- Select -' ? e.target.value : undefined;
+              updateErrors();
               return e.target.value;
             }}
-          />
+          >
+            <SelectItem value="- Select -" text="- Select -" />
+            {Object.values(Region).map((r) => (
+              <SelectItem value={r} text={r} />
+            ))}
+          </Select>
         </div>
       </div>
       <div className="display-flex flex-row grid-row grid-gap">
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-facility-input-${
-            newSite.facilityCode
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-facility-input-${newSite.facilityCode}`}
         >
           <NumberInput
             label="Facility code (optional)"
@@ -110,9 +159,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-license-input-${
-            newSite.licenseNumber
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-license-input-${newSite.licenseNumber}`}
         >
           <NumberInput
             label="License number (optional)"
@@ -130,9 +177,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-registry-input-${
-            newSite.registryId
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-registry-input-${newSite.registryId}`}
         >
           <NumberInput
             label="Registry id (optional)"
@@ -150,9 +195,7 @@ export const NewSiteFormCard: React.FC<NewSiteFormCardProps> = ({
         </div>
         <div
           className="tablet:grid-col-3"
-          key={`new-site-${numberOnPage}-naeyc-input-${
-            newSite.naeycId
-          }-${Date.now()}`}
+          key={`new-site-${numberOnPage}-naeyc-input-${newSite.naeycId}`}
         >
           <NumberInput
             label="NAEYC ID (optional)"

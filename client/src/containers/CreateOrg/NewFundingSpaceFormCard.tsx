@@ -1,14 +1,16 @@
-import { Card, Button, Select } from '@ctoec/component-library';
-import { NumberInput } from 'carbon-components-react';
-import React, { useState } from 'react';
+import { Card, Button } from '@ctoec/component-library';
+import { NumberInput, Select, SelectItem } from 'carbon-components-react';
+import React, { useState, useEffect } from 'react';
 import { FundingSource, AgeGroup, FundingTime } from '../../shared/models';
 import { FUNDING_SOURCE_TIMES } from '../../shared/constants';
+import { FundingSpaceWithErrors } from './CreateOrg';
 import { FundingSpace } from '../../shared/models/db/FundingSpace';
 
 type NewFundingSpaceFormCardProps = {
-  newFundingSpace: Partial<FundingSpace>;
+  newFundingSpace: Partial<FundingSpaceWithErrors>;
   numberOnPage: number;
   remove: Function;
+  showErrors: Boolean;
 };
 
 /**
@@ -21,6 +23,7 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
   newFundingSpace,
   numberOnPage,
   remove,
+  showErrors,
 }) => {
   const getFundingTimes = (source: FundingSource) => {
     let tmp: FundingTime[] = [];
@@ -32,83 +35,121 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
     return tmp;
   };
 
+  const getMissingInfo = () => {
+    const errors: Partial<Record<keyof FundingSpace, boolean>> = {
+      source: false,
+      ageGroup: false,
+      capacity: false,
+      time: false,
+    };
+    Object.keys(errors).forEach((k) => {
+      const key = k as keyof FundingSpace;
+      errors[key] = !newFundingSpace[key];
+    });
+    return errors;
+  };
+
+  const updateErrors = () => {
+    newFundingSpace.errors = Object.values(getMissingInfo()).includes(true);
+    setMissingInfo(getMissingInfo());
+  };
+
   const [fundingTimes, setFundingTimes] = useState<FundingTime[]>(
     newFundingSpace.source ? getFundingTimes(newFundingSpace.source) : []
   );
 
+  const [missingInfo, setMissingInfo] = useState<
+    Partial<Record<keyof FundingSpace, boolean>>
+  >(getMissingInfo());
+
+  useEffect(() => {
+    newFundingSpace.errors = Object.values(getMissingInfo()).includes(true);
+  }, []);
+
   return (
     <Card>
+      <>
+        {newFundingSpace.errors && showErrors && (
+          <div className="display-flex flex-row grid-row grid-gap error-text">
+            <div>Please enter all required funding space information.</div>
+          </div>
+        )}
+      </>
       <div className="display-flex flex-row grid-row grid-gap">
         <div
-          className="tablet:grid-col-3"
-          key={`new-funding-space-${numberOnPage}-funding-source-select-${
-            newFundingSpace.source
-          }-${Date.now()}`}
+          className={`tablet:grid-col-3`}
+          key={`new-funding-space-${numberOnPage}-funding-source-select-${newFundingSpace.source}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-funding-source-select`}
-            label="Funding source"
-            options={Object.values(FundingSource).map((r) => ({
-              text: r,
-              value: r,
-            }))}
+            labelText="Funding source"
+            invalid={showErrors && missingInfo.source}
             defaultValue={newFundingSpace.source ?? undefined}
             onChange={(e: any) => {
-              newFundingSpace.source = e.target.value;
+              newFundingSpace.source =
+                e.target.value != '- Select -' ? e.target.value : undefined;
               setFundingTimes(getFundingTimes(e.target.value));
+              updateErrors();
               return e.target.value;
             }}
-          />
+          >
+            <SelectItem value="- Select -" text="- Select -" />
+            {Object.values(FundingSource).map((r) => (
+              <SelectItem value={r} text={r} />
+            ))}
+          </Select>
         </div>
         <div
-          className="tablet:grid-col-3"
-          key={`new-funding-space-${numberOnPage}-age-group-select-${
-            newFundingSpace.ageGroup
-          }-${Date.now()}`}
+          className={`tablet:grid-col-3`}
+          key={`new-funding-space-${numberOnPage}-age-group-select-${newFundingSpace.ageGroup}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-age-group-select`}
-            label="Age group"
-            options={Object.values(AgeGroup).map((r) => ({
-              text: r,
-              value: r,
-            }))}
+            labelText="Age group"
+            invalid={showErrors && missingInfo.ageGroup}
             defaultValue={newFundingSpace.ageGroup ?? undefined}
             onChange={(e: any) => {
-              newFundingSpace.ageGroup = e.target.value;
+              newFundingSpace.ageGroup =
+                e.target.value != '- Select -' ? e.target.value : undefined;
+              updateErrors();
               return e.target.value;
             }}
-          />
+          >
+            <SelectItem value="- Select -" text="- Select -" />
+            {Object.values(AgeGroup).map((r) => (
+              <SelectItem value={r} text={r} />
+            ))}
+          </Select>
         </div>
         <div
-          className="tablet:grid-col-3"
-          key={`new-funding-space-${numberOnPage}-space-type-select-${
-            newFundingSpace.time
-          }-${Date.now()}`}
+          className={`tablet:grid-col-3`}
+          key={`new-funding-space-${numberOnPage}-space-type-select-${newFundingSpace.time}`}
         >
           <Select
             id={`new-funding-space-${numberOnPage}-space-type-select`}
-            label="Space type"
-            options={(newFundingSpace.source
-              ? getFundingTimes(newFundingSpace.source)
-              : fundingTimes
-            ).map((f) => ({
-              text: f,
-              value: f,
-            }))}
+            labelText="Space type"
+            invalid={showErrors && missingInfo.time}
             defaultValue={newFundingSpace.time ?? undefined}
             onChange={(e: any) => {
-              newFundingSpace.time = e.target.value;
+              newFundingSpace.time =
+                e.target.value != '- Select -' ? e.target.value : undefined;
+              updateErrors();
               return e.target.value;
             }}
-          />
+          >
+            <SelectItem value="- Select -" text="- Select -" />
+            {(newFundingSpace.source
+              ? getFundingTimes(newFundingSpace.source)
+              : fundingTimes
+            ).map((r) => (
+              <SelectItem value={r} text={r} />
+            ))}
+          </Select>
         </div>
 
         <div
-          className="tablet:grid-col-3"
-          key={`new-funding-space-${numberOnPage}-capacity-${
-            newFundingSpace.capacity
-          }-${Date.now()}`}
+          className={`tablet:grid-col-3`}
+          key={`new-funding-space-${numberOnPage}-capacity-${newFundingSpace.capacity}`}
         >
           <NumberInput
             label={`Capacity`}
@@ -118,10 +159,15 @@ export const NewFundingSpaceCard: React.FC<NewFundingSpaceFormCardProps> = ({
               newFundingSpace.capacity = e.target.value;
               return e.target.value;
             }}
+            invalid={showErrors && missingInfo.capacity}
+            invalidText=""
             allowEmpty={true}
             //  @ts-ignore
             hideSteppers={true}
             light={true}
+            onBlur={() => {
+              updateErrors();
+            }}
           />
         </div>
       </div>
