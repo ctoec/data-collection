@@ -31,6 +31,7 @@ export const AnnualHouseholdIncomeField: React.FC<HideErrorProps> = ({
     <NumberInput
       value={dataDriller.at('income').value}
       className="usa-label"
+      // @ts-ignore
       hideSteppers={true}
       onChange={(e) => {
         const income = parseCurrencyFromString(e.target.value);
