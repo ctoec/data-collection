@@ -8,6 +8,7 @@ import {
 } from '../middleware/error/errors';
 import { getManager } from 'typeorm';
 import { Organization } from '../entity';
+import { parseQueryString } from '../utils/parseQueryString';
 
 export const organizationsRouter = express.Router();
 
@@ -32,17 +33,20 @@ organizationsRouter.get(
   passAsyncError(async (req, res) => {
     const user = req.user;
     if (!user.isAdmin) throw new ForbiddenError();
-    const organizations = await controller.getOrganizations(req.query);
-    res.send(organizations);
+    let organizationIds = parseQueryString(req, 'orgIds', {
+      forceArray: true,
+    }) as string[];
+    if (organizationIds) {
+      const foundOrgs = await getManager().findByIds(
+        Organization,
+        organizationIds.map(id => parseInt(id)),
+        { relations: ['sites'] }
+      );
+      res.send(foundOrgs);
+    }
+    else {
+      const organizations = await controller.getOrganizations(req.query);
+      res.send(organizations);
+    }
   })
 );
-
-organizationsRouter.get(
-  '/by-ids/:orgIds',
-  passAsyncError(async (req, res) => {
-    if (!req.user.isAdmin) throw new ForbiddenError();
-    const ids: number[] = JSON.parse(req.params['orgIds']);
-    const foundOrgs = await getManager().findByIds(Organization, ids, { relations: ['sites']})
-    res.send(foundOrgs);
-  })
-)

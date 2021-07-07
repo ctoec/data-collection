@@ -23,6 +23,7 @@ import { User } from '../../shared/models/db/User';
 import { OrgSearchBar } from './OrgSearchBar';
 import produce from 'immer';
 import { Organization } from '../../shared/models';
+import { stringify } from 'query-string';
 
 const EditUser: React.FC = () => {
   const [alertElements, setAlerts] = useAlerts();
@@ -69,7 +70,7 @@ const EditUser: React.FC = () => {
         // For site-level users, this will still contain the orgs 
         // associated with the sites they can access
         const orgsToSend = (user.organizations || []).map((o) => o.id);
-        apiGet(`organizations/by-ids/${JSON.stringify(orgsToSend)}`, accessToken)
+        apiGet(`organizations?${stringify({ orgIds: orgsToSend })}`, accessToken)
           .then((res: Organization[]) => setOrgsOnPage(res))
           .catch((err) => {
             console.error(err);
@@ -233,7 +234,6 @@ const EditUser: React.FC = () => {
                         const fullOrg = orgsOnPage.find((o) => o.providerName === userOrg.providerName);
                         const fullSites = (fullOrg?.sites || []).map((s) => ({ ...s, label: s.siteName }));
                         const initSites = (fullSites).filter((fullSite) => user.sites?.some((uSite) => uSite.siteName === fullSite.siteName));
-                        console.log(initSites);
                         let updatedUser: User;
                         return (
                           <LoadingWrapper loading={!fullSites.length}>
@@ -286,7 +286,6 @@ const EditUser: React.FC = () => {
                                           o => o.providerName !== userOrg.providerName
                                         );
                                         draft.sites = draft.sites?.filter((s) => fullSites.every((fs) => fs.siteName !== s.siteName));
-                                        console.log(draft.sites);
                                         return draft;
                                       });
                                       updateData(updatedUser);
