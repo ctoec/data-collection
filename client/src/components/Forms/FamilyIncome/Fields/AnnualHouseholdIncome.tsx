@@ -49,7 +49,7 @@ export const AnnualHouseholdIncomeField: React.FC<HideErrorProps> = ({
       }}
       id="income-determination"
       label="Annual household income"
-      invalid={hideStatus ? false : validationStatus == null}
+      invalid={hideStatus ? false : validationStatus !== undefined}
       invalidText={validationStatus?.message ?? ''}
       disabled={dataDriller.at('incomeNotDisclosed').value}
     />
