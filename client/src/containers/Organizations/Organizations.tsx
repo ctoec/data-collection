@@ -36,9 +36,7 @@ const Organizations: React.FC = () => {
     })();
   }, [user, accessToken]);
 
-  return !user?.isAdmin ? (
-    <Redirect to="/home" />
-  ) : (
+  return (
     <div className="grid-container">
       {alertElements.length > 0 && alertElements}
       <div className="grid-row grid-gap">

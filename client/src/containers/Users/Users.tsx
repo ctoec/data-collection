@@ -26,9 +26,7 @@ const Users: React.FC = () => {
     })();
   }, [user, accessToken]);
 
-  return !user?.isAdmin ? (
-    <Redirect to="/home" />
-  ) : (
+  return (
     <div className="grid-container">
       <div className="grid-row grid-gap">
         {alertElements}

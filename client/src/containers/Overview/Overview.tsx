@@ -28,9 +28,7 @@ const Overview: React.FC = () => {
   const totalSites =
     completedSites.length + inProgressSites.length + noDataSites.length;
 
-  return !user?.isAdmin ? (
-    <Redirect to="/home" />
-  ) : (
+  return (
     <div className="grid-container">
       <div className="grid-row grid-gap">
         <div className="tablet:grid-col-12 margin-top-4 margin-bottom-2">

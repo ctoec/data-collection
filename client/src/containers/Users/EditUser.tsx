@@ -62,9 +62,7 @@ const EditUser: React.FC = () => {
     });
   };
 
-  return !adminUser?.isAdmin ? (
-    <Redirect to="/home" />
-  ) : (
+  return (
     <div className="grid-container">
       <div className="grid-row grid-gap">
         <div className="tablet:grid-col-12 margin-top-4 margin-bottom-2">
