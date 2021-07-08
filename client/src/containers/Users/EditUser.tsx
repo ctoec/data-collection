@@ -302,7 +302,6 @@ const EditUser: React.FC = () => {
                   )}
                 </>
                 <h3 className="margin-top-4">Add Organization</h3>
-                <Divider />
                 <OrgSearchBar
                   user={user}
                   accessToken={accessToken}
