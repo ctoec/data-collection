@@ -17,6 +17,9 @@ abstract class Permission {
 
   @ManyToOne(() => User, { nullable: false })
   user: User;
+
+  @Column()
+  userId: number;
 }
 
 @Entity()

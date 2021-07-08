@@ -81,11 +81,17 @@ export const updateUser = async (id: string, updatedUser: User) => {
 
   const newOrgPerms = [];
   const newSitePerms = [];
-  const orgsInUpdatedUser = await getManager().findByIds(Organization, updatedUser.organizations.map(o => o.id), { relations: ['sites']});
+  const orgsInUpdatedUser = await getManager().findByIds(
+    Organization,
+    updatedUser.organizations.map(o => o.id),
+    { relations: ['sites']}
+  );
 
   updatedUser.organizations.forEach((newOrg) => {
     const relevantOrg = orgsInUpdatedUser.find((o) => o.providerName === newOrg.providerName);
-    const allSitesPresent = relevantOrg.sites.every((s) => updatedUser.sites.some((uSite) => uSite.id === s.id));
+    const allSitesPresent = relevantOrg.sites.every(
+      (s) => updatedUser.sites.some((uSite) => uSite.id === s.id)
+    );
     // Access to all sites means it's an org level user
     if (allSitesPresent) {
       newOrgPerms.push(newOrg.id);
@@ -93,7 +99,9 @@ export const updateUser = async (id: string, updatedUser: User) => {
     // Otherwise, just give them the sites they have
     else {
       updatedUser.sites.forEach((s) => {
-        if (relevantOrg.sites.some((relevantSite) => relevantSite.siteName === s.siteName)) {
+        if (relevantOrg.sites.some(
+          (relevantSite) => relevantSite.siteName === s.siteName)
+        ) {
           newSitePerms.push(s.id);
         }
       })
@@ -101,18 +109,20 @@ export const updateUser = async (id: string, updatedUser: User) => {
   });
 
   await getManager().transaction(async (tManager) => {
+    await tManager.save(foundUser);
     await tManager.delete(OrganizationPermission, { user: foundUser });
     await tManager.delete(SitePermission, { user: foundUser });
-    newOrgPerms.forEach(async (newOrgId) => {
-      const newPerm = tManager.create(OrganizationPermission, { user: foundUser, organizationId: newOrgId });
+
+    // Note: Can't use a forEach loop here because they're not async/
+    // await compatible (they don't wait for their anonymous funcs to
+    // finish)
+    for (const newOrgId of newOrgPerms) {
+      const newPerm = tManager.create(OrganizationPermission, { userId: foundUser.id, organizationId: newOrgId });
       await tManager.save(newPerm);
-      foundUser.orgPermissions.push(newPerm);
-    });
-    newSitePerms.forEach(async (newSiteId) => {
-      const newPerm = tManager.create(SitePermission, { user: foundUser, siteId: newSiteId });
+    };
+    for (const newSiteId of newSitePerms) {
+      const newPerm = tManager.create(SitePermission, { userId: foundUser.id, siteId: newSiteId });
       await tManager.save(newPerm);
-      foundUser.sitePermissions.push(newPerm);
-    });
-    await tManager.save(foundUser);
+    }
   });
 };
