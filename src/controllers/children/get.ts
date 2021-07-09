@@ -1,8 +1,6 @@
 import { getManager } from 'typeorm';
-import { User, Enrollment, FundingSpace, Child } from '../../entity';
+import { User, FundingSpace, Child } from '../../entity';
 import { getReadAccessibleOrgIds } from '../../utils/getReadAccessibleOrgIds';
-import moment, { Moment } from 'moment';
-import { getCurrentEnrollment } from '../../utils/getCurrentEnrollment';
 import { validateChild } from '../../utils/validateChild';
 import { groupBy } from 'underscore';
 import { getCurrentFunding } from '../../utils/getCurrentFunding';
@@ -11,11 +9,6 @@ import { getFundingSpaces } from '../../controllers/fundingSpaces';
 import { intersection } from 'lodash';
 import { AgeGroup } from '../../../client/src/shared/models';
 import { AgeGroupCount } from '../../../client/src/shared/payloads/AgeGroupCount';
-
-type skipTake = {
-  skip?: number;
-  take?: number;
-};
 
 const whereNotDeleted = (field: string) => `${field}.deletedDate IS NULL`;
 
@@ -119,67 +112,17 @@ export const getChildById = async (id: string, user: User): Promise<Child> => {
 };
 
 /**
- * Get all active children for the current month that the given user has access.
- * Optionally, can filter to only return children:
- * 	- for specific organizations
- *  - with active enrollments for a different time frame
- * Supports pagination with skip and take parameters, which
- * leverages offset fetch capability of sorted sql server query
- * (https://docs.microsoft.com/en-us/sql/t-sql/queries/select-order-by-clause-transact-sql?view=sql-server-ver15#syntax)
+ * Get children for a user
  */
-const activeChildrenQuery = async (
-  user: User,
-  organizationIds: string[],
-  selectParams: {
-    end: string;
-    start: string;
-  } & skipTake
-) => {
-  const { end, start, skip, take } = selectParams;
-  const qb = await queryBuilderBuilder({ user, organizationIds });
-  // Filter children: either with no enrollment or overlapping with time range
-  qb.andWhere(
-    '(enrollment.entry <= :end OR enrollment.entry IS NULL) AND (enrollment.exit >= :start OR enrollment.exit IS NULL)',
-    {
-      start,
-      end,
-    }
-  );
-
-  if (skip) qb.skip(skip);
-  if (take) qb.take(take);
-
+const getChildrenQuery = async (user: User) => {
+  const qb = await queryBuilderBuilder({ user });
   return qb;
 };
 
-export const getActiveChildren = async (
-  user: User,
-  organizationIds?: string[],
-  selectParams?: {
-    month?: Moment;
-  } & skipTake
-) => {
-  const { month = moment(), ...restParams } = selectParams ?? {};
-  const qb = await activeChildrenQuery(user, organizationIds, {
-    end: month.endOf('month').format('YYYY-MM-DD'),
-    start: month.startOf('month').format('YYYY-MM-DD'),
-    ...restParams,
-  });
+export const getChildren = async (user: User) => {
+  const qb = await getChildrenQuery(user);
   const children = await qb.getMany();
   return await Promise.all(children.map(validateChild));
-};
-
-/**
- * Get count of active children
- */
-export const getActiveChildrenCount = async (user: User, organizationIds) => {
-  const month = moment();
-  const qb = await activeChildrenQuery(user, organizationIds, {
-    end: month.endOf('month').format('YYYY-MM-DD'),
-    start: month.startOf('month').format('YYYY-MM-DD'),
-  });
-
-  return await qb.getCount();
 };
 
 /**
@@ -187,48 +130,18 @@ export const getActiveChildrenCount = async (user: User, organizationIds) => {
  * associated with all of a user's organizations. No records are
  * returned, only the counts within each age group.
  */
-export const getChildrenCountByAgeGroup = async (user: User, organizationIds): Promise<AgeGroupCount> => {
-  const month = moment();
+export const getChildrenCountByAgeGroup = async (
+  user: User
+): Promise<AgeGroupCount> => {
   let ageGroupCounts = {} as AgeGroupCount;
-  await Promise.all(Object.keys(AgeGroup).map(async (group) => {
-    const qb = await activeChildrenQuery(user, organizationIds, {
-      end: month.endOf('month').format('YYYY-MM-DD'),
-      start: month.startOf('month').format('YYYY-MM-DD'),
-    });
-    qb.andWhere('enrollment.ageGroup = :group', { group });
-    ageGroupCounts[AgeGroup[group]] = await qb.getCount();
-  }));
+  await Promise.all(
+    Object.keys(AgeGroup).map(async (group) => {
+      const qb = await getChildrenQuery(user);
+      qb.andWhere('enrollment.ageGroup = :group', { group });
+      ageGroupCounts[AgeGroup[group]] = await qb.getCount();
+    })
+  );
   return ageGroupCounts;
-}
-
-export const getWithdrawnChildren = async (
-  user: User,
-  organizationIds?: string[],
-  selectParams?: skipTake
-) => {
-  const { skip, take } = selectParams;
-
-  const qb = await queryBuilderBuilder({ user, organizationIds });
-  // Empty enrollments qualify as "active"
-  qb.andWhere('enrollment.entry IS NOT NULL');
-  // Subquery: find active enrollments by childId
-  let end = moment().endOf('month').format('YYYY-MM-DD');
-  qb.andWhere((qb) => {
-    const subQuery = qb
-      .subQuery()
-      .select('e.childId')
-      .from(Enrollment, 'e')
-      .where('(e.exit >= :end OR e.exit IS NULL)', { end });
-
-    // Inverse: Child not included as those with active enrollments
-    return 'NOT Child.id IN ' + subQuery.getQuery();
-  });
-
-  if (skip) qb.skip(skip);
-  if (take) qb.take(take);
-
-  const children = await qb.getMany();
-  return await Promise.all(children.map(validateChild));
 };
 
 export const getMissingInfoChildren = async (
@@ -240,53 +153,6 @@ export const getMissingInfoChildren = async (
   const children = await Promise.all(preProcessedChildren.map(validateChild));
 
   return children.filter((child) => child?.validationErrors?.length);
-};
-
-/**
- * Function that determines the distribution of children across sites.
- * Counts the children at each site and stores the result in a data
- * structure that pairs this count with id properties of the site
- * so that the front-end can send useres directly to a particular
- * site roster.
- */
-export const getSiteCountMap = async (
-  user: User,
-  organizationIds: string[]
-) => {
-  const siteCounts: {
-    siteName: string;
-    count: number;
-    orgId: number;
-    siteId: number;
-  }[] = [];
-  const qb = await queryBuilderBuilder({ user, organizationIds });
-  const children = await qb.getMany();
-
-  children.forEach((c) => {
-    const enrollment = getCurrentEnrollment(c);
-    if (enrollment) {
-      if (
-        user.accessType == 'organization' ||
-        user.siteIds.includes(enrollment.site.id)
-      ) {
-        let match = siteCounts.find(
-          (sc) => sc.siteName === enrollment?.site?.siteName
-        );
-        if (match === undefined) {
-          match = {
-            siteName: enrollment?.site?.siteName,
-            count: 0,
-            orgId: enrollment?.site?.organizationId,
-            siteId: enrollment?.site?.id,
-          };
-          siteCounts.push(match);
-        }
-        match.count += 1;
-      }
-    }
-  });
-
-  return siteCounts.sort((a, b) => (a.siteName > b.siteName ? 1 : -1));
 };
 
 /**
@@ -344,18 +210,4 @@ export const getErrorCounts = async (user: User, organizationIds: string[]) => {
     },
     { activeErrorsCount: 0, withdrawnErrorsCount: 0 }
   );
-};
-
-export const getMetadata = async (
-  user: User,
-  organizationIds: string[],
-  showFundings?: boolean
-) => {
-  const count = await getActiveChildrenCount(user, organizationIds);
-  const siteCountMap = await getSiteCountMap(user, organizationIds);
-  const fundingSpacesMap = showFundings
-    ? await getFundingSpaceMap(user, organizationIds)
-    : null;
-
-  return { count, fundingSpacesMap, siteCountMap };
 };

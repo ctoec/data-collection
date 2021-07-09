@@ -7,7 +7,6 @@ import {
 } from '../middleware/error/errors';
 import * as controller from '../controllers/children';
 import { parseQueryString } from '../utils/parseQueryString';
-import moment, { Moment } from 'moment';
 
 export const childrenRouter = express.Router();
 
@@ -20,23 +19,7 @@ export const childrenRouter = express.Router();
 childrenRouter.get(
   '/',
   passAsyncError(async (req, res) => {
-    const organizationIds = parseQueryString(req, 'organizationId', {
-      forceArray: true,
-    }) as string[];
-    const month = parseQueryString(req, 'month', {
-      post: (monthStr) => moment.utc(monthStr, 'MMM-YYYY'),
-    }) as Moment;
-    const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
-    const take = parseQueryString(req, 'take', { post: parseInt }) as number;
-    const children = await controller.getActiveChildren(
-      req.user,
-      organizationIds,
-      {
-        month,
-        skip,
-        take,
-      }
-    );
+    const children = await controller.getChildren(req.user);
     res.send(children);
   })
 );
@@ -44,49 +27,10 @@ childrenRouter.get(
 childrenRouter.get(
   '/count',
   passAsyncError(async (req, res) => {
-    const organizationIds = parseQueryString(req, 'organizationId', {
-      forceArray: true,
-    }) as string[];
-    const ageGroupCounts = await controller.getChildrenCountByAgeGroup(req.user, organizationIds);
+    const ageGroupCounts = await controller.getChildrenCountByAgeGroup(
+      req.user
+    );
     res.send(ageGroupCounts);
-  })
-);
-
-childrenRouter.get(
-  '/withdrawn',
-  passAsyncError(async (req, res) => {
-    const organizationIds = parseQueryString(req, 'organizationId', {
-      forceArray: true,
-    }) as string[];
-    const skip = parseQueryString(req, 'skip', { post: parseInt }) as number;
-    const take = parseQueryString(req, 'take', { post: parseInt }) as number;
-    const children = await controller.getWithdrawnChildren(
-      req.user,
-      organizationIds,
-      {
-        skip,
-        take,
-      }
-    );
-
-    res.send(children);
-  })
-);
-
-childrenRouter.get(
-  '/metadata',
-  passAsyncError(async (req, res) => {
-    const organizationIds = parseQueryString(req, 'organizationId', {
-      forceArray: true,
-    }) as string[];
-    const showFundings = parseQueryString(req, 'showFundings') as string;
-    const metadata = await controller.getMetadata(
-      req.user,
-      organizationIds,
-      showFundings === 'true'
-    );
-
-    res.send(metadata);
   })
 );
 

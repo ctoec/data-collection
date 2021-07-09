@@ -1,0 +1,18 @@
+.roster {
+  table-layout: fixed;
+}
+.bx--data-table th,
+.bx--data-table td,
+.bx--data-table tr:hover {
+  background-color: #ffffff !important;
+  color: #1b1b1b;
+}
+.bx--data-table thead tr {
+  border-bottom: 2px solid #1b1b1b;
+}
+.bx--data-table td {
+  line-height: 150%;
+  white-space: break-spaces;
+  padding-bottom: 2em;
+  padding-top: 2em;
+}
