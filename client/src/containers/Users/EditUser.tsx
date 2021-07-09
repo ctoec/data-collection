@@ -315,7 +315,10 @@ const EditUser: React.FC = () => {
                 <Button
                   text="Cancel"
                   appearance="outline"
-                  onClick={() => setCancelToggle(!cancelToggle)}
+                  onClick={() => {
+                    setCancelToggle(!cancelToggle);
+                    history.push({ pathname: '/users' });
+                  }}
                 />
               </Form>
             </>

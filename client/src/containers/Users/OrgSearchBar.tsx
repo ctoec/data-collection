@@ -46,12 +46,13 @@ export const OrgSearchBar: React.FC<OrgSearchProps> = ({
           </p>
           <div className="margin-bottom-4">
             {foundOrgs.map((o) => (
-              <div className="grid-row grid-gap">
+              <div className="grid-row grid-gap margin-top-2">
                 <div className="tablet:grid-col-4">{o.providerName}</div>
                 <div className="tablet:grid-col-2">
                   <Button
-                    appearance="unstyled"
-                    text={user?.organizations?.find(org => org.providerName === o.providerName) ? "User already has access to this organization" : "Add organization"}
+                    className="marginless-button"
+                    appearance={user?.organizations?.find(org => org.providerName === o.providerName) ? "outline" : "unstyled"}
+                    text={user?.organizations?.find(org => org.providerName === o.providerName) ? "User already has access" : "Add organization"}
                     onClick={() => {
                       setUser(u => {
                         const updatedUser = produce<User>((user || {}) as User, draft => {
