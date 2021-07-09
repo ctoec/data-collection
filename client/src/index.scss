@@ -6,6 +6,7 @@
 @import './containers/EditRecord/EditRecord.scss';
 @import './containers/Roster/Roster.scss';
 @import './containers/Upload/Upload.scss';
+@import 'carbon-components/scss/globals/scss/styles.scss';
 
 p,
 ol {
@@ -25,6 +26,15 @@ legend .usa-label {
 .usa-form .usa-button[type='submit'] {
   margin-top: 1.5rem; // match other button styles
   margin-bottom: unset;
+}
+
+.bx--label {
+  font-family: Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: normal;
 }
 
 h1,
