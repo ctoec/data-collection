@@ -59,7 +59,7 @@ const EditUser: React.FC = () => {
             });
           });
     })();
-  }, [adminUser, accessToken]);
+  }, [adminUser, accessToken, cancelToggle]);
 
   // Have to maintain both an org's "full" list of sites, as well as
   // the subset of those sites the user has access to, because 
@@ -316,8 +316,8 @@ const EditUser: React.FC = () => {
                   text="Cancel"
                   appearance="outline"
                   onClick={() => {
+                    window.scrollTo(0, 0);
                     setCancelToggle(!cancelToggle);
-                    history.push({ pathname: '/users' });
                   }}
                 />
               </Form>
