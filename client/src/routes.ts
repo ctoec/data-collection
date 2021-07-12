@@ -32,6 +32,7 @@ export type RouteConfig = {
   routes?: RouteConfig[];
   unauthorized?: boolean;
   props?: any;
+  adminOnly?: boolean;
 };
 
 export const routes: RouteConfig[] = [
@@ -62,37 +63,44 @@ export const routes: RouteConfig[] = [
     component: Overview,
     unauthorized: false,
     exact: true,
+    adminOnly: true,
   },
   {
     path: '/overview/site/:id',
     component: SiteOverview,
     unauthorized: false,
+    adminOnly: true,
   },
   {
     path: '/organizations',
     component: Organizations,
     unauthorized: false,
+    adminOnly: true,
   },
   {
     path: '/users',
     component: Users,
     unauthorized: false,
+    adminOnly: true,
   },
   {
     path: '/overview/organization/:id',
     component: OrganizationOverview,
     unauthorized: false,
+    adminOnly: true,
   },
   {
     path: '/create-org',
     component: CreateOrg,
     unauthorized: false,
     exact: true,
+    adminOnly: true,
   },
   {
     path: '/edit-user/:id',
     component: EditUser,
     unauthorized: false,
+    adminOnly: true,
   },
   {
     path: '/home',
