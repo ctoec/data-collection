@@ -6,6 +6,7 @@
 // TODO: Delete this once we're ready to dump all the old roster stuff
 // @import './containers/RosterOld/Roster.scss';
 @import './containers/Upload/Upload.scss';
+@import 'carbon-components/scss/globals/scss/styles.scss';
 
 p,
 ol {
@@ -41,6 +42,15 @@ legend .usa-label {
   margin: 0.5em;
   width: 30%;
   max-width: 30%;
+}
+
+.bx--label {
+  font-family: Public Sans Web, -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+    Segoe UI Symbol;
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: normal;
 }
 
 h1,
