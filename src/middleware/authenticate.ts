@@ -1,14 +1,15 @@
 import jwt from 'express-jwt';
 import jwks from 'jwks-rsa';
 import { Request, Response, NextFunction } from 'express';
-import { getManager, In } from 'typeorm';
-import { User, Organization, Site, OrganizationPermission } from '../entity';
+import { getManager } from 'typeorm';
+import { User, Organization, OrganizationPermission } from '../entity';
 import { passAsyncError } from './error/passAsyncError';
 import { default as axios, AxiosResponse } from 'axios';
 import * as https from 'https';
 import { InvalidSubClaimError } from './error/errors';
 import { isProdLike } from '../utils/isProdLike';
 import { organizations } from '../data/fake/organizations';
+import { mapUserPermsToIds } from '../utils/mapPermsToIds';
 
 interface UserInfoResponse {
   sub: string
@@ -99,36 +100,14 @@ const getUser = async (wingedKeysId: string) => {
     relations: ['orgPermissions', 'sitePermissions'],
     where: { wingedKeysId },
   });
-
+  
   if (!user) return;
-
-  // Create list of distinct organization ids the user can access
-  const allOrgIds = (user.orgPermissions || []).map(
-    (perm) => perm.organizationId
-  );
-
-  // Get all sites associated with all organizations user has permissions for
-  const sitesFromAllOrgs = allOrgIds.length
-    ? await getManager().find(Site, {
-        where: { organizationId: In(allOrgIds) },
-      })
-    : [];
-
-  // Create list of distinct site ids the user can access
-  const allSiteIds = Array.from(
-    new Set([
-      ...(user.sitePermissions || []).map((perm) => perm.siteId),
-      ...sitesFromAllOrgs.map((site) => site.id),
-    ])
-  );
+  await mapUserPermsToIds(user);
 
   // Determine access pattern level of the user
   user.accessType =
     (user.orgPermissions || []).length === 0 ? 'site' : 'organization';
 
-  // Add values to the user object
-  user.organizationIds = allOrgIds;
-  user.siteIds = allSiteIds;
   return user;
 };
 

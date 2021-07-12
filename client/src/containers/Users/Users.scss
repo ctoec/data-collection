@@ -24,3 +24,24 @@
     font-size: 1rem;
   }
 }
+
+.bx--multi-select__wrapper {
+  .bx--label {
+    line-height: 0rem !important;
+    display: none !important;
+    font-size: 0rem !important;
+  }
+}
+
+.full-page-form {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
+.marginless-button {
+  margin-top: 0 !important;
+}
+
+.site-perm-field {
+  padding-top: 0.5rem;
+}

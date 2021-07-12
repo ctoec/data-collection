@@ -83,6 +83,7 @@ const escapeLikeString = (raw: string): string =>
 const getOrgsByName = (name: string) =>
   getManager().find(Organization, {
     where: { providerName: ILike(`%${escapeLikeString(name)}%`) },
+    relations: ['sites']
   });
 
 const getAllAccessibleOrgs = () =>
