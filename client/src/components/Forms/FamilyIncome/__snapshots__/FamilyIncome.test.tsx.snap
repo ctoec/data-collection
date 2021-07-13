@@ -42,21 +42,29 @@ exports[`EditForms FamilyIncome matches snapshot 1`] = `
         </div>
         <div>
           <div
-            class=" usa-form-group"
+            class="bx--form-item"
           >
-            <label
-              class="usa-label"
-              for="income-determination"
+            <div
+              class="bx--number bx--number--helpertext usa-label bx--number--nosteppers"
             >
-              Annual household income 
-            </label>
-            <input
-              aria-required="true"
-              class="usa-input oec-text-input"
-              id="income-determination"
-              type="text"
-              value="50000"
-            />
+              <label
+                class="bx--label"
+                for="income-determination"
+              >
+                Annual household income
+              </label>
+              <div
+                class="bx--number__input-wrapper"
+              >
+                <input
+                  id="income-determination"
+                  pattern="[0-9]*"
+                  step="1"
+                  type="number"
+                  value="50000"
+                />
+              </div>
+            </div>
           </div>
         </div>
         <div>

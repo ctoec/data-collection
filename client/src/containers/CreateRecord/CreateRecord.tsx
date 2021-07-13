@@ -50,7 +50,7 @@ const CreateRecord: React.FC = () => {
   // On initial load, set url hash to first step hash
   useEffect(() => {
     if (!activeStep) {
-      history.replace({ hash: steps[0].key });
+      history.replace({ hash: steps[0].key, state: locationState });
     }
   }, [activeStep, history, steps]);
 

@@ -1,72 +1,22 @@
-import { getConnectionOptions, getConnectionManager } from 'typeorm';
-import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerConnectionOptions';
+import { Connection } from 'typeorm';
 import commandLineArgs from 'command-line-args';
-import {
-  Organization,
-  FundingSpace,
-  Site,
-  Enrollment,
-  Funding,
-  Family,
-  Child,
-  IncomeDetermination,
-  FundingTimeSplit,
-  Community,
-  OrganizationPermission,
-  SitePermission,
-  User,
-  CommunityPermission,
-  ReportingPeriod,
-} from '../../entity';
-import { read, parse } from './utils';
+import { read, parse, openFawkesDbConnection } from './utils';
 import { createOrganizationData } from './organizations';
 import { createSiteData } from './sites';
 import {
   createUserData,
-  DBConnectionOpts,
-  SiteConnectionOpts,
   USER_ROW_PROPS,
   UserRow,
 } from './users/create';
 import { createReportingPeriodData } from './reportingPeriods';
 import { invite } from './invite';
+import { Config, DBConnectionOpts, SiteConnectionOpts } from './types';
 
 const optionDefns = [
   { name: 'config', type: String },
   { name: 'invite', type: Boolean },
 ];
 const options = commandLineArgs(optionDefns);
-
-type Config = {
-  app: {
-    db: {
-      user: string;
-      password: string;
-      server: string;
-      port: number;
-    };
-  };
-
-  wingedKeys: {
-    db: {
-      user: string;
-      password: string;
-      server: string;
-      port: number;
-    };
-    site: {
-      url: string;
-      user: string;
-      password: string;
-    };
-    passwordFile?: string;
-  };
-
-  orgFile: string;
-  siteFile: string;
-  userFile: string;
-  reportingPeriodFile: string;
-};
 
 const configPath = options.config as string;
 if (!configPath || !configPath.startsWith('/')) {
@@ -134,37 +84,7 @@ if (doInvite) {
 
 async function create() {
   try {
-    const connectionOptions = (await getConnectionOptions()) as SqlServerConnectionOptions;
-    const connection = getConnectionManager().create({
-      ...connectionOptions,
-      host: appDBConnOpts.server || connectionOptions.host,
-      port: appDBConnOpts.port || connectionOptions.port,
-      username: appDBConnOpts.user || connectionOptions.username,
-      password: appDBConnOpts.password || connectionOptions.password,
-      database: 'ece',
-      name: 'script',
-      logging: false,
-      migrationsRun: false,
-      synchronize: false,
-      entities: [
-        Organization,
-        Site,
-        Enrollment,
-        Funding,
-        FundingSpace,
-        Child,
-        Family,
-        IncomeDetermination,
-        FundingTimeSplit,
-        Community,
-        OrganizationPermission,
-        SitePermission,
-        User,
-        CommunityPermission,
-        ReportingPeriod,
-      ],
-    });
-    await connection.connect();
+    const connection: Connection = await openFawkesDbConnection(appDBConnOpts);
 
     if (reportingPeriodFile) {
       const rawReportingPeriods = read(reportingPeriodFile);

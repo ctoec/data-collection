@@ -1,15 +1,12 @@
 import React from 'react';
-import {
-  TextInput,
-  FormContext,
-  useGenericContext,
-} from '@ctoec/component-library';
+import { FormContext, useGenericContext } from '@ctoec/component-library';
 import { IncomeDetermination } from '../../../../shared/models';
 import parseCurrencyFromString from '../../../../utils/parseCurrencyFromString';
 import { getValidationStatusForFieldInFieldset } from '../../../../utils/getValidationStatus';
 import { set } from 'lodash';
 import produce from 'immer';
 import { HideErrorProps } from '../../types';
+import { NumberInput } from 'carbon-components-react';
 
 /**
  * Component that receives the annual household income of a given
@@ -24,10 +21,18 @@ export const AnnualHouseholdIncomeField: React.FC<HideErrorProps> = ({
     updateData,
   } = useGenericContext<IncomeDetermination>(FormContext);
 
+  const validationStatus = getValidationStatusForFieldInFieldset(
+    dataDriller,
+    dataDriller.at('income').path,
+    {}
+  );
+
   return (
-    <TextInput
+    <NumberInput
       value={dataDriller.at('income').value}
-      type="input"
+      className="usa-label"
+      // @ts-ignore
+      hideSteppers={true}
       onChange={(e) => {
         const income = parseCurrencyFromString(e.target.value);
         // Make sure to set not disclosed to false if we've entered info for
@@ -44,15 +49,8 @@ export const AnnualHouseholdIncomeField: React.FC<HideErrorProps> = ({
       }}
       id="income-determination"
       label="Annual household income"
-      status={
-        hideStatus
-          ? undefined
-          : getValidationStatusForFieldInFieldset(
-              dataDriller,
-              dataDriller.at('income').path,
-              {}
-            )
-      }
+      invalid={hideStatus ? false : validationStatus !== undefined}
+      invalidText={validationStatus?.message ?? ''}
       disabled={dataDriller.at('incomeNotDisclosed').value}
     />
   );
