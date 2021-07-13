@@ -505,7 +505,7 @@ export class EnrollmentReportRow {
     formattedName: 'funding start date',
     requirementLevel: TEMPLATE_REQUIREMENT_LEVELS.REQUIRED,
     definition:
-      "The first day the child occupied the funded space (usually, same as enrollment start date).",
+      'The first day the child occupied the funded space (usually, same as enrollment start date).',
     reason: UTILIZATION_REPORTING_REASON,
     format: makeFormatOptionsList(DATE_FORMATS),
     example: '09/05/2016',

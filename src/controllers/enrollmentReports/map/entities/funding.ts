@@ -1,9 +1,5 @@
 import { getManager } from 'typeorm';
-import {
-  Funding,
-  Organization,
-  FundingSpace,
-} from '../../../../entity';
+import { Funding, Organization, FundingSpace } from '../../../../entity';
 import {
   AgeGroup,
   FundingSource,
@@ -25,7 +21,7 @@ export const addFunding = (
   source: EnrollmentReportRow,
   organization: Organization,
   ageGroup: AgeGroup,
-  fundingSpaces: FundingSpace[],
+  fundingSpaces: FundingSpace[]
 ) => {
   const fundingSource: FundingSource = mapEnum(
     FundingSource,
@@ -48,7 +44,7 @@ export const addFunding = (
   }
 
   return getManager().create(Funding, {
-		...source,
+    ...source,
     fundingSpace,
   });
 };

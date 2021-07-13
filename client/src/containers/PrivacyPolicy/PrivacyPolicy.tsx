@@ -137,13 +137,20 @@ const PrivacyPolicy: React.FC = () => {
       </ul>
       <p>
         Further regulations and laws as applicable may apply including state law
-        and the United States Privacy Act of 1974 {' '}
-        <Link to={{ pathname: "http://www.archives.gov" }} target="_blank">(http://www.archives.gov)</Link>. You
-        may obtain more information regarding other data security laws pertinent
-        to data shared with State of Connecticut Departments and Agencies
-        including the OEC as explained in the State of Connecticut Privacy
-        Policy, available at the following link: {' '}
-        <Link to={{ pathname: "https://portal.ct.gov/policies/state-privacy-policy/" }} target="_blank">
+        and the United States Privacy Act of 1974{' '}
+        <Link to={{ pathname: 'http://www.archives.gov' }} target="_blank">
+          (http://www.archives.gov)
+        </Link>
+        . You may obtain more information regarding other data security laws
+        pertinent to data shared with State of Connecticut Departments and
+        Agencies including the OEC as explained in the State of Connecticut
+        Privacy Policy, available at the following link:{' '}
+        <Link
+          to={{
+            pathname: 'https://portal.ct.gov/policies/state-privacy-policy/',
+          }}
+          target="_blank"
+        >
           https://portal.ct.gov/policies/state-privacy-policy/
         </Link>
         .
@@ -157,8 +164,13 @@ const PrivacyPolicy: React.FC = () => {
         State of Connecticut Privacy Policy also applies. If there is not a
         specific provision in this ECE Reporter Privacy Policy, the State of
         Connecticut Privacy Policy will prevail. You may view the State of
-        Connecticut Privacy Policy here: {' '}
-        <Link to={{ pathname: "https://portal.ct.gov/policies/state-privacy-policy/" }} target="_blank">
+        Connecticut Privacy Policy here:{' '}
+        <Link
+          to={{
+            pathname: 'https://portal.ct.gov/policies/state-privacy-policy/',
+          }}
+          target="_blank"
+        >
           https://portal.ct.gov/policies/state-privacy-policy/.
         </Link>
       </p>
@@ -207,8 +219,13 @@ const PrivacyPolicy: React.FC = () => {
         carry out official duties. All such persons as defined above that has
         approved, limited access to data in ECE Reporter must comply with both
         this Privacy Policy and the State of Connecticut Privacy Policy found
-        here: {' '}
-        <Link to={{ pathname: "https://portal.ct.gov/policies/state-privacy-policy/" }} target="_blank">
+        here:{' '}
+        <Link
+          to={{
+            pathname: 'https://portal.ct.gov/policies/state-privacy-policy/',
+          }}
+          target="_blank"
+        >
           https://portal.ct.gov/policies/state-privacy-policy/.
         </Link>
       </p>

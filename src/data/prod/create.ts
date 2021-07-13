@@ -3,11 +3,7 @@ import commandLineArgs from 'command-line-args';
 import { read, parse, openFawkesDbConnection } from './utils';
 import { createOrganizationData } from './organizations';
 import { createSiteData } from './sites';
-import {
-  createUserData,
-  USER_ROW_PROPS,
-  UserRow,
-} from './users/create';
+import { createUserData, USER_ROW_PROPS, UserRow } from './users/create';
 import { invite } from './invite';
 import { Config, DBConnectionOpts, SiteConnectionOpts } from './types';
 

@@ -42,7 +42,7 @@ export const updateEnrollmentFunding = (
     row,
     match.organization,
     newEnrollment.ageGroup,
-    transactionMetadata.fundingSpaces,
+    transactionMetadata.fundingSpaces
   );
   // Look up an existing funding that matches row funding
   // (may not exist)
@@ -55,8 +55,7 @@ export const updateEnrollmentFunding = (
   if (rowHasExitForCurrentEnrollment(newEnrollment, matchingEnrollment)) {
     matchingEnrollment.exit = newEnrollment.exit;
     matchingEnrollment.exitReason = newEnrollment.exitReason;
-    if (matchingFunding)
-      matchingFunding.endDate = newFunding.endDate;
+    if (matchingFunding) matchingFunding.endDate = newFunding.endDate;
     match.tags.push(ChangeTag.WithdrawnRecord);
   }
   // If row has new enrollment, create new enrollment and funding
@@ -149,9 +148,7 @@ export const getFundingMatch = (fundingFromRow: Funding, fundings: Funding[]) =>
       fundingFromRow.fundingSpace?.id === f.fundingSpace.id &&
       f.startDate &&
       fundingFromRow.startDate.isSame(f.startDate, 'day') &&
-			(f.endDate
-				? fundingFromRow.endDate.isSame(f.endDate, 'day')
-				: true)
+      (f.endDate ? fundingFromRow.endDate.isSame(f.endDate, 'day') : true)
   );
 
 /**
@@ -164,10 +161,7 @@ export const getFundingMatch = (fundingFromRow: Funding, fundings: Funding[]) =>
 export const rowEndsCurrentFunding = (
   newFunding: Funding,
   matchingFunding: Funding
-) =>
-  !!matchingFunding &&
-  !matchingFunding.endDate &&
-  !!newFunding.endDate;
+) => !!matchingFunding && !matchingFunding.endDate && !!newFunding.endDate;
 
 /**
  * Determines if a new funding from row is a new funding.

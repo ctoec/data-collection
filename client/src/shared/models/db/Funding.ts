@@ -6,6 +6,6 @@ export interface Funding extends ObjectWithValidationErrors {
   id: number;
   enrollment: Enrollment;
   fundingSpace?: FundingSpace;
-	startDate?: Moment;
-	endDate?: Moment;
+  startDate?: Moment;
+  endDate?: Moment;
 }

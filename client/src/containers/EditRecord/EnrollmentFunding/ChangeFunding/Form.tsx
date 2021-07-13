@@ -38,7 +38,7 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
       .finally(() => setLoading(false));
   };
 
-  const activeFunding = getCurrentFunding({ enrollment: enrollment }) 
+  const activeFunding = getCurrentFunding({ enrollment: enrollment });
   if (activeFunding && !activeFunding.fundingSpace) {
     return (
       <div>
@@ -66,9 +66,9 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
         />
       )}
       {!!activeFunding && (
-				<FundingEndDateField<ChangeFundingRequest>
-					fundingAccessor={(data) => data.at('oldFunding')}	
-				/>
+        <FundingEndDateField<ChangeFundingRequest>
+          fundingAccessor={(data) => data.at('oldFunding')}
+        />
       )}
       <div className="display-flex flex-align-center">
         <Button text="Cancel" appearance="outline" onClick={hideForm} />

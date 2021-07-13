@@ -104,17 +104,18 @@ function flattenChild(
         if (o && o.hasOwnProperty(propertyName)) {
           childString.push(formatProperty(o[propertyName], propertyName));
           return true;
-        }
-        else if (propertyName === 'sasidUniqueId') {
+        } else if (propertyName === 'sasidUniqueId') {
           // Special case: template has a joint 'sasid/unique ID' field, but
           // child objects have only 'sasid' and 'uniqueId' fields, so can't
           // check strict 'ownProperty'
           if (child.organization?.uniqueIdType === UniqueIdType.SASID) {
-            childString.push(formatProperty(
-              child[UniqueIdType.SASID.toLowerCase()], UniqueIdType.SASID.toLowerCase())
+            childString.push(
+              formatProperty(
+                child[UniqueIdType.SASID.toLowerCase()],
+                UniqueIdType.SASID.toLowerCase()
+              )
             );
-          }
-          else {
+          } else {
             childString.push(formatProperty(child['uniqueId'], 'uniqueId'));
           }
           return true;

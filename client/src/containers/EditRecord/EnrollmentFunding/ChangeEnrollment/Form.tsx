@@ -57,7 +57,7 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       .finally(() => setLoading(false));
   };
 
-  const activeFunding = getCurrentFunding({ enrollment: currentEnrollment })
+  const activeFunding = getCurrentFunding({ enrollment: currentEnrollment });
 
   if (activeFunding && !activeFunding?.fundingSpace) {
     return (
@@ -107,9 +107,9 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       {!!currentEnrollment && activeFunding && (
         <>
           <Heading level={topHeadingLevel}>Previous enrollment</Heading>
-					<FundingEndDateField<ChangeEnrollmentRequest>
-						fundingAccessor={(data) => data.at('oldEnrollment').at('funding')}
-					/>
+          <FundingEndDateField<ChangeEnrollmentRequest>
+            fundingAccessor={(data) => data.at('oldEnrollment').at('funding')}
+          />
         </>
       )}
 

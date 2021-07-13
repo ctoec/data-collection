@@ -52,7 +52,12 @@ export const ContractSpaceField = <
     FundingSpace[]
   >([]);
 
-  const { data, immutableUpdateData, dataDriller, updateData } = useGenericContext<T>(FormContext);
+  const {
+    data,
+    immutableUpdateData,
+    dataDriller,
+    updateData,
+  } = useGenericContext<T>(FormContext);
 
   useEffect(() => {
     if (!fundingSpaces) return;
@@ -65,7 +70,13 @@ export const ContractSpaceField = <
 
   if (fundingSpaceOptions.length === 1) {
     updateData(
-      produce<T>(data, (draft) => set(draft, fundingAccessor(dataDriller).at('fundingSpace').at('id').path, fundingSpaceOptions[0].id))
+      produce<T>(data, (draft) =>
+        set(
+          draft,
+          fundingAccessor(dataDriller).at('fundingSpace').at('id').path,
+          fundingSpaceOptions[0].id
+        )
+      )
     );
 
     return (
@@ -73,7 +84,7 @@ export const ContractSpaceField = <
         <span className="usa-hint text-italic">
           {fundingSpaceFormatter(fundingSpaceOptions[0])}
         </span>
-    </div>
+      </div>
     );
   }
 

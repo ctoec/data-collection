@@ -133,17 +133,15 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         <div className="flex-2">
           <p className="margin-bottom-0">Enrollment dates</p>
           <p className="text-bold margin-top-0">
-            {enrollment.entry 
-							? enrollment.entry.format('MM/DD/YYYY') 
-							: InlineIcon({ icon: 'incomplete' })
-						}
-						{' '}-{' '}
+            {enrollment.entry
+              ? enrollment.entry.format('MM/DD/YYYY')
+              : InlineIcon({ icon: 'incomplete' })}{' '}
+            -{' '}
             {hasValidationErrorForField(enrollment, 'exit')
-							? InlineIcon({ icon: 'incomplete' })
-							: !!enrollment.exit 
-							? enrollment.exit.format('MM/DD/YYYY') 
-							: 'present'
-						}
+              ? InlineIcon({ icon: 'incomplete' })
+              : !!enrollment.exit
+              ? enrollment.exit.format('MM/DD/YYYY')
+              : 'present'}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">

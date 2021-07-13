@@ -29,8 +29,10 @@ export async function checkIfAllOrgsSubmitted(user: User) {
   const foundReports = await getManager().find(OECReport, {
     where: { organizationId: In(orgIds) },
   });
-  
+
   return orgIds.every((oid) =>
-    foundReports.some((foundReport: OECReport) => foundReport.organizationId === Number(oid))
+    foundReports.some(
+      (foundReport: OECReport) => foundReport.organizationId === Number(oid)
+    )
   );
 }

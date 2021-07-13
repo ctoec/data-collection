@@ -1,15 +1,16 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class UpdateFundingAddStartEndDate1624989301327 implements MigrationInterface {
-    name = 'UpdateFundingAddStartEndDate1624989301327'
+export class UpdateFundingAddStartEndDate1624989301327
+  implements MigrationInterface {
+  name = 'UpdateFundingAddStartEndDate1624989301327';
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-       	await queryRunner.query(`ALTER TABLE "funding" ADD "startDate" date`);
-        await queryRunner.query(`ALTER TABLE "funding" ADD "endDate" date`);
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`ALTER TABLE "funding" ADD "startDate" date`);
+    await queryRunner.query(`ALTER TABLE "funding" ADD "endDate" date`);
 
-				// populate values with enrollment start/end date for enrollments with a single funding, \
-				// or with reporting period start/end dates for enrollments with multiple fundings
-				await queryRunner.query(`
+    // populate values with enrollment start/end date for enrollments with a single funding, \
+    // or with reporting period start/end dates for enrollments with multiple fundings
+    await queryRunner.query(`
 					UPDATE funding
 					SET	
 						funding.startDate = (
@@ -41,12 +42,11 @@ export class UpdateFundingAddStartEndDate1624989301327 implements MigrationInter
 						GROUP BY enrollment.id, enrollment.entry, enrollment.[exit]
 					) AS computed
 					ON computed.id = funding.enrollmentId
-				`)
-    }
+				`);
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`ALTER TABLE "funding" DROP COLUMN "endDate"`);
-        await queryRunner.query(`ALTER TABLE "funding" DROP COLUMN "startDate"`);
-    }
-
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`ALTER TABLE "funding" DROP COLUMN "endDate"`);
+    await queryRunner.query(`ALTER TABLE "funding" DROP COLUMN "startDate"`);
+  }
 }

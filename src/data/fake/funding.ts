@@ -18,8 +18,8 @@ export const getFakeFunding = (
     enrollment,
     enrollmentId: enrollment.id,
     fundingSpace,
-		startDate: enrollment.entry,
-		endDate: includeEndDate ? enrollment.exit : null,
+    startDate: enrollment.entry,
+    endDate: includeEndDate ? enrollment.exit : null,
     updateMetaData: { updatedAt: new Date() },
     deletedDate: null,
   };

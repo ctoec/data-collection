@@ -33,15 +33,15 @@ export class Funding implements FundingInterface {
   @IsNotEmpty()
   fundingSpace?: FundingSpace;
 
-	@Column({ type: 'date', nullable: true, transformer: momentTransformer })
-	@IsNotEmpty()
-	@FundingBeginsAfterEnrollmentEntry()
-	startDate: Moment;
+  @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  @IsNotEmpty()
+  @FundingBeginsAfterEnrollmentEntry()
+  startDate: Moment;
 
-	@Column({ type: 'date', nullable: true, transformer: momentTransformer })
-	@ValidateIf(f => !!f.startDate)
-	@EndDateAfterStartDate()
-	endDate: Moment;
+  @Column({ type: 'date', nullable: true, transformer: momentTransformer })
+  @ValidateIf((f) => !!f.startDate)
+  @EndDateAfterStartDate()
+  endDate: Moment;
 
   @Column(() => UpdateMetaData, { prefix: false })
   updateMetaData: UpdateMetaData;

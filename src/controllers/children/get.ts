@@ -71,7 +71,7 @@ const queryBuilderBuilder = async ({
     .leftJoinAndSelect(
       'enrollment_funding.fundingSpace',
       'funding_fundingSpace'
-		);
+    );
 
   // Restrict via site access
   if (user.accessType === 'site') {

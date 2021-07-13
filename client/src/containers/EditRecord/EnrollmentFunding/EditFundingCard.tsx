@@ -120,18 +120,16 @@ export const EditFundingCard: React.FC<EditFundingCardProps> = ({
         <div className="flex-2">
           <p className="margin-bottom-0">Funding dates</p>
           <p className="text-bold margin-top-0">
-						{hasValidationErrorForField(funding, 'startDate')
-							? InlineIcon({ icon: 'incomplete' })
-							: funding.startDate?.format('MM/DD/YYYY')
-						}
-						{' '}-{' '}
-						{hasValidationErrorForField(funding, 'endDate')
-							? InlineIcon({ icon: 'incomplete' })
-							: !!funding.endDate
-							? funding.endDate?.format('MM/DD/YYYY')
-							: 'present'
-						}
-					</p>
+            {hasValidationErrorForField(funding, 'startDate')
+              ? InlineIcon({ icon: 'incomplete' })
+              : funding.startDate?.format('MM/DD/YYYY')}{' '}
+            -{' '}
+            {hasValidationErrorForField(funding, 'endDate')
+              ? InlineIcon({ icon: 'incomplete' })
+              : !!funding.endDate
+              ? funding.endDate?.format('MM/DD/YYYY')
+              : 'present'}
+          </p>
         </div>
         <div className="display-flex align-center flex-space-between">
           <div className="display-flex align-center margin-right-2">

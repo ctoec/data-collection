@@ -1,7 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { Funding, Child } from '../../../../shared/models';
-import { ContractSpaceField, FundingStartDateField, FundingEndDateField } from './Fields';
+import {
+  ContractSpaceField,
+  FundingStartDateField,
+  FundingEndDateField,
+} from './Fields';
 import { RecordFormProps } from '../../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut } from '../../../../utils/api';
@@ -13,11 +17,7 @@ import { getValidationStatusForFields } from '../../../../utils/getValidationSta
 import { NewFundingField } from '../Fields';
 import { useValidationErrors } from '../../../../hooks/useValidationErrors';
 
-const fundingFields = [
-  'fundingSpace',
-  'startDate',
-  'endDate',
-];
+const fundingFields = ['fundingSpace', 'startDate', 'endDate'];
 export const doesFundingFormHaveErrors = (
   child?: Child,
   enrollmentId?: number,
@@ -116,11 +116,11 @@ export const FundingForm: React.FC<FundingFormProps> = ({
         fundingSource={funding.fundingSpace.source}
         organizationId={child.organization.id}
       />
-			<FundingStartDateField<Funding> />
+      <FundingStartDateField<Funding> />
 
       {/* Only display end date f ield if a value already exists OR if the owning enrollment is exited */}
       {(!!funding.endDate || enrollment.exit) && (
-				<FundingEndDateField<Funding> />
+        <FundingEndDateField<Funding> />
       )}
 
       {AdditionalButton}

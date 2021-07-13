@@ -8,13 +8,7 @@ import {
 import { ApiError } from '../../../middleware/error/errors';
 import { createRecord } from './createRecord';
 import { updateRecord } from './updateRecord';
-import {
-  Child,
-  Organization,
-  Site,
-  FundingSpace,
-  User,
-} from '../../../entity';
+import { Child, Organization, Site, FundingSpace, User } from '../../../entity';
 import { getReadAccessibleOrgIds } from '../../../utils/getReadAccessibleOrgIds';
 import { validateChild } from '../../../utils/validateChild';
 
@@ -33,11 +27,7 @@ export type TransactionMetadata = {
  */
 export const getTransactionData = async (user: User) => {
   const readAccessibleOrgIds = await getReadAccessibleOrgIds(user);
-  const [
-    organizations,
-    sites,
-    fundingSpaces,
-  ] = await Promise.all([
+  const [organizations, sites, fundingSpaces] = await Promise.all([
     getManager().findByIds(Organization, readAccessibleOrgIds),
     getManager().findByIds(Site, user.siteIds),
     getManager().find(FundingSpace, {

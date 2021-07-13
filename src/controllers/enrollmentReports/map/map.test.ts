@@ -537,7 +537,7 @@ describe('controllers', () => {
         time: FundingTime.FullTime,
       } as FundingSpace;
       const START_DATE = moment('10/20/2020');
-			const NEW_FUNDING_SPACE = {
+      const NEW_FUNDING_SPACE = {
         id: 2,
         source: FundingSource.CSR,
         time: FundingTime.PartTime,

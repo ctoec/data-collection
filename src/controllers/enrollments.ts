@@ -46,11 +46,14 @@ export const changeFunding = async (
   user: User,
   changeFundingData: ChangeFundingRequest
 ) => {
-
-	if(!changeFundingData.newFunding?.startDate &&
-		!changeFundingData.oldFunding?.endDate) {
-		throw new BadRequestError("New funding start date or old funding end date is required.")
-	}
+  if (
+    !changeFundingData.newFunding?.startDate &&
+    !changeFundingData.oldFunding?.endDate
+  ) {
+    throw new BadRequestError(
+      'New funding start date or old funding end date is required.'
+    );
+  }
   const enrollment = await getEnrollment(id, user, true);
   enrollment.fundings = removeDeletedElements(enrollment.fundings);
 
@@ -59,8 +62,9 @@ export const changeFunding = async (
     const currentFunding = getCurrentFunding({ enrollment });
     if (currentFunding) {
       // Update current funding last reporting period
-      currentFunding.endDate = changeFundingData.oldFunding?.endDate ?? 
-				changeFundingData.newFunding.startDate?.clone().add(-1, 'day');
+      currentFunding.endDate =
+        changeFundingData.oldFunding?.endDate ??
+        changeFundingData.newFunding.startDate?.clone().add(-1, 'day');
       await tManager.save(currentFunding);
     }
 
@@ -80,9 +84,9 @@ export const withdraw = async (
   user: User,
   withdrawData: WithdrawRequest
 ) => {
-	if (!withdrawData.exit || !withdrawData.exitReason) {
-		throw new BadRequestError("Exit date and exit reason are required");
-	} 
+  if (!withdrawData.exit || !withdrawData.exitReason) {
+    throw new BadRequestError('Exit date and exit reason are required');
+  }
 
   const enrollment = await getEnrollment(id, user, true);
   enrollment.fundings = removeDeletedElements(enrollment.fundings || []);
@@ -90,8 +94,9 @@ export const withdraw = async (
   return getManager().transaction(async (tManager) => {
     const currentFunding = getCurrentFunding({ enrollment });
     if (currentFunding) {
-      currentFunding.endDate = withdrawData.funding?.endDate ??
-				withdrawData.exit.clone().add(-1, 'days');
+      currentFunding.endDate =
+        withdrawData.funding?.endDate ??
+        withdrawData.exit.clone().add(-1, 'days');
       await tManager.save(currentFunding);
     }
 

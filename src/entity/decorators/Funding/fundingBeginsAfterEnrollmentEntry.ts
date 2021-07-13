@@ -17,9 +17,9 @@ export function FundingBeginsAfterEnrollmentEntry(
       validator: {
         validate(startDate: Moment, { object: funding }) {
           const { entry } = (funding as Funding)?.enrollment;
-					if (!entry) return true; // Can't do this validation without the enrollment entry
+          if (!entry) return true; // Can't do this validation without the enrollment entry
 
-					return startDate.isSameOrAfter(entry);
+          return startDate.isSameOrAfter(entry);
         },
       },
     });

@@ -6,7 +6,7 @@ export interface ChangeEnrollmentRequest {
   oldEnrollment?: {
     exitDate?: Moment;
     funding?: {
-			endDate: Moment;
+      endDate: Moment;
     };
   };
 }

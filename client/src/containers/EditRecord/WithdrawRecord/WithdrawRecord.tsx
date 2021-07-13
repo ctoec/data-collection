@@ -82,9 +82,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       .finally(() => setIsSaving(false));
   };
 
-  const activeFunding = (enrollment.fundings || []).find(
-    (f) => !f.endDate
-  );
+  const activeFunding = (enrollment.fundings || []).find((f) => !f.endDate);
 
   // If record has validation errors, onClick action is to display alert informing the user they cannot withdraw
   // Otherwise, onClick action is to display the withdraw modal
@@ -137,9 +135,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
                     <p>Contract space: {activeFunding.fundingSpace?.time}</p>
                     <p>
                       Funding start date:{' '}
-                      {activeFunding.startDate?.format(
-                        'MMMM YYYY'
-                      )}
+                      {activeFunding.startDate?.format('MMMM YYYY')}
                     </p>
                   </>
                 )}
@@ -153,9 +149,9 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               <ExitReasonField<WithdrawRequest> />
               <EnrollmentEndDateField<WithdrawRequest> />
               {!!activeFunding && (
-								<FundingEndDateField<WithdrawRequest>
-									fundingAccessor={(data) => data.at('funding')}
-								/>
+                <FundingEndDateField<WithdrawRequest>
+                  fundingAccessor={(data) => data.at('funding')}
+                />
               )}
               <Button
                 appearance="outline"

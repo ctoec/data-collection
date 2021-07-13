@@ -87,19 +87,17 @@ export class Enrollment implements EnrollmentInterface {
     cascade: ['update', 'soft-remove'],
     eager: true,
   })
-	// Add enrollment start date to fundings to enable funding start date validation
-	// (Not a real condition! Just hack to pre-process)
-	@ValidateIf(
-		(enrollment) => {
-			enrollment.fundings?.forEach(funding => {
-			funding.enrollment = { entry: enrollment.entry }
-			})
-			return true;
-		}
-	)
+  // Add enrollment start date to fundings to enable funding start date validation
+  // (Not a real condition! Just hack to pre-process)
+  @ValidateIf((enrollment) => {
+    enrollment.fundings?.forEach((funding) => {
+      funding.enrollment = { entry: enrollment.entry };
+    });
+    return true;
+  })
   @ValidateNested({ each: true })
   @FundingAgeGroupMatchesEnrollment()
-	@FundingsDoNotOverlap()
+  @FundingsDoNotOverlap()
   fundings?: Array<Funding>;
 
   @Column(() => UpdateMetaData, { prefix: false })

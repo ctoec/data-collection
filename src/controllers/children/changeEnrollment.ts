@@ -44,26 +44,28 @@ export const changeEnrollment = async (
     `Matching child found for ${id}.  Initiating enrollment change...`
   );
 
-
-	if(!changeEnrollmentData.newEnrollment.entry) {
-		throw new BadRequestError("New enrollment entry date is required.");
-	}
+  if (!changeEnrollmentData.newEnrollment.entry) {
+    throw new BadRequestError('New enrollment entry date is required.');
+  }
   // Get current enrollment
   return getManager().transaction(async (tManager) => {
     // Update current enrollment, if exists
     const currentEnrollment = (child.enrollments || []).find((e) => !e.exit);
 
     if (currentEnrollment) {
-			const currentFunding = getCurrentFunding({ enrollment: currentEnrollment })
-			currentEnrollment.exit = changeEnrollmentData.oldEnrollment?.exitDate ??
-				changeEnrollmentData.newEnrollment.entry?.clone().add(-1, 'day');
-
+      const currentFunding = getCurrentFunding({
+        enrollment: currentEnrollment,
+      });
+      currentEnrollment.exit =
+        changeEnrollmentData.oldEnrollment?.exitDate ??
+        changeEnrollmentData.newEnrollment.entry?.clone().add(-1, 'day');
 
       // Update current funding, if exists
       if (currentFunding) {
-        currentFunding.endDate = changeEnrollmentData?.oldEnrollment?.funding?.endDate ??
-					currentEnrollment.exit;
-				
+        currentFunding.endDate =
+          changeEnrollmentData?.oldEnrollment?.funding?.endDate ??
+          currentEnrollment.exit;
+
         await tManager.save(Funding, {
           ...currentFunding,
           updateMetaData: { author: user },
@@ -143,10 +145,7 @@ async function createNewEnrollment(
     const funding = tManager.create(Funding, {
       enrollment,
       fundingSpace: idx(newEnrollment, (_) => _.fundings[0].fundingSpace),
-      startDate: idx(
-        newEnrollment,
-        (_) => _.fundings[0].startDate
-      ),
+      startDate: idx(newEnrollment, (_) => _.fundings[0].startDate),
     });
     await tManager.save(Funding, {
       ...funding,

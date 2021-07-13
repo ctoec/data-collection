@@ -106,7 +106,7 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
 
     setAccessToken(resp.accessToken);
     setRefreshToken(resp.refreshToken);
-    
+
     setLoading(false);
     history.push('/');
   };
@@ -231,31 +231,28 @@ const AuthenticationProvider: React.FC<AuthenticationProviderPropsType> = (
     //  in order to prevent rapid, successive requests from inadvertently causing a logout
     if (inFlightAccessTokenRequest.current) return;
 
-      let req = new TokenRequest({
-        client_id: clientId,
-        redirect_uri: redirectUrl,
-        grant_type: GRANT_TYPE_REFRESH_TOKEN,
-        code: undefined,
-        refresh_token: refreshToken,
-      });
+    let req = new TokenRequest({
+      client_id: clientId,
+      redirect_uri: redirectUrl,
+      grant_type: GRANT_TYPE_REFRESH_TOKEN,
+      code: undefined,
+      refresh_token: refreshToken,
+    });
 
-      try {
-        inFlightAccessTokenRequest.current = true;
+    try {
+      inFlightAccessTokenRequest.current = true;
 
-        const resp = await tokenHandler.performTokenRequest(
-          configuration,
-          req
-        );
+      const resp = await tokenHandler.performTokenRequest(configuration, req);
 
-        setTokenResponse(resp);
-        setAccessToken(resp.accessToken);
-        setRefreshToken(resp.refreshToken);
-      } catch (e) {
-        console.error('Could not get refresh token: ', e);
-        history.push(logoutEndpoint);
-      } finally {
-        inFlightAccessTokenRequest.current = false;
-      }
+      setTokenResponse(resp);
+      setAccessToken(resp.accessToken);
+      setRefreshToken(resp.refreshToken);
+    } catch (e) {
+      console.error('Could not get refresh token: ', e);
+      history.push(logoutEndpoint);
+    } finally {
+      inFlightAccessTokenRequest.current = false;
+    }
   }
 
   const location = useLocation();

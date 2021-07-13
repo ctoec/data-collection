@@ -28,9 +28,9 @@ export const ChangeFundingCard: React.FC<ChangeFundingCardProps> = ({
   topHeadingLevel,
 }) => {
   const [visibleForm, setVisibleForm] = useState<'end' | 'start'>();
-  const activeFunding = getCurrentFunding({ enrollment })
-	
-	return (
+  const activeFunding = getCurrentFunding({ enrollment });
+
+  return (
     <>
       {!!visibleForm && (
         <Card>
