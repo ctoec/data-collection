@@ -1,11 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { Funding, Child } from '../../../../shared/models';
-import {
-  ContractSpaceField,
-  FundingStartDateField,
-  FundingEndDateField,
-} from './Fields';
+import { ContractSpaceField, FundingDateField } from './Fields';
 import { RecordFormProps } from '../../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut } from '../../../../utils/api';
@@ -116,11 +112,11 @@ export const FundingForm: React.FC<FundingFormProps> = ({
         fundingSource={funding.fundingSpace.source}
         organizationId={child.organization.id}
       />
-      <FundingStartDateField<Funding> />
+      <FundingDateField<Funding> fieldType="startDate" />
 
       {/* Only display end date f ield if a value already exists OR if the owning enrollment is exited */}
       {(!!funding.endDate || enrollment.exit) && (
-        <FundingEndDateField<Funding> />
+        <FundingDateField<Funding> fieldType="endDate" />
       )}
 
       {AdditionalButton}

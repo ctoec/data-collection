@@ -15,11 +15,12 @@ import { Moment } from 'moment';
 import { getValidationStatusForField } from '../../../../../utils/getValidationStatus';
 
 type FundingStartDateProps<T> = {
-  fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Funding>;
+  fundingAccessor?: (_: TObjectDriller<T>) => TObjectDriller<Partial<Funding>>;
+  fieldType: 'startDate' | 'endDate';
   optional?: boolean;
 };
 
-export const FundingStartDateField = <
+export const FundingDateField = <
   T extends
     | Funding
     | Enrollment
@@ -27,7 +28,8 @@ export const FundingStartDateField = <
     | ChangeEnrollmentRequest
     | WithdrawRequest
 >({
-  fundingAccessor = (data) => data as TObjectDriller<Funding>,
+  fundingAccessor = (data) => data as TObjectDriller<Partial<Funding>>,
+  fieldType,
   optional = false,
 }: FundingStartDateProps<T>) => {
   return (
@@ -35,16 +37,18 @@ export const FundingStartDateField = <
       // if field is optional, force default value empty (null)
       // otherwise, use default value today (undefined)
       defaultValue={optional ? null : undefined}
-      getValue={(data) => fundingAccessor(data).at('startDate')}
+      getValue={(data) => fundingAccessor(data).at(fieldType)}
       optional={optional}
       parseOnChangeEvent={(e: any) => e}
       inputComponent={DateInput}
-      label="Funding start date"
-      id="funding-start-date"
+      label={
+        fieldType === 'startDate' ? 'Funding start date' : 'Funding end date'
+      }
+      id={fieldType === 'startDate' ? `funding-start-date` : `funding-end-date`}
       status={(data, _, props) =>
         getValidationStatusForField(
           fundingAccessor(data),
-          fundingAccessor(data).at('startDate').path,
+          fundingAccessor(data).at(fieldType).path,
           props
         )
       }

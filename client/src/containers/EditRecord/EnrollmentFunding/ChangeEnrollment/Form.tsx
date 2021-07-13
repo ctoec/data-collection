@@ -20,7 +20,7 @@ import AuthenticationContext from '../../../../contexts/AuthenticationContext/Au
 import { Heading, HeadingLevel } from '../../../../components/Heading';
 import { nameFormatter } from '../../../../utils/formatters';
 import { getCurrentFunding } from '../../../../utils/models';
-import { FundingEndDateField } from '../../../../components/Forms/Enrollment/Funding/Fields/FundingEndDate';
+import { FundingDateField } from '../../../../components/Forms/Enrollment/Funding/Fields';
 
 export type ChangeEnrollmentFormProps = {
   afterSaveSuccess: () => void;
@@ -107,8 +107,9 @@ export const ChangeEnrollmentForm: React.FC<ChangeEnrollmentFormProps> = ({
       {!!currentEnrollment && activeFunding && (
         <>
           <Heading level={topHeadingLevel}>Previous enrollment</Heading>
-          <FundingEndDateField<ChangeEnrollmentRequest>
+          <FundingDateField<ChangeEnrollmentRequest>
             fundingAccessor={(data) => data.at('oldEnrollment').at('funding')}
+            fieldType="endDate"
           />
         </>
       )}

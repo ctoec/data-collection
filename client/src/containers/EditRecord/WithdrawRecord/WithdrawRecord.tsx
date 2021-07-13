@@ -21,7 +21,8 @@ import { useAlerts } from '../../../hooks/useAlerts';
 import { nameFormatter } from '../../../utils/formatters';
 import RosterContext from '../../../contexts/RosterContext/RosterContext';
 import { ReactComponent as WithdrawIcon } from '../../../images/withdraw.svg';
-import { FundingEndDateField } from '../../../components/Forms/Enrollment/Funding/Fields/FundingEndDate';
+import { getCurrentFunding } from '../../../utils/models';
+import { FundingDateField } from '../../../components/Forms/Enrollment/Funding/Fields';
 
 type WithdrawProps = {
   child: Child;
@@ -82,7 +83,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       .finally(() => setIsSaving(false));
   };
 
-  const activeFunding = (enrollment.fundings || []).find((f) => !f.endDate);
+  const activeFunding = getCurrentFunding({ enrollment });
 
   // If record has validation errors, onClick action is to display alert informing the user they cannot withdraw
   // Otherwise, onClick action is to display the withdraw modal
@@ -149,8 +150,9 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               <ExitReasonField<WithdrawRequest> />
               <EnrollmentEndDateField<WithdrawRequest> />
               {!!activeFunding && (
-                <FundingEndDateField<WithdrawRequest>
+                <FundingDateField<WithdrawRequest>
                   fundingAccessor={(data) => data.at('funding')}
+                  fieldType="endDate"
                 />
               )}
               <Button

@@ -18,12 +18,13 @@ export const getCurrentFunding = (source: {
   const currentEnrollment =
     enrollment ??
     (child.enrollments || []).find(
-      (enrollment) => !enrollment.exit || enrollment.exit.isSameOrAfter(today)
+      (enrollment) =>
+        !enrollment.exit || enrollment.exit.isSameOrAfter(today, 'day')
     );
 
   if (!currentEnrollment) return;
 
   return (currentEnrollment.fundings || []).find(
-    (funding) => !funding.endDate || funding.endDate.isSameOrAfter(today)
+    (funding) => !funding.endDate || funding.endDate.isSameOrAfter(today, 'day')
   );
 };

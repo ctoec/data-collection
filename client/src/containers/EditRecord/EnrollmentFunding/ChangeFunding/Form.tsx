@@ -6,7 +6,7 @@ import { Enrollment } from '../../../../shared/models';
 import { apiPost } from '../../../../utils/api';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { getCurrentFunding } from '../../../../utils/models';
-import { FundingEndDateField } from '../../../../components/Forms/Enrollment/Funding/Fields/FundingEndDate';
+import { FundingDateField } from '../../../../components/Forms/Enrollment/Funding/Fields';
 
 type ChangeFundingFormProps = {
   orgId: number;
@@ -66,8 +66,9 @@ export const ChangeFundingForm: React.FC<ChangeFundingFormProps> = ({
         />
       )}
       {!!activeFunding && (
-        <FundingEndDateField<ChangeFundingRequest>
+        <FundingDateField<ChangeFundingRequest>
           fundingAccessor={(data) => data.at('oldFunding')}
+          fieldType="endDate"
         />
       )}
       <div className="display-flex flex-align-center">

@@ -2,10 +2,8 @@ import { registerDecorator, ValidationOptions } from 'class-validator';
 import { propertyDateSorter } from '../../../utils/propertyDateSorter';
 import { Funding } from '../../Funding';
 
-// Make sure first reporting period of a funding is after the last reporting period of the previous funding
-
 const fundingPeriodOverlap =
-  'Cannot claim a child twice in a reporting period.';
+  'Cannot claim a child twice in a given time period';
 
 export function FundingsDoNotOverlap(
   validationOptions?: ValidationOptions
