@@ -60,9 +60,9 @@ const UploadWizard: React.FC = () => {
         {currentStepIndex === 0 && (
           <p>
             You can use the <Link to="/template">data collection template</Link>
-            &nbsp;to enter all of the required state-funded enrollment data. When
-            you’re finished, you can upload the complete template below. After
-            your data is in the system, you can also{' '}
+            &nbsp;to enter all of the required state-funded enrollment data.
+            When you’re finished, you can upload the complete template below.
+            After your data is in the system, you can also{' '}
             <Link to="/roster">
               use the Roster to make changes to your data
             </Link>

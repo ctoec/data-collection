@@ -2,7 +2,7 @@ import { Checkbox } from '@ctoec/component-library';
 import React from 'react';
 import { FUNDING_SOURCE_TIMES } from '../../../shared/constants';
 import { AgeGroup } from '../../../shared/models';
-import { ChangeFundingSpaceRequest } from '../../../shared/models/db/ChangeFundingSpaceRequest';
+import { ChangeFundingSpaceRequest } from '../../../shared/payloads/ChangeFundingSpaceRequest';
 import { getStrippedFundingSourceName } from '../../../utils/getFundingSpaceDisplayName';
 
 /**

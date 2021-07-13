@@ -9,19 +9,20 @@ import {
 } from '@ctoec/component-library';
 import { stringify } from 'query-string';
 import { useHistory } from 'react-router-dom';
-import { Enrollment, Child, FundingSource } from '../../../shared/models';
+import { Enrollment, Child } from '../../../shared/models';
 import { apiPost, apiGet } from '../../../utils/api';
 import AuthenticationContext from '../../../contexts/AuthenticationContext/AuthenticationContext';
 import {
   EnrollmentEndDateField,
   ExitReasonField,
 } from '../../../components/Forms/Enrollment/Fields';
-import { ReportingPeriodField } from '../../../components/Forms/Enrollment/Funding/Fields';
 import { WithdrawRequest } from '../../../shared/payloads';
 import { useAlerts } from '../../../hooks/useAlerts';
 import { nameFormatter } from '../../../utils/formatters';
 import RosterContext from '../../../contexts/RosterContext/RosterContext';
 import { ReactComponent as WithdrawIcon } from '../../../images/withdraw.svg';
+import { getCurrentFunding } from '../../../utils/models';
+import { FundingDateField } from '../../../components/Forms/Enrollment/Funding/Fields';
 
 type WithdrawProps = {
   child: Child;
@@ -82,9 +83,7 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
       .finally(() => setIsSaving(false));
   };
 
-  const activeFunding = (enrollment.fundings || []).find(
-    (f) => !f.lastReportingPeriod
-  );
+  const activeFunding = getCurrentFunding({ enrollment });
 
   // If record has validation errors, onClick action is to display alert informing the user they cannot withdraw
   // Otherwise, onClick action is to display the withdraw modal
@@ -136,10 +135,8 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
                     </p>
                     <p>Contract space: {activeFunding.fundingSpace?.time}</p>
                     <p>
-                      First reporting period:{' '}
-                      {activeFunding.firstReportingPeriod?.period.format(
-                        'MMMM YYYY'
-                      )}
+                      Funding start date:{' '}
+                      {activeFunding.startDate?.format('MMMM YYYY')}
                     </p>
                   </>
                 )}
@@ -150,17 +147,12 @@ export const WithdrawRecord: React.FC<WithdrawProps> = ({
               data={{} as WithdrawRequest}
               className="usa-form"
             >
-              <EnrollmentEndDateField<WithdrawRequest> />
               <ExitReasonField<WithdrawRequest> />
+              <EnrollmentEndDateField<WithdrawRequest> />
               {!!activeFunding && (
-                <ReportingPeriodField<WithdrawRequest>
-                  fundingSource={
-                    activeFunding.fundingSpace?.source as FundingSource
-                  } // Known to have value (modal only displayed when record has no missing info)
-                  isLast={true}
-                  accessor={(data) =>
-                    data.at('funding').at('lastReportingPeriod')
-                  }
+                <FundingDateField<WithdrawRequest>
+                  fundingAccessor={(data) => data.at('funding')}
+                  fieldType="endDate"
                 />
               )}
               <Button

@@ -1,8 +1,9 @@
-import { ReportingPeriod, Funding } from '../models';
+import { Moment } from 'moment';
+import { Funding } from '../models';
 
 export interface ChangeFundingRequest {
   newFunding?: Funding;
   oldFunding?: {
-    lastReportingPeriod: ReportingPeriod;
+    endDate: Moment;
   };
 }

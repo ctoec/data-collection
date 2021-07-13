@@ -15,17 +15,16 @@ export const getCurrentFunding = (source: {
   if (!enrollment && !child) return;
 
   const today = moment.utc();
-  const currentEnrollment = (child.enrollments || []).find(
-    (enrollment) => !enrollment.exit || enrollment.exit.isSameOrAfter(today)
-  );
+  const currentEnrollment =
+    enrollment ??
+    (child.enrollments || []).find(
+      (enrollment) =>
+        !enrollment.exit || enrollment.exit.isSameOrAfter(today, 'day')
+    );
 
-  const _enrollment = enrollment || (child ? currentEnrollment : undefined);
+  if (!currentEnrollment) return;
 
-  if (!_enrollment) return;
-
-  return (_enrollment.fundings || []).find(
-    (funding) =>
-      !funding.lastReportingPeriod ||
-      funding.lastReportingPeriod.periodEnd.isSameOrAfter(today)
+  return (currentEnrollment.fundings || []).find(
+    (funding) => !funding.endDate || funding.endDate.isSameOrAfter(today, 'day')
   );
 };

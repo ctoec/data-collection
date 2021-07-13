@@ -17,8 +17,6 @@ import { getFakeFunding } from './funding';
 import { weightedBoolean } from './utils';
 import {
   getAllColumnMetadata,
-  REQUIRED_IF_CHANGED_ENROLLMENT,
-  REQUIRED_IF_CHANGED_ENROLLMENT_FUNDING,
   REQUIRED_IF_INCOME_DISCLOSED,
   REQUIRED_IF_US_BORN,
 } from '../../template';
@@ -258,7 +256,6 @@ let oldFunding = getFakeFunding(
   changedFundingRecord.organization,
   true
 );
-oldFunding = { ...oldFunding, lastReportingPeriod: undefined };
 const newFunding = getFakeFunding(
   100,
   currentEnrollment,

@@ -15,6 +15,7 @@ import AuthenticationContext from '../../../contexts/AuthenticationContext/Authe
 import { EnrollmentForm } from '../../../components/Forms/Enrollment/Form';
 import { RecordFormProps } from '../../../components/Forms';
 import { HeadingLevel } from '../../../components/Heading';
+import { hasValidationErrorForField } from '../../../utils/hasValidationError';
 
 type EditEnrollmentCardProps = {
   child: Child;
@@ -132,11 +133,15 @@ export const EditEnrollmentCard: React.FC<EditEnrollmentCardProps> = ({
         <div className="flex-2">
           <p className="margin-bottom-0">Enrollment dates</p>
           <p className="text-bold margin-top-0">
-            {enrollment.entry && enrollment.entry.isValid()
+            {enrollment.entry
               ? enrollment.entry.format('MM/DD/YYYY')
               : InlineIcon({ icon: 'incomplete' })}{' '}
             -{' '}
-            {enrollment.exit ? enrollment.exit.format('MM/DD/YYYY') : 'present'}
+            {hasValidationErrorForField(enrollment, 'exit')
+              ? InlineIcon({ icon: 'incomplete' })
+              : !!enrollment.exit
+              ? enrollment.exit.format('MM/DD/YYYY')
+              : 'present'}
           </p>
         </div>
         <div className="display-flex align-center flex-space-between">

@@ -10,6 +10,5 @@ export * from './IncomeDetermination';
 export * from './OECReport';
 export * from './Organization';
 export * from './Permission';
-export * from './ReportingPeriod';
 export * from './Site';
 export * from './User';

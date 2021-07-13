@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Form, FormSubmitButton } from '@ctoec/component-library';
 import { Funding, Child } from '../../../../shared/models';
-import { ContractSpaceField, ReportingPeriodField } from './Fields';
+import { ContractSpaceField, FundingDateField } from './Fields';
 import { RecordFormProps } from '../../types';
 import AuthenticationContext from '../../../../contexts/AuthenticationContext/AuthenticationContext';
 import { apiPut } from '../../../../utils/api';
@@ -13,11 +13,7 @@ import { getValidationStatusForFields } from '../../../../utils/getValidationSta
 import { NewFundingField } from '../Fields';
 import { useValidationErrors } from '../../../../hooks/useValidationErrors';
 
-const fundingFields = [
-  'fundingSpace',
-  'firstReportingPeriod',
-  'lastReportingPeriod',
-];
+const fundingFields = ['fundingSpace', 'startDate', 'endDate'];
 export const doesFundingFormHaveErrors = (
   child?: Child,
   enrollmentId?: number,
@@ -116,20 +112,13 @@ export const FundingForm: React.FC<FundingFormProps> = ({
         fundingSource={funding.fundingSpace.source}
         organizationId={child.organization.id}
       />
-      <ReportingPeriodField<Funding>
-        fundingSource={funding.fundingSpace.source}
-        accessor={(data) => data.at('firstReportingPeriod')}
-        showStatus
-      />
-      {/* Only display last reporting period field if a value already exists OR if the owning enrollment is exited */}
-      {(!!funding.lastReportingPeriod || enrollment.exit) && (
-        <ReportingPeriodField<Funding>
-          fundingSource={funding.fundingSpace.source}
-          accessor={(data) => data.at('lastReportingPeriod')}
-          isLast={true}
-          showStatus
-        />
+      <FundingDateField<Funding> fieldType="startDate" />
+
+      {/* Only display end date f ield if a value already exists OR if the owning enrollment is exited */}
+      {(!!funding.endDate || enrollment.exit) && (
+        <FundingDateField<Funding> fieldType="endDate" />
       )}
+
       {AdditionalButton}
       <FormSubmitButton
         text={loading ? 'Saving...' : 'Save'}

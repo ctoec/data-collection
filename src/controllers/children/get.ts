@@ -71,14 +71,6 @@ const queryBuilderBuilder = async ({
     .leftJoinAndSelect(
       'enrollment_funding.fundingSpace',
       'funding_fundingSpace'
-    )
-    .leftJoinAndSelect(
-      'enrollment_funding.firstReportingPeriod',
-      'funding_firstReportingPeriod'
-    )
-    .leftJoinAndSelect(
-      'enrollment_funding.lastReportingPeriod',
-      'funding_lastReportingPeriod'
     );
 
   // Restrict via site access
@@ -96,7 +88,7 @@ const queryBuilderBuilder = async ({
   qb.orderBy({
     'family_incomeDetermination.determinationDate': 'DESC',
     'enrollment.entry': 'DESC',
-    'enrollment_funding.firstReportingPeriod': 'DESC',
+    'enrollment_funding.startDate': 'DESC',
   });
 
   return qb;

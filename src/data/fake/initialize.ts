@@ -4,7 +4,6 @@ import {
   Organization,
   Site,
   FundingSpace,
-  ReportingPeriod,
   Funding,
   Enrollment,
   Child,
@@ -18,10 +17,6 @@ import {
   FundingTimeSplit,
 } from '../../entity';
 import { FundingSource, Region } from '../../../client/src/shared/models';
-import {
-  getReportingPeriodFromDates,
-  allReportingPeriods,
-} from './reportingPeriods';
 import { organizations } from './organizations';
 import { sitesByOrgName } from './sites';
 import { getFakeFundingSpaces } from './fundingSpace';
@@ -74,11 +69,6 @@ export const initialize = async () => {
       .delete()
       .from(Organization)
       .execute();
-    await getManager()
-      .createQueryBuilder()
-      .delete()
-      .from(ReportingPeriod)
-      .execute();
 
     await createDummyRows();
   }
@@ -113,7 +103,7 @@ export const initialize = async () => {
       const fundingSpacesForOrg = await getManager().find(FundingSpace, {
         where: {
           organizationId: organization.id,
-        }
+        },
       });
 
       if (!fundingSpacesForOrg?.length) {
@@ -126,20 +116,6 @@ export const initialize = async () => {
       }
     })
   );
-
-  if (!(await getManager().find(ReportingPeriod)).length) {
-    const reportingPeriodsToAdd = [];
-    for (let fundingSource of Object.values(FundingSource)) {
-      for (let dates of allReportingPeriods) {
-        const reportingPeriod = getManager().create(
-          ReportingPeriod,
-          getReportingPeriodFromDates(fundingSource as FundingSource, dates)
-        );
-        reportingPeriodsToAdd.push(reportingPeriod);
-      }
-    }
-    await getManager().save(reportingPeriodsToAdd);
-  }
 };
 
 /**
@@ -191,7 +167,7 @@ async function createDummyRows() {
       firstName: 'DUMMY_FIRST_NAME',
       lastName: 'DUMMY_LAST_NAME',
       wingedKeysId: 'DUMMY_WINGEDKEYS_ID',
-      email: 'DUMMY_EMAIL@EMAIL.COM'
+      email: 'DUMMY_EMAIL@EMAIL.COM',
     })
   );
 

@@ -16,9 +16,7 @@ interface WingedKeysUsersMap {
 }
 
 (async function updateEmail() {
-  const optionDefns = [
-    { name: 'config', type: String }
-  ];
+  const optionDefns = [{ name: 'config', type: String }];
   const options = commandLineArgs(optionDefns);
 
   const configPath: string = options.config;
@@ -55,7 +53,9 @@ async function updateFawkesUsers(
   );
 
   console.log('Opening Fawkes database connection...');
-  const connection: Connection = await openFawkesDbConnection(fawkesDbConnectionOpts);
+  const connection: Connection = await openFawkesDbConnection(
+    fawkesDbConnectionOpts
+  );
 
   let usersToUpdate = await getManager('script').find(User, {
     where: { wingedKeysId: In(Object.keys(wkUsersById)) },
@@ -63,7 +63,8 @@ async function updateFawkesUsers(
 
   for (const user of usersToUpdate) {
     try {
-      const wingedKeysUser: BasicWingedKeysUser = wkUsersById[user.wingedKeysId];
+      const wingedKeysUser: BasicWingedKeysUser =
+        wkUsersById[user.wingedKeysId];
       if (!wingedKeysUser) {
         throw new Error('This is actually impossible');
       }
@@ -71,7 +72,7 @@ async function updateFawkesUsers(
       if (!!wingedKeysUser.email && wingedKeysUser.email !== user.email) {
         await getManager('script').save(User, {
           ...user,
-          email: wingedKeysUser.email
+          email: wingedKeysUser.email,
         });
 
         console.log(
@@ -84,10 +85,7 @@ async function updateFawkesUsers(
         );
       }
     } catch (err) {
-      console.error(
-        `\tError updating user ${user.email}`,
-        err
-      );
+      console.error(`\tError updating user ${user.email}`, err);
     }
   }
 

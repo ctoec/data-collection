@@ -80,95 +80,10 @@ exports[`BatchEdit EnrollmentFundingForm matches snapshot 1`] = `
   >
     Enrollment dates: 09/3/2019 - 08/1/2020
   </div>
-  <div
-    class="text-bold font-body-md"
-  >
-    Funding source: CDC - Child Day Care
-  </div>
   <form
-    class="usa-form usa-form"
-    id="batch-edit-funding-1"
+    class="usa-form"
+    id="batch-edit-enrollment-2"
   >
-    <div
-      class="usa-form-group"
-    >
-      <label
-        class="usa-label"
-        for="contract-space"
-      >
-        Contract space
-      </label>
-      <select
-        aria-required="true"
-        class="usa-select"
-        id="contract-space"
-        name="contract-space"
-      >
-        <option
-          value=""
-        >
-          - Select -
-        </option>
-      </select>
-    </div>
-    <div
-      class="usa-form-group usa-form-group--error"
-    >
-      <label
-        class="usa-label usa-label--error"
-        for="first-reporting-period"
-      >
-        First reporting period
-      </label>
-      <span
-        class="usa-error-message"
-        id="status-firstReportingPeriod"
-        role="alert"
-      >
-         Field is required for OEC reporting.
-      </span>
-      <select
-        aria-describedby="status-firstReportingPeriod"
-        aria-invalid="true"
-        aria-required="true"
-        class="usa-select usa-input--error"
-        id="first-reporting-period"
-        name="first-reporting-period"
-      >
-        <option
-          value=""
-        >
-          - Select -
-        </option>
-      </select>
-    </div>
-    <div
-      class="usa-form-group"
-    >
-      <label
-        class="usa-label"
-        for="last-reporting-period"
-      >
-        Last reporting period
-      </label>
-      <span
-        class="usa-hint text-italic"
-      >
-        Last reporting period is only required if this child's funding is no longer active.
-      </span>
-      <select
-        aria-required="true"
-        class="usa-select"
-        id="last-reporting-period"
-        name="last-reporting-period"
-      >
-        <option
-          value=""
-        >
-          - Select -
-        </option>
-      </select>
-    </div>
     <button
       class="usa-button bx--btn bx--btn--primary"
       tabindex="0"

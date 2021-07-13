@@ -11,7 +11,7 @@ import { isProdLike } from '../utils/isProdLike';
 import { organizations } from '../data/fake/organizations';
 
 interface UserInfoResponse {
-  sub: string
+  sub: string;
   name: string;
   given_name: string;
   family_name: string;
@@ -19,7 +19,7 @@ interface UserInfoResponse {
 }
 
 interface TokenClaims {
-  sub: string;  //  WingedKeys UUID
+  sub: string; //  WingedKeys UUID
   nbf: number;
   exp: number;
   iss: string;
@@ -74,10 +74,7 @@ const addUser = passAsyncError(
         );
 
         if (res?.data?.sub === claims.sub) {
-          fawkesUser = await createUserWithOrgPermissions(
-            claims,
-            res.data
-          );
+          fawkesUser = await createUserWithOrgPermissions(claims, res.data);
         } else {
           throw new InvalidSubClaimError();
         }
@@ -158,7 +155,7 @@ async function getUserFromWingedKeys(
 async function createUserWithOrgPermissions(
   tokenClaims: TokenClaims,
   userInfo: UserInfoResponse
-  ): Promise<User> {
+): Promise<User> {
   let user: User;
 
   await getManager().transaction(async (manager) => {

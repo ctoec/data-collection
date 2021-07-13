@@ -1,4 +1,19 @@
-import { Organization, Site, Enrollment, Funding, FundingSpace, Child, Family, IncomeDetermination, FundingTimeSplit, Community, OrganizationPermission, SitePermission, User, CommunityPermission, ReportingPeriod } from '../../../src/entity';
+import {
+  Organization,
+  Site,
+  Enrollment,
+  Funding,
+  FundingSpace,
+  Child,
+  Family,
+  IncomeDetermination,
+  FundingTimeSplit,
+  Community,
+  OrganizationPermission,
+  SitePermission,
+  User,
+  CommunityPermission,
+} from '../../../src/entity';
 import { Connection, createConnection, getConnectionOptions } from 'typeorm';
 import { SqlServerConnectionOptions } from 'typeorm/driver/sqlserver/SqlServerConnectionOptions';
 import { WorkSheet, utils, readFile } from 'xlsx';
@@ -16,8 +31,10 @@ export function parse<T>(sheetData: WorkSheet, header: string[]) {
   });
 }
 
-export async function openFawkesDbConnection(opts: DBConnectionOpts): Promise<Connection> {
-  const defaultOpts: SqlServerConnectionOptions = await getConnectionOptions() as SqlServerConnectionOptions;
+export async function openFawkesDbConnection(
+  opts: DBConnectionOpts
+): Promise<Connection> {
+  const defaultOpts: SqlServerConnectionOptions = (await getConnectionOptions()) as SqlServerConnectionOptions;
 
   return createConnection({
     ...defaultOpts,
@@ -45,7 +62,6 @@ export async function openFawkesDbConnection(opts: DBConnectionOpts): Promise<Co
       SitePermission,
       User,
       CommunityPermission,
-      ReportingPeriod,
     ],
   });
 }

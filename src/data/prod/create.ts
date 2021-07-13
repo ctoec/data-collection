@@ -3,12 +3,7 @@ import commandLineArgs from 'command-line-args';
 import { read, parse, openFawkesDbConnection } from './utils';
 import { createOrganizationData } from './organizations';
 import { createSiteData } from './sites';
-import {
-  createUserData,
-  USER_ROW_PROPS,
-  UserRow,
-} from './users/create';
-import { createReportingPeriodData } from './reportingPeriods';
+import { createUserData, USER_ROW_PROPS, UserRow } from './users/create';
 import { invite } from './invite';
 import { Config, DBConnectionOpts, SiteConnectionOpts } from './types';
 
@@ -31,11 +26,10 @@ const {
   orgFile,
   siteFile,
   userFile,
-  reportingPeriodFile,
   wingedKeys: { passwordFile },
 } = config;
 
-if (!orgFile && !siteFile && !userFile && !reportingPeriodFile) {
+if (!orgFile && !siteFile && !userFile) {
   console.error('At least one file option must be supplied');
   process.exit(1);
 }
@@ -85,11 +79,6 @@ if (doInvite) {
 async function create() {
   try {
     const connection: Connection = await openFawkesDbConnection(appDBConnOpts);
-
-    if (reportingPeriodFile) {
-      const rawReportingPeriods = read(reportingPeriodFile);
-      await createReportingPeriodData(rawReportingPeriods);
-    }
 
     if (orgFile) {
       const rawOrgs = read(orgFile);

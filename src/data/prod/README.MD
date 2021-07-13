@@ -15,7 +15,6 @@ From csv data with formats defined [here](https://docs.google.com/spreadsheets/d
 - Organizations and their funding spaces
 - Sites
 - Users and their permissions
-- Reporting periods
 
 ### Usage
 ```
@@ -82,7 +81,6 @@ Configuration is supplied as a JSON file like:
   "orgFile": "",
   "siteFile": "",
   "userFile": "",
-  "reportingPeriodFile": ""
 }
 ```
 **NOTE**: If `userFile` config value is suppled, then all `wingedkeys` configs (both site and db) must also be supplied.

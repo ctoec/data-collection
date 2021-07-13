@@ -5,9 +5,5 @@ import { Funding } from '../shared/models';
  */
 export const fundingHasNoInformation = (funding: Funding | undefined) => {
   if (!funding) return true;
-  return (
-    !funding.fundingSpace &&
-    !funding.firstReportingPeriod &&
-    !funding.lastReportingPeriod
-  );
+  return !funding.fundingSpace && !funding.startDate && !funding.endDate;
 };

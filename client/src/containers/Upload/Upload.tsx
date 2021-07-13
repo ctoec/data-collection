@@ -79,12 +79,19 @@ const Upload: React.FC<StepContentProps> = ({
               <>
                 <p>
                   Files must be uploaded in the format of our data template.
-                  Please re-upload your file using one of the templates provided&nbsp;
-                  <a className="usa-button usa-button--unstyled" href="/template">
+                  Please re-upload your file using one of the templates
+                  provided&nbsp;
+                  <a
+                    className="usa-button usa-button--unstyled"
+                    href="/template"
+                  >
                     here.
                   </a>
                   &nbsp;If you need further support, send us a&nbsp;
-                  <a className="usa-button usa-button--unstyled" href="/support">
+                  <a
+                    className="usa-button usa-button--unstyled"
+                    href="/support"
+                  >
                     support request.
                   </a>
                 </p>

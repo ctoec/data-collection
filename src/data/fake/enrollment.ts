@@ -46,7 +46,7 @@ export const makeFakeEnrollments = (
       deletedDate: null,
     };
     oldEnrollment.fundings = [
-      getFakeFunding(id, currentEnrollment, site.organization, true),
+      getFakeFunding(id, oldEnrollment, site.organization, true),
     ];
     returnEnrollments.push(oldEnrollment);
   }
