@@ -257,7 +257,7 @@ const CreateOrg: React.FC = () => {
             onClick={addNewFundingSpace}
           />
         </div>
-        <h2 className="margin-top-4">Users and permissions</h2>
+        {/* <h2 className="margin-top-4">Users and permissions</h2>
         <Divider />
         <p className="margin-top-2 margin-bottom-2">
           If users have not already been created for this organization, you may
@@ -269,8 +269,8 @@ const CreateOrg: React.FC = () => {
           placeholderText="Search"
           onSearch={searchForUsers}
           className="tablet:grid-col-6"
-        />
-        {showSearchResults && (
+        /> */}
+        {/* {showSearchResults && (
           <>
             <p className="margin-bottom-2 text-bold">
               {`We found ${pluralize(
@@ -295,7 +295,7 @@ const CreateOrg: React.FC = () => {
               ))}
             </div>
           </>
-        )}
+        )} */}
       </div>
       <FixedBottomBar>
         <Button text="Create organization" onClick={createNewOrg} />
