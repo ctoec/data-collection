@@ -101,30 +101,14 @@ exports[`Roster matches snapshot for multi-org user 1`] = `
                   id="add-record-in-actions"
                 >
                   <button
-                    class="usa-button usa-button--unstyled margin-right-2 bx--btn bx--btn--primary"
+                    class="usa-button margin-right-2 bx--btn bx--btn--primary"
                     tabindex="0"
                     type="button"
                   >
                     <div
                       class="button-content display-flex"
                     >
-                      <span
-                        class="oec-text-with-icon"
-                      >
-                        <svg
-                          class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-                          data-icon="plus-circle"
-                          data-prefix="fas"
-                          viewBox="0 0 512 512"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
-                            fill="currentColor"
-                          />
-                        </svg>
-                        Add a record
-                      </span>
+                      Add Record
                       <svg
                         class="arrow"
                         fill="currentColor"
@@ -1374,26 +1358,10 @@ exports[`Roster matches snapshot for one-org, multi-site user 1`] = `
                 class="display-inline-block"
               >
                 <a
-                  class="bx--link usa-button usa-button--unstyled margin-right-2"
+                  class="bx--link usa-button margin-right-2"
                   href="/create-record"
                 >
-                  <span
-                    class="oec-text-with-icon"
-                  >
-                    <svg
-                      class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-                      data-icon="plus-circle"
-                      data-prefix="fas"
-                      viewBox="0 0 512 512"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Add a record
-                  </span>
+                  Add Record
                 </a>
               </div>
               <button
@@ -2558,26 +2526,10 @@ exports[`Roster matches snapshot for site level user 1`] = `
                 class="display-inline-block"
               >
                 <a
-                  class="bx--link usa-button usa-button--unstyled margin-right-2"
+                  class="bx--link usa-button margin-right-2"
                   href="/create-record"
                 >
-                  <span
-                    class="oec-text-with-icon"
-                  >
-                    <svg
-                      class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-                      data-icon="plus-circle"
-                      data-prefix="fas"
-                      viewBox="0 0 512 512"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Add a record
-                  </span>
+                  Add Record
                 </a>
               </div>
               <button
@@ -3654,26 +3606,10 @@ exports[`Roster matches snapshot for user at a submitted org 1`] = `
                 class="display-inline-block"
               >
                 <a
-                  class="bx--link usa-button usa-button--unstyled margin-right-2"
+                  class="bx--link usa-button margin-right-2"
                   href="/create-record"
                 >
-                  <span
-                    class="oec-text-with-icon"
-                  >
-                    <svg
-                      class="oec-text-with-icon__icon oec-text-with-icon__icon--direction-right oec-text-with-icon__icon--side-left"
-                      data-icon="plus-circle"
-                      data-prefix="fas"
-                      viewBox="0 0 512 512"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                    Add a record
-                  </span>
+                  Add Record
                 </a>
               </div>
               <button
