@@ -28,6 +28,8 @@ import { nameFormatter } from '../../utils/formatters';
 import { getStrippedFundingSourceName } from '../../utils/getFundingSpaceDisplayName';
 import { getH1RefForTitle } from '../../utils/getH1RefForTitle';
 import { RosterSummaryCard } from './RosterSummaryCard';
+import { Divider, Button } from '@ctoec/component-library';
+import { AddRecordButton } from '../../components/AddRecordButton';
 
 export interface ChildRow extends ObjectWithValidationErrors {
   ageGroup?: AgeGroup;
@@ -146,7 +148,19 @@ const Roster: React.FC = () => {
         />
       </div>
 
-      <h3>{childRows.length} enrollments</h3>
+      <div className="grid-row grid-gap">
+        <h3 className="tablet:grid-col-9 margin-bottom-1">Roster</h3>
+        <div className="tablet:grid-col-2 margin-top-1 action-button">
+          <Button
+            text="Upload File"
+            href="/upload"
+          />
+        </div>
+        <div className="tablet:grid-col-2 margin-top-1 action-button">
+          <AddRecordButton id="roster-add-record" />
+        </div>
+      </div>
+      <Divider />
 
       <div className="margin-top-4">
         <DataTable
