@@ -17,8 +17,12 @@ import Help from './containers/Help/Help';
 import SupportRequest from './containers/Help/SupportRequest';
 import UploadWizard from './containers/Upload/UploadWizard';
 import Overview from './containers/Overview/Overview';
+import EditUser from './containers/Users/EditUser';
 import { SiteOverview } from './containers/Overview/Site/Site';
 import { OrganizationOverview } from './containers/Overview/Organization/Organization';
+import CreateOrg from './containers/CreateOrg/CreateOrg';
+import Organizations from './containers/Organizations/Organizations';
+import Users from './containers/Users/Users';
 import { RevisionRequest } from './containers/Home/RevisionRequest';
 
 export type RouteConfig = {
@@ -28,6 +32,7 @@ export type RouteConfig = {
   routes?: RouteConfig[];
   unauthorized?: boolean;
   props?: any;
+  adminOnly?: boolean;
 };
 
 export const routes: RouteConfig[] = [
@@ -58,16 +63,44 @@ export const routes: RouteConfig[] = [
     component: Overview,
     unauthorized: false,
     exact: true,
+    adminOnly: true,
   },
   {
     path: '/overview/site/:id',
     component: SiteOverview,
     unauthorized: false,
+    adminOnly: true,
+  },
+  {
+    path: '/organizations',
+    component: Organizations,
+    unauthorized: false,
+    adminOnly: true,
+  },
+  {
+    path: '/users',
+    component: Users,
+    unauthorized: false,
+    adminOnly: true,
   },
   {
     path: '/overview/organization/:id',
     component: OrganizationOverview,
     unauthorized: false,
+    adminOnly: true,
+  },
+  {
+    path: '/create-org',
+    component: CreateOrg,
+    unauthorized: false,
+    exact: true,
+    adminOnly: true,
+  },
+  {
+    path: '/edit-user/:id',
+    component: EditUser,
+    unauthorized: false,
+    adminOnly: true,
   },
   {
     path: '/home',

@@ -22,3 +22,16 @@ export async function getSites(
     relations: ['organization'],
   });
 }
+
+/**
+ * Determine if all given names for new sites to-be created are
+ * free in the DB.
+ * @param siteNames 
+ * @returns 
+ */
+export async function areSiteNamesUnique(siteNames: string[]) {
+  const foundSites = await getManager().find(
+    Site, { where: { siteName: In(siteNames) } }
+  )
+  return !foundSites?.length;
+}
