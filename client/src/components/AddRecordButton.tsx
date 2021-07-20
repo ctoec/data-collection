@@ -3,22 +3,19 @@ import {
   ButtonProps,
   Button,
   ButtonWithDropdown,
-  PlusCircle,
-  TextWithIcon,
 } from '@ctoec/component-library';
 import { useHistory } from 'react-router-dom';
 import UserContext from '../contexts/UserContext/UserContext';
 
 // Need to require an ID for the dropdown, so don't let it be undefined like
-// it could be in a buttonn
+// it could be in a button
 type AddRecordButtonProps = {
   id: string;
-} & Pick<ButtonProps, 'className' | 'appearance'>;
+} & Pick<ButtonProps, 'className'>;
 
 export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
   id, // Needs to be unique to associate with dropdown
   className,
-  appearance,
 }) => {
   const history = useHistory();
   const { user } = useContext(UserContext);
@@ -33,9 +30,8 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
       // the same alignment the text is
       <div className="display-inline-block">
         <Button
-          appearance={appearance || 'unstyled'}
           className={className}
-          text={<TextWithIcon Icon={PlusCircle} text="Add a record" />}
+          text="Add Record"
           href="/create-record"
           onClick={(e: any) => {
             if (e) e.preventDefault();
@@ -50,11 +46,8 @@ export const AddRecordButton: React.FC<AddRecordButtonProps> = ({
     <div className="display-inline-block">
       <ButtonWithDropdown
         className={className}
-        text={
-          <TextWithIcon Icon={PlusCircle} text="Add a record" iconSide="left" />
-        }
+        text="Add Record"
         id={id}
-        appearance="unstyled"
         options={organizations.map((org) => ({
           text: org.providerName,
           href: '/create-record',
